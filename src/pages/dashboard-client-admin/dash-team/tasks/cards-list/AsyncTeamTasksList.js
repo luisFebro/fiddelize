@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import TeamTasksCard from "./card/accordion/TeamTasksCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import Illustration from "../../../../../components/Illustration";
 import TeamTasksFilter from "./TeamTasksFilter";
@@ -52,7 +52,7 @@ export default function AsyncCardsList() {
     });
     const { filterBy, isFiltering } = data;
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const styles = getStyles();
 
@@ -81,7 +81,7 @@ export default function AsyncCardsList() {
             </section>
         );
 
-    const params = { userId: businessId, bizId: businessId, skip, filterBy };
+    const params = { userId: bizId, bizId: bizId, skip, filterBy };
 
     const trigger = getTrigger(null, null, { cond2: `filter_${filterBy}` });
     const {

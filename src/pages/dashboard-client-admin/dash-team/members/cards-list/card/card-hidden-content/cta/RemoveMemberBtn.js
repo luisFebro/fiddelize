@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
-import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import ModalConfYesNo from "../../../../../../../../components/modals/ModalYesNo";
-import showToast from "../../../../../../../../components/toasts";
-import getAPI, {
-    removeUser,
-} from "../../../../../../../../utils/promises/getAPI";
-import { useAppSystem } from "../../../../../../../../hooks/useRoleData";
-import { countField } from "../../../../../../../../redux/actions/userActions";
-import { setRun } from "../../../../../../../../hooks/useRunComp";
+import { useBizData } from "init";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ModalConfYesNo from "components/modals/ModalYesNo";
+import showToast from "components/toasts";
+import getAPI, { removeUser } from "utils/promises/getAPI";
+import { countField } from "redux/actions/userActions";
+import { setRun } from "hooks/useRunComp";
 
 export default function RemoveMemberBtn({ modalData }) {
     const [fullOpen, setFullOpen] = useState(false);
@@ -17,7 +15,7 @@ export default function RemoveMemberBtn({ modalData }) {
     const { name, _id } = modalData;
 
     const dispatch = useStoreDispatch();
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const onOpen = () => {
         setFullOpen(true);
@@ -34,13 +32,13 @@ export default function RemoveMemberBtn({ modalData }) {
             getAPI({
                 method: "delete",
                 url: removeUser(_id),
-                params: { userId: businessId, thisRole: "cliente-membro" },
+                params: { userId: bizId, thisRole: "cliente-membro" },
             }).then((res) => {
                 if (res.status !== 200)
                     return showToast("Membro excluído com sucesso.", {
                         type: "error",
                     });
-                countField(businessId, {
+                countField(bizId, {
                     field: "clientAdminData.totalClientUsers",
                     type: "dec",
                     thisRole: "cliente-admin",

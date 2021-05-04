@@ -10,7 +10,6 @@ import { setRun } from "../../redux/actions/globalActions";
 import ShowActionBtns from "../../pages/new-app/self-service/pickers/ShowActionBtns";
 import { getIconIndex } from "../../global-data/milestoneIconsSorted.js";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { useAppSystem } from "../../hooks/useRoleData";
 import findAndReplaceObjInArray from "../../utils/arrays/findAndReplaceObjInArray";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -28,8 +27,8 @@ export default function CarouselFlickity({
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
     const dispatch = useStoreDispatch();
 
-    const { businessId } = useAppSystem();
     const {
+        bizId,
         milestoneIcon,
         mainReward,
         targetPoints,
@@ -103,7 +102,7 @@ export default function CarouselFlickity({
     if (!setSelectedIcon) {
         updatedArray = [
             {
-                id: businessId,
+                id: bizId,
                 icon: iconSelected,
                 targetPoints,
                 rewardDesc: mainReward,

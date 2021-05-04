@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useAppSystem } from "hooks/useRoleData";
-import { getVars } from "init/var";
+import useData from "init";
 import useAuth from "auth/useAuth";
 import isThisApp from "utils/window/isThisApp";
 import { useRunComp } from "hooks/useRunComp";
@@ -26,31 +25,8 @@ export default function PrivateRouteClientAdm({
 }) {
     const { runName } = useRunComp();
     const [goHome, setGoHome] = useState(checkPath(runName));
-    let isAuth = useAuth();
-    let { roleWhichDownloaded } = useAppSystem();
-    // const dispatch = useStoreDispatch();
-
-    const [login, setLogin] = useState({
-        success: null,
-        loading: true,
-        role: null,
-    });
-    const { success, loading, role } = login;
-
-    roleWhichDownloaded = roleWhichDownloaded || role;
-    isAuthUser = isAuthUser || success;
-
-    useEffect(() => {
-        getVars(["success", "role"], "user").then((res) => {
-            const [success, role] = res;
-
-            setLogin({
-                success,
-                role,
-                loading: false,
-            });
-        });
-    }, []);
+    const isAuthUser = useAuth();
+    const [role, loading] = useData(["role"]);
 
     const whichPath = isApp ? "/mobile-app" : "/";
     const alertAndRedirect = (props) => (
@@ -68,9 +44,9 @@ export default function PrivateRouteClientAdm({
                 {...rest}
                 render={(props) =>
                     isAuthUser &&
-                    roleWhichDownloaded &&
+                    role &&
                     "cliente-admin, cliente-membro, nucleo-equipe".includes(
-                        roleWhichDownloaded
+                        role
                     ) &&
                     !goHome ? ( //  isAuthUser is not working sometimes at start.
                         <Component {...props} />

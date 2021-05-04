@@ -1,12 +1,10 @@
 import { Fragment } from "react";
 import PickLogo from "../../../../new-app/self-service/pickers/PickLogo";
 import { useBizData } from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 import BackButton from "../../../../../components/buttons/BackButton";
 
 export default function ShowLogoComp({ openComp, onBackBtnClick }) {
-    const { businessId } = useAppSystem();
-    const { bizLinkName } = useBizData();
+    const { bizId, bizLinkName } = useBizData();
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
@@ -24,7 +22,7 @@ export default function ShowLogoComp({ openComp, onBackBtnClick }) {
                         style={{ margin: "50px 0px 0px" }}
                     >
                         <PickLogo
-                            bizId={businessId}
+                            bizId={bizId}
                             bizLinkName={bizLinkName}
                             isFromDash
                         />

@@ -12,7 +12,6 @@ import getAPI, { checkPassword, createTk } from "utils/promises/getAPI";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import PasswordCircleFields from "components/fields/PasswordCircleFields";
 import { Load } from "components/code-splitting/LoadableComp";
-import { useAppSystem } from "hooks/useRoleData";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import Lock from "./interative-lock/Lock";
 import ProtectionMsg from "./ProtectionMsg";
@@ -49,9 +48,11 @@ export default function AccessPassword({ history, isBizTeam = false }) {
 
     const role = isBizTeam ? "nucleo-equipe" : "cliente-admin";
 
-    const { themeBackColor: backColor, themePColor: colorP } = useBizData();
-
-    const { businessId } = useAppSystem();
+    const {
+        bizId,
+        themeBackColor: backColor,
+        themePColor: colorP,
+    } = useBizData();
 
     const styles = getStyles();
 
@@ -162,13 +163,13 @@ export default function AccessPassword({ history, isBizTeam = false }) {
             runCheckPassword();
         }
 
-        const allIdsOn = userId && businessId;
+        const allIdsOn = userId && bizId;
 
         if (allIdsOn && completedFill && success) {
             (async () => {
                 const body = {
                     _id: userId,
-                    bizId: businessId,
+                    bizId,
                     role,
                 };
                 const { data: newToken } = await getAPI({
@@ -183,7 +184,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 }, 1000);
             })();
         }
-    }, [userId, businessId, completedFill, passOk]);
+    }, [userId, bizId, completedFill, passOk]);
 
     const showInterativeLock = () => (
         <Lock

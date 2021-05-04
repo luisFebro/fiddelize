@@ -6,7 +6,6 @@ import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import { updateUser } from "../../../../redux/actions/userActions";
 import useData, { useBizData } from "init";
-import { useAppSystem } from "../../../../hooks/useRoleData";
 import useAPIList, {
     readUserList,
     getTrigger,
@@ -172,7 +171,7 @@ const handleParams = ({ search, filterName, period, getFilterDate }) => {
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
     const [isFiltering, setIsFiltering] = useState(false);
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
     const { name } = useData();
     const { bizPlan } = useBizData();
 
@@ -237,7 +236,7 @@ export default function AsyncRecordedClientsList() {
             "clientAdminData.totalClientUserPoints": totalCliUserScores,
             "clientAdminData.totalActivePoints": totalActivePoints,
         };
-        updateUser(dispatch, objToSend, businessId, {
+        updateUser(dispatch, objToSend, bizId, {
             thisRole: "cliente-admin",
         });
     }, [totalCliUserScores, totalActivePoints]);
@@ -262,7 +261,7 @@ export default function AsyncRecordedClientsList() {
         listTotal,
         ShowOverMsg,
     } = useAPIList({
-        url: readUserList(businessId),
+        url: readUserList(bizId),
         skip,
         params,
         trigger,

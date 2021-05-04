@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import sendSMS from "./sendSMS";
-// import { useAppSystem } from '../hooks/useRoleData';
 // Check why sometimes this is being trigger many times...
 export default function useSendSMS({
     trigger,

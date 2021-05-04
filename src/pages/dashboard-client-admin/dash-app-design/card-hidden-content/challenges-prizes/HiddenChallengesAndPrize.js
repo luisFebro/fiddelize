@@ -5,15 +5,13 @@ import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import List from "./List.js";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
-import { useBizData } from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 import useAPI, {
     updateUser,
     treatBoolStatus,
 } from "../../../../../hooks/api/useAPI";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getId from "../../../../../utils/getId";
-import useData from "init";
+import useData, { useBizData } from "init";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
@@ -21,8 +19,7 @@ export default function HiddenGoalsAndRewards() {
     const [hideAddBtn, setHideAddBtn] = useState(false);
     const [visibleToggleBtn, setVisibleToggleBtn] = useState(undefined);
 
-    const { businessId } = useAppSystem();
-    const { arePrizesVisible } = useBizData();
+    const { bizId, arePrizesVisible } = useBizData();
 
     const [currRole] = useData(["role"]);
 
@@ -32,7 +29,7 @@ export default function HiddenGoalsAndRewards() {
     };
     useAPI({
         method: "put",
-        url: updateUser(businessId),
+        url: updateUser(bizId),
         body,
         trigger: visibleToggleBtn && currRole !== "...",
     });

@@ -37,13 +37,12 @@ export const loadUser = async (uify, history) => {
 
 // login Email
 export const doLogin = async (uify, objToSend) => {
-    // setLoadingProgress(dispatch, true);
-
     const res = await getAPI({
         method: "post",
         url: login(),
         body: objToSend,
         timeout: 30000,
+        loader: true,
     }).catch((err) => {
         showToast(
             "Não foi possível conectar. Verifique sua conexão e tente novamente.",
@@ -53,13 +52,11 @@ export const doLogin = async (uify, objToSend) => {
         );
         console.log(`ERROR: ${err.response}`);
         return null;
-        // setLoadingProgress(dispatch, false);
     });
 
     if (!res) return null;
 
     await setInitData(res.data, { uify });
-    // setLoadingProgress(dispatch, false);
 
     return res;
 };

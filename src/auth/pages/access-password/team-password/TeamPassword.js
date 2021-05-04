@@ -7,7 +7,6 @@ import { handleEnterPress } from "utils/event/isKeyPressed";
 import { checkVerificationPass } from "redux/actions/adminActions";
 import useData, { useBizData } from "init";
 import { setVar } from "init/var";
-import { useAppSystem } from "hooks/useRoleData";
 import showToast from "components/toasts";
 import getAPI, { createTk } from "utils/promises/getAPI";
 import useBackColor from "hooks/useBackColor";
@@ -33,10 +32,9 @@ export default function TeamPassword({ history }) {
     const { pass } = data;
 
     const [role, userId, firstName] = useData(["role", "userId", "firstName"]);
-    const { businessId } = useAppSystem();
     const dispatch = useStoreDispatch();
 
-    const { themeBackColor: backColor } = useBizData();
+    const { bizId, themeBackColor: backColor } = useBizData();
     useBackColor(`var(--themeBackground--${backColor})`);
 
     const styles = getStyles();
@@ -46,7 +44,7 @@ export default function TeamPassword({ history }) {
 
         const bodyToSend = {
             pass,
-            bizId: businessId,
+            bizId,
         };
 
         const res = await checkVerificationPass(dispatch, bodyToSend);
@@ -62,7 +60,7 @@ export default function TeamPassword({ history }) {
             // authorize user first
             const body = {
                 _id: userId,
-                bizId: businessId,
+                bizId,
                 role,
                 nT: getId(),
             };

@@ -2,7 +2,7 @@ import isObj from "utils/isObj";
 // only for crucial and essencial variables which requires a bootup value right away like background color and important user's data. The performance can be an issue if localstorage is huge in size since is syncronous.
 // all secondary data should use indexedDB.
 
-const allowedCollections = ["currUser", "bizData", "appSystem", "onceChecked"];
+const allowedCollections = ["currUser", "bizData", "onceChecked"];
 
 function setItems(collectionName, dataObj) {
     if (!allowedCollections.includes(collectionName))
@@ -15,7 +15,7 @@ function setItems(collectionName, dataObj) {
         throw new Error("missing collection name as the first argument");
     if (!dataObj)
         throw new Error(
-            "new obj should has new data to be stored in localstorage with props and values. e.g { name: `john` }"
+            "new obj should have new data to be stored in localstorage with props and values. e.g { name: `john` }"
         );
 
     const priorData = getCurrCollectionData(collectionName);
@@ -41,7 +41,7 @@ function getItems(collectionName, namesArray = null) {
 
     const finalDataResult = [];
     namesArray.forEach((key) => {
-        if (!currData[key]) finalDataResult.push(null);
+        if (!currData[key]) return finalDataResult.push(null);
         finalDataResult.push(currData[key]);
     });
 

@@ -6,7 +6,7 @@ import useAPI, {
     activateAutoService,
     treatBoolStatus,
 } from "../../../../hooks/api/useAPI";
-import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 export default function Operation({
     active = false,
@@ -25,7 +25,7 @@ export default function Operation({
     });
     const { service, serviceId, innerActive } = data;
 
-    const { businessId: userId } = useAppSystem();
+    const { bizId: userId } = useBizData();
 
     useEffect(() => {
         setData({

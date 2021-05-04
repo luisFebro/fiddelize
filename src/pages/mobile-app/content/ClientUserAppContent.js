@@ -41,15 +41,22 @@ export default function ClientUserAppContent({
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currPointsRef = useRef(null);
 
-    const {
+    const [
         userId,
         role,
-        firstName: firstUserName,
-        name: fullName,
+        firstUserName,
+        fullName,
         lastPrizeId,
         lastPrizeDate,
         loadingData,
-    } = useData();
+    ] = useData([
+        "userId",
+        "role",
+        "firstName",
+        "name",
+        "lastPrizeId",
+        "lastPrizeDate",
+    ]);
     const firstName = clientNameTest || firstUserName;
 
     const {
@@ -174,9 +181,7 @@ export default function ClientUserAppContent({
             >
                 {greeting},
                 <br />
-                <span className="text-title">{`${
-                    !firstName ? "..." : firstName
-                }!`}</span>
+                <span className="text-title">{`${firstName}!`}</span>
             </div>
         </section>
     );

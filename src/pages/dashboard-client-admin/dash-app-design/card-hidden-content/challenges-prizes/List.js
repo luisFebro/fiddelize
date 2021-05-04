@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import ChallComp from "./ChallComp";
 import { useBizData } from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 import {
     readClientAdmin,
     updateUser,
@@ -11,8 +10,8 @@ import showToast from "../../../../../components/toasts";
 import ShowBizNotes from "./ShowBizNotes";
 
 export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
-    const { businessId } = useAppSystem();
     const {
+        bizId,
         milestoneIcon,
         mainReward,
         targetPoints,
@@ -22,7 +21,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
 
     // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
     const firstMainData = {
-        id: businessId,
+        id: bizId,
         icon: milestoneIcon,
         targetPoints: targetPoints,
         rewardDesc: mainReward,
@@ -97,14 +96,14 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
             "clientAdminData.rewardList": newModifiedArray || challengesArray,
         };
 
-        updateUser(dispatch, dataToSend, businessId, {
+        updateUser(dispatch, dataToSend, bizId, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
                 return showToast("Algo deu errado. Verifique sua conexão.", {
                     type: "error",
                 });
-            readClientAdmin(dispatch, businessId).then((res) => {
+            readClientAdmin(dispatch, bizId).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
                 needMsg && showToast("Alterações salvas!", { type: "success" });

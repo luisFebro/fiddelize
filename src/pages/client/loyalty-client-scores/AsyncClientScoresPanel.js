@@ -12,7 +12,6 @@ import { convertDotToComma } from "utils/numbers/convertDotComma";
 import isThisApp from "utils/window/isThisApp";
 import disconnect from "auth/disconnect";
 import useData, { useBizData } from "init";
-import { useAppSystem } from "hooks/useRoleData";
 import getFirstName from "utils/string/getFirstName";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
@@ -54,7 +53,6 @@ function AsyncClientScoresPanel({ history, location }) {
     const paidValueLoading = paidValue !== "...";
 
     // ROLES
-    const { businessId } = useAppSystem();
     let {
         role,
         name,
@@ -68,6 +66,7 @@ function AsyncClientScoresPanel({ history, location }) {
     totalGeneralPoints = !totalGeneralPoints ? 0 : totalGeneralPoints;
 
     let {
+        bizId,
         targetPoints,
         milestoneIcon,
         rewardList,
@@ -170,7 +169,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     ? parseFloat(lastPoints)
                     : parseFloat(lastCurrScore);
             let objToSend = {
-                "clientUserData.bizId": businessId, // for cli-admin or if not it will not override <again className=""></again>
+                "clientUserData.bizId": bizId, // for cli-admin or if not it will not override <again className=""></again>
                 "clientUserData.lastPoints": lastPoints,
                 "clientUserData.currPoints": currPointsNow, // need to be Number to ranking in DB properly
                 "clientUserData.totalActivePoints": currPointsNow, // the same as currPoints | active is passive to be discounted and general it is accumulative without discount.
@@ -423,7 +422,7 @@ export default withRouter(AsyncClientScoresPanel);
 /* ARCHIVES
 const showSharingBtn = () => (
     <Link
-        to={`/${bizLinkName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}
+        to={`/${bizLinkName}/compartilhar-app?negocio=${bizName}&id=${bizId}&role=${role}`}
     >
         <ButtonFab
             position="relative"

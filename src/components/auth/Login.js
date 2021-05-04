@@ -1,5 +1,5 @@
 import { withRouter } from "react-router-dom";
-import useContext from "context";
+import { useGlobalContext } from "context";
 import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
@@ -10,7 +10,6 @@ import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "redux/actions/notificationActions";
 import { removeVar, getVars, removeVars } from "init/var";
-import authenticate from "auth/authenticate";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";
 import Title from "../Title";
@@ -28,7 +27,7 @@ function Login({
 }) {
     needAppRegister = needAppRegister === "..." ? false : needAppRegister;
 
-    const { uify } = useContext();
+    const { uify } = useGlobalContext();
 
     const {
         themeSColor,
@@ -136,7 +135,6 @@ export async function signInUserData(cpfValue, options = {}) {
         verificationPass,
         needCliUserWelcomeNotif,
         needAccountPanel,
-        token, // only for cli-user
         // nucleo-equipe data
         pswd, // only verification to redirect to password page
         publicKey, // only verification to redirect to password page
@@ -198,8 +196,6 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "cliente") {
-        await authenticate(token);
-
         if (needCliUserWelcomeNotif) {
             showToast("Preparando App...");
 

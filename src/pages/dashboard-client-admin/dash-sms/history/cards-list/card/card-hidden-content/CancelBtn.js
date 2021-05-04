@@ -1,17 +1,17 @@
 import { useState } from "react";
+import { useBizData } from "init";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import ModalYesNo from "../../../../../../../components/modals/ModalYesNo";
 import useAPI, {
     cancelSMS,
     getUniqueId,
 } from "../../../../../../../hooks/api/useAPI";
-import { useAppSystem } from "../../../../../../../hooks/useRoleData";
 
 export default function CancelBtn({ cardId, date }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [trigger, setTrigger] = useState(false);
 
-    const { businessId: userId } = useAppSystem();
+    const { bizId: userId } = useBizData();
 
     const uniqueId = getUniqueId();
     const runName = `UpdateSMSAll ${uniqueId}`;

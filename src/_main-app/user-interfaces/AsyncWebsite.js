@@ -3,7 +3,7 @@ import LoadableComp from "../../components/code-splitting/LoadableComp";
 const AsyncWebsite = LoadableComp({
     // n1
     loader: () =>
-        import("./Website" /* webpackChunkName: "website-content-lazy" */),
+        import("./Website" /* webpackChunkName: "website-full-content-lazy" */),
 });
 
 export default AsyncWebsite;

@@ -17,7 +17,6 @@ import { handleEnterPress } from "../../../../utils/event/isKeyPressed";
 import clearForm from "../../../../utils/form/use-state/clearForm";
 import { checkVerificationPass } from "../../../../redux/actions/adminActions";
 import { useBizData } from "init";
-import { useAppSystem } from "../../../../hooks/useRoleData";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
 
 StaffConf.propTypes = {
@@ -37,9 +36,7 @@ export default function StaffConf({
         bizId: "",
     });
 
-    const { businessId } = useAppSystem();
-
-    const { themePColor, themeSColor, themeBackColor } = useBizData();
+    const { bizId, themePColor, themeSColor, themeBackColor } = useBizData();
 
     const { pass } = data;
     const [fieldError, setFieldError] = useState(null);
@@ -55,7 +52,7 @@ export default function StaffConf({
     const checkAccess = () => {
         const bodyToSend = {
             pass,
-            bizId: businessId,
+            bizId,
         };
         checkVerificationPass(dispatch, bodyToSend).then((res) => {
             if (res.status === 500)

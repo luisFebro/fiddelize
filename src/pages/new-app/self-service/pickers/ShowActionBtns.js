@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
-import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
@@ -33,7 +33,7 @@ export default function ShowActionBtns({
 
     const dispatch = useStoreDispatch();
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     useEffect(() => {
         if (showUpdateBtn === false) {
@@ -45,14 +45,14 @@ export default function ShowActionBtns({
 
     const handleUpdateIcon = () => {
         showToast(titleBeforeOk);
-        updateUser(dispatch, objToSend, businessId, {
+        updateUser(dispatch, objToSend, bizId, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
                 return showToast("Algo deu errado. Verifique sua conexão", {
                     type: "error",
                 });
-            readClientAdmin(dispatch, businessId).then((res) => {
+            readClientAdmin(dispatch, bizId).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
                 showToast(titleAfterOk, { type: "success" });

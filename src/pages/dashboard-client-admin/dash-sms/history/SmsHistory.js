@@ -5,7 +5,7 @@ import useAPI, {
     needTrigger,
 } from "../../../../hooks/api/useAPI";
 import { useRunComp } from "../../../../hooks/useRunComp";
-import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 const AsyncSmsCardsList = LoadableVisible({
     loading: true,
@@ -16,7 +16,7 @@ const AsyncSmsCardsList = LoadableVisible({
 });
 
 export default function SmsHistory() {
-    const { businessId: userId } = useAppSystem();
+    const { bizId: userId } = useBizData();
 
     const { runName } = useRunComp();
     const trigger = needTrigger(runName, "UpdateSMSAll");

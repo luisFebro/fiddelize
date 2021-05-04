@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Provider } from "context";
+import { GlobalProvider } from "context";
 import { BrowserRouter } from "react-router-dom";
 import ReactGA from "react-ga"; // google analytics
 import isThisApp from "utils/window/isThisApp";
@@ -23,14 +23,11 @@ import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // END UIs
 // import ScrollToTop from 'react-router-scroll-top';
-import useData from "init";
+// import useData from "init";
+const isApp = isThisApp();
 
 export default function App() {
     useOffline();
-    // !!!!FIX NULL WHEN IT IS OBJ LIEK BELOW::
-    const [userID, loading] = useData(["userId"], { dots: true });
-    // console.log("loading", loading);
-    // console.log("userID", userID);
 
     useEffect(() => {
         switchConsoleLogs();
@@ -74,9 +71,9 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            <Provider store={store}>
-                {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
-            </Provider>
+            <GlobalProvider store={store}>
+                {isApp ? <AsyncMobileApp /> : <AsyncWebsite />}
+            </GlobalProvider>
         </BrowserRouter>
     );
 }

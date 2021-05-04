@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useBizData } from "init";
-// import parse from "html-react-parser";
 import InstructionBtn from "../../../../buttons/InstructionBtn";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
 import {
@@ -9,11 +7,10 @@ import {
     changePrizeStatus,
 } from "../../../../../redux/actions/userActions";
 import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { sendNotification } from "../../../../../redux/actions/notificationActions";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { addDays, calendar } from "../../../../../utils/dates/dateFns";
-import useData from "init";
+import useData, { useBizData } from "init";
 import showToast from "../../../../toasts";
 import getAPI, {
     updateUser,
@@ -23,8 +20,7 @@ import getAPI, {
 export default function DiscountBenefit({ onClose, modalData }) {
     const [disableCTA, setDisableCTA] = useState(false);
 
-    const { businessId } = useAppSystem();
-    const { bizLogo, bizName, rewardDeadline = 30 } = useBizData();
+    const { bizId, bizLogo, bizName, rewardDeadline = 30 } = useBizData();
     const [staffName, role, firstStaffName] = useData([
         "name",
         "role",
@@ -64,7 +60,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
 
         const notifAuthorBody = {
             role: "cliente-admin",
-            cliAdminId: businessId,
+            cliAdminId: bizId,
             cardId,
             updatedBy: {
                 role,
@@ -90,7 +86,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
                 currChall,
                 prizeDeadline: rewardDeadline,
                 prizeDesc,
-                // senderId: businessId,
+                // senderId: bizId,
             },
         };
 
@@ -137,7 +133,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
                 body: notifAuthorBody,
             }),
             sendNotification(customerId, "challenge", pushNotifData),
-            addAutomaticTask(businessId, taskBody),
+            addAutomaticTask(bizId, taskBody),
         ]);
 
         if (notifRes.status !== 200)

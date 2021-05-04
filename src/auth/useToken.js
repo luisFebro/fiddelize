@@ -1,9 +1,9 @@
-import useContext from "context";
+import useData from "init";
 import getVar from "init/var";
 
 export default function useToken() {
-    const { currUser = {} } = useContext();
-    return currUser.token;
+    const { token } = useData();
+    return token;
 }
 
 export const chooseHeaderAsync = async ({ token, needAuth = true }) => {

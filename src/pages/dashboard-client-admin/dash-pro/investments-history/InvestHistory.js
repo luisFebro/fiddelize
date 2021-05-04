@@ -1,6 +1,5 @@
 import Title from "../../../../components/Title";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
-// import { useAppSystem } from "../../../../hooks/useRoleData";
 
 const AsyncInvestCardsList = LoadableVisible({
     loading: true,
@@ -11,8 +10,6 @@ const AsyncInvestCardsList = LoadableVisible({
 });
 
 export default function InvestHistory() {
-    // const { businessId: userId } = useAppSystem();
-
     return (
         <section>
             <Title

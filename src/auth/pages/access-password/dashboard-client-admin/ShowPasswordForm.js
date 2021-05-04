@@ -11,7 +11,7 @@ import showToast from "components/toasts";
 import { updateUser } from "redux/actions/userActions";
 import { readVerificationPass } from "redux/actions/adminActions";
 import setValObjWithStr from "utils/objects/setValObjWithStr";
-import { useAppSystem } from "hooks/useRoleData";
+import { useBizData } from "init";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
 import { setVar } from "init/var";
 
@@ -57,19 +57,19 @@ export default function ShowPasswordForm({
         speed: "normal",
     });
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
-    const { history } = dataFromPassPage;
-    const { clientAdminName } = dataFromPassPage;
-    const { bizLinkName } = dataFromPassPage;
+    // const { history } = dataFromPassPage;
+    // const { clientAdminName } = dataFromPassPage;
+    // const { bizLinkName } = dataFromPassPage;
 
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
         if (isFromCliAdminDash) {
-            readVerificationPass(businessId).then((res) => {
+            readVerificationPass(bizId).then((res) => {
                 if (res.status !== 200)
-                    return console.log("CODE ERROR: There is no businessId...");
+                    return console.log("CODE ERROR: There is no bizId...");
                 const passValue = res.data.verificationPass;
                 const keyName = "clientAdminData.verificationPass";
 
@@ -78,7 +78,7 @@ export default function ShowPasswordForm({
                 setData({ ...data, ...newObj });
             });
         }
-    }, [businessId]);
+    }, [bizId]);
 
     const sendDataBackend = () => {
         if (!clientAdminData.verificationPass) {
@@ -95,7 +95,7 @@ export default function ShowPasswordForm({
         };
 
         showToast("Ok, registrando...");
-        updateUser(dispatch, dataToSend, businessId, {
+        updateUser(dispatch, dataToSend, bizId, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)

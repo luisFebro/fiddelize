@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import MembersCard from "./card/accordion/MembersCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 
 import useAPIList, {
@@ -45,7 +45,7 @@ const handleSecHeading = (data, styles) => (
 
 export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const styles = getStyles();
 
@@ -65,7 +65,7 @@ export default function AsyncCardsList() {
             </section>
         );
 
-    const params = { bizId: businessId, skip };
+    const params = { bizId, skip };
 
     const { runName } = useRunComp();
     const trigger = getTrigger(runName, "teamMemberList");
@@ -80,7 +80,7 @@ export default function AsyncCardsList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readTeamMemberList(businessId),
+        url: readTeamMemberList(bizId),
         skip,
         params,
         listName: "teamMemberList",

@@ -18,7 +18,6 @@ import {
 } from "../../../../../redux/actions/userActions";
 import showToast from "../../../../../components/toasts";
 import { useBizData } from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 
 import { setRun } from "../../../../../hooks/useRunComp";
 import PrizesBtn from "../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn";
@@ -87,8 +86,7 @@ export default function RegisteredClientsAccordion({
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
-    const { bizLinkName } = useBizData();
-    const { businessId } = useAppSystem();
+    const { bizId, bizLinkName } = useBizData();
 
     const { runArray } = useStoreState((state) => ({
         runArray: state.globalReducer.cases.runArray,
@@ -101,7 +99,7 @@ export default function RegisteredClientsAccordion({
         setTimeout(() => {
             removeField(cardId, "clientUserData").then((res) => {
                 showToast("Atualizando app...");
-                readUser(dispatch, businessId, { role: "cliente-admin" }).then(
+                readUser(dispatch, bizId, { role: "cliente-admin" }).then(
                     (res) => {
                         if (res.status !== 200)
                             return showToast(

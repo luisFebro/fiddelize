@@ -1,17 +1,10 @@
-import { setItems } from "init/lStorage";
 import getVar, { removeVar, setVar, removeVars } from "init/var";
 import renewToken from "auth/renewToken";
 import { signInUserData } from "components/auth/Login";
 import getAPI, { setDefaultAccess } from "utils/promises/getAPI";
 import { setRun } from "redux/actions/globalActions";
 
-const handleCliAdmin = ({ bizId, dispatch, history, bizLinkName }) => {
-    const updatedValues = {
-        roleWhichDownloaded: "cliente-admin",
-        businessId: bizId,
-    };
-    setItems("appSystem", updatedValues);
-
+const handleCliAdmin = ({ dispatch, history, bizLinkName }) => {
     setRun(dispatch, "goDash");
 
     if (!bizLinkName) {
@@ -25,9 +18,7 @@ const handleCliAdmin = ({ bizId, dispatch, history, bizLinkName }) => {
     return history.push(`/${bizLinkName}/cliente-admin/painel-de-controle`);
 };
 
-const handleCliUser = ({ bizId, history }) => {
-    const updatedValues = { roleWhichDownloaded: "cliente", businessId: bizId };
-    setItems("appSystem", updatedValues);
+const handleCliUser = ({ history }) => {
     // need to reload so that some variables in the local storage can be loaded properly.
     return (window.location.href = "/mobile-app");
 };
@@ -44,7 +35,7 @@ export default async function handleOpenApp({
     userId,
     bizId,
 }) {
-    if (role_loggedIn === "...") return;
+    if (role_loggedIn === "...") return null;
 
     const isBizTeam = role_loggedIn === "nucleo-equipe";
     const isCliAdmin = role_loggedIn === "cliente-admin";
@@ -104,7 +95,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliAdmin) {
-            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
+            return handleCliAdmin({ dispatch, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -112,13 +103,13 @@ export default async function handleOpenApp({
         }
 
         if (isCliUserApp) {
-            return handleCliUser({ bizId, history });
+            return handleCliUser({ history });
         }
     }
 
     if (isBizTeam) {
         if (isCliAdminApp) {
-            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
+            return handleCliAdmin({ dispatch, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -126,7 +117,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliUserApp) {
-            return handleCliUser({ bizId, history });
+            return handleCliUser({ history });
         }
     }
 
@@ -137,7 +128,7 @@ export default async function handleOpenApp({
 
         // cli-admin apps can be multiple
         if (isCliAdminApp) {
-            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
+            return handleCliAdmin({ dispatch, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -145,7 +136,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliUserApp) {
-            return handleCliUser({ bizId, history });
+            return handleCliUser({ history });
         }
     }
 
@@ -155,11 +146,11 @@ export default async function handleOpenApp({
         }
 
         if (isCliAdminApp) {
-            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
+            return handleCliAdmin({ dispatch, history, bizLinkName });
         }
 
         if (isCliUserApp) {
-            return handleCliUser({ bizId, history });
+            return handleCliUser({ history });
         }
     }
 
@@ -188,7 +179,7 @@ export default async function handleOpenApp({
 
         // cli-user apps can be multiple
         if (isCliUserApp) {
-            return handleCliUser({ bizId, history });
+            return handleCliUser({ history });
         }
     }
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import InvestCard from "./card/accordion/InvestCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
@@ -49,11 +49,11 @@ const handleSecHeading = (data, styles) => (
 
 export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const styles = getStyles();
 
-    const params = { userId: businessId, skip };
+    const params = { userId: bizId, skip };
 
     const {
         list,

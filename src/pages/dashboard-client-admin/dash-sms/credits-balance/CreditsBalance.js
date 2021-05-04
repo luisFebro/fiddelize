@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import useAPI, { readCredits, needTrigger } from "../../../../hooks/api/useAPI";
-import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import usePro from "../../../../hooks/pro/usePro";
 
@@ -17,7 +17,7 @@ const getStyles = () => ({
 export default function CreditsBalance({ handleBalance }) {
     const styles = getStyles();
 
-    const { businessId: userId } = useAppSystem();
+    const { bizId: userId } = useBizData();
 
     const { runName } = useRunComp();
 

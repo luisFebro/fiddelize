@@ -1,30 +1,25 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { default as LProgress } from "@material-ui/core/LinearProgress";
-import { useStoreState } from "easy-peasy";
 // ref: https://material-ui.com/components/progress/
 
 function LinearProgress({ needDeterminate = false }) {
     const [completed, setCompleted] = useState(0);
-    const isLoading = useStoreState(
-        (state) => state.globalReducer.cases.isLinearPLoading
-    );
+    const isLoading = true;
 
     const styles = {
         progress: {
-            color: "var(--themeS)",
             backgroundColor: "var(--mainWhite)",
         },
     };
 
-    const showLinearProgress = (isLoading) =>
-        isLoading && (
-            <LProgress
-                variant="indeterminate"
-                style={styles.progress}
-                thickness={5}
-                value={needDeterminate ? completed : null}
-            />
-        );
+    const showLinearProgress = () => (
+        <LProgress
+            variant="indeterminate"
+            style={styles.progress}
+            thickness={5}
+            value={needDeterminate ? completed : null}
+        />
+    );
 
     useEffect(() => {
         function progress() {
@@ -51,9 +46,9 @@ function LinearProgress({ needDeterminate = false }) {
 
     return (
         <div style={{ position: "fixed", top: 0, width: "100%", zIndex: 2000 }}>
-            {showLinearProgress(isLoading)}
+            {isLoading && showLinearProgress(isLoading)}
         </div>
     );
 }
 
-export default React.memo(LinearProgress);
+export default LinearProgress;

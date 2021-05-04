@@ -7,12 +7,10 @@ import FacesPromotersScore, {
     getScaleText,
 } from "./faces-promoters-score/FacesPromotersScore";
 import handleChange from "../../../../utils/form/use-state/handleChange";
-import useData from "init";
+import useData, { useBizData } from "init";
 import "./_BuyRating.css";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
-import { useBizData } from "init";
-import { useAppSystem } from "../../../../hooks/useRoleData";
 import showToast from "../../../../components/toasts";
 
 const getStyles = () => ({
@@ -59,8 +57,7 @@ export default function BuyRating({
         "role",
     ]);
 
-    const { bizName, bizLogo } = useBizData();
-    const { businessId } = useAppSystem();
+    const { bizId, bizName, bizLogo } = useBizData();
 
     useEffect(() => {
         if (typeof handleBuyRating === "function") {
@@ -111,7 +108,7 @@ export default function BuyRating({
                 "clientUserData.review.reportUpdatedAt": new Date(),
                 customerName,
                 bizLogo,
-                businessId,
+                businessId: bizId,
                 report: buyReport,
             },
         }).catch((err) => {

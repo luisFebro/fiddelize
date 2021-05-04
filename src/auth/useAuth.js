@@ -1,14 +1,12 @@
 import { useEffect } from "react";
-import useData, { useBizData } from "init";
+import useData from "init";
 import isThisApp from "utils/window/isThisApp";
 import disconnect from "auth/disconnect";
 
 const isApp = isThisApp();
 
 export default function useAuth(options = {}) {
-    const { token } = useBizData();
-    const { role: currRole } = useData();
-    const [success] = useData(["success"]);
+    const [success, token, currRole] = useData(["success", "token", "role"]);
 
     const { history, roles } = options;
 

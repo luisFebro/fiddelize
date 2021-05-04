@@ -1,5 +1,5 @@
 import { setVars } from "init/var";
-import { setItems, getItems } from "init/lStorage";
+import { setItems } from "init/lStorage";
 
 // for both indexDB and localstorage in one place
 // also for bootup Login.js data and recurring access with loadUserInit rest API
@@ -19,6 +19,9 @@ export default async function setInitData(data, options = {}) {
     return "done setting init data";
 }
 
+const getIndexCommonData = (initData) => initData.currUser;
+
+/* PRIOR:
 const getIndexCommonData = (initData) => ({
     role: initData.currUser && initData.currUser.role,
     userId: initData.currUser && initData.currUser.userId,
@@ -28,6 +31,7 @@ const getIndexCommonData = (initData) => ({
     firstName: initData.currUser && initData.currUser.firstName,
     sexLetter: initData.currUser && initData.currUser.sexLetter,
 });
+ */
 
 const getDataByRole = (role, initData) => {
     const bizTeam = {
@@ -91,27 +95,10 @@ async function setLstorageData(initData) {
 
         setItems("bizData", initData.bizData);
         setItems("currUser", initData.currUser);
-        setImportantData(initData);
 
         resolve("done!");
     };
 
     return new Promise(run);
-}
-
-function setImportantData(data) {
-    // only used for cli-user and cli-admin, but it can be used as fallback to recover user's data.
-    const { role, userId } = data.currUser;
-    const { bizId } = data;
-
-    const [currBizId] = getItems("appSystem", ["businessId"]);
-
-    const updatedData = {
-        userId,
-        roleWhichDownloaded: role,
-        businessId: bizId || currBizId, // bizId will only be truthy when user log in
-    };
-
-    setItems("appSystem", updatedData);
 }
 // END LOCALSTORAGE

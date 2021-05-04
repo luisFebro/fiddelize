@@ -2,11 +2,10 @@ import { Fragment, useState } from "react";
 import TeamTasksCard from "./card/accordion/TeamTasksCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../../utils/dates/dateFns";
-import { useAppSystem } from "../../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import Illustration from "../../../../../../components/Illustration";
 import TeamTasksFilter from "./TeamTasksFilter";
-import useData from "init";
+import useData, { useBizData } from "init";
 // import extractStrData from '../../../../../../utils/string/extractStrData';
 // import { isScheduledDate } from '../../../../../../utils/dates/dateFns';
 import useAPIList, {
@@ -51,7 +50,7 @@ export default function TeamTasksList() {
     });
     const { filterBy, isFiltering } = data;
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
     const [memberId] = useData(["userId"]);
 
     const styles = getStyles();
@@ -67,7 +66,7 @@ export default function TeamTasksList() {
     const params = {
         userId: memberId, // for token check
         memberId,
-        bizId: businessId,
+        bizId,
         skip,
         filterBy,
     };

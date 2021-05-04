@@ -5,7 +5,6 @@ import { reducer } from "easy-peasy";
 // REDUCERS
 const initialState = {
     isLoading: false,
-    isLinearPLoading: false,
     isCustomLoading: false,
     isCustom2Loading: false,
     errorMsg: null,
@@ -21,12 +20,6 @@ const initialState = {
 export const globalReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
-            // Objs
-            // case 'VARIABLE':
-            //     return {
-            //         ...state,
-            //         variables: { ...initialState.variable, ...action.payload }
-            //     };
             case "CURRENT_ITEM_FOUND":
                 return {
                     ...state,
@@ -57,10 +50,7 @@ export const globalReducer = {
                     errorMsg: action.payload,
                 };
             case "LOADING_PROGRESS_TOGGLED":
-                return {
-                    ...state,
-                    isLinearPLoading: action.payload,
-                };
+                return null;
             case "CUSTOM_LOADING_TOGGLED":
                 return {
                     ...state,

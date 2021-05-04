@@ -17,8 +17,6 @@ export default function RatingIcons({
     colorBack,
     colorS,
 }) {
-    console.log("currPoints", currPoints);
-    console.log("targetPoints", targetPoints);
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,
     });
@@ -28,7 +26,6 @@ export default function RatingIcons({
     const selectedIcon = appPreviewIcon || milestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
     const eachMilestone = Number(targetPoints / 5);
-    console.log("eachMilestone", eachMilestone);
     const needDark = selectTxtStyle(colorBack, { needDarkBool: true });
 
     const paintStarsForScore = () => {

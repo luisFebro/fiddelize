@@ -1,15 +1,12 @@
-import { Fragment, useEffect } from "react";
+import { useMemo, Fragment, useEffect } from "react";
+import { useGlobalContext } from "context";
 import { Switch, Route, withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import { loadUser } from "../../redux/actions/authActions";
+import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 // LAYOUT
 import Navbar from "../../components/_layout/navbar";
 import Footer from "../../components/_layout/footer/Footer";
 // END LAYOUT
-
-// COMPONENTS
-import LinearProgress from "../../components/loadingIndicators/LinearProgress";
-import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
 // PAGES
 import Home from "../../pages/home/Home";
@@ -63,16 +60,18 @@ function Website({ location, history }) {
     const locationNow = location.pathname;
     const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
 
-    const dispatch = useStoreDispatch();
+    const { uify } = useGlobalContext();
+
+    // eslint-disable-next-line
+    const setUify = useMemo(() => uify, []);
 
     useEffect(() => {
         // loadReCaptcha();
-        loadUser(dispatch, history);
-    }, [dispatch]);
+        loadUser(setUify, history);
+    }, [setUify]);
 
     return (
         <Fragment>
-            <LinearProgress />
             {dontNeedLayout && <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />

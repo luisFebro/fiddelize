@@ -1,5 +1,5 @@
+import { removeItems } from "init/lStorage";
 import { setVars } from "init/var";
-import { setItems } from "init/lStorage";
 
 export default function handleRoleStorage({
     userScore,
@@ -60,15 +60,8 @@ export default function handleRoleStorage({
             "user"
         );
 
-        const needSysOp = whichRole && bizId;
-        if (needSysOp)
-            setItems("appSystem", {
-                roleWhichDownloaded: whichRole,
-                businessId: bizId,
-            });
-
         // for garantee that the current app is logged out.
         // Otherwise, the app will be displayed with wrong and mingled app's pages.
-        localStorage.removeItem("token");
+        removeItems("currUser", ["token"]);
     })();
 }

@@ -1,13 +1,13 @@
 import useAPI, { readCredits } from "../api/useAPI";
-import { useAppSystem } from "../useRoleData";
+import { useBizData } from "init";
 
 export default function useCheckBalance() {
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const { data: smsBalance } = useAPI({
-        url: readCredits(businessId),
+        url: readCredits(bizId),
         needOnlyOnce: true,
-        trigger: businessId !== "...",
+        trigger: bizId,
     });
 
     return smsBalance;

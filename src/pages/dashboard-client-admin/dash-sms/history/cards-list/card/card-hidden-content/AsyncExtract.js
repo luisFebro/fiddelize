@@ -7,7 +7,7 @@ import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import click from "../../../../../../../utils/event/click";
 import { setRun, useRunComp } from "../../../../../../../hooks/useRunComp";
 import showToast from "../../../../../../../components/toasts";
-import { useAppSystem } from "../../../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import useAPI, {
     readSMSHistoryStatement,
     needTrigger,
@@ -36,7 +36,7 @@ const headCells = [
 export default function AsyncExtract({ extractId }) {
     const loading = false;
 
-    const { businessId: userId } = useAppSystem();
+    const { bizId: userId } = useBizData();
 
     const { runName } = useRunComp();
     const trigger = needTrigger(runName, "UpdateSMSAll");

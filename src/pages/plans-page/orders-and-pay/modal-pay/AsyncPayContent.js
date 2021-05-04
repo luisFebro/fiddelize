@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import "./_PayContent.scss";
 import PayCategories from "./payment-methods/PayCategories";
-// import { Load } from "../../../../components/code-splitting/LoadableComp";
-import { useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import handleRenewalDays from "./helpers/handleRenewalDays";
-import useData from "init";
+import useData, { useBizData } from "init";
 
 export default function AsyncPayContent({ modalData }) {
     const {
@@ -40,11 +38,11 @@ export default function AsyncPayContent({ modalData }) {
         ordersStatement,
     ]);
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
     const [userName, userFirstName] = useData(["name", "firstName"]);
 
     const methodsModalData = {
-        userId: businessId,
+        userId: bizId,
         userName,
         userFirstName,
         renewalCurrDays,

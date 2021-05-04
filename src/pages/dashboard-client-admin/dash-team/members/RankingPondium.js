@@ -3,15 +3,15 @@ import styled from "styled-components";
 // import convertToReal from "../../../../utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import truncateWords from "../../../../utils/string/truncateWords";
-import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import Img from "../../../../components/Img";
 import useAPI, { getMembersPodium } from "../../../../hooks/api/useAPI";
 
 export default function RankingPondium() {
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const { data: highestData, gotData, loading } = useAPI({
-        url: getMembersPodium(businessId),
+        url: getMembersPodium(bizId),
         needAuth: false,
         dataName: "membersPodium",
     });

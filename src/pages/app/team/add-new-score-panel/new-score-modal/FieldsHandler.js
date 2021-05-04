@@ -4,12 +4,10 @@ import SearchCustomer from "./SearchCustomer";
 import ScoreCustomer from "./ScoreCustomer";
 import SuccessMsg from "./SuccessMsg";
 import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
-import { useBizData } from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
     setTempPointsAndMemberData,
 } from "../../../../../utils/promises/getAPI";
-import useData from "init";
+import useData, { useBizData } from "init";
 
 const setCustomerId = async (clientName, bizId, memberId) => {
     const body = {
@@ -42,7 +40,11 @@ function FieldsHandler({
     });
     const { field, customerName, customerId } = curr;
 
-    const { businessId: bizId } = useAppSystem();
+    const {
+        bizId,
+        themeBackColor: backColor,
+        themePColor: colorP,
+    } = useBizData();
     const [memberId] = useData(["userId"]);
 
     useEffect(() => {
@@ -59,8 +61,6 @@ function FieldsHandler({
             })();
         }
     }, [customerName, bizId, memberId]);
-
-    const { themeBackColor: backColor, themePColor: colorP } = useBizData();
 
     const textColor = selectTxtStyle(backColor);
     const needDark = selectTxtStyle(backColor, { needDarkBool: true }); // for icons

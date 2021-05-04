@@ -4,9 +4,7 @@ import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import AsyncLogin from "components/auth/AsyncLogin";
 import useData, { useBizData } from "init";
-import { useAppSystem } from "hooks/useRoleData";
 import useAuth from "auth/useAuth";
-import { useRunComp } from "hooks/useRunComp";
 import isThisApp from "utils/window/isThisApp";
 import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import useDelay from "hooks/useDelay";
@@ -19,7 +17,15 @@ import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
 import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
-import ClientUserAppContent from "./content/ClientUserAppContent";
+// import ClientUserAppContent from "./content/ClientUserAppContent";
+
+const AsyncClientUserAppContent = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "./content/ClientUserAppContent" /* webpackChunkName: "client-user-app-content-comp-lazy" */
+        ),
+});
 
 const AsyncAdminQuickActions = Load({
     loading: false,
@@ -70,6 +76,7 @@ function ClientMobileApp({ location, history }) {
     useScrollUp();
 
     const [
+        role,
         userId,
         rememberAccess,
         fullName,
@@ -81,6 +88,7 @@ function ClientMobileApp({ location, history }) {
         needAppRegister,
         loadingData,
     ] = useData([
+        "role",
         "userId",
         "rememberAccess",
         "name",
@@ -92,9 +100,8 @@ function ClientMobileApp({ location, history }) {
         "needAppRegister",
     ]);
 
-    const { role } = useData();
-
     const {
+        bizId,
         bizLinkName,
         bizLogo,
         themePColor,
@@ -112,8 +119,7 @@ function ClientMobileApp({ location, history }) {
     });
 
     const isAuthUser = useAuth();
-
-    const { roleWhichDownloaded, businessId } = useAppSystem();
+    console.log("isAuthUser", isAuthUser);
 
     // MAIN VARIABLES
     // # query
@@ -123,15 +129,13 @@ function ClientMobileApp({ location, history }) {
     const needPWA = searchQuery.includes("banner=1"); // used for trying to show the download banner again if the first attempt has failed
     // # roles
     const isStaff = role === "cliente-membro" || role === "cliente-admin";
-    const isBizTeam =
-        role === "nucleo-equipe" || roleWhichDownloaded === "nucleo-equipe";
-    let isCliAdmin =
-        role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
-    const isCliMember =
-        role === "cliente-membro" || roleWhichDownloaded === "cliente-membro";
-    let isCliUser = role === "cliente" || roleWhichDownloaded === "cliente";
+    const isBizTeam = role === "nucleo-equipe";
+    let isCliAdmin = role === "cliente-admin";
+    const isCliMember = role === "cliente-membro";
+    let isCliUser = role === "cliente";
+    console.log("isCliAdmin", isCliAdmin);
 
-    const isSessionOver = isAuthUser;
+    const isSessionOver = !isAuthUser;
     const needStaffLogout = isStaff && isSessionOver && rememberAccess;
 
     if (needAppForCliAdmin) {
@@ -141,7 +145,6 @@ function ClientMobileApp({ location, history }) {
     const accessCheck = !isStaff || (!loadingData && !rememberAccess);
     // END MAIN VARIABLES
 
-    const { runName } = useRunComp();
     const versionReady = useDelay(2000);
 
     // useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
@@ -269,9 +272,9 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
-    const conditionRegister = loginOrRegister === "register" && showRegister();
+    const conditionRegister = loginOrRegister === "register";
     const conditionLogin =
-        (loginOrRegister === "login" && accessCheck && showLogin()) ||
+        (loginOrRegister === "login" && accessCheck) ||
         (loginOrRegister === "login" && !isAuthUser);
 
     if (loadingData) {
@@ -321,7 +324,6 @@ function ClientMobileApp({ location, history }) {
                     <AppTypeBubble
                         role={role}
                         loadingAccess={loadingData}
-                        roleWhichDownloaded={roleWhichDownloaded}
                         isUrlAdmin={isUrlAdmin}
                         needAppForCliAdmin={needAppForCliAdmin}
                         themePColor={themePColor}
@@ -342,16 +344,16 @@ function ClientMobileApp({ location, history }) {
                             loadingAccess={loadingData}
                         />
                     )}
-                    {conditionRegister}
-                    {conditionLogin}
+                    {conditionRegister && showRegister()}
+                    {conditionLogin && showLogin()}
                 </section>
             )}
 
             {isAuthUser && (
                 <section>
                     {isCliUser && (
-                        <ClientUserAppContent
-                            businessId={businessId}
+                        <AsyncClientUserAppContent
+                            businessId={bizId}
                             loadingData={loadingData}
                             useThisData={useData}
                             useBizData={useBizData}

@@ -2,10 +2,9 @@ import { Fragment, useState } from "react";
 import CliWinnersCard from "./card/accordion/CliWinnersCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
+import useData, { useBizData } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import Illustration from "../../../../../components/Illustration";
-import useData from "init";
 // import extractStrData from '../../../../../utils/string/extractStrData';
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
@@ -45,7 +44,7 @@ const handleSecHeading = (data, styles) => (
 export default function CliWinnersList() {
     const [skip, setSkip] = useState(0);
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
     const [memberId] = useData(["userId"]);
 
     const styles = getStyles();
@@ -53,7 +52,7 @@ export default function CliWinnersList() {
     const params = {
         userId: memberId, // for token check
         memberId,
-        bizId: businessId,
+        bizId,
         skip,
     };
 

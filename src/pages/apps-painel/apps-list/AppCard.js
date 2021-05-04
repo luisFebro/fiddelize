@@ -7,7 +7,7 @@ import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
-import { useAppSystem } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 import handleOpenApp from "./helpers/appAccessAlgorithm";
 import Skeleton from "../../../components/multimedia/Skeleton";
 
@@ -44,7 +44,7 @@ function AppCard({ data, payload, loading }, ref) {
         userId,
     } = payload;
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
 
     const dataAppType = role && handleAppType(role);
 
@@ -72,7 +72,7 @@ function AppCard({ data, payload, loading }, ref) {
         appId_loggedIn,
         dispatch,
         bizLinkName,
-        bizId: businessId,
+        bizId,
         clickedAppUserId,
         userId,
     };

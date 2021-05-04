@@ -1,5 +1,5 @@
 import isThisApp from "utils/window/isThisApp";
-import { removeCollection } from "init/lStorage";
+import { removeCollection, setItems } from "init/lStorage";
 import getVar, { setVars, removeStore } from "init/var";
 import showToast from "components/toasts";
 
@@ -18,14 +18,15 @@ export default async function disconnect(options = {}) {
     const role = await getVar("role", "user");
     const isCliAdmin = role === "cliente-admin";
 
-    const setRememberAccess = async () => {
-        if (!isCliAdmin) return null;
-        return await setVars({ rememberAccess }, "user");
-    };
+    if (!role) return null;
 
-    await Promise.all([setRememberAccess(), removeStore("user")]);
-
+    await removeStore("user");
     removeCollection("currUser");
+
+    // post essential data set
+    if (isCliAdmin) await setVars({ rememberAccess }, "user");
+    setItems("currUser", { role });
+    // end
 
     if (!needRedirect && !history) return null;
 
@@ -34,5 +35,5 @@ export default async function disconnect(options = {}) {
     }
 
     const destiny = isApp ? "/mobile-app" : "/acesso/verificacao";
-    window.location.href = destiny;
+    return (window.location.href = destiny);
 }

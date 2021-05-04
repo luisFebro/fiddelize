@@ -1,12 +1,9 @@
-import React, { Fragment, useEffect } from "react";
+import { useMemo, Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
-import useContext from "context";
+import { useGlobalContext } from "context";
 import { loadUser } from "redux/actions/authActions";
-// LAYOUT
-import Navbar from "components/_layout/navbar";
-// COMPONENTS
-import LinearProgress from "components/loadingIndicators/LinearProgress";
 import PrivateRouteClientAdm from "components/auth/routes/PrivateRouteClientAdm";
+import { Load } from "components/code-splitting/LoadableComp";
 // PAGES
 import ClientMobileApp from "pages/mobile-app/ClientMobileApp";
 import RegulationPage from "pages/RegulationPage";
@@ -46,6 +43,14 @@ import {
 } from "./CommonImports";
 // END PAGES
 
+const AsyncNavBar = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "components/_layout/navbar" /* webpackChunkName: "main-navbar-lazy" */
+        ),
+});
+
 // This is the msg to be displayed for desktop users when popping up the
 // new screen right after the download.
 const InstallMsg = () => (
@@ -61,10 +66,10 @@ const InstallMsg = () => (
 function Mobile({ location, history }) {
     const locationNow = location.pathname;
 
-    const { uify } = useContext();
+    const { uify } = useGlobalContext();
 
     // eslint-disable-next-line
-    const setUify = React.useMemo(() => uify, []);
+    const setUify = useMemo(() => uify, []);
 
     useEffect(() => {
         loadUser(setUify, history);
@@ -73,9 +78,8 @@ function Mobile({ location, history }) {
 
     return (
         <Fragment>
-            <LinearProgress />
             {!["/mobile-app", "/acesso/verificacao"].includes(locationNow) ? (
-                <Navbar />
+                <AsyncNavBar />
             ) : null}
             <Switch>
                 <Route

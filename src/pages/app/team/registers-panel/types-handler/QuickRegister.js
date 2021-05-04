@@ -4,9 +4,7 @@ import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import EmailIcon from "@material-ui/icons/Email";
 import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import { useBizData } from "init";
-import useData from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
+import useData, { useBizData } from "init";
 import validatePhone from "../../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../../utils/validation/validateEmail";
 import showToast from "../../../../../components/toasts";
@@ -52,9 +50,9 @@ const runLink = (url) => {
     a.click();
 };
 
-const getSmsObj = ({ businessId, name, meanPayload }) => ({
+const getSmsObj = ({ bizId, name, meanPayload }) => ({
     isAutomatic: false,
-    userId: businessId,
+    userId: bizId,
     contactList: [{ name, phone: meanPayload }],
 });
 
@@ -91,8 +89,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
 
     const [linkId] = useData(["linkId"]);
 
-    const { businessId } = useAppSystem();
-    const { bizName, bizLinkName } = useBizData();
+    const { bizId, bizName, bizLinkName } = useBizData();
     const { name: userName } = useData();
 
     const smsBalance = useCheckBalance();
@@ -117,7 +114,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     score: dbScore,
                     cliFirstName,
                     bizCode,
-                    userId: businessId,
+                    userId: bizId,
                 },
             });
 
@@ -192,7 +189,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
             showToast(`Enviando convite para ${name.cap()}!`);
 
             const smsObj = getSmsObj({
-                businessId,
+                bizId,
                 name,
                 meanPayload,
             });

@@ -21,7 +21,6 @@ import copyText from "../../utils/document/copyText";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 import showToast from "../../components/toasts";
 import useData from "init";
-import { useAppSystem } from "../../hooks/useRoleData";
 import downloadImg from "../../utils/media/download-img/downloadImg";
 import QrCode from "../../components/QrCode";
 import "../app/team/registers-panel/types-handler/qr-code-invitation-btn/_QrInvitationModal.scss";
@@ -95,14 +94,14 @@ export default function AppSharer({ location, match }) {
         themePColor: pColor,
     } = useBizData();
     const { name: cliName } = useData();
-    const { businessId } = useAppSystem();
+    const { bizId: thisBizId } = useBizData();
 
     const role = getQueryByName("role", location.search) || "cliente-admin";
     const bizLinkName = match.params.bizLinkName || thisBizCode;
     const bizName = getQueryByName("negocio", location.search) || businessName;
     const cliAdminName =
         getQueryByName("adminName", location.search) || cliName;
-    const bizId = getQueryByName("id", location.search) || businessId;
+    const bizId = getQueryByName("id", location.search) || thisBizId;
 
     const indLastSlash = bizLinkName.lastIndexOf("-");
     const onlyBizCode = bizLinkName.slice(indLastSlash + 1);

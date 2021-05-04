@@ -4,8 +4,7 @@ import SmsCard from "./card/accordion/SmsCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 // import SearchFilter from "../../../../../components/search/SearchFilter";
 import { calendar, isScheduledDate } from "../../../../../utils/dates/dateFns";
-import useData from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
+import useData, { useBizData } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import Img from "../../../../../components/Img";
@@ -71,7 +70,7 @@ const handleSecHeading = (data, styles, forceCancel) => {
 export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
     const [forceCancel, setForceCancel] = useState(false); // solve real time update after calling off a scheduled date.
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
     const { name } = useData();
 
     const styles = getStyles();
@@ -91,7 +90,7 @@ export default function AsyncCardsList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readSMSMainHistory(businessId),
+        url: readSMSMainHistory(bizId),
         skip,
         trigger,
         listName: "smsCardsList",

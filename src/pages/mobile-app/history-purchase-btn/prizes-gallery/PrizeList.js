@@ -1,17 +1,17 @@
 import { useState } from "react";
 import Trophy from "./Trophy";
 import useAPIList, { readPrizes } from "../../../../hooks/api/useAPIList";
-import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import Tooltip from "../../../../components/tooltips/Tooltip";
 import { fromNow, formatDMY } from "../../../../utils/dates/dateFns";
 
 export default function PrizeList({ userId }) {
     const [skip, setSkip] = useState(0);
 
-    const { businessId } = useAppSystem();
+    const { bizId } = useBizData();
     const { list, loading, ShowLoading, error, ShowError } = useAPIList({
         url: readPrizes(userId),
-        params: { cliAdminId: businessId },
+        params: { cliAdminId: bizId },
     });
 
     const dataMap =

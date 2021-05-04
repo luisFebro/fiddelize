@@ -1,30 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { getVars } from "init/var";
 import { getItems } from "init/lStorage";
 import repeat from "utils/arrays/repeat";
-import useContext from "context";
+import { useGlobalContext } from "context";
 
 // USAGE
 // localStorage = simply use an empty function. e.g const { role } = useData();
 // indexedDB = use an array of strings = const [userRole] = useData(["role"]);
 export default function useData(dataArray, options) {
-    // const { currUser = {} } = useContext();
+    const globalData = useGlobalContext();
+    const currUser = globalData ? globalData.currUser : {};
     const { store, trigger, dots, local } = handleOptions(dataArray, options);
 
-    const [finalData, setFinalData] = useState([]);
-
     // eslint-disable-next-line
-    const thisArray = React.useMemo(() => dataArray, []);
+    const thisArray = useMemo(() => dataArray, []);
 
-    useIndexedLoader({
+    // LESSON: this condition is responsible to update indexedDB data in bootup
+    const updateIndexedDB = Boolean(currUser.userId);
+
+    const finalData = useIndexedLoader({
         thisArray,
         trigger,
         store,
         local,
-        setFinalData,
+        updateIndexedDB,
     });
 
-    if (local) return handleLocalStorage();
+    if (local) return updateLocalStorage("currUser", { currData: currUser });
 
     // this will automatically set a ... for dataArray loading
     const isLoading = !finalData.length;
@@ -35,10 +37,10 @@ export default function useData(dataArray, options) {
 }
 
 export function useBizData() {
-    const { bizData = {} } = useContext();
-    const [priorBizData] = getItems("bizData");
+    const globalData = useGlobalContext();
+    const bizData = globalData ? globalData.bizData : {};
 
-    const updatedBizData = { ...priorBizData, ...bizData };
+    const updatedBizData = updateLocalStorage("bizData", { currData: bizData });
 
     return {
         ...updatedBizData,
@@ -59,24 +61,38 @@ export function useFiddelizeAdmin() {
 }
 
 // HOOKS
-function useIndexedLoader({ thisArray, trigger, store, local, setFinalData }) {
+function useIndexedLoader({
+    thisArray,
+    trigger,
+    store,
+    local,
+    updateIndexedDB,
+}) {
+    const [finalData, setFinalData] = useState([]);
+
     useEffect(() => {
         let unmounted;
         if (local || (thisArray && !thisArray.length) || !trigger || unmounted)
             return null;
 
         (async () => {
-            const indexedRes = await getVars(thisArray, store).catch((err) => {
-                throw new Error(`${err}`);
-            });
+            const updatedIndexedDB = await getVars(thisArray, store).catch(
+                (err) => {
+                    throw new Error(`${err}`);
+                }
+            );
 
-            if (indexedRes) setFinalData(indexedRes);
+            setFinalData(updatedIndexedDB);
+
+            return null;
         })();
 
         return () => {
             unmounted = true;
         };
-    }, [thisArray, trigger, store, local]);
+    }, [thisArray, trigger, store, local, updateIndexedDB]);
+
+    return finalData;
 }
 // END HOOKS
 
@@ -91,7 +107,7 @@ function handleOptions(dataArray, options) {
     const local = dataArray === undefined; // fetch data from localstorage
 
     if (typeof options === "object") {
-        store = options.store;
+        store = options.store || "user";
         trigger = options.trigger === undefined ? true : options.trigger;
         dots = options.dots === false ? null : dots;
     }
@@ -104,8 +120,10 @@ function handleOptions(dataArray, options) {
     };
 }
 
-function handleLocalStorage() {
-    const [localRes] = getItems("currUser");
-    return !localRes ? {} : localRes;
+function updateLocalStorage(collection, { currData }) {
+    const [priorData] = getItems(collection);
+    const updatedData = { ...priorData, ...currData };
+
+    return updatedData;
 }
 // END HELPERS

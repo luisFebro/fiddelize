@@ -11,7 +11,6 @@ import ButtonMulti, {
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 import { useBizData } from "init";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { regulationText as generatedRegTxt } from "../../../regulationText";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import { handleEnterPress } from "../../../../../utils/event/isKeyPressed";
@@ -22,7 +21,7 @@ let temp = "";
 
 // NEXT UPDATE: using debouncing and throttling technique to save in real time without any further action like currently as clicking outside the box.
 function RegulationText({ generateRegulation }) {
-    const { rewardDeadline, regulation, bizLinkName } = useBizData();
+    const { bizId, rewardDeadline, regulation, bizLinkName } = useBizData();
 
     const [msgStatus, setMsgStatus] = useState("atualizado.");
     const [disabledBtn, setDisabledBtn] = useState(false);
@@ -32,8 +31,6 @@ function RegulationText({ generateRegulation }) {
         deadline: rewardDeadline,
     });
     const { regulationText, deadline } = data;
-
-    const { businessId } = useAppSystem();
 
     const init = (regulation) => {
         setData({ ...data, regulationText: regulation && regulation.text });
@@ -117,7 +114,7 @@ function RegulationText({ generateRegulation }) {
             const objToSend = {
                 "clientAdminData.rewardDeadline": deadline,
             };
-            updateUser(dispatch, objToSend, businessId).then((res) => {
+            updateUser(dispatch, objToSend, bizId).then((res) => {
                 if (res.status !== 200)
                     return showSnackbar(dispatch, res.data.msg, "error");
                 showSnackbar(dispatch, "O prazo foi atualizado!", "success");
@@ -134,7 +131,7 @@ function RegulationText({ generateRegulation }) {
                 "clientAdminData.regulation.text": regulationText,
                 "clientAdminData.regulation.updatedAt": new Date(),
             };
-            updateUser(dispatch, objToSend, businessId).then((res) => {
+            updateUser(dispatch, objToSend, bizId).then((res) => {
                 if (res.status !== 200)
                     return showSnackbar(dispatch, res.data.msg, "error");
                 setMsgStatus("salvo");

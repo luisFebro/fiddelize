@@ -1,42 +1,13 @@
-import useImg, { Img } from "../../../hooks/media/useImg";
-
-const handleAppType = ({
-    role,
-    themePColor,
-    needAppForCliAdmin,
-    roleWhichDownloaded,
-    isAuthUser,
-}) => {
-    const isClientUser = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
-    const isClientMember = role === "cliente-membro";
-    const isBizTeam = role === "nucleo-equipe";
-
-    if (!isAuthUser && (isClientMember || isClientUser || isBizTeam))
-        return true;
-    if (roleWhichDownloaded === "cliente") return false;
-
-    const gotEmptyData = typeof role === "object" && themePColor === "default";
-
-    return (
-        (roleWhichDownloaded && !isClientUser && !needAppForCliAdmin) ||
-        gotEmptyData ||
-        (role === "cliente-admin" && !needAppForCliAdmin)
-    );
-};
+import { getItems } from "init/lStorage";
 
 export default function AppTypeBubble({
-    role,
     loadingAccess,
     isUrlAdmin,
     needAppForCliAdmin,
     themePColor,
-    roleWhichDownloaded,
     isAuthUser,
 }) {
-    const shapeSrc = useImg(`/img/shapes/blob-app-start--${themePColor}.svg`, {
-        coll: "shapes",
-        key: `app_start_shape_${themePColor}`,
-    });
+    const [role] = getItems("currUser", ["role"]);
 
     const isBizTeam = role === "nucleo-equipe";
 
@@ -53,7 +24,6 @@ export default function AppTypeBubble({
         role,
         themePColor,
         needAppForCliAdmin,
-        roleWhichDownloaded,
         isAuthUser,
     });
 
@@ -68,14 +38,11 @@ export default function AppTypeBubble({
                         marginBottom: -40,
                     }}
                 >
-                    <div
-                        style={{ animationIterationCount: 1 }}
-                        className="animated rubberBand delay-1s"
-                    >
-                        <Img
-                            src={shapeSrc}
+                    <div>
+                        <img
+                            src={`/img/shapes/blob-app-start--${themePColor}.svg`}
+                            className="animated rubberBand delay-5s"
                             width={460}
-                            needLoader={false}
                             height={130}
                             alt="tipo de app"
                         />
@@ -106,3 +73,18 @@ export default function AppTypeBubble({
         )
     );
 }
+
+// HELPERS
+function handleAppType({ role, themePColor, needAppForCliAdmin, isAuthUser }) {
+    const isClientAdmin = role === "cliente-admin" && !needAppForCliAdmin;
+    const afterPasswordCliAdmin = isAuthUser && isClientAdmin;
+    const defaultFiddelize = themePColor === "default";
+
+    const condNotAuth =
+        !isAuthUser && (defaultFiddelize || isClientAdmin || role);
+    if (afterPasswordCliAdmin || condNotAuth) return true;
+
+    return false;
+}
+
+// END HELPERS

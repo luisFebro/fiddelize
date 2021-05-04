@@ -3,11 +3,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.18.0-30";
+const latestVersion = "4.18.0-50";
 
 const updateDescription =
-    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | new authentication system pt 2";
+    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | new api and progress loader";
 /* HISTORY
+new authentication system
 new uify to handle global states
 "new init data handling for frontend"
 "new init to fetch rest API at once"
