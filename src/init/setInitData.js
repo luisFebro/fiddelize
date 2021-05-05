@@ -19,7 +19,10 @@ export default async function setInitData(data, options = {}) {
     return "done setting init data";
 }
 
-const getIndexCommonData = (initData) => initData.currUser;
+const getIndexCommonData = (initData) => ({
+    ...initData.currUser,
+    appId: initData.appId,
+});
 
 const getDataByRole = (role, initData) => {
     const bizTeam = {

@@ -163,7 +163,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
             runCheckPassword();
         }
 
-        const allIdsOn = userId && bizId;
+        const allIdsOn = isBizTeam ? userId : userId && bizId;
 
         if (allIdsOn && completedFill && success) {
             (async () => {

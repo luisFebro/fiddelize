@@ -147,7 +147,6 @@ export async function signInUserData(cpfValue, options = {}) {
     await removeInstantAppAndRegisterData();
 
     if (role === "nucleo-equipe") {
-        if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectAgent", "user");
 
         if (!pswd) {
@@ -182,7 +181,6 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "cliente-membro") {
-        if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectCliMember", "user");
 
         if (needAccountPanel) {

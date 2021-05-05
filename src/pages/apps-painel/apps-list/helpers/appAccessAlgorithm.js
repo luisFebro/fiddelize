@@ -1,5 +1,5 @@
 import { removeVar, setVar, removeVars } from "init/var";
-import getItems from "init/lStorage";
+import getItems, { removeItems } from "init/lStorage";
 import renewToken from "auth/renewToken";
 import { signInUserData } from "components/auth/Login";
 import getAPI, { setDefaultAccess } from "api";
@@ -22,17 +22,17 @@ const handleCliAdmin = ({ dispatch, history, bizLinkName }) => {
 };
 
 const handleCliUser = ({ history }) => {
-    // need to reload so that some variables in the local storage can be loaded properly.
-    return (window.location.href = "/mobile-app");
+    history.push("/mobile-app");
 };
 
 export default async function handleOpenApp({
+    uify,
+    dispatch,
     history,
     appRole,
     role_loggedIn,
     appId,
     appId_loggedIn,
-    dispatch,
     bizLinkName,
     clickedAppUserId,
     userId,
@@ -61,11 +61,10 @@ export default async function handleOpenApp({
                 appId,
                 userId: clickedAppUserId,
             },
-        }).catch((e) => {
-            console.log(e.error);
         });
 
         const userData = {
+            uify,
             dispatch,
             history,
             appPanelUserId: clickedAppUserId,
@@ -162,7 +161,7 @@ export default async function handleOpenApp({
         const removeSession = async () => {
             // NOTE: sometimes, token is not removed. This is not an issue just yet since this token is simply informative so far.
             await removeVars(["success", "token"], "user");
-            localStorage.removeItem("token");
+            removeItems("currUser", ["token"]);
         };
 
         if (isFiddelizeApp) {

@@ -1,20 +1,17 @@
 import { Fragment, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
-import AppCard from "./AppCard";
 import useAPIList, { readAppList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import repeat from "../../../utils/arrays/repeat";
-import useData from "init";
+import repeat from "utils/arrays/repeat";
+import useData, { useBizData } from "init";
+import AppCard from "./AppCard";
 
 export default function AppList({ history }) {
     const [skip, setSkip] = useState(0);
 
-    const [userId, role, bizLinkName, appId] = useData([
-        "userId",
-        "role",
-        "bizLinkName",
-        "appId",
-    ]);
+    const { bizLinkName } = useBizData();
+
+    const [userId, role, appId] = useData(["userId", "role", "appId"]);
 
     const dispatch = useStoreDispatch();
 

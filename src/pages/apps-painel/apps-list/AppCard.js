@@ -1,15 +1,17 @@
 import { useState, forwardRef } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import "./_AppCard.scss";
-// icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import { useGlobalContext } from "context";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
 import { useBizData } from "init";
+import Skeleton from "components/multimedia/Skeleton";
+import showToast from "components/toasts";
 import handleOpenApp from "./helpers/appAccessAlgorithm";
-import Skeleton from "../../../components/multimedia/Skeleton";
+//
 
 const handleAppType = (role) => {
     if (role === "cliente-admin")
@@ -18,12 +20,14 @@ const handleAppType = (role) => {
         return { type: "equipe", icon: <PeopleAltIcon /> };
     if (role === "nucleo-equipe")
         return { type: "fiddelize", icon: <MonetizationOnIcon /> };
-    if (role === "cliente") return { type: "cliente", icon: <LocalMallIcon /> };
+
+    return { type: "cliente", icon: <LocalMallIcon /> };
 };
 
 export default forwardRef(AppCard);
 
 function AppCard({ data, payload, loading }, ref) {
+    const { uify } = useGlobalContext();
     const [opening, setOpening] = useState(false);
 
     const {
@@ -65,17 +69,19 @@ function AppCard({ data, payload, loading }, ref) {
     );
 
     const payloadOpen = {
+        uify,
+        dispatch,
         history,
         appId,
         appRole: role,
         role_loggedIn,
         appId_loggedIn,
-        dispatch,
         bizLinkName,
         bizId,
         clickedAppUserId,
         userId,
     };
+    // console.log("payloadOpen", payloadOpen);
 
     let finalBizLogo =
         bizImg && bizImg.replace(/\/h_100,w_100|\/h_85,w_190/gi, "");
@@ -111,13 +117,17 @@ function AppCard({ data, payload, loading }, ref) {
                     title={`${opening ? "iniciando..." : "abrir"}`}
                     variant="extended"
                     size="small"
-                    backgroundColor="var(--default)"
                     position="relative"
                     backgroundColor="var(--themeSDark--default)"
                     onClick={() => {
                         (async () => {
                             setOpening(true);
-                            await handleOpenApp(payloadOpen);
+                            await handleOpenApp(payloadOpen).catch((err) => {
+                                showToast("Ocorreu um erro ao iniciar app", {
+                                    type: "error",
+                                });
+                                setOpening(false);
+                            });
                             setOpening(false);
                         })();
                     }}

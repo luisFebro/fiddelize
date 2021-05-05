@@ -41,7 +41,7 @@ export function handleAction(action = [], state) {
     return [...action];
 }
 // END REDUCER
-// warning: global context should be used for init and auth data purpose and set ONLY at files like useData.js and Login.js file so data can be used in the entire project. All other contexts should be in a sub main component/project with useContext which belong to its specific comp
+// warning: global context should be used for init and auth data purpose and set ONLY at files like useData.js, appAccessAlgorithm (renew session) and Login.js file so data can be used in the entire project. All other contexts should be in a sub main component/project with useContext which belong to its specific comp
 
 /* n1 create a file "useGlobal.js" in the root of the target component to store all global variables.
 this file should be import to the target file and be assigned to store like:

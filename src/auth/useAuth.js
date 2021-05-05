@@ -6,12 +6,14 @@ import disconnect from "auth/disconnect";
 const isApp = isThisApp();
 
 export default function useAuth(options = {}) {
-    const [success, token, currRole] = useData(["success", "token", "role"]);
+    const [success, token, currRole] = useData(["success", "token", "role"], {
+        dots: false,
+    });
 
     const { history, roles } = options;
 
     useEffect(() => {
-        if (success === "...") return;
+        if (!success) return;
 
         const theseRoles = roles && roles.includes(currRole);
         const isAuthUser = success && theseRoles;
