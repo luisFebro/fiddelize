@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getAPI, { recoverPassword, changePassword } from "utils/promises/getAPI";
+import getAPI, { recoverPassword, changePassword } from "api";
 import isThisApp from "utils/window/isThisApp";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";

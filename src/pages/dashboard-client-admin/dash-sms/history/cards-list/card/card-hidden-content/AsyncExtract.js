@@ -8,10 +8,7 @@ import click from "../../../../../../../utils/event/click";
 import { setRun, useRunComp } from "../../../../../../../hooks/useRunComp";
 import showToast from "../../../../../../../components/toasts";
 import { useBizData } from "init";
-import useAPI, {
-    readSMSHistoryStatement,
-    needTrigger,
-} from "../../../../../../../hooks/api/useAPI";
+import useAPI, { readSMSHistoryStatement, needTrigger } from "api/useAPI";
 
 const isSmall = window.Helper.isSmallScreen();
 

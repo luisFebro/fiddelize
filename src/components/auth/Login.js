@@ -3,7 +3,7 @@ import { useGlobalContext } from "context";
 import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
-import { doLogin } from "redux/actions/authActions";
+import { doLogin } from "auth/api";
 import isThisApp from "utils/window/isThisApp";
 import { useBizData } from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
@@ -164,8 +164,6 @@ export async function signInUserData(cpfValue, options = {}) {
 
     if (role === "cliente-admin") {
         let whichRoute;
-
-        if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
 
         if (!verificationPass) {
             await sendWelcomeNotif({

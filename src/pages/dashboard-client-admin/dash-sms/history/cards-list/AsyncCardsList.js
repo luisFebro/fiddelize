@@ -11,13 +11,8 @@ import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import scrollIntoView from "../../../../../utils/document/scrollIntoView";
 
-import useAPIList, {
-    readSMSMainHistory,
-    getTrigger,
-} from "../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../hooks/api/useElemDetection";
+import useAPIList, { readSMSMainHistory, getTrigger } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 
 const isSmall = window.Helper.isSmallScreen();
 

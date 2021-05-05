@@ -1,4 +1,4 @@
-import getId from "../../utils/getId";
+import getId from "utils/getId";
 
 const getUniqueId = () => getId();
 

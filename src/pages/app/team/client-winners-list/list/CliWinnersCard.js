@@ -5,7 +5,7 @@ import useAPI, {
     toggleDoneUrl,
     changePrizeStatus,
     treatBoolStatus,
-} from "../../../../../hooks/api/useAPI";
+} from "api/useAPI";
 import ActionBtn from "./ActionBtn";
 import extractStrData from "../../../../../utils/string/extractStrData";
 import useDatesCountdown from "../../../../../hooks/dates/useDatesCountdown";

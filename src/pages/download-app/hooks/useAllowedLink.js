@@ -1,5 +1,5 @@
 import useData from "init";
-import useAPI, { isLinkAllowed } from "../../../hooks/api/useAPI";
+import useAPI, { isLinkAllowed } from "api/useAPI";
 
 export default function useAllowedLink({
     bizId,

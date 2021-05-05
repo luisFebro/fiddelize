@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from "react";
 import { getVars } from "init/var";
-import { getItems } from "init/lStorage";
+import getItems from "init/lStorage";
 import repeat from "utils/arrays/repeat";
 import { useGlobalContext } from "context";
 

@@ -1,4 +1,4 @@
-import { getItems } from "init/lStorage";
+import getItems from "init/lStorage";
 
 export default function AppTypeBubble({
     loadingAccess,
@@ -17,7 +17,7 @@ export default function AppTypeBubble({
         if (role === "cliente-membro") return "Membro";
         if (role === "cliente-admin" || isUrlAdmin) return "Admin";
         if (role === "cliente") return "Cliente";
-        return "Admin";
+        return "Cliente";
     };
 
     const showAppType = handleAppType({

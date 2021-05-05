@@ -1,13 +1,13 @@
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 import axios from "axios";
-import { getHeaderJson } from "../../utils/server/getHeaders";
+import { getHeaderJson } from "utils/server/getHeaders";
+import { ROOT } from "api/root"; // ${ROOT}
 import { setLoadingProgress } from "./globalActions";
-import { API } from "../../config/api"; // ${API}
 
 export const sendWelcomeConfirmEmail = async (bodyEmail, userId) => {
     try {
         return await axios.post(
-            `${API}/email/client/welcome-and-confirm/${userId}`,
+            `${ROOT}/email/client/welcome-and-confirm/${userId}`,
             bodyEmail,
             getHeaderJson
         );
@@ -20,7 +20,7 @@ export const sendBuyRequestEmail = async (dispatch, bodyEmail) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post(
-            `${API}/email/admin/order-request`,
+            `${ROOT}/email/admin/order-request`,
             bodyEmail,
             getHeaderJson
         );
@@ -36,7 +36,7 @@ export const sendNewPasswordLink = async (dispatch, bodyEmail) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post(
-            `${API}/email/client/new-password`,
+            `${ROOT}/email/client/new-password`,
             bodyEmail,
             getHeaderJson
         );

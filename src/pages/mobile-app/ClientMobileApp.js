@@ -119,7 +119,6 @@ function ClientMobileApp({ location, history }) {
     });
 
     const isAuthUser = useAuth();
-    console.log("isAuthUser", isAuthUser);
 
     // MAIN VARIABLES
     // # query
@@ -133,7 +132,6 @@ function ClientMobileApp({ location, history }) {
     let isCliAdmin = role === "cliente-admin";
     const isCliMember = role === "cliente-membro";
     let isCliUser = role === "cliente";
-    console.log("isCliAdmin", isCliAdmin);
 
     const isSessionOver = !isAuthUser;
     const needStaffLogout = isStaff && isSessionOver && rememberAccess;

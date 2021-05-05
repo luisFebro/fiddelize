@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Operation from "./Operation";
 import { useBizData } from "init";
-import useAPI, { readAutoService } from "../../../../hooks/api/useAPI";
+import useAPI, { readAutoService } from "api/useAPI";
 
 const getStyles = () => ({
     icon: {

@@ -4,18 +4,14 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import showToast from "../../../../../../../../components/toasts";
-import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
-import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import getAPI, {
-    addFiddelizeCosts,
-} from "../../../../../../../../utils/promises/getAPI";
-import moneyMaskBr from "../../../../../../../../utils/validation/masks/moneyMaskBr";
+import showToast from "components/toasts";
+import handleChange from "utils/form/use-state/handleChange";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import getAPI, { addFiddelizeCosts } from "api";
+import moneyMaskBr from "utils/validation/masks/moneyMaskBr";
 import useData from "init";
-import converToReal, {
-    convertToDollar,
-} from "../../../../../../../../utils/numbers/convertToReal";
-import getPercentage from "../../../../../../../../utils/numbers/getPercentage";
+import converToReal, { convertToDollar } from "utils/numbers/convertToReal";
+import getPercentage from "utils/numbers/getPercentage";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({

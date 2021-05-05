@@ -6,7 +6,6 @@ import Card from "@material-ui/core/Card";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import { removeCollection } from "init/lStorage";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -21,13 +20,11 @@ import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
-import { registerEmail } from "../../redux/actions/authActions";
+import { doRegister } from "auth/api";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
-// import { setRun } from '../../hooks/useRunComp';
-// import { makeStyles } from '@material-ui/core/styles';
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import { handleNextField } from "../../utils/form/kit";
@@ -146,8 +143,6 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     const errorPhone = fieldError && fieldError.phone;
     // end detecting field errors
 
-    const dispatch = useStoreDispatch();
-
     useEffect(() => {
         if (selectedDate) {
             const opts = { needYear: true };
@@ -194,7 +189,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             );
         }
 
-        registerEmail(dispatch, newUser).then((res) => {
+        doRegister(newUser).then((res) => {
             if (res.status !== 200) {
                 showToast(res.data.msg || res.data.error, { type: "error" });
                 // detect field errors
@@ -208,7 +203,6 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             }
 
             setStorageRegisterDone();
-            // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
 
             ReactGA.event({
                 category: "bizTeam",

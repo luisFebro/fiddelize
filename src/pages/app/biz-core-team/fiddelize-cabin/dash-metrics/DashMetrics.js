@@ -1,8 +1,8 @@
 import { Fragment } from "react";
+import useAPI, { getCabinMainData } from "api/useAPI";
 import DashSectionTitle from "../DashSectionTitle";
 import PrimaryMetrics from "./primary-metrics/PrimaryMetrics";
 import SecondaryMetrics from "./secondary-metrics/SecondaryMetrics";
-import useAPI, { getCabinMainData } from "../../../../../hooks/api/useAPI";
 import ComplementaryData from "./complementary-data/ComplementaryData";
 
 const getTitle = () => (

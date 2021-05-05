@@ -8,13 +8,8 @@ import TeamTasksFilter from "./TeamTasksFilter";
 import useData, { useBizData } from "init";
 // import extractStrData from '../../../../../../utils/string/extractStrData';
 // import { isScheduledDate } from '../../../../../../utils/dates/dateFns';
-import useAPIList, {
-    readOneMemberTasksList,
-    getTrigger,
-} from "../../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../../hooks/api/useElemDetection";
+import useAPIList, { readOneMemberTasksList, getTrigger } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 
 const isSmall = window.Helper.isSmallScreen();
 

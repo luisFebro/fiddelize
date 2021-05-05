@@ -4,7 +4,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import SwitchBtn from "../../../../../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
-import { treatBoolStatus } from "../../../../../../../../hooks/api/trigger";
+import { treatBoolStatus } from "api/trigger";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import createCardToken, { getValidationData } from "../helpers/createCardToken";
 import showToast from "../../../../../../../../components/toasts";
@@ -14,9 +14,7 @@ import goFinishCheckout from "../../../../../helpers/pagseguro/goFinishCheckout"
 import getInstallments, {
     MAX_INSTALLMENT_NO_INTEREST,
 } from "../helpers/getInstallments";
-import getAPI, {
-    removeOneClickInvest,
-} from "../../../../../../../../utils/promises/getAPI";
+import getAPI, { removeOneClickInvest } from "api";
 
 const getEncryptedCC = async (mainData) => {
     const { month: expirationMonth, year: expirationYear } = getValidationData(

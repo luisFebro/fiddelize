@@ -3,13 +3,8 @@ import Illustration from "../../../../../components/Illustration";
 import useData from "init";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import TaskCard from "../list/TaskCard";
-import useAPIList, {
-    readTasks,
-    getTrigger,
-} from "../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../hooks/api/useElemDetection";
+import useAPIList, { readTasks, getTrigger } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 
 export default function ModalContent({ isOffline }) {
     const [skip, setSkip] = useState(0);

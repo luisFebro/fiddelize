@@ -1,11 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import RevenueCard from "./card/RevenueCard";
-import useAPIList, {
-    getFiddelizeRevenueHistory,
-} from "../../../../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../../../../hooks/api/useElemDetection";
+import useAPIList, { getFiddelizeRevenueHistory } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 
 export default function RevenueList({ handleRevenueChart }) {
     const [skip, setSkip] = useState(0);

@@ -3,7 +3,7 @@ import useContext from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getRemainder from "utils/numbers/getRemainder";
 import Tooltip from "components/tooltips/Tooltip";
-import { getItems, setItems } from "init/lStorage";
+import getItems, { setItems } from "init/lStorage";
 import { convertDotToComma } from "utils/numbers/convertDotComma";
 // circular percentage
 import ReactjsPercentageCircle from "components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle";

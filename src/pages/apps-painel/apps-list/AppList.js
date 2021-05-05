@@ -1,10 +1,8 @@
 import { Fragment, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import AppCard from "./AppCard";
-import useAPIList, { readAppList } from "../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../hooks/api/useElemDetection";
+import useAPIList, { readAppList } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import repeat from "../../../utils/arrays/repeat";
 import useData from "init";
 

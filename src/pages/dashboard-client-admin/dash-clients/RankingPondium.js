@@ -5,7 +5,7 @@ import truncateWords from "../../../utils/string/truncateWords";
 import convertToReal from "../../../utils/numbers/convertToReal";
 import { useBizData } from "init";
 import Img from "../../../components/Img";
-import useAPI, { readHighestScores } from "../../../hooks/api/useAPI";
+import useAPI, { readHighestScores } from "api/useAPI";
 
 export default function RankingPondium() {
     const { bizId } = useBizData();

@@ -1,4 +1,4 @@
-import getAPI, { checkValidSession as check } from "utils/promises/getAPI";
+import getAPI, { checkValidSession as check } from "api";
 import getVar from "init/var";
 import disconnect from "auth/disconnect";
 

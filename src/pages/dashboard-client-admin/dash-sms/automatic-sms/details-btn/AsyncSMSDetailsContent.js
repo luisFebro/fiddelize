@@ -8,7 +8,7 @@ import useAPI, {
     activateAutoService,
     readAutoService,
     getUniqueId,
-} from "../../../../../hooks/api/useAPI";
+} from "api/useAPI";
 
 const getStyles = () => ({
     msgField: {

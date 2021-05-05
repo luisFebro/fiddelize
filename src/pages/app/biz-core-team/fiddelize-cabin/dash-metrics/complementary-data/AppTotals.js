@@ -3,7 +3,7 @@ import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
-import useAPI, { getAppTotals } from "../../../../../../hooks/api/useAPI";
+import useAPI, { getAppTotals } from "api/useAPI";
 
 const icons = { color: "var(--themeP)", fontSize: "50px" };
 

@@ -4,7 +4,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { removeCollection } from "init/lStorage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
@@ -17,14 +16,11 @@ import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
-// import ReCaptchaCheckbox from "../ReCaptcha";
-// Redux
-import { registerEmail } from "../../redux/actions/authActions";
-// import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
+import { doRegister } from "auth/api";
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
@@ -38,7 +34,6 @@ import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
-import useData from "init";
 import showToast from "../toasts";
 
 const filter = getFilterDate();
@@ -147,8 +142,6 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
     const errorPhone = fieldError && fieldError.phone;
     // end detecting field errors
 
-    const dispatch = useStoreDispatch();
-
     useEffect(() => {
         if (selectedDate) {
             const opts = { needYear: true };
@@ -188,7 +181,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
 
         showToast("Registrando... Aguarde um momento.");
 
-        registerEmail(dispatch, newUser).then((res) => {
+        doRegister(newUser).then((res) => {
             if (res.status !== 200) {
                 showToast(res.data.msg || res.data.error, { type: "error" });
                 // detect field errors
@@ -202,7 +195,6 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
             }
 
             setStorageRegisterDone();
-            // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
 
             ReactGA.event({
                 category: "cliMemberUser",

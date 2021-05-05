@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
-import MuSelectTable from "../../../../../components/tables/MuSelectTable";
-import { useRunComp } from "../../../../../hooks/useRunComp";
-import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
+import useAPI, { readContacts } from "api/useAPI";
+import MuSelectTable from "components/tables/MuSelectTable";
+import { useRunComp } from "hooks/useRunComp";
 import useData from "init";
 
 const headCells = [

@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import useAPI, { sendSMS, getUniqueId } from "../../../../hooks/api/useAPI";
+import useAPI, { sendSMS, getUniqueId } from "api/useAPI";
 import { useBizData } from "init";
 import showToast from "../../../../components/toasts";
 import Title from "../../../../components/Title";

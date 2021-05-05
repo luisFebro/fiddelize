@@ -1,7 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import showToast from "../../../../components/toasts";
+import getAPI, { updateUser, readUser } from "api";
+import showToast from "components/toasts";
 import Title from "../../../../components/Title";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import FacesPromotersScore, {
@@ -10,10 +11,6 @@ import FacesPromotersScore, {
 import useData from "init";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import "./faces-promoters-score/_FacesPromotersScore.css";
-import getAPI, {
-    updateUser,
-    readUser,
-} from "../../../../utils/promises/getAPI";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 

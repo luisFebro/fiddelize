@@ -1,6 +1,6 @@
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreState } from "easy-peasy";
+import useData from "init";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
 import HiddenVerifPass from "../card-hidden-content/HiddenVerifPass";
 import HiddenProfile from "../card-hidden-content/HiddenProfile";
@@ -14,9 +14,7 @@ const faStyle = {
 };
 
 export default function ShowExpansiblePanel() {
-    const { userData } = useStoreState((state) => ({
-        userData: state.userReducer.cases.currUser,
-    }));
+    const userData = useData();
 
     const configList = [
         {

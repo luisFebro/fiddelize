@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getHeaderJson } from "../../utils/server/getHeaders";
-import { API } from "../../config/api"; // ${API}
+import { ROOT } from "api/root"; // ${ROOT}
+import { getHeaderJson } from "utils/server/getHeaders";
 // import { tokenConfig } from './authActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
@@ -18,7 +18,7 @@ export const readUser = async (dispatch, _userId, options = {}) => {
     }
 
     const res = await axios.get(
-        `${API}/user/${_userId}${selectQuery}${roleQuery}`,
+        `${ROOT}/user/${_userId}${selectQuery}${roleQuery}`,
         getHeaderJson
     );
     console.log("===CURRENT USER LOADED===");
@@ -29,7 +29,7 @@ export const readUser = async (dispatch, _userId, options = {}) => {
 
 export const readClientAdmin = async (dispatch, _userId) => {
     const res = await axios.get(
-        `${API}/user/${_userId}?clientAdminRequest=true&thisRole=cliente-admin&select=cliAdminSelect`,
+        `${ROOT}/user/${_userId}?clientAdminRequest=true&thisRole=cliente-admin&select=cliAdminSelect`,
         getHeaderJson
     );
     dispatch({
@@ -52,7 +52,7 @@ export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
 
     try {
         const res = await axios.put(
-            `${API}/user/${_idUser}?${selectQuery}${noResponseQuery}${thisRoleQuery}`,
+            `${ROOT}/user/${_idUser}?${selectQuery}${noResponseQuery}${thisRoleQuery}`,
             objToSend,
             getHeaderJson
         );
@@ -101,7 +101,7 @@ export const readPurchaseHistory = async (
 
     try {
         return await axios.get(
-            `${API}/user/list/purchase-history/${_idUser}?targetPoints=${targetPoints}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
+            `${ROOT}/user/list/purchase-history/${_idUser}?targetPoints=${targetPoints}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
             getHeaderJson
         );
     } catch (err) {
@@ -115,7 +115,7 @@ export const changePrizeStatus = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `${API}/user/purchase-history/update-status/${userId}?statusType=${statusType}&prizeId=${prizeId}&newValue=true`,
+            `${ROOT}/user/purchase-history/update-status/${userId}?statusType=${statusType}&prizeId=${prizeId}&newValue=true`,
             getHeaderJson
         );
     } catch (err) {
@@ -131,7 +131,7 @@ export const addAutomaticTask = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `${API}/task/add?userId=${userId}`,
+            `${ROOT}/task/add?userId=${userId}`,
             options,
             getHeaderJson
         );
@@ -144,7 +144,7 @@ export const addAutomaticTask = async (userId, options = {}) => {
 export const countField = async (_id, objToSend) => {
     try {
         return await axios.put(
-            `${API}/user/count/field/${_id}?thisRole=${
+            `${ROOT}/user/count/field/${_id}?thisRole=${
                 objToSend.thisRole || "cliente"
             }`,
             objToSend,
@@ -158,7 +158,7 @@ export const countField = async (_id, objToSend) => {
 export const getUrlLink = async (code) => {
     try {
         return await axios.get(
-            `${API}/user/redirect/url-link?code=${code}`,
+            `${ROOT}/user/redirect/url-link?code=${code}`,
             getHeaderJson
         );
     } catch (err) {
@@ -171,7 +171,7 @@ export const removeField = async (userId, fieldName) => {
     const objToSend = { fieldToBeDeleted: fieldName };
     try {
         return await axios.put(
-            `${API}/user/field/remove/${userId}`,
+            `${ROOT}/user/field/remove/${userId}`,
             objToSend,
             getHeaderJson
         );
@@ -188,7 +188,7 @@ export const uploadImages = async (formData, options) => {
     const { fileName } = options;
     try {
         return await axios.post(
-            `${API}/user/image/upload?fileName=${fileName}`,
+            `${ROOT}/user/image/upload?fileName=${fileName}`,
             formData,
             getHeaderJson
         );
@@ -201,7 +201,7 @@ export const updateImages = async (_id, bodyToSend) => {
     // bodyToSend: lastUrl, paramArray, customParam
     try {
         return await axios.put(
-            `${API}/user/image/update?id=${_id}`,
+            `${ROOT}/user/image/update?id=${_id}`,
             bodyToSend,
             getHeaderJson
         );
@@ -215,7 +215,7 @@ export const updateImages = async (_id, bodyToSend) => {
 export const gotUsersInThisChallenge = async (bizId, challengeInd) => {
     try {
         return await axios.get(
-            `${API}/user/check/user-challenges?id=${bizId}&challengeInd=${challengeInd}`,
+            `${ROOT}/user/check/user-challenges?id=${bizId}&challengeInd=${challengeInd}`,
             getHeaderJson
         );
     } catch (err) {

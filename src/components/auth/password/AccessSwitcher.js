@@ -1,6 +1,6 @@
 import { useState } from "react";
 import showToast from "components/toasts";
-import { treatBoolStatus } from "hooks/api/trigger";
+import { treatBoolStatus } from "api/trigger";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 import { Load } from "components/code-splitting/LoadableComp";
 import selectTxtStyle from "utils/biz/selectTxtStyle";

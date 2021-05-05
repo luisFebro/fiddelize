@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { default as checkToday } from "date-fns/isToday";
-import getAccurateDate from "../../utils/dates/getAccurateDate";
-import useAPI, { removeServices } from "../api/useAPI";
+import getAccurateDate from "utils/dates/getAccurateDate";
+import useAPI, { removeServices } from "api/useAPI";
 import getVar from "init/var";
-import { isScheduledDate, addDays } from "../../utils/dates/dateFns";
-import { IS_PROD } from "../../config/clientUrl";
-import didRunOnce from "../../utils/storage/didRunOnce";
-import { sendNotification } from "../../redux/actions/notificationActions";
+import { isScheduledDate, addDays } from "utils/dates/dateFns";
+import { IS_PROD } from "config/clientUrl";
+import didRunOnce from "utils/storage/didRunOnce";
+import { sendNotification } from "redux/actions/notificationActions";
 import usePro from "./usePro";
 import { useBizData } from "init";
 

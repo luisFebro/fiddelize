@@ -5,7 +5,7 @@ import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
-import getAPI, { removeUser } from "utils/promises/getAPI";
+import getAPI, { removeUser } from "api";
 import { countField } from "redux/actions/userActions";
 import { setRun } from "hooks/useRunComp";
 

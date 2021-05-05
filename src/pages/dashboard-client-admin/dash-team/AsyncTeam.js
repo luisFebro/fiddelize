@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { useBizData } from "init";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./_AsyncTeam.scss";
 import { useStoreState } from "easy-peasy";
@@ -16,9 +17,7 @@ export default function AsyncTeam() {
 }
 
 function Title() {
-    const bizName = useStoreState(
-        (state) => state.userReducer.cases.bizData.bizName
-    );
+    const { bizName } = useBizData();
 
     return (
         <Fragment>

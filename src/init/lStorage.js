@@ -4,28 +4,7 @@ import isObj from "utils/isObj";
 
 const allowedCollections = ["currUser", "bizData", "onceChecked"];
 
-function setItems(collectionName, dataObj) {
-    if (!allowedCollections.includes(collectionName))
-        throw new Error(
-            `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
-        );
-    if (!isObj(dataObj, { noArrays: true }))
-        throw new Error("only object is allowed");
-    if (!collectionName)
-        throw new Error("missing collection name as the first argument");
-    if (!dataObj)
-        throw new Error(
-            "new obj should have new data to be stored in localstorage with props and values. e.g { name: `john` }"
-        );
-
-    const priorData = getCurrCollectionData(collectionName);
-
-    const result = { ...priorData, ...dataObj };
-
-    return localStorage.setItem(collectionName, JSON.stringify(result));
-}
-
-function getItems(collectionName, namesArray = null) {
+export default function getItems(collectionName, namesArray = null) {
     if (!allowedCollections.includes(collectionName))
         throw new Error(
             `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
@@ -48,7 +27,28 @@ function getItems(collectionName, namesArray = null) {
     return finalDataResult;
 }
 
-function removeItems(collectionName, namesArray) {
+export function setItems(collectionName, dataObj) {
+    if (!allowedCollections.includes(collectionName))
+        throw new Error(
+            `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
+        );
+    if (!isObj(dataObj, { noArrays: true }))
+        throw new Error("only object is allowed");
+    if (!collectionName)
+        throw new Error("missing collection name as the first argument");
+    if (!dataObj)
+        throw new Error(
+            "new obj should have new data to be stored in localstorage with props and values. e.g { name: `john` }"
+        );
+
+    const priorData = getCurrCollectionData(collectionName);
+
+    const result = { ...priorData, ...dataObj };
+
+    return localStorage.setItem(collectionName, JSON.stringify(result));
+}
+
+export function removeItems(collectionName, namesArray) {
     if (!allowedCollections.includes(collectionName))
         throw new Error(
             `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
@@ -74,7 +74,7 @@ function removeItems(collectionName, namesArray) {
     throw new Error("localstorage not available");
 }
 
-function removeCollection(collectionName) {
+export function removeCollection(collectionName) {
     if (!allowedCollections.includes(collectionName))
         throw new Error(
             `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
@@ -104,5 +104,3 @@ function getCurrCollectionData(collectionName) {
     return {};
 }
 // END HELPERS
-
-export { setItems, getItems, removeItems, removeCollection };

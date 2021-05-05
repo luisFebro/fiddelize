@@ -29,33 +29,3 @@ export default function useAuth(options = {}) {
 
     return Boolean(token || success);
 }
-
-/* ARCHIVES
-
-export const useAuthUser = (options = {}) => {
-    const { history } = options;
-
-    const { tokenWhenLogin, runName } = useStoreState((state) => ({
-        tokenWhenLogin: state.authReducer.cases.tokenWhenLogin,
-        runName: state.globalReducer.cases.runName,
-    }));
-
-    const isLogout = runName === "logout";
-    const isAuthorized =
-        (!isLogout && gotToken && !tokenWhenLogin) ||
-        (!gotToken && tokenWhenLogin) ||
-        (gotToken && tokenWhenLogin);
-
-    const isAuthUser = Boolean(isAuthorized);
-
-    // REDIRECT TO MAIN PAGE IF USER IS NOT OR NO LONGER AUTHORIZED.
-    useEffect(() => {
-        if (!isAuthUser && history) {
-            isThisApp() ? history.push("/mobile-app") : history.push("/");
-        }
-    }, [isAuthUser, history]);
-
-    return { isAuthUser };
-};
-
-*/

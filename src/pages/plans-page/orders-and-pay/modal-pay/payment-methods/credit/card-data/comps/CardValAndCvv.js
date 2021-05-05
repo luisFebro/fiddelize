@@ -1,6 +1,6 @@
 import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
-import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
+import { getUniqueId } from "api/trigger";
 import ShowAvailableCards from "./ShowAvailableCards";
 import { handleEnterPress } from "../../../../../../../../utils/event/isKeyPressed";
 

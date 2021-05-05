@@ -5,13 +5,8 @@ import { calendar } from "../../../../../utils/dates/dateFns";
 import { useBizData } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 
-import useAPIList, {
-    readTeamMemberList,
-    getTrigger,
-} from "../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../hooks/api/useElemDetection";
+import useAPIList, { readTeamMemberList, getTrigger } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 // need to handle update when the component amount cuz it is not working sometimes. The element is not detected.

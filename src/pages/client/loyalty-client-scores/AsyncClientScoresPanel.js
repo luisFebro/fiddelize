@@ -20,7 +20,7 @@ import getAPI, {
     setLastPointsAsDone,
     updateUser,
     addPurchaseHistory,
-} from "utils/promises/getAPI";
+} from "api";
 import getVar, { setVar, removeVar } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";

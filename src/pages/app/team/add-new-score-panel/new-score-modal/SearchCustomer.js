@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
-import { API } from "../../../../../config/api.js";
+import AutoCompleteSearch from "components/search/AutoCompleteSearch";
+import { ROOT } from "api/root";
 
 export default function SearchCustomer({ setCurr, textColor, bizId }) {
     const [data, setData] = useState({
@@ -17,7 +17,7 @@ export default function SearchCustomer({ setCurr, textColor, bizId }) {
             }));
     }, [selectedValue]);
 
-    const autocompleteUrl = `${API}/sms/read/contacts?userId=${bizId}&autocomplete=true&autocompleteLimit=7`;
+    const autocompleteUrl = `${ROOT}/sms/read/contacts?userId=${bizId}&autocomplete=true&autocompleteLimit=7`;
 
     return (
         <section>

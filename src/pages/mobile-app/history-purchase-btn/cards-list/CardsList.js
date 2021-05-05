@@ -12,12 +12,8 @@ import { formatDMY, fromNow } from "../../../../utils/dates/dateFns";
 import Spinner from "../../../../components/loadingIndicators/Spinner";
 import useDelay from "../../../../hooks/useDelay";
 import pickCurrChallData from "../../../../utils/biz/pickCurrChallData";
-import useAPIList, {
-    readPurchaseCardsList,
-} from "../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../hooks/api/useElemDetection";
+import useAPIList, { readPurchaseCardsList } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import extractStrData from "../../../../utils/string/extractStrData";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
 import { setVar } from "init/var";

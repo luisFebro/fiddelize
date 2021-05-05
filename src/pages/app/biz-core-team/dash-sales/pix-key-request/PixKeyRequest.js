@@ -2,16 +2,13 @@ import { useState, useEffect } from "react";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
-import showToast from "../../../../../components/toasts";
-import handleChange from "../../../../../utils/form/use-state/handleChange";
-import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-import EditButton from "../../../../../components/buttons/EditButton";
-import getAPI, {
-    updateUser,
-    readUser,
-} from "../../../../../utils/promises/getAPI";
+import showToast from "components/toasts";
+import handleChange from "utils/form/use-state/handleChange";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import EditButton from "components/buttons/EditButton";
+import getAPI, { updateUser, readUser } from "api";
 import useData from "init";
-import useAPI from "../../../../../hooks/api/useAPI";
+import useAPI from "api/useAPI";
 
 const isSmall = window.Helper.isSmallScreen();
 

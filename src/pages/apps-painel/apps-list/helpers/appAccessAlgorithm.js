@@ -1,19 +1,22 @@
-import getVar, { removeVar, setVar, removeVars } from "init/var";
+import { removeVar, setVar, removeVars } from "init/var";
+import getItems from "init/lStorage";
 import renewToken from "auth/renewToken";
 import { signInUserData } from "components/auth/Login";
-import getAPI, { setDefaultAccess } from "utils/promises/getAPI";
+import getAPI, { setDefaultAccess } from "api";
 import { setRun } from "redux/actions/globalActions";
 
 const handleCliAdmin = ({ dispatch, history, bizLinkName }) => {
     setRun(dispatch, "goDash");
 
     if (!bizLinkName) {
-        (async () => {
-            const thisBizCodeName = await getVar("bizLinkName", "user");
-            return history.push(
-                `/${thisBizCodeName}/cliente-admin/painel-de-controle`
-            );
-        })();
+        const thisBizCodeName = getItems("bizData", ["bizLinkName"]);
+        console.log(
+            "thisBizCodeName APPACCESSALGORITHM CHECK",
+            thisBizCodeName
+        );
+        return history.push(
+            `/${thisBizCodeName}/cliente-admin/painel-de-controle`
+        );
     }
     return history.push(`/${bizLinkName}/cliente-admin/painel-de-controle`);
 };

@@ -1,7 +1,7 @@
 import { useMemo, Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useGlobalContext } from "context";
-import { loadUser } from "redux/actions/authActions";
+import loadInit from "auth/api";
 import PrivateRouteClientAdm from "components/auth/routes/PrivateRouteClientAdm";
 import { Load } from "components/code-splitting/LoadableComp";
 // PAGES
@@ -72,7 +72,7 @@ function Mobile({ location, history }) {
     const setUify = useMemo(() => uify, []);
 
     useEffect(() => {
-        loadUser(setUify, history);
+        loadInit(setUify, history);
         // eslint-disable-next-line
     }, [setUify]);
 

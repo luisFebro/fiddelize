@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import MuSlider from "../../../../../components/sliders/MuSlider";
+import getAPI, { updateUser } from "api";
+import MuSlider from "components/sliders/MuSlider";
 import "./_StarsBuyExperience.css";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import getAPI, { updateUser } from "../../../../../utils/promises/getAPI";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
 export const getGradeText = (g) => {
     if (g === 1) return "Péssimo";

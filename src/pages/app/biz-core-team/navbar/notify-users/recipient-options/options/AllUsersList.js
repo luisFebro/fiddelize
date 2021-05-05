@@ -1,8 +1,8 @@
 import { useState, useEffect, Fragment } from "react";
-import MuSelectTable from "../../../../../../../components/tables/MuSelectTable";
-import { useRunComp } from "../../../../../../../hooks/useRunComp";
-import useAPI, { readUserSubIds } from "../../../../../../../hooks/api/useAPI";
-import SelectField from "../../../../../../../components/fields/SelectField";
+import useAPI, { readUserSubIds } from "api/useAPI";
+import MuSelectTable from "components/tables/MuSelectTable";
+import { useRunComp } from "hooks/useRunComp";
+import SelectField from "components/fields/SelectField";
 
 const headCells = [
     {

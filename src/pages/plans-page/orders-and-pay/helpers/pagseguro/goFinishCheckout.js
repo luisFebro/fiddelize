@@ -1,4 +1,4 @@
-import getAPI, { finishCheckout } from "../../../../../utils/promises/getAPI";
+import getAPI, { finishCheckout } from "api";
 import getFilterDate from "../../../../../utils/dates/getFilterDate";
 
 const filter = getFilterDate();

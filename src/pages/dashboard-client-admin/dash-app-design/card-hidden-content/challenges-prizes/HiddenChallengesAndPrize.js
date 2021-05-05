@@ -5,10 +5,7 @@ import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import List from "./List.js";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
-import useAPI, {
-    updateUser,
-    treatBoolStatus,
-} from "../../../../../hooks/api/useAPI";
+import useAPI, { updateUser, treatBoolStatus } from "api/useAPI";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getId from "../../../../../utils/getId";
 import useData, { useBizData } from "init";

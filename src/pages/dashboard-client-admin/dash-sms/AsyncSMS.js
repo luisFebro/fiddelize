@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreDispatch } from "easy-peasy";
+import { useBizData } from "init";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./_AsyncSMS.scss";
 import { Load } from "../../../components/code-splitting/LoadableComp";
@@ -8,7 +9,7 @@ import showToast from "../../../components/toasts";
 import scrollIntoView from "../../../utils/document/scrollIntoView";
 import { handleFocus } from "../../../utils/form/handleFocus";
 import InstructionBtn from "../../../components/buttons/InstructionBtn";
-import { getUniqueId } from "../../../hooks/api/useAPI";
+import { getUniqueId } from "api/useAPI";
 import { setRun } from "../../../hooks/useRunComp";
 // Components
 import CreditsBalance from "./credits-balance/CreditsBalance";
@@ -143,9 +144,7 @@ export default function AsyncSMS() {
 }
 
 function Title() {
-    const bizName = useStoreState(
-        (state) => state.userReducer.cases.bizData.bizName
-    );
+    const { bizName } = useBizData();
 
     return (
         <Fragment>

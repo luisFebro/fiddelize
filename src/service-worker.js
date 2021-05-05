@@ -223,7 +223,7 @@ self.addEventListener("notificationclose", (event) => {
 //     await setVar({ "subscription-renewal": newSubscription });
 // }
 
-// function getAPI() {
+// function getUrlAPI() {
 //     return process.env.NODE_ENV === "production"
 //         ? "https://fiddelize.herokuapp.com/api"
 //         : "http://localhost:5000/api";
@@ -238,7 +238,7 @@ self.addEventListener("notificationclose", (event) => {
 
 // if(newSubscription.endpoint !== oldSubscription.endpoint) {
 // await saveSub(newSubscription);
-// const req = new Request(`${getAPI()}/push-notification/push-subscription-change`, {
+// const req = new Request(`${getUrlAPI()}/push-notification/push-subscription-change`, {
 // method: 'POST',
 // headers: { 'Content-Type': 'application/json' },
 // body: JSON.stringify(

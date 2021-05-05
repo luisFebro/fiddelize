@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
-import { API } from "../../config/api"; // ${API}
+import { getHeaderJson, getHeaderToken } from "utils/server/getHeaders";
+import { ROOT } from "api/root"; // ${ROOT}
 
 export const countPendingNotif = async (userId, options = {}) => {
     if (!userId) return;
@@ -15,7 +15,7 @@ export const countPendingNotif = async (userId, options = {}) => {
 
     try {
         return await axios.get(
-            `${API}/notification/count-pending-notification?userId=${userId}&role=${
+            `${ROOT}/notification/count-pending-notification?userId=${userId}&role=${
                 role || "cliente"
             }${cliUserQuery}${cliMemberQuery}`,
             getHeaderJson
@@ -56,7 +56,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
     if (needPushNotif) {
         try {
             return await axios.put(
-                `${API}/notification/send`,
+                `${ROOT}/notification/send`,
                 pushNotifData,
                 getHeaderToken(token)
             );
@@ -76,7 +76,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 
     try {
         return await axios.put(
-            `${API}/notification/send${queryNoToken}`,
+            `${ROOT}/notification/send${queryNoToken}`,
             notificationOpts,
             getHeaderToken(token)
         );
@@ -98,7 +98,7 @@ export const markOneClicked = async (userId, cardId, options = {}) => {
 
     try {
         return await axios.put(
-            `${API}/notification/mark-one-clicked/${userId}?cardId=${cardId}${thisRoleQuery}${updatedByQuery}`,
+            `${ROOT}/notification/mark-one-clicked/${userId}?cardId=${cardId}${thisRoleQuery}${updatedByQuery}`,
             options,
             getHeaderJson
         );
@@ -113,7 +113,7 @@ export const markAllAsClicked = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `${API}/notification/mark-all-clicked/${userId}`,
+            `${ROOT}/notification/mark-all-clicked/${userId}`,
             options,
             getHeaderJson
         );
@@ -128,7 +128,7 @@ export const markAllAsSeen = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `${API}/notification/mark-all-seen/${userId}`,
+            `${ROOT}/notification/mark-all-seen/${userId}`,
             options,
             getHeaderJson
         );

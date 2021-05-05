@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import styled from "styled-components";
-// import convertToReal from "../../../../utils/numbers/convertToReal";
+import useAPI, { getMembersPodium } from "api/useAPI";
+// import convertToReal from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import truncateWords from "../../../../utils/string/truncateWords";
+import truncateWords from "utils/string/truncateWords";
 import { useBizData } from "init";
-import Img from "../../../../components/Img";
-import useAPI, { getMembersPodium } from "../../../../hooks/api/useAPI";
+import Img from "components/Img";
 
 export default function RankingPondium() {
     const { bizId } = useBizData();

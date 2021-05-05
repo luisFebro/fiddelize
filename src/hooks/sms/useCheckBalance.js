@@ -1,4 +1,4 @@
-import useAPI, { readCredits } from "../api/useAPI";
+import useAPI, { readCredits } from "api/useAPI";
 import { useBizData } from "init";
 
 export default function useCheckBalance() {

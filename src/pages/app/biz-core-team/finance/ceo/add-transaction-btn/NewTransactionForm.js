@@ -7,9 +7,7 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import showToast from "../../../../../../components/toasts";
 import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import getAPI, {
-    addFinanceTransaction,
-} from "../../../../../../utils/promises/getAPI";
+import getAPI, { addFinanceTransaction } from "api";
 import moneyMaskBr from "../../../../../../utils/validation/masks/moneyMaskBr";
 import { convertToDollar } from "../../../../../../utils/numbers/convertToReal";
 // import useData from "init";

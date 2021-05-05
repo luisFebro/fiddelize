@@ -1,7 +1,7 @@
 import { Fragment } from "react";
+import useAPI, { getCabinMainData } from "api/useAPI";
 import DashSectionTitle from "../DashSectionTitle";
 import OKR from "./objectives-key-results/OKR";
-import useAPI, { getCabinMainData } from "../../../../../hooks/api/useAPI";
 
 const getTitle = () => (
     <span className="text-subtitle font-weight-bold">

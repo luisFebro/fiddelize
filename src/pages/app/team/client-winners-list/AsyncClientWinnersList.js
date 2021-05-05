@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useBizData } from "init";
-import useAPIList, { readTasks } from "../../../../hooks/api/useAPIList";
+import useAPIList, { readTasks } from "api/useAPIList";
 import "./_AsyncClientWinnersList.scss";
 import CliWinnersList from "./list/CliWinnersList";
 import useData from "init";

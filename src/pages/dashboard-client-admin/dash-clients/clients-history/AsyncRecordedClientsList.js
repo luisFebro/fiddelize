@@ -6,14 +6,9 @@ import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import { updateUser } from "../../../../redux/actions/userActions";
 import useData, { useBizData } from "init";
-import useAPIList, {
-    readUserList,
-    getTrigger,
-} from "../../../../hooks/api/useAPIList";
+import useAPIList, { readUserList, getTrigger } from "api/useAPIList";
 import { useRunComp } from "../../../../hooks/useRunComp";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../hooks/api/useElemDetection";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import extractStrData from "../../../../utils/string/extractStrData";
 import { Load } from "../../../../components/code-splitting/LoadableComp";
 import RegisterPanelBtn from "./register-panel-btn/RegisterPanelBtn";

@@ -6,7 +6,6 @@ import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -18,7 +17,7 @@ import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-import { registerEmail } from "../../redux/actions/authActions";
+import { doRegister } from "auth/api";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../utils/form/kit";
@@ -26,8 +25,7 @@ import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { useBizData } from "init";
-import useData from "init";
+import useData, { useBizData } from "init";
 import { removeStore } from "init/var";
 import getFirstName from "../../utils/string/getFirstName";
 import CheckBoxForm from "../CheckBoxForm";
@@ -146,8 +144,6 @@ function RegisterClientAdmin({ logo }) {
         setData({ ...data, bizImg: bizLogo });
     }, [bizLogo]);
 
-    const dispatch = useStoreDispatch();
-
     const styles = getStyles();
 
     useEffect(() => {
@@ -187,7 +183,7 @@ function RegisterClientAdmin({ logo }) {
             );
         }
 
-        const res = await registerEmail(dispatch, newUser);
+        const res = await doRegister(newUser);
         showToast("Preparando página de download...");
 
         if (res.status !== 200) {

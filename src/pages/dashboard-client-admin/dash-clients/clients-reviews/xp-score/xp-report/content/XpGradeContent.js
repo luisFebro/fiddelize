@@ -1,8 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import parse from "html-react-parser";
-import getAPI, {
-    getXpScoreChartData,
-} from "../../../../../../../utils/promises/getAPI";
+import getAPI, { getXpScoreChartData } from "api";
 import useData from "init";
 import { getGradeText, getColorGrade } from "../../helpers";
 import "../../../_ClientsReviews.scss";

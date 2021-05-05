@@ -10,7 +10,7 @@ import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
-import getAPI, { forgotPasswordRequest } from "utils/promises/getAPI";
+import getAPI, { forgotPasswordRequest } from "api";
 import useData from "init";
 import showToast from "components/toasts";
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import getAPI, { sendEmail } from "../../utils/promises/getAPI";
+import getAPI, { sendEmail } from "api";
 
 export default function useSendEmail({
     trigger = true,

@@ -1,4 +1,4 @@
-import getAPI, { subscribePushNotif } from "../../utils/promises/getAPI";
+import getAPI, { subscribePushNotif } from "api";
 import { setVar } from "init/var";
 
 const convertedVapidKey = urlBase64ToUint8Array(
@@ -24,17 +24,17 @@ export default async function subscribeUser({ role, userId }) {
         userVisibleOnly: true,
     });
 
-    sendAndStoreSubscribe(newSubscription, { role, userId, deviceType });
+    sendSubscription(subscription, params);
     return "ok";
 }
 
 // HELPERS
-async function sendAndStoreSubscribe(subscription, params = {}) {
-    return await Promise.all([
-        sendSubscription(subscription, params),
-        setVar({ "subscription-renewal": JSON.stringify(subscription) }),
-    ]);
-}
+// async function sendAndStoreSubscribe(subscription, params = {}) {
+//     return await Promise.all([
+//         setVar({ "subscription-renewal": JSON.stringify(subscription) }),
+//         sendSubscription(subscription, params)
+//     ]);
+// }
 
 async function sendSubscription(subscription, params = {}) {
     // n1

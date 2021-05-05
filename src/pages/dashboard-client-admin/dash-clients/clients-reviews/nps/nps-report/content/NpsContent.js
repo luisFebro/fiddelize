@@ -4,9 +4,7 @@ import SpeedometerGauge from "../../../../../../../components/charts/speedometer
 import colorsHandler from "../../../helpers/colorsHandler";
 import { getTextStatus } from "../../../../../../../components/charts/speedometer-gauge/helpers";
 import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
-import getAPI, {
-    getNpsChartData,
-} from "../../../../../../../utils/promises/getAPI";
+import getAPI, { getNpsChartData } from "api";
 import useData from "init";
 import getWeekDayBr from "../../../../../../../utils/dates/getWeekDayBr";
 

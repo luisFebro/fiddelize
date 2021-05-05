@@ -1,13 +1,13 @@
 import { useState, Fragment, useEffect } from "react";
-import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
+import AutoCompleteSearch from "components/search/AutoCompleteSearch";
 import useData from "init";
-import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import { Load } from "components/code-splitting/LoadableComp";
 import ShowSelectionArea from "./comps/ShowSelectionArea";
-import { useRunComp } from "../../../../../hooks/useRunComp";
-import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
-import showToast from "../../../../../components/toasts";
-import { API } from "../../../../../config/api.js";
+import { useRunComp } from "hooks/useRunComp";
+import useAPI, { readContacts } from "api/useAPI";
+import showToast from "components/toasts";
+import { ROOT } from "api/root";
 
 const AsyncShowNewContactForm = Load({
     loader: () =>
@@ -91,7 +91,7 @@ export default function AsyncSpecificCustomer({
     };
 
     const showSearch = () => {
-        const autocompleteUrl = `${API}/sms/read/contacts?userId=${userId}&autocomplete=true`;
+        const autocompleteUrl = `${ROOT}/sms/read/contacts?userId=${userId}&autocomplete=true`;
 
         const handleNewContact = () => {
             setNewContactOpen((prev) => !prev);

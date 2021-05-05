@@ -3,10 +3,7 @@ import Title from "../../../../components/Title";
 import { useBizData } from "init";
 import useData from "init";
 import { useRunComp } from "../../../../hooks/useRunComp";
-import useAPIList, {
-    readTasks,
-    getTrigger,
-} from "../../../../hooks/api/useAPIList";
+import useAPIList, { readTasks, getTrigger } from "api/useAPIList";
 import "./_AutomaticTaskList.scss";
 import TaskList from "./list/TaskList";
 import DoneTasksBtn from "./done-tasks-modal/DoneTasksBtn";

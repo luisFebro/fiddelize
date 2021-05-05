@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
-import BuyReviewCard from "./BuyReviewCard";
-import BuyReviewFilter from "./BuyReviewFilter";
 import useAPIList, {
     getBuyReviewsList,
     getXpReviewList,
     getTrigger,
-} from "../../../../../../hooks/api/useAPIList";
+} from "api/useAPIList";
 import useData from "init";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../../hooks/api/useElemDetection";
-import getAPI, { updateUser } from "../../../../../../utils/promises/getAPI";
+import getAPI, { updateUser } from "api";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import "./_BuyReviewList.scss";
-import { isAfter } from "../../../../../../utils/dates/dateFns";
+import { isAfter } from "utils/dates/dateFns";
+import BuyReviewCard from "./BuyReviewCard";
+import BuyReviewFilter from "./BuyReviewFilter";
 
 export default function BuyReviewList({ lastDateChecked, isBizAdmin = false }) {
     const [skip, setSkip] = useState(0);

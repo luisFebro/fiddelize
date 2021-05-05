@@ -1,14 +1,14 @@
 import { useState, useEffect, Fragment } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import { useStoreDispatch, useStoreState } from "easy-peasy";
-import showToast from "../../../../../components/toasts";
-import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
-import Img from "../../../../../components/Img";
-import useData from "init";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import { useBizData } from "init";
-import CheckBoxForm from "../../../../../components/CheckBoxForm";
-// import ButtonDropdown from "../../../../../components/buttons/material-ui/ButtonDropdown";
+import { useStoreDispatch } from "easy-peasy";
+import useData, { useBizData } from "init";
+import useToken from "auth/useToken";
+import showToast from "components/toasts";
+import { readAllDbFromModels } from "redux/actions/adminActions";
+import Img from "components/Img";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import CheckBoxForm from "components/CheckBoxForm";
+// import ButtonDropdown from "components/buttons/material-ui/ButtonDropdown";
 
 const dbData = {
     users: {
@@ -36,9 +36,7 @@ export default function BackUpToExcel() {
 
     const isArrayReady = dbDataList.length !== 0;
 
-    const { token } = useStoreState((state) => ({
-        token: state.authReducer.cases.tokenWhenLogin,
-    }));
+    const token = useToken();
     const [adminId] = useData(["userId"]);
     const { bizLinkName } = useBizData();
 

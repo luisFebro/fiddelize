@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import getAPI, { getMainReviewData } from "api";
 import Title from "../../../../components/Title";
 import NpsReportBtn from "./nps/nps-report/NpsReportBtn";
 import XpGradeReportBtn from "./xp-score/xp-report/XpGradeReportBtn";
 import BuyReviewsBtn from "./buy-reviews/BuyReviewsBtn";
 import colorsHandler from "./helpers/colorsHandler";
 import { getTextStatus } from "../../../../components/charts/speedometer-gauge/helpers";
-import getAPI, { getMainReviewData } from "../../../../utils/promises/getAPI";
 import useData from "init";
 import { getGradeText, getColorGrade } from "./xp-score/helpers";
 import "./_ClientsReviews.scss";

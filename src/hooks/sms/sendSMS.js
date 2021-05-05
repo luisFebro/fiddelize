@@ -2,7 +2,7 @@ import getAPI, {
     readCredits,
     readAutoService,
     sendSMS as sendThisSMS,
-} from "../../utils/promises/getAPI";
+} from "api";
 import didRunOnce from "../../utils/storage/didRunOnce";
 import getFilterDate from "../../utils/dates/getFilterDate";
 

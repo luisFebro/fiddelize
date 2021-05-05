@@ -10,7 +10,7 @@ import handleChange from "../../../../utils/form/use-state/handleChange";
 import useData, { useBizData } from "init";
 import "./_BuyRating.css";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
+import getAPI, { updateUser } from "api";
 import showToast from "../../../../components/toasts";
 
 const getStyles = () => ({

@@ -1,11 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import SessionCard from "./card/SessionCard";
-import useAPIList, {
-    readFinanceTransactions,
-} from "../../../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../../../hooks/api/useElemDetection";
+import useAPIList, { readFinanceTransactions } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 
 export default function SessionOutList({ mainData }) {
     const [skip, setSkip] = useState(0);

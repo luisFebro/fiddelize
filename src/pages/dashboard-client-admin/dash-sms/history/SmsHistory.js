@@ -1,9 +1,6 @@
 import Title from "../../../../components/Title";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
-import useAPI, {
-    getGeneralTotals,
-    needTrigger,
-} from "../../../../hooks/api/useAPI";
+import useAPI, { getGeneralTotals, needTrigger } from "api/useAPI";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import { useBizData } from "init";
 

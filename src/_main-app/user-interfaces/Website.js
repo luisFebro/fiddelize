@@ -1,26 +1,26 @@
 import { useMemo, Fragment, useEffect } from "react";
 import { useGlobalContext } from "context";
+import loadInit from "auth/api";
 import { Switch, Route, withRouter } from "react-router-dom";
-import { loadUser } from "../../redux/actions/authActions";
-import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
+import PrivateRouteClientAdm from "components/auth/routes/PrivateRouteClientAdm";
 // LAYOUT
-import Navbar from "../../components/_layout/navbar";
-import Footer from "../../components/_layout/footer/Footer";
+import Navbar from "components/_layout/navbar";
+import Footer from "components/_layout/footer/Footer";
 // END LAYOUT
 
 // PAGES
-import Home from "../../pages/home/Home";
-import RegulationPage from "../../pages/RegulationPage";
-import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
+import Home from "pages/home/Home";
+import RegulationPage from "pages/RegulationPage";
+import AsyncDownloadApp from "pages/download-app/AsyncDownloadApp";
 import {
     AsyncBizInfo,
     AsyncRewardPlanner,
     AsyncSelfService,
     AsyncAdminRegister,
 } from "./comp-pages/AsyncNewAppPages";
-import RedirectLink from "../../pages/RedirectLink";
-import Default from "../../pages/Default";
-import UnavailableService from "../../pages/UnavailableService";
+import RedirectLink from "pages/RedirectLink";
+import Default from "pages/Default";
+import UnavailableService from "pages/UnavailableService";
 import {
     AsyncLoginPage,
     // cli-admin
@@ -67,7 +67,7 @@ function Website({ location, history }) {
 
     useEffect(() => {
         // loadReCaptcha();
-        loadUser(setUify, history);
+        loadInit(setUify, history);
     }, [setUify]);
 
     return (
@@ -232,8 +232,8 @@ export default withRouter(Website);
 
 /* ARCHIVES
 
-import ChangePassword from '../../pages/client/ChangePassword';
-import ConfirmAccount from '../../pages/client/ConfirmAccount';
+import ChangePassword from 'pages/client/ChangePassword';
+import ConfirmAccount from 'pages/client/ConfirmAccount';
 <Route path="/cliente/trocar-senha" exact component={ChangePassword} />
 <Route path="/cliente/confirmacao-conta/:authUserId" exact component={ConfirmAccount} />
 

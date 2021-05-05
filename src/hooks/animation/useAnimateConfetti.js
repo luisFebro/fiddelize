@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
-import { setItems, getItems, removeItems } from "init/lStorage";
+import getItems, { setItems, removeItems } from "init/lStorage";
 
 const localCollection = "onceChecked";
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
+import AutoCompleteSearch from "components/search/AutoCompleteSearch";
 import useData from "init";
-import { API } from "../../../../../config/api.js";
-// import SearchFilter from "../../../../../components/search/SearchFilter";
+import { ROOT } from "api/root";
+// import SearchFilter from "components/search/SearchFilter";
 
 export default function ClientsSearch({ handleSearch }) {
     const [data, setData] = useState({
@@ -20,7 +20,7 @@ export default function ClientsSearch({ handleSearch }) {
 
     const showSearchBar = () => {
         // sms but it works for this since we need only the names of the clients which it is exactly this is requesting.
-        const autocompleteUrl = `${API}/sms/read/contacts?userId=${adminId}&autocomplete=true&autocompleteLimit=7`;
+        const autocompleteUrl = `${ROOT}/sms/read/contacts?userId=${adminId}&autocomplete=true&autocompleteLimit=7`;
 
         return (
             <section className="my-4">

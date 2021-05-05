@@ -1,8 +1,6 @@
 import { Fragment } from "react";
+import useAPIList, { readFiddelizeCosts } from "api/useAPIList";
 import MonthlyCostsCard from "./card/MonthlyCostsCard";
-import useAPIList, {
-    readFiddelizeCosts,
-} from "../../../../../../../../hooks/api/useAPIList";
 
 export default function MonthlyCostsList({ newCardSet }) {
     const {

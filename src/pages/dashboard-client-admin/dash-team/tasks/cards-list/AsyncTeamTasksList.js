@@ -8,13 +8,8 @@ import Illustration from "../../../../../components/Illustration";
 import TeamTasksFilter from "./TeamTasksFilter";
 // import extractStrData from '../../../../../utils/string/extractStrData';
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
-import useAPIList, {
-    readTeamTaskList,
-    getTrigger,
-} from "../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../hooks/api/useElemDetection";
+import useAPIList, { readTeamTaskList, getTrigger } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useElemShowOnScroll from "../../../../../hooks/scroll/useElemShowOnScroll";
 import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 

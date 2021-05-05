@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
-import getAPI, { readUser } from "../../../utils/promises/getAPI";
+import getAPI, { readUser } from "api";
 import useData from "init";
 import { useBizData } from "init";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useAPI, { startCheckout } from "../../../../../hooks/api/useAPI";
+import useAPI, { startCheckout } from "api/useAPI";
 
 // start checkout and get and set session id.
 export default function useStartCheckout({ userId, trigger }) {

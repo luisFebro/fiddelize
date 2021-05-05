@@ -4,9 +4,7 @@ import SearchCustomer from "./SearchCustomer";
 import ScoreCustomer from "./ScoreCustomer";
 import SuccessMsg from "./SuccessMsg";
 import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
-import getAPI, {
-    setTempPointsAndMemberData,
-} from "../../../../../utils/promises/getAPI";
+import getAPI, { setTempPointsAndMemberData } from "api";
 import useData, { useBizData } from "init";
 
 const setCustomerId = async (clientName, bizId, memberId) => {

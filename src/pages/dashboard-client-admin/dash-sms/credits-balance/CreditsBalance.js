@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
-import useAPI, { readCredits, needTrigger } from "../../../../hooks/api/useAPI";
+import useAPI, { readCredits, needTrigger } from "api/useAPI";
 import { useBizData } from "init";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import usePro from "../../../../hooks/pro/usePro";

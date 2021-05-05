@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
-import getAPI, { makeGoogleLogin } from "../../utils/promises/getAPI";
+import getAPI, { makeGoogleLogin } from "api";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 import getVar from "init/var";
 import { showSnackbar } from "../../redux/actions/snackbarActions";

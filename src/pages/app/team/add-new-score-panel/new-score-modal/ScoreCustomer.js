@@ -8,9 +8,7 @@ import useData from "init";
 import { setVar } from "init/var";
 import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../../../utils/arrays/getRandomArray";
-import getAPI, {
-    setTempPointsAndMemberData,
-} from "../../../../../utils/promises/getAPI";
+import getAPI, { setTempPointsAndMemberData } from "api";
 import showToast from "../../../../../components/toasts";
 import { useBizData } from "init";
 

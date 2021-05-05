@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCard";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useData from "init";
-import useAPI, { readTempPointsList } from "../../../hooks/api/useAPI";
+import useAPI, { readTempPointsList } from "api/useAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
 import { useBizData } from "init";
 import useBackColor from "../../../hooks/useBackColor";

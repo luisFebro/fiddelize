@@ -1,4 +1,4 @@
-import getAPI, { sendEmail as send } from "../../utils/promises/getAPI";
+import getAPI, { sendEmail as send } from "api";
 
 export default async function sendEmail({
     type,

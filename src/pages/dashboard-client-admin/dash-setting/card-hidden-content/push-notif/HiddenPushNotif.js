@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
+import getAPI from "api";
+import useData from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import showToast from "../../../../../components/toasts";
 import SwitchBtn, {
     treatBoolStatus,
 } from "../../../../../components/buttons/material-ui/SwitchBtn";
-import useAPI, {
-    readOrUpdateNotifStatus,
-} from "../../../../../hooks/api/useAPI";
-import getAPI from "../../../../../utils/promises/getAPI";
-import useData from "init";
+import useAPI, { readOrUpdateNotifStatus } from "api/useAPI";
 import subscribeUser from "../../../../../components/pwa-push-notification/subscription";
 
 export default function HiddenPushNotif() {

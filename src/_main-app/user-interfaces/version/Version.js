@@ -3,10 +3,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.18.0-50";
+const latestVersion = "4.19.0";
 
 const updateDescription =
-    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | new api and progress loader";
+    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | new api and progress loader pt 2";
 /* HISTORY
 new authentication system
 new uify to handle global states

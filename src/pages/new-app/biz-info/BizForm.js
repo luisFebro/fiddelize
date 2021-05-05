@@ -12,7 +12,7 @@ import { setVars } from "init/var";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import showToast from "../../../components/toasts";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
-import { API } from "../../../config/api";
+import { ROOT } from "api/root";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -55,7 +55,7 @@ export default function BizForm() {
 
     // error options: bizName or field
     const [fieldError, setFieldError] = useState(null);
-    const autocompleteUrl = `${API}/user/pre-register/fields-list?limit=30`;
+    const autocompleteUrl = `${ROOT}/user/pre-register/fields-list?limit=30`;
 
     const generateThisBizCode = (ultimateBizName) => {
         if (ultimateBizName) {

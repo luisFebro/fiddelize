@@ -8,7 +8,7 @@ import useData, { useBizData } from "init";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import showToast from "components/toasts";
-import getAPI, { checkPassword, createTk } from "utils/promises/getAPI";
+import getAPI, { checkPassword, createTk } from "api";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import PasswordCircleFields from "components/fields/PasswordCircleFields";
 import { Load } from "components/code-splitting/LoadableComp";

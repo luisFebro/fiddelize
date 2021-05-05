@@ -1,8 +1,8 @@
 import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import useAPI, { convertCurrency } from "../../../../../../../hooks/api/useAPI";
-import convertToReal from "../../../../../../../utils/numbers/convertToReal";
-import handleChange from "../../../../../../../utils/form/use-state/handleChange";
+import useAPI, { convertCurrency } from "api/useAPI";
+import convertToReal from "utils/numbers/convertToReal";
+import handleChange from "utils/form/use-state/handleChange";
 
 const getStyles = () => ({
     fieldFormValue: {

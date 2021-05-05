@@ -1,10 +1,10 @@
 import axios from "axios";
 import disconnect from "auth/disconnect";
 import { chooseHeaderAsync } from "auth/useToken";
+import getItems from "init/lStorage";
+import showProgress from "components/loadingIndicators/progress/showProgress";
 
-export * from "../../hooks/api/requestsLib";
-
-const token = localStorage.getItem("token");
+export * from "./requestsLib";
 
 // complete promise for inline and programatically requests
 export default function getAPI({
@@ -17,8 +17,12 @@ export default function getAPI({
     trigger = true,
     isSearch = false,
     fullCatch = false, // return full catch obj to handle
+    loader = false,
 }) {
-    if (!url) return console.log("A URL is required!");
+    if (!url) throw new Error("A URL is required!");
+
+    const [token] = getItems("currUser", ["token"]);
+    handleProgress("go", { loader });
 
     const axiosPromise = async (resolve, reject) => {
         let cancel;
@@ -26,6 +30,7 @@ export default function getAPI({
         const stopRequest = setTimeout(() => {
             if (typeof cancel === "function") cancel();
             // LESSON: do not use Promise.reject inside a pure promise like this where there is reject method already. the request will fail
+
             return reject({
                 response: "Tempo de espera terminou. Tente novamente",
             });
@@ -48,7 +53,8 @@ export default function getAPI({
             clearTimeout(stopRequest);
             return resolve("Request not ready to trigger");
         }
-        const response = await axios(config).catch((error) => {
+        const response = await axios(config).catch(async (error) => {
+            await handleProgress("end", { loader });
             if (fullCatch) return reject(error.response);
             if (axios.isCancel(error)) {
                 // if it is search and cancel is need as a defendor against multiple request, then isSearch is true.
@@ -66,15 +72,17 @@ export default function getAPI({
         });
 
         clearTimeout(stopRequest);
+        await handleProgress("end", { loader });
         return resolve(response);
     };
 
     return new Promise(axiosPromise);
 }
 
-// Alternative
-// fetchUsers(data)
-// const fetchUsers = async () => {
-//     const response = await axios.get('api/user/list/all');
-//     setData(response.data);
-// };
+// HELPERS
+async function handleProgress(type, { loader = false }) {
+    if (!loader) return null;
+
+    return await showProgress(type);
+}
+// END HELPERS

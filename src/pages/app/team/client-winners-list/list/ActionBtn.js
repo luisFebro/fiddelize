@@ -1,10 +1,7 @@
 import { useState } from "react";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import useAPI, {
-    getUniqueId,
-    removeTaskAndExpireCliPrize,
-} from "../../../../../hooks/api/useAPI";
+import useAPI, { getUniqueId, removeTaskAndExpireCliPrize } from "api/useAPI";
 
 export default function ActionBtn({
     type = "pendingDelivery",

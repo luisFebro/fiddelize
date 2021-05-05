@@ -1,7 +1,7 @@
 import "./_FacesPromotersScore.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import getAPI, { updateUser } from "../../../../../utils/promises/getAPI";
+import getAPI, { updateUser } from "api";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 // NPS (Net Promoter Score) Rating
 
 const facePatterns = [

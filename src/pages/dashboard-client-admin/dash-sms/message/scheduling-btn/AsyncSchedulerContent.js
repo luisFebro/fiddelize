@@ -12,7 +12,7 @@ import {
 import getTimezoneDate from "../../../../../utils/dates/getTimezoneDate";
 
 import getWeekDayBr from "../../../../../utils/dates/getWeekDayBr";
-import useAPI, { sendSMS, getUniqueId } from "../../../../../hooks/api/useAPI";
+import useAPI, { sendSMS, getUniqueId } from "api/useAPI";
 import scrollIntoView from "../../../../../utils/document/scrollIntoView";
 import getFilterDate from "../../../../../utils/dates/getFilterDate";
 

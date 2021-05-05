@@ -8,7 +8,7 @@ import { checkVerificationPass } from "redux/actions/adminActions";
 import useData, { useBizData } from "init";
 import { setVar } from "init/var";
 import showToast from "components/toasts";
-import getAPI, { createTk } from "utils/promises/getAPI";
+import getAPI, { createTk } from "api";
 import useBackColor from "hooks/useBackColor";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import disconnect from "auth/disconnect";

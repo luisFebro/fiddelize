@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { setVar } from "init/var";
 import PasswordCircleFields from "components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "components/keyboards/NumericKeyboard";
-import getAPI, { createPassword } from "utils/promises/getAPI";
+import getAPI, { createPassword } from "api";
 import getFirstName from "utils/string/getFirstName";
 import showToast from "components/toasts";
 

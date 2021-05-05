@@ -13,7 +13,7 @@ import showToast from "../../../../../../../components/toasts";
 import { setRun } from "../../../../../../../hooks/useRunComp";
 import { countField } from "../../../../../../../redux/actions/userActions";
 import { useBizData } from "init";
-import getAPI, { removeUser } from "../../../../../../../utils/promises/getAPI";
+import getAPI, { removeUser } from "api";
 // END CUSTOM DATA
 
 ModalConfYesNo.propTypes = {

@@ -7,8 +7,11 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import getVar, { removeVar } from "init/var";
+import getItems from "init/lStorage";
 import scrollIntoView from "../../utils/document/scrollIntoView";
 import "./_BottomTabs.scss";
+
+const [mainColor] = getItems("bizData", ["themePColor"]);
 
 function TabPanel(props) {
     const { children, value, index, boxPadding, ...other } = props;
@@ -66,12 +69,11 @@ BottomTabs.propTypes = {
 
 export default function BottomTabs({
     data,
-    colorP,
     needTabFullWidth = false,
     showAppBar,
 }) {
     const props = {
-        color: colorP,
+        color: mainColor,
     };
 
     const classes = useStyles(props);

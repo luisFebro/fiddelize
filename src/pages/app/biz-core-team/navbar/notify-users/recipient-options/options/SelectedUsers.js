@@ -2,10 +2,10 @@ import { useState, Fragment, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../../../components/search/AutoCompleteSearch";
 import ShowSelectionArea from "./comps/ShowSelectionArea";
 import { useRunComp } from "../../../../../../../hooks/useRunComp";
-import { API } from "../../../../../../../config/api";
+import { ROOT } from "api/root";
 import SelectField from "../../../../../../../components/fields/SelectField";
 import showToast from "../../../../../../../components/toasts";
-import useAPI, { readUserSubIds } from "../../../../../../../hooks/api/useAPI";
+import useAPI, { readUserSubIds } from "api/useAPI";
 
 const defaultSelected = "selecione tipo app:";
 
@@ -116,7 +116,7 @@ export default function SelectedUsers({
     };
 
     const showSearch = () => {
-        const autocompleteUrl = `${API}/push-notification/read/sub-ids?role=${selectedApp}`;
+        const autocompleteUrl = `${ROOT}/push-notification/read/sub-ids?role=${selectedApp}`;
 
         return (
             <section className="my-3 animated fadeInUp">

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import CardData from "./card-data/CardData";
-import useAPI, {
-    checkOneClickInvest,
-} from "../../../../../../hooks/api/useAPI";
+import useAPI, { checkOneClickInvest } from "api/useAPI";
 import { decryptCreditCard } from "../../../../../../utils/security/creditCard";
 import "./_AsyncCredit.scss";
 import useSendEmail from "../../../../../../hooks/email/useSendEmail";

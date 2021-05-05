@@ -6,7 +6,7 @@ import parse from "html-react-parser";
 import getId from "../../../utils/getId";
 import { useBizData } from "init";
 
-export { treatBoolStatus } from "../../../hooks/api/trigger";
+export { treatBoolStatus } from "api/trigger";
 
 const getStyles = ({ pillStyle, pillBack }) => ({
     pill: pillStyle

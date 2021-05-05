@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import getVar, { setVar } from "init/var";
-import isOffline from "../../utils/server/isOffline";
+import isOffline from "utils/server/isOffline";
 
 const isOnline = !isOffline();
 

@@ -4,12 +4,8 @@ import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../../utils/dates/dateFns";
 import Img from "../../../../../../components/Img";
 // import { isScheduledDate } from '../../../../../../utils/dates/dateFns';
-import useAPIList, {
-    readAgentIncomeHistory,
-} from "../../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../../hooks/api/useElemDetection";
+import useAPIList, { readAgentIncomeHistory } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import useData from "init";
 import extractStrData from "../../../../../../utils/string/extractStrData";

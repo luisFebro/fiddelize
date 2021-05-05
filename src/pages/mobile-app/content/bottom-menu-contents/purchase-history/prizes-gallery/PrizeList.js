@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Trophy from "./Trophy";
-import useAPIList, { readPrizes } from "hooks/api/useAPIList";
+import useAPIList, { readPrizes } from "api/useAPIList";
 import { useBizData } from "init";
 import Tooltip from "components/tooltips/Tooltip";
 import { fromNow, formatDMY } from "utils/dates/dateFns";

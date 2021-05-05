@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import SwitchBtn from "../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import DetailsBtn from "./details-btn/DetailsBtn";
-import useAPI, {
-    activateAutoService,
-    treatBoolStatus,
-} from "../../../../hooks/api/useAPI";
+import useAPI, { activateAutoService, treatBoolStatus } from "api/useAPI";
 import { useBizData } from "init";
 
 export default function Operation({

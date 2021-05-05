@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
-import { useStoreState } from "easy-peasy";
+import { useBizData } from "init";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./DashSetting.scss";
 import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
@@ -58,9 +58,7 @@ export default function DashSetting() {
 }
 
 function Title() {
-    const bizName = useStoreState(
-        (state) => state.userReducer.cases.bizData.bizName
-    );
+    const { bizName } = useBizData();
 
     return (
         <Fragment>

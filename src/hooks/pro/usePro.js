@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBizData } from "init";
-import useAPI, { getProData } from "../api/useAPI";
+import useAPI, { getProData } from "api/useAPI";
 import getVar from "init/var";
 import getDatesCountdown from "../dates/getDatesCountdown";
 

@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import "./_Balance.scss";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import convertToReal from "../../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
 import getVar, { setVar } from "init/var";
-import useAPI, {
-    readAgentIncomeHistory,
-} from "../../../../../hooks/api/useAPI";
+import useAPI, { readAgentIncomeHistory } from "api/useAPI";
 import useData from "init";
 
 const muStyle = {

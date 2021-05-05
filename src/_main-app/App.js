@@ -21,9 +21,8 @@ import "./libraries/fontAwesomeLib";
 // END STYLING
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
-// END UIs
 // import ScrollToTop from 'react-router-scroll-top';
-// import useData from "init";
+
 const isApp = isThisApp();
 
 export default function App() {

@@ -12,10 +12,7 @@ import getFirstName from "../../../../../utils/string/getFirstName";
 import { addDays, calendar } from "../../../../../utils/dates/dateFns";
 import useData, { useBizData } from "init";
 import showToast from "../../../../toasts";
-import getAPI, {
-    updateUser,
-    setNotifAuthor,
-} from "../../../../../utils/promises/getAPI";
+import getAPI, { updateUser, setNotifAuthor } from "api";
 
 export default function DiscountBenefit({ onClose, modalData }) {
     const [disableCTA, setDisableCTA] = useState(false);

@@ -8,12 +8,8 @@ import { useBizData } from "init";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
-import useAPIList, {
-    readTransactionHistory,
-} from "../../../../../hooks/api/useAPIList";
-import useElemDetection, {
-    checkDetectedElem,
-} from "../../../../../hooks/api/useElemDetection";
+import useAPIList, { readTransactionHistory } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 
 const isSmall = window.Helper.isSmallScreen();

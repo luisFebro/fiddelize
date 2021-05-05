@@ -8,12 +8,11 @@ import getFirstName from "utils/string/getFirstName";
 import useData from "init";
 import useToken, { chooseHeader } from "auth/useToken";
 import disconnect from "auth/disconnect";
-import { ShowLoadingComp } from "./Comps";
-
 import Skeleton from "components/multimedia/Skeleton";
 import { IS_DEV } from "config/clientUrl";
 import extractStrData from "utils/string/extractStrData";
 import isThisApp from "utils/window/isThisApp";
+import Spinner from "components/loadingIndicators/Spinner";
 
 const isApp = isThisApp();
 
@@ -26,7 +25,7 @@ const {
     data: list = [],
     loading, ShowLoading,
     error, ShowError,
-} = useAPI({ method: "put", url: someMethod(userId), params: { cliAdminId: businessId } })
+} = useAPIList({ method: "put", url: someMethod(userId), params: { cliAdminId: businessId } })
 <List />
 {loading && <ShowLoading />}
 {error && <ShowError />}
@@ -41,6 +40,10 @@ useAPIList.propTypes = {
 };
 
 const isSmall = window.Helper.isSmallScreen();
+
+const ShowLoadingComp = ({ size = "small" }) => (
+    <Spinner marginY={100} size={size} />
+);
 
 export default function useAPIList({
     method = "GET",

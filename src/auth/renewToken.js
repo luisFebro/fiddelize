@@ -1,4 +1,4 @@
-import getAPI, { createTk } from "utils/promises/getAPI";
+import getAPI, { createTk } from "api";
 import { setItems } from "init/lStorage";
 import { setVar } from "init/var";
 

@@ -1,5 +1,5 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
-// use GETAPI  on utils/promises for progaramatically make requests.
+// for requests required when the pages are loading.
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -8,14 +8,11 @@ import isObjEmpty from "utils/objects/isObjEmpty";
 import useToken, { chooseHeader } from "auth/useToken";
 import disconnect from "auth/disconnect";
 import showToast from "components/toasts";
-import { setRun } from "../useRunComp";
-import { useOfflineData } from "../storage/useOfflineListData";
+import { setRun } from "hooks/useRunComp";
+import { useOfflineData } from "hooks/storage/useOfflineListData";
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
-
-// Global axios defaults
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 useAPI.propTypes = {
     url: PropTypes.string.isRequired,

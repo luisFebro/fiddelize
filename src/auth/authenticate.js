@@ -1,6 +1,6 @@
-import { getVars, setVars, setVar } from "init/var";
+import { setVars, setVar } from "init/var";
 import isThisApp from "utils/window/isThisApp";
-import { setItems } from "init/lStorage";
+import getItems, { setItems } from "init/lStorage";
 
 const isApp = isThisApp();
 
@@ -40,7 +40,8 @@ export default async function authenticate(newToken, options = {}) {
         token: newToken,
     });
 
-    const [bizLinkName] = await getVars(["bizLinkName"], "user");
+    const { bizLinkName } = getItems("bizData", ["bizLinkName"]);
+    console.log("bizLinkName AUTHENTICATE CHECK", bizLinkName);
 
     if (role === "cliente-admin") {
         await setVar({ welcomeMsg: true });
