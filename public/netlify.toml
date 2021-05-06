@@ -1,5 +1,3 @@
-[build]
-base = "/"
 [[headers]]
 for = "/*"
 [headers.values]
