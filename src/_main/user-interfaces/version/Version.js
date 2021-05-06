@@ -3,7 +3,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.19.0-55";
+const latestVersion = "4.19.1-55";
 
 const updateDescription =
     "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | restructures of folders and removal of packages pt1";
