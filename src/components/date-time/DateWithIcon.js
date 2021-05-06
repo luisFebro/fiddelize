@@ -1,7 +1,6 @@
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
-import { fromNow, calendar } from "../../utils/dates/dateFns";
+import { fromNow, calendar } from "utils/dates/dateFns";
 
 DateWithIcon.propTypes = {
     marginTop: PropTypes.number,
@@ -13,27 +12,6 @@ DateWithIcon.propTypes = {
 // date.setDate(date.getDate() - daysBefore);
 // END
 
-const Div = styled.div`
-    .last-update {
-        margin-top: ${({ cssProps }) => `${cssProps.marginTop}px;` || "70px;"}
-        display: flex;
-        justify-content: flex-end;
-        padding: 10px;
-        align-items: center;
-    }
-
-    .last-update .icon {
-        margin-right: 15px;
-        font-size: 30px;
-    }
-
-    .last-update .text {
-        white-space: nowrap;
-        line-height: 20px;
-        margin-bottom: 0;
-    }
-`;
-
 // cssProps: background-color: ${({ cssProps }) => cssProps.btn || 'blue'};
 export default function DateWithIcon({
     style,
@@ -43,7 +21,7 @@ export default function DateWithIcon({
     needTxtShadow = false,
 }) {
     return (
-        <Div cssProps={{ marginTop }}>
+        <div>
             <section className="last-update" style={style}>
                 <div className="icon">
                     <FontAwesomeIcon
@@ -72,6 +50,26 @@ export default function DateWithIcon({
                     )}
                 </p>
             </section>
-        </Div>
+            <style jsx global>
+                {`
+                .last-update {
+                    margin-top: ${`${marginTop}px;` || "70px;"}
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 10px;
+                    align-items: center;
+                }
+                .last-update .icon {
+                    margin-right: 15px;
+                    font-size: 30px;
+                }
+                .last-update .text {
+                    white-space: nowrap;
+                    line-height: 20px;
+                    margin-bottom: 0;
+                }
+            `}
+            </style>
+        </div>
     );
 }

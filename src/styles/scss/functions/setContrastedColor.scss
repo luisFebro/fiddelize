@@ -1,0 +1,8 @@
+@function setContrastedColor($color) {
+    @if (lightness( $color ) > 40) {
+        @return var(--mainPurple);
+    }
+    @else {
+        @return var(--mainWhite);
+    }
+}

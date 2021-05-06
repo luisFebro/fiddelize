@@ -19,7 +19,9 @@ export default function GatewayAndCTAs({
     bizLinkName,
     loadingAccess,
 }) {
-    const handleLogout = () => disconnect();
+    const handleLogout = () => {
+        disconnect();
+    };
 
     return (
         <section

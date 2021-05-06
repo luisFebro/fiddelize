@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { useStoreState } from "easy-peasy";
 
 export default function WhatsappIcon() {

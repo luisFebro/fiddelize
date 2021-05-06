@@ -7,8 +7,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
-import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
-import showToast from "../../../../../../../components/toasts";
+import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
+import showToast from "components/toasts";
 // CUSTOM DATA
 import { setRun } from "../../../../../../../hooks/useRunComp";
 import { countField } from "../../../../../../../redux/actions/userActions";

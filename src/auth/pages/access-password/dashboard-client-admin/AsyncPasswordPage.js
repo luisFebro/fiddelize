@@ -2,7 +2,7 @@ import { useState, Fragment } from "react";
 import getQueryByName from "utils/string/getQueryByName";
 import { CLIENT_URL } from "config/clientUrl";
 import Illustration from "components/Illustration";
-import ScrollArrow from "keyframes/built/scroll-arrow/ScrollArrow";
+import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
 import { Load } from "components/code-splitting/LoadableComp";
 import ShowPasswordForm from "./ShowPasswordForm";

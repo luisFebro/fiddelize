@@ -1,0 +1,50 @@
+/*reference: https://codepen.io/wifeo/pen/KwdXwV*/
+.pulse-waves {
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 1px;
+    /*origin: center;*/
+    border-radius: 50%;
+    background-color: 0 0 0 30px rgba(34, 229, 235, 0.3);
+    cursor: pointer;
+    z-indez: -1;
+    /*-webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+    -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);*/
+    animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+.pulse-button:hover {
+    -webkit-animation: none;
+    -moz-animation: none;
+    -ms-animation: none;
+    animation: none;
+}
+
+/*@-webkit-keyframes pulse {
+    to {
+        box-shadow: 0 0 0 45px rgba(255, 255, 255, 0.3);
+    }
+}
+
+@-moz-keyframes pulse {
+    to {
+        box-shadow: 0 0 0 45px rgba(255, 255, 255, 0.3);
+    }
+}
+
+@-ms-keyframes pulse {
+    to {
+        box-shadow: 0 0 0 45px rgba(255, 255, 255, 0.3);
+    }
+}*/
+
+@keyframes pulse {
+    to {
+        box-shadow: 0 0 0 30px rgba(34, 229, 235, 0.3);
+    }
+}

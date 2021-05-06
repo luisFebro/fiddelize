@@ -1,8 +1,39 @@
 import { useState, Fragment } from "react";
 import Fab from "@material-ui/core/Fab";
-import { buttonFabType } from "../../../types";
+import {
+    number,
+    string,
+    shape,
+    element,
+    func,
+    bool,
+    oneOf,
+    oneOfType,
+} from "prop-types";
 
-ButtonFab.propTypes = buttonFabType;
+ButtonFab.propTypes = {
+    title: oneOfType([string, element]),
+    icon: element,
+    variant: oneOf(["extended", "round"]),
+    size: oneOf(["small", "medium", "large"]),
+    position: oneOf(["fixed", "absolute", "relative"]),
+    top: number,
+    left: number,
+    color: string,
+    fontSize: string,
+    fontWeight: string,
+    backgroundColor: string,
+    iconMu: element,
+    iconFontAwesome: oneOfType([string, element]),
+    iconMarginLeft: string,
+    iconFontSize: string,
+    iconAfterClick: oneOfType([string, element]),
+    actionAfterClick: shape({
+        setStatus: func,
+        status: bool,
+    }),
+    onClick: func,
+};
 
 export const muStyle = {
     transform: "scale(1.2)",

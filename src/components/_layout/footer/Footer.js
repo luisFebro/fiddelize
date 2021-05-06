@@ -2,7 +2,7 @@ import { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useDelay from "../../../hooks/useDelay";
-import AsyncVersion from "../../../_main-app/user-interfaces/version/AsyncVersion";
+import AsyncVersion from "../../../_main/user-interfaces/version/AsyncVersion";
 import "./_Footer.scss";
 import { Load } from "../../code-splitting/LoadableComp";
 import ModalFullContent from "../../modals/ModalFullContent";

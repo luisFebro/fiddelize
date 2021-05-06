@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import FaqAccordion from "../components/expansion-panels/faq/FaqAccordion";
-import DateWithIcon from "../components/date-time/DateWithIcon";
-import useScrollUp from "../hooks/scroll/useScrollUp";
+import FaqAccordion from "components/expansion-panels/faq/FaqAccordion";
+import DateWithIcon from "components/date-time/DateWithIcon";
+import useScrollUp from "hooks/scroll/useScrollUp";
 // import parse from "html-react-parser";
 
 const text1 = (

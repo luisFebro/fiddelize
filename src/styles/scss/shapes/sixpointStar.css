@@ -1,0 +1,24 @@
+.sixpointStar {
+    position: relative;
+
+    height: 0;
+    width: 0;
+
+    border-bottom: 12.5em solid #000;
+    border-right: 6.25em solid transparent;
+    border-left: 6.25em solid transparent;
+}
+
+.sixpointStar:before {
+    content: "";
+    position: absolute;
+    top: 70px;
+    left: -100px;
+
+    height: 0;
+    width: 0;
+
+    border-top: 12.5em solid #000;
+    border-right: 6.25em solid transparent;
+    border-left: 6.25em solid transparent;
+}

@@ -2,11 +2,9 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullScreen from "./ModalFullScreen";
-import { buttonFabType } from "../../../../../../../types";
 
 ModalBtn.propTypes = {
     modalData: PropTypes.object.isRequired,
-    button: PropTypes.shape(buttonFabType),
     setSelectedValue: PropTypes.func,
 };
 

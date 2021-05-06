@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { CLIENT_URL } from "../../config/clientUrl";
+import { setVar } from "init/var";
+import { CLIENT_URL } from "config/clientUrl";
 import "./_Home.scss";
 import FeaturesSection from "./sections/features/FeaturesSection";
 import CtaSection from "./sections/CtaSection";
-import preloadMedia from "../../utils/media/preloadMedia";
-import { setVar } from "init/var";
+import preloadMedia from "utils/media/preloadMedia";
 // import CompLoader from "../../components/CompLoader";
 // import AppShowCase from "./AppShowCase";
 // import { Link } from 'react-router-dom';

@@ -1,0 +1,27 @@
+//primary colors
+.theme-p {
+    background-color: var(--themeP) !important;
+}
+.theme-p-light {
+    background-color: var(--themePLight);
+}
+.theme-p-dark {
+    background-color: var(--themePDark);
+}
+//secondary colors
+.theme-s {
+    background-color: var(--themeS);
+}
+.theme-s-light {
+    background-color: var(--themeSLight);
+}
+.theme-s-dark {
+    background-color: var(--themeSDark);
+}
+//surface and background
+.theme-surface {
+    background-color: var(--themeSurface);
+}
+.theme-background {
+    background-color: var(--themeBackground);
+}

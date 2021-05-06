@@ -2,9 +2,6 @@ import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import clsx from "clsx";
 import parse from "html-react-parser";
-import { buttonMultiType } from "../../../types";
-
-ButtonMulti.propTypes = buttonMultiType;
 
 export const faStyle = {
     fontSize: "30px",

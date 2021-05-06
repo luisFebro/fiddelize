@@ -1,11 +1,8 @@
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
 import moneyMaskBr from "../../utils/validation/masks/moneyMaskBr";
 import showToast from "../toasts";
-
-const isSmall = window.Helper.isSmallScreen();
 
 MoneyKeyboard.propTypes = {
     setDisplay: PropTypes.func,
@@ -51,10 +48,7 @@ export default function MoneyKeyboard({
 
     return (
         <section className="container-center">
-            <GridContainer
-                myGradient={`linear-gradient(to right, #16222a, var(--themePLight--${colorP}))`}
-                className="animated fadeInUp delay-1s"
-            >
+            <section className="root animated fadeInUp delay-1s">
                 <section>
                     <div
                         onClick={() => {
@@ -205,67 +199,79 @@ export default function MoneyKeyboard({
                     <div className="empty" />
                 </section>
                 <audio id="keypadBeep" src="/sounds/tock.mp3" />
-            </GridContainer>
+            </section>
+            <style jsx global>
+                {`
+                    .root > section div {
+                        background: linear-gradient(
+                            to right,
+                            #16222a,
+                            ${colorP
+                                ? `var(--themePLight--${colorP})`
+                                : "#3a6073"}
+                        );
+                    }
+                `}
+            </style>
+            <style jsx global>
+                {`
+                    .root {
+                        bottom: 0;
+                        position: fixed;
+                        width: 100%;
+                        max-width: 400px;
+                    }
+
+                    .root > section {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr 40%;
+                        grid-gap: 5px;
+                        background-color: var(--mainDark);
+                        padding: 10px;
+                        font-size: 100%;
+                    }
+
+                    .root > section div {
+                        color: white;
+                        text-align: center;
+                        text-shadow: 1px 1px 3px black;
+                        padding: 10px 0;
+                        font-weight: bolder;
+                        font-size: 2em;
+                        border-radius: 15px;
+                    }
+
+                    .root > section div:active {
+                        background: white;
+                    }
+
+                    .root > section div:hover {
+                        position: relative;
+                        top: 1px;
+                        left: 1px;
+                        border-color: #e5e5e5;
+                        cursor: pointer;
+                    }
+
+                    .root .side-btn {
+                        font-size: 1.4em;
+                    }
+
+                    .root .erase-last {
+                        background: #fbc531;
+                    }
+
+                    .root .return {
+                        background: var(--lightBlue);
+                    }
+
+                    .root .confirm {
+                        background: #4cd137;
+                        grid-column: 4;
+                        grid-row: 3 / span 2;
+                    }
+                `}
+            </style>
         </section>
     );
 }
-
-const GridContainer = styled.div`
-    & {
-        bottom: 0;
-        position: fixed;
-        width: 100%;
-        max-width: 400px;
-    }
-
-    & > section {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 40%;
-        grid-gap: 5px;
-        background-color: var(--mainDark);
-        padding: 10px;
-        font-size: 100%;
-    }
-
-    & > section div {
-        background: ${({ myGradient }) =>
-            myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
-        color: white;
-        text-align: center;
-        text-shadow: 1px 1px 3px black;
-        padding: 10px 0;
-        font-weight: bolder;
-        font-size: 2em;
-        border-radius: 15px;
-    }
-
-    & > section div:active {
-        background: white;
-    }
-
-    & > section div:hover {
-        position: relative;
-        top: 1px;
-        left: 1px;
-        border-color: #e5e5e5;
-        cursor: pointer;
-    }
-
-    .side-btn {
-        font-size: 1.4em;
-    }
-
-    & .erase-last {
-        background: #fbc531;
-    }
-
-    & .return {
-        background: var(--lightBlue);
-    }
-
-    & .confirm {
-        background: #4cd137;
-        grid-column: 4;
-        grid-row: 3 / span 2;
-    }
-`;

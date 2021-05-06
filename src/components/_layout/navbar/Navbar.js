@@ -3,7 +3,6 @@ import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useBizData } from "init";
 import useAuth from "auth/useAuth";
-import styled from "styled-components";
 import gaEvent from "utils/analytics/gaEvent";
 import isThisApp from "utils/window/isThisApp";
 import "./NavbarLayout.scss";
@@ -228,8 +227,8 @@ function Navbar({ history, location }) {
 
     return (
         !isBlackList && (
-            <NavWrapper
-                className="navbar navbar-expand-sm text-nav-items"
+            <section
+                className="root navbar shadow-babadoo navbar-expand-sm text-nav-items"
                 style={{
                     backgroundColor:
                         !isApp || locationNow.includes("/painel-de-controle")
@@ -240,85 +239,42 @@ function Navbar({ history, location }) {
                 {showLogo()}
                 {showButtons()}
                 {showAccessLinkMobile()}
-            </NavWrapper>
+                <style jsx global>
+                    {`
+                        .root {
+                            margin: 0;
+                            padding: 0;
+                            min-height: 50px;
+                        }
+
+                        .store-container {
+                            position: relative;
+                        }
+
+                        .store-badge {
+                            font-size: 0.4em;
+                            position: absolute;
+                            top: 60%;
+                            left: 65%;
+                            transform: translate(-50%, -50%);
+                        }
+                        .fixed {
+                            position: fixed;
+                            right: 1.2rem;
+                            top: 1.9rem;
+                        }
+
+                        .nav-link {
+                            text-transform: capitalize;
+                        }
+                    `}
+                </style>
+            </section>
         )
     );
 }
 
 export default withRouter(Navbar); // n1
-
-/* ARCHIVES
-{locationNow.includes("/cliente-admin/painel-de-controle") && btnLogout()}
-
-{isSmall ? "Admin" : "Usuário: Cliente-Admin"} <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
-
-This is not wokring right... I cant seem to log out when clicked i the btn.
-<div>
-    <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
-        Cliente <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
-    </span>
-    {btnLogout()}
-</div>
-
-{role === "colaborador" &&
-<Fragment>
-    <Link to={`/colaborador/quadro-administrativo/${_idStaff}`}>
-        Usuário: Colaborador <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
-    </Link>
-    {btnLogout()}
-</Fragment>}
-*/
-
-// STYLES
-const DivWrapper = styled.div`
-    position: sticky;
-    top: 0;
-    z-index: 1010;
-`;
-const NavWrapper = styled.nav`
-    & {
-        margin: 0;
-        padding: 0;
-        min-height: 50px;
-    }
-    .store-container {
-        position: relative;
-    }
-
-    .store-badge {
-        font-size: 0.4em;
-        position: absolute;
-        top: 60%;
-        left: 65%;
-        transform: translate(-50%, -50%);
-    }
-    & .fixed {
-        position: fixed;
-        right: 1.2rem;
-        top: 1.9rem;
-    }
-
-    .nav-link {
-        text-transform: capitalize;
-    }
-`;
-
-/* ARCHIVES
-import KeyAccessDashboard from './KeyAccessDashboard';
-const showKeyAccessDashboard = () => (
-    <Link to="/painel-controle-admin">
-        <KeyAccessDashboard />
-    </Link>
-);
-
-import { storeIcon } from './dataIcons';
-import { dataWorkingHour } from './working-hour/GetWorkingHour';
-const isStoreOpen = dataWorkingHour[1];
-
-import ShowImgOrSkeleton from '../../ShowImgOrSkeleton';
-import CategorySlider from './CategorySlider';
-import SearchCompleteWithImg from '../../SearchCompleteWithImg';
-*/
 
 /* COMMENTS
 n1: withRouter - https://stackoverflow.com/questions/53539314/what-is-withrouter-for-in-react-router-dom

@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 export const ButtonContainerNoFillLightBlue = styled.button`
     :root {
         --mainBlue: #2a2a72;

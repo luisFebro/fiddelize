@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 // Material UI
 import TextField from "@material-ui/core/TextField";

@@ -3,9 +3,8 @@ import Slider from "react-slick";
 import { HashLink } from "react-router-hash-link";
 import "../../carousels/_slick.css";
 import "../../carousels/_slickTheme.css";
-import styled from "styled-components";
 import { productCategories } from "../../../data/dataIcons";
-import { floatIt } from "../../../keyframes/floatIt";
+// import { floatIt } from "../../../keyframes/floatIt";
 
 export default class CategorySlider extends Component {
     constructor() {
@@ -108,9 +107,3 @@ export default class CategorySlider extends Component {
         );
     }
 }
-
-const SpanWrapper = styled.span`
-    cursor: pointer;
-    margin-bottom: 5px;
-    animation: ${floatIt} 1s linear 0s 20;
-`;

@@ -12,7 +12,6 @@
         "@material-ui/icons": "^4.5.1",
         "@material-ui/lab": "^4.0.0-alpha.35",
         "@material-ui/pickers": "^3.2.8",
-        "@welldone-software/why-did-you-render": "^4.2.5",
         "axios": "^0.19.0",
         "chartist": "^0.11.4",
         "chartist-plugin-tooltips": "0.0.17",
@@ -22,7 +21,6 @@
         "file-saver": "^2.0.5",
         "flickity": "^2.2.1",
         "html-react-parser": "^0.10.0",
-        "http-proxy-middleware": "^1.0.5",
         "jquery": "^3.5.0",
         "localforage": "^1.7.3",
         "nanoid": "^3.1.20",
@@ -37,13 +35,13 @@
         "react-router-dom": "^5.1.2",
         "react-scripts": "^4.0.2",
         "sharethis-reactjs": "^1.5.0",
-        "styled-components": "^4.4.1",
+        "styled-jsx": "^3.4.4",
         "web-vitals": "^0.2.4",
         "zenscroll": "^4.0.2"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "CI=false && react-scripts build",
+        "start": "react-app-rewired start",
+        "build": "CI=false && react-app-rewired build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "analyse": "node scripts/analyse.js",
@@ -69,6 +67,7 @@
         ]
     },
     "devDependencies": {
+        "customize-cra": "^1.0.0",
         "cypress": "^4.9.0",
         "eslint": "^7.11.0",
         "eslint-config-airbnb": "^18.2.1",
@@ -85,6 +84,7 @@
         "path": "^0.12.7",
         "prettier": "2.1.1",
         "progress-bar-webpack-plugin": "^2.1.0",
+        "react-app-rewired": "^2.1.8",
         "webpack-bundle-analyzer": "^3.8.0"
     },
     "husky": {

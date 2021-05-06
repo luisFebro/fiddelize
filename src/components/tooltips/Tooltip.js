@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 // import this to component later!!!
 import { default as TooltipMU } from "@material-ui/core/Tooltip";
+import { useBizData } from "init";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Zoom from "@material-ui/core/Zoom";
 import parse from "html-react-parser";
-import "../../keyframes/pulseWaves.css";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
-import { useBizData } from "init";
+import "./pulseWaves.css";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
 
 const isSmall = window.Helper.isSmallScreen();
 

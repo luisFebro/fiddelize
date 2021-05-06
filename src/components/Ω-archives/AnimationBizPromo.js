@@ -1,5 +1,4 @@
 import { useStoreState, useStoreDispatch } from "easy-peasy";
-import styled from "styled-components";
 import { showModalDefault } from "../redux/actions/modalActions.js";
 // End Redux
 import ModalDefault from "./modals/ModalDefault.js";

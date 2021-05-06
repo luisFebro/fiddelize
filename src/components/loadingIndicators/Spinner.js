@@ -1,7 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
-import { spin } from "../../keyframes/spin";
 import Picture from "../Picture";
 
 const logoOpts = {
@@ -9,18 +7,6 @@ const logoOpts = {
     small: "50px",
     mini: "20px",
 };
-
-const SpinnerInner = styled.div`
-    position: relative;
-    height: ${({ size }) => logoOpts[size]};
-    width: ${({ size }) => logoOpts[size]};
-
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--lightPurple);
-    border-radius: 100%;
-
-    animation: ${spin} 0.8s linear infinite;
-`;
 
 Spinner.propTypes = {
     expireSec: PropTypes.number,
@@ -53,7 +39,35 @@ export default function Spinner({
     }, [stopSpinnerAfter]);
 
     const showSpinner = (isRunning) =>
-        isRunning && <SpinnerInner size={size} />;
+        isRunning && (
+            <section className="root">
+                <div />
+                <style jsx>
+                    {`
+                        .root div {
+                            position: relative;
+                            height: ${logoOpts[size]};
+                            width: ${logoOpts[size]};
+
+                            border: 3px solid #f3f3f3;
+                            border-top: 3px solid var(--lightPurple);
+                            border-radius: 100%;
+
+                            animation: spin 0.8s linear infinite;
+                        }
+
+                        @keyframes spin {
+                            from {
+                                transform: rotate(0deg);
+                            }
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+                    `}
+                </style>
+            </section>
+        );
 
     const heightCond =
         typeof marginY === "number"
@@ -86,17 +100,5 @@ export default function Spinner({
         </section>
     );
 }
-
-/* ARCHIVES
-const SpinnerInner = styled(Wrapper)`
-`;
-
-let config = {
-    center: 'container-center',
-    left: '?',
-    right: '?',
-    none: ''
-}
- */
 
 /* concept from: https://codepen.io/smashtheshell/pen/jqGxzr */

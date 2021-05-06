@@ -1,23 +1,23 @@
 import { useState, useEffect, Fragment } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import { setItems } from "init/lStorage";
-import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
-import PwaInstaller from "../../components/pwa-installer/PwaInstaller";
-import { CLIENT_URL } from "../../config/clientUrl";
-import checkIfElemIsVisible from "../../utils/window/checkIfElemIsVisible";
+import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
+import PwaInstaller from "components/pwa-installer/PwaInstaller";
+import { CLIENT_URL } from "config/clientUrl";
+import checkIfElemIsVisible from "utils/window/checkIfElemIsVisible";
 import { useBizData } from "init";
-import { readClientAdmin } from "../../redux/actions/userActions";
-import showToast from "../../components/toasts";
-import Spinner from "../../components/loadingIndicators/Spinner";
-import useAnimateElem from "../../hooks/scroll/useAnimateElem";
-import useBackColor from "../../hooks/useBackColor";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
+import { readClientAdmin } from "redux/actions/userActions";
+import showToast from "components/toasts";
+import Spinner from "components/loadingIndicators/Spinner";
+import useAnimateElem from "hooks/scroll/useAnimateElem";
+import useBackColor from "hooks/useBackColor";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
+import { Load } from "components/code-splitting/LoadableComp";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import BackButton from "components/buttons/BackButton";
 import getQueries from "./helpers/getQueries";
 import handleRoleStorage from "./helpers/handleRoleStorage";
 import useAllowedLink from "./hooks/useAllowedLink";
-import { Load } from "../../components/code-splitting/LoadableComp";
-import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
-import BackButton from "../../components/buttons/BackButton";
 
 const isSmall = window.Helper.isSmallScreen();
 

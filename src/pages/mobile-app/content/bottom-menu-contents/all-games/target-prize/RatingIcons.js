@@ -1,6 +1,5 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
 import { useEffect } from "react";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "components/tooltips/Tooltip";
 import animateCSS from "utils/animateCSS";
@@ -99,7 +98,7 @@ export default function RatingIcons({
     };
 
     return (
-        <RatingDiv>
+        <section className="root">
             {levels.map((level, ind) => (
                 <section className="position-relative" key={level}>
                     <Tooltip
@@ -132,37 +131,40 @@ export default function RatingIcons({
                     />
                 </section>
             ))}
-        </RatingDiv>
+            <style jsx global>
+                {`
+                    .root {
+                        display: flex;
+                        justify-content: center;
+                        flex-flow: row wrap;
+                        text-align: center;
+                        perspective: 250px;
+                        width: 100%;
+                    }
+
+                    .icon {
+                        font-size: 60px;
+                        cursor: pointer;
+                        box-sizing: content-box !important;
+                        padding: 0 8px;
+                        color: #fff;
+                        opacity: 0.5;
+                        transition: all 150ms;
+                        transform: rotateX(45deg);
+                        transform-origin: center bottom;
+                    }
+
+                    .icon:hover {
+                        color: white;
+                        opacity: 1;
+                        transform: rotateX(0deg);
+                        text-shadow: 0 0 30px grey;
+                    }
+                `}
+            </style>
+        </section>
     );
 }
-
-const RatingDiv = styled.div`
-    display: flex;
-    justify-content: center;
-    flex-flow: row wrap;
-    text-align: center;
-    perspective: 250px;
-    width: 100%;
-
-    .icon {
-        font-size: 60px;
-        cursor: pointer;
-        box-sizing: content-box !important;
-        padding: 0 8px;
-        color: #fff;
-        opacity: 0.5;
-        transition: all 150ms;
-        transform: rotateX(45deg);
-        transform-origin: center bottom;
-    }
-
-    .icon:hover {
-        color: white;
-        opacity: 1;
-        transform: rotateX(0deg);
-        text-shadow: 0 0 30px grey;
-    }
-`;
 
 /* COselectTxtStyle(colorP, {needDarkBool: true})
 n1: the native icons sometimes can demonstrate faitures on displaying the colors,

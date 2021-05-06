@@ -2,7 +2,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, StoreProvider } from "easy-peasy";
-import App from "./_main-app/App";
+import App from "./_main/App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 // import reportWebVitals from "./reportWebVitals";
 import { easyStore } from "./redux/_easyStore";

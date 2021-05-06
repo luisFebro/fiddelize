@@ -1,5 +1,5 @@
 import getAPI, { subscribePushNotif } from "api";
-import { setVar } from "init/var";
+// import { setVar } from "init/var";
 
 const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY
@@ -24,7 +24,9 @@ export default async function subscribeUser({ role, userId }) {
         userVisibleOnly: true,
     });
 
-    sendSubscription(subscription, params);
+    const params = { role, userId, deviceType };
+
+    sendSubscription(newSubscription, params);
     return "ok";
 }
 
@@ -51,7 +53,7 @@ function urlBase64ToUint8Array(base64String) {
         console.log(
             "base64String is not passed or is in an invalid format other than string. Check if your PUBLIC_VAPID_KEY is declared correctly both in dev and production env."
         );
-        return;
+        return null;
     }
 
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);

@@ -1,7 +1,5 @@
 import { Fragment } from "react";
-import styled from "styled-components";
 import useAPI, { getMembersPodium } from "api/useAPI";
-// import convertToReal from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import truncateWords from "utils/string/truncateWords";
 import { useBizData } from "init";
@@ -69,7 +67,7 @@ export default function RankingPondium() {
     );
 
     return (
-        <DivPodium className="animated fadeIn my-3 container-center flex-column">
+        <section className="root animated fadeIn my-3 container-center flex-column">
             <div className="position-relative" style={{ marginTop: "30px" }}>
                 <Img
                     className="shadow-elevation-black"
@@ -82,47 +80,48 @@ export default function RankingPondium() {
                 {showScores()}
             </div>
             <hr className="lazer-purple" />
-        </DivPodium>
+            <style jsx global>
+                {`
+                    .root {
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .root .bounce-repeat {
+                        animation-iteration-count: 2;
+                    }
+
+                    .root .podium-title {
+                        font-weight: bold;
+                    }
+
+                    .root .first-place,
+                    .second-place,
+                    .third-place {
+                        text-align: center;
+                        font-weight: bold;
+                        min-width: 200px;
+                    }
+
+                    .root .first-place {
+                        top: -14%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+
+                    .root .second-place {
+                        top: 18%;
+                        left: 17%;
+                        transform: translate(-50%, -50%);
+                    }
+
+                    .root .third-place {
+                        top: 26%;
+                        left: 85%;
+                        transform: translate(-50%, -50%);
+                    }
+                `}
+            </style>
+        </section>
     );
 }
-
-const DivPodium = styled.div`
-    & {
-        display: flex;
-        justify-content: center;
-    }
-
-    & .bounce-repeat {
-        animation-iteration-count: 2;
-    }
-
-    & .podium-title {
-        font-weight: bold;
-    }
-
-    & .first-place,
-    .second-place,
-    .third-place {
-        text-align: center;
-        font-weight: bold;
-        min-width: 200px;
-    }
-
-    & .first-place {
-        top: -14%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    & .second-place {
-        top: 18%;
-        left: 17%;
-        transform: translate(-50%, -50%);
-    }
-
-    & .third-place {
-        top: 26%;
-        left: 85%;
-        transform: translate(-50%, -50%);
-    }
-`;

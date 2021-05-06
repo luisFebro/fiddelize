@@ -1,0 +1,81 @@
+/*text transform*/
+.text-capi {
+    text-transform: capitalize;
+}
+
+.text-uppe {
+    text-transform: uppercase;
+}
+
+.text-lowe {
+    text-transform: lowercase;
+}
+.text-justify {
+    text-align: left;
+    word-spacing: 4px;
+}
+
+.text-align {
+    text-align: left;
+    /*word-spacing: 4px;*/
+    margin: 20px;
+}
+
+@media screen and (min-width: 780px) {
+    .text-align {
+        text-align: justify;
+        word-spacing: -2px;
+        margin: 50px;
+    }
+}
+
+/*Letters border*/
+.text-border-white {
+    text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;
+}
+
+.text-shadow-black, /*bad*/
+.text-border-black {
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+
+.text-shadow {
+    /*recommended*/
+    text-shadow: 1px 1px 3px black;
+}
+.no-text-shadow {
+    /*recommended*/
+    text-shadow: none;
+}
+.text-shadow-white {
+    text-shadow: 1px 1px 3px white;
+}
+
+.no-text-decoration,
+.text-decoration-none {
+    text-decoration: none !important;
+}
+
+.margin-left-25 {
+    margin-left: 25px !important;
+}
+
+.text-link,
+.text-underline {
+    text-decoration: underline !important;
+    font-weight: bold !important;
+    color: var(--themeP);
+    cursor: pointer;
+}
+
+.text-pill {
+    border-radius: 30px;
+    padding: 1px 10px;
+    color: #fff;
+    background-color: var(--themeP);
+    font-weight: bold;
+}
+
+.font-weight-normal {
+    font-weight: normal !important;
+}

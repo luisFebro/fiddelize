@@ -9,18 +9,24 @@ import Select from "@material-ui/core/Select";
 // import TextField from '@material-ui/core/TextField';
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import PropTypes from "prop-types";
+import PropTypes, { string, object } from "prop-types";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { updateUser } from "../../../redux/actions/userActions";
-import { modalDefaultType } from "../../../types";
 import { setRun } from "../../../redux/actions/globalActions";
 
 ModalSelect_userFunction.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    modal: PropTypes.shape(modalDefaultType),
+    modal: PropTypes.shape({
+        title: string,
+        subTitle: string,
+        txtBtn: string,
+        iconBtn: string,
+        userId: string,
+        modalData: object,
+    }),
 };
 // End Material UI
 

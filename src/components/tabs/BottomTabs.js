@@ -70,7 +70,7 @@ BottomTabs.propTypes = {
 export default function BottomTabs({
     data,
     needTabFullWidth = false,
-    showAppBar,
+    showAppBar = true,
 }) {
     const props = {
         color: mainColor,

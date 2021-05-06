@@ -518,5 +518,3 @@ export default function CardsList({ data }) {
         </div>
     );
 }
-
-CardsList.whyDidYouRender = false;

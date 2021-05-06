@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from "easy-peasy";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
@@ -8,21 +7,22 @@ import PurchaseHistoryBtn from "../../../../mobile-app/history-purchase-btn/Purc
 
 const isSmall = window.Helper.isSmallScreen();
 
-const Div = styled.div`
-    .title-blob-action {
-        font-size: 0.5em;
-    }
-    .star-blob-medium {
-        font-size: 3em;
-    }
-`;
-
 export default function ActionBtns({ data, needBadgeForTestMode }) {
     return (
-        <Div cssProps={{ compName: null }}>
+        <section>
             {showBlobActionBtns(data)}
             {showDeleteBtn(data, needBadgeForTestMode)}
-        </Div>
+            <style jsx global>
+                {`
+                    .title-blob-action {
+                        font-size: 0.5em;
+                    }
+                    .star-blob-medium {
+                        font-size: 3em;
+                    }
+                `}
+            </style>
+        </section>
     );
 }
 

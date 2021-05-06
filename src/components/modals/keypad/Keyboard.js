@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../hooks/media/usePlayAudio";
 import animateCSS from "../../../utils/animateCSS";
@@ -74,9 +73,7 @@ export default function Keyboard({
     };
 
     return (
-        <GridContainer
-            myGradient={`linear-gradient(to right, #16222a, var(--themePLight--${colorP}))`}
-        >
+        <section className="root">
             <div
                 onClick={() => {
                     getValue("1");
@@ -220,59 +217,71 @@ export default function Keyboard({
                 {keyboardType === "numeric" ? "," : ""}
             </div>
             <audio id="keypadBeep" src="/sounds/tock.mp3" />
-        </GridContainer>
+            <style jsx global>
+                {`
+                    .root > div {
+                        background: linear-gradient(
+                            to right,
+                            #16222a,
+                            ${colorP
+                                ? `var(--themePLight--${colorP})`
+                                : "#3a6073"}
+                        );
+                    }
+                `}
+            </style>
+            <style jsx global>
+                {`
+                    .root {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr 40%;
+                        grid-gap: 5px;
+                        background-color: var(--mainDark);
+                        padding: 10px;
+                        font-size: 100%;
+                    }
+
+                    .root > div {
+                        color: white;
+                        text-align: center;
+                        text-shadow: 1px 1px 3px black;
+                        padding: 10px 0;
+                        font-weight: bolder;
+                        font-size: 2em;
+                        border-radius: 15px;
+                    }
+
+                    .root > div:active {
+                        background: white;
+                    }
+
+                    .root > div:hover {
+                        position: relative;
+                        top: 1px;
+                        left: 1px;
+                        border-color: #e5e5e5;
+                        cursor: pointer;
+                    }
+
+                    .root .side-btn {
+                        font-size: 1.4em;
+                    }
+
+                    .root .erase-last {
+                        background: #fbc531 !important;
+                    }
+
+                    .root .cancel {
+                        background: #ea2027;
+                    }
+
+                    .root .confirm {
+                        background: #4cd137;
+                        grid-column: 4;
+                        grid-row: 3 / span 2;
+                    }
+                `}
+            </style>
+        </section>
     );
 }
-
-const GridContainer = styled.div`
-    & {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 40%;
-        grid-gap: 5px;
-        background-color: var(--mainDark);
-        padding: 10px;
-        font-size: 100%;
-    }
-
-    & > div {
-        background: ${({ myGradient }) =>
-            myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
-        color: white;
-        text-align: center;
-        text-shadow: 1px 1px 3px black;
-        padding: 10px 0;
-        font-weight: bolder;
-        font-size: 2em;
-        border-radius: 15px;
-    }
-
-    & > div:active {
-        background: white;
-    }
-
-    & > div:hover {
-        position: relative;
-        top: 1px;
-        left: 1px;
-        border-color: #e5e5e5;
-        cursor: pointer;
-    }
-
-    .side-btn {
-        font-size: 1.4em;
-    }
-
-    & .erase-last {
-        background: #fbc531;
-    }
-
-    & .cancel {
-        background: #ea2027;
-    }
-
-    & .confirm {
-        background: #4cd137;
-        grid-column: 4;
-        grid-row: 3 / span 2;
-    }
-`;

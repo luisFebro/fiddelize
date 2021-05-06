@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 // need to set flexBasis to the mainContent in order to sum up to 100% in total.
 export default function SideButton({
     onClick,
@@ -16,7 +14,8 @@ export default function SideButton({
         },
     };
     return (
-        <BtnWrapper
+        <section
+            className="root"
             style={styles.btn}
             onClick={onClick}
             onMouseOver={(e) => (e.target.style.backgroundColor = "grey")}
@@ -25,19 +24,24 @@ export default function SideButton({
             }
         >
             <i className={`${fontAwesomeIcon || "fas fa-angle-right"}`} />
-        </BtnWrapper>
+            <style jsx global>
+                {`
+                    .root {
+                        display: flex;
+                        justify-content: center;
+                        border: none;
+                        outline: none;
+                    }
+
+                    i {
+                        font-size: 5em;
+                        color: white;
+                        filter: drop-shadow(
+                            0.001em 0.001em 0.15em var(--mainDark)
+                        );
+                    }
+                `}
+            </style>
+        </section>
     );
 }
-
-const BtnWrapper = styled.button`
-    display: flex;
-    justify-content: center;
-    border: none;
-    outline: none;
-
-    & i {
-        font-size: 5em;
-        color: white;
-        filter: drop-shadow(0.001em 0.001em 0.15em var(--mainDark));
-    }
-`;

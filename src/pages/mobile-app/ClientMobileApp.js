@@ -16,7 +16,7 @@ import removeImgFormat from "utils/biz/removeImgFormat";
 import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
-import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
+import AsyncVersion from "../../_main/user-interfaces/version/AsyncVersion";
 // import ClientUserAppContent from "./content/ClientUserAppContent";
 
 const AsyncClientUserAppContent = Load({

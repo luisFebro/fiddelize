@@ -1,0 +1,20 @@
+.float-it {
+    animation: floatit 1s linear 0s infinite;
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+}
+
+.float-it-5 {
+    animation: floatit 1s linear 0s 5;
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+}
+
+.float-it-2 {
+    animation: floatit 1s linear 0s 2;
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+}
+
+@keyframes floatit {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(0.55em); }
+    100% { transform: translateY(0); }
+}

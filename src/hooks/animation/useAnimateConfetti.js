@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
-import usePlayAudio from "../../hooks/media/usePlayAudio";
 import getItems, { setItems, removeItems } from "init/lStorage";
+import usePlayAudio from "hooks/media/usePlayAudio";
 
 const localCollection = "onceChecked";
 
 const loadConfetti = async (command) => {
     const { getConfetti } = await import(
-        "../../keyframes/animations-js/confetti/confetti" /* webpackChunkName: "confetti-anima-lazy" */
+        "./confetti" /* webpackChunkName: "confetti-anima-lazy" */
     );
     const confetti = getConfetti();
 
     if (command === "start") return confetti.start();
     if (command === "isRunning") return confetti.isRunning;
     if (command === "stop") return confetti.stop();
+
+    return null;
 };
 
 // options:

@@ -1,7 +1,6 @@
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ServiceCard({ data }) {
     const classes = useStyles();
     return (
-        <DivWrapper class="col-4 col-md-4">
+        <div className="col-4 col-md-4">
             <Paper className={classes.paper}>
                 <Typography component="p" className={classes.text}>
                     {data.title}
@@ -32,7 +31,7 @@ export default function ServiceCard({ data }) {
                     <img src={data.icon} />
                 </div>
             </section>
-        </DivWrapper>
+        </div>
     );
 }
 

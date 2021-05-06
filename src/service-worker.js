@@ -307,7 +307,7 @@ async function showNotification(payload = {}) {
         dir: payload.dir || "ltr",
         vibrate: payload.vibrate || [200, 100, 200, 100, 200, 100, 200], // n1
         // behavior options
-        requireInteraction: payload.requireInteraction || false, // only on mobile - Indicates that on devices with sufficiently large screens, a notification should remain active until the user clicks or dismisses it. If this value is absent or false, the desktop version of Chrome will auto-minimize notifications after approximately twenty seconds. The default value is false.
+        requireInteraction: true, // payload.requireInteraction ||  only on mobile - Indicates that on devices with sufficiently large screens, a notification should remain active until the user clicks or dismisses it. If this value is absent or false, the desktop version of Chrome will auto-minimize notifications after approximately twenty seconds. The default value is false.
         actions: payload.actions || [], // n2 array with objects - only works on mobile android - it does not appear in the desktop - the left side icon from the title
         lang: payload.lang || "pt-BR", // Specify the lang used within the notification. This string must be a valid BCP 47 language tag.
         data: payload.data || null, // Arbitrary data that you want to be associated with the notification. This can be of any data type.

@@ -86,5 +86,3 @@ export default function BadaloBell({
         </section>
     );
 }
-
-// BadaloBell.whyDidYouRender = false;

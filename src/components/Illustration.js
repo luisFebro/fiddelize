@@ -1,6 +1,5 @@
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import parse from "html-react-parser";
 import truncateWords from "../utils/string/truncateWords";
 import { ButtonContainerPressedEffectDark as Dark } from "./buttons/Ω-archives/Default";
@@ -73,8 +72,8 @@ export default function Illustration({
 
     return (
         <Fragment>
-            <DivWrapper
-                className={`${
+            <section
+                className={`root ${
                     wrapperClassName
                         ? `${wrapperClassName} container-center`
                         : "container-center mt-5"
@@ -128,36 +127,27 @@ export default function Illustration({
                         </p>
                     </div>
                 </section>
-            </DivWrapper>
+                <style jsx global>
+                    {`
+                        .root {
+                            position: relative;
+                        }
+
+                        .move-txt-from-center {
+                            font-size: 1.3em;
+                            position: absolute;
+                            transform: translate(-50%, -50%);
+                        }
+
+                        .border-white {
+                            //border in the font
+                            text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff,
+                                0 -2px #fff;
+                        }
+                    `}
+                </style>
+            </section>
             {showActionButton(actionButton)}
         </Fragment>
     );
 }
-
-const DivWrapper = styled.div`
-    position: relative;
-
-    .move-txt-from-center {
-        font-size: 1.3em;
-        position: absolute;
-        transform: translate(-50%, -50%);
-    }
-
-    // BORDERS
-    .border-white {
-        //border in the font
-        text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;
-    }
-`;
-
-/* ARCHIVES
-return (
-    btnName === "dark" && (
-        <div className="container-center">
-            <HashLink smooth to={to || "/#inicio"}>
-                <Dark className="mt-5">{txt}</Dark>
-            </HashLink>
-        </div>
-    )
-);
- */

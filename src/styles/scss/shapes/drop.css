@@ -1,0 +1,13 @@
+.drop {
+    height: 12.5em;
+    width: 12.5em;
+
+    border-radius: 0 50% 50% 50%;
+    background-color: #000;
+
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

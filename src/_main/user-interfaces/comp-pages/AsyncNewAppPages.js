@@ -1,0 +1,29 @@
+import { Load } from "../../../components/code-splitting/LoadableComp";
+
+export const AsyncBizInfo = Load({
+    loader: () =>
+        import(
+            "../../../pages/new-app/biz-info/BizInfo" /* webpackChunkName: "biz-info-page-lazy" */
+        ),
+});
+
+export const AsyncSelfService = Load({
+    loader: () =>
+        import(
+            "../../../pages/new-app/self-service/SelfServicePage" /* webpackChunkName: "new-app-self-service-page-lazy" */
+        ),
+});
+
+export const AsyncRewardPlanner = Load({
+    loader: () =>
+        import(
+            "../../../pages/new-app/reward-planner/RewardPlanner" /* webpackChunkName: "reward-planner-page-lazy" */
+        ),
+});
+
+export const AsyncAdminRegister = Load({
+    loader: () =>
+        import(
+            "../../../pages/new-app/admin-register/AdminRegister" /* webpackChunkName: "admin-register-page-lazy" */
+        ),
+});

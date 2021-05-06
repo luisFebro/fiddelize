@@ -94,5 +94,3 @@ export default function ModalFullContent({
         </Dialog>
     );
 }
-
-ModalFullContent.whyDidYouRender = false;

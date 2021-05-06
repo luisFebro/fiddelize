@@ -1,0 +1,142 @@
+@import "../../functions/setContrastedColor";
+
+:root {
+    /*purple 900*/
+    --themeP: #4a148c;
+    --themePLight: #7c43bd;
+    --themePDark: #12005e;
+
+    /*surface (such as cards, sheets, and menus) and background*/
+    --themeSurface: #f7f1e3; /*white variant*/
+    --themeBackground: #4a148c; /*same as primary*/
+    /*on colors - text*/
+    --mainBlack: black;
+    --mainWhite: #ecf0f1;
+
+    --mainFont: "Poppins", sans-serif;
+    /*THEMING*/
+    /*default*/
+    --themeP--default: #4a148c;
+    --themePLight--default: #7c43bd;
+    --themePDark--default: #4a148c;
+    --themeBackground--default: #4a148c;
+    /*pink*/
+    --themeP--pink: #e84393;
+    --themePLight--pink: #ff79c3;
+    --themePDark--pink: #7c003b;
+    --themeBackground--pink: #b10065;
+    /*red*/
+    --themeP--red: #ff4757;
+    --themePLight--red: #ff7d84;
+    --themePDark--red: #c5002e;
+    --themeBackground--red: #ff4757;
+    /*purple*/
+    --themeP--purple: #4a148c;
+    --themePLight--purple: #7c43bd;
+    --themePDark--purple: #4a148c; /* prior #12005e */
+    --themeBackground--purple: #4a148c;
+    /*orange*/
+    --themeP--orange: #ffb300;
+    --themePLight--orange: #ffb300; /* prior: #ffe54c; */
+    --themePDark--orange: #905700;
+    --themeBackground--orange: #c68400;
+    /*black*/
+    --themeP--black: #232528;
+    --themePLight--black: #4b4d50;
+    --themePDark--black: #000000;
+    --themeBackground--black: #232528;
+    /*white*/
+    --themeP--white: #ecf0f1;
+    --themePLight--white: #ecf0f1; /* prior: #ffffff */
+    --themePDark--white: #808080;
+    --themeBackground--white: #cac5c5; /*prior: #babebe  */
+    /*blue*/
+    --themeP--blue: #009ffd;
+    --themePLight--blue: #68d0ff;
+    --themePDark--blue: #004798;
+    --themeBackground--blue: #0071c9;
+    /*green*/
+    --themeP--green: #2ecc71;
+    --themePLight--green: #2ecc71; /* prior: #6effa0; */
+    --themePDark--green: #006a18;
+    --themeBackground--green: #009a44;
+    /*brown*/
+    --themeP--brown: #795548;
+    --themePLight--brown: #a98274;
+    --themePDark--brown: #250200;
+    --themeBackground--brown: #4b2c20;
+    /*yellow*/
+    --themeP--yellow: #ffee58;
+    --themePLight--yellow: #ffee58; /* prior: #ffff8b */
+    --themePDark--yellow: #948c00;
+    --themeBackground--yellow: #c9bc1f;
+    /*END THEMING*/
+}
+/* THEMING */
+.theme-back--default {
+    background-color: #4a148c !important;
+}
+.theme-back--pink {
+    background-color: var(--themeBackground--pink) !important;
+}
+.theme-back--red {
+    background-color: var(--themeBackground--red) !important;
+}
+.theme-back--purple {
+    background-color: var(--themeBackground--purple) !important;
+}
+.theme-back--orange {
+    background-color: var(--themeBackground--orange) !important;
+}
+.theme-back--black {
+    background-color: var(--themeBackground--black) !important;
+}
+.theme-back--white {
+    background-color: var(--themeBackground--white) !important;
+}
+.theme-back--blue {
+    background-color: var(--themeBackground--blue) !important;
+}
+.theme-back--green {
+    background-color: var(--themeBackground--green) !important;
+}
+.theme-back--brown {
+    background-color: var(--themeBackground--brown) !important;
+}
+.theme-back--yellow {
+    background-color: var(--themeBackground--yellow) !important;
+}
+
+.txt-color--default {
+    color: setContrastedColor(#4a148c);
+}
+.txt-color--pink {
+    color: setContrastedColor(#b10065);
+}
+.txt-color--red {
+    color: setContrastedColor(#ff4757);
+}
+.txt-color--purple {
+    color: setContrastedColor(#4a148c);
+}
+.txt-color--orange {
+    color: setContrastedColor(#c68400);
+}
+.txt-color--black {
+    color: setContrastedColor(#232528);
+}
+.txt-color--white {
+    color: setContrastedColor(#babebe);
+}
+.txt-color--blue {
+    color: setContrastedColor(#0071c9);
+}
+.txt-color--green {
+    color: setContrastedColor(#009a44);
+}
+.txt-color--brown {
+    color: setContrastedColor(#4b2c20);
+}
+.txt-color--yellow {
+    color: setContrastedColor(#c9bc1f);
+}

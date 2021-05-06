@@ -174,8 +174,6 @@ function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
     );
 }
 
-Welcome.whyDidYouRender = false;
-
 /*
 <p className="d-none">
     <strong>✔ Resumo da semana dos clientes com ideias baseado nas atividades.</strong>
