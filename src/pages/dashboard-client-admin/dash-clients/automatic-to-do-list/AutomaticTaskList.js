@@ -2,7 +2,7 @@ import { useState } from "react";
 import Title from "../../../../components/Title";
 import { useBizData } from "init";
 import useData from "init";
-import { useRunComp } from "../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import useAPIList, { readTasks, getTrigger } from "api/useAPIList";
 import "./_AutomaticTaskList.scss";
 import TaskList from "./list/TaskList";
@@ -12,7 +12,7 @@ export default function AutomaticTaskList() {
     const [skip, setSkip] = useState(0);
     const { userId } = useData();
     const { rewardDeadline } = useBizData();
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     const trigger = getTrigger(runName, "TaskCard");
     const apiKeys = {

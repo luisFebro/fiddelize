@@ -1,29 +1,6 @@
 import axios from "axios";
-import { getHeaderJson, getHeaderToken } from "utils/server/getHeaders";
+import { getHeaderToken } from "utils/server/getHeaders";
 import { ROOT } from "api/root"; // ${ROOT}
-
-export const countPendingNotif = async (userId, options = {}) => {
-    if (!userId) return;
-
-    const { role, forceCliUser, bizId } = options;
-
-    let cliUserQuery = "";
-    if (forceCliUser) cliUserQuery = "&forceCliUser=true";
-
-    let cliMemberQuery = "";
-    if (role === "cliente-membro" && bizId) cliMemberQuery = `&bizId=${bizId}`; // bizId so that members can read all admin challanges related notifications
-
-    try {
-        return await axios.get(
-            `${ROOT}/notification/count-pending-notification?userId=${userId}&role=${
-                role || "cliente"
-            }${cliUserQuery}${cliMemberQuery}`,
-            getHeaderJson
-        );
-    } catch (err) {
-        return err;
-    }
-};
 
 // OK
 // if forceCliUser is true, then a cli-admin will have a cli=user notification's data. Useful for test mode session.
@@ -99,8 +76,7 @@ export const markOneClicked = async (userId, cardId, options = {}) => {
     try {
         return await axios.put(
             `${ROOT}/notification/mark-one-clicked/${userId}?cardId=${cardId}${thisRoleQuery}${updatedByQuery}`,
-            options,
-            getHeaderJson
+            options
         );
     } catch (err) {
         return err;
@@ -114,8 +90,7 @@ export const markAllAsClicked = async (userId, options = {}) => {
     try {
         return await axios.put(
             `${ROOT}/notification/mark-all-clicked/${userId}`,
-            options,
-            getHeaderJson
+            options
         );
     } catch (err) {
         return err;
@@ -129,8 +104,7 @@ export const markAllAsSeen = async (userId, options = {}) => {
     try {
         return await axios.put(
             `${ROOT}/notification/mark-all-seen/${userId}`,
-            options,
-            getHeaderJson
+            options
         );
     } catch (err) {
         return err;

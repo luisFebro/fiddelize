@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
-import { useStoreDispatch } from "easy-peasy";
-import { setRun } from "../../../../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 import SuccessOp from "./SuccessOp";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
@@ -24,7 +23,7 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
     const [hidePanel, setHidePanel] = useState(false);
     const payload = useRef({});
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
 
     const togglePanel = () => {
         setHidePanel((prev) => !prev);
@@ -34,7 +33,7 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
         // payL: { name, phone, email }
         togglePanel();
         payload.current = payL;
-        setRun(dispatch, isNewMember ? "" : "RecordedClientsList");
+        setRun("runName", isNewMember ? "" : "RecordedClientsList", uify);
     };
 
     const showNewCliRegister = () =>

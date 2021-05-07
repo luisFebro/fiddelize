@@ -1,11 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import MuSelectTable from "../../../../../../../components/tables/MuSelectTable";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import useDelay from "../../../../../../../hooks/useDelay";
 import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import click from "../../../../../../../utils/event/click";
-import { setRun, useRunComp } from "../../../../../../../hooks/useRunComp";
+import useRun, { setRun, useAction } from "global-data/ui";
 import showToast from "../../../../../../../components/toasts";
 import { useBizData } from "init";
 import useAPI, { readSMSHistoryStatement, needTrigger } from "api/useAPI";
@@ -35,7 +34,7 @@ export default function AsyncExtract({ extractId }) {
 
     const { bizId: userId } = useBizData();
 
-    const { runName } = useRunComp();
+    const { runName } = useRun();
     const trigger = needTrigger(runName, "UpdateSMSAll");
 
     let { data: list } = useAPI({
@@ -46,7 +45,7 @@ export default function AsyncExtract({ extractId }) {
 
     list = !list ? (list = []) : list;
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
 
     const styles = getStyles();
 
@@ -58,7 +57,9 @@ export default function AsyncExtract({ extractId }) {
                 delete data.carrier;
                 delete data.status;
             });
-            setRun(dispatch, "asyncExtractList", { array: list });
+            setRun("runName", "asyncExtractList", uify);
+            setRun("runOneArray", list, uify);
+
             showToast("Pronto!", { type: "success" });
         };
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+
 // Material UI
 import { makeStyles } from "@material-ui/core/styles";
 import { CardMedia } from "@material-ui/core";

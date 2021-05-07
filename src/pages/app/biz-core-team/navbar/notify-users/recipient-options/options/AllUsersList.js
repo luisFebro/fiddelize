@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import useAPI, { readUserSubIds } from "api/useAPI";
 import MuSelectTable from "components/tables/MuSelectTable";
-import { useRunComp } from "hooks/useRunComp";
+import useRun from "global-data/ui";
 import SelectField from "components/fields/SelectField";
 
 const headCells = [
@@ -47,7 +47,7 @@ export default function AllUsersList({
     });
     if (!list) list = [];
 
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     const totalSelected = selectedContacts.length;
     const isSendEverybodyMode = Boolean(

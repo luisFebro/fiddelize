@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+
 import InsertValue from "./comps/InsertValue";
 import HomeButton from "../../../components/buttons/HomeButton";
 import showVanillaToast from "../../../components/vanilla-js/toastify/showVanillaToast";
-import { updateUser } from "../../../redux/actions/userActions";
 
 PurchaseValue.propTypes = {
     success: PropTypes.bool,

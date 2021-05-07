@@ -1,7 +1,6 @@
 import convertToReal from "../../utils/numbers/convertToReal";
 import usePro from "../../hooks/pro/usePro";
 import ProCreditsBtn from "./pro-credits-btn/ProCreditsBtn";
-// import { useRunComp } from '../../hooks/useRunComp';
 
 export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
     const {
@@ -15,7 +14,7 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
         service,
     });
 
-    // const { runName } = useRunComp();
+    // const { runName } = useRun();
     // if(runName === "ProCreditsBadge") credits -= 1;
 
     const modalData = {

@@ -1,9 +1,8 @@
 import "./_BubbleTabs.scss";
 import parse from "html-react-parser";
-import { useStoreDispatch } from "easy-peasy";
 import addDashesToString from "../../../utils/string/addDashesToString";
 import ButtonFab from "../../buttons/material-ui/ButtonFab";
-import { setRun } from "../../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 
 export default function BubbleTabs({
     firstLabel = "I am label 1",
@@ -21,7 +20,7 @@ export default function BubbleTabs({
     firstLabel = parse(firstLabel);
     secondLabel = parse(secondLabel);
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
 
     function openTab(evt, component) {
         // reference: https://www.w3schools.com/howto/howto_js_tabs.asp
@@ -55,7 +54,7 @@ export default function BubbleTabs({
                     onClick={(e) => {
                         if (typeof setWhichTab === "function") {
                             setWhichTab(firstName);
-                            setRun(dispatch, firstName);
+                            setRun("runName", firstName, uify);
                         }
                         openTab(e, firstLabelId);
                     }}
@@ -70,7 +69,7 @@ export default function BubbleTabs({
                     onClick={(e) => {
                         if (typeof setWhichTab === "function") {
                             setWhichTab(secondName);
-                            setRun(dispatch, secondName);
+                            setRun("runName", secondName, uify);
                         }
                         openTab(e, secondLabelId);
                     }}

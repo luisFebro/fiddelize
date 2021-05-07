@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
+import { readUser } from "api/frequent";
 import { Link } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
-import { setRun } from "../../../redux/actions/globalActions";
-import { useBizData } from "init";
-import useData from "init";
+import { setRun, useAction } from "global-data/ui";
+import useData, { useBizData } from "init";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import { addDays } from "../../../utils/dates/dateFns";
 import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
-import { readUser } from "../../../redux/actions/userActions";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import setProRef from "../../../utils/biz/setProRef";
 import useStartPagseguro, {
@@ -67,7 +65,7 @@ export default function PayArea({
         trigger: SKU && servicesTotal && servicesAmount,
     });
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
 
     const handlePeriod = () => {
         if (period === "yearly") return "anual";
@@ -77,7 +75,7 @@ export default function PayArea({
 
     useEffect(() => {
         if (alreadyReadUser) return;
-        readUser(dispatch, userId, {
+        readUser(userId, {
             select: "cpf birthday referrer -_id",
             role: "cliente-admin",
         }).then((res) => {
@@ -157,7 +155,7 @@ export default function PayArea({
             <section className="container-center-col">
                 <Link
                     to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
-                    onClick={() => setRun(dispatch, "goDash")}
+                    onClick={() => setRun("runName", "goDash", uify)}
                 >
                     <ButtonMulti
                         title="VOLTAR MAIS TARDE"

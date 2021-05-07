@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useBizData } from "init";
 import { Link } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
-import { setRun } from "../../../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 import useData from "init";
 import Img from "../../../Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
-import { readUser } from "../../../../redux/actions/userActions";
-import showToast from "../../../toasts";
 import removeImgFormat from "../../../../utils/biz/removeImgFormat";
 
 export const textStyle = "text-purple text-left text-normal mx-3";
@@ -81,7 +78,8 @@ export const ShowActionBtn = ({
     callback,
 }) => {
     const [loading, setLoading] = useState(null);
-    const dispatch = useStoreDispatch();
+
+    const uify = useAction();
     const { bizLinkName } = useBizData();
     const { role: loggedUserRole, userId } = useData();
 
@@ -94,19 +92,14 @@ export const ShowActionBtn = ({
             window.location.href = "/t/app/equipe";
         }
         if (typeof callback === "function") callback(true);
-        readUser(dispatch, userId, { role: loggedUserRole }).then((res) => {
-            if (res.status !== 200)
-                return showToast("Não foi possível atualizar. Reinicie app.", {
-                    type: "error",
-                });
-            if (role === "cliente")
-                window.location.href =
-                    loggedUserRole === "cliente-admin"
-                        ? "/mobile-app?client-admin=1"
-                        : "/mobile-app";
-            if (role === "cliente-admin") setRun(dispatch, "goDash");
-            setLoading(false);
-        });
+
+        if (role === "cliente")
+            window.location.href =
+                loggedUserRole === "cliente-admin"
+                    ? "/mobile-app?client-admin=1"
+                    : "/mobile-app";
+        if (role === "cliente-admin") setRun("runName", "goDash", uify);
+        setLoading(false);
     };
 
     const handleBtnPath = () => {

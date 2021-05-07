@@ -178,19 +178,18 @@ function ClientMobileApp({ location, history }) {
             ? "/img/official-logo-name.png"
             : thisbizLogo;
 
-    const showLogo = () => {
-        return (
-            <div className="container-center">
-                <img
-                    src={logoSrc}
-                    className="animated fadeInUp slow delay-2s"
-                    style={{ position: "relative", margin: "15px 0" }}
-                    width={width}
-                    height={height}
-                />
-            </div>
-        );
-    };
+    const showLogo = () => (
+        <div className="container-center">
+            <img
+                src={logoSrc}
+                className="animated fadeInUp slow delay-2s"
+                style={{ position: "relative", margin: "15px 0" }}
+                width={width}
+                height={height}
+                alt="logo"
+            />
+        </div>
+    );
 
     const showLogin = () => (
         <Fragment>

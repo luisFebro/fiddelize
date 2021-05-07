@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import { Link } from "react-router-dom";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import useDelay from "../../../hooks/useDelay";
 import convertToReal from "../../../utils/numbers/convertToReal";
-import { setRun } from "../../../redux/actions/globalActions";
+import { setRun, useAction } from "global-data/ui";
 import useData from "init";
 import { useBizData } from "init";
 import getOrderTableList from "./helpers/getOrderTableList";
@@ -27,7 +26,8 @@ export default function OrdersTable({
     const [totalServs, setTotalServs] = useState(0);
     const loading = false;
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
+
     const { bizLinkName } = useBizData();
 
     const [totalMoney] = useData("totalMoney_clientAdmin");
@@ -96,7 +96,7 @@ export default function OrdersTable({
                 />
                 <Link
                     to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
-                    onClick={() => setRun(dispatch, "goDash")}
+                    onClick={() => setRun("runName", "goDash", uify)}
                 >
                     <ButtonMulti
                         title="cancelar pedido"

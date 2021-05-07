@@ -1,9 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CLIENT_URL } from "../../../config/clientUrl";
-import { useRunComp } from "../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import MobileScreenLoading from "../../../components/loadingIndicators/MobileScreenLoading";
-// import useCount from '../../../hooks/useCount';
 import "./style.scss";
 import PropTypes from "prop-types";
 
@@ -21,8 +20,7 @@ function AppPreview({
     targetPoints,
     currPoints,
 }) {
-    const { runName } = useRunComp();
-    // useCount("AppPreview"); // RT = 2 (OK) || Interation RT = 3 Before = 6
+    const { runName } = useRun();
 
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
     const iframeUrl = React.useCallback(

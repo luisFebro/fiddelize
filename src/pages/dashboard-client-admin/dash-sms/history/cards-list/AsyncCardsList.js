@@ -6,7 +6,7 @@ import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar, isScheduledDate } from "../../../../../utils/dates/dateFns";
 import useData, { useBizData } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
-import { useRunComp } from "../../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import scrollIntoView from "../../../../../utils/document/scrollIntoView";
@@ -70,7 +70,7 @@ export default function AsyncCardsList() {
 
     const styles = getStyles();
 
-    const { runName, runName2 } = useRunComp();
+    const { runName, runName2 } = useRun();
     const trigger = getTrigger(runName, "UpdateSMSAll");
     const triggerForce = getTrigger(runName2, "ForceCancelScheduled");
 

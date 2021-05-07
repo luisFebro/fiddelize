@@ -6,8 +6,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PropTypes from "prop-types";
-
-import { useStoreDispatch } from "easy-peasy";
 import "./ExpansiblePanel.scss";
 // End Customized Data
 
@@ -49,8 +47,6 @@ export default function ExpansiblePanel({
     statusAfterClick,
 }) {
     const classes = useStyles();
-
-    const dispatch = useStoreDispatch();
 
     const styles = {
         Accordion: {

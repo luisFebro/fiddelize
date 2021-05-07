@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import authenticate from "auth/authenticate";
 import ToggleVisibilityPassword from "components/forms/fields/ToggleVisibilityPassword";
 import handleChange from "utils/form/use-state/handleChange";
 import { handleEnterPress } from "utils/event/isKeyPressed";
-import { checkVerificationPass } from "redux/actions/adminActions";
 import useData, { useBizData } from "init";
 import { setVar } from "init/var";
 import showToast from "components/toasts";
-import getAPI, { createTk } from "api";
+import getAPI, { createTk, checkVerificationPass } from "api";
 import useBackColor from "hooks/useBackColor";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import disconnect from "auth/disconnect";
@@ -32,7 +30,6 @@ export default function TeamPassword({ history }) {
     const { pass } = data;
 
     const [role, userId, firstName] = useData(["role", "userId", "firstName"]);
-    const dispatch = useStoreDispatch();
 
     const { bizId, themeBackColor: backColor } = useBizData();
     useBackColor(`var(--themeBackground--${backColor})`);
@@ -40,39 +37,50 @@ export default function TeamPassword({ history }) {
     const styles = getStyles();
 
     const checkAccess = async () => {
-        if (userId === "...") return;
+        if (userId === "...") return null;
 
-        const bodyToSend = {
+        const body = {
             pass,
             bizId,
         };
+        const res = await getAPI({
+            method: "post",
+            url: checkVerificationPass(),
+            body,
+            fullCatch: true,
+            needAuth: false,
+            loader: true,
+        }).catch((err) => {
+            if (err.status !== 200)
+                return showToast(
+                    "Algo deu errado ao verificar nova senha. Tente novamente",
+                    { type: "error" }
+                );
 
-        const res = await checkVerificationPass(dispatch, bodyToSend);
+            if (err.status === 500)
+                return showToast("Algo deu errado. Verifique sua conexão.", {
+                    type: "error",
+                });
 
-        if (!res || res.status === 500)
-            return showToast("Algo deu errado. Verifique sua conexão.", {
-                type: "error",
-            });
-        if (res.status === 401)
-            return showToast(res.data.msg, { type: "error" });
+            return null;
+        });
+        if (!res) return null;
 
-        if (res.data.msg) {
-            // authorize user first
-            const body = {
-                _id: userId,
-                bizId,
-                role,
-                nT: getId(),
-            };
+        // authorize user first
+        const bodyForToken = {
+            _id: userId,
+            bizId,
+            role,
+            nT: getId(),
+        };
 
-            const { data: token } = await getAPI({
-                method: "post",
-                url: createTk(),
-                body,
-            });
+        const { data: token } = await getAPI({
+            method: "post",
+            url: createTk(),
+            body: bodyForToken,
+        });
 
-            await authenticate(token, { history, role });
-        }
+        await authenticate(token, { history, role });
     };
 
     const handleLogout = () => {

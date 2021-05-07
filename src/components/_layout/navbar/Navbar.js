@@ -6,7 +6,6 @@ import useAuth from "auth/useAuth";
 import gaEvent from "utils/analytics/gaEvent";
 import isThisApp from "utils/window/isThisApp";
 import "./NavbarLayout.scss";
-import useImg, { Img } from "hooks/media/useImg";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import { getNewAppPage } from "pages/new-app/helpers/handleRedirectPages";
 import RadiusBtn from "../../buttons/RadiusBtn";
@@ -15,22 +14,10 @@ const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
-    const [url, setUrl] = useState({
+    const [url] = useState({
         logoBiz: "",
         logoFid: "",
     });
-
-    const logoBiz = useImg(url.logoBiz, {
-        trigger: url.logoBiz,
-        coll: "logos",
-        key: "app_biz_logo",
-    });
-    const logoFid = useImg(url.logoFid, {
-        trigger: url.logoFid,
-        coll: "logos",
-        key: "app_fiddelize_logo",
-    });
-    const logoSrc = logoBiz || logoFid;
 
     const isAuth = useAuth();
     const { bizLogo, themePColor } = useBizData();
@@ -140,63 +127,41 @@ function Navbar({ history, location }) {
         </Fragment>
     );
 
-    // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
-    const needClientLogo =
-        (isAdminDash && bizLogo) || (isAuth && bizLogo && isApp); // isApp &&
-    const fiddelizeLogo = "/img/official-logo-name.png";
-    const handleLogoSrc = () => {
-        if (needClientLogo) {
-            const { newImg: thisbizLogo } = removeImgFormat(bizLogo);
-            return setUrl({ ...url, logoBiz: thisbizLogo });
-        }
-        return setUrl({ ...url, logoFid: fiddelizeLogo });
-    };
-
-    useEffect(() => {
-        handleLogoSrc();
-    }, [needClientLogo]);
-
     const showLogo = () => {
-        const imgFormatRaw = bizLogo && bizLogo.includes("h_100,w_100");
-        const webCond = locationNow !== "/" && isAdminDash && imgFormatRaw;
+        // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
+        const needClientLogo =
+            (isAdminDash && bizLogo) || (isAuth && bizLogo && isApp); // isApp &&
+        const fiddelizeLogo = "/img/official-logo-name.png";
+        const { newImg: thisbizLogo, width, height } = removeImgFormat(
+            needClientLogo && bizLogo
+        );
 
-        const appCond = isApp && imgFormatRaw;
-
-        const isSquared = webCond || appCond;
-        // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
-        const handleSize = (side) => {
-            let size;
-            if (side === "width") {
-                if (bizLogo) {
-                    isSquared ? (size = 85) : (size = 150);
-                } else {
-                    size = 200;
-                }
-            } else if (bizLogo) {
-                isSquared ? (size = 85) : (size = 67);
-            } else {
-                size = 90;
-            }
-            return size;
-        };
+        // const webCond = locationNow !== "/" && isAdminDash && imgFormatRaw;
+        // const appCond = isApp && imgFormatRaw;
 
         const handleLogoClick = () => {
             if (isClientAdmin && locationNow.includes("pontos-fidelidade"))
                 return "/mobile-app?client-admin=1";
             return isApp ? "/mobile-app" : "/";
         };
+
+        const logoSrc =
+            locationNow === "/" || !needClientLogo
+                ? fiddelizeLogo
+                : thisbizLogo;
+
         return (
             <Link to={handleLogoClick()}>
-                <Img
+                <img
                     style={{
                         position: "absolute",
                         top: needClientLogo ? 0 : "8px",
                         left: isSmall ? "10px" : "20px",
                     }}
-                    src={locationNow === "/" ? fiddelizeLogo : logoSrc}
+                    src={logoSrc}
                     alt="Logomarca Principal"
-                    width={handleSize("width")}
-                    height={handleSize("height")}
+                    width={!needClientLogo ? 160 : 85}
+                    height={!needClientLogo ? 70 : 85}
                 />
             </Link>
         );

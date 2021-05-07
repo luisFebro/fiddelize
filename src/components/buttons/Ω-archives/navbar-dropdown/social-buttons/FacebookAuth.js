@@ -1,4 +1,3 @@
-import { useStoreDispatch, useStoreState } from "easy-peasy";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import {

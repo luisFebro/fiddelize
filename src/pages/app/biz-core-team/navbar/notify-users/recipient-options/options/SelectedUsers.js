@@ -1,7 +1,7 @@
 import { useState, Fragment, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../../../components/search/AutoCompleteSearch";
 import ShowSelectionArea from "./comps/ShowSelectionArea";
-import { useRunComp } from "../../../../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import { ROOT } from "api/root";
 import SelectField from "../../../../../../../components/fields/SelectField";
 import showToast from "../../../../../../../components/toasts";
@@ -19,7 +19,7 @@ export default function SelectedUsers({
         selectedApp: defaultSelected,
     });
 
-    const { runName, runOneArray } = useRunComp();
+    const { runName, runOneArray } = useRun();
 
     const [list, setList] = useState([]);
 

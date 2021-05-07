@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
 import getAPI, { removeUser } from "api";
 import { countField } from "redux/actions/userActions";
-import { setRun } from "hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 
 export default function RemoveMemberBtn({ modalData }) {
     const [fullOpen, setFullOpen] = useState(false);
 
+    const uify = useAction();
+
     const { name, _id } = modalData;
 
-    const dispatch = useStoreDispatch();
     const { bizId } = useBizData();
 
     const onOpen = () => {
@@ -49,7 +49,7 @@ export default function RemoveMemberBtn({ modalData }) {
                         `Cliente ${name} foi excluído dos seus registros!`,
                         { type: "success" }
                     );
-                    setRun(dispatch, "teamMemberList");
+                    setRun("runName", "teamMemberList", uify);
                 });
             });
         }, 5900);

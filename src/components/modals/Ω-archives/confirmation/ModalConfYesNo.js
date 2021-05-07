@@ -1,4 +1,3 @@
-import { useStoreState, useStoreDispatch } from "easy-peasy";
 // End Redux
 // Material UI
 import { makeStyles } from "@material-ui/core/styles";

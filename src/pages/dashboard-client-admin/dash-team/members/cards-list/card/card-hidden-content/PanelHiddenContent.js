@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RemoveMemberBtn from "./cta/RemoveMemberBtn";
 import SeeProfileBtn from "./cta/SeeProfileBtn";
@@ -15,9 +15,7 @@ const getStyles = () => ({
 });
 
 function PanelHiddenContent({ history, data }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const styles = getStyles();
 

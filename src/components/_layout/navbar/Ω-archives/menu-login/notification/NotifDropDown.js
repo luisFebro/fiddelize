@@ -4,7 +4,7 @@ import moment from "moment";
 import "moment/locale/pt-br";
 // End Moment
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+
 // import {showModalTextField} from '../../../../../redux/actions/modalActions';
 // import MessagesList from './MessagesList';
 // End Redux

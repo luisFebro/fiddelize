@@ -1,12 +1,11 @@
 import { useState, useEffect, Fragment } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { setItems } from "init/lStorage";
 import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import PwaInstaller from "components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "config/clientUrl";
 import checkIfElemIsVisible from "utils/window/checkIfElemIsVisible";
 import { useBizData } from "init";
-import { readClientAdmin } from "redux/actions/userActions";
+import { readClientAdmin } from "api/frequent";
 import showToast from "components/toasts";
 import Spinner from "components/loadingIndicators/Spinner";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
@@ -179,7 +178,6 @@ export default function DownloadApp({ match, location, history }) {
             backColor === "undefined" ? "default" : backColor
         })`
     );
-    const dispatch = useStoreDispatch();
     // END HOOKS
 
     // STORAGE
@@ -204,7 +202,7 @@ export default function DownloadApp({ match, location, history }) {
     useEffect(() => {
         if (whichRole !== "cliente-admin") return;
 
-        readClientAdmin(dispatch, bizId).then((res) => {
+        readClientAdmin(bizId).then((res) => {
             if (res.status !== 200)
                 return showToast("Ocorreu um problema. Verifique sua conexão", {
                     type: "error",

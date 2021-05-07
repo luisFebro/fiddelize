@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import { useBizData } from "init";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./_AsyncTeam.scss";
-import { useStoreState } from "easy-peasy";
 import OptionsHandler from "./OptionsHandler";
 
 export default function AsyncTeam() {

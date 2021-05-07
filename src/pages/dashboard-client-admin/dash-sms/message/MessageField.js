@@ -70,7 +70,7 @@ export default function MessageField({
     const uniqueId = getUniqueId();
     const runName = `UpdateSMSAll ${uniqueId}`;
 
-    const { data: doneMsg, loading, setRun, dispatch } = useAPI({
+    const { data: doneMsg, loading, setRun, uify } = useAPI({
         method: "post",
         url: sendSMS(),
         body: { userId, contactList, msg: message, filter },
@@ -92,7 +92,7 @@ export default function MessageField({
                 setTimeout(() => showToast("Atualizando Histórico..."), 4000);
                 setMessage("");
                 handleShowMessage(false);
-                setRun(dispatch, runName);
+                setRun("runName", runName, uify);
             };
 
             const config = {

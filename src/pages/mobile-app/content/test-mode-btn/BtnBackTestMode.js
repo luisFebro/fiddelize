@@ -1,6 +1,5 @@
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
-import { setRun } from "../../../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 import { useBizData } from "init";
 import "./_BtnBackTesteMode.scss";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
@@ -15,11 +14,11 @@ function BtnBackTestMode({
 }) {
     const isCliUser = mode === "Cliente";
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
     const { bizLinkName } = useBizData();
 
     const handleBackBtnClick = () => {
-        setRun(dispatch, "goDash");
+        setRun("runName", "goDash", uify);
         history.push(`/${bizLinkName}/cliente-admin/painel-de-controle`);
     };
 

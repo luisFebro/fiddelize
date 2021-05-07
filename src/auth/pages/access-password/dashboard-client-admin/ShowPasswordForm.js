@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CLIENT_URL } from "config/clientUrl";
 import ToggleVisibilityPassword from "components/forms/fields/ToggleVisibilityPassword";
@@ -8,8 +7,8 @@ import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
 import showToast from "components/toasts";
-import { updateUser } from "redux/actions/userActions";
-import { readVerificationPass } from "redux/actions/adminActions";
+import { updateUser } from "api/frequent";
+import getAPI, { readVerificationPass } from "api";
 import setValObjWithStr from "utils/objects/setValObjWithStr";
 import { useBizData } from "init";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
@@ -63,20 +62,27 @@ export default function ShowPasswordForm({
     // const { clientAdminName } = dataFromPassPage;
     // const { bizLinkName } = dataFromPassPage;
 
-    const dispatch = useStoreDispatch();
-
     useEffect(() => {
         if (isFromCliAdminDash) {
-            readVerificationPass(bizId).then((res) => {
-                if (res.status !== 200)
-                    return console.log("CODE ERROR: There is no bizId...");
+            (async () => {
+                const res = await getAPI({
+                    url: readVerificationPass(bizId),
+                    fullCatch: true,
+                    loader: false,
+                }).catch((err) => {
+                    if (err.status !== 200)
+                        return console.log("CODE ERROR: There is no bizId...");
+                    return null;
+                });
+                if (!res) return null;
+
                 const passValue = res.data.verificationPass;
                 const keyName = "clientAdminData.verificationPass";
 
                 setValObjWithStr(data, keyName, passValue);
                 const newObj = data;
-                setData({ ...data, ...newObj });
-            });
+                return setData({ ...data, ...newObj });
+            })();
         }
     }, [bizId]);
 
@@ -95,7 +101,7 @@ export default function ShowPasswordForm({
         };
 
         showToast("Ok, registrando...");
-        updateUser(dispatch, dataToSend, bizId, {
+        updateUser(bizId, dataToSend, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)

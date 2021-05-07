@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import getFirstName from "../../../../../../../../utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
@@ -11,9 +11,7 @@ const getStyles = () => ({
 });
 
 function PanelHiddenContent({ history, data }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const styles = getStyles();
 

@@ -1,11 +1,10 @@
 import { Fragment, useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import useData from "init";
 import NotifList from "./NotifList";
 import RadiusBtn from "../buttons/RadiusBtn";
 import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
-import { setRun } from "../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 import getId from "../../utils/getId";
 
 export default function Notification({
@@ -21,7 +20,7 @@ export default function Notification({
     const isCliMember = bizId;
     const [userId, firstName, role] = useData(["userId", "firstName", "role"]);
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
 
     const { notifCount } = useData();
 
@@ -39,8 +38,7 @@ export default function Notification({
         markAllAsClicked(userId, { forceCliUser }).then((res) => {
             if (res.status !== 200)
                 return console.log("smt wrong with handleMarkAllClicked");
-            setRun(dispatch, `notificationCount${getId()}`);
-            // setRunList(`true${getId()}`); not working for now
+            setRun("runName", `notificationCount${getId()}`, uify);
             setLoading(false);
             setBtnTitle("Todas Marcadas!");
             setBtnDisabled(true);

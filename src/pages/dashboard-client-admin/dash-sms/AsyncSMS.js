@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { useBizData } from "init";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./_AsyncSMS.scss";
@@ -10,7 +9,7 @@ import scrollIntoView from "../../../utils/document/scrollIntoView";
 import { handleFocus } from "../../../utils/form/handleFocus";
 import InstructionBtn from "../../../components/buttons/InstructionBtn";
 import { getUniqueId } from "api/useAPI";
-import { setRun } from "../../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 // Components
 import CreditsBalance from "./credits-balance/CreditsBalance";
 import RecipientOptions from "./recipient-options/RecipientOptions";
@@ -35,7 +34,7 @@ export default function AsyncSMS() {
         suggestionMsg: "",
         currBalance: 0,
     });
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
 
     const {
         showMessage,
@@ -49,7 +48,7 @@ export default function AsyncSMS() {
         showToast("Atualizando Histórico...");
         const uniqueId = getUniqueId();
         const runName = `UpdateSMSAll ${uniqueId}`;
-        setRun(dispatch, runName);
+        setRun("runName", runName, uify);
     };
 
     const handleWhichTab = (currTab) => {

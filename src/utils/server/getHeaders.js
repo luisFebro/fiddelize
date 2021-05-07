@@ -1,10 +1,4 @@
-// BOTH getHeaderJson and getHeaderToken will be DEPRACATED
-export const getHeaderJson = {
-    headers: {
-        "Content-Type": "application/json",
-    },
-};
-
+// getHeaderToken will be DEPRACATED
 export const getHeaderToken = (token) => {
     if (!token) {
         token = localStorage.getItem("token");

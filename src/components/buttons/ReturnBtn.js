@@ -1,11 +1,9 @@
 // Choose this over BackBtn
 import { Link, withRouter } from "react-router-dom";
-
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab, { faStyle } from "./material-ui/ButtonFab";
 import { useBizData } from "init";
-import { setRun } from "../../redux/actions/globalActions";
+import { setRun, useAction } from "global-data/ui";
 import RedirectLink from "../RedirectLink";
 
 function ReturnBtn({
@@ -22,7 +20,8 @@ function ReturnBtn({
 
     const isCliAdmin = toAdminDash || location.search === "?cliente-admin=1";
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
+
     const isFunc = typeof onClick === "function";
 
     if (toTab) {
@@ -68,7 +67,7 @@ function ReturnBtn({
                 <Link
                     className="no-text-decoration"
                     to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
-                    onClick={() => setRun(dispatch, "goDash")}
+                    onClick={() => setRun("runName", "goDash", uify)}
                 >
                     <ButtonFab
                         color="var(--mainWhite)"

@@ -5,6 +5,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 import disconnect from "auth/disconnect";
 
 const AsyncAccessGateKeeper = Load({
+    loading: false,
     loader: () =>
         import(
             "auth/pages/access-password/mobile-app/AccessGateKeeper" /* webpackChunkName: "gate-keeper-comp-lazy" */

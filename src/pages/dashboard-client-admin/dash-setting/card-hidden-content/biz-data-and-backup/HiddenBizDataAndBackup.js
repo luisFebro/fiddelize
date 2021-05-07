@@ -2,16 +2,13 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti, {
     faStyle,
 } from "../../../../../components/buttons/material-ui/ButtonMulti";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 // import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
-import {
-    updateUser,
-    readClientAdmin,
-} from "../../../../../redux/actions/userActions";
+import { readClientAdmin } from "api/frequent";
+import { updateUser } from "api/frequent";
 import showToast from "../../../../../components/toasts";
 import BackUpToExcel from "./BackUpToExcel";
 import autoPhoneMask from "../../../../../utils/validation/masks/autoPhoneMask";
@@ -37,7 +34,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
     const bizWhatsappValue = autoPhoneMask(bizWhatsapp);
 
     useEffect(() => {
-        readClientAdmin(dispatch, userData._id).then((res) => {
+        readClientAdmin(userData._id).then((res) => {
             if (res.status !== 200)
                 return showToast(res.data.msg, { type: "error" });
             setData({
@@ -48,8 +45,6 @@ export default function HiddenBizDataAndBackup({ userData }) {
             });
         });
     }, []);
-
-    const dispatch = useStoreDispatch();
 
     const styles = {
         form: {
@@ -83,7 +78,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
             "clientAdminData.bizCep": bizCep,
             "clientAdminData.bizAddress": bizAddress,
         };
-        updateUser(dispatch, dataToSend, userData._id, {
+        updateUser(userData._id, dataToSend, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)

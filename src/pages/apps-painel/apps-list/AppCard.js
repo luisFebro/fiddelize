@@ -5,12 +5,12 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
-import { useGlobalContext } from "context";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
 import { useBizData } from "init";
 import Skeleton from "components/multimedia/Skeleton";
 import showToast from "components/toasts";
 import handleOpenApp from "./helpers/appAccessAlgorithm";
+import { useAction } from "global-data/ui";
 //
 
 const handleAppType = (role) => {
@@ -27,7 +27,7 @@ const handleAppType = (role) => {
 export default forwardRef(AppCard);
 
 function AppCard({ data, payload, loading }, ref) {
-    const { uify } = useGlobalContext();
+    const uify = useAction();
     const [opening, setOpening] = useState(false);
 
     const {
@@ -42,7 +42,6 @@ function AppCard({ data, payload, loading }, ref) {
     const {
         appId_loggedIn,
         history,
-        dispatch,
         role_loggedIn,
         bizLinkName,
         userId,
@@ -70,7 +69,6 @@ function AppCard({ data, payload, loading }, ref) {
 
     const payloadOpen = {
         uify,
-        dispatch,
         history,
         appId,
         appRole: role,

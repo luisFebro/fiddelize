@@ -1,6 +1,4 @@
 import { useState } from "react";
-// Redux
-import { useStoreDispatch } from "easy-peasy";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -10,7 +8,7 @@ import PropTypes from "prop-types";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import showToast from "components/toasts";
 // CUSTOM DATA
-import { setRun } from "../../../../../../../hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 import { countField } from "../../../../../../../redux/actions/userActions";
 import { useBizData } from "init";
 import getAPI, { removeUser } from "api";
@@ -25,7 +23,8 @@ ModalConfYesNo.propTypes = {
 export default function ModalConfYesNo({ open, onClose, modalData }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
 
-    const dispatch = useStoreDispatch();
+    const uify = useAction();
+
     const { title, subTitle, itemData } = modalData;
 
     const { bizId } = useBizData();
@@ -60,7 +59,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                         `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
                         { type: "success" }
                     );
-                    setRun(dispatch, "RecordedClientsList");
+                    setRun("runName", "RecordedClientsList", uify);
                 });
             });
         }, 5900);

@@ -1,7 +1,7 @@
 import Title from "../../../../components/Title";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 import useAPI, { getGeneralTotals, needTrigger } from "api/useAPI";
-import { useRunComp } from "../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import { useBizData } from "init";
 
 const AsyncSmsCardsList = LoadableVisible({
@@ -15,7 +15,7 @@ const AsyncSmsCardsList = LoadableVisible({
 export default function SmsHistory() {
     const { bizId: userId } = useBizData();
 
-    const { runName } = useRunComp();
+    const { runName } = useRun();
     const trigger = needTrigger(runName, "UpdateSMSAll");
     const { data, loading } = useAPI({
         url: getGeneralTotals(userId),

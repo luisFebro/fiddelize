@@ -2,7 +2,7 @@ import { useState } from "react";
 // import { default as GL } from "react-google-login";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
+
 import getAPI, { makeGoogleLogin } from "api";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 import getVar from "init/var";

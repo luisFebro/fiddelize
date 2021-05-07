@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
+
 import Title from "../../components/Title";
 import RedirectPage from "../../components/RedirectPage";
 // Redux

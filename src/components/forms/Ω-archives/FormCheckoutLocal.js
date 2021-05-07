@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { sendBuyRequestEmail } from "../../redux/actions/emailActions";
 // helpers

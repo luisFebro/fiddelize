@@ -1,5 +1,4 @@
 import { Fragment, useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import useAPIList, { readAppList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import repeat from "utils/arrays/repeat";
@@ -12,8 +11,6 @@ export default function AppList({ history }) {
     const { bizLinkName } = useBizData();
 
     const [userId, role, appId] = useData(["userId", "role", "appId"]);
-
-    const dispatch = useStoreDispatch();
 
     const params = {
         userId,
@@ -67,7 +64,6 @@ export default function AppList({ history }) {
         history,
         role_loggedIn: role,
         appId_loggedIn: appId,
-        dispatch,
         bizLinkName,
         userId,
     };

@@ -5,8 +5,7 @@ import Flickity from "flickity";
 import { useBizData } from "init";
 import "./CarouselFlickity.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
-import { setRun } from "../../redux/actions/globalActions";
+import { setRun, useAction } from "global-data/ui";
 import ShowActionBtns from "../../pages/new-app/self-service/pickers/ShowActionBtns";
 import { getIconIndex } from "../../global-data/milestoneIconsSorted.js";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
@@ -25,7 +24,8 @@ export default function CarouselFlickity({
     const [iconSelected, setIconSelected] = useState(data[0].icon);
     const [iconReady, setIconReady] = useState(false);
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
-    const dispatch = useStoreDispatch();
+
+    const uify = useAction();
 
     const {
         bizId,
@@ -52,7 +52,7 @@ export default function CarouselFlickity({
 
     useEffect(() => {
         if (!isFromDash) {
-            setRun(dispatch, iconSelected);
+            setRun("runName", iconSelected, uify);
         }
     }, [isFromDash, iconSelected]);
 

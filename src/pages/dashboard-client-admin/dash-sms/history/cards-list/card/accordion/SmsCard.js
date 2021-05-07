@@ -6,7 +6,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
@@ -75,9 +75,7 @@ export default function SmsCard({
 
     // const dispatch = useStoreDispatch();
 
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const displayScheduledBadge = (panel) => {
         const { isCanceled } = panel.data;

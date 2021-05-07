@@ -18,7 +18,7 @@ export default function CancelBtn({ cardId, date }) {
         txtSuccess: "Cancelado! Atualizando...",
     };
 
-    const { data, loading, setRun, dispatch } = useAPI({
+    const { data, loading, setRun, uify } = useAPI({
         method: "put",
         url: cancelSMS(userId, cardId),
         needAuth: true,
@@ -27,7 +27,8 @@ export default function CancelBtn({ cardId, date }) {
         snackbar,
         callback: () => {
             setFullOpen(false);
-            setRun(dispatch, runName, { runName2 });
+            setRun("runName", runName, uify);
+            setRun("runName2", runName2, uify);
         },
     });
 

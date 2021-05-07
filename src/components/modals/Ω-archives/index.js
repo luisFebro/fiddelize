@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 // MODALS
 import Modal from "./Modal";
 import ModalFavorite from "./ModalFavorite";
@@ -18,9 +18,7 @@ import ModalSelect from "./confirmation/ModalSelect";
 // END MODALS
 
 export default function AllModals() {
-    const { currentItemFound } = useStoreState((state) => ({
-        currentItemFound: state.globalReducer.cases.currentItemFound,
-    }));
+    const { currentItemFound } = useRun();
 
     let itemsYesNo = null;
     let itemsField = null;

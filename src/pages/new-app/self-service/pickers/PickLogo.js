@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
@@ -10,8 +9,8 @@ import CheckBoxForm from "../../../../components/CheckBoxForm";
 import RadioGroupForm from "../../../../components/RadioGroupForm";
 import { CLIENT_URL } from "../../../../config/clientUrl";
 import showToast from "../../../../components/toasts";
+import { readClientAdmin } from "api/frequent";
 import {
-    readClientAdmin,
     uploadImages,
     updateImages,
 } from "../../../../redux/actions/userActions";
@@ -63,8 +62,6 @@ export default function PickLogo({
 
     const { bizLogo } = useBizData();
 
-    const dispatch = useStoreDispatch();
-
     const goNext = () => setNextDisabled(false);
 
     const updateThisImg = (data) => {
@@ -74,7 +71,7 @@ export default function PickLogo({
                 return showToast(res.data.msg, { type: "error" });
             setTempImgUrl(res.data);
             if (isFromDash) {
-                readClientAdmin(dispatch, bizId).then((res) => {
+                readClientAdmin(bizId).then((res) => {
                     if (res.status !== 200)
                         return showToast(res.data.msg, { type: "error" });
                     showToast("Formato Atualizado!", { type: "success" });
@@ -195,7 +192,7 @@ export default function PickLogo({
             };
             if (isFromDash) {
                 deleteImage("logos", "app_biz_logo").then((res) => {
-                    readClientAdmin(dispatch, bizId).then((res) => {
+                    readClientAdmin(bizId).then((res) => {
                         if (res.status !== 200)
                             return showToast(res.data.msg, { type: "error" });
                         showToast("Nova logo salva. Alterando no app...", {

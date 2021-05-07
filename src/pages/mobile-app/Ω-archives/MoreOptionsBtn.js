@@ -271,10 +271,4 @@ const currChecked = lStorage("getItem", currOption);
 
     }
 />
-
-// const { run, runName } = useStoreState(state => ({
-//     run: state.globalReducer.cases.run,
-//     runName: state.globalReducer.cases.runName,
-// }))
-// const needRun = run && runName === "appIntro";
 */

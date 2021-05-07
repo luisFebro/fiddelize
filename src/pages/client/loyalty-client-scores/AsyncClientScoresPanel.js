@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { readUser, readPurchaseHistory } from "redux/actions/userActions";
+import { readUser } from "api/frequent";
+import { readPurchaseHistory } from "redux/actions/userActions";
 import showToast from "components/toasts";
 import Title from "components/Title";
 import animateNumber, {
@@ -92,7 +92,6 @@ function AsyncClientScoresPanel({ history, location }) {
     // END STYLES
 
     // USE HOOKS
-    const dispatch = useStoreDispatch();
     const animatedNumber = useRef(null);
     useBackColor(`var(--themeBackground--${colorBack})`);
     // useCount("ClientScoresPanel"); // RT = 46
@@ -113,7 +112,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     type: "stars",
                 }));
             }
-            const dataCliReview = await readUser(dispatch, cliUserId, {
+            const dataCliReview = await readUser(cliUserId, {
                 role: "cliente",
                 select: "clientUserData.review",
             });
@@ -359,13 +358,10 @@ function AsyncClientScoresPanel({ history, location }) {
         });
 
         if (isApp) {
-            await readUser(dispatch, cliUserId, {
-                role: whichRole,
-            });
-
             await setVar({ alreadySetTempPoints: false });
 
-            history.push(path);
+            window.location.href = path;
+            // for future, update only necessary data and use history.push
         } else {
             window.location.href = "/acesso/verificacao";
             disconnect();

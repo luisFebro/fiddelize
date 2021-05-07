@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setRun } from "../../../hooks/useRunComp";
 import { markOneClicked } from "../../../redux/actions/notificationActions";
 import ButtonMulti, { faStyle } from "../../buttons/material-ui/ButtonMulti";
 import ModalFullContent from "../../modals/ModalFullContent";
@@ -59,9 +58,6 @@ function CardActionBtn(props) {
         if (res.status !== 200) {
             return setIsLoading(false);
         }
-
-        // this was a bottleneck and causing a few seconds delay while clicking in the notif's card CTA
-        // setRun(dispatch, `notificationCount${getId()}`);
 
         handleFullOpen();
         setTimeout(() => {

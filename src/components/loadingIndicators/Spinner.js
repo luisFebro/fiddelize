@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Fragment } from "react";
 import PropTypes from "prop-types";
 import Picture from "../Picture";
 
@@ -40,11 +40,11 @@ export default function Spinner({
 
     const showSpinner = (isRunning) =>
         isRunning && (
-            <section className="root">
-                <div />
+            <Fragment>
+                <div className="spinner" />
                 <style jsx>
                     {`
-                        .root div {
+                        .spinner {
                             position: relative;
                             height: ${logoOpts[size]};
                             width: ${logoOpts[size]};
@@ -66,7 +66,7 @@ export default function Spinner({
                         }
                     `}
                 </style>
-            </section>
+            </Fragment>
         );
 
     const heightCond =

@@ -1,13 +1,10 @@
-import { useStoreDispatch } from "easy-peasy";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getVar, { removeVar } from "init/var";
+import useData from "init";
+import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import { textStyle } from "../DefaultRenderComps";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
-import useData from "init";
-import showToast from "../../../../toasts";
-import { readUser } from "../../../../../redux/actions/userActions";
-import defineCurrChallenge from "../../../../../utils/biz/defineCurrChallenge";
 
 export default function CliUserConfirmedChall({
     userName,
@@ -16,36 +13,28 @@ export default function CliUserConfirmedChall({
     prizeDeadline,
     deadlineDate,
 }) {
-    const [role, userId] = useData(["role", "userId"]);
+    const [role] = useData(["role"]);
     const [loading, setLoading] = useState(false);
-
-    const dispatch = useStoreDispatch();
 
     const { totalPurchasePrize } = useData();
     const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
 
-    const handleCTA = (res) => {
-        if (userId === "..." || !updatedCurrChall) return;
+    const handleCTA = () => {
+        if (!updatedCurrChall) return;
 
         setLoading(true);
-        readUser(dispatch, userId, { role }).then((res) => {
-            if (res.status !== 200)
-                return showToast("Não foi possível atualizar. Reinicie app.", {
-                    type: "error",
-                });
 
-            removeVersion({
-                key: "alreadyAlertChallenge",
-                value: updatedCurrChall,
-            }).then((res) => {
-                window.location.href =
-                    role === "cliente-admin"
-                        ? "/mobile-app?client-admin=1"
-                        : "/mobile-app";
+        removeVersion({
+            key: "alreadyAlertChallenge",
+            value: updatedCurrChall,
+        }).then((res) => {
+            window.location.href =
+                role === "cliente-admin"
+                    ? "/mobile-app?client-admin=1"
+                    : "/mobile-app";
 
-                removeVar("pendingChall");
-                setLoading(false);
-            });
+            removeVar("pendingChall");
+            setLoading(false);
         });
     };
 

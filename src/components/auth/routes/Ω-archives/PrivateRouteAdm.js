@@ -1,6 +1,5 @@
 // import React, { useState } from "react";
 // import { Route, Redirect } from "react-router-dom";
-// import { useStoreState } from 'easy-peasy';
 // import isThisApp from '../../../utils/window/isThisApp';
 // // import { showSnackbar } from '../../redux/actions/snackbarActions';
 

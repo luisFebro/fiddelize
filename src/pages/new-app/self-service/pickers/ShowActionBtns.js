@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useBizData } from "init";
+import { updateUser, readClientAdmin } from "api/frequent";
 import ButtonMulti, {
     faStyle,
-} from "../../../../components/buttons/material-ui/ButtonMulti";
-import {
-    updateUser,
-    readClientAdmin,
-} from "../../../../redux/actions/userActions";
-import showToast from "../../../../components/toasts";
+} from "components/buttons/material-ui/ButtonMulti";
+import showToast from "components/toasts";
 
-import isThisApp from "../../../../utils/window/isThisApp";
+import isThisApp from "utils/window/isThisApp";
 import TestModeBtn from "../../../dashboard-client-admin/modal-test-mode/TestModeBtn";
 
 ShowActionBtns.propTypes = {
@@ -31,8 +27,6 @@ export default function ShowActionBtns({
     const [showUpdateBtn, setShowUpdateBtn] = useState(false);
     const [showAppBtn, setShowAppBtn] = useState(false);
 
-    const dispatch = useStoreDispatch();
-
     const { bizId } = useBizData();
 
     useEffect(() => {
@@ -45,14 +39,14 @@ export default function ShowActionBtns({
 
     const handleUpdateIcon = () => {
         showToast(titleBeforeOk);
-        updateUser(dispatch, objToSend, bizId, {
+        updateUser(bizId, objToSend, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
                 return showToast("Algo deu errado. Verifique sua conexão", {
                     type: "error",
                 });
-            readClientAdmin(dispatch, bizId).then((res) => {
+            readClientAdmin(bizId).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
                 showToast(titleAfterOk, { type: "success" });

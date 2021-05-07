@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import TextField from "@material-ui/core/TextField";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
@@ -48,9 +48,7 @@ function PanelHiddenContent({ history, data }) {
     const [copy, setCopy] = useState(false);
     const [loadingOrderPage, setLoadingOrderPage] = useState(false);
 
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const isDuePay =
         !isScheduledDate(data.payDueDate, { isDashed: true }) &&

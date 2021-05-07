@@ -6,20 +6,13 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PropTypes from "prop-types";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import showToast from "components/toasts";
+import useRun from "global-data/ui";
 
 import "./RecordedClientsAccordion.scss";
-import { useStoreDispatch, useStoreState } from "easy-peasy";
 import ToggleBtn from "./ToggleBtn";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-import {
-    removeField,
-    readUser,
-} from "../../../../../redux/actions/userActions";
-import showToast from "../../../../../components/toasts";
-import { useBizData } from "init";
-
-import { setRun } from "../../../../../hooks/useRunComp";
 import PrizesBtn from "../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn";
 // End Customized Data
 
@@ -85,40 +78,9 @@ export default function RegisteredClientsAccordion({
 }) {
     const classes = useStyles();
 
-    const dispatch = useStoreDispatch();
-    const { bizId, bizLinkName } = useBizData();
-
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const styles = getStyles({ color, backgroundColor });
-
-    const handleEraseTestCard = (cardId) => {
-        showToast("Apagando card de teste...");
-        setTimeout(() => {
-            removeField(cardId, "clientUserData").then((res) => {
-                showToast("Atualizando app...");
-                readUser(dispatch, bizId, { role: "cliente-admin" }).then(
-                    (res) => {
-                        if (res.status !== 200)
-                            return showToast(
-                                "Não foi possível atualizar. Reinicie app.",
-                                { type: "error" }
-                            );
-                        window.location.href = "/mobile-app?client-admin=1";
-                    }
-                );
-                if (res.status !== 200)
-                    return console.log("smt wrong while updating");
-                showToast(
-                    "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.",
-                    { type: "success" }
-                );
-                setRun(dispatch, "RecordedClientsList");
-            });
-        }, 3000);
-    };
 
     const displayCliPrizes = (panel) => {
         const toggledBtn = runArray.includes(panel._id);
@@ -167,30 +129,6 @@ export default function RegisteredClientsAccordion({
         );
     };
 
-    const displayTestCardBadgeBtn = (panel) => (
-        <div className="enabledLink">
-            <ButtonFab
-                position="absolute"
-                top={-15}
-                left={70}
-                title="MODO TESTE"
-                variant="extended"
-                fontWeight="bolder"
-                fontSize=".9em"
-                color="var(--mainWhite)"
-                backgroundColor="var(--niceUiYellow)"
-            />
-            <RadiusBtn
-                size="extra-small"
-                title="apagar"
-                onClick={() => handleEraseTestCard(panel._id)}
-                position="absolute"
-                top={-25}
-                left={isSmall ? 210 : 239}
-            />
-        </div>
-    );
-
     const showPanel = (panel) => (
         <div>
             <AccordionSummary
@@ -222,7 +160,6 @@ export default function RegisteredClientsAccordion({
                     </Fragment>
                 )}
             </AccordionSummary>
-            {panel.needBadgeForTestMode && displayTestCardBadgeBtn(panel)}
             {Boolean(panel.needCliPrizes) && displayCliPrizes(panel)}
         </div>
     );
@@ -261,3 +198,29 @@ export default function RegisteredClientsAccordion({
 
     return <section className={classes.root}>{ActionsMap}</section>;
 }
+
+/*
+const displayTestCardBadgeBtn = (panel) => (
+    <div className="enabledLink">
+        <ButtonFab
+            position="absolute"
+            top={-15}
+            left={70}
+            title="MODO TESTE"
+            variant="extended"
+            fontWeight="bolder"
+            fontSize=".9em"
+            color="var(--mainWhite)"
+            backgroundColor="var(--niceUiYellow)"
+        />
+        <RadiusBtn
+            size="extra-small"
+            title="apagar"
+            onClick={() => handleEraseTestCard(panel._id)}
+            position="absolute"
+            top={-25}
+            left={isSmall ? 210 : 239}
+        />
+    </div>
+);
+ */

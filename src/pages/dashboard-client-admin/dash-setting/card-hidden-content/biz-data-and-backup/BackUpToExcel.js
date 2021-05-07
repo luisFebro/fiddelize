@@ -1,10 +1,8 @@
 import { useState, useEffect, Fragment } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import { useStoreDispatch } from "easy-peasy";
 import useData, { useBizData } from "init";
-import useToken from "auth/useToken";
 import showToast from "components/toasts";
-import { readAllDbFromModels } from "redux/actions/adminActions";
+import getAPI, { readAllDbData } from "api";
 import Img from "components/Img";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import CheckBoxForm from "components/CheckBoxForm";
@@ -36,11 +34,8 @@ export default function BackUpToExcel() {
 
     const isArrayReady = dbDataList.length !== 0;
 
-    const token = useToken();
     const [adminId] = useData(["userId"]);
     const { bizLinkName } = useBizData();
-
-    const dispatch = useStoreDispatch();
 
     const switchLoading = (status) => {
         setData((prev) => ({
@@ -49,32 +44,37 @@ export default function BackUpToExcel() {
         }));
     };
 
-    const handleSubmit = (adminId) => {
-        const securityObj = {
-            adminId,
-            token,
+    const handleSubmit = async () => {
+        const params = {
+            modelName: dbModelName,
+            thisRole: "cliente-admin",
         };
 
         switchLoading(true);
-        readAllDbFromModels(dispatch, securityObj, dbModelName).then((res) => {
-            if (res.status === 404) {
-                showToast(res.data.error, { type: "error" });
+        const res = await getAPI({
+            url: readAllDbData(adminId),
+            params,
+            fullCatch: true,
+        }).catch((err) => {
+            if (err.status === 404) {
+                showToast(err.data.error, { type: "error" });
                 switchLoading(false);
                 return;
             }
-            if (res.status !== 200) {
+            if (err.status !== 200) {
                 showToast("Ocorreu um erro ao carregar dados de clientes", {
                     type: "error",
                 });
                 switchLoading(false);
-                return;
             }
-            setData({
-                ...data,
-                dbDataList: res.data,
-            });
-            switchLoading(false);
         });
+        if (!res) return null;
+
+        return setData({
+            ...data,
+            dbDataList: res.data,
+        });
+        switchLoading(false);
     };
 
     useEffect(() => {

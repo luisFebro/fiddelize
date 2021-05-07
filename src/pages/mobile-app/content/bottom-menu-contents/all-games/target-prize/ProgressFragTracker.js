@@ -8,7 +8,6 @@ import { convertDotToComma } from "utils/numbers/convertDotComma";
 // circular percentage
 import ReactjsPercentageCircle from "components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle";
 import getPercentage from "utils/numbers/getPercentage";
-// import { setRun } from '../../redux/actions/globalActions';
 
 // LESSON: if the page does not load and there is no clue what the issue is
 // probably is the propTypes which is being called in the former or wrong component.

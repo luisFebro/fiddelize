@@ -1,66 +1,5 @@
 import axios from "axios";
 import { ROOT } from "api/root"; // ${ROOT}
-import { getHeaderJson } from "utils/server/getHeaders";
-// import { tokenConfig } from './authActions';
-// naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
-
-// MAIN DATA LOADING
-export const readUser = async (dispatch, _userId, options = {}) => {
-    const { select, role } = options;
-    let selectQuery = "";
-    if (select) selectQuery = `?select=${select}`;
-
-    let roleQuery = "";
-    if (!select && role) {
-        roleQuery = `?thisRole=${role}`;
-    } else {
-        roleQuery = `&thisRole=${role}`;
-    }
-
-    const res = await axios.get(
-        `${ROOT}/user/${_userId}${selectQuery}${roleQuery}`,
-        getHeaderJson
-    );
-    console.log("===CURRENT USER LOADED===");
-    if (!select) dispatch({ type: "USER_READ", payload: res.data });
-
-    return res;
-};
-
-export const readClientAdmin = async (dispatch, _userId) => {
-    const res = await axios.get(
-        `${ROOT}/user/${_userId}?clientAdminRequest=true&thisRole=cliente-admin&select=cliAdminSelect`,
-        getHeaderJson
-    );
-    dispatch({
-        type: "CLIENT_ADMIN_READ",
-        payload: res.data,
-    });
-    return res;
-};
-// END MAIN DATA LOADING
-
-export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
-    // selectKeys: is a string with only the keys requires to return.
-    // noResponse: update but do not return any data as response.
-    const { selectKeys, noResponse, thisRole } = opts;
-    const selectQuery = selectKeys ? `selectKeys=${selectKeys}` : "";
-    const noResponseQuery = !noResponse
-        ? "&noResponse=true"
-        : "&noResponse=false";
-    const thisRoleQuery = thisRole ? `&thisRole=${thisRole}` : "";
-
-    try {
-        const res = await axios.put(
-            `${ROOT}/user/${_idUser}?${selectQuery}${noResponseQuery}${thisRoleQuery}`,
-            objToSend,
-            getHeaderJson
-        );
-        return res;
-    } catch (err) {
-        return err;
-    }
-};
 
 // PURCHASE HISTORY
 // addPurchaseHistory is on requestLib
@@ -101,8 +40,7 @@ export const readPurchaseHistory = async (
 
     try {
         return await axios.get(
-            `${ROOT}/user/list/purchase-history/${_idUser}?targetPoints=${targetPoints}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
-            getHeaderJson
+            `${ROOT}/user/list/purchase-history/${_idUser}?targetPoints=${targetPoints}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`
         );
     } catch (err) {
         return err.response;
@@ -115,8 +53,7 @@ export const changePrizeStatus = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `${ROOT}/user/purchase-history/update-status/${userId}?statusType=${statusType}&prizeId=${prizeId}&newValue=true`,
-            getHeaderJson
+            `${ROOT}/user/purchase-history/update-status/${userId}?statusType=${statusType}&prizeId=${prizeId}&newValue=true`
         );
     } catch (err) {
         return err.response;
@@ -130,11 +67,7 @@ export const addAutomaticTask = async (userId, options = {}) => {
     const { madeBy, content, taskTitle, taskType } = options;
 
     try {
-        return await axios.put(
-            `${ROOT}/task/add?userId=${userId}`,
-            options,
-            getHeaderJson
-        );
+        return await axios.put(`${ROOT}/task/add?userId=${userId}`, options);
     } catch (err) {
         return err.response;
     }
@@ -147,8 +80,7 @@ export const countField = async (_id, objToSend) => {
             `${ROOT}/user/count/field/${_id}?thisRole=${
                 objToSend.thisRole || "cliente"
             }`,
-            objToSend,
-            getHeaderJson
+            objToSend
         );
     } catch (err) {
         return err.response;
@@ -157,10 +89,7 @@ export const countField = async (_id, objToSend) => {
 
 export const getUrlLink = async (code) => {
     try {
-        return await axios.get(
-            `${ROOT}/user/redirect/url-link?code=${code}`,
-            getHeaderJson
-        );
+        return await axios.get(`${ROOT}/user/redirect/url-link?code=${code}`);
     } catch (err) {
         return err.response;
     }
@@ -172,8 +101,7 @@ export const removeField = async (userId, fieldName) => {
     try {
         return await axios.put(
             `${ROOT}/user/field/remove/${userId}`,
-            objToSend,
-            getHeaderJson
+            objToSend
         );
         // dispatch({ type: 'USER_READ', payload: res.data.user });
     } catch (err) {
@@ -189,8 +117,7 @@ export const uploadImages = async (formData, options) => {
     try {
         return await axios.post(
             `${ROOT}/user/image/upload?fileName=${fileName}`,
-            formData,
-            getHeaderJson
+            formData
         );
     } catch (err) {
         return err;
@@ -202,8 +129,7 @@ export const updateImages = async (_id, bodyToSend) => {
     try {
         return await axios.put(
             `${ROOT}/user/image/update?id=${_id}`,
-            bodyToSend,
-            getHeaderJson
+            bodyToSend
         );
     } catch (err) {
         return err;
@@ -215,8 +141,7 @@ export const updateImages = async (_id, bodyToSend) => {
 export const gotUsersInThisChallenge = async (bizId, challengeInd) => {
     try {
         return await axios.get(
-            `${ROOT}/user/check/user-challenges?id=${bizId}&challengeInd=${challengeInd}`,
-            getHeaderJson
+            `${ROOT}/user/check/user-challenges?id=${bizId}&challengeInd=${challengeInd}`
         );
     } catch (err) {
         return err;

@@ -3,12 +3,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import isObjEmpty from "utils/objects/isObjEmpty";
 import useToken, { chooseHeader } from "auth/useToken";
 import disconnect from "auth/disconnect";
 import showToast from "components/toasts";
-import { setRun } from "hooks/useRunComp";
+import { setRun, useAction } from "global-data/ui";
 import { useOfflineData } from "hooks/storage/useOfflineListData";
 
 export * from "./requestsLib.js";
@@ -43,6 +42,8 @@ export default function useAPI({
     const [alreadyReqId, setAlreadyReqId] = useState(null);
     const [error, setError] = useState(false);
 
+    const uify = useAction();
+
     const thisData = data;
     const { offlineData } = useOfflineData({ dataName, data: thisData });
     useEffect(() => {
@@ -68,7 +69,6 @@ export default function useAPI({
         txtFailure = "Não foi possível realizar operação. Tente novamente.",
     } = snackbar;
 
-    const dispatch = useStoreDispatch();
     const needSnack = !isObjEmpty(snackbar);
 
     const token = useToken();
@@ -87,10 +87,10 @@ export default function useAPI({
 
     const handleUpdateData = () => {
         // same target component NAME which is being requesting to...
-        // you can use it in the target component since setRun and dispatch is passed as parameter
+        // you can use it in the target component since setRun and uify is passed as parameter
         if (!runName) return;
 
-        setRun(dispatch, runName);
+        setRun("runName", runName, uify);
         if (typeof callback === "function") {
             callback();
         }
@@ -180,7 +180,7 @@ export default function useAPI({
             Oops! Esta parte não funcionou como esperado. Tente recarregar.
         </p>
     );
-    return { data, gotData, loading, setRun, dispatch, error, ShowError };
+    return { data, gotData, loading, setRun, uify, error, ShowError };
 }
 
 /* COMMENTS

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import ActionBtns from "./ActionBtns";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import getFirstName from "../../../../../utils/string/getFirstName";
@@ -9,9 +9,7 @@ PanelHiddenContent.propTypes = {
 };
 
 export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const styles = {
         pointsContainer: {

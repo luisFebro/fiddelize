@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
 import handleChange from "../../../../utils/form/use-state/handleChange";
-// import DateWithIcon from '../../../../components/date-time/DateWithIcon';
 import CreatedAtBr from "../../CreatedAtBr";
-import { updateUser, readUser } from "../../../../redux/actions/userActions";
+import { readUser, updateUser } from "api/frequent";
 import showToast from "../../../../components/toasts";
 import isValidName from "../../../../utils/validation/isValidName";
 import autoPhoneMask from "../../../../utils/validation/masks/autoPhoneMask";
@@ -40,7 +38,7 @@ export default function HiddenProfile({ userData }) {
 
     useEffect(() => {
         (async () => {
-            const res = await readUser(dispatch, userData._id, {
+            const res = await readUser(userData._id, {
                 role: "cliente-admin",
             });
 
@@ -55,8 +53,6 @@ export default function HiddenProfile({ userData }) {
             }));
         })();
     }, []);
-
-    const dispatch = useStoreDispatch();
 
     const styles = {
         form: {
@@ -96,7 +92,7 @@ export default function HiddenProfile({ userData }) {
             );
 
         const dataToSend = { ...data };
-        updateUser(dispatch, dataToSend, userData._id, {
+        updateUser(userData._id, dataToSend, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)

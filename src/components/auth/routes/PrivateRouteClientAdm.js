@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import useData from "init";
 import useAuth from "auth/useAuth";
 import isThisApp from "utils/window/isThisApp";
-import { useRunComp } from "hooks/useRunComp";
+import useRun from "global-data/ui";
 
 const isApp = isThisApp();
 
@@ -23,7 +23,7 @@ export default function PrivateRouteClientAdm({
     history,
     ...rest
 }) {
-    const { runName } = useRunComp();
+    const { runName } = useRun();
     const [goHome, setGoHome] = useState(checkPath(runName));
     const isAuthUser = useAuth();
     const [role, loading] = useData(["role"]);

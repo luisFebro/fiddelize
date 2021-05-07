@@ -1,8 +1,17 @@
 import { useUify, handleAction } from "context";
 
+const legacyEasyPeasy = {
+    run: false,
+    runName: "",
+    runName2: "",
+    runArray: [], // for history of executed elements...
+    runOneArray: [],
+};
+
 const initState = {
     currUser: {},
     bizData: {},
+    ...legacyEasyPeasy,
 };
 
 const reducer = (state, action) => {
@@ -10,6 +19,19 @@ const reducer = (state, action) => {
 
     if (type === "currUser") return { ...state, currUser: payload };
     if (type === "bizData") return { ...state, bizData: payload };
+    if (type === "run") return { ...state, run: !state.run };
+    if (type === "runName")
+        return { ...state, runName: payload && payload.toString() };
+    if (type === "runName2") return { ...state, runName2: payload };
+    if (type === "runOneArray") return { ...state, runOneArray: payload };
+    if (type === "runArray") {
+        const prior = state.runArray;
+
+        return {
+            ...state,
+            runArray: [...prior, ...payload],
+        };
+    }
     return state;
 };
 

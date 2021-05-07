@@ -1,5 +1,5 @@
 import { useState, Fragment } from "react";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+
 import PropTypes from "prop-types";
 import Skeleton from "@material-ui/lab/Skeleton";
 import animateCSS from "../../../utils/animateCSS";

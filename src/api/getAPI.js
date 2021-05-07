@@ -63,7 +63,7 @@ export default function getAPI({
             if (error.response) {
                 const { status } = error.response;
                 const gotExpiredToken = status === 401;
-                if (gotExpiredToken) disconnect();
+                if (gotExpiredToken) return await disconnect();
             }
 
             return reject({

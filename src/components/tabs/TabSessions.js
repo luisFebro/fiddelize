@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import green from "@material-ui/core/colors/green";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import getVar, { removeVar } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -84,8 +83,6 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
     const classes = useStyles();
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
-
-    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         // Programatically set user to one section when redirecting to dashboard.

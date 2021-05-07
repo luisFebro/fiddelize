@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import { withRouter } from "react-router-dom";
 import { Load } from "../../../../../../../../components/code-splitting/LoadableComp";
 // import TextField from "@material-ui/core/TextField";
@@ -30,11 +30,7 @@ PanelHiddenContent.propTypes = {
 // });
 
 function PanelHiddenContent({ data }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
-
-    // const styles = getStyles();
+    const { runArray } = useRun();
 
     const showInvestExtract = (data) => {
         const isOpen = runArray.includes(data._id); // only when the card is open is loaded.
@@ -94,21 +90,3 @@ function PanelHiddenContent({ data }) {
 }
 
 export default withRouter(PanelHiddenContent);
-
-/* ARCHIVES
-<TextField
-    multiline
-    rows={8}
-    id="msgArea"
-    name="message"
-    InputProps={{
-        style: styles.fieldFormValue,
-    }}
-    value={data.sentMsgDesc}
-    variant="outlined"
-    fullWidth
-/>
-
-<p className="animated flip slow delay-2s"> first flip that I was looking for with the style of  a n entire 360 with zooming.
-<CreatedAtBr createdAt={createdAt} />
-*/

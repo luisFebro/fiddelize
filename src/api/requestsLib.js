@@ -14,13 +14,16 @@ export const forgotPasswordRequest = () => `${ROOT}/auth/pswd/forgot`;
 export const recoverPassword = () => `${ROOT}/auth/pswd/recover`;
 export const changePassword = () => `${ROOT}/auth/pswd/change`;
 export const createPassword = () => `${ROOT}/auth/pswd/create`;
+export const readVerificationPass = (bizId) =>
+    `${ROOT}/admin/verification-pass/${bizId}`; // GET
+export const checkVerificationPass = () => `${ROOT}/admin/verification-pass`; // POST
 // export const makeGoogleLogin = () => `${ROOT}/auth/google`; // POST
 
 // USER
 export const readUser = (userId, role, noResponse = true) =>
     `${ROOT}/user/${userId}?noResponse=${noResponse}&thisRole=${role}`;
-export const updateUser = (userId, thisRole) =>
-    `${ROOT}/user/${userId}?noResponse=true&thisRole=${thisRole}`;
+export const updateUser = (userId, role, noResponse = true) =>
+    `${ROOT}/user/${userId}?noResponse=${noResponse}true&thisRole=${role}`;
 export const removeUser = (userId) => `/api/user/${userId}`;
 
 // client's register
@@ -152,3 +155,7 @@ export const readOrUpdateNotifStatus = (action) =>
     `${ROOT}/push-notification/notif-status?action=${action}`; // PUT
 export const readUserSubIds = () => `${ROOT}/push-notification/read/sub-ids`; // GET
 export const sendPushNotifs = () => `${ROOT}/push-notification/go-everybody`; // POST
+
+// DB
+export const readAllDbData = (adminId) =>
+    `${ROOT}/database/db-from-models/list/${adminId}`; // GET

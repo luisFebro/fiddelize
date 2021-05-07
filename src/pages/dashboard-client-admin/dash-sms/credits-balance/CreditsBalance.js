@@ -3,7 +3,7 @@ import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import useAPI, { readCredits, needTrigger } from "api/useAPI";
 import { useBizData } from "init";
-import { useRunComp } from "../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import usePro from "../../../../hooks/pro/usePro";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -19,7 +19,7 @@ export default function CreditsBalance({ handleBalance }) {
 
     const { bizId: userId } = useBizData();
 
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     const trigger = needTrigger(runName, "UpdateSMSAll");
 

@@ -1,4 +1,3 @@
-import { useStoreState, useStoreDispatch } from "easy-peasy";
 import { closeModal } from "../../redux/actions/modalActions";
 // End Redux
 import { underConstruction } from "../../data/dataIllustrations";

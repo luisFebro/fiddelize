@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import useAPI, { readContacts } from "api/useAPI";
 import MuSelectTable from "components/tables/MuSelectTable";
-import { useRunComp } from "hooks/useRunComp";
+import useRun from "global-data/ui";
 import useData from "init";
 
 const headCells = [
@@ -27,7 +27,7 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     });
     if (!list) list = [];
 
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     const totalSelected = selectedContacts.length;
     const isSendEverybodyMode = Boolean(

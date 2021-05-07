@@ -4,7 +4,7 @@ import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
 import "../style.scss";
-import { useRunComp } from "../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import getId from "../../../../utils/getId";
 import { getVars } from "init/var";
 // pickers
@@ -28,7 +28,7 @@ export default function AppPickersHandler({
     targetPoints,
     history,
 }) {
-    const { runName } = useRunComp();
+    const { runName } = useRun();
     const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
     const [nextDisabled, setNextDisabled] = useState(true);
 
@@ -143,12 +143,3 @@ export default function AppPickersHandler({
         </div>
     );
 }
-
-/* ARCHIVES
-useEffect(() => {
-    if(step.currNumber === 3) {
-        console.log("running setRun goBotto,m")
-        setRun(dispatch, "goBottomApp");
-    }
-}, [step])
-*/

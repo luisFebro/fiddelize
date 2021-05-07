@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Illustration from "../../../../../components/Illustration";
 import useData from "init";
-import { useRunComp } from "../../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import TaskCard from "../list/TaskCard";
 import useAPIList, { readTasks, getTrigger } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
@@ -9,7 +9,7 @@ import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 export default function ModalContent({ isOffline }) {
     const [skip, setSkip] = useState(0);
     const { userId } = useData();
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     const trigger = getTrigger(runName, "TaskCard");
 

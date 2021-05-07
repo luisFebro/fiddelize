@@ -1,13 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { calendar } from "../../../../utils/dates/dateFns";
 import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
-import { updateUser } from "../../../../redux/actions/userActions";
+import { updateUser } from "api/frequent";
 import useData, { useBizData } from "init";
 import useAPIList, { readUserList, getTrigger } from "api/useAPIList";
-import { useRunComp } from "../../../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import extractStrData from "../../../../utils/string/extractStrData";
 import { Load } from "../../../../components/code-splitting/LoadableComp";
@@ -170,8 +169,6 @@ export default function AsyncRecordedClientsList() {
     const { name } = useData();
     const { bizPlan } = useBizData();
 
-    const dispatch = useStoreDispatch();
-
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
     const [data, setData] = useState({
@@ -189,7 +186,7 @@ export default function AsyncRecordedClientsList() {
     });
 
     const { filterName, period, needEmpty } = filter;
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     useEffect(() => {
         if ((filterName && period) || runName === "RecordedClientsList") {
@@ -231,7 +228,7 @@ export default function AsyncRecordedClientsList() {
             "clientAdminData.totalClientUserPoints": totalCliUserScores,
             "clientAdminData.totalActivePoints": totalActivePoints,
         };
-        updateUser(dispatch, objToSend, bizId, {
+        updateUser(bizId, objToSend, {
             thisRole: "cliente-admin",
         });
     }, [totalCliUserScores, totalActivePoints]);

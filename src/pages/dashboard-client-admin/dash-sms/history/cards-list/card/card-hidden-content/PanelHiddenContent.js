@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import useRun from "global-data/ui";
 import TextField from "@material-ui/core/TextField";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
@@ -39,9 +39,7 @@ const getStyles = () => ({
 });
 
 export default function PanelHiddenContent({ data }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
+    const { runArray } = useRun();
 
     const styles = getStyles();
 

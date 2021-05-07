@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import { useStoreDispatch } from "easy-peasy";
-import { updateUser } from "../../../../../redux/actions/userActions";
+
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import ButtonMulti, {
     faStyle,

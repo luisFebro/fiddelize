@@ -3,10 +3,10 @@ import getItems, { removeItems } from "init/lStorage";
 import renewToken from "auth/renewToken";
 import { signInUserData } from "components/auth/Login";
 import getAPI, { setDefaultAccess } from "api";
-import { setRun } from "redux/actions/globalActions";
+import { setRun } from "global-data/ui";
 
-const handleCliAdmin = ({ dispatch, history, bizLinkName }) => {
-    setRun(dispatch, "goDash");
+const handleCliAdmin = ({ uify, history, bizLinkName }) => {
+    setRun("runName", "goDash", uify);
 
     if (!bizLinkName) {
         const thisBizCodeName = getItems("bizData", ["bizLinkName"]);
@@ -27,7 +27,6 @@ const handleCliUser = ({ history }) => {
 
 export default async function handleOpenApp({
     uify,
-    dispatch,
     history,
     appRole,
     role_loggedIn,
@@ -65,7 +64,7 @@ export default async function handleOpenApp({
 
         const userData = {
             uify,
-            dispatch,
+            uify,
             history,
             appPanelUserId: clickedAppUserId,
             appPanelRole: appRole,
@@ -97,7 +96,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliAdmin) {
-            return handleCliAdmin({ dispatch, history, bizLinkName });
+            return handleCliAdmin({ uify, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -111,7 +110,7 @@ export default async function handleOpenApp({
 
     if (isBizTeam) {
         if (isCliAdminApp) {
-            return handleCliAdmin({ dispatch, history, bizLinkName });
+            return handleCliAdmin({ uify, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -130,7 +129,7 @@ export default async function handleOpenApp({
 
         // cli-admin apps can be multiple
         if (isCliAdminApp) {
-            return handleCliAdmin({ dispatch, history, bizLinkName });
+            return handleCliAdmin({ uify, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -148,7 +147,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliAdminApp) {
-            return handleCliAdmin({ dispatch, history, bizLinkName });
+            return handleCliAdmin({ uify, history, bizLinkName });
         }
 
         if (isCliUserApp) {

@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import ChallComp from "./ChallComp";
 import { useBizData } from "init";
-import {
-    readClientAdmin,
-    updateUser,
-} from "../../../../../redux/actions/userActions";
+import { readClientAdmin } from "api/frequent";
+import { updateUser } from "api/frequent";
 import showToast from "../../../../../components/toasts";
 import ShowBizNotes from "./ShowBizNotes";
 
@@ -36,8 +33,6 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     );
     const [needUpdateData, setNeedUpdateData] = useState(false);
     const [switchAddBtn, setSwitchAddBtn] = useState(false);
-
-    const dispatch = useStoreDispatch();
 
     const limitFree = bizPlan === "gratis" && challengesArray.length >= 3;
     useEffect(() => {
@@ -96,14 +91,14 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
             "clientAdminData.rewardList": newModifiedArray || challengesArray,
         };
 
-        updateUser(dispatch, dataToSend, bizId, {
+        updateUser(bizId, dataToSend, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
                 return showToast("Algo deu errado. Verifique sua conexão.", {
                     type: "error",
                 });
-            readClientAdmin(dispatch, bizId).then((res) => {
+            readClientAdmin(bizId).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
                 needMsg && showToast("Alterações salvas!", { type: "success" });

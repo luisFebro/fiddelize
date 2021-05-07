@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import Dialog from "@material-ui/core/Dialog";
 import CloseButton from "../buttons/CloseButton";
 import RadiusBtn from "../buttons/RadiusBtn";
-import { useRunComp } from "../../hooks/useRunComp";
+import useRun from "global-data/ui";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 
 ModalFullContent.propTypes = {
@@ -30,7 +30,7 @@ export default function ModalFullContent({
     backgroundColor,
     // style,
 }) {
-    const { runName } = useRunComp();
+    const { runName } = useRun();
 
     const styles = getStyles({ needIndex });
 

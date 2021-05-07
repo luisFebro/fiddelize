@@ -1,6 +1,6 @@
 import { useState } from "react";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+
 // Material UI
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -12,7 +12,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
-import { updateUser, readUserList } from "../../../redux/actions/userActions";
 import { closeModal } from "../../../redux/actions/modalActions";
 
 ModalSelect.propTypes = {

@@ -1,4 +1,3 @@
-import { useStoreState, useStoreDispatch } from "easy-peasy";
 import parse from "html-react-parser";
 // End Redux
 import green from "@material-ui/core/colors/green";
