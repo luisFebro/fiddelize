@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
 import NotifCard from "./NotifCard";
-import { markAllAsSeen } from "../../redux/actions/notificationActions";
+import getAPI, { markAllAsSeen } from "api";
 import useAPIList, { readNotifications } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import { useBizData } from "init";
@@ -47,7 +47,15 @@ export default function NotifList({
         if (_id === "...") return;
 
         if (list.length && !firstChunkLoaded) {
-            !bizId && markAllAsSeen(_id, { forceCliUser });
+            if (!bizId) {
+                getAPI({
+                    method: "put",
+                    url: markAllAsSeen(_id),
+                    body: {
+                        forceCliUser,
+                    },
+                });
+            }
             setFirstChunkLoaded(true);
         }
     }, [list, firstChunkLoaded, _id]);

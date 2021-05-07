@@ -3,7 +3,6 @@ import { getVars } from "init/var";
 import getItems from "init/lStorage";
 import repeat from "utils/arrays/repeat";
 import { useGlobalContext } from "context";
-import useRun from "global-data/ui";
 
 // USAGE
 // localStorage = simply use an empty function. e.g const { role } = useData();
@@ -38,11 +37,8 @@ export default function useData(dataArray, options) {
 }
 
 export function useBizData() {
-    // TEST
-    const dataUSESTORE = useRun();
-    console.log("dataUSESTORE", dataUSESTORE);
-
     const globalData = useGlobalContext();
+    console.log("globalData CHECK", globalData);
     const bizData = globalData ? globalData.bizData : {};
 
     const updatedBizData = updateLocalStorage("bizData", { currData: bizData });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { sendNotification } from "../../../../redux/actions/notificationActions";
+import { sendNotification } from "api/frequent";
 import useData from "init";
 import getVar, { setVar } from "init/var";
 

@@ -8,7 +8,7 @@ import isThisApp from "utils/window/isThisApp";
 import { useBizData } from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { deleteImage } from "utils/storage/lForage";
-import { sendNotification } from "redux/actions/notificationActions";
+import { sendNotification } from "api/frequent";
 import { removeVar, getVars, removeVars } from "init/var";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";

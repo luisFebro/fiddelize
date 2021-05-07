@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useBizData } from "init";
-import { updateUser, readClientAdmin } from "api/frequent";
+import { updateUser, readUser } from "api/frequent";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
@@ -46,7 +46,7 @@ export default function ShowActionBtns({
                 return showToast("Algo deu errado. Verifique sua conexão", {
                     type: "error",
                 });
-            readClientAdmin(bizId).then((res) => {
+            readUser(bizId, { role: "cliente-admin" }).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
                 showToast(titleAfterOk, { type: "success" });

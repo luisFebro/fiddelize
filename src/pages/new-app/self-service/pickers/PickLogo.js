@@ -4,21 +4,17 @@ import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle,
-} from "../../../../components/buttons/material-ui/ButtonMulti";
-import CheckBoxForm from "../../../../components/CheckBoxForm";
-import RadioGroupForm from "../../../../components/RadioGroupForm";
-import { CLIENT_URL } from "../../../../config/clientUrl";
-import showToast from "../../../../components/toasts";
-import { readClientAdmin } from "api/frequent";
-import {
-    uploadImages,
-    updateImages,
-} from "../../../../redux/actions/userActions";
-import ShowActionBtns from "./ShowActionBtns";
-import { deleteImage } from "../../../../utils/storage/lForage";
+} from "components/buttons/material-ui/ButtonMulti";
+import CheckBoxForm from "components/CheckBoxForm";
+import RadioGroupForm from "components/RadioGroupForm";
+import { CLIENT_URL } from "config/clientUrl";
+import showToast from "components/toasts";
+import { readUser } from "api/frequent";
+import getAPI, { uploadImages, updateImages } from "api";
+import { deleteImage } from "utils/storage/lForage";
 import { useBizData } from "init";
 import getVar, { setVars } from "init/var";
-// import useCount from '../../../../hooks/useCount';
+import ShowActionBtns from "./ShowActionBtns";
 
 PickLogo.propTypes = {
     step: PropTypes.number,
@@ -64,14 +60,20 @@ export default function PickLogo({
 
     const goNext = () => setNextDisabled(false);
 
-    const updateThisImg = (data) => {
+    const updateThisImg = (body) => {
+        // body: lastUrl, paramArray, customParam
         const thisBizId = isFromDash ? bizId : undefined;
-        updateImages(thisBizId, data).then((res) => {
+        getAPI({
+            method: "put",
+            url: updateImages(thisBizId),
+            fullCatch: true,
+            body,
+        }).then((res) => {
             if (res.status !== 200)
                 return showToast(res.data.msg, { type: "error" });
             setTempImgUrl(res.data);
             if (isFromDash) {
-                readClientAdmin(bizId).then((res) => {
+                readUser(bizId, { role: "cliente-admin" }).then((res) => {
                     if (res.status !== 200)
                         return showToast(res.data.msg, { type: "error" });
                     showToast("Formato Atualizado!", { type: "success" });
@@ -162,12 +164,16 @@ export default function PickLogo({
         formData.set(name, fileValue); // n1 - set and append diff
         setUploadedPic(fileValue);
 
-        const options = { fileName: bizLinkName };
         setIsLoadingPic(true);
 
         setEditArea(false);
         // n1
-        uploadImages(formData, options).then((res) => {
+        getAPI({
+            method: "post",
+            url: uploadImages(bizLinkName),
+            body: formData,
+            fullCatch: true,
+        }).then((res) => {
             if (res.status !== 200) {
                 setIsLoadingPic(false);
                 showToast("Algo deu errado. Verifique sua conexão.", {
@@ -192,7 +198,7 @@ export default function PickLogo({
             };
             if (isFromDash) {
                 deleteImage("logos", "app_biz_logo").then((res) => {
-                    readClientAdmin(bizId).then((res) => {
+                    readUser(bizId, { role: "cliente-admin" }).then((res) => {
                         if (res.status !== 200)
                             return showToast(res.data.msg, { type: "error" });
                         showToast("Nova logo salva. Alterando no app...", {

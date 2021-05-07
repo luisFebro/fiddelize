@@ -1,10 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
-import DeleteButton from "../../../../../components/buttons/DeleteButton";
+import DeleteButton from "components/buttons/DeleteButton";
 import { useBizData } from "init";
-import { gotUsersInThisChallenge } from "../../../../../redux/actions/userActions";
-import ModalYesNo from "../../../../../components/modals/ModalYesNo";
+import getAPI, { gotUsersInThisChallenge } from "api";
+import ModalYesNo from "components/modals/ModalYesNo";
 
 DeleteModalBtn.propTypes = {
     id: PropTypes.string,
@@ -24,7 +24,10 @@ export default function DeleteModalBtn({
 
     const handleDelete = (arrayId) => {
         const currChallInd = challengeNumber - 1;
-        gotUsersInThisChallenge(bizId, currChallInd).then((res) => {
+        getAPI({
+            url: gotUsersInThisChallenge(bizId, currChallInd),
+            fullCatch: true,
+        }).then((res) => {
             if (res.status !== 200)
                 return console.log(
                     "Something went wrong with gotUsersInThisChallenge request"

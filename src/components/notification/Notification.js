@@ -1,11 +1,11 @@
 import { Fragment, useState } from "react";
 import useData from "init";
+import { setRun, useAction } from "global-data/ui";
+import getId from "utils/getId";
+import getAPI, { markAllAsClicked } from "api";
 import NotifList from "./NotifList";
 import RadiusBtn from "../buttons/RadiusBtn";
-import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
-import { setRun, useAction } from "global-data/ui";
-import getId from "../../utils/getId";
 
 export default function Notification({
     forceCliUser = false,
@@ -15,7 +15,6 @@ export default function Notification({
     const [loading, setLoading] = useState(false);
     const [btnTitle, setBtnTitle] = useState("Marcar todas ✔️");
     const [btnDisabled, setBtnDisabled] = useState(false);
-    // const [runList, setRunList] = useState(false);
 
     const isCliMember = bizId;
     const [userId, firstName, role] = useData(["userId", "firstName", "role"]);
@@ -35,7 +34,14 @@ export default function Notification({
     const handleMarkAllClicked = () => {
         if (userId === "...") return;
         setLoading(true);
-        markAllAsClicked(userId, { forceCliUser }).then((res) => {
+        getAPI({
+            method: "put",
+            url: markAllAsClicked(userId),
+            body: {
+                forceCliUser,
+            },
+            fullCatch: true,
+        }).then((res) => {
             if (res.status !== 200)
                 return console.log("smt wrong with handleMarkAllClicked");
             setRun("runName", `notificationCount${getId()}`, uify);

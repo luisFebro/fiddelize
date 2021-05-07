@@ -1,15 +1,15 @@
 import React, { useState, forwardRef } from "react";
 import Card from "@material-ui/core/Card";
-import { fromNow, formatDMY } from "../../../../../utils/dates/dateFns";
+import { fromNow, formatDMY } from "utils/dates/dateFns";
+import useData from "init";
 import useAPI, {
     toggleDoneUrl,
     changePrizeStatus,
     treatBoolStatus,
 } from "api/useAPI";
 import ActionBtn from "./ActionBtn";
-import extractStrData from "../../../../../utils/string/extractStrData";
-import useDatesCountdown from "../../../../../hooks/dates/useDatesCountdown";
-import useData from "init";
+import extractStrData from "utils/string/extractStrData";
+import useDatesCountdown from "hooks/dates/useDatesCountdown";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();

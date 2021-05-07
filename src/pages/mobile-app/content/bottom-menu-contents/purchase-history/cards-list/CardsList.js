@@ -11,7 +11,7 @@ import { formatDMY, fromNow } from "utils/dates/dateFns";
 import Spinner from "components/loadingIndicators/Spinner";
 import useDelay from "hooks/useDelay";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
-import useAPIList, { readPurchaseCardsList } from "api/useAPIList";
+import useAPIList, { readPurchaseHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import extractStrData from "utils/string/extractStrData";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
@@ -117,7 +117,7 @@ export default function CardsList({ data }) {
         error,
         ShowError,
     } = useAPIList({
-        url: readPurchaseCardsList(_id),
+        url: readPurchaseHistory(_id),
         params,
         skip,
         trigger: !loadingGetVar,

@@ -19,7 +19,7 @@ export const readVerificationPass = (bizId) =>
 export const checkVerificationPass = () => `${ROOT}/admin/verification-pass`; // POST
 // export const makeGoogleLogin = () => `${ROOT}/auth/google`; // POST
 
-// USER
+// CLI-USER
 export const readUser = (userId, role, noResponse = true) =>
     `${ROOT}/user/${userId}?noResponse=${noResponse}&thisRole=${role}`;
 export const updateUser = (userId, role, noResponse = true) =>
@@ -31,25 +31,28 @@ export const readUserList = (cliAdminId) =>
     `${ROOT}/user/list/all?bizId=${cliAdminId}`;
 export const readHighestScores = (cliAdminId) =>
     `${ROOT}/user/list/highest-scores?bizId=${cliAdminId}`;
-// END USER
 
-// ACCOUNT
-export const createInstantApp = () => `${ROOT}/user/instant-app`; // POST
-export const readAppList = () => `${ROOT}/user/acc/app-list`; // GET
-export const setDefaultAccess = () => `${ROOT}/user/acc/set-default-access`; // POST
-
-// END ACCOUNT
-
-// PURCHASE'S HISTORY
-export const readPurchaseCardsList = (userId) =>
-    `${ROOT}/user/list/purchase-history/${userId}`;
+// purchase's history
+export const readPurchaseHistory = (userId) =>
+    `${ROOT}/user/list/purchase-history/${userId}`; // GET
 export const readPrizes = (userId) =>
     `${ROOT}/user/list/purchase-history/prizes/${userId}`;
 export const changePrizeStatus = (cliUserId, statusType) =>
-    `${ROOT}/user/purchase-history/update-status/${cliUserId}?statusType=${statusType}`; // PUT - +params: newValue, taskId
+    `${ROOT}/user/purchase-history/update-status/${cliUserId}?statusType=${statusType}`; // PUT
 export const addPurchaseHistory = (userId, role) =>
     `${ROOT}/user/purchase-history/${userId}?thisRole=${role}`; // PUT
 
+// temp score
+export const readTempPointsList = (userId) =>
+    `${ROOT}/user/cli-user/temp-score/list?userId=${userId}`;
+export const setLastPointsAsDone = (userId) =>
+    `${ROOT}/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
+export const encryptLinkScore = () =>
+    `${ROOT}/user/cli-user/temp-score/encrypt`; // POST
+export const isLinkAllowed = () =>
+    `${ROOT}/user/cli-user/temp-score/allowed-link`; // GET
+
+// CLI-ADMIN
 // Automatic Tasks
 export const readTasks = (userId, doneStatus) =>
     `${ROOT}/task/read/${userId}?doneStatus=${doneStatus}&thisRole=cliente-admin`; // GET
@@ -58,12 +61,7 @@ export const toggleDoneUrl = () => `${ROOT}/task/toggle`; // PUT
 export const removeTaskAndExpireCliPrize = () =>
     `${ROOT}/task/remove-and-expire`;
 
-// Notifications
-export const readNotifications = (userId) =>
-    `${ROOT}/notification/read/${userId}`; // GET
-
-export const setNotifAuthor = () => `${ROOT}/notification/set-notif-author`; // POST
-// SMS
+// sms
 export const readContacts = (userId) =>
     `${ROOT}/sms/read/contacts?userId=${userId}`;
 export const sendSMS = () => `${ROOT}/sms/send`; // POST
@@ -81,7 +79,7 @@ export const readAutoService = (userId) =>
     `${ROOT}/sms/automatic/read?userId=${userId}`;
 export const activateAutoService = () => `${ROOT}/sms/automatic/activate`; // POST
 
-// PAY
+// pay
 export const startCheckout = () => `${ROOT}/pay/transparent-checkout/start`; // POST
 export const finishCheckout = () => `${ROOT}/pay/transparent-checkout/finish`; // POST
 export const readTransactionHistory = () => `${ROOT}/pay/transactions/history`; // GET
@@ -90,13 +88,23 @@ export const checkOneClickInvest = (userId) =>
 export const removeOneClickInvest = (userId) =>
     `${ROOT}/pay/cc/remove/one-click-invest?userId=${userId}`; // PUT
 
-// PRO
+// pro
 export const getProData = (userId) =>
     `${ROOT}/pro/pro-member-data?userId=${userId}`; // POST
 export const removeServices = (userId) =>
     `${ROOT}/pro/service/remove?userId=${userId}`; // DELETE
 
-// TEAM
+// images (logo)
+export const uploadImages = (fileName) =>
+    `${ROOT}/user/image/upload?fileName=${fileName}`; // POST
+export const updateImages = (userId) =>
+    `${ROOT}/user/image/update?id=${userId}`; // PUT
+
+// challenges and rewards
+export const gotUsersInThisChallenge = (bizId, challInd) =>
+    `${ROOT}/user/check/user-challenges?id=${bizId}&challengeInd=${challInd}`; // GET
+
+// CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;
 export const readOneMemberTasksList = () =>
@@ -106,18 +114,29 @@ export const setTempPointsAndMemberData = () =>
 export const getMembersPodium = (bizId) =>
     `${ROOT}/user/team/members/podium?bizId=${bizId}`;
 
-// TEMP SCORE
-export const readTempPointsList = (userId) =>
-    `${ROOT}/user/cli-user/temp-score/list?userId=${userId}`;
-export const setLastPointsAsDone = (userId) =>
-    `${ROOT}/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
-export const encryptLinkScore = () =>
-    `${ROOT}/user/cli-user/temp-score/encrypt`; // POST
-export const isLinkAllowed = () =>
-    `${ROOT}/user/cli-user/temp-score/allowed-link`; // GET
+// BIZ FIDDELIZE TEAM
+export const readAgentIncomeHistory = () =>
+    `${ROOT}/user/biz-fiddelize-team/income/history`;
 
-// EMAIL
-export const sendEmail = () => `${ROOT}/email/send`;
+// cabin fiddelize-cabin
+export const getCabinMainData = () => `${ROOT}/admin/fiddelize-cabin/main-data`;
+export const getAppTotals = () => `${ROOT}/admin/fiddelize-cabin/app-totals`;
+export const getXpReviewList = () => `${ROOT}/admin/fiddelize-cabin/xp-reviews`;
+
+// finance
+export const getFiddelizeRevenueHistory = () =>
+    `${ROOT}/admin/fiddelize-cabin/revenue-history`;
+export const convertCurrency = () => `${ROOT}/admin/fiddelize-cabin/curr-conv`;
+export const readFiddelizeCosts = () =>
+    `${ROOT}/admin/fiddelize-cabin/read-costs`;
+export const addFiddelizeCosts = () =>
+    `${ROOT}/admin/fiddelize-cabin/add-costs`;
+
+// personal finance usage
+export const readFinanceTransactions = () =>
+    `${ROOT}/admin/finance/transaction-history`; // GET
+export const addFinanceTransaction = () =>
+    `${ROOT}/admin/finance/add-transaction`; // POST
 
 // REVIEWS
 export const getBuyReviewsList = () => `${ROOT}/reviews/list/buy-reviews`;
@@ -128,26 +147,12 @@ export const getNpsChartData = (userId) =>
 export const getXpScoreChartData = (userId) =>
     `${ROOT}/reviews/xp-score-chart?userId=${userId}`;
 
-// BIZ FIDDELIZE TEAM
-export const readAgentIncomeHistory = () =>
-    `${ROOT}/user/biz-fiddelize-team/income/history`;
-// cabin fiddelize-cabin
-export const getCabinMainData = () => `${ROOT}/admin/fiddelize-cabin/main-data`;
-export const getAppTotals = () => `${ROOT}/admin/fiddelize-cabin/app-totals`;
-export const getXpReviewList = () => `${ROOT}/admin/fiddelize-cabin/xp-reviews`;
-// finance
-export const getFiddelizeRevenueHistory = () =>
-    `${ROOT}/admin/fiddelize-cabin/revenue-history`;
-export const convertCurrency = () => `${ROOT}/admin/fiddelize-cabin/curr-conv`;
-export const readFiddelizeCosts = () =>
-    `${ROOT}/admin/fiddelize-cabin/read-costs`;
-export const addFiddelizeCosts = () =>
-    `${ROOT}/admin/fiddelize-cabin/add-costs`;
-// personal finance usage
-export const readFinanceTransactions = () =>
-    `${ROOT}/admin/finance/transaction-history`; // GET
-export const addFinanceTransaction = () =>
-    `${ROOT}/admin/finance/add-transaction`; // POST
+// EMAIL
+export const sendEmail = () => `${ROOT}/email/send`;
+
+// DB
+export const readAllDbData = (adminId) =>
+    `${ROOT}/database/db-from-models/list/${adminId}`; // GET
 
 // PUSH NOTIFICATIONS
 export const subscribePushNotif = () => `${ROOT}/push-notification/subscribe`; // POST
@@ -156,6 +161,25 @@ export const readOrUpdateNotifStatus = (action) =>
 export const readUserSubIds = () => `${ROOT}/push-notification/read/sub-ids`; // GET
 export const sendPushNotifs = () => `${ROOT}/push-notification/go-everybody`; // POST
 
-// DB
-export const readAllDbData = (adminId) =>
-    `${ROOT}/database/db-from-models/list/${adminId}`; // GET
+// IN-APP NOTIFICATIONS
+export const sendNotification = () => `${ROOT}/notification/send`; // POST
+export const markOneClicked = (userId) =>
+    `${ROOT}/notification/mark-one-clicked/${userId}`; // PUT
+export const markAllAsClicked = (userId) =>
+    `${ROOT}/notification/mark-all-clicked/${userId}`; // PUT
+export const markAllAsSeen = (userId) =>
+    `${ROOT}/notification/mark-all-seen/${userId}`; // PUT
+export const readNotifications = (userId) =>
+    `${ROOT}/notification/read/${userId}`; // GET
+export const setNotifAuthor = () => `${ROOT}/notification/set-notif-author`; // POST
+
+// ACCOUNT, DOWNLOAD AND URLS
+export const createInstantApp = () => `${ROOT}/user/instant-app`; // POST
+export const readAppList = () => `${ROOT}/user/acc/app-list`; // GET
+export const setDefaultAccess = () => `${ROOT}/user/acc/set-default-access`; // POST
+export const getUrlLink = (code) =>
+    `${ROOT}/user/redirect/url-link?code=${code}`; // GET
+
+// MISCELLANEOUS
+export const countField = (userId, role = "cliente") =>
+    `${ROOT}/user/count/field/${userId}?thisRole=${role}`; // PUT

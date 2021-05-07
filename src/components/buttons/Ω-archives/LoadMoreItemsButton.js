@@ -73,7 +73,6 @@
 
 //         setIsThisLoading(true);
 //         axios
-//             .get(modifiedUrl, token ? getHeaderToken(token) : getHeaderJson)
 //             .then((res) => {
 //                 if (res.status !== 200) {
 //                     setIsThisLoading(false);

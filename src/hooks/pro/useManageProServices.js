@@ -6,9 +6,9 @@ import getVar from "init/var";
 import { isScheduledDate, addDays } from "utils/dates/dateFns";
 import { IS_PROD } from "config/clientUrl";
 import didRunOnce from "utils/storage/didRunOnce";
-import { sendNotification } from "redux/actions/notificationActions";
-import usePro from "./usePro";
 import { useBizData } from "init";
+import { sendNotification } from "api/frequent";
+import usePro from "./usePro";
 
 const getPeriod = (ref) => {
     if (!ref) return false;

@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import MuSelectTable from "../../../../../../../components/tables/MuSelectTable";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import useDelay from "../../../../../../../hooks/useDelay";
-import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
-import click from "../../../../../../../utils/event/click";
+import MuSelectTable from "components/tables/MuSelectTable";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import useDelay from "hooks/useDelay";
+import scrollIntoView from "utils/document/scrollIntoView";
+import click from "utils/event/click";
 import useRun, { setRun, useAction } from "global-data/ui";
-import showToast from "../../../../../../../components/toasts";
+import showToast from "components/toasts";
 import { useBizData } from "init";
 import useAPI, { readSMSHistoryStatement, needTrigger } from "api/useAPI";
 

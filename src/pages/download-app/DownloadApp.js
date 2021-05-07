@@ -5,7 +5,7 @@ import PwaInstaller from "components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "config/clientUrl";
 import checkIfElemIsVisible from "utils/window/checkIfElemIsVisible";
 import { useBizData } from "init";
-import { readClientAdmin } from "api/frequent";
+import { readUser } from "api/frequent";
 import showToast from "components/toasts";
 import Spinner from "components/loadingIndicators/Spinner";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
@@ -202,7 +202,7 @@ export default function DownloadApp({ match, location, history }) {
     useEffect(() => {
         if (whichRole !== "cliente-admin") return;
 
-        readClientAdmin(bizId).then((res) => {
+        readUser(bizId, { role: "cliente-admin" }).then((res) => {
             if (res.status !== 200)
                 return showToast("Ocorreu um problema. Verifique sua conexão", {
                     type: "error",

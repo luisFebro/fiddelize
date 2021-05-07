@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getUrlLink } from "../redux/actions/userActions";
 import { setVar } from "init/var";
+import getAPI, { getUrlLink } from "api";
 
 // linkCode example: alan_yvs493z0
 export default function RedirectLink({ match }) {
@@ -8,7 +8,10 @@ export default function RedirectLink({ match }) {
     const code = match.params.nameAndCode;
 
     useEffect(() => {
-        getUrlLink(code).then((res) => {
+        getAPI({
+            url: getUrlLink(code),
+            fullCatch: true,
+        }).then((res) => {
             if (res.status === 500)
                 return setError("Problema de Conexão. Tente novamente...");
             if (res.status !== 200) return setError("Link Inválido!");

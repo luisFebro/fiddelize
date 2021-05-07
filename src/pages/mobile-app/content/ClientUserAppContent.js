@@ -44,7 +44,6 @@ export default function ClientUserAppContent({
     const [
         userId,
         role,
-        firstUserName,
         fullName,
         lastPrizeId,
         lastPrizeDate,
@@ -57,6 +56,8 @@ export default function ClientUserAppContent({
         "lastPrizeId",
         "lastPrizeDate",
     ]);
+
+    const { firstName: firstUserName } = useData(); // instant data without loading
     const firstName = clientNameTest || firstUserName;
 
     const {
@@ -304,119 +305,4 @@ function useAlreadyAlertChallenge(currPoints) {
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start
 b) When user log in, RT is 36
-*/
-
-/* ARCHIVES
-const handleMoreComps = () => {
-    setShowMoreComps(true);
-};
-
-const thisCurrTxtColor = currTxtColor(colorS);
-const showSkipIconsBtn = () =>
-    currPoints >= 30 &&
-    !showMoreComps && (
-        <div
-            className={`${
-                needAppForPreview && "enabledLink"
-            } position-relative container-center`}
-            style={{ top: "-55px" }}
-        >
-            <ButtonFab
-                position="relative"
-                onClick={handleMoreComps}
-                title="ver mais"
-                iconFontAwesome={<FontAwesomeIcon icon="plus" />}
-                iconFontSize="25px"
-                variant="extended"
-                fontWeight="bolder"
-                onMouseOver={null}
-                fontSize=".9em"
-                size="large"
-                color={thisCurrTxtColor}
-                backgroundColor={`var(--themeSDark--${colorS})`}
-                shadowColor={
-                    themeBackColor === "black" ? "white" : "black"
-                }
-            />
-        </div>
-    );
-
-const totalChallengesWon = Math.floor(currPoints / targetPoints);
-const pickedObjForPending = React.useMemo(
-    () => pickCurrChallData(rewardList, totalPurchasePrize + 1),
-    []
-); // do not include params to run the first right result.
-// read client user data to make sure prizes are generated if user has multiple prizes won in the row...
-useEffect(() => {
-    const key = "challengesWon";
-
-    if (totalChallengesWon >= 2) {
-        setVar({ [key]: totalChallengesWon });
-    }
-
-    if (loadingData) return;
-
-    getVar(key).then((gotValue) => {
-        const options = {
-            trigger: gotValue,
-            noResponse: true,
-            prizeDesc: mainReward,
-            trophyIcon: milestoneIcon,
-            thisRole: role || "cliente",
-        };
-        getVar("pendingChall").then((resPending) => {
-            let thisTargetPoints = targetPoints;
-            if (resPending) {
-                thisTargetPoints = pickedObjForPending.targetPoints;
-            }
-            readPurchaseHistory(userId, thisTargetPoints, options);
-        });
-
-        if (gotValue && !userBeatChallenge) {
-            removeVar(key);
-        }
-    });
-}, [
-    loadingData,
-    userId,
-    userBeatChallenge,
-    totalChallengesWon,
-    pickedObjForPending,
-]);
-
-
-const showRules = () =>
-    showMoreComps && (
-        <div className="mb-4">
-            <div
-                className="target--rules-page container-center position-relative"
-                style={{ top: `${needAppForPreview && "15px"}` }}
-            >
-                <Link
-                    to={
-                        needAppForCliAdmin
-                            ? "/regulamento?client-admin=1"
-                            : "/regulamento"
-                    }
-                >
-                    <div
-                        className="no-text-decoration text-center pressed-to-left"
-                        onClick={playBeep}
-                        style={{
-                            width: "130px",
-                            color: "var(--mainWhite)",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <span className={`${selectedTxtStyle} text-normal`}>
-                            Consulte
-                            <br />
-                            Regras Aqui
-                        </span>
-                    </div>
-                </Link>
-            </div>
-        </div>
-    );
-
 */

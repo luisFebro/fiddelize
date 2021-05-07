@@ -1,41 +1,32 @@
+// generic rest APIs which are called more than 5 times and reusable in any component go here.
+
 import getAPI, {
     readUser as readThisUser,
     updateUser as updateThisUser,
+    sendNotification as sendNotif,
 } from "api";
 
 // readNewData
 export const readUser = async (userId, options = {}) => {
-    const { role, select } = options;
+    const { role } = options;
+    let { select } = options;
+
+    const isCliAdmin = role === "cliente-admin";
+    select = isCliAdmin ? "cliAdminSelect" : select;
 
     const params = {
         select,
+        clientAdminRequest: isCliAdmin ? true : undefined,
     };
 
-    const noResponse = !select;
+    const noResponse = Boolean(!select);
 
     return await getAPI({
         url: readThisUser(userId, role, noResponse),
         params,
     });
-};
 
-export const readClientAdmin = async (userId) => {
-    const params = {
-        clientAdminRequest: true,
-        select: "cliAdminSelect",
-    };
-
-    const role = "cliente-admin";
-
-    return await getAPI({
-        url: readThisUser(userId, role, false),
-        params,
-    });
-
-    // dispatch({
-    //     type: "CLIENT_ADMIN_READ",
-    //     payload: res.data,
-    // });
+    // option to use uify here
 };
 
 // NEW METHOD: updateData (instead of updateUser) to set a new value and read and update whatever was selected to updated with UIFY
@@ -57,14 +48,39 @@ export const updateUser = async (userId, body, options = {}) => {
         params,
     });
 };
-/*
-try {
-    const res = await axios.put(
-        `${ROOT}/user/${_idUser}${thisRoleQuery}`,
-        objToSend,
-    );
-    return res;
-} catch (err) {
-    return err;
-}
- */
+
+// WARNING: sending notifications should prioritarily happen in the backend. This method is to maintain prior frontend implement
+export const sendNotification = async (userId, cardType, options = {}) => {
+    const { subtype, nT, content, role, name, senderId } = options;
+
+    const pushNotifData = options;
+    const needPushNotif = pushNotifData && pushNotifData.isPushNotif;
+
+    if (needPushNotif) {
+        return await getAPI({
+            method: "put",
+            url: sendNotif(),
+            body: pushNotifData,
+            fullCatch: true,
+        });
+    }
+
+    const notificationOpts = {
+        userId, // for authorization
+        cardType,
+        subtype,
+        recipient: { id: userId, role, name },
+        senderId: senderId || undefined,
+        content,
+    };
+
+    return await getAPI({
+        method: "put",
+        url: sendNotif(),
+        fullCatch: true,
+        params: {
+            nT: nT ? 1 : undefined,
+        },
+        body: notificationOpts,
+    });
+};

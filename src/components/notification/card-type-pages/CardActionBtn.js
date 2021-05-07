@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { markOneClicked } from "../../../redux/actions/notificationActions";
+import getAPI, { markOneClicked } from "api";
 import ButtonMulti, { faStyle } from "../../buttons/material-ui/ButtonMulti";
 import ModalFullContent from "../../modals/ModalFullContent";
 import pickCardType from "./pickCardType";
@@ -45,14 +45,23 @@ function CardActionBtn(props) {
 
         const updatedBy = props.userName;
 
-        const res = await markOneClicked(bizId || userId, cardId, {
-            forceCliUser,
+        const roleForNotif =
+            role === "cliente-admin" || role === "cliente-membro"
+                ? updatedBy
+                : undefined;
+
+        const body = {
+            cardId,
             thisRole: bizId ? "cliente-admin" : role,
-            updatedBy:
-                role === "cliente-admin" || role === "cliente-membro"
-                    ? updatedBy
-                    : undefined,
-            cliMemberId: userId,
+            updatedBy: roleForNotif,
+            cliMemberId: roleForNotif && userId,
+        };
+
+        const res = await getAPI({
+            method: "put",
+            url: markOneClicked(bizId || userId),
+            fullCatch: true,
+            body,
         });
 
         if (res.status !== 200) {

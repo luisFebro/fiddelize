@@ -13,7 +13,6 @@ import Button from "@material-ui/core/Button";
 import RadiusBtn from "../../buttons/RadiusBtn";
 import generateAlphaNumeric from "../../../utils/string/generateAlphaNumeric";
 import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
-// import { closeModal } from '../../../redux/actions/modalActions';
 // end material ui
 
 ToggleVisibilityPassword.propTypes = {

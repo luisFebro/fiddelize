@@ -4,8 +4,7 @@ import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
-import getAPI, { removeUser } from "api";
-import { countField } from "redux/actions/userActions";
+import getAPI, { removeUser, countField } from "api";
 import { setRun, useAction } from "global-data/ui";
 
 export default function RemoveMemberBtn({ modalData }) {
@@ -38,10 +37,15 @@ export default function RemoveMemberBtn({ modalData }) {
                     return showToast("Membro excluído com sucesso.", {
                         type: "error",
                     });
-                countField(bizId, {
-                    field: "clientAdminData.totalClientUsers",
-                    type: "dec",
-                    thisRole: "cliente-admin",
+                getAPI({
+                    method: "put",
+                    url: countField(bizId, "cliente-admin"),
+                    fullCatch: true,
+                    body: {
+                        field: "clientAdminData.totalClientUsers",
+                        type: "dec",
+                        thisRole: "cliente-admin",
+                    },
                 }).then((res) => {
                     if (res.status !== 200)
                         return showToast(res.data.msg, { type: "error" });

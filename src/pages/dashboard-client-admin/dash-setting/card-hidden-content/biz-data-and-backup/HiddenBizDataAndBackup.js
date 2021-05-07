@@ -7,8 +7,7 @@ import ButtonMulti, {
 } from "../../../../../components/buttons/material-ui/ButtonMulti";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 // import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
-import { readClientAdmin } from "api/frequent";
-import { updateUser } from "api/frequent";
+import { updateUser, readUser } from "api/frequent";
 import showToast from "../../../../../components/toasts";
 import BackUpToExcel from "./BackUpToExcel";
 import autoPhoneMask from "../../../../../utils/validation/masks/autoPhoneMask";
@@ -34,7 +33,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
     const bizWhatsappValue = autoPhoneMask(bizWhatsapp);
 
     useEffect(() => {
-        readClientAdmin(userData._id).then((res) => {
+        readUser(userData._id, { role: "cliente-admin" }).then((res) => {
             if (res.status !== 200)
                 return showToast(res.data.msg, { type: "error" });
             setData({

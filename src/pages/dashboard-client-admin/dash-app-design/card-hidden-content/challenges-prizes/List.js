@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import ChallComp from "./ChallComp";
 import { useBizData } from "init";
-import { readClientAdmin } from "api/frequent";
-import { updateUser } from "api/frequent";
-import showToast from "../../../../../components/toasts";
+import { updateUser, readUser } from "api/frequent";
+import showToast from "components/toasts";
+import ChallComp from "./ChallComp";
 import ShowBizNotes from "./ShowBizNotes";
 
 export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
@@ -98,7 +97,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
                 return showToast("Algo deu errado. Verifique sua conexão.", {
                     type: "error",
                 });
-            readClientAdmin(bizId).then((res) => {
+            readUser({ role: "cliente-admin" }).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
                 needMsg && showToast("Alterações salvas!", { type: "success" });

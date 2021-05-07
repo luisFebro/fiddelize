@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { convertDotToComma } from "utils/numbers/convertDotComma";
+import { sendNotification } from "api/frequent";
+import getFirstName from "utils/string/getFirstName";
+import { addDays, calendar } from "utils/dates/dateFns";
+import useData, { useBizData } from "init";
+import getAPI, {
+    addTask,
+    updateUser,
+    setNotifAuthor,
+    changePrizeStatus,
+} from "api";
 import InstructionBtn from "../../../../buttons/InstructionBtn";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
-import {
-    addAutomaticTask,
-    changePrizeStatus,
-} from "../../../../../redux/actions/userActions";
-import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
-import { sendNotification } from "../../../../../redux/actions/notificationActions";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import { addDays, calendar } from "../../../../../utils/dates/dateFns";
-import useData, { useBizData } from "init";
 import showToast from "../../../../toasts";
-import getAPI, { updateUser, setNotifAuthor } from "api";
 
 export default function DiscountBenefit({ onClose, modalData }) {
     const [disableCTA, setDisableCTA] = useState(false);
@@ -101,10 +102,18 @@ export default function DiscountBenefit({ onClose, modalData }) {
 
         showToast("Atualizando pontuação do cliente...");
 
-        const prizeStatusRes = await changePrizeStatus(customerId, {
-            statusType: "confirmed",
+        const params = {
             prizeId,
+            newValue: true,
+        };
+
+        const prizeStatusRes = await getAPI({
+            method: "put",
+            url: changePrizeStatus(customerId, "confirmed"),
+            params,
+            fullCatch: true,
         });
+
         if (prizeStatusRes.status !== 200) {
             if (prizeStatusRes.data.error.indexOf("critical") !== -1) {
                 return showToast(
@@ -130,7 +139,11 @@ export default function DiscountBenefit({ onClose, modalData }) {
                 body: notifAuthorBody,
             }),
             sendNotification(customerId, "challenge", pushNotifData),
-            addAutomaticTask(bizId, taskBody),
+            getAPI({
+                method: "put",
+                url: addTask(),
+                body: taskBody,
+            }),
         ]);
 
         if (notifRes.status !== 200)

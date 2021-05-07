@@ -9,9 +9,8 @@ import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import showToast from "components/toasts";
 // CUSTOM DATA
 import { setRun, useAction } from "global-data/ui";
-import { countField } from "../../../../../../../redux/actions/userActions";
 import { useBizData } from "init";
-import getAPI, { removeUser } from "api";
+import getAPI, { removeUser, countField } from "api";
 // END CUSTOM DATA
 
 ModalConfYesNo.propTypes = {
@@ -48,10 +47,15 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
             }).then((res) => {
                 if (res.status !== 200)
                     return showToast(res.data.msg, { type: "error" });
-                countField(bizId, {
-                    field: "clientAdminData.totalClientUsers",
-                    type: "dec",
-                    thisRole: "cliente-admin",
+                getAPI({
+                    method: "put",
+                    url: countField(bizId, "cliente-admin"),
+                    fullCatch: true,
+                    body: {
+                        field: "clientAdminData.totalClientUsers",
+                        type: "dec",
+                        thisRole: "cliente-admin",
+                    },
                 }).then((res) => {
                     if (res.status !== 200)
                         return showToast(res.data.msg, { type: "error" });

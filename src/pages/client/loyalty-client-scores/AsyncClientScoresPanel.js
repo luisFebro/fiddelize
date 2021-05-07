@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { readUser } from "api/frequent";
-import { readPurchaseHistory } from "redux/actions/userActions";
 import showToast from "components/toasts";
 import Title from "components/Title";
 import animateNumber, {
@@ -16,10 +14,12 @@ import getFirstName from "utils/string/getFirstName";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
+import { readUser } from "api/frequent";
 import getAPI, {
     setLastPointsAsDone,
     updateUser,
     addPurchaseHistory,
+    readPurchaseHistory,
 } from "api";
 import getVar, { setVar, removeVar } from "init/var";
 import useBackColor from "hooks/useBackColor";
@@ -216,7 +216,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 }
 
                 const historyObj = {
-                    targetPoints: targetPoints,
+                    targetPoints,
                     icon: milestoneIcon,
                     value: lastPoints,
                 };
@@ -230,13 +230,21 @@ function AsyncClientScoresPanel({ history, location }) {
                 showToast("Pontuação Registrada!", { type: "success" });
 
                 if (userBeatChallenge) {
-                    const options = {
-                        noResponse: true,
-                        thisRole: whichRole,
+                    const params = {
                         prizeDesc,
-                        trophyIcon: milestoneIcon,
+                        thisRole: whichRole || "cliente",
+                        noResponse: true,
+                        targetPoints,
+                        trophyIcon: milestoneIcon, // Query for reading the prizes on clientScorePanel
+                        skip: undefined || 0,
+                        limit: undefined,
+                        challengeN: undefined,
                     };
-                    await readPurchaseHistory(cliUserId, targetPoints, options);
+
+                    await getAPI({
+                        url: readPurchaseHistory(cliUserId),
+                        params,
+                    });
                     setFinishedWork(true);
                 } else {
                     setFinishedWork(true);
