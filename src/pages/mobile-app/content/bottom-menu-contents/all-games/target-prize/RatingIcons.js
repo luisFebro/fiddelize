@@ -27,65 +27,14 @@ export default function RatingIcons({
     const eachMilestone = Number(targetPoints / 5);
     const needDark = selectTxtStyle(colorBack, { needDarkBool: true });
 
-    const paintStarsForScore = () => {
-        let indScore;
-        if (!currPoints) {
-            indScore = -1;
-        }
-
-        const level1 = eachMilestone;
-        const level2 = eachMilestone * 2;
-        const level3 = eachMilestone * 3;
-        const level4 = eachMilestone * 4;
-        const level5 = eachMilestone * 5;
-        const toLevel2 = level2 - 0.05;
-        const toLevel3 = level3 - 0.05;
-        const toLevel4 = level4 - 0.05;
-        const toLevel5 = level5 - 0.05;
-
-        if (currPoints >= level1 && currPoints <= toLevel2) {
-            indScore = 0;
-        } // L
-        else if (currPoints >= level2 && currPoints <= toLevel3) {
-            indScore = 1;
-        } else if (currPoints >= level3 && currPoints <= toLevel4) {
-            indScore = 2;
-        } else if (currPoints >= level4 && currPoints <= toLevel5) {
-            indScore = 3;
-        } else if (currPoints >= toLevel5) {
-            indScore = 4;
-        }
-
-        const arrayIconIds = [
-            "icon-100",
-            "icon-200",
-            "icon-300",
-            "icon-400",
-            "icon-500",
-        ];
-
-        let iconInArray;
-        let count = 0;
-        for (iconInArray of arrayIconIds) {
-            if (count++ <= indScore) {
-                const selectedIcon = document.querySelector(`#${iconInArray}`);
-                const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(
-                    () =>
-                        (selectedIcon.style.cssText = `z-index: 1000; color: #ff0; opacity: 1; transform: rotateX(0deg); ${
-                            needDark
-                                ? "filter: drop-shadow(grey 0px 0px 4px);"
-                                : "filter: drop-shadow(0 0 20px #ffc);"
-                        }`),
-                    delayToAnimated
-                );
-            }
-        }
-    };
-
     useEffect(() => {
-        paintStarsForScore();
-    }, []);
+        paintStarsForScore({
+            currPoints,
+            eachMilestone,
+            needDark,
+        });
+        // eslint-disable-next-line
+    }, [currPoints, eachMilestone, needDark]);
 
     const levels = [100, 200, 300, 400, 500];
     const { fontSize, icon } = milestoneIcons.find(
@@ -164,6 +113,62 @@ export default function RatingIcons({
             </style>
         </section>
     );
+}
+
+function paintStarsForScore({ currPoints, eachMilestone, needDark }) {
+    let indScore;
+    if (!currPoints) {
+        indScore = -1;
+    }
+
+    const level1 = eachMilestone;
+    const level2 = eachMilestone * 2;
+    const level3 = eachMilestone * 3;
+    const level4 = eachMilestone * 4;
+    const level5 = eachMilestone * 5;
+    const toLevel2 = level2 - 0.05;
+    const toLevel3 = level3 - 0.05;
+    const toLevel4 = level4 - 0.05;
+    const toLevel5 = level5 - 0.05;
+
+    if (currPoints >= level1 && currPoints <= toLevel2) {
+        indScore = 0;
+    } // L
+    else if (currPoints >= level2 && currPoints <= toLevel3) {
+        indScore = 1;
+    } else if (currPoints >= level3 && currPoints <= toLevel4) {
+        indScore = 2;
+    } else if (currPoints >= level4 && currPoints <= toLevel5) {
+        indScore = 3;
+    } else if (currPoints >= toLevel5) {
+        indScore = 4;
+    }
+
+    const arrayIconIds = [
+        "icon-100",
+        "icon-200",
+        "icon-300",
+        "icon-400",
+        "icon-500",
+    ];
+
+    let iconInArray;
+    let count = 0;
+    for (iconInArray of arrayIconIds) {
+        if (count++ <= indScore) {
+            const selectedIcon = document.querySelector(`#${iconInArray}`);
+            const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
+            setTimeout(
+                () =>
+                    (selectedIcon.style.cssText = `z-index: 1000; color: #ff0; opacity: 1; transform: rotateX(0deg); ${
+                        needDark
+                            ? "filter: drop-shadow(grey 0px 0px 4px);"
+                            : "filter: drop-shadow(0 0 20px #ffc);"
+                    }`),
+                delayToAnimated
+            );
+        }
+    }
 }
 
 /* COselectTxtStyle(colorP, {needDarkBool: true})

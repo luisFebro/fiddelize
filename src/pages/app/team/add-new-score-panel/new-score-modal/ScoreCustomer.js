@@ -169,9 +169,9 @@ export default function ScoreCustomer({
                 bizLogo,
             };
             const resNewScore = await setUltimateData(ultimateData).catch(
-                (e) => {
-                    if (e.error && e.error.includes("pontuação pendente")) {
-                        showToast(e.error, { dur: 10000, type: "error" });
+                (err) => {
+                    if (err && err.includes("pontuação pendente")) {
+                        showToast(err, { dur: 10000, type: "error" });
                         setTimeout(() => {
                             showToast("Reiniciando...");
                             const isCliAdmin = role === "cliente-admin";

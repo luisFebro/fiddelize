@@ -14,10 +14,9 @@ import getFirstName from "utils/string/getFirstName";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
-import { readUser } from "api/frequent";
+import { updateUser, readUser } from "api/frequent";
 import getAPI, {
     setLastPointsAsDone,
-    updateUser,
     addPurchaseHistory,
     readPurchaseHistory,
 } from "api";
@@ -49,33 +48,33 @@ function AsyncClientScoresPanel({ history, location }) {
         });
     };
 
-    const [paidValue] = useData(["paidValue"], "global_vars");
-    const paidValueLoading = paidValue !== "...";
+    const [paidValue, paidValueLoading] = useData(["paidValue"], {
+        store: "global_vars",
+        dots: false,
+    });
+    console.log("paidValueLoading", paidValueLoading);
+    console.log("paidValue", paidValue);
 
     // ROLES
-    let {
+    const {
         role,
         name,
-        _id: cliUserId, // cliUserId is essencial here to read cli-users data
+        userId: cliUserId, // cliUserId is essencial here to read cli-users data
         currPoints: currentScore,
         lastPoints: lastCurrScore,
-        totalGeneralPoints,
-        totalActivePoints,
         totalPurchasePrize = 0,
     } = useData();
+    let { totalGeneralPoints } = useData();
     totalGeneralPoints = !totalGeneralPoints ? 0 : totalGeneralPoints;
 
-    let {
+    const {
         bizId,
-        targetPoints,
-        milestoneIcon,
         rewardList,
-        // bizName,
-        // bizLinkName,
         themeBackColor: colorBack,
         themePColor: colorP,
         themeSColor: colorS,
     } = useBizData();
+    let { targetPoints, milestoneIcon } = useBizData();
     // END ROLES
 
     // STYLES
@@ -96,9 +95,9 @@ function AsyncClientScoresPanel({ history, location }) {
     useBackColor(`var(--themeBackground--${colorBack})`);
     // useCount("ClientScoresPanel"); // RT = 46
     useEffect(() => {
-        if (!paidValueLoading && !paidValue) {
+        if (paidValueLoading) return;
+        if (!paidValue)
             history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
-        }
     }, [paidValueLoading, paidValue]);
 
     useEffect(() => {
@@ -112,12 +111,13 @@ function AsyncClientScoresPanel({ history, location }) {
                     type: "stars",
                 }));
             }
-            const dataCliReview = await readUser(cliUserId, {
-                role: "cliente",
-                select: "clientUserData.review",
-            });
+            const dataCliReview = await readUser(
+                cliUserId,
+                "cliente",
+                "clientUserData.review"
+            );
             const thisReview =
-                dataCliReview && dataCliReview.data.clientUserData.review;
+                dataCliReview && dataCliReview.clientUserData.review;
             if (!thisReview) return;
 
             setRatingData((prev) => ({
@@ -176,7 +176,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     totalGeneralPoints + Number(lastPoints),
                 "clientUserData.filterLastPurchase": new Date(),
                 "clientUserData.filterHighestPurchase": newHighestScore,
-                "clientUserData.needStaffDiscount": true,
+                "clientUserData.needStaffDiscount": userBeatChallenge,
             };
 
             // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.
@@ -188,8 +188,6 @@ function AsyncClientScoresPanel({ history, location }) {
             }
 
             (async () => {
-                // remove this var so the it can be undefined and redirect user
-                await removeVar("paidValue");
                 if (!paidValue) return;
                 // avoid user to restart page and end up adding more scores
                 const alreadySetScore = await getVar("alreadySetTempPoints");
@@ -199,19 +197,14 @@ function AsyncClientScoresPanel({ history, location }) {
                 }
                 await setVar({ alreadySetTempPoints: true });
 
-                await getAPI({
-                    method: "put",
-                    url: updateUser(cliUserId, whichRole),
-                    body: objToSend,
-                }).catch((err) => {
-                    console.log(`ERROR: ${err}`);
-                });
+                await updateUser(cliUserId, whichRole, objToSend).catch(
+                    console.log
+                );
 
                 if (role === "cliente") {
                     await getAPI({
                         method: "post",
                         url: setLastPointsAsDone(cliUserId),
-                        needAuth: true,
                     });
                 }
 
@@ -249,6 +242,8 @@ function AsyncClientScoresPanel({ history, location }) {
                 } else {
                     setFinishedWork(true);
                 }
+                // remove this var so the it can be null and redirect user
+                await removeVar("paidValue");
             })();
         }
     }, [finishedWork, lastPoints]);
@@ -342,34 +337,29 @@ function AsyncClientScoresPanel({ history, location }) {
         // update user with new rating
         const thisNpsScore = !ratingData.nps ? undefined : ratingData.nps;
         const thisXpScore = !ratingData.nps ? ratingData.xpScore : undefined;
-        await getAPI({
-            method: "put",
-            url: updateUser(cliUserId, whichRole),
-            body: {
-                "clientUserData.review.nps": thisNpsScore,
-                "clientUserData.review.xpScore": thisXpScore,
-                "clientUserData.review.buyReport": !ratingData.buyReport
-                    ? undefined
-                    : ratingData.buyReport,
-                "clientUserData.review.npsUpdatedAt": !ratingData.nps
-                    ? undefined
-                    : new Date(),
-                "clientUserData.review.xpUpdatedAt": !ratingData.nps
-                    ? new Date()
-                    : undefined,
-                "clientUserData.review.reportUpdatedAt": ratingData.buyReport
-                    ? undefined
-                    : new Date(),
-            },
-        }).catch((err) => {
-            console.log(`ERROR: ${err}`);
-        });
+        const body = {
+            "clientUserData.review.nps": thisNpsScore,
+            "clientUserData.review.xpScore": thisXpScore,
+            "clientUserData.review.buyReport": !ratingData.buyReport
+                ? undefined
+                : ratingData.buyReport,
+            "clientUserData.review.npsUpdatedAt": !ratingData.nps
+                ? undefined
+                : new Date(),
+            "clientUserData.review.xpUpdatedAt": !ratingData.nps
+                ? new Date()
+                : undefined,
+            "clientUserData.review.reportUpdatedAt": ratingData.buyReport
+                ? undefined
+                : new Date(),
+        };
+
+        await updateUser(cliUserId, whichRole, body).catch(console.log);
 
         if (isApp) {
             await setVar({ alreadySetTempPoints: false });
 
             window.location.href = path;
-            // for future, update only necessary data and use history.push
         } else {
             window.location.href = "/acesso/verificacao";
             disconnect();

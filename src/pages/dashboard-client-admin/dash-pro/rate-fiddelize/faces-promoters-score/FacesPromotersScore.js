@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getAPI, { updateUser } from "api";
+import { updateUser } from "api/frequent";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import "./_FacesPromotersScore.css";
 // NPS (Net Promoter Score) Rating
@@ -34,16 +34,12 @@ export default function FacesPromotersScore({
 }) {
     const handleUpdate = async () => {
         showToast("Enviando...");
-        await getAPI({
-            method: "put",
-            url: updateUser(userId, role),
-            body: {
-                "clientAdminData.review.nps": scale,
-                "clientAdminData.review.npsUpdatedAt": new Date(),
-            },
-        }).catch((err) => {
-            console.log(`ERROR: ${err}`);
-        });
+        const body = {
+            "clientAdminData.review.nps": scale,
+            "clientAdminData.review.npsUpdatedAt": new Date(),
+        };
+
+        await updateUser(userId, role, body).catch(console.log);
         showToast("Avaliação recebida. Obrigada pelo retorno!", {
             type: "success",
         });

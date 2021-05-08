@@ -160,8 +160,8 @@ function Navbar({ history, location }) {
                     }}
                     src={logoSrc}
                     alt="Logomarca Principal"
-                    width={!needClientLogo ? 160 : 85}
-                    height={!needClientLogo ? 70 : 85}
+                    width={!needClientLogo ? 160 : width}
+                    height={!needClientLogo ? 70 : 90}
                 />
             </Link>
         );

@@ -1,24 +1,10 @@
 import { Fragment } from "react";
-import PropTypes from "prop-types";
-import useRun from "global-data/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RemoveMemberBtn from "./cta/RemoveMemberBtn";
 import SeeProfileBtn from "./cta/SeeProfileBtn";
 import getFirstName from "../../../../../../../utils/string/getFirstName";
 
-PanelHiddenContent.propTypes = {
-    data: PropTypes.object.isRequired,
-};
-
-const getStyles = () => ({
-    empty: {},
-});
-
 function PanelHiddenContent({ history, data }) {
-    const { runArray } = useRun();
-
-    const styles = getStyles();
-
     const { newClientTotal, newPointsTotal } = data;
 
     const name = getFirstName(data.name && data.name.cap(), {

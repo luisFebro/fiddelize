@@ -17,8 +17,10 @@ const initState = {
 const reducer = (state, action) => {
     const [type, payload] = handleAction(action, initState);
 
-    if (type === "currUser") return { ...state, currUser: payload };
-    if (type === "bizData") return { ...state, bizData: payload };
+    if (type === "currUser")
+        return { ...state, currUser: { ...state.currUser, ...payload } }; // inner ...state.currUser so that variables can be inserted individually when updating data with updateUser.
+    if (type === "bizData")
+        return { ...state, bizData: { ...state.bizData, ...payload } };
     if (type === "run") return { ...state, run: !state.run };
     if (type === "runName")
         return { ...state, runName: payload && payload.toString() };

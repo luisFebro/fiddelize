@@ -9,8 +9,8 @@ import CheckBoxForm from "components/CheckBoxForm";
 import RadioGroupForm from "components/RadioGroupForm";
 import { CLIENT_URL } from "config/clientUrl";
 import showToast from "components/toasts";
-import { readUser } from "api/frequent";
 import getAPI, { uploadImages, updateImages } from "api";
+import { updateUI, useAction } from "global-data/ui";
 import { deleteImage } from "utils/storage/lForage";
 import { useBizData } from "init";
 import getVar, { setVars } from "init/var";
@@ -41,8 +41,6 @@ export default function PickLogo({
     setLogoUrlPreview,
     isFromDash = false,
 }) {
-    // useCount("pickLogo"); //RT 3 (OK) || COMPLETE INTERACTION RT: 49 (ATTENTION) - last rendering after running all functionalaties: 49 times.
-
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
     const [tempImgUrl, setTempImgUrl] = useState("");
@@ -57,6 +55,7 @@ export default function PickLogo({
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
     const { bizLogo } = useBizData();
+    const uify = useAction();
 
     const goNext = () => setNextDisabled(false);
 
@@ -73,11 +72,12 @@ export default function PickLogo({
                 return showToast(res.data.msg, { type: "error" });
             setTempImgUrl(res.data);
             if (isFromDash) {
-                readUser(bizId, { role: "cliente-admin" }).then((res) => {
-                    if (res.status !== 200)
-                        return showToast(res.data.msg, { type: "error" });
-                    showToast("Formato Atualizado!", { type: "success" });
-                });
+                updateUI(
+                    "bizData",
+                    { "clientAdminData.bizLogo": res.data },
+                    uify
+                );
+                showToast("Formato Atualizado!", { type: "success" });
             }
             if (!isFromDash) {
                 (async () => {
@@ -173,45 +173,46 @@ export default function PickLogo({
             url: uploadImages(bizLinkName),
             body: formData,
             fullCatch: true,
-        }).then((res) => {
-            if (res.status !== 200) {
-                setIsLoadingPic(false);
-                showToast("Algo deu errado. Verifique sua conexão.", {
-                    type: "error",
-                });
-                return;
-            }
-            const generatedImg = res.data;
-            if (!isFromDash) {
-                (async () => {
-                    await setLogo({
-                        generatedImg,
-                        setLogoUrlPreview,
-                    });
-                })();
-            }
+        })
+            .then((res) => {
+                const generatedImg = res.data;
+                if (!isFromDash) {
+                    (async () => {
+                        await setLogo({
+                            generatedImg,
+                            setLogoUrlPreview,
+                        });
+                    })();
+                }
 
-            const commonActions = () => {
-                setTempImgUrl(generatedImg);
-                setIsLoadingPic(false);
-                setEditArea(true);
-            };
-            if (isFromDash) {
-                deleteImage("logos", "app_biz_logo").then((res) => {
-                    readUser(bizId, { role: "cliente-admin" }).then((res) => {
-                        if (res.status !== 200)
-                            return showToast(res.data.msg, { type: "error" });
+                const commonActions = () => {
+                    setTempImgUrl(generatedImg);
+                    setIsLoadingPic(false);
+                    setEditArea(true);
+                };
+                if (isFromDash) {
+                    deleteImage("logos", "app_biz_logo").then(() => {
                         showToast("Nova logo salva. Alterando no app...", {
                             type: "success",
                         });
                         setNeedUpdateBtn(true);
                         commonActions();
+                        updateUI(
+                            "bizData",
+                            { "clientAdminData.bizLogo": generatedImg },
+                            uify
+                        );
                     });
+                } else {
+                    commonActions();
+                }
+            })
+            .catch(() => {
+                setIsLoadingPic(false);
+                showToast("Algo deu errado. Verifique sua conexão.", {
+                    type: "error",
                 });
-            } else {
-                commonActions();
-            }
-        });
+            });
     };
 
     const showUploadingBtn = () => (

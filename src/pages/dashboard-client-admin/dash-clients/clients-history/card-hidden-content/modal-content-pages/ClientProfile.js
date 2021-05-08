@@ -3,18 +3,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
 import CreatedAtBr from "../../../../CreatedAtBr";
 
-const isSmall = window.Helper.isSmallScreen();
-
 export default function ClientProfile({ data, title, subtitle }) {
-    const {
-        name,
-        cpf,
-        phone,
-        email,
-        maritalStatus,
-        birthday,
-        createdAt,
-    } = data;
+    const { cpf, phone, email, birthday, createdAt } = data;
 
     const showMainTitle = () => (
         <section

@@ -77,7 +77,7 @@ export default function Gift({
         <section
             className="position-absolute animated zoomIn delay-2s"
             style={{
-                zIndex: 2000,
+                zIndex: 1000,
                 bottom: "5%",
                 left: "66%",
                 display: isGiftOpen ? "block" : "none",
@@ -91,7 +91,7 @@ export default function Gift({
                         </p>
                     )}
 
-                    {finalDeadline && (
+                    {Boolean(finalDeadline) && (
                         <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
                             {didPrizeExpired
                                 ? "expirou"

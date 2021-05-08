@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
-import getAPI, { updateUser } from "api";
-import useAPI, { readUser } from "api/useAPI";
-import { useBizData } from "init";
+import { useReadUser, updateUser } from "api/frequent";
+import useData, { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import showToast from "components/toasts";
-import useData from "init";
 import handleChange from "utils/form/use-state/handleChange";
 import "./_BirthdayMsgContent.scss";
 
@@ -26,22 +24,20 @@ export default function BirthdayMsgContent() {
         `a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário com mais saúde e conquistas!`
     );
 
-    const role = "cliente-admin";
-
     const styles = getStyles();
     const [firstName, userId] = useData(["firstName", "userId"]);
 
-    const { data, loading } = useAPI({
-        url: readUser(userId, role),
-        trigger: userId !== "...",
-        params: {
-            select: "clientAdminData.birthdayMsg",
-            clientAdminRequest: true,
-        },
-    });
+    const { data, loading } = useReadUser(
+        userId,
+        "cliente-admin",
+        "clientAdminData.birthdayMsg",
+        {
+            trigger: userId !== "...",
+        }
+    );
 
     useEffect(() => {
-        const msg = data && data.birthdayMsg;
+        const msg = data && data.clientAdminData.birthdayMsg;
         if (msg) {
             setBirthdayMsg(msg);
         }
@@ -61,13 +57,10 @@ export default function BirthdayMsgContent() {
         if (userId === "...") return;
 
         (async () => {
-            await getAPI({
-                method: "put",
-                url: updateUser(userId, role),
-                body: {
-                    "clientAdminData.birthdayMsg": birthdayMsg,
-                },
-            }).catch((err) => {
+            const body = {
+                "clientAdminData.birthdayMsg": birthdayMsg,
+            };
+            await updateUser(userId, role, body).catch((err) => {
                 showToast("Ocorreu um erro ao atualizar", { type: "error" });
                 console.log(`ERROR: ${err}`);
             });

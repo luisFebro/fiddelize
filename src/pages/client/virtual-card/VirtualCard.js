@@ -22,7 +22,7 @@ const defaultPath = "/sounds/tts/cli-user-app";
 const getTtsStore = ({ isShe }) => ({
     newCard: [
         {
-            audio: `${defaultPath}/new-card/${getDayGreeting()}-oba-novo-cartao-de-compra-exclusivo-com-pontos.mp3`,
+            audio: `${defaultPath}/new-card/new-buy-score-day-greeting/${getDayGreeting()}-oba-novo-cartao-de-compra-exclusivo-com-pontos.mp3`,
             text:
                 "Oba! Aqui está seu novo cartão de compra exclusivo com pontos. Tenha um bom dia e volte sempre!",
         },
@@ -259,11 +259,11 @@ function VirtualCard({ history }) {
 // HELPERS
 function getDayGreeting() {
     const greeting = getDayGreetingBr();
-    if (!greeting) return;
+    if (!greeting) return null;
 
-    if (greeting.includes("tarde")) return "tarde";
-    if (greeting.includes("noite")) return "noite";
-    if (greeting.includes("madru")) return "madrugada";
+    if (greeting.includes("Tarde")) return "tarde";
+    if (greeting.includes("Noite")) return "noite";
+    if (greeting.includes("Madru")) return "madrugada";
 
     return "dia";
 }
@@ -295,7 +295,7 @@ function useAccessChecker(userId, totalPrize, trigger) {
 
         (async () => {
             const res = await getAPI({
-                url: readUser(userId, "cliente", false),
+                url: readUserrr(userId, "cliente", false),
                 params: {
                     select: "clientUserData.totalPurchasePrize",
                 },
@@ -303,7 +303,7 @@ function useAccessChecker(userId, totalPrize, trigger) {
 
             if (res.status !== 200) {
                 console.log(
-                    "smt wrong with readUser from block access checker"
+                    "smt wrong with readUserrr from block access checker"
                 );
                 return;
             }

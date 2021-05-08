@@ -5,7 +5,7 @@ import useAPIList, {
     getTrigger,
 } from "api/useAPIList";
 import useData from "init";
-import getAPI, { updateUser } from "api";
+import { updateUser } from "api/frequent";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import "./_BuyReviewList.scss";
 import { isAfter } from "utils/dates/dateFns";
@@ -138,16 +138,11 @@ function useAdminChecked(trigger, bizId, isBizAdmin) {
             const thisRole = isBizAdmin ? "nucleo-equipe" : "cliente-admin";
             const thisId = isBizAdmin ? "604a9b7dff36c40017476cee" : bizId; // for now, it will track only primary account, after can track dinamically to check who read the last time the reports
 
-            await getAPI({
-                method: "put",
-                url: updateUser(thisId, thisRole),
-                body: {
-                    [`${path}`]: new Date(),
-                },
-                trigger,
-            }).catch((err) => {
-                console.log(`ERROR: ${err}`);
-            });
+            const body = {
+                [`${path}`]: new Date(),
+            };
+
+            await updateUser(thisId, thisRole, body).catch(console.log);
         };
 
         if (trigger) {

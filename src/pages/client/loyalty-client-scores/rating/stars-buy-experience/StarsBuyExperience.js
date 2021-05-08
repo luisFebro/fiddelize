@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getAPI, { updateUser } from "api";
+import { updateUser } from "api/frequent";
 import MuSlider from "components/sliders/MuSlider";
 import "./_StarsBuyExperience.css";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
@@ -68,16 +68,12 @@ export default function StarsBuyExperience({
 }) {
     const handleUpdate = async () => {
         showToast("Atualizando...", { dur: 3000 });
-        await getAPI({
-            method: "put",
-            url: updateUser(userId, role),
-            body: {
-                "clientUserData.review.xpScore": grade,
-                "clientUserData.review.xpUpdatedAt": new Date(),
-            },
-        }).catch((err) => {
-            console.log(`ERROR: ${err}`);
-        });
+        const body = {
+            "clientUserData.review.xpScore": grade,
+            "clientUserData.review.xpUpdatedAt": new Date(),
+        };
+
+        await updateUser(userId, role, body).catch(console.log);
         showToast("Avaliação da experiência de compra atualizada!", {
             type: "success",
         });

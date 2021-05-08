@@ -5,10 +5,11 @@ import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import List from "./List.js";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
-import useAPI, { updateUser, treatBoolStatus } from "api/useAPI";
+import { useUpdateUser } from "api/frequent";
+import { treatBoolStatus } from "api/useAPI";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getId from "../../../../../utils/getId";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
@@ -18,18 +19,11 @@ export default function HiddenGoalsAndRewards() {
 
     const { bizId, arePrizesVisible } = useBizData();
 
-    const [currRole] = useData(["role"]);
-
     // LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths like clientAdminData.arePrizesVisible clientAdminData, not arePrizesVisible { arePrizesVisible ...
     const body = {
         "clientAdminData.arePrizesVisible": treatBoolStatus(visibleToggleBtn),
     };
-    useAPI({
-        method: "put",
-        url: updateUser(bizId),
-        body,
-        trigger: visibleToggleBtn && currRole !== "...",
-    });
+    useUpdateUser(bizId, "cliente-admin", body);
 
     const handleVisibility = (res) => {
         setVisibleToggleBtn(res);

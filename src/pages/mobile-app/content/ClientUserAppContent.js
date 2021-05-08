@@ -298,11 +298,30 @@ function useAlreadyAlertChallenge(currPoints) {
         }
     }, [currPoints]);
 }
-
 // END HOOKS
 
 /* COMMENTS
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start
 b) When user log in, RT is 36
+*/
+
+/* TESTS
+<section className="TESTS">
+    <input type="number" value={vv} onChange={e => setVV(Number(e.target.value))} />
+    <button type="button" className="test-btn" onClick={handleUserUpdate}>
+        update user
+    </button>
+    <style jsx>{`
+        .TESTS {
+            margin: 150px 0;
+        }
+        .test-btn {
+            background: var(--themeP);
+            color: var(--mainWhite);
+        }
+    `}
+    </style>
+</section>
+
 */

@@ -38,18 +38,21 @@ export default function HiddenProfile({ userData }) {
 
     useEffect(() => {
         (async () => {
-            const res = await readUser(userData._id, {
-                role: "cliente-admin",
-            });
+            const select = "name cpf birthday email phone gender";
+            const res = await readUser(
+                userData._id,
+                "cliente-admin",
+                select
+            ).catch(console.log);
 
             setData((prev) => ({
                 ...prev,
-                name: res.data.name && res.data.name.cap(),
-                cpf: res.data.cpf,
-                birthday: res.data.birthday,
-                email: res.data.email,
-                phone: res.data.phone,
-                gender: res.data.gender,
+                name: res.name.cap(),
+                cpf: res.cpf,
+                birthday: res.birthday,
+                email: res.email,
+                phone: res.phone,
+                gender: res.gender,
             }));
         })();
     }, []);
@@ -92,13 +95,11 @@ export default function HiddenProfile({ userData }) {
             );
 
         const dataToSend = { ...data };
-        updateUser(userData._id, dataToSend, {
-            thisRole: "cliente-admin",
-        }).then((res) => {
-            if (res.status !== 200)
-                return showToast(res.data.msg, { type: "error" });
-            showToast("Seu perfil foi atualizado!", { type: "success" });
-        });
+        updateUser(userData._id, "cliente-admin", dataToSend)
+            .then(() =>
+                showToast("Seu perfil foi atualizado!", { type: "success" })
+            )
+            .catch((err) => showToast(err.response, { type: "error" }));
     };
 
     const showButtonAction = () => (

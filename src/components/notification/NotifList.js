@@ -80,11 +80,11 @@ export default function NotifList({
         };
 
         return checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
-            <section key={_id} className="mx-2" ref={detectedCard}>
+            <section key={notif._id} className="mx-2" ref={detectedCard}>
                 {showCard(props)}
             </section>
         ) : (
-            <section key={_id} className="mx-2">
+            <section key={notif._id} className="mx-2">
                 {showCard(props)}
             </section>
         );

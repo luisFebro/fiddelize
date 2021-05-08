@@ -51,28 +51,29 @@ export default function getAPI({
 
         if (!trigger) {
             clearTimeout(stopRequest);
-            return resolve("Request not ready to trigger");
+            return resolve(false);
         }
         const response = await axios(config).catch(async (error) => {
             await handleProgress("end", { loader });
-            if (fullCatch) return reject(error.response);
-            if (axios.isCancel(error)) {
-                // if it is search and cancel is need as a defendor against multiple request, then isSearch is true.
-                return isSearch && reject({ error: "canceled" });
-            }
-            if (error.response) {
-                const { status } = error.response;
-                const gotExpiredToken = status === 401;
-                if (gotExpiredToken) return await disconnect();
-            }
+            if (!error.response) return reject("no error response");
+            const { status } = error.response;
+            const gotExpiredToken = status === 401;
 
-            return reject({
-                response: error.response && error.response.data,
-            });
+            if (axios.isCancel(error)) return isSearch && reject("canceled"); // if it is search and cancel is need as a defendor against multiple request, then isSearch is true.
+            if (gotExpiredToken) return await disconnect();
+            if (fullCatch) return reject(error.response); // if need status and more info, enable fullCatch.
+
+            const gotErrorMsg = error.response.data.error;
+            console.log(`API ERROR MSG:  ${gotErrorMsg}`);
+
+            return reject(gotErrorMsg);
         });
 
         clearTimeout(stopRequest);
         await handleProgress("end", { loader });
+
+        // UPDATE NEXT: change all getAPI to receive data directly here
+        // response.data
         return resolve(response);
     };
 

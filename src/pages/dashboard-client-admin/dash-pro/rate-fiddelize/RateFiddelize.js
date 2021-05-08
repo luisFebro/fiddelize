@@ -1,15 +1,15 @@
 import { Fragment, useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getAPI, { updateUser, readUser } from "api";
+import { readUser, updateUser } from "api/frequent";
 import showToast from "components/toasts";
-import Title from "../../../../components/Title";
-import handleChange from "../../../../utils/form/use-state/handleChange";
+import Title from "components/Title";
+import handleChange from "utils/form/use-state/handleChange";
+import useData from "init";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import FacesPromotersScore, {
     getScaleText,
 } from "./faces-promoters-score/FacesPromotersScore";
-import useData from "init";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import "./faces-promoters-score/_FacesPromotersScore.css";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -28,23 +28,18 @@ export default function RateFiddelize() {
         if (loadingData) return;
 
         (async () => {
-            const res = await getAPI({
-                url: readUser(userId, "cliente-admin", false),
-                params: {
-                    select:
-                        "clientAdminData.review.nps clientAdminData.review.xpReport",
-                    clientAdminRequest: true,
-                },
-            }).catch((err) => {
-                console.log(`ERROR: ${err}`);
-            });
+            const data = await readUser(
+                userId,
+                "cliente-admin",
+                "clientAdminData.review.nps clientAdminData.review.xpReport"
+            ).catch(console.log);
 
-            const reviewData = res.data.review;
+            const reviewData = data.clientAdminData.review;
 
             setDataDB((prev) => ({
                 ...prev,
-                nps: reviewData && reviewData.nps,
-                xpReport: reviewData && reviewData.xpReport,
+                nps: reviewData.nps,
+                xpReport: reviewData.xpReport,
             }));
         })();
     }, [userId, loadingData]);
@@ -224,19 +219,15 @@ function ShowXpReportField({
     const handleReportEditDone = async () => {
         if (loadingData) return;
         showToast("Atualizando...");
-        await getAPI({
-            method: "put",
-            url: updateUser(userId, role),
-            body: {
-                "clientAdminData.review.xpReport": xpReport,
-                "clientAdminData.review.reportUpdatedAt": new Date(),
-                isBizReport: true,
-                report: xpReport,
-                customerName,
-            },
-        }).catch((err) => {
-            console.log(`ERROR: ${err}`);
-        });
+        const body = {
+            "clientAdminData.review.xpReport": xpReport,
+            "clientAdminData.review.reportUpdatedAt": new Date(),
+            isBizReport: true,
+            report: xpReport,
+            customerName,
+        };
+
+        await updateUser(userId, role, body).catch(console.log);
         showToast("Relato Enviado. Obrigada por compartilhar!", {
             type: "success",
         });

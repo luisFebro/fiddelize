@@ -1,6 +1,6 @@
 import "./_FacesPromotersScore.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getAPI, { updateUser } from "api";
+import { updateUser } from "api/frequent";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 // NPS (Net Promoter Score) Rating
 
@@ -35,16 +35,16 @@ export default function FacesPromotersScore({
 }) {
     const handleUpdate = async () => {
         showToast("Atualizando...", { dur: 3000 });
-        await getAPI({
-            method: "put",
-            url: updateUser(userId, role),
-            body: {
-                "clientUserData.review.nps": scale,
-                "clientUserData.review.npsUpdatedAt": new Date(),
-            },
-        }).catch((err) => {
-            console.log(`ERROR: ${err}`);
+
+        const body = {
+            "clientUserData.review.nps": scale,
+            "clientUserData.review.npsUpdatedAt": new Date(),
+        };
+
+        await updateUser(userId, role, body).catch((err) => {
+            console.log(`ERROR: ${err.response}`);
         });
+
         showToast("Avaliação Atualizada!", { type: "success" });
     };
 

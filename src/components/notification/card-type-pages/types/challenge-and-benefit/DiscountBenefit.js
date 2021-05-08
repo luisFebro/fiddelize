@@ -1,16 +1,11 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertDotToComma } from "utils/numbers/convertDotComma";
-import { sendNotification } from "api/frequent";
+import { sendNotification, updateUser } from "api/frequent";
 import getFirstName from "utils/string/getFirstName";
 import { addDays, calendar } from "utils/dates/dateFns";
 import useData, { useBizData } from "init";
-import getAPI, {
-    addTask,
-    updateUser,
-    setNotifAuthor,
-    changePrizeStatus,
-} from "api";
+import getAPI, { addTask, setNotifAuthor, changePrizeStatus } from "api";
 import InstructionBtn from "../../../../buttons/InstructionBtn";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
 import showToast from "../../../../toasts";
@@ -128,11 +123,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
         }
 
         const [updateRes, notifRes, taskRes] = await Promise.all([
-            getAPI({
-                method: "put",
-                url: updateUser(customerId, "cliente"),
-                body: updateUserBody,
-            }),
+            updateUser(customerId, "cliente", updateUserBody),
             getAPI({
                 method: "post",
                 url: setNotifAuthor(),

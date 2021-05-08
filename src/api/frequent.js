@@ -1,52 +1,96 @@
+import { useState, useEffect, useMemo } from "react";
+import { ROOT } from "api/root";
 // generic rest APIs which are called more than 5 times and reusable in any component go here.
 
-import getAPI, {
-    readUser as readThisUser,
-    updateUser as updateThisUser,
-    sendNotification as sendNotif,
-} from "api";
+import getAPI, { sendNotification as sendNotif } from "api";
 
 // readNewData
-export const readUser = async (userId, options = {}) => {
-    const { role } = options;
-    let { select } = options;
-
-    const isCliAdmin = role === "cliente-admin";
-    select = isCliAdmin ? "cliAdminSelect" : select;
-
+export const readUser = async (userId, role, select) => {
     const params = {
+        userId,
+        role,
         select,
-        clientAdminRequest: isCliAdmin ? true : undefined,
     };
 
-    const noResponse = Boolean(!select);
-
-    return await getAPI({
-        url: readThisUser(userId, role, noResponse),
+    const res = await getAPI({
+        url: `${ROOT}/user/read`,
         params,
+    }).catch((err) => {
+        Promise.reject(err);
     });
+    if (!res) return null;
 
-    // option to use uify here
+    return res.data;
 };
 
-// NEW METHOD: updateData (instead of updateUser) to set a new value and read and update whatever was selected to updated with UIFY
-// use it in challenge-prize/List.js, ClientScorePanel and places which are required an instant update in both DB and UI.
-// pass uify as options to update ui
+export const useReadUser = (userId, role, select, options = {}) => {
+    const { trigger = true } = options;
 
-export const updateUser = async (userId, body, options = {}) => {
-    // selectKeys: only fields to update and be returned in the api response
-    const { selectKeys, noResponse, thisRole } = options;
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        if (!trigger) return;
+
+        const params = {
+            userId,
+            role,
+            select,
+        };
+
+        getAPI({
+            url: `${ROOT}/user/read`,
+            params,
+        })
+            .then((res) => {
+                setData(res.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, [userId, role, select, trigger]);
+
+    return { data, loading };
+};
+
+export const updateUser = async (userId, role, body) => {
     const params = {
-        selectKeys,
+        userId,
+        role,
     };
 
-    return await getAPI({
+    await getAPI({
         method: "put",
-        url: updateThisUser(userId, thisRole, noResponse),
+        url: `${ROOT}/user/update`,
         body,
         params,
+    }).catch((err) => {
+        Promise.reject(err);
     });
+};
+
+export const useUpdateUser = (userId, role, body, options = {}) => {
+    const { trigger } = options;
+
+    const thisBody = useMemo(() => body, []);
+
+    useEffect(() => {
+        if (!trigger) return;
+
+        const params = {
+            userId,
+            role,
+        };
+
+        getAPI({
+            method: "put",
+            url: `${ROOT}/user/update`,
+            body: thisBody,
+            params,
+        }).catch(console.log);
+    }, [userId, role, thisBody, trigger]);
 };
 
 // WARNING: sending notifications should prioritarily happen in the backend. This method is to maintain prior frontend implement

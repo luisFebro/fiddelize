@@ -101,23 +101,20 @@ export default function ShowPasswordForm({
         };
 
         showToast("Ok, registrando...");
-        updateUser(bizId, dataToSend, {
-            thisRole: "cliente-admin",
-        }).then((res) => {
-            if (res.status !== 200)
-                return showToast(res.data.msg, { type: "error" });
-
-            setVar(
-                { verifPass: clientAdminData.verificationPass },
-                "user"
-            ).then((res) => {
-                if (isFromCliAdminDash) {
-                    showToast("Senha foi alterada!", { type: "success" });
-                } else {
-                    btnAction(true);
-                }
-            });
-        });
+        updateUser(bizId, "cliente-admin", dataToSend)
+            .then(() =>
+                setVar(
+                    { verifPass: clientAdminData.verificationPass },
+                    "user"
+                ).then(() => {
+                    if (isFromCliAdminDash) {
+                        showToast("Senha foi alterada!", { type: "success" });
+                    } else {
+                        btnAction(true);
+                    }
+                })
+            )
+            .catch((err) => showToast(err.response, { type: "error" }));
     };
 
     const showButtonAction = () => (

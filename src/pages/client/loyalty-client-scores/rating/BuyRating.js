@@ -1,17 +1,17 @@
 import { useState, useEffect, Fragment } from "react";
+import useData, { useBizData } from "init";
 import TextField from "@material-ui/core/TextField";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { updateUser } from "api/frequent";
+import showToast from "components/toasts";
+import handleChange from "utils/form/use-state/handleChange";
 import StarsBuyExperience, {
     getGradeText,
 } from "./stars-buy-experience/StarsBuyExperience";
 import FacesPromotersScore, {
     getScaleText,
 } from "./faces-promoters-score/FacesPromotersScore";
-import handleChange from "../../../../utils/form/use-state/handleChange";
-import useData, { useBizData } from "init";
 import "./_BuyRating.css";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import getAPI, { updateUser } from "api";
-import showToast from "../../../../components/toasts";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -100,20 +100,17 @@ export default function BuyRating({
     const handleReportEditDone = async () => {
         if (!buyReport) return;
         showToast("Atualizando...", { dur: 3000 });
-        await getAPI({
-            method: "put",
-            url: updateUser(userId, role),
-            body: {
-                "clientUserData.review.buyReport": buyReport,
-                "clientUserData.review.reportUpdatedAt": new Date(),
-                customerName,
-                bizLogo,
-                businessId: bizId,
-                report: buyReport,
-            },
-        }).catch((err) => {
+        const body = {
+            "clientUserData.review.buyReport": buyReport,
+            "clientUserData.review.reportUpdatedAt": new Date(),
+            customerName,
+            bizLogo,
+            businessId: bizId,
+            report: buyReport,
+        };
+        updateUser(userId, role, body).catch((err) => {
             showToast("Ocorreu um erro ao atualizar", { type: "error" });
-            console.log(`ERROR: ${err}`);
+            console.log(`ERROR: ${err.response}`);
         });
         showToast("Relato Atualizado!", { type: "success" });
         setSwitchEdit(false);

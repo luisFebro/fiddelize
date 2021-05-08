@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
-import getAPI, { readUser } from "api";
+import { readUser } from "api/frequent";
 import useData from "init";
 import { useBizData } from "init";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
@@ -29,21 +29,17 @@ export default function ReviewModal() {
         if (userId === "...") return;
 
         (async () => {
-            const params = {
-                select: "clientUserData.review",
-            };
-
-            const dataCliReview = await getAPI({
-                url: readUser(userId, role, false),
-                params,
-            }).catch((err) => {
-                setData((prev) => ({
-                    ...prev,
-                    error: true,
-                }));
-            });
+            const select = "clientUserData.review";
+            const dataCliReview = await readUser(userId, role, select).catch(
+                () => {
+                    setData((prev) => ({
+                        ...prev,
+                        error: true,
+                    }));
+                }
+            );
             const thisReview =
-                dataCliReview && dataCliReview.data.clientUserData.review;
+                dataCliReview && dataCliReview.clientUserData.review;
             const noReview = !thisReview || !thisReview.nps;
 
             if (noReview) {

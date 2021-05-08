@@ -6,9 +6,8 @@ import showToast from "components/toasts";
 import handleChange from "utils/form/use-state/handleChange";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import EditButton from "components/buttons/EditButton";
-import getAPI, { updateUser, readUser } from "api";
+import { useReadUser, updateUser } from "api/frequent";
 import useData from "init";
-import useAPI from "api/useAPI";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -34,25 +33,25 @@ export default function PixKeyRequest() {
     });
     const { pix, alreadyHasPix } = data;
 
-    const [userId] = useData(["userId"]);
+    const { userId } = useData();
 
-    const { data: dataUser, loading: loadingPix } = useAPI({
-        url: readUser(userId, "nucleo-equipe"),
-        trigger: userId !== "...",
-        params: {
-            select: "bizTeamData.pixKey",
-        },
-    });
+    // use INIT/BOOTUP DATA in future updates
+    const { data: dataUser, loading: loadingPix } = useReadUser(
+        userId,
+        "nucleo-equipe",
+        "bizTeamData.pixKey",
+        { trigger: userId !== "..." }
+    );
 
     useEffect(() => {
-        if (dataUser) {
-            const dbPix = dataUser.bizTeamData.pixKey;
-            setData((prev) => ({
-                ...prev,
-                pix: dbPix,
-                alreadyHasPix: true,
-            }));
-        }
+        if (!dataUser) return;
+
+        const dbPix = dataUser.bizTeamData.pixKey;
+        setData((prev) => ({
+            ...prev,
+            pix: dbPix,
+            alreadyHasPix: true,
+        }));
     }, [dataUser]);
 
     const styles = getStyles();
@@ -63,13 +62,8 @@ export default function PixKeyRequest() {
             const body = {
                 "bizTeamData.pixKey": pix,
             };
-            // LESSON: if put is not working with data, probably you are missing to declare method put, mofo.
-            await getAPI({
-                method: "put",
-                url: updateUser(userId, "nucleo-equipe"),
-                trigger: userId !== "...",
-                body,
-            });
+            // LESSON: if put is not working with data, probably you are missing to declare method put.
+            await updateUser(userId, "nucleo-equipe", body);
 
             showToast("Pix registrado!", { type: "success" });
         })();

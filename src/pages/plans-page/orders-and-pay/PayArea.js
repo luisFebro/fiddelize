@@ -75,47 +75,48 @@ export default function PayArea({
 
     useEffect(() => {
         if (alreadyReadUser) return;
-        readUser(userId, {
-            select: "cpf birthday referrer -_id",
-            role: "cliente-admin",
-        }).then((res) => {
-            setAlreadyReadUser(true);
-            const thisReferrer = res.data.referrer;
-            const thisBirthDay = res.data.birthday;
-            let thisCPF = res.data.cpf;
-            if (thisCPF === "111.111.111-00") thisCPF = "319.683.234-14"; // for testing only
+        readUser(userId, "cliente-admin", "cpf birthday referrer").then(
+            (res) => {
+                setAlreadyReadUser(true);
+                const thisReferrer = res.referrer;
+                const thisBirthDay = res.birthday;
+                let thisCPF = res.cpf;
+                if (thisCPF === "111.111.111-00") thisCPF = "319.683.234-14"; // for testing only
 
-            const desc = `Plano ${plan} ${handlePeriod()} com ${
-                servicesTotal || ""
-            } serviço${servicesTotal > 1 ? "s" : ""} no valor total de: `;
-            // if(servicesTotal > planServiceTotal) {
-            //     const leftover = serviceTotal - planServiceTotal;
-            //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `
-            // }
-            const thisSenderCPF = getOnlyNumbersFromStr(thisCPF);
-            const thisSenderAreaCode = convertPhoneStrToInt(phone, {
-                dddOnly: true,
-            });
-            const thisSenderPhone = convertPhoneStrToInt(phone, {
-                phoneOnly: true,
-            });
-            const thisFirstDueDate = getDashYearMonthDay(
-                addDays(new Date(), 3)
-            );
+                const desc = `Plano ${plan} ${handlePeriod()} com ${
+                    servicesTotal || ""
+                } serviço${servicesTotal > 1 ? "s" : ""} no valor total de: `;
+                // if(servicesTotal > planServiceTotal) {
+                //     const leftover = serviceTotal - planServiceTotal;
+                //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `
+                // }
+                const thisSenderCPF = getOnlyNumbersFromStr(thisCPF);
+                const thisSenderAreaCode = convertPhoneStrToInt(phone, {
+                    dddOnly: true,
+                });
+                const thisSenderPhone = convertPhoneStrToInt(phone, {
+                    phoneOnly: true,
+                });
+                const thisFirstDueDate = getDashYearMonthDay(
+                    addDays(new Date(), 3)
+                );
 
-            const thisSenderBirthday = convertTextDateToSlashDate(thisBirthDay);
+                const thisSenderBirthday = convertTextDateToSlashDate(
+                    thisBirthDay
+                );
 
-            setData((thisData) => ({
-                ...thisData,
-                referrer: thisReferrer,
-                servDesc: desc,
-                senderCPF: thisSenderCPF,
-                senderAreaCode: thisSenderAreaCode,
-                senderPhone: thisSenderPhone,
-                firstDueDate: thisFirstDueDate,
-                senderBirthday: thisSenderBirthday,
-            }));
-        });
+                setData((thisData) => ({
+                    ...thisData,
+                    referrer: thisReferrer,
+                    servDesc: desc,
+                    senderCPF: thisSenderCPF,
+                    senderAreaCode: thisSenderAreaCode,
+                    senderPhone: thisSenderPhone,
+                    firstDueDate: thisFirstDueDate,
+                    senderBirthday: thisSenderBirthday,
+                }));
+            }
+        );
     }, [plan, servicesTotal, phone, servicesAmount, alreadyReadUser]);
 
     servicesAmount =

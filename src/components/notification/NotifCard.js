@@ -17,6 +17,7 @@ NotifCard.propTypes = {
         "challenge", // cliAdmin (active)
         "birthday", // clieUser (active) / cliAdmin
         "pro", // cliAdmin (active)
+        "score",
     ]),
     isCardNew: PropTypes.bool,
     createdAt: PropTypes.string,

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useBizData } from "init";
-import { updateUser, readUser } from "api/frequent";
+import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import ChallComp from "./ChallComp";
 import ShowBizNotes from "./ShowBizNotes";
+import { useAction } from "global-data/ui";
 
-export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
+export default function List({ setMode, needAdd, setHideAddBtn }) {
     const {
         bizId,
         milestoneIcon,
@@ -14,6 +15,8 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
         rewardList,
         bizPlan,
     } = useBizData();
+
+    const uify = useAction();
 
     // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
     const firstMainData = {
@@ -90,18 +93,13 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
             "clientAdminData.rewardList": newModifiedArray || challengesArray,
         };
 
-        updateUser(bizId, dataToSend, {
-            thisRole: "cliente-admin",
-        }).then((res) => {
+        updateUser(bizId, "cliente-admin", dataToSend, { uify }).then((res) => {
             if (res.status !== 200)
                 return showToast("Algo deu errado. Verifique sua conexão.", {
                     type: "error",
                 });
-            readUser({ role: "cliente-admin" }).then((res) => {
-                if (res.status !== 200)
-                    return showToast(res.data.msg, { type: "error" });
-                needMsg && showToast("Alterações salvas!", { type: "success" });
-            });
+
+            if (needMsg) showToast("Alterações salvas!", { type: "success" });
         });
     };
 

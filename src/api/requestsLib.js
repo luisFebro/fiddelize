@@ -20,12 +20,6 @@ export const checkVerificationPass = () => `${ROOT}/admin/verification-pass`; //
 // export const makeGoogleLogin = () => `${ROOT}/auth/google`; // POST
 
 // CLI-USER
-export const readUser = (userId, role, noResponse = true) =>
-    `${ROOT}/user/${userId}?noResponse=${noResponse}&thisRole=${role}`;
-export const updateUser = (userId, role, noResponse = true) =>
-    `${ROOT}/user/${userId}?noResponse=${noResponse}true&thisRole=${role}`;
-export const removeUser = (userId) => `/api/user/${userId}`;
-
 // client's register
 export const readUserList = (cliAdminId) =>
     `${ROOT}/user/list/all?bizId=${cliAdminId}`;
@@ -137,6 +131,9 @@ export const readFinanceTransactions = () =>
     `${ROOT}/admin/finance/transaction-history`; // GET
 export const addFinanceTransaction = () =>
     `${ROOT}/admin/finance/add-transaction`; // POST
+
+// USERS' DATA
+export const removeUser = (userId) => `/api/user/${userId}`;
 
 // REVIEWS
 export const getBuyReviewsList = () => `${ROOT}/reviews/list/buy-reviews`;

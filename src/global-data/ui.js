@@ -1,5 +1,18 @@
 import { useGlobalContext } from "context";
-// update ui data globally
+import { setItems } from "init/lStorage";
+
+// these methods aim to update ui data globally
+export default function useRun() {
+    const data = useGlobalContext();
+
+    return {
+        run: data.run,
+        runName: data.runName,
+        runName2: data.runName2,
+        runArray: data.runArray,
+        runOneArray: data.runOneArray,
+    };
+}
 
 export const useAction = () => {
     const { uify } = useGlobalContext();
@@ -15,14 +28,30 @@ export const setRun = (type, data, uify) => {
     return uify([type, data]);
 };
 
-export default function useRun() {
-    const data = useGlobalContext();
+// pass uify to update data instantly in the UI. Use it only when data is in another component. For local ones, use local states to update instantly
+// e.g update picture in the ui
+export const updateUI = (storeName, data, uify) => {
+    const treatedData = treatObjForUify(data);
 
-    return {
-        run: data.run,
-        runName: data.runName,
-        runName2: data.runName2,
-        runArray: data.runArray,
-        runOneArray: data.runOneArray,
-    };
+    setItems(storeName, treatedData);
+    uify([storeName, treatedData]);
+};
+
+// HELPERS
+function treatObjForUify(dataObj) {
+    const treatedObj = {};
+    const allValues = Object.values(dataObj);
+
+    Object.keys(dataObj).forEach((k, ind) => {
+        let newKey = k;
+
+        const dotInd = k.lastIndexOf(".");
+        const isNested = dotInd > 1;
+        if (isNested) newKey = k.slice(dotInd + 1);
+
+        treatedObj[newKey] = allValues[ind];
+    });
+
+    return treatedObj;
 }
+// END HELPERS

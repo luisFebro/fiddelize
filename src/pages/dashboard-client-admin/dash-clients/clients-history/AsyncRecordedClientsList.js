@@ -228,9 +228,7 @@ export default function AsyncRecordedClientsList() {
             "clientAdminData.totalClientUserPoints": totalCliUserScores,
             "clientAdminData.totalActivePoints": totalActivePoints,
         };
-        updateUser(bizId, objToSend, {
-            thisRole: "cliente-admin",
-        });
+        updateUser(bizId, "cliente-admin", objToSend).catch(console.log);
     }, [totalCliUserScores, totalActivePoints]);
 
     const params = handleParams({ search, filterName, period, getFilterDate });

@@ -33,16 +33,19 @@ export default function HiddenBizDataAndBackup({ userData }) {
     const bizWhatsappValue = autoPhoneMask(bizWhatsapp);
 
     useEffect(() => {
-        readUser(userData._id, { role: "cliente-admin" }).then((res) => {
-            if (res.status !== 200)
-                return showToast(res.data.msg, { type: "error" });
-            setData({
-                bizName: res.data.bizName,
-                bizWhatsapp: res.data.bizWhatsapp,
-                bizCep: res.data.bizCep,
-                bizAddress: res.data.bizAddress,
-            });
-        });
+        const select =
+            "clientAdminData.bizName clientAdminData.bizWhatsapp clientAdminData.bizCep clientAdminData.bizAddress";
+        readUser(userData.userId, "cliente-admin", select)
+            .then((res) => {
+                const cliData = res.clientAdminData;
+                setData({
+                    bizName: cliData.bizName,
+                    bizWhatsapp: cliData.bizWhatsapp,
+                    bizCep: cliData.bizCep,
+                    bizAddress: cliData.bizAddress,
+                });
+            })
+            .catch(console.log);
     }, []);
 
     const styles = {
@@ -77,13 +80,11 @@ export default function HiddenBizDataAndBackup({ userData }) {
             "clientAdminData.bizCep": bizCep,
             "clientAdminData.bizAddress": bizAddress,
         };
-        updateUser(userData._id, dataToSend, {
-            thisRole: "cliente-admin",
-        }).then((res) => {
-            if (res.status !== 200)
-                return showToast(res.data.msg, { type: "error" });
-            showToast("Dados comerciais atualizados!", { type: "success" });
-        });
+        updateUser(userData._id, "cliente-admin", dataToSend)
+            .then(() =>
+                showToast("Dados comerciais atualizados!", { type: "success" })
+            )
+            .catch((err) => showToast(err.response, { type: "error" }));
     };
 
     const showButtonAction = () => (

@@ -7,7 +7,7 @@ import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
 import showToast from "components/toasts";
-
+import { useAction } from "global-data/ui";
 import isThisApp from "utils/window/isThisApp";
 import TestModeBtn from "../../../dashboard-client-admin/modal-test-mode/TestModeBtn";
 
@@ -28,6 +28,7 @@ export default function ShowActionBtns({
     const [showAppBtn, setShowAppBtn] = useState(false);
 
     const { bizId } = useBizData();
+    const uify = useAction();
 
     useEffect(() => {
         if (showUpdateBtn === false) {
@@ -39,20 +40,9 @@ export default function ShowActionBtns({
 
     const handleUpdateIcon = () => {
         showToast(titleBeforeOk);
-        updateUser(bizId, objToSend, {
-            thisRole: "cliente-admin",
-        }).then((res) => {
-            if (res.status !== 200)
-                return showToast("Algo deu errado. Verifique sua conexão", {
-                    type: "error",
-                });
-            readUser(bizId, { role: "cliente-admin" }).then((res) => {
-                if (res.status !== 200)
-                    return showToast(res.data.msg, { type: "error" });
-                showToast(titleAfterOk, { type: "success" });
-                setShowAppBtn(true);
-            });
-        });
+        updateUser(bizId, "cliente-admin", objToSend, { uify }).catch((err) =>
+            showToast(err, { type: "error" })
+        );
     };
 
     const conditionToShowResultBtn = !objToSend ? needUpdateBtn : showAppBtn;

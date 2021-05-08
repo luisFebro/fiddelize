@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useAPI, { readUser } from "api/useAPI";
+import { useReadUser } from "api/frequent";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -11,19 +11,17 @@ const Async = Load({
         ),
 });
 
-export default function ModalBtn({ modalData = {} }) {
+export default function SeeProfileBtn({ modalData = {} }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const { name, _id } = modalData;
 
-    const params = {
-        select: "-_id name cpf createdAt phone email birthday",
-    };
-
-    const { data: payload, loading } = useAPI({
-        url: readUser(_id, "cliente-membro"),
-        params,
-    });
+    const select = "name cpf createdAt phone email birthday";
+    const { data: payload, loading } = useReadUser(
+        _id,
+        "cliente-membro",
+        select
+    );
 
     const data = {
         name: loading ? "..." : payload.name,

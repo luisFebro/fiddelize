@@ -38,7 +38,6 @@ export default function useData(dataArray, options) {
 
 export function useBizData() {
     const globalData = useGlobalContext();
-    console.log("globalData CHECK", globalData);
     const bizData = globalData ? globalData.bizData : {};
 
     const updatedBizData = updateLocalStorage("bizData", { currData: bizData });

@@ -13,6 +13,8 @@ export default function CreatedAtBr({
     title,
     needTextShadow,
 }) {
+    const ready = Boolean(createdAt || createdAt !== "...");
+
     return (
         <div
             style={{ backgroundColor: backgroundColor || "transparent" }}
@@ -24,10 +26,10 @@ export default function CreatedAtBr({
                         {title || "Conta criada em:"}
                     </span>
                     <br />
-                    {formatDMY(createdAt)}
+                    {ready && formatDMY(createdAt)}
                 </span>
                 <br />
-                {`${fromNow(createdAt)} atrás.`}
+                {ready && `${fromNow(createdAt)} atrás.`}
             </p>
         </div>
     );
