@@ -27,7 +27,7 @@ export default function sendSMS({
             let credits;
 
             if (isAutomatic || needCheckCredits) {
-                const { data } = await getAPI({ url: readCredits(userId) });
+                const data = await getAPI({ url: readCredits(userId) });
                 if (!data) return resolve("No credits");
                 credits = data;
             }
@@ -38,7 +38,7 @@ export default function sendSMS({
                 );
                 if (alreadySent) return resolve("Already sent");
 
-                const { data: doneServices } = await getAPI({
+                const doneServices = await getAPI({
                     url: readAutoService(userId),
                     needAuth: true,
                 });

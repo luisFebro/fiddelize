@@ -67,27 +67,27 @@ export default function PickLogo({
             url: updateImages(thisBizId),
             fullCatch: true,
             body,
-        }).then((res) => {
-            if (res.status !== 200)
-                return showToast(res.data.msg, { type: "error" });
-            setTempImgUrl(res.data);
-            if (isFromDash) {
-                updateUI(
-                    "bizData",
-                    { "clientAdminData.bizLogo": res.data },
-                    uify
-                );
-                showToast("Formato Atualizado!", { type: "success" });
-            }
-            if (!isFromDash) {
-                (async () => {
-                    await setLogo({
-                        generatedImg: res.data,
-                        setLogoUrlPreview,
-                    });
-                })();
-            }
-        });
+        })
+            .then((bizLogoLink) => {
+                setTempImgUrl(bizLogoLink);
+                if (isFromDash) {
+                    updateUI(
+                        "bizData",
+                        { "clientAdminData.bizLogo": bizLogoLink },
+                        uify
+                    );
+                    showToast("Formato Atualizado!", { type: "success" });
+                }
+                if (!isFromDash) {
+                    (async () => {
+                        await setLogo({
+                            generatedImg: bizLogoLink,
+                            setLogoUrlPreview,
+                        });
+                    })();
+                }
+            })
+            .catch((err) => showToast(err.data.msg, { type: "error" }));
     };
 
     useEffect(() => {

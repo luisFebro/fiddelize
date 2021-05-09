@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { updateUser } from "api/frequent";
 import MuSlider from "components/sliders/MuSlider";
-import "./_StarsBuyExperience.css";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import "./_StarsBuyExperience.css";
 
 export const getGradeText = (g) => {
     if (g === 1) return "Péssimo";
@@ -73,7 +73,7 @@ export default function StarsBuyExperience({
             "clientUserData.review.xpUpdatedAt": new Date(),
         };
 
-        await updateUser(userId, role, body).catch(console.log);
+        await updateUser(userId, role, body);
         showToast("Avaliação da experiência de compra atualizada!", {
             type: "success",
         });

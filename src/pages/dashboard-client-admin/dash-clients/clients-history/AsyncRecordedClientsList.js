@@ -1,25 +1,25 @@
 import { Fragment, useEffect, useState } from "react";
-import { calendar } from "../../../../utils/dates/dateFns";
-import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
-import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
-import convertToReal from "../../../../utils/numbers/convertToReal";
+import { calendar } from "utils/dates/dateFns";
+import convertToReal from "utils/numbers/convertToReal";
 import { updateUser } from "api/frequent";
 import useData, { useBizData } from "init";
 import useAPIList, { readUserList, getTrigger } from "api/useAPIList";
 import useRun from "global-data/ui";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import extractStrData from "../../../../utils/string/extractStrData";
-import { Load } from "../../../../components/code-splitting/LoadableComp";
+import extractStrData from "utils/string/extractStrData";
+import { Load } from "components/code-splitting/LoadableComp";
+import useElemShowOnScroll from "hooks/scroll/useElemShowOnScroll";
+import getFirstName from "utils/string/getFirstName";
+import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
+import getFilterDate from "utils/dates/getFilterDate";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RegisterPanelBtn from "./register-panel-btn/RegisterPanelBtn";
-import useElemShowOnScroll from "../../../../hooks/scroll/useElemShowOnScroll";
-import getFirstName from "../../../../utils/string/getFirstName";
+import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
+import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import "./_RecordedClientsList.scss";
-import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
-import getFilterDate from "../../../../utils/dates/getFilterDate";
 import Totals from "./search/Totals";
 import ClientsSearch from "./search/ClientsSearch";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AsyncFreeAccountsLimitMsg = Load({
     loader: () =>
@@ -228,7 +228,7 @@ export default function AsyncRecordedClientsList() {
             "clientAdminData.totalClientUserPoints": totalCliUserScores,
             "clientAdminData.totalActivePoints": totalActivePoints,
         };
-        updateUser(bizId, "cliente-admin", objToSend).catch(console.log);
+        updateUser(bizId, "cliente-admin", objToSend);
     }, [totalCliUserScores, totalActivePoints]);
 
     const params = handleParams({ search, filterName, period, getFilterDate });

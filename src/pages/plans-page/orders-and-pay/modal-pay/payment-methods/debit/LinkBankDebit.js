@@ -27,13 +27,11 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                 error: false,
             }));
 
-            const response = await goFinishCheckout({
+            const payLink = await goFinishCheckout({
                 selectedMethod: "eft",
                 bankName: selectedBank,
                 senderHash,
                 modalData,
-            }).catch((e) => {
-                console.log(e);
             });
 
             if (response === "Internal Server Error") {
@@ -43,7 +41,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                     error: true,
                 }));
             }
-            const { data: payLink } = response;
+
             setData((prev) => ({
                 ...prev,
                 paymentLink: payLink,

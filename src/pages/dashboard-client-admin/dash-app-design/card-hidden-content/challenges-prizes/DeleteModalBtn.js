@@ -26,15 +26,10 @@ export default function DeleteModalBtn({
         const currChallInd = challengeNumber - 1;
         getAPI({
             url: gotUsersInThisChallenge(bizId, currChallInd),
-            fullCatch: true,
-        }).then((res) => {
-            if (res.status !== 200)
-                return console.log(
-                    "Something went wrong with gotUsersInThisChallenge request"
-                );
-            if (typeof res.data === "number") {
+        }).then((quantity) => {
+            if (typeof quantity === "number") {
                 setErrorMsg(
-                    `Não é possível excluir.<br />Tem ${res.data} cliente(s) neste desafio.`
+                    `Não é possível excluir.<br />Tem ${quantity} cliente(s) neste desafio.`
                 );
             } else {
                 updateThisUser(false, { deleteThisId: arrayId });

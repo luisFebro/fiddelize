@@ -78,7 +78,7 @@ export default function AsyncBoleto({ modalData = {} }) {
                 error: false,
             }));
 
-            const { data: responseData } = await goFinishCheckout({
+            const responseData = await goFinishCheckout({
                 selectedMethod: "boleto",
                 senderHash,
                 modalData,

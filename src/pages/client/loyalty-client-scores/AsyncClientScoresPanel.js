@@ -354,7 +354,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 : new Date(),
         };
 
-        await updateUser(cliUserId, whichRole, body).catch(console.log);
+        await updateUser(cliUserId, whichRole, body);
 
         if (isApp) {
             await setVar({ alreadySetTempPoints: false });

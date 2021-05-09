@@ -140,17 +140,16 @@ export default function AsyncPasswordRecoverContent({ role }) {
                 method: "post",
                 body,
                 url: forgotPasswordRequest(),
-            }).catch(({ error }) => {
-                showToast(error, { type: "error" });
+                errMsg: true,
             });
+            if (!success) return null;
 
-            if (success) {
-                !visibleForm &&
-                    showToast("Email foi enviado novamente.", {
-                        type: "success",
-                    });
-                setData((prev) => ({ ...prev, visibleForm: false }));
-            }
+            if (!visibleForm)
+                showToast("Email foi enviado novamente.", {
+                    type: "success",
+                });
+
+            setData((prev) => ({ ...prev, visibleForm: false }));
         })();
     };
 

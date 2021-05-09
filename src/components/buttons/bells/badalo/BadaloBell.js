@@ -78,7 +78,7 @@ export default function BadaloBell({
     // LESSON: if position is absolute, the bell is clickable only in a specific area in the top.
     return (
         <section
-            className="badalo-bell--audio"
+            className="badalo-bell--audio animated fadeIn"
             style={{ position, top, right, left, cursor: "pointer" }}
             onClick={handleBadaloClick}
         >

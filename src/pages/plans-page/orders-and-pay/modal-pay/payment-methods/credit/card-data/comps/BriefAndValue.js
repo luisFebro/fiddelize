@@ -293,7 +293,7 @@ export default function BriefAndValue({
 
         const encryptedCC = await getEncryptedCC(mainData);
 
-        const { data: dataCheckout } = await goFinishCheckout({
+        const dataCheckout = await goFinishCheckout({
             selectedMethod: "creditCard",
             senderHash,
             modalData,
@@ -309,8 +309,6 @@ export default function BriefAndValue({
             cc: encryptedCC,
             oneClickInvest: mainData.oneClickInvest,
             brand,
-        }).catch((err) => {
-            console.log(err);
         });
 
         if (!dataCheckout) {

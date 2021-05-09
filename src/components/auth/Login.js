@@ -124,11 +124,10 @@ export async function signInUserData(cpfValue, options = {}) {
         appPanelRole,
     };
 
-    const res = await doLogin(uify, objToSend);
-    if (!res) return null;
+    const initData = await doLogin(uify, objToSend);
+    if (!initData) return null;
 
-    const initData = res.data;
-    const { currUser } = res.data;
+    const { currUser } = initData;
 
     const {
         bizLinkName,
@@ -195,13 +194,10 @@ export async function signInUserData(cpfValue, options = {}) {
         if (needCliUserWelcomeNotif) {
             showToast("Preparando App...");
 
-            const cliNotifRes = await sendNotification(userId, "welcome", {
+            await sendNotification(userId, "welcome", {
                 role,
                 nT: true,
             });
-
-            if (cliNotifRes.status !== 200)
-                return console.log("smt wrong with sendNotification");
 
             if (needAccountPanel) {
                 return history.push("/painel-de-apps");

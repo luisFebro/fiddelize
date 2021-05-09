@@ -35,17 +35,15 @@ export default function HiddenBizDataAndBackup({ userData }) {
     useEffect(() => {
         const select =
             "clientAdminData.bizName clientAdminData.bizWhatsapp clientAdminData.bizCep clientAdminData.bizAddress";
-        readUser(userData.userId, "cliente-admin", select)
-            .then((res) => {
-                const cliData = res.clientAdminData;
-                setData({
-                    bizName: cliData.bizName,
-                    bizWhatsapp: cliData.bizWhatsapp,
-                    bizCep: cliData.bizCep,
-                    bizAddress: cliData.bizAddress,
-                });
-            })
-            .catch(console.log);
+        readUser(userData.userId, "cliente-admin", select).then((res) => {
+            const cliData = res.clientAdminData;
+            setData({
+                bizName: cliData.bizName,
+                bizWhatsapp: cliData.bizWhatsapp,
+                bizCep: cliData.bizCep,
+                bizAddress: cliData.bizAddress,
+            });
+        });
     }, []);
 
     const styles = {

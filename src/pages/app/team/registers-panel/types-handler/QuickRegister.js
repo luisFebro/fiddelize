@@ -106,7 +106,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         bizCode = `${bizCode}${linkId}`;
 
         (async () => {
-            const { data: scoreToken } = await getAPI({
+            const scoreToken = await getAPI({
                 method: "post",
                 url: encryptLinkScore(),
                 needAuth: true,
@@ -117,8 +117,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     userId: bizId,
                 },
             });
+            if (!scoreToken) return null;
 
-            setData((prev) => ({
+            return setData((prev) => ({
                 ...prev,
                 linkScore: scoreToken,
             }));
@@ -193,13 +194,8 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                 name,
                 meanPayload,
             });
-            sendSMS(smsObj).then((res) => {
-                if (res.status === 200)
-                    handleSuccessOp(
-                        "Convite Enviado!",
-                        handleNewRegister,
-                        true
-                    );
+            sendSMS(smsObj).then(() => {
+                handleSuccessOp("Convite Enviado!", handleNewRegister, true);
             });
         }
         if (type === "whatsapp") {

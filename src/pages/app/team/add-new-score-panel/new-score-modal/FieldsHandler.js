@@ -50,7 +50,7 @@ function FieldsHandler({
 
         if (customerName && bizId) {
             (async () => {
-                const { data: thisCustomerId } = await setCustomerId(
+                const thisCustomerId = await setCustomerId(
                     customerName,
                     bizId,
                     memberId

@@ -256,11 +256,12 @@ function useMainReviewData() {
                 url: getMainReviewData(userId),
                 timeout: 30000,
             });
+            if (!thisMainData) return null;
 
-            setData((prev) => ({
+            return setData((prev) => ({
                 ...prev,
                 loading: false,
-                mainData: thisMainData && thisMainData.data,
+                mainData: thisMainData,
             }));
         };
         userId !== "..." && runAnalysis();

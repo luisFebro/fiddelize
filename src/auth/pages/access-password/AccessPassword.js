@@ -82,7 +82,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         Promise.all([checkIfLocked()]).then((res) => {
             const [lockedRes] = res;
             if (lockedRes) {
-                const { blocked, lockMin } = lockedRes.data;
+                const { blocked, lockMin } = lockedRes;
                 if (blocked) {
                     setData((prev) => ({
                         ...prev,
@@ -120,7 +120,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         };
 
         setData((prev) => ({ ...prev, loading: true }));
-        const checkRes = await getAPI({
+        const checkData = await getAPI({
             method: "post",
             url: checkPassword(),
             body,
@@ -130,7 +130,8 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 showToast("Senha de acesso inválida.", { type: "error" });
                 setData((prev) => ({ ...prev, loading: false }));
                 setDisplay("");
-                return;
+
+                return null;
             }
 
             const isThisBlocked = error && error.blocked;
@@ -149,11 +150,11 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 setData((prev) => ({ ...prev, loading: false }));
             }
             setDisplay("");
+            return null;
         });
 
-        if (checkRes && checkRes.data) {
-            setData((prev) => ({ ...prev, loading: false, passOk: true }));
-        }
+        if (!checkData) return null;
+        return setData((prev) => ({ ...prev, loading: false, passOk: true }));
     };
 
     const completedFill = display && display.length === 6;
@@ -172,7 +173,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                     bizId,
                     role,
                 };
-                const { data: newToken } = await getAPI({
+                const newToken = await getAPI({
                     method: "post",
                     url: createTk(),
                     body,

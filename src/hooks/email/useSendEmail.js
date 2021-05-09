@@ -19,13 +19,12 @@ export default function useSendEmail({
         };
 
         const send = async () => {
-            const emailSucc = await getAPI({
+            await getAPI({
                 method: "post",
                 url: sendEmail(),
                 body,
             });
             setAlreadySent(true);
-            if (emailSucc) console.log("invest email ok");
         };
 
         if (!alreadySent) {

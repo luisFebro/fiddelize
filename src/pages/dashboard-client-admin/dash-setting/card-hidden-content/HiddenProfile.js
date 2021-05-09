@@ -39,20 +39,20 @@ export default function HiddenProfile({ userData }) {
     useEffect(() => {
         (async () => {
             const select = "name cpf birthday email phone gender";
-            const res = await readUser(
-                userData._id,
+            const dataUser = await readUser(
+                userData.userId,
                 "cliente-admin",
                 select
-            ).catch(console.log);
+            );
 
             setData((prev) => ({
                 ...prev,
-                name: res.name.cap(),
-                cpf: res.cpf,
-                birthday: res.birthday,
-                email: res.email,
-                phone: res.phone,
-                gender: res.gender,
+                name: dataUser.name.cap(),
+                cpf: dataUser.cpf,
+                birthday: dataUser.birthday,
+                email: dataUser.email,
+                phone: dataUser.phone,
+                gender: dataUser.gender,
             }));
         })();
     }, []);

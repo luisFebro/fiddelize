@@ -43,12 +43,12 @@ export default function TeamPassword({ history }) {
             pass,
             bizId,
         };
-        const res = await getAPI({
+        const dataAPI = await getAPI({
             method: "post",
             url: checkVerificationPass(),
             body,
-            fullCatch: true,
             needAuth: false,
+            fullCatch: true,
             loader: true,
         }).catch((err) => {
             if (err.status !== 200)
@@ -57,14 +57,9 @@ export default function TeamPassword({ history }) {
                     { type: "error" }
                 );
 
-            if (err.status === 500)
-                return showToast("Algo deu errado. Verifique sua conexão.", {
-                    type: "error",
-                });
-
             return null;
         });
-        if (!res) return null;
+        if (!dataAPI) return null;
 
         // authorize user first
         const bodyForToken = {
@@ -74,7 +69,7 @@ export default function TeamPassword({ history }) {
             nT: getId(),
         };
 
-        const { data: token } = await getAPI({
+        const token = await getAPI({
             method: "post",
             url: createTk(),
             body: bodyForToken,

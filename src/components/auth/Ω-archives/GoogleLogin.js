@@ -33,7 +33,7 @@ function GoogleLogin({ history }) {
         const { tokenId } = response;
         const body = { userId, tokenId };
 
-        const { data: newToken } = await getAPI({
+        const newToken = await getAPI({
             method: "post",
             url: makeGoogleLogin(),
             body,

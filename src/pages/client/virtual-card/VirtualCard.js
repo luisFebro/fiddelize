@@ -294,7 +294,6 @@ function useAccessChecker(userId, totalPrize, trigger) {
         if (cancel || !trigger) return;
 
         (async () => {
-            const res = await getAPI({
                 url: readUserrr(userId, "cliente", false),
                 params: {
                     select: "clientUserData.totalPurchasePrize",

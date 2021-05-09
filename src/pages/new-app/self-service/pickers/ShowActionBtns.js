@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useBizData } from "init";
-import { updateUser, readUser } from "api/frequent";
+import { updateUser } from "api/frequent";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";

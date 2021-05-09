@@ -26,7 +26,7 @@ export default async function subscribeUser({ role, userId }) {
 
     const params = { role, userId, deviceType };
 
-    sendSubscription(newSubscription, params);
+    await sendSubscription(newSubscription, params);
     return "ok";
 }
 

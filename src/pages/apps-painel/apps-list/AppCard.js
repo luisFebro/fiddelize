@@ -121,6 +121,7 @@ function AppCard({ data, payload, loading }, ref) {
                         (async () => {
                             setOpening(true);
                             await handleOpenApp(payloadOpen).catch((err) => {
+                                console.log("err handleOpenApp", err);
                                 showToast("Ocorreu um erro ao iniciar app", {
                                     type: "error",
                                 });

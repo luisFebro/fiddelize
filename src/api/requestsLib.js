@@ -159,7 +159,6 @@ export const readUserSubIds = () => `${ROOT}/push-notification/read/sub-ids`; //
 export const sendPushNotifs = () => `${ROOT}/push-notification/go-everybody`; // POST
 
 // IN-APP NOTIFICATIONS
-export const sendNotification = () => `${ROOT}/notification/send`; // POST
 export const markOneClicked = (userId) =>
     `${ROOT}/notification/mark-one-clicked/${userId}`; // PUT
 export const markAllAsClicked = (userId) =>

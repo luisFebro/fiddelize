@@ -39,7 +39,7 @@ export default function FacesPromotersScore({
             "clientAdminData.review.npsUpdatedAt": new Date(),
         };
 
-        await updateUser(userId, role, body).catch(console.log);
+        await updateUser(userId, role, body);
         showToast("Avaliação recebida. Obrigada pelo retorno!", {
             type: "success",
         });

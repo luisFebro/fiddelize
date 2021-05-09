@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { ROOT } from "api/root";
 // generic rest APIs which are called more than 5 times and reusable in any component go here.
 
-import getAPI, { sendNotification as sendNotif } from "api";
+import getAPI from "api";
 
 // readNewData
 export const readUser = async (userId, role, select) => {
@@ -12,15 +12,10 @@ export const readUser = async (userId, role, select) => {
         select,
     };
 
-    const res = await getAPI({
+    return await getAPI({
         url: `${ROOT}/user/read`,
         params,
-    }).catch((err) => {
-        Promise.reject(err);
     });
-    if (!res) return null;
-
-    return res.data;
 };
 
 export const useReadUser = (userId, role, select, options = {}) => {
@@ -66,8 +61,6 @@ export const updateUser = async (userId, role, body) => {
         url: `${ROOT}/user/update`,
         body,
         params,
-    }).catch((err) => {
-        Promise.reject(err);
     });
 };
 
@@ -89,7 +82,7 @@ export const useUpdateUser = (userId, role, body, options = {}) => {
             url: `${ROOT}/user/update`,
             body: thisBody,
             params,
-        }).catch(console.log);
+        });
     }, [userId, role, thisBody, trigger]);
 };
 
@@ -103,7 +96,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
     if (needPushNotif) {
         return await getAPI({
             method: "put",
-            url: sendNotif(),
+            url: `${ROOT}/notification/send`,
             body: pushNotifData,
             fullCatch: true,
         });

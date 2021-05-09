@@ -11,16 +11,18 @@ export default function RedirectLink({ match }) {
         getAPI({
             url: getUrlLink(code),
             fullCatch: true,
-        }).then((res) => {
-            if (res.status === 500)
-                return setError("Problema de Conexão. Tente novamente...");
-            if (res.status !== 200) return setError("Link Inválido!");
-
-            (async () => {
-                await setVar({ linkCode: code }, "user");
-                window.location.href = res.data;
-            })();
-        });
+        })
+            .then((link) => {
+                (async () => {
+                    await setVar({ linkCode: code }, "user");
+                    window.location.href = link;
+                })();
+            })
+            .catch((err) => {
+                if (err.status === 500)
+                    return setError("Problema de Conexão. Tente novamente...");
+                if (err.status !== 200) return setError("Link Inválido!");
+            });
     }, [code]);
 
     return (

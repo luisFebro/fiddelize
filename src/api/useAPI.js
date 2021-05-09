@@ -142,7 +142,9 @@ export default function useAPI({
             data: body,
             params,
             headers: chooseHeader({ token, needAuth }),
-            cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
+            cancelToken: new axios.CancelToken((c) => {
+                cancel = c;
+            }), // n1
         };
 
         async function doRequest() {

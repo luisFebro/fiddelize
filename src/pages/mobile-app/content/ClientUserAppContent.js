@@ -308,9 +308,8 @@ b) When user log in, RT is 36
 
 /* TESTS
 <section className="TESTS">
-    <input type="number" value={vv} onChange={e => setVV(Number(e.target.value))} />
-    <button type="button" className="test-btn" onClick={handleUserUpdate}>
-        update user
+    <button type="button" className="test-btn" onClick={handleTest}>
+        fire test
     </button>
     <style jsx>{`
         .TESTS {

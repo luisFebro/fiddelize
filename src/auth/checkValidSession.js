@@ -14,11 +14,10 @@ export default async function checkValidSession() {
 
         if (arePublicPages || !isLoggedIn) return;
 
-        const session = await getAPI({
+        const isValidSession = await getAPI({
             url: check(),
-        }).catch(console.log);
+        });
 
-        const isValidSession = session && session.data;
         if (!isValidSession) await disconnect();
     });
 }

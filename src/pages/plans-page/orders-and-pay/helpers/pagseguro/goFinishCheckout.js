@@ -114,9 +114,6 @@ export default async function goFinishCheckout(props) {
         body,
         trigger: true,
         timeout: 60000,
-    }).catch((err) => {
-        console.log(err);
-        return err;
     });
 }
 

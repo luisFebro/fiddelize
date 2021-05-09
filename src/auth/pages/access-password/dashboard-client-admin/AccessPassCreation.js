@@ -74,7 +74,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                     role: isBizTeam ? "nucleo-equipe" : "cliente-admin",
                 };
 
-                newPswdCond && showToast("Criando...");
+                if (newPswdCond) showToast("Criando...");
                 // LESSON: do not destruct await with catch. otherwise when catch returns will throw an error of data's undefined.
                 const finalRes = await getAPI({
                     method: "post",
@@ -89,29 +89,29 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                     );
                 });
 
-                if (finalRes) {
-                    if (currPswd === 1) {
-                        restartFields();
-                        setData((prev) => ({ ...prev, currPswd: 2 }));
-                    }
+                if (!finalRes) return;
 
-                    const { msg } = finalRes.data;
-                    if (msg === "pass created") {
-                        showToast("Senha criada!", { type: "success" });
-                        setTimeout(() => {
-                            if (isBizTeam) {
-                                (async () => {
-                                    await setVar({ donePswd: true });
-                                    history.push(
-                                        "/t/app/nucleo-equipe/cadastro/pagseguro"
-                                    );
-                                })();
-                            } else {
-                                showToast("Tudo pronto!", { dur: 4000 });
-                                history.push("/mobile-app");
-                            }
-                        }, 2900);
-                    }
+                if (currPswd === 1) {
+                    restartFields();
+                    setData((prev) => ({ ...prev, currPswd: 2 }));
+                }
+
+                const { msg } = finalRes;
+                if (msg === "pass created") {
+                    showToast("Senha criada!", { type: "success" });
+                    setTimeout(() => {
+                        if (isBizTeam) {
+                            (async () => {
+                                await setVar({ donePswd: true });
+                                history.push(
+                                    "/t/app/nucleo-equipe/cadastro/pagseguro"
+                                );
+                            })();
+                        } else {
+                            showToast("Tudo pronto!", { dur: 4000 });
+                            history.push("/mobile-app");
+                        }
+                    }, 2900);
                 }
             })();
         }

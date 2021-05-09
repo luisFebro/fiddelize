@@ -44,28 +44,31 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 method: "delete",
                 url: removeUser(itemData._id),
                 params: { userId: bizId, thisRole: "cliente" },
-            }).then((res) => {
-                if (res.status !== 200)
-                    return showToast(res.data.msg, { type: "error" });
-                getAPI({
-                    method: "put",
-                    url: countField(bizId, "cliente-admin"),
-                    fullCatch: true,
-                    body: {
-                        field: "clientAdminData.totalClientUsers",
-                        type: "dec",
-                        thisRole: "cliente-admin",
-                    },
-                }).then((res) => {
-                    if (res.status !== 200)
-                        return showToast(res.data.msg, { type: "error" });
-                    showToast(
-                        `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
-                        { type: "success" }
-                    );
-                    setRun("runName", "RecordedClientsList", uify);
-                });
-            });
+                fullCatch: true,
+            })
+                .then(() => {
+                    getAPI({
+                        method: "put",
+                        url: countField(bizId, "cliente-admin"),
+                        fullCatch: true,
+                        body: {
+                            field: "clientAdminData.totalClientUsers",
+                            type: "dec",
+                            thisRole: "cliente-admin",
+                        },
+                    })
+                        .then(() => {
+                            showToast(
+                                `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
+                                { type: "success" }
+                            );
+                            setRun("runName", "RecordedClientsList", uify);
+                        })
+                        .catch((err) =>
+                            showToast(err.data.msg, { type: "error" })
+                        );
+                })
+                .catch((err) => showToast(err.data.msg, { type: "error" }));
         }, 5900);
     };
 

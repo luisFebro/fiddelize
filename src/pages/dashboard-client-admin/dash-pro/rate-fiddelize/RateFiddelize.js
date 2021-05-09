@@ -32,7 +32,7 @@ export default function RateFiddelize() {
                 userId,
                 "cliente-admin",
                 "clientAdminData.review.nps clientAdminData.review.xpReport"
-            ).catch(console.log);
+            );
 
             const reviewData = data.clientAdminData.review;
 
@@ -227,7 +227,7 @@ function ShowXpReportField({
             customerName,
         };
 
-        await updateUser(userId, role, body).catch(console.log);
+        await updateUser(userId, role, body);
         showToast("Relato Enviado. Obrigada por compartilhar!", {
             type: "success",
         });

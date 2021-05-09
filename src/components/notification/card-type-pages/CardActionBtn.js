@@ -57,16 +57,11 @@ function CardActionBtn(props) {
             cliMemberId: roleForNotif && userId,
         };
 
-        const res = await getAPI({
+        await getAPI({
             method: "put",
             url: markOneClicked(bizId || userId),
-            fullCatch: true,
             body,
-        });
-
-        if (res.status !== 200) {
-            return setIsLoading(false);
-        }
+        }).catch(() => setIsLoading(false));
 
         handleFullOpen();
         setTimeout(() => {

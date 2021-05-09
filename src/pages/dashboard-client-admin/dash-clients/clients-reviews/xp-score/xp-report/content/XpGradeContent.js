@@ -122,10 +122,10 @@ function useXpScoreChartData() {
             setData((prev) => ({
                 ...prev,
                 loading: false,
-                dataChart: thisChartData.data,
+                dataChart: thisChartData,
             }));
         };
-        userId !== "..." && runAnalysis();
+        if (userId !== "...") runAnalysis();
     }, [userId]);
 
     return { dataChart, loading };

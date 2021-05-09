@@ -4,7 +4,7 @@ import setInitData from "init/setInitData";
 import disconnect from "auth/disconnect";
 
 export default async function loadInit(uify, history) {
-    const res = await getAPI({
+    const data = await getAPI({
         method: "post",
         url: loadDataInit(),
         fullCatch: true,
@@ -25,14 +25,14 @@ export default async function loadInit(uify, history) {
         }
     });
 
-    if (!res) return;
+    if (!data) return;
 
-    await setInitData(res.data, { uify });
+    await setInitData(data, { uify });
 }
 
 // objToSend: { name, email, password, registeredBy = email }
 export const doRegister = async (objToSend) => {
-    const res = await getAPI({
+    const data = await getAPI({
         method: "post",
         url: register(),
         body: objToSend,
@@ -42,17 +42,15 @@ export const doRegister = async (objToSend) => {
     }).catch((err) => {
         if (!err) return null;
         return err;
-        // const errorMsg = err.data && err.data.error;
-        // if(!errorMsg) showToast("Ocorreu um erro de conexão", { type: "error" });
     });
 
-    if (!res) return null;
+    if (!data) return null;
 
-    return res;
+    return data;
 };
 
 export const doLogin = async (uify, objToSend) => {
-    const res = await getAPI({
+    const data = await getAPI({
         method: "post",
         url: login(),
         body: objToSend,
@@ -70,15 +68,14 @@ export const doLogin = async (uify, objToSend) => {
                 type: "error",
             }
         );
-        console.log(`ERROR: ${err.response}`);
         return null;
     });
 
-    if (!res) return null;
+    if (!data) return null;
 
-    await setInitData(res.data, { uify });
+    await setInitData(data, { uify });
 
-    return res;
+    return data;
 };
 
 /* COMMENTS

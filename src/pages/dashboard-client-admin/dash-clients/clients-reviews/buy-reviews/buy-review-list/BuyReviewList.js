@@ -142,7 +142,7 @@ function useAdminChecked(trigger, bizId, isBizAdmin) {
                 [`${path}`]: new Date(),
             };
 
-            await updateUser(thisId, thisRole, body).catch(console.log);
+            await updateUser(thisId, thisRole, body);
         };
 
         if (trigger) {

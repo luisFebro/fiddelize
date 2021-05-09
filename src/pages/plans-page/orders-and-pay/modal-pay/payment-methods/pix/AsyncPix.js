@@ -29,16 +29,9 @@ export default function AsyncPix({ modalData }) {
     useEffect(() => {
         if (alreadyPix) return;
         const runPix = async () => {
-            const { data: responseData } = await goFinishCheckout({
+            const responseData = await goFinishCheckout({
                 selectedMethod: "pix",
                 modalData,
-            }).catch((e) => {
-                console.log(e);
-                // setData((prev) => ({
-                //     ...prev,
-                //     loading: false,
-                //     error: true,
-                // }));
             });
             if (!responseData) return;
 

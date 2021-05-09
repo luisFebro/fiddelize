@@ -65,18 +65,13 @@ export default function ShowPasswordForm({
     useEffect(() => {
         if (isFromCliAdminDash) {
             (async () => {
-                const res = await getAPI({
+                const dataVerif = await getAPI({
                     url: readVerificationPass(bizId),
-                    fullCatch: true,
                     loader: false,
-                }).catch((err) => {
-                    if (err.status !== 200)
-                        return console.log("CODE ERROR: There is no bizId...");
-                    return null;
                 });
-                if (!res) return null;
+                if (!dataVerif) return null;
 
-                const passValue = res.data.verificationPass;
+                const passValue = dataVerif.verificationPass;
                 const keyName = "clientAdminData.verificationPass";
 
                 setValObjWithStr(data, keyName, passValue);

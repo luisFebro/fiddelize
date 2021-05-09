@@ -16,16 +16,12 @@ export default async function renewToken(options = {}) {
     };
 
     // LESSON: remember that res here receives both data or failure catch
-    const res = await getAPI({
+    const newToken = await getAPI({
         method: "post",
         url: createTk(),
         body,
-    }).catch((e) => {
-        console.log(e);
     });
-    if (!res) return false;
-
-    const newToken = res.data;
+    if (!newToken) return null;
 
     // this will be handled by localforage for other projects.
     await setVar({ token: newToken }, "user");

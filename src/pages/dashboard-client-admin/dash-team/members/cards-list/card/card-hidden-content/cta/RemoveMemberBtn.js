@@ -32,30 +32,36 @@ export default function RemoveMemberBtn({ modalData }) {
                 method: "delete",
                 url: removeUser(_id),
                 params: { userId: bizId, thisRole: "cliente-membro" },
-            }).then((res) => {
-                if (res.status !== 200)
-                    return showToast("Membro excluído com sucesso.", {
+                fullCatch: true,
+            })
+                .then(() => {
+                    getAPI({
+                        method: "put",
+                        url: countField(bizId, "cliente-admin"),
+                        fullCatch: true,
+                        body: {
+                            field: "clientAdminData.totalClientUsers",
+                            type: "dec",
+                            thisRole: "cliente-admin",
+                        },
+                    })
+                        .then(() => {
+                            showToast(
+                                `Cliente ${name} foi excluído dos seus registros!`,
+                                { type: "success" }
+                            );
+                            setRun("runName", "teamMemberList", uify);
+                        })
+                        .catch((err) =>
+                            showToast(err.data.msg, { type: "error" })
+                        );
+                })
+                .catch((err) => {
+                    // if (res.status !== 200)
+                    showToast("Membro excluído com sucesso.", {
                         type: "error",
                     });
-                getAPI({
-                    method: "put",
-                    url: countField(bizId, "cliente-admin"),
-                    fullCatch: true,
-                    body: {
-                        field: "clientAdminData.totalClientUsers",
-                        type: "dec",
-                        thisRole: "cliente-admin",
-                    },
-                }).then((res) => {
-                    if (res.status !== 200)
-                        return showToast(res.data.msg, { type: "error" });
-                    showToast(
-                        `Cliente ${name} foi excluído dos seus registros!`,
-                        { type: "success" }
-                    );
-                    setRun("runName", "teamMemberList", uify);
                 });
-            });
         }, 5900);
     };
 

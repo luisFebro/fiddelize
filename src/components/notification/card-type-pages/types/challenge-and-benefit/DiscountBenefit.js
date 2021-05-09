@@ -106,47 +106,48 @@ export default function DiscountBenefit({ onClose, modalData }) {
             method: "put",
             url: changePrizeStatus(customerId, "confirmed"),
             params,
-            fullCatch: true,
-        });
-
-        if (prizeStatusRes.status !== 200) {
-            if (prizeStatusRes.data.error.indexOf("critical") !== -1) {
-                return showToast(
+        }).catch((err) => {
+            if (err.indexOf("critical") !== -1) {
+                showToast(
                     "Não foi possível descontar pontos. Por favor, contate suporte técnico da Fiddelize.",
                     { type: "error", dur: 15000 }
                 );
             }
-            return showToast(
+
+            showToast(
                 "Pontos deste desafio já foram descontados e podem está desatualizados.",
                 { type: "error", dur: 9000 }
             );
-        }
+        });
+        if (!prizeStatusRes) return null;
 
         const [updateRes, notifRes, taskRes] = await Promise.all([
             updateUser(customerId, "cliente", updateUserBody),
-            getAPI({
-                method: "post",
-                url: setNotifAuthor(),
-                body: notifAuthorBody,
-            }),
             sendNotification(customerId, "challenge", pushNotifData),
             getAPI({
                 method: "put",
                 url: addTask(),
                 body: taskBody,
+                fullCatch: true,
+            }),
+            getAPI({
+                method: "post",
+                url: setNotifAuthor(),
+                body: notifAuthorBody,
+                fullCatch: true,
             }),
         ]);
 
-        if (notifRes.status !== 200)
+        if (!notifRes)
             return showToast(
                 "Um problema aconteceu ao enviar notificação para o cliente",
                 { type: "error" }
             );
-        if (updateRes.status !== 200)
+        if (!updateRes)
             return showToast("Algo deu errado ao atualizar cliente", {
                 type: "error",
             });
-        if (taskRes.status !== 200)
+        if (!taskRes)
             return showToast(
                 "Ocorreu um problema ao adicionar tarefa automática.",
                 { type: "error" }

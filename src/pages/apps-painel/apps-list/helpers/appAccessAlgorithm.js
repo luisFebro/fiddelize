@@ -64,7 +64,6 @@ export default async function handleOpenApp({
 
         const userData = {
             uify,
-            uify,
             history,
             appPanelUserId: clickedAppUserId,
             appPanelRole: appRole,

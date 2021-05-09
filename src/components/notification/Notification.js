@@ -17,7 +17,7 @@ export default function Notification({
     const [btnDisabled, setBtnDisabled] = useState(false);
 
     const isCliMember = bizId;
-    const [userId, firstName, role] = useData(["userId", "firstName", "role"]);
+    const [userId, firstName] = useData(["userId", "firstName"]);
 
     const uify = useAction();
 
@@ -40,10 +40,7 @@ export default function Notification({
             body: {
                 forceCliUser,
             },
-            fullCatch: true,
-        }).then((res) => {
-            if (res.status !== 200)
-                return console.log("smt wrong with handleMarkAllClicked");
+        }).then(() => {
             setRun("runName", `notificationCount${getId()}`, uify);
             setLoading(false);
             setBtnTitle("Todas Marcadas!");

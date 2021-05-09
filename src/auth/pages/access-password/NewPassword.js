@@ -63,7 +63,7 @@ export default function NewPassword({ location, match, history }) {
                 token: match.params.token,
                 role,
             };
-            const { data: isValidToken } = await getAPI({
+            const isValidToken = await getAPI({
                 method: "post",
                 url: recoverPassword(),
                 body,
@@ -81,7 +81,7 @@ export default function NewPassword({ location, match, history }) {
             }
         };
 
-        !changeMode && run();
+        if (!changeMode) run();
     }, [changeMode]);
 
     const showTitle = () => (
@@ -195,12 +195,12 @@ export default function NewPassword({ location, match, history }) {
                 newPswdCond &&
                     showToast(changeMode ? "Mudando..." : "Recuperando...");
                 // LESSON: do not destruct await with catch. otherwise when catch returns will throw an error of data's undefined.
-                const finalRes = await getAPI({
+                const finalData = await getAPI({
                     method: "post",
                     url: changeMode ? changePassword() : recoverPassword(),
                     body,
                     needAuth: !!changeMode,
-                }).catch(({ error }) => {
+                }).catch((error) => {
                     showToast(
                         error || "Um problema aconteceu. Tente novamente",
                         { type: "error" }
@@ -208,16 +208,14 @@ export default function NewPassword({ location, match, history }) {
                     restartFields(true);
                 });
 
-                if (finalRes) {
-                    if (currPswd === 1) {
-                        restartFields();
-                        setData((prev) => ({ ...prev, currPswd: 2 }));
-                    }
+                if (currPswd === 1) {
+                    restartFields();
+                    setData((prev) => ({ ...prev, currPswd: 2 }));
+                }
 
-                    const { msg } = finalRes.data;
-                    if (msg === "pass changed") {
-                        setOkContent(true);
-                    }
+                const { msg } = finalData;
+                if (msg === "pass changed") {
+                    setOkContent(true);
                 }
             })();
         }

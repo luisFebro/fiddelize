@@ -172,11 +172,12 @@ function useNpsChartData({ isBizAdmin }) {
                 url: getNpsChartData(userId),
                 params,
             });
+            if (!thisChartData) return null;
 
-            setData((prev) => ({
+            return setData((prev) => ({
                 ...prev,
                 loading: false,
-                dataChart: thisChartData && thisChartData.data,
+                dataChart: thisChartData,
             }));
         };
 

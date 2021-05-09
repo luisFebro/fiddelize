@@ -51,28 +51,26 @@ export default function BackUpToExcel() {
         };
 
         switchLoading(true);
-        const res = await getAPI({
+        const allDbData = await getAPI({
             url: readAllDbData(adminId),
             params,
             fullCatch: true,
         }).catch((err) => {
+            switchLoading(false);
             if (err.status === 404) {
                 showToast(err.data.error, { type: "error" });
-                switchLoading(false);
-                return;
             }
             if (err.status !== 200) {
                 showToast("Ocorreu um erro ao carregar dados de clientes", {
                     type: "error",
                 });
-                switchLoading(false);
             }
         });
-        if (!res) return null;
+        if (!allDbData) return null;
 
         return setData({
             ...data,
-            dbDataList: res.data,
+            dbDataList: allDbData,
         });
         switchLoading(false);
     };
