@@ -13,6 +13,7 @@ export default function InstructionBtn({
     mode = "none", // "none", "tooltip", "modal"
     article = "SomeArticle_art1",
     animated = false,
+    tooltipProps,
     // blurEffect = false,
 }) {
     const [needOpen, setNeedOpen] = useState(false);
@@ -94,6 +95,7 @@ export default function InstructionBtn({
                         color="var(--mainWhite)"
                         backgroundColor="var(--mainDark)"
                         element={TooltipBtn}
+                        {...tooltipProps}
                     />
                 </section>
             )}

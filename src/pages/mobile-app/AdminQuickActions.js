@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
-import { useBizData } from "init";
-import useData from "init";
+import useData, { useBizData } from "init";
 // SpeedDial and Icons
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
@@ -78,7 +77,14 @@ function MoreOptionsBtn({
                 },
             },
             {
-                icon: <GroupWorkIcon style={styles.muStyle} />,
+                icon: (
+                    <GroupWorkIcon
+                        style={{
+                            ...styles.muStyle,
+                            transform: "rotate(40deg)",
+                        }}
+                    />
+                ),
                 name: "Cadastrar Pontos ►",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {

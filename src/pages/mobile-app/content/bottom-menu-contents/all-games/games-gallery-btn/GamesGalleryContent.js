@@ -1,8 +1,8 @@
-import useContext from "context";
+import useData from "init";
 import GameList from "./games-list/GameList";
 
-export default function GamesGalleryContent() {
-    const { currPoints } = useContext();
+export default function GamesGalleryContent(props) {
+    const { currPoints } = useData();
 
     const showTitle = () => (
         <div className="mt-3 text-center text-purple mx-3">
@@ -32,7 +32,7 @@ export default function GamesGalleryContent() {
         <section className="mx-3">
             {showTitle()}
             {showBalance()}
-            <GameList />
+            <GameList {...props} />
         </section>
     );
 }

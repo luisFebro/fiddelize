@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -11,7 +12,9 @@ const AsyncGamesGalleryContent = Load({
         ),
 });
 
-export default function GamesGalleryBtn({ colorS, colorBack }) {
+export default function GamesGalleryBtn() {
+    const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
+
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
@@ -42,7 +45,9 @@ export default function GamesGalleryBtn({ colorS, colorBack }) {
                 />
             </div>
             <ModalFullContent
-                contentComp={<AsyncGamesGalleryContent />}
+                contentComp={
+                    <AsyncGamesGalleryContent closeModal={handleFullClose} />
+                }
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />

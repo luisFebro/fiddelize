@@ -1,25 +1,18 @@
 import { Fragment } from "react";
+import useData from "init";
 import GameCard from "./GameCard";
 
-export default function GameList({ setMainData = () => null }) {
-    const availableGames = [
-        {
-            name: "targetPrize",
-        },
-        {
-            name: "discountBack",
-            data: "discountGoal:30.50;discountPerc:5;",
-        },
-    ];
-    const error = false;
+export default function GameList(props) {
+    const { adminGame } = useData();
+    const allGamesList = [];
 
-    if (error) {
-        return (
-            <p className="text-subtitle text-red font-weight-bold mx-3 my-5">
-                Um erro aconteceu ao iniciar a sessão. Tente abrir novamente.
-            </p>
-        );
-    }
+    Object.keys(adminGame).forEach((gameName) => {
+        if (!adminGame || typeof adminGame[gameName].on !== "boolean") return;
+        allGamesList.push({
+            gameName,
+            ...adminGame[gameName],
+        });
+    });
 
     return (
         <section
@@ -28,22 +21,18 @@ export default function GameList({ setMainData = () => null }) {
                 marginBottom: "150px",
             }}
         >
-            {!availableGames && (
+            {!allGamesList.length && (
                 <p className="text-normal text-purple font-weight-bold">
                     Verificando disponíveis...
                 </p>
             )}
             <section className="container">
                 <div className="row">
-                    {availableGames &&
-                        availableGames.map((game) => (
-                            <Fragment key={game.name}>
-                                <GameCard
-                                    data={game}
-                                    setMainData={setMainData}
-                                />
-                            </Fragment>
-                        ))}
+                    {allGamesList.map((data) => (
+                        <Fragment key={data.gameName}>
+                            <GameCard data={data} {...props} />
+                        </Fragment>
+                    ))}
                 </div>
             </section>
         </section>

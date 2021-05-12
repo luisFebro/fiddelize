@@ -21,20 +21,19 @@ export const checkVerificationPass = () => `${ROOT}/admin/verification-pass`; //
 
 // CLI-USER
 // client's register
-export const readUserList = (cliAdminId) =>
+export const readAllCliUsers = (cliAdminId) =>
     `${ROOT}/user/list/all?bizId=${cliAdminId}`;
 export const readHighestScores = (cliAdminId) =>
     `${ROOT}/user/list/highest-scores?bizId=${cliAdminId}`;
 
 // purchase's history
-export const readPurchaseHistory = (userId) =>
-    `${ROOT}/user/list/purchase-history/${userId}`; // GET
+export const readBuyHistory = (userId) =>
+    `${ROOT}/user/list/buy-history/${userId}`; // GET
+export const addBuyHistory = (userId) => `${ROOT}/user/buy-history/${userId}`; // PUT
 export const readPrizes = (userId) =>
     `${ROOT}/user/list/purchase-history/prizes/${userId}`;
 export const changePrizeStatus = (cliUserId, statusType) =>
     `${ROOT}/user/purchase-history/update-status/${cliUserId}?statusType=${statusType}`; // PUT
-export const addPurchaseHistory = (userId, role) =>
-    `${ROOT}/user/purchase-history/${userId}?thisRole=${role}`; // PUT
 
 // temp score
 export const readTempPointsList = (userId) =>

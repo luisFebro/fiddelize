@@ -6,7 +6,7 @@
 // import ExpansiblePanel from "../ExpansiblePanel";
 // import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 // // Redux
-// import { readUserList } from "../../../redux/actions/userActions";
+// import { readAllCliUsers } from "../../../redux/actions/userActions";
 // import { showSnackbar } from "../../../redux/actions/snackbarActions";
 // import PanelHiddenContent from "./PanelHiddenContent";
 // // End Redux
@@ -29,7 +29,7 @@
 
 //     useEffect(() => {
 //         if (init || runName === "registered") {
-//             readUserList(dispatch, initialSkip, "colaborador-e-admin").then(
+//             readAllCliUsers(dispatch, initialSkip, "colaborador-e-admin").then(
 //                 (res) => {
 //                     if (res.status !== 200)
 //                         return showSnackbar(dispatch, res.data.msg, "error");
@@ -50,7 +50,7 @@
 //         const querySearched = e.target.value;
 //         searchTerm = querySearched;
 
-//         readUserList(
+//         readAllCliUsers(
 //             dispatch,
 //             initialSkip,
 //             "colaborador-e-admin",

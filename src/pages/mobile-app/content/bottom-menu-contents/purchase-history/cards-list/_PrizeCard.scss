@@ -1,0 +1,45 @@
+// ModalFullScreenHistory
+
+.purchase-history-prize-card--root {
+    padding: 0 15px 15px;
+    border: 2px solid white;
+}
+
+// status panel
+.purchase-history-status-panel--root {
+    top: -15px;
+
+    .board {
+        height: 25px;
+        display: flex;
+        align-items: center;
+        top: 0;
+        border-radius: 15% 15%;
+        background-color: var(--mainWhite);
+    }
+
+    .board div {
+        display: flex;
+    }
+
+    .board p:first-child {
+        position: relative;
+        left: -13px;
+    }
+
+    .board div > p {
+        margin: 0 10px;
+        padding: 0;
+    }
+
+    .board div:last-child {
+        margin-left: 10px;
+    }
+
+    .board div .icon {
+        position: relative;
+        left: -25px;
+    }
+
+}
+// end status panel

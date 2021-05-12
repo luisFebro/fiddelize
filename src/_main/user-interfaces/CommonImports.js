@@ -1,4 +1,4 @@
-import { Load } from "../../components/code-splitting/LoadableComp";
+import { Load } from "components/code-splitting/LoadableComp";
 // All component pages which are using both in website and mobile app goes here in next updates...
 
 export const AsyncLoginPage = Load({

@@ -1,273 +1,87 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Card from "@material-ui/core/Card";
-import Illustration from "components/Illustration";
-import { convertDotToComma } from "utils/numbers/convertDotComma";
-import { useBizData } from "init";
-import useData from "init";
-import defineCurrChallenge from "utils/biz/defineCurrChallenge";
-import getFirstName from "utils/string/getFirstName";
+// LESSON: use import * as React from "react" in case the component is not being recognized or is being delayed to appear when in async mode. Also check the comp, try build the component properly with right props and structure
 import { formatDMY, fromNow } from "utils/dates/dateFns";
-import Spinner from "components/loadingIndicators/Spinner";
-import useDelay from "hooks/useDelay";
-import pickCurrChallData from "utils/biz/pickCurrChallData";
-import useAPIList, { readPurchaseHistory } from "api/useAPIList";
+import Card from "@material-ui/core/Card";
+import { useState, Fragment } from "react";
+import useData, { useBizData } from "init";
+import useAPIList, { readBuyHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import extractStrData from "utils/string/extractStrData";
+import convertToReal from "utils/numbers/convertToReal";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
-import { setVar } from "init/var";
-import PrizeCard from "./PrizeCard";
+import GroupWorkIcon from "@material-ui/icons/GroupWork";
+import PickOtherCards from "./PickOtherCards";
 
-const isSmall = window.Helper.isSmallScreen();
-
-const faStyle = {
-    filter: "drop-shadow(0 0 30px #ffc)",
-    color: "#ff0",
-    fontSize: "30px",
-};
-
-const styles = {
-    check: {
-        ...faStyle,
-        fontSize: "25px",
-        marginRight: "10px",
-        color: "var(--themeP)",
-    },
-};
-
-const WonChallengeBrief = ({ historyData }) => (
-    <section className="prize-card--challenge-brief text-purple">
-        <p className="text-subtitle text-center font-weight-bold m-0">
-            {historyData.desc}
-        </p>
-        <p className="text-normal animated zoomIn fast">
-            <FontAwesomeIcon icon="check" style={styles.check} />
-            Meta final foi:{" "}
-            <strong>{convertDotToComma(historyData.value)} pontos</strong>
-            <br />
-            <FontAwesomeIcon icon="check" style={styles.check} />
-            Você fez:{" "}
-            <strong>
-                {convertDotToComma(historyData.finishedScore)} pontos
-            </strong>
-        </p>
-    </section>
-);
-
-export default function CardsList({ data }) {
+export default function CardsList({
+    cliUserId,
+    cliUserFirstName,
+    isFromDashboard,
+    totalGeneralPoints,
+}) {
+    const { firstName } = useData();
     const [skip, setSkip] = useState(0);
-    const [hasPendingChall] = useData(["pendingChall"]);
-    const loadingGetVar = hasPendingChall !== "...";
 
-    const [challScore, setChallScore] = useState(0);
-
-    const { _id, name, totalPurchasePrize, isFromDashboard } = data;
-
-    let { totalGeneralPoints } = data;
-    totalGeneralPoints = convertDotToComma(totalGeneralPoints);
-    const totalGeneralForIllustra = data.totalGeneralPoints;
-
-    let {
-        targetPoints,
-        rewardList,
-        themeBackColor,
-        themePColor,
-        themeSColor,
-    } = useBizData();
-
-    const txtClass = selectTxtStyle(themeBackColor);
-
+    const gotUserPoints = Boolean(totalGeneralPoints);
     const { role } = useData();
     const isAdmin = role === "cliente-admin";
 
-    const totalPrizes = hasPendingChall
-        ? totalPurchasePrize + 1
-        : loadingGetVar
-        ? "..."
-        : totalPurchasePrize;
-    const pickedObj = pickCurrChallData(rewardList, totalPrizes);
-    targetPoints = convertDotToComma(pickedObj.targetPoints);
+    const { themeBackColor, themePColor, targetPoints } = useBizData();
 
-    const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
-    const confirmedChallenges = totalPurchasePrize || 0;
-    const challengeN = hasPendingChall
-        ? defineCurrChallenge(totalPurchasePrize) + 1
-        : defineCurrChallenge(totalPurchasePrize);
-    const challDiffs = challengeN - confirmedChallenges;
-    const needChallDelayAlert = challDiffs >= 2;
-    const mainCompsReady = useDelay(3000);
+    const txtClass = selectTxtStyle(themeBackColor);
 
-    const params = React.useMemo(
-        () => ({
-            challengeN,
-            targetPoints,
-            isFromDashboard,
-        }),
-        [challengeN, targetPoints, isFromDashboard]
-    );
+    const params = {
+        targetPoints,
+        isFromDashboard,
+    };
 
     const {
         list,
-        content,
         hasMore,
-        isOffList,
         readyShowElems,
+        isOffList,
         loading,
         ShowLoadingSkeleton,
         error,
         ShowError,
+        // content,
     } = useAPIList({
-        url: readPurchaseHistory(_id),
+        url: readBuyHistory(cliUserId),
         params,
         skip,
-        trigger: !loadingGetVar,
-        listName: "purchaseCardsList",
+        listName: "buyPointCardsList",
     });
+
     const detectedCard = useElemDetection({ loading, hasMore, setSkip });
 
-    useEffect(() => {
-        if (list.length) {
-            const foundPendingChallenge = list.find(
-                (card) =>
-                    card.cardType === "prize" && card.isPrizeConfirmed === false
-            );
-            if (foundPendingChallenge) {
-                setVar({ pendingChall: true });
-            }
-
-            // removeVar("pendingChall") is handled in the Challenge component to avoid user remove it and set the prior challenge again...
-        }
-    }, [list]);
-
-    useEffect(() => {
-        if (content) {
-            const { challScore } = extractStrData(content);
-            setChallScore(challScore);
-        }
-    }, [content, hasPendingChall]);
-
-    const onlyFirstName = getFirstName(name);
-
-    const illustrationIfEmpty = () => (
-        <Illustration
-            img="/img/illustrations/empty-woman-card.svg"
-            className="app_empty_purchase_illustra"
-            alt="Sem Compras"
-            imgStyle={{
-                maxWidth: 400,
-            }}
-            txtImgConfig={{
-                topPos: "15%",
-                txt: `Sem compras,<br />${onlyFirstName.cap()}.`,
-            }}
-        />
-    );
-
-    const showChallDelayAlert = () =>
-        needChallDelayAlert && (
-            <p className="my-3 text-expense-red text-small font-weight-bold text-left mx-2">
-                Atenção: Desafios desatualizados. Aguarde - ou verifique - a
-                notificação de confirmação para atualizar.
-            </p>
-        );
-
-    const showAllTimeTotal = () => {
-        const firstChallScoreTitle = isSmall
-            ? "• Total de Pontos:"
-            : "• Total de Pontos Gerais:";
-        const showTotalBadge = isAfterFirstChall || hasPendingChall;
-
-        const handleChallScore = (challScore, options = {}) => {
-            const { totalGeneralPoints, isAfterFirstChall } = options;
-            if (!isAfterFirstChall) return totalGeneralPoints || 0;
-            return challScore;
-        };
-
-        let currChallScore = handleChallScore(challScore, {
-            totalGeneralPoints,
-            isAfterFirstChall,
-        });
-        currChallScore = isSmall
-            ? currChallScore && convertDotToComma(currChallScore)
-            : `${convertDotToComma(currChallScore)} pontos`;
-
-        const showCore = () => (
-            <div className="purchase-history-sum--root">
-                <div className="scores">
-                    <span>
-                        {!isAfterFirstChall
-                            ? firstChallScoreTitle
-                            : `• Desafio atual #${challengeN}:`}
-                    </span>
-                    <p className="d-inline-block value m-0 ml-2">
-                        {currChallScore}
-                    </p>
-                    <br />
-                    {!isAfterFirstChall ? (
-                        <Fragment>
-                            <span>• Desafios Confirmados:</span>
-                            <p className="d-inline-block value m-0 ml-2">
-                                {confirmedChallenges}
-                            </p>
-                        </Fragment>
-                    ) : (
-                        <Fragment>
-                            <span>
-                                • Desafios
-                                <FontAwesomeIcon
-                                    icon="check-circle"
-                                    className="icon-shadow"
-                                    style={{ marginLeft: "5px" }}
-                                />
-                                :
-                            </span>
-                            <p className="d-inline-block value m-0 ml-2">
-                                {confirmedChallenges}
-                            </p>
-                        </Fragment>
-                    )}
-                </div>
-            </div>
-        );
+    const showAllPointsBadge = () => {
+        const allPoints = convertToReal(totalGeneralPoints);
 
         return (
-            <div className="mt-4 mb-5 card-total position-relative">
-                <Card
-                    className="mt-2 text-shadow text-normal text-white"
-                    style={{ backgroundColor: "var(--incomeGreen)" }}
+            <section className="all-points animated fadeInUp delay-3s container-center mb-5">
+                <p
+                    className={`${txtClass} text-pill text-normal d-inline-block font-weight-bold m-0 ml-2`}
                 >
-                    {loading && skip === 0 ? (
-                        <p className="ml-3 my-3 font-weight-bold text-normal text-shadow text-white">
-                            Analisando valores...
-                        </p>
-                    ) : (
-                        showCore()
-                    )}
-                </Card>
-                {showTotalBadge && !loading ? (
-                    <div
-                        className={`badge-total-scores theme-back--${themeBackColor}`}
-                    >
-                        <div
-                            className={`text text-normal ${txtClass} text-nowrap`}
-                        >
-                            <p className="text-center m-0 mt-2">
-                                {totalGeneralPoints}
-                            </p>
-                            <br />
-                            Pontos Gerais
-                        </div>
-                    </div>
-                ) : (
-                    <Fragment>
-                        {showTotalBadge && (
-                            <p className="badge-loading ml-3 my-3 font-weight-bold text-normal text-shadow text-white">
-                                ...
-                            </p>
-                        )}
-                    </Fragment>
-                )}
-            </div>
+                    {allPoints} pontos gerais
+                    <span className="d-inline-block ml-2">
+                        <GroupWorkIcon
+                            style={{ fontSize: 30, transform: "rotate(40deg)" }}
+                        />
+                    </span>
+                </p>
+                <style jsx>
+                    {`
+                        .all-points p {
+                            background: var(--themePDark--${themePColor});
+                        }
+                    `}
+                </style>
+                <style jsx>
+                    {`
+                        .all-points p {
+                            color: rgb(255, 255, 0);
+                            padding: 10px 15px;
+                        }
+                    `}
+                </style>
+            </section>
         );
     };
 
@@ -280,208 +94,156 @@ export default function CardsList({ data }) {
             </div>
         );
 
-    const showCurrFinalChallScore = () =>
-        isAfterFirstChall &&
-        totalPrizes >= 1 && (
-            <section className="container-center my-5">
-                <FontAwesomeIcon
-                    icon="trophy"
-                    style={{ ...styles.check, fontSize: "35px" }}
-                />
-                <p
-                    className="d-inline-block text-normal text-purple font-weight-bold m-0"
-                    style={{ lineHeight: "24px" }}
-                >
-                    Nova Meta Final:
-                    <br />
-                    <span style={{ fontSize: "28px" }}>
-                        {targetPoints} pontos
-                    </span>
-                </p>
-            </section>
-        );
-
-    const showDesc = (historyData, isRemainder, embodyRemainderCard) => {
-        const { milestoneIcon: cardIcon } = pickCurrChallData(
-            rewardList,
-            historyData.challengeN - 1
-        );
+    function Header() {
         return (
+            <Fragment>
+                <section className="record-card desc position-absolute">
+                    <p className="font-site text-em-1-1 text-black font-weight-bold">
+                        Descrição
+                    </p>
+                </section>
+                <section className="record-card score position-absolute">
+                    <p className="font-site text-em-1-1 text-black font-weight-bold">
+                        Pontos
+                    </p>
+                </section>
+                <style jsx>
+                    {`
+                        .record-card {
+                            top: -20px;
+                            z-index: 1000;
+                        }
+
+                        .record-card p {
+                            background-color: var(--lightGrey);
+                            padding: 3px 5px;
+                            border-radius: 25px;
+                        }
+
+                        .record-card.desc {
+                            left: 30px;
+                        }
+
+                        .record-card.score {
+                            right: 30px;
+                        }
+                    `}
+                </style>
+            </Fragment>
+        );
+    }
+
+    function RecordCard({ historyData }) {
+        const { desc, isLastRecordCard, createdAt } = historyData;
+
+        const showDesc = () => (
             <section className="desc text-left">
-                <div className={`${!isRemainder ? "inner-container" : ""}`}>
-                    {!isRemainder && (
-                        <div>
-                            <FontAwesomeIcon
-                                icon={cardIcon}
-                                className="pr-1"
-                                style={faStyle}
-                            />
-                            #{historyData.challengeN}
-                        </div>
-                    )}
-                    <div>
-                        {!isRemainder ? (
-                            <span className="font-weight-bold text-normal">
-                                {historyData.desc}
-                            </span>
-                        ) : (
-                            <Fragment>
-                                <p className="m-0 text-center font-weight-bold text-normal">
-                                    {historyData.desc}
-                                </p>
-                                {embodyRemainderCard(historyData) ? (
-                                    <p
-                                        className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
-                                        style={{ lineHeight: "20px" }}
-                                    >
-                                        Desafio
-                                        <strong className="text-normal font-weight-bold">
-                                            {" "}
-                                            N.º {historyData.challengeN}
-                                        </strong>{" "}
-                                        começou com
-                                        <br />
-                                        <strong className="text-normal font-weight-bold">
-                                            {" "}
-                                            {convertDotToComma(
-                                                historyData.value
-                                            )}{" "}
-                                            pontos.
-                                        </strong>
-                                    </p>
-                                ) : (
-                                    <p
-                                        className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
-                                        style={{ lineHeight: "20px" }}
-                                    >
-                                        Você já começa o desafio seguinte de
-                                        <strong className="text-normal font-weight-bold">
-                                            {" "}
-                                            N.º {historyData.challengeN}
-                                        </strong>{" "}
-                                        com
-                                        <strong className="text-normal font-weight-bold">
-                                            {" "}
-                                            {convertDotToComma(
-                                                historyData.value
-                                            )}{" "}
-                                            pontos.
-                                        </strong>
-                                    </p>
-                                )}
-                            </Fragment>
-                        )}
-                        {!isRemainder && (
-                            <Fragment>
-                                <br />
-                                <br />
-                                <span className="text-small font-weight-bold">
-                                    {formatDMY(historyData.createdAt)}
-                                    <br />
-                                    {fromNow(historyData.createdAt)}
-                                </span>
-                            </Fragment>
-                        )}
+                <div className="inner-container">
+                    <span className="d-inline-block mt-1 font-weight-bold text-normal">
+                        {desc}
+                    </span>
+                    <div className="timestamp mt-1 text-small font-weight-bold">
+                        {formatDMY(createdAt)}
+                        <br />
+                        {fromNow(createdAt)}
                     </div>
+                    <style jsx>
+                        {`
+                            .timestamp {
+                                line-height: 18px;
+                            }
+                        `}
+                    </style>
                 </div>
             </section>
         );
+
+        const showScore = () => (
+            <div className="card-score font-weight-bold text-subtitle text-center">
+                {convertToReal(historyData.value)}
+                <span className="d-inline-block text-small font-weight-bold ml-1">
+                    pts
+                </span>
+                <style jsx>
+                    {`
+                        .card-score {
+                            color: rgb(255, 255, 0);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    `}
+                </style>
+            </div>
+        );
+
+        return (
+            <section className="position-relative">
+                <Card className="record-card--root mt-2">
+                    <section className="record-card-body text-white font-weight-bold text-normal text-center text-purple">
+                        {showDesc()}
+                        {showScore()}
+                    </section>
+                </Card>
+                {isLastRecordCard && <Header />}
+                <style jsx global>
+                    {`
+                        .record-card-body {
+                            display: flex;
+                            padding: 0 4px;
+                            background: var(--mainDark);
+                        }
+
+                        .record-card-body div {
+                            padding: 9px 5px;
+                        }
+
+                        .desc {
+                            flex-basis: 70%;
+                        }
+                    `}
+                </style>
+            </section>
+        );
+    }
+
+    const pickCard = (historyData) => {
+        const { cardType, gameType = "fsdfs" } = historyData;
+        const isRecord = cardType === "record";
+
+        return (
+            <Fragment>
+                {!isRecord && (
+                    <Fragment>
+                        {gameType && <hr className="lazer-purple my-4" />}
+                        <PickOtherCards
+                            historyData={historyData}
+                            colorP={themePColor}
+                        />
+                    </Fragment>
+                )}
+                {isRecord && <RecordCard historyData={historyData} />}
+            </Fragment>
+        );
     };
 
-    const showScore = (historyData, isRemainder) =>
-        !isRemainder && (
-            <div className="font-weight-bold text-subtitle text-center container-center">
-                {convertDotToComma(historyData.value)}
-            </div>
-        );
-
-    const embodyRemainderCard = (historyData) =>
-        challengeN >= historyData.challengeN;
-    const pickCard = ({ historyData, isRemainder, isLastRecordCard }) => (
-        <Fragment>
-            {historyData.cardType.includes("prize") && (
-                <Fragment>
-                    <hr className="lazer-purple my-4" />
-                    <PrizeCard
-                        historyData={historyData}
-                        colorS={themeSColor}
-                        colorP={themePColor}
-                    />
-                </Fragment>
-            )}
-
-            {historyData.cardType.includes("brief") && (
-                <WonChallengeBrief historyData={historyData} />
-            )}
-
-            {(historyData.cardType === "record" || isRemainder) && (
-                <section className="position-relative">
-                    <Card
-                        className="mt-2"
-                        style={{
-                            backgroundColor:
-                                !isRemainder || embodyRemainderCard(historyData)
-                                    ? `var(--themePDark--${themeBackColor})`
-                                    : "var(--themePLight--black)",
-                        }}
-                    >
-                        <section
-                            className={`text-white font-weight-bold ${
-                                !isRemainder
-                                    ? "purchase-history-table-data--root"
-                                    : "my-2 text-shadow"
-                            } text-normal text-center text-purple`}
-                        >
-                            {showDesc(
-                                historyData,
-                                isRemainder,
-                                embodyRemainderCard
-                            )}
-                            {showScore(historyData, isRemainder)}
-                        </section>
-                    </Card>
-                    {isLastRecordCard && (
-                        <Fragment>
-                            <section className="record-card desc position-absolute">
-                                <p className="font-site text-em-1-1 text-black font-weight-bold">
-                                    Descrição
-                                </p>
-                            </section>
-                            <section className="record-card score position-absolute">
-                                <p className="font-site text-em-1-1 text-black font-weight-bold">
-                                    Pontos/R$
-                                </p>
-                            </section>
-                        </Fragment>
-                    )}
-                </section>
-            )}
-        </Fragment>
-    );
-
-    const mainData = list.map((historyData, ind) => {
-        const isRemainder = historyData.cardType === "remainder";
-
-        const { isLastRecordCard } = historyData;
-        const props = { key: historyData._id };
-
-        return !isOffList &&
+    const mainData =
+        !isOffList &&
+        list.map((historyData, ind) =>
             checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
-            <div {...props} ref={detectedCard}>
-                {pickCard({ historyData, isRemainder, isLastRecordCard })}
-            </div>
-        ) : (
-            <div {...props}>
-                {pickCard({ historyData, isRemainder, isLastRecordCard })}
-            </div>
+                <div key={historyData._id} ref={detectedCard}>
+                    {pickCard(historyData)}
+                </div>
+            ) : (
+                <div key={historyData._id}>{pickCard(historyData)}</div>
+            )
         );
-    });
 
     const showOverMsg = () => (
         <Fragment>
             {!hasMore && readyShowElems && (
                 <p className="my-5 text-normal text-center font-weight-bold text-purple">
-                    Isso é tudo{!isAdmin ? `, ${name}` : "."}
+                    Isso é tudo{!isAdmin ? `, ${cliUserFirstName}` : "."}
                 </p>
             )}
 
@@ -493,28 +255,74 @@ export default function CardsList({ data }) {
         </Fragment>
     );
 
+    const showUserCards = () => (
+        <Fragment>
+            {showAllPointsBadge()}
+            {showOfflineStatus()}
+            {mainData}
+            {loading && <ShowLoadingSkeleton size="large" />}
+            {error && <ShowError />}
+            {showOverMsg()}
+        </Fragment>
+    );
+
     return (
-        <div>
-            {!totalGeneralForIllustra ? (
-                illustrationIfEmpty()
-            ) : (
-                <Fragment>
-                    {!mainCompsReady ? (
-                        <Spinner marginY={100} size="small" />
-                    ) : (
-                        <Fragment>
-                            {showChallDelayAlert()}
-                            {showAllTimeTotal()}
-                            {showOfflineStatus()}
-                            {showCurrFinalChallScore()}
-                            {mainData}
-                            {loading && <ShowLoadingSkeleton size="large" />}
-                            {error && <ShowError />}
-                            {showOverMsg()}
-                        </Fragment>
-                    )}
-                </Fragment>
-            )}
+        <section>
+            {!gotUserPoints
+                ? showNoBuyIllustration(firstName)
+                : showUserCards()}
+        </section>
+    );
+}
+
+function showNoBuyIllustration(firstName) {
+    return (
+        <div className="container-center">
+            <p
+                className="position-relative text-subtitle font-weight-bold text-purple"
+                style={{
+                    fontSize: "2rem",
+                    lineHeight: "35px",
+                    textAlign: "center",
+                    top: "70px",
+                }}
+            >
+                Sem compras,
+                <br />
+                {firstName}
+            </p>
+            <img
+                width={400}
+                height={400}
+                src="/img/illustrations/empty-woman-card.svg"
+                alt="sem compras"
+            />
         </div>
     );
 }
+
+/* ORIGINAL BODY
+
+<div>
+    {!gotUserPoints ? (
+        illustrationIfEmpty()
+    ) : (
+        <Fragment>
+            {!userCardsReady ? (
+                <Spinner marginY={100} size="small" />
+            ) : (
+                <Fragment>
+                    {showChallDelayAlert()}
+                    {showAllTimeTotal()}
+                    {showOfflineStatus()}
+                    {mainData}
+                    {loading && <ShowLoadingSkeleton size="large" />}
+                    {error && <ShowError />}
+                    {showOverMsg()}
+                </Fragment>
+            )}
+        </Fragment>
+    )}
+</div>
+
+ */

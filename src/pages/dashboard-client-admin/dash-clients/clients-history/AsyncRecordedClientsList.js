@@ -3,7 +3,7 @@ import { calendar } from "utils/dates/dateFns";
 import convertToReal from "utils/numbers/convertToReal";
 import { updateUser } from "api/frequent";
 import useData, { useBizData } from "init";
-import useAPIList, { readUserList, getTrigger } from "api/useAPIList";
+import useAPIList, { readAllCliUsers, getTrigger } from "api/useAPIList";
 import useRun from "global-data/ui";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import extractStrData from "utils/string/extractStrData";
@@ -165,19 +165,18 @@ const handleParams = ({ search, filterName, period, getFilterDate }) => {
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
     const [isFiltering, setIsFiltering] = useState(false);
-    const { bizId } = useBizData();
+    // TO DO: the updated totalActivePoints will be read from INIT only now
+    const { bizId, bizPlan } = useBizData();
     const { name } = useData();
-    const { bizPlan } = useBizData();
 
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
     const [data, setData] = useState({
         totalCliUserScores: 0,
-        totalActivePoints: 0,
         search: "",
         cleared: "",
     });
-    const { totalCliUserScores, totalActivePoints, search, cleared } = data;
+    const { totalCliUserScores, search, cleared } = data;
 
     const [filter, setFilter] = useState({
         filterName: "newCustomers",
@@ -226,10 +225,9 @@ export default function AsyncRecordedClientsList() {
     useEffect(() => {
         const objToSend = {
             "clientAdminData.totalClientUserPoints": totalCliUserScores,
-            "clientAdminData.totalActivePoints": totalActivePoints,
         };
         updateUser(bizId, "cliente-admin", objToSend);
-    }, [totalCliUserScores, totalActivePoints]);
+    }, [totalCliUserScores]);
 
     const params = handleParams({ search, filterName, period, getFilterDate });
 
@@ -251,7 +249,7 @@ export default function AsyncRecordedClientsList() {
         listTotal,
         ShowOverMsg,
     } = useAPIList({
-        url: readUserList(bizId),
+        url: readAllCliUsers(bizId),
         skip,
         params,
         trigger,
@@ -268,11 +266,10 @@ export default function AsyncRecordedClientsList() {
     });
 
     useEffect(() => {
-        if (content) {
-            const { totalCliUserScores, totalActivePoints } = extractStrData(
-                content
-            );
-            setData({ ...data, totalCliUserScores, totalActivePoints });
+        if (false) {
+            // content
+            const { totalCliUserScores } = extractStrData(content);
+            setData({ ...data, totalCliUserScores });
         }
     }, [content]);
 

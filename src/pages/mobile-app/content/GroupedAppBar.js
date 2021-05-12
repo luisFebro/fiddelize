@@ -1,15 +1,18 @@
 import { withRouter } from "react-router-dom";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import StarsIcon from "@material-ui/icons/Stars";
+import useData, { useBizData } from "init";
 // import HomeIcon from "@material-ui/icons/Home";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useContext from "context";
-import BottomTabs from "../../../components/tabs/BottomTabs";
-import LoadableVisible from "../../../components/code-splitting/LoadableComp";
+import BottomTabs from "components/tabs/BottomTabs";
+import LoadableVisible from "components/code-splitting/LoadableComp";
+// Contents
 import Games from "./bottom-menu-contents/all-games/Games";
 
 const AsyncMoreOptionsMenu = LoadableVisible({
@@ -29,13 +32,18 @@ const AsyncPurchaseHistory = LoadableVisible({
 });
 
 function GroupedAppBar({ history }) {
-    const {
-        needAppForCliAdmin,
-        colorP,
-        colorBack,
-        didUserScroll,
-        // needAppForPreview
-    } = useContext();
+    const { firstName, userId, totalGeneralPoints } = useData();
+
+    const { themePColor: colorP, themeBackColor: colorBack } = useBizData();
+
+    const { needAppForCliAdmin, didUserScroll } = useContext();
+
+    const cliUserBuyData = {
+        cliUserFirstName: firstName,
+        cliUserId: userId,
+        totalGeneralPoints,
+        isFromDashboard: false,
+    };
 
     const data = [
         {
@@ -48,12 +56,12 @@ function GroupedAppBar({ history }) {
         {
             tabLabel: "Compras",
             tabIcon: <LocalMallIcon />,
-            tabContentPanel: <AsyncPurchaseHistory />,
+            tabContentPanel: <AsyncPurchaseHistory {...cliUserBuyData} />,
             scrollView: true,
         },
         {
-            tabLabel: "Ranking",
-            tabIcon: <BarChartIcon />,
+            tabLabel: "Ganhos",
+            tabIcon: <FontAwesomeIcon icon="trophy" style={{ fontSize: 19 }} />,
             tabContentPanel: undefined,
             scrollView: true,
         },
@@ -95,3 +103,14 @@ function GroupedAppBar({ history }) {
 }
 
 export default withRouter(GroupedAppBar);
+
+/* ARCHIVES
+
+{
+    tabLabel: "Ranking",
+    tabIcon: <BarChartIcon />,
+    tabContentPanel: undefined,
+    scrollView: true,
+},
+
+ */

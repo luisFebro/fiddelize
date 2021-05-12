@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import getFirstName from "utils/string/getFirstName";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 import ClientProfile from "./modal-content-pages/ClientProfile";
@@ -27,19 +28,12 @@ export default function ActionBtns({ data, needBadgeForTestMode }) {
 
 const ShowHistoryBtn = ({ data, isFromDashboard = true }) => {
     const { name, _id, clientUserData } = data;
-    const {
-        totalGeneralPoints,
-        totalPurchasePrize,
-        currPoints,
-    } = clientUserData;
 
     const getModalData = () => ({
-        cliUserName: name,
+        cliUserFirstName: getFirstName(name && name.cap()),
         cliUserId: _id,
-        currUserScore: currPoints,
-        totalGeneralPoints,
-        totalPurchasePrize,
-        isFromDashboard,
+        totalGeneralPoints: clientUserData.totalGeneralPoints,
+        isFromDashboard: true,
     });
 
     const modalData = getModalData();

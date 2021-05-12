@@ -10,7 +10,10 @@ import parse from "html-react-parser";
 // End Material UI
 import PropTypes from "prop-types";
 import { deleteProduct } from "../../../redux/actions/productActions";
-import { deleteUser, readUserList } from "../../../redux/actions/userActions";
+import {
+    deleteUser,
+    readAllCliUsers,
+} from "../../../redux/actions/userActions";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { closeModal } from "../../../redux/actions/modalActions";
 
@@ -144,7 +147,9 @@ export default function ModalConfYesNo({ currItemFound }) {
                                                             `O ${mainSubject} ${name.cap()} foi excluído com sucesso!`,
                                                             "success"
                                                         );
-                                                        readUserList(dispatch);
+                                                        readAllCliUsers(
+                                                            dispatch
+                                                        );
                                                     });
                                                 }, 7000);
                                                 break;

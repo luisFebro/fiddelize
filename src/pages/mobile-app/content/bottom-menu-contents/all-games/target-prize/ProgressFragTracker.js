@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import useContext from "context";
+import useData, { useBizData } from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getRemainder from "utils/numbers/getRemainder";
 import Tooltip from "components/tooltips/Tooltip";
@@ -29,12 +30,15 @@ const getStyles = () => ({
 });
 
 export default function ProgressFragTracker() {
+    const { currPoints } = useData();
+
     const {
-        colorS,
-        colorP,
-        colorBack,
-        currPoints,
-        // currChall,
+        themeSColor: colorS,
+        themePColor: colorP,
+        themeBackColor: colorBack,
+    } = useBizData();
+
+    const {
         selectTxtStyle,
         targetPoints,
         playBeep,

@@ -14,19 +14,7 @@ export const AsyncProgressFragTracker = Load({
 });
 
 export default function TargetPrizeGame({ didUserScroll }) {
-    const {
-        userId,
-        needAppForPreview,
-        arePrizesVisible,
-        prizeDesc,
-        milestoneIcon,
-        runName,
-        currPoints,
-        targetPoints,
-        colorBack,
-        colorS,
-        selectTxtStyle,
-    } = useContext();
+    const { needAppForPreview } = useContext();
 
     const showRatingIcons = () => (
         <div
@@ -34,15 +22,7 @@ export default function TargetPrizeGame({ didUserScroll }) {
                 needAppForPreview && "enabledLink"
             }`}
         >
-            <RatingIcons
-                currPoints={currPoints}
-                targetPoints={targetPoints}
-                colorBack={colorBack}
-                colorS={colorS}
-                selectTxtStyle={selectTxtStyle}
-                milestoneIcon={milestoneIcon}
-                runName={runName}
-            />
+            <RatingIcons />
         </div>
     );
 
@@ -51,12 +31,7 @@ export default function TargetPrizeGame({ didUserScroll }) {
             {didUserScroll && (
                 <Fragment>
                     <div className="mb-5" />
-                    <Gift
-                        prizeDesc={prizeDesc}
-                        userId={userId}
-                        arePrizesVisible={arePrizesVisible}
-                        rewardDeadline={30}
-                    />
+                    <Gift />
                 </Fragment>
             )}
             <div className="mb-3" />
@@ -70,7 +45,7 @@ export default function TargetPrizeGame({ didUserScroll }) {
             )}
             {didUserScroll && (
                 <section className="my-5 container-center">
-                    <GamesGalleryBtn colorS={colorS} colorBack={colorBack} />
+                    <GamesGalleryBtn />
                 </section>
             )}
         </section>

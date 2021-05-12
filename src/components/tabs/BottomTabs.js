@@ -118,6 +118,10 @@ export default function BottomTabs({
                                 : "var(--mainWhite)",
                         }}
                     >
+                        <div
+                            style={{ position: "relative" }}
+                            id="bottomTabContentView"
+                        />
                         <TabPanel
                             style={{
                                 minHeight: "500px",

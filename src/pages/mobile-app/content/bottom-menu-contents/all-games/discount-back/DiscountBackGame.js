@@ -1,17 +1,19 @@
-import useContext from "context";
+import useData, { useBizData } from "init";
 import GamesGalleryBtn from "../games-gallery-btn/GamesGalleryBtn";
 import CartRace from "./cart-race/CartRace";
+
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
 export default function DiscountBackGame({ didUserScroll }) {
-    const { colorS, colorBack, userName, currPoints } = useContext();
+    const { firstName, currPoints } = useData();
+    const { themeSColor: colorS, themeBackColor: colorBack } = useBizData();
 
     const showCartRace = () =>
         isEvenSmall && (
             <CartRace
                 className="animated fadeInUp faster"
                 currUserScore={currPoints}
-                userName={userName}
+                userName={firstName}
             />
         );
 

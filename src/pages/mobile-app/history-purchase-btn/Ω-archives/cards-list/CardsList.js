@@ -129,7 +129,8 @@ export default function CardsList({ data }) {
         if (list.length) {
             const foundPendingChallenge = list.find(
                 (card) =>
-                    card.cardType === "prize" && card.isPrizeConfirmed === false
+                    card.cardType === "benefit" &&
+                    card.isPrizeConfirmed === false
             );
             if (foundPendingChallenge) {
                 setVar({ pendingChall: true });
@@ -399,7 +400,7 @@ export default function CardsList({ data }) {
         challengeN >= historyData.challengeN;
     const pickCard = ({ historyData, isRemainder, isLastRecordCard }) => (
         <Fragment>
-            {historyData.cardType.includes("prize") && (
+            {historyData.cardType.includes("benefit") && (
                 <Fragment>
                     <hr className="lazer-purple my-4" />
                     <PrizeCard

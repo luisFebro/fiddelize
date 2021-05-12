@@ -59,7 +59,7 @@ export default function DashClients() {
             <AsyncRankingPondium />
             <Title
                 title="&#187; Aniversário de clientes"
-                subTitle="Envie automaticamente uma mensagem para todos seus clientes lembrarem da sua marca em um dia especial"
+                subTitle="Envie automaticamente uma mensagem para todos seus clientes lembrarem da sua marca neste dia importante para eles"
                 subTitleClassName="text-small font-weight-bold"
                 color="var(--themeP)"
                 padding=" "

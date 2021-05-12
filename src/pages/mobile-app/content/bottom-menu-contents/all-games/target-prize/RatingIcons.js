@@ -1,5 +1,7 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
 import { useEffect } from "react";
+import useContext from "context";
+import useData from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "components/tooltips/Tooltip";
 import animateCSS from "utils/animateCSS";
@@ -7,15 +9,20 @@ import { milestoneIcons, iconNamesOnly } from "global-data/milestoneIcons";
 import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import usePlayAudio from "hooks/media/usePlayAudio";
 
-export default function RatingIcons({
-    currPoints,
-    targetPoints,
-    milestoneIcon,
-    runName,
-    selectTxtStyle,
-    colorBack,
-    colorS,
-}) {
+export default function RatingIcons() {
+    const {
+        themeBackColor: colorBack,
+        themeSColor: colorS,
+        currPoints,
+    } = useData();
+
+    const {
+        targetPoints,
+        milestoneIcon,
+        runName,
+        selectTxtStyle,
+    } = useContext();
+
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,
     });

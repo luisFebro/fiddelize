@@ -113,7 +113,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 
     return await getAPI({
         method: "put",
-        url: sendNotif(),
+        url: `${ROOT}/notification/send`,
         fullCatch: true,
         params: {
             nT: nT ? 1 : undefined,

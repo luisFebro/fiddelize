@@ -17,8 +17,8 @@ import pickCurrChallData from "utils/biz/pickCurrChallData";
 import { updateUser, readUser } from "api/frequent";
 import getAPI, {
     setLastPointsAsDone,
-    addPurchaseHistory,
-    readPurchaseHistory,
+    addBuyHistory,
+    readBuyHistory,
 } from "api";
 import getVar, { setVar, removeVar } from "init/var";
 import useBackColor from "hooks/useBackColor";
@@ -136,7 +136,7 @@ function AsyncClientScoresPanel({ history, location }) {
     // MAIN VARIABLES
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     targetPoints = pickedObj.targetPoints;
-    milestoneIcon = pickedObj.milestoneIcon;
+    // milestoneIcon = pickedObj.milestoneIcon;
     const prizeDesc = pickedObj.mainReward;
 
     const { currPointsBefore, lastPoints, currPointsNow } = getScoreData({
@@ -171,7 +171,6 @@ function AsyncClientScoresPanel({ history, location }) {
                 "clientUserData.bizId": bizId, // for cli-admin or if not it will not override <again className=""></again>
                 "clientUserData.lastPoints": lastPoints,
                 "clientUserData.currPoints": currPointsNow, // need to be Number to ranking in DB properly
-                "clientUserData.totalActivePoints": currPointsNow, // the same as currPoints | active is passive to be discounted and general it is accumulative without discount.
                 "clientUserData.totalGeneralPoints":
                     totalGeneralPoints + Number(lastPoints),
                 "clientUserData.filterLastPurchase": new Date(),
@@ -210,13 +209,12 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 const historyObj = {
                     targetPoints,
-                    icon: milestoneIcon,
                     value: lastPoints,
                 };
 
                 await getAPI({
                     method: "put",
-                    url: addPurchaseHistory(cliUserId, whichRole),
+                    url: addBuyHistory(cliUserId),
                     body: historyObj,
                 });
 
@@ -224,18 +222,13 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 if (userBeatChallenge) {
                     const params = {
-                        prizeDesc,
-                        thisRole: whichRole || "cliente",
-                        noResponse: true,
                         targetPoints,
-                        trophyIcon: milestoneIcon, // Query for reading the prizes on clientScorePanel
-                        skip: undefined || 0,
-                        limit: undefined,
-                        challengeN: undefined,
+                        noResponse: true,
+                        prizeDesc,
                     };
 
                     await getAPI({
-                        url: readPurchaseHistory(cliUserId),
+                        url: readBuyHistory(cliUserId),
                         params,
                     });
                     setFinishedWork(true);

@@ -20,7 +20,7 @@ import {
     closeModal,
     showModalRegister,
 } from "../../redux/actions/modalActions";
-import { readUserList } from "../../redux/actions/userActions";
+import { readAllCliUsers } from "../../redux/actions/userActions";
 import { loginEmail } from "../../redux/actions/authActions";
 // Material UI
 // End Material UI
@@ -142,7 +142,7 @@ export default function ModalLogin() {
             <ButtonMulti
                 onClick={() => {
                     signInThisUser();
-                    setTimeout(() => readUserList(dispatch), 3000);
+                    setTimeout(() => readAllCliUsers(dispatch), 3000);
                     showSnackbar(dispatch, "Acessando sua conta...");
                 }}
                 iconFontAwesome="fas fa-paper-plane"

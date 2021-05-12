@@ -2,6 +2,7 @@ import useContext from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Load } from "components/code-splitting/LoadableComp";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
+import useData from "init";
 // games
 export const AsyncTargetPrizeGame = Load({
     loader: () =>
@@ -19,23 +20,11 @@ export const AsyncDiscountBackGame = Load({
 // end games
 
 export default function Games() {
-    const { selectedTxtStyle, currChall, didUserScroll } = useContext();
+    const { currGame, selectedTxtStyle, didUserScroll } = useContext();
+    const { userGame } = useData();
+    if (!userGame) return <div />;
 
-    // for cli-user
-    const games = {
-        targetPrize: {
-            challN: 6,
-        },
-        discountBack: {
-            challN: 1,
-        },
-        raffleTicket: {},
-    };
-
-    // last selected game from user or according to this order of priority:
-    // targetPrize, discountBack, raffleTicket
-    const gameType = "targetPrize";
-    const { icon, nameBr, challN } = getGameData(gameType, games);
+    const { icon, nameBr, challN } = getGameData(currGame, userGame);
 
     const showTitle = () => (
         <section className="animated fadeIn py-4">
@@ -44,58 +33,52 @@ export default function Games() {
             >
                 {icon}
                 {nameBr}
-                <br />
-                <span className="text-title">n.º {challN || currChall}</span>
+                <span className="position-relative d-block text-title">
+                    n.º {challN}
+                </span>
             </h2>
         </section>
     );
 
-    if (!gameType)
-        return (
-            <div className="my-3 text-normal text-center text-white text-shadow">
-                ...
-            </div>
-        );
-
     return (
         <section>
             {didUserScroll ? showTitle() : <div className="pb-2" />}
-            {gameType === "targetPrize" && (
+            {currGame === "targetPrize" && (
                 <AsyncTargetPrizeGame didUserScroll={didUserScroll} />
             )}
-            {gameType === "discountBack" && (
+            {currGame === "discountBack" && (
                 <AsyncDiscountBackGame didUserScroll={didUserScroll} />
             )}
-            {gameType === "raffleTicket" && null}
+            {currGame === "raffleTicket" && null}
         </section>
     );
 }
 
 // HELPERS
-function getGameData(gameType, games) {
-    if (gameType === "targetPrize") {
+function getGameData(currGame, games) {
+    if (currGame === "targetPrize") {
         return {
             nameBr: "Prêmio Alvo",
             icon: (
                 <FontAwesomeIcon
                     icon="gift"
-                    className="mr-3"
-                    style={{ fontSize: 35 }}
+                    className="mr-2"
+                    style={{ fontSize: 45 }}
                 />
             ),
             challN: games ? games.targetPrize.challN : "...",
         };
     }
 
-    if (gameType === "discountBack") {
+    if (currGame === "discountBack") {
         return {
             nameBr: "Desconto Retornado",
-            icon: <LoyaltyIcon className="mr-3" style={{ fontSize: 35 }} />,
+            icon: <LoyaltyIcon className="mr-2" style={{ fontSize: 45 }} />,
             challN: games ? games.discountBack.challN : "...",
         };
     }
 
-    if (gameType === "raffleTicket") {
+    if (currGame === "raffleTicket") {
         return {
             nameBr: "Bilhete Premiado",
             icon: null,

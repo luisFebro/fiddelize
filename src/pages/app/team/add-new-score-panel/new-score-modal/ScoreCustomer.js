@@ -173,7 +173,7 @@ export default function ScoreCustomer({
                     if (err && err.includes("pontuação pendente")) {
                         showToast(err, { dur: 10000, type: "error" });
                         setTimeout(() => {
-                            showToast("Reiniciando...");
+                            showToast("Voltando...");
                             const isCliAdmin = role === "cliente-admin";
                             if (isCliAdmin)
                                 window.location.href = "/mobile-app";

@@ -84,7 +84,7 @@
 //                     "O Tipo de Usuário foi alterado e movido.",
 //                     "success"
 //                 );
-//                 readUserList(dispatch);
+//                 readAllCliUsers(dispatch);
 //             });
 //         }
 //     };

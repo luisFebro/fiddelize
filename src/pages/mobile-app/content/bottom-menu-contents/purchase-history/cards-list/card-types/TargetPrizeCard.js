@@ -1,54 +1,46 @@
+import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
-import { useBizData } from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
-import pickCurrChallData from "utils/biz/pickCurrChallData";
-import PrizesBtn from "../prizes-gallery/PrizesBtn";
+import "../_PrizeCard.scss";
+import convertToReal from "utils/numbers/convertToReal";
 
-const faStyle = {
-    filter: "drop-shadow(0 0 25px grey)",
-    color: "#ff0",
-    fontSize: "30px",
-};
+export default function TargetPrizeCard({ historyData, colorP }) {
+    const {
+        value,
+        desc,
+        challengeN,
+        isPrizeConfirmed,
+        isPrizeExpired,
+        isPrizeReceived,
+    } = historyData;
 
-export default function PrizeCard({ historyData, colorP, colorS }) {
-    const currChallengeN = historyData.challengeN;
-    const { isPrizeConfirmed } = historyData;
-    const { isPrizeReceived } = historyData;
-    const { isPrizeExpired } = historyData;
-
-    let { mainReward, rewardList } = useBizData();
-
-    const pickedObj = pickCurrChallData(rewardList, currChallengeN - 1);
-    mainReward = pickedObj.mainReward;
-
-    const displayMainContent = () => (
-        <section
-            className={`${selectTxtStyle(
-                colorP
-            )} purchase-history-prize-card--root text-center text-purple`}
-        >
-            <main className="gift-main-title">
-                <div>
-                    <FontAwesomeIcon
-                        icon="trophy"
-                        style={{ ...faStyle, fontSize: "45px" }}
-                    />
-                    <p
-                        style={{ zIndex: 100 }}
-                        className="edition font-weight-bold text-subtitle"
-                    >
-                        #{historyData.challengeN}
-                    </p>
-                </div>
-                <div>
-                    <p className="text-title text-nowrap">Você ganhou!</p>
-                    <div className="prize-btn">
-                        <PrizesBtn colorS={colorS} />
-                    </div>
-                </div>
-            </main>
-        </section>
+    const showDiscountedPoints = () => (
+        <Fragment>
+            <div className="discounted-points--root">
+                <p className="discounted-points text-subtitle font-weight-bold">
+                    -{convertToReal(value)}
+                    <span className="d-inline-block text-small font-weight-bold ml-1">
+                        pts
+                    </span>
+                </p>
+            </div>
+            <style jsx>
+                {`
+                    .discounted-points--root {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    .discounted-points {
+                        padding: 0px 8px;
+                        background: var(--mainWhite);
+                        color: var(--expenseRed);
+                        border-radius: 25px;
+                        text-shadow: none;
+                    }
+                `}
+            </style>
+        </Fragment>
     );
 
     const showStatusPanel = () => (
@@ -120,11 +112,53 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
             </div>
         </section>
     );
+
+    const displayMainContent = () => (
+        <section
+            className={`${selectTxtStyle(
+                colorP
+            )} m-0 purchase-history-prize-card--root text-center`}
+        >
+            <main className="gift-main-title container-center">
+                <div>
+                    <FontAwesomeIcon icon="gift" />
+                </div>
+                <span className="benefit-title d-inline-block ml-3 text-normal font-weight-bold">
+                    Prêmio Alvo
+                    <br />
+                    <span className="text-subtitle font-weight-bold">
+                        N.º {challengeN}
+                    </span>
+                </span>
+                <style jsx>
+                    {`
+                        .gift-main-title {
+                            padding-top: 10px;
+                        }
+
+                        .gift-main-title div svg {
+                            font-size: 50px;
+                            filter: drop-shadow(0 0 25px grey);
+                            color: #ff0;
+                        }
+                        .benefit-title {
+                            line-height: 17px;
+                        }
+                    `}
+                </style>
+            </main>
+            <p className="m-0 my-2 text-left font-site text-em-1-1">
+                Você ganhou:{" "}
+                <span className="d-inline-block text-normal">{desc}</span>
+            </p>
+            {isPrizeConfirmed && showDiscountedPoints()}
+        </section>
+    );
+
     return (
-        <section className="position-relative animated slideInUp fast">
+        <section className="my-5 position-relative">
             <Card
                 key={historyData.desc}
-                className="mt-2"
                 style={{ backgroundColor: `var(--themePLight--${colorP})` }}
             >
                 {displayMainContent()}

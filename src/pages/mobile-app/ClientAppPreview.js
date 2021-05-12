@@ -13,7 +13,6 @@ function ClientAppPreview({ location }) {
     // useCount("ClientAppPreview.js"); // RT =1 (ok)
 
     const runName = getQueryByName("runName", location.search);
-    const clientName = getQueryByName("clientName", location.search);
     const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
     const colorP = getQueryByName("colorP", location.search);
     const colorS = getQueryByName("colorS", location.search);
@@ -66,7 +65,6 @@ function ClientAppPreview({ location }) {
                 needAppForPreview
                 runName={runName}
                 targetPointsTest={targetPoints}
-                clientNameTest={clientName}
                 colorP={colorP}
                 colorS={colorS}
                 colorBack={colorBack}

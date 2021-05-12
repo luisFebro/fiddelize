@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useContext from "context";
+import useData, { useBizData } from "init";
 import Tooltip from "components/tooltips/Tooltip";
 import useDatesCountdown from "hooks/dates/useDatesCountdown";
 import usePlayAudio from "hooks/media/usePlayAudio";
@@ -23,22 +24,22 @@ const getStyles = (props) => ({
     },
 });
 
-export default function Gift({
-    rewardDeadline,
-    prizeDesc,
-    arePrizesVisible,
-    userId,
-}) {
+export default function Gift() {
+    const { userId, currPoints, firstName } = useData();
+
     const {
-        currPoints,
+        themeSColor: colorS,
+        themePColor: colorP,
+        themeBackColor: colorBack,
+    } = useBizData();
+
+    const {
         currChall,
         targetPoints,
-        colorS,
-        colorP,
-        colorBack,
-        userName,
         lastPrizeDate,
-        // playBeep,
+        rewardDeadline = 30,
+        arePrizesVisible,
+        prizeDesc,
     } = useContext();
 
     const [isGiftOpen, setIsGiftOpen] = useState(false);
@@ -61,13 +62,13 @@ export default function Gift({
 
     const visibleTxt = `
         <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
-        • ${userName}, você ganha <strong>${prizeDesc}</strong> ao concluir este desafio.
+        • ${firstName}, você ganha <strong>${prizeDesc}</strong> ao concluir este desafio.
         <br />
     `;
 
     const hiddenTxt = `
         <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
-        • ${userName}, o prêmio é uma surpresa e será revelado assim que este desafio for concluído.
+        • ${firstName}, o prêmio é uma surpresa e será revelado assim que este desafio for concluído.
         <br />
     `;
     const tooltipTxt = arePrizesVisible ? visibleTxt : hiddenTxt;
@@ -184,7 +185,7 @@ export default function Gift({
         const beatedChallenge = () => (
             <section>
                 <p className="animated fadeInUp delay-2s pb-2 text-title text-shadow text-subtitle font-weight-bold">
-                    Parabéns, {userName}!
+                    Parabéns, {firstName}!
                     <br />
                     <p className="text-normal">Abra seu prêmio.</p>
                 </p>

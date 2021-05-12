@@ -7,7 +7,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 const Async = Load({
     loader: () =>
         import(
-            "./AsyncPurchaseHistory" /* webpackChunkName: "cli-purchase-history-full-page-lazy" */
+            "pages/mobile-app/content/bottom-menu-contents/purchase-history/PurchaseHistory" /* webpackChunkName: "new-cli-purchase-history-full-page-lazy" */
         ),
 });
 

@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import useContext from "context";
+import { useBizData } from "init";
 import disconnect from "auth/disconnect";
 
 const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
@@ -33,9 +34,10 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
 ];
 
 export default function MoreOptionsMenu({ history }) {
+    const { themeBackColor: colorBack } = useBizData();
+
     const {
         selectedTxtStyle,
-        colorBack,
         needAppForCliAdmin,
         needAppForPreview,
     } = useContext();

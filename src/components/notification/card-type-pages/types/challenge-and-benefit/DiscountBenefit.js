@@ -33,7 +33,6 @@ export default function DiscountBenefit({ onClose, modalData }) {
         gender,
     } = modalData;
 
-    const userBeatScore = userCurrScore >= targetPoints;
     const currChall = totalPrizes + 1;
 
     const currCustomerScore = Number(userCurrScore);
@@ -46,9 +45,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
         const updateUserBody = {
             "clientUserData.needStaffDiscount": false,
             "clientUserData.currPoints": leftCustomerScore,
-            "clientUserData.totalActivePoints": parseFloat(
-                userCurrScore - targetPoints
-            ), // the same as currPoints, this is only used to differentiate from totalGeneralPoints.
+            "clientUserData.games.targetPrize.challN": currChall + 1,
         };
 
         const notifAuthorBody = {
@@ -181,16 +178,14 @@ export default function DiscountBenefit({ onClose, modalData }) {
             <h2 className="my-2 text-center text-purple text-subtitle font-weight-bold">
                 Resumo
             </h2>
-            {userBeatScore && (
-                <div className="text-left text-normal text-purple my-1">
-                    <p className="m-0">✔ Desafio Concluído:</p>
-                    <p>
-                        <strong>
-                            • N.º {currChall} ({targetPoints} pontos)
-                        </strong>
-                    </p>
-                </div>
-            )}
+            <div className="text-left text-normal text-purple my-1">
+                <p className="m-0">✔ Desafio Concluído:</p>
+                <p>
+                    <strong>
+                        • N.º {currChall} ({targetPoints} pontos)
+                    </strong>
+                </p>
+            </div>
             <div className="text-left text-normal text-purple my-1">
                 <p className="m-0">
                     ✔ Pontuação Atual:
@@ -202,15 +197,12 @@ export default function DiscountBenefit({ onClose, modalData }) {
                     </strong>
                 </p>
             </div>
-            {userBeatScore && (
-                <div className="text-left text-normal text-purple my-1">
-                    <p className="m-0">✔ Cliente fica com:</p>
-                    <p className="font-weight-bold text-nowrap">
-                        • {convertDotToComma(leftCustomerScore)} Pontos
-                        Restantes
-                    </p>
-                </div>
-            )}
+            <div className="text-left text-normal text-purple my-1">
+                <p className="m-0">✔ Cliente fica com:</p>
+                <p className="font-weight-bold text-nowrap">
+                    • {convertDotToComma(leftCustomerScore)} Pontos Restantes
+                </p>
+            </div>
             <section className="container-center my-5">
                 <ButtonFab
                     disabled={disableCTA}

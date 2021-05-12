@@ -32,10 +32,8 @@ export default function ClientUserAppContent({
     runName,
     colorP = "default",
     colorS = "default",
-    colorBack,
     businessId,
     targetPointsTest,
-    clientNameTest,
     totalNotifications,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
@@ -57,8 +55,7 @@ export default function ClientUserAppContent({
         "lastPrizeDate",
     ]);
 
-    const { firstName: firstUserName } = useData(); // instant data without loading
-    const firstName = clientNameTest || firstUserName;
+    const { firstName } = useData();
 
     const {
         currPoints = 0,
@@ -141,8 +138,7 @@ export default function ClientUserAppContent({
     };
     useAnimateNumber(currPointsRef.current, currPoints, numberOptions);
 
-    const backColorSelect = colorBack || themeBackColor || colorP;
-    const selectedTxtStyle = selectTxtStyle(backColorSelect, { bold: true });
+    const selectedTxtStyle = selectTxtStyle(themeBackColor, { bold: true });
 
     const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative">
@@ -160,9 +156,9 @@ export default function ClientUserAppContent({
                         forceCliUser
                         top={21}
                         left={needAppForPreview ? 258 : 270}
-                        notifBorderColor={`var(--themeBackground--${backColorSelect})`}
+                        notifBorderColor={`var(--themeBackground--${themeBackColor})`}
                         notifBackColor={
-                            backColorSelect === "red"
+                            themeBackColor === "red"
                                 ? "var(--themePLight--black)"
                                 : "var(--expenseRed)"
                         }
@@ -197,7 +193,7 @@ export default function ClientUserAppContent({
             lastPoints={lastPoints}
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
-            colorBack={backColorSelect}
+            colorBack={themeBackColor}
             colorS={colorS}
             totalGeneralPoints={totalGeneralPoints}
             totalPurchasePrize={totalPurchasePrize}
@@ -207,23 +203,17 @@ export default function ClientUserAppContent({
     const backBtnForCliAdmin = () => (
         <BtnBackTestMode
             isActive={!!needAppForCliAdmin}
-            btnBackColor={backColorSelect}
+            btnBackColor={themeBackColor}
         />
     );
 
     const store = useGlobal({
-        colorP,
-        colorS,
-        colorBack: backColorSelect,
-        needAppForCliAdmin,
-        needAppForPreview,
-        userName: firstName,
-        userId,
-        selectedTxtStyle,
-        selectTxtStyle,
         targetPoints,
         currChall,
-        currPoints,
+        needAppForCliAdmin,
+        needAppForPreview,
+        selectedTxtStyle,
+        selectTxtStyle,
         playBeep,
         arePrizesVisible,
         prizeDesc: mainReward,
@@ -250,10 +240,6 @@ export default function ClientUserAppContent({
                     subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
                 />
                 <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
-                <div
-                    style={{ position: "absolute", bottom: 0, left: "auto" }}
-                    id="bottomTabContentView"
-                />
             </section>
         </Provider>
     );
