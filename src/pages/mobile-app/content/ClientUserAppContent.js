@@ -57,19 +57,17 @@ export default function ClientUserAppContent({
 
     const { currPoints = 0, lastPoints, totalGeneralPoints } = useThisData();
     const currChall = userGame.targetPrize.challN;
-    const { milestoneIcon, prizeDesc } = adminGame.targetPrize;
+    const {
+        milestoneIcon,
+        prizeDesc,
+        arePrizesVisible,
+    } = adminGame.targetPrize;
     let { targetPoints } = adminGame.targetPrize;
     if (targetPointsTest) {
         targetPoints = Number(targetPointsTest);
     }
 
-    const {
-        themeBackColor,
-        arePrizesVisible,
-        bizWhatsapp,
-        bizName,
-        bizLogo,
-    } = useBizData();
+    const { themeBackColor, bizWhatsapp, bizName, bizLogo } = useBizData();
 
     const userBeatChallenge = currPoints >= targetPoints;
 
@@ -80,7 +78,7 @@ export default function ClientUserAppContent({
 
     useNotifyCliWonChall(businessId, {
         businessId,
-        mainReward: prizeDesc,
+        prizeDesc,
         fullName,
         targetPoints,
         currChall,
@@ -193,19 +191,20 @@ export default function ClientUserAppContent({
     );
 
     const store = useGlobal({
-        targetPoints,
-        currChall,
         needAppForCliAdmin,
         needAppForPreview,
         selectedTxtStyle,
         selectTxtStyle,
         playBeep,
+        runName,
+        didUserScroll,
+        // from targetPrize
+        targetPoints,
+        currChall,
         arePrizesVisible,
         prizeDesc,
         milestoneIcon,
-        runName,
         lastPrizeDate,
-        didUserScroll,
         bizName,
     });
 

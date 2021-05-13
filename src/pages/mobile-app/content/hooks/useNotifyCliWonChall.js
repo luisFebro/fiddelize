@@ -8,7 +8,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
 
     const {
         businessId,
-        mainReward,
+        prizeDesc,
         fullName,
         currChall,
         currPoints,
@@ -36,7 +36,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
             payload: {
                 role: "cliente-admin",
                 targetPoints,
-                prize: mainReward,
+                prize: prizeDesc,
                 customerName: fullName,
                 currChallN: currChall,
                 bizLogo,
@@ -50,7 +50,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
                 currPoints,
                 currChall,
                 fullName,
-                mainReward,
+                prizeDesc,
             },
         }),
         // eslint-disable-next-line

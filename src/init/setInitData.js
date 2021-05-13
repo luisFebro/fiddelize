@@ -4,6 +4,32 @@ import { setItems } from "init/lStorage";
 // for both indexDB and localstorage in one place
 // also for bootup Login.js data and recurring access with loadUserInit rest API
 export default async function setInitData(data, options = {}) {
+    // DEFAULT DATA TO BE SET WHEN THERE IS NO DATA IN INIT TO AVOID UNDEFINED ERRORS OR BAD CONFIG
+    if (!data) {
+        const defaultGame = {
+            targetPrize: {},
+            discountBack: {},
+            raffleTicket: {},
+        };
+
+        setItems("currUser", {
+            adminGame: {
+                ...defaultGame,
+            },
+            userGame: {
+                currGame: "",
+                ...defaultGame,
+            },
+        });
+        setItems("bizData", {
+            themePColor: "default",
+            themeSColor: "default",
+            themeBackColor: "default",
+        });
+
+        return Promise.resolve("default init values set");
+    }
+
     const { uify } = options;
     if (!data || !uify) return Promise.reject("missing role, uify or data");
 

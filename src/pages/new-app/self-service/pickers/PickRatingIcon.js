@@ -5,7 +5,7 @@ import {
     milestoneIconsSorted,
     getIconIndex,
 } from "../../../../global-data/milestoneIconsSorted";
-import { useBizData } from "init";
+import useData from "init";
 
 PickRatingIcon.propTypes = {
     step: PropTypes.number,
@@ -23,7 +23,9 @@ export default function PickRatingIcon({
         : milestoneIcons.filter((iconObj) => iconObj.appPreview === true);
     const showCondition = isFromDash ? true : step === 3;
 
-    const { milestoneIcon } = useBizData();
+    const { adminGame } = useData();
+    const { milestoneIcon } = adminGame.targetPrize;
+
     const currIconInd = getIconIndex(milestoneIcon);
     // n1
     return (

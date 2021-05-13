@@ -3,14 +3,14 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
-import { CLIENT_URL } from "../../../config/clientUrl";
-import handleChange from "../../../utils/form/use-state/handleChange";
-import { handleNextField } from "../../../utils/form";
+import { CLIENT_URL } from "config/clientUrl";
+import handleChange from "utils/form/use-state/handleChange";
+import { handleNextField } from "utils/form";
 import ButtonMulti, {
     faStyle,
-} from "../../../components/buttons/material-ui/ButtonMulti";
-import showToast from "../../../components/toasts";
-import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
+} from "components/buttons/material-ui/ButtonMulti";
+import showToast from "components/toasts";
+import useAnimateElem from "hooks/scroll/useAnimateElem";
 import getVar, { setVars } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -69,9 +69,9 @@ function GoalForm({ history, bizLinkName, bizName }) {
     const [error, setError] = useState("");
     const [data, setData] = useState({
         targetPoints: undefined,
-        mainReward: "",
+        prizeDesc: "",
     });
-    const { targetPoints, mainReward } = data;
+    const { targetPoints, prizeDesc } = data;
 
     useAnimateElem(".goal-form--comp", {
         animaIn: "bounceInUp",
@@ -82,7 +82,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
 
     const saveData = async () => {
         const score = targetPoints;
-        const prize = mainReward;
+        const prize = prizeDesc;
 
         if (!score) {
             setError("targetPoints");
@@ -91,7 +91,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
             });
         }
         if (!prize) {
-            setError("mainReward");
+            setError("prizeDesc");
             return showToast("Você precisa inserir uma descrição do prêmio", {
                 type: "error",
             });
@@ -101,7 +101,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
         const newData = {
             ...priorData,
             targetPoints: Number(targetPoints),
-            mainReward,
+            prizeDesc,
         };
         await setVars(
             {
@@ -216,8 +216,8 @@ function GoalForm({ history, bizLinkName, bizName }) {
                                 },
                                 id: "value2",
                             }}
-                            name="mainReward"
-                            value={mainReward}
+                            name="prizeDesc"
+                            value={prizeDesc}
                             helperText="Lembre-se: um serviço, produto, benefício ou desconto."
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
@@ -226,13 +226,13 @@ function GoalForm({ history, bizLinkName, bizName }) {
                             onBlur={() =>
                                 setData({
                                     ...data,
-                                    mainReward:
-                                        mainReward &&
-                                        mainReward.toLowerCase().trim(),
+                                    prizeDesc:
+                                        prizeDesc &&
+                                        prizeDesc.toLowerCase().trim(),
                                 })
                             }
                             variant="outlined"
-                            error={error === "mainReward"}
+                            error={error === "prizeDesc"}
                             autoComplete="off"
                         />
                         <div
@@ -249,7 +249,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                         </div>
                     </div>
                 </div>
-                {mainReward && (
+                {prizeDesc && (
                     <p className="animated fadeInUp delay-2s mt-3 text-shadow text-white text-small">
                         Nota: Se precisar, você pode mudar esses dados depois no
                         seu painel de controle na sessão de app. 👍

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Title from "../../../../components/Title";
-import { useBizData } from "init";
+import Title from "components/Title";
 import useData from "init";
 import useRun from "global-data/ui";
 import useAPIList, { readTasks, getTrigger } from "api/useAPIList";
@@ -11,7 +10,9 @@ import DoneTasksBtn from "./done-tasks-modal/DoneTasksBtn";
 export default function AutomaticTaskList() {
     const [skip, setSkip] = useState(0);
     const { userId } = useData();
-    const { rewardDeadline } = useBizData();
+    const { adminGame } = useData();
+    const { prizeDeadline } = adminGame.targetPrize;
+
     const { runName } = useRun();
 
     const trigger = getTrigger(runName, "TaskCard");
@@ -56,7 +57,7 @@ export default function AutomaticTaskList() {
                 }`}
             />
 
-            <TaskList list={list} rewardDeadline={rewardDeadline} />
+            <TaskList list={list} prizeDeadline={prizeDeadline} />
             {loading && <ShowLoading />}
             {error && <ShowError />}
 

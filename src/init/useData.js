@@ -40,14 +40,7 @@ export function useBizData() {
     const globalData = useGlobalContext();
     const bizData = globalData ? globalData.bizData : {};
 
-    const updatedBizData = updateLocalStorage("bizData", { currData: bizData });
-
-    return {
-        ...updatedBizData,
-        themePColor: updatedBizData.themePColor || "default",
-        themeSColor: updatedBizData.themeSColor || "default",
-        themeBackColor: updatedBizData.themeBackColor || "default",
-    };
+    return updateLocalStorage("bizData", { currData: bizData });
 }
 
 export function useFiddelizeAdmin() {
@@ -122,8 +115,6 @@ function handleOptions(dataArray, options) {
 
 function updateLocalStorage(collection, { currData }) {
     const [priorData] = getItems(collection);
-    const updatedData = { ...priorData, ...currData };
-
-    return updatedData;
+    return { ...priorData, ...currData };
 }
 // END HELPERS

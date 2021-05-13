@@ -4,7 +4,7 @@ import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import PwaInstaller from "components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "config/clientUrl";
 import checkIfElemIsVisible from "utils/window/checkIfElemIsVisible";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import Spinner from "components/loadingIndicators/Spinner";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
 import useBackColor from "hooks/useBackColor";
@@ -190,12 +190,10 @@ export default function DownloadApp({ match, location, history }) {
         });
     }
     // admin app config
-    const {
-        milestoneIcon,
-        themePColor,
-        themeSColor,
-        themeBackColor,
-    } = useBizData();
+    const { themePColor, themeSColor, themeBackColor } = useBizData();
+
+    const { adminGame } = useData();
+    const { milestoneIcon } = adminGame.targetPrize;
 
     useEffect(() => {
         if (whichRole !== "cliente-admin") return;

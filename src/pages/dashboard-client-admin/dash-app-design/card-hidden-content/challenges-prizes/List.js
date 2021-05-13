@@ -1,35 +1,32 @@
 import { useState, useEffect } from "react";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
+import { useAction } from "global-data/ui";
 import ChallComp from "./ChallComp";
 import ShowBizNotes from "./ShowBizNotes";
-import { useAction } from "global-data/ui";
 
 export default function List({ setMode, needAdd, setHideAddBtn }) {
-    const {
-        bizId,
-        milestoneIcon,
-        mainReward,
-        targetPoints,
-        rewardList,
-        bizPlan,
-    } = useBizData();
+    const { bizId, bizPlan } = useBizData();
+    const { adminGame } = useData();
+    const { milestoneIcon, prizeDesc, targetPoints } = adminGame.targetPrize;
 
     const uify = useAction();
 
+    const challList = [];
     // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
     const firstMainData = {
         id: bizId,
-        icon: milestoneIcon,
-        targetPoints: targetPoints,
-        rewardDesc: mainReward,
+        milestoneIcon,
+        targetPoints,
+        prizeDesc,
     };
-    if (!rewardList.length) {
-        rewardList.unshift(firstMainData);
+
+    if (!milestoneIcon || !targetPoints || !prizeDesc) {
+        challList.unshift(firstMainData);
     }
 
-    const [challengesArray, setChallengesArray] = useState(rewardList);
+    const [challengesArray, setChallengesArray] = useState(challList);
     const [isConstantMode, setIsConstantMode] = useState(
         challengesArray.length < 2
     );
@@ -56,9 +53,9 @@ export default function List({ setMode, needAdd, setHideAddBtn }) {
     const updateThisUser = (needMsg = true, opts = {}) => {
         const { deleteThisId, addThisId } = opts;
         const constObj = {
-            "clientAdminData.milestoneIcon": challengesArray[0].icon,
+            "clientAdminData.milestoneIcon": challengesArray[0].milestoneIcon,
             "clientAdminData.targetPoints": challengesArray[0].targetPoints,
-            "clientAdminData.mainReward": challengesArray[0].rewardDesc,
+            "clientAdminData.prizeDesc": challengesArray[0].prizeDesc,
         };
 
         let newModifiedArray;
@@ -77,12 +74,13 @@ export default function List({ setMode, needAdd, setHideAddBtn }) {
         if (addThisId) {
             let lasttargetPoints =
                 challengesArray[challengesArray.length - 1].targetPoints;
-            const lastIcon = challengesArray[challengesArray.length - 1].icon;
+            const lastIcon =
+                challengesArray[challengesArray.length - 1].milestoneIcon;
             const addedObj = {
                 id: needAdd,
-                icon: lastIcon,
+                milestoneIcon: lastIcon,
                 targetPoints: ++lasttargetPoints,
-                rewardDesc: "Sem Descrição",
+                prizeDesc: "Sem Descrição",
             };
             newModifiedArray = [...challengesArray, addedObj];
             setChallengesArray(newModifiedArray);
@@ -90,7 +88,7 @@ export default function List({ setMode, needAdd, setHideAddBtn }) {
 
         const dataToSend = {
             ...constObj,
-            "clientAdminData.rewardList": newModifiedArray || challengesArray,
+            "clientAdminData.challList": newModifiedArray || challengesArray,
         };
 
         updateUser(bizId, "cliente-admin", dataToSend, { uify }).then((res) => {
@@ -132,10 +130,9 @@ export default function List({ setMode, needAdd, setHideAddBtn }) {
                         setChallengesArray={setChallengesArray}
                         showToast={showToast}
                         id={chall.id}
-                        icon={chall.icon}
+                        milestoneIcon={chall.milestoneIcon}
                         targetPoints={chall.targetPoints}
-                        rewardDesc={chall.rewardDesc}
-                        milestoneIcon={milestoneIcon}
+                        prizeDesc={chall.prizeDesc}
                         updateThisUser={updateThisUser}
                     />
                 </div>

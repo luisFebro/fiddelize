@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OptionCard from "./OptionCard";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import useAuth from "auth/useAuth";
 import "./style.scss";
 import { translateColorToPtBr } from "../../../../../global-data/uiColors";
@@ -9,13 +9,10 @@ import useImg, { Img } from "../../../../../hooks/media/useImg";
 import removeImgFormat from "../../../../../utils/biz/removeImgFormat";
 
 export default function ShowCards({ setOpenComp }) {
-    const {
-        bizLogo,
-        themePColor,
-        themeSColor,
-        themeBackColor,
-        milestoneIcon,
-    } = useBizData();
+    const { adminGame } = useData();
+    const { milestoneIcon } = adminGame.targetPrize;
+
+    const { bizLogo, themePColor, themeSColor, themeBackColor } = useBizData();
 
     const isAuth = useAuth();
 

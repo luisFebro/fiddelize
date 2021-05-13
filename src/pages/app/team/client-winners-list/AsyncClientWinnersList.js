@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { useBizData } from "init";
+import useData from "init";
 import useAPIList, { readTasks } from "api/useAPIList";
 import "./_AsyncClientWinnersList.scss";
 import CliWinnersList from "./list/CliWinnersList";
-import useData from "init";
 import Illustration from "../../../../components/Illustration";
 
 export default function AsyncClientWinnersList() {
     const [skip, setSkip] = useState(0);
-    const { rewardDeadline } = useBizData();
+    const { adminGame } = useData();
+
+    const { prizeDeadline } = adminGame.targetPrize;
+
     const [bizId] = useData(["bizId"]);
 
     const apiKeys = {
@@ -73,7 +75,7 @@ export default function AsyncClientWinnersList() {
         <div className="text-normal" style={{ color: "grey" }}>
             {showTitle()}
             {showNoWinnersImg()}
-            <CliWinnersList list={list} rewardDeadline={rewardDeadline} />
+            <CliWinnersList list={list} prizeDeadline={prizeDeadline} />
             {loading && <ShowLoading />}
             {error && <ShowError />}
         </div>

@@ -16,8 +16,6 @@
 //     const { isPrizeReceived } = historyData;
 //     const { isPrizeExpired } = historyData;
 
-//     let { mainReward, rewardList } = useBizData();
-
 //     const displayMainContent = () => (
 //         <section
 //             className={`${selectTxtStyle(

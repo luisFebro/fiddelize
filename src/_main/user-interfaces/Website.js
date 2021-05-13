@@ -56,7 +56,7 @@ import {
 } from "./CommonImports";
 // END PAGES
 
-function Website({ location, history }) {
+function Website({ location }) {
     const locationNow = location.pathname;
     const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
 
@@ -67,7 +67,7 @@ function Website({ location, history }) {
 
     useEffect(() => {
         // loadReCaptcha();
-        loadInit(setUify, history);
+        loadInit(setUify);
     }, [setUify]);
 
     return (

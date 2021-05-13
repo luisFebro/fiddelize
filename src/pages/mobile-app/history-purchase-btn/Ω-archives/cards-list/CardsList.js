@@ -67,7 +67,6 @@
 
 //     let {
 //         targetPoints,
-//         rewardList,
 //         themeBackColor,
 //         themePColor,
 //         themeSColor,
@@ -298,7 +297,6 @@
 //         );
 
 //     const showDesc = (historyData, isRemainder, embodyRemainderCard) => {
-//             rewardList,
 //             historyData.challengeN - 1
 //         );
 //         return (

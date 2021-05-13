@@ -24,9 +24,8 @@ export default function AppPickersHandler({
     theme,
     setTheme,
     setLocalData,
-    rewardDesc,
+    prizeDesc,
     targetPoints,
-    history,
 }) {
     const { runName } = useRun();
     const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
@@ -72,12 +71,12 @@ export default function AppPickersHandler({
             case 3:
                 const iconsData = {
                     milestoneIcon: runName || "star",
-                    rewardList: [
+                    challList: [
                         {
                             id,
-                            icon: runName,
+                            milestoneIcon: runName,
                             targetPoints,
-                            rewardDesc: rewardDesc || "Sem Descrição",
+                            prizeDesc: prizeDesc || "Sem Descrição",
                         },
                     ],
                 };

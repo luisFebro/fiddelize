@@ -25,7 +25,8 @@ const getStyles = (props) => ({
 });
 
 export default function Gift() {
-    const { userId, currPoints, firstName } = useData();
+    const { userId, currPoints, firstName, adminGame } = useData();
+    const { prizeDeadline } = adminGame.targetPoints;
 
     const {
         themeSColor: colorS,
@@ -37,7 +38,6 @@ export default function Gift() {
         currChall,
         targetPoints,
         lastPrizeDate,
-        rewardDeadline = 30,
         arePrizesVisible,
         prizeDesc,
     } = useContext();
@@ -49,7 +49,7 @@ export default function Gift() {
     const userBeatedChall = currPoints >= targetPoints;
 
     const finalDeadline = useDatesCountdown({
-        deadline: rewardDeadline,
+        deadline: prizeDeadline,
         userId,
         date: lastPrizeDate,
     });

@@ -1,15 +1,15 @@
 import { useState, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Title from "../../../../../components/Title";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
-import List from "./List.js";
-import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
+import Title from "components/Title";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import InstructionBtn from "components/buttons/InstructionBtn";
+import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 import { useUpdateUser } from "api/frequent";
 import { treatBoolStatus } from "api/useAPI";
-import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
-import getId from "../../../../../utils/getId";
-import { useBizData } from "init";
+import PremiumButton from "components/buttons/premium/PremiumButton";
+import getId from "utils/getId";
+import useData, { useBizData } from "init";
+import List from "./List.js";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
@@ -17,11 +17,15 @@ export default function HiddenGoalsAndRewards() {
     const [hideAddBtn, setHideAddBtn] = useState(false);
     const [visibleToggleBtn, setVisibleToggleBtn] = useState(undefined);
 
-    const { bizId, arePrizesVisible } = useBizData();
+    const { bizId } = useBizData();
+    const { adminGame } = useData();
+    const { arePrizesVisible } = adminGame.targetPrize;
 
-    // LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths like clientAdminData.arePrizesVisible clientAdminData, not arePrizesVisible { arePrizesVisible ...
+    // LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths
     const body = {
-        "clientAdminData.arePrizesVisible": treatBoolStatus(visibleToggleBtn),
+        "clientAdminData.games.targetPrize.arePrizesVisible": treatBoolStatus(
+            visibleToggleBtn
+        ),
     };
     useUpdateUser(bizId, "cliente-admin", body);
 

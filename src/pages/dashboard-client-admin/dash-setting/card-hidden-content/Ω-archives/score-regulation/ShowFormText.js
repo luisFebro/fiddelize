@@ -20,14 +20,12 @@
 
 // // NEXT UPDATE: using debouncing and throttling technique to save in real time without any further action like currently as clicking outside the box.
 // function RegulationText({ generateRegulation }) {
-//     const { bizId, rewardDeadline, regulation, bizLinkName } = useBizData();
 
 //     const [msgStatus, setMsgStatus] = useState("atualizado.");
 //     const [disabledBtn, setDisabledBtn] = useState(false);
 //     const [showDeadline, setShowDeadline] = useState(false);
 //     const [data, setData] = useState({
 //         regulationText: "",
-//         deadline: rewardDeadline,
 //     });
 //     const { regulationText, deadline } = data;
 
@@ -51,14 +49,12 @@
 
 //     // const userName = currentUser && currentUser.name.cap();
 //     // const bizName = clientAdmin && clientAdmin.bizName.cap();
-//     // const mainReward = clientAdmin && clientAdmin.mainReward.cap();
 //     // const targetPoints = clientAdmin && clientAdmin.targetPoints;
 //     // const levelScore = clientAdmin && clientAdmin.targetPoints / 5;
 
 //     // const variablesObj = {
 //     //     "nome-empresa": bizName,
 //     //     "nome-cliente": userName,
-//     //     "nome-premio": mainReward,
 //     //     "ponto-premio": `${targetPoints} pontos`,
 //     //     "ponto-nivel": `${levelScore} pontos`,
 //     // }
@@ -111,7 +107,6 @@
 //         showSnackbar(dispatch, "Atualizando...");
 //         if (fieldName === "deadline") {
 //             const objToSend = {
-//                 "clientAdminData.rewardDeadline": deadline,
 //             };
 //             updateUser(dispatch, objToSend, bizId).then((res) => {
 //                 if (res.status !== 200)

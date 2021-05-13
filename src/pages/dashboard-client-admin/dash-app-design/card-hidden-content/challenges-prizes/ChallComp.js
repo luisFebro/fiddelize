@@ -17,7 +17,7 @@ ChallComp.propTypes = {
     id: PropTypes.string,
     icon: PropTypes.string,
     targetPoints: PropTypes.number,
-    rewardDesc: PropTypes.string,
+    prizeDesc: PropTypes.string,
     isFirst: PropTypes.bool,
     currChallNumber: PropTypes.number,
 };
@@ -26,7 +26,7 @@ export default function ChallComp({
     id,
     icon,
     targetPoints,
-    rewardDesc,
+    prizeDesc,
     isFirst,
     setNeedUpdateData,
     challengesArray,
@@ -41,7 +41,7 @@ export default function ChallComp({
         id,
         icon,
         targetPoints,
-        rewardDesc,
+        prizeDesc,
     });
 
     const [edit, setEdit] = useState(false);
@@ -92,7 +92,7 @@ export default function ChallComp({
                 id: data.id,
                 icon: isFirst ? milestoneIcon : data.icon,
                 targetPoints: Number(data.targetPoints),
-                rewardDesc: data.rewardDesc && data.rewardDesc.toLowerCase(),
+                prizeDesc: data.prizeDesc && data.prizeDesc.toLowerCase(),
             },
         ];
         const newArray = findAndReplaceObjInArray(
@@ -181,7 +181,7 @@ export default function ChallComp({
             <p className={txtStyle}>Descrição Prêmio:</p>
             {!edit ? (
                 <p className="text-left text-normal m-0">
-                    {truncate(data.rewardDesc || " ", 29)}
+                    {truncate(data.prizeDesc || " ", 29)}
                 </p>
             ) : (
                 <div className="animated zoomIn">
@@ -195,8 +195,8 @@ export default function ChallComp({
                             handleChange(setData, data)(e);
                             setSaveChangeBtn(true);
                         }}
-                        name="rewardDesc"
-                        value={data.rewardDesc}
+                        name="prizeDesc"
+                        value={data.prizeDesc}
                         autoComplete="off"
                         multiline
                         rows="2"

@@ -13,12 +13,15 @@ import showToast from "../../../../toasts";
 export default function DiscountBenefit({ onClose, modalData }) {
     const [disableCTA, setDisableCTA] = useState(false);
 
-    const { bizId, bizLogo, bizName, rewardDeadline = 30 } = useBizData();
-    const [staffName, role, firstStaffName] = useData([
-        "name",
-        "role",
-        "firstName",
-    ]);
+    const { bizId, bizLogo, bizName } = useBizData();
+    const {
+        name: staffName,
+        role,
+        firstName: firstStaffName,
+        adminGame,
+    } = useData();
+
+    const { prizeDeadline } = adminGame.targetPrize;
 
     const {
         senderId: customerId,
@@ -37,7 +40,6 @@ export default function DiscountBenefit({ onClose, modalData }) {
     const leftCustomerScore = Number(userCurrScore) - Number(targetPoints);
 
     const handleDiscount = async () => {
-        if (staffName === "...") return false;
         setDisableCTA(true);
 
         const updateUserBody = {
@@ -72,16 +74,13 @@ export default function DiscountBenefit({ onClose, modalData }) {
                 cardType: "challenge",
                 subtype: "confirmedChall",
                 currChall,
-                prizeDeadline: rewardDeadline,
+                prizeDeadline,
                 prizeDesc,
                 // senderId: bizId,
             },
         };
 
-        const deadlineDate = addDays(
-            new Date(),
-            rewardDeadline + 1
-        ).toLocaleString();
+        const deadlineDate = addDays(new Date(), +1).toLocaleString();
 
         const taskBody = {
             taskTitle: "Entrega de Prêmio",

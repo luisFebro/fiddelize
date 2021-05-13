@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import "flickity/dist/flickity.css";
 // jquery module is required to run this path
 import Flickity from "flickity";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import "./CarouselFlickity.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setRun, useAction } from "global-data/ui";
+import { useReadUser } from "api/frequent";
 import ShowActionBtns from "../../pages/new-app/self-service/pickers/ShowActionBtns";
 import { getIconIndex } from "../../global-data/milestoneIconsSorted.js";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
@@ -21,19 +22,26 @@ export default function CarouselFlickity({
     setSelectedIcon,
     setOpenModal,
 }) {
-    const [iconSelected, setIconSelected] = useState(data[0].icon);
+    const [iconSelected, setIconSelected] = useState(data[0].milestoneIcon);
     const [iconReady, setIconReady] = useState(false);
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
     const uify = useAction();
 
-    const {
+    const { bizId } = useBizData();
+
+    const { data: dataChall, loading } = useReadUser(
         bizId,
-        milestoneIcon,
-        mainReward,
-        targetPoints,
-        rewardList,
-    } = useBizData();
+        "cliente-admin",
+        "clientAdminData.games.targetPrize.challList"
+    );
+    const challList = !loading
+        ? dataChall.clientAdminData.games.targetPrize.challList
+        : [];
+
+    const { adminGame } = useData();
+
+    const { prizeDesc, targetPoints } = adminGame.targetPrize;
 
     const [carouselElem2, setCarouselElem2] = useState("");
     useEffect(() => {
@@ -81,7 +89,8 @@ export default function CarouselFlickity({
         const condRunSelect = isFromDash ? !iconReady : true;
         flkty.on("change", (index) =>
             setTimeout(
-                () => condRunSelect && setIconSelected(data[index].icon),
+                () =>
+                    condRunSelect && setIconSelected(data[index].milestoneIcon),
                 1000
             )
         );
@@ -97,15 +106,15 @@ export default function CarouselFlickity({
     // const dataFlickity = Flickity.data(elem)
     // console.log("data", dataFlickity);
 
-    // Updating rewardList as well:
+    // Updating challList as well:
     let updatedArray;
     if (!setSelectedIcon) {
         updatedArray = [
             {
                 id: bizId,
-                icon: iconSelected,
+                milestoneIcon: iconSelected,
                 targetPoints,
-                rewardDesc: mainReward,
+                prizeDesc,
             },
         ];
     }
@@ -115,12 +124,12 @@ export default function CarouselFlickity({
             <div className="main-carousel">
                 {data.map((card) => (
                     <div
-                        key={card.icon}
+                        key={card.milestoneIcon}
                         className="carousel-cell no-outline d-flex flex-column justify-content-center align-content-item"
                     >
                         <div className="container-center">
                             <FontAwesomeIcon
-                                icon={card.icon}
+                                icon={card.milestoneIcon}
                                 className="card-icons"
                             />
                         </div>
@@ -135,8 +144,8 @@ export default function CarouselFlickity({
                     needUpdateBtn={needUpdateBtn}
                     objToSend={{
                         "clientAdminData.milestoneIcon": iconSelected,
-                        "clientAdminData.rewardList": findAndReplaceObjInArray(
-                            rewardList,
+                        "clientAdminData.challList": findAndReplaceObjInArray(
+                            challList,
                             updatedArray,
                             "id"
                         ),

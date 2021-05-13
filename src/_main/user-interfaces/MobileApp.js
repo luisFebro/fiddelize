@@ -63,7 +63,7 @@ const InstallMsg = () => (
     </div>
 );
 
-function Mobile({ location, history }) {
+function Mobile({ location }) {
     const locationNow = location.pathname;
 
     const { uify } = useGlobalContext();
@@ -72,7 +72,7 @@ function Mobile({ location, history }) {
     const setUify = useMemo(() => uify, []);
 
     useEffect(() => {
-        loadInit(setUify, history);
+        loadInit(setUify);
         // eslint-disable-next-line
     }, [setUify]);
 

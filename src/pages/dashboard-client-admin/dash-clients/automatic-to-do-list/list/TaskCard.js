@@ -24,7 +24,7 @@ function TaskCard(props, ref) {
         data = {},
         defaultStatus = false,
         className,
-        rewardDeadline = 30,
+        prizeDeadline,
     } = props;
 
     const [moreInfo, setMoreInfo] = useState(false);
@@ -85,7 +85,7 @@ function TaskCard(props, ref) {
     });
 
     const finalDeadline = useDatesCountdown({
-        deadline: rewardDeadline,
+        deadline: prizeDeadline,
         date: deadline,
     });
     const didPrizeExpired = finalDeadline === 0;

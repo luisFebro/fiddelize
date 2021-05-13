@@ -1,17 +1,15 @@
 import showToast from "components/toasts";
 import getAPI, { login, register, loadDataInit } from "api";
 import setInitData from "init/setInitData";
-import disconnect from "auth/disconnect";
 
-export default async function loadInit(uify, history) {
+export default async function loadInit(uify) {
     const data = await getAPI({
         method: "post",
         url: loadDataInit(),
         fullCatch: true,
-    }).catch((err) => {
+    }).catch(async (err) => {
         if (!err) return;
-
-        const errorMsg = err.data && err.data.error;
+        // const errorMsg = err.data && err.data.error;
 
         // to avoid infinite request loop
         const isUnavailablePage =
@@ -20,9 +18,8 @@ export default async function loadInit(uify, history) {
         if (err.status === 503 && !isUnavailablePage) {
             window.location.href = "/temporariamente-indisponivel-503";
         }
-        if (err.status === 401 && errorMsg === "A sua sessão terminou") {
-            disconnect({ history, msg: false, needRedirect: false });
-        }
+
+        if (err.status === 401) setInitData(undefined); // set init default values
     });
 
     if (!data) return;

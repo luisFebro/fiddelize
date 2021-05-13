@@ -1,11 +1,11 @@
 import CliWinnersCard from "./CliWinnersCard";
 
-export default function CliWinnersList({ list, rewardDeadline }) {
+export default function CliWinnersList({ list, prizeDeadline }) {
     const listMap = list.map((task) => (
         <CliWinnersCard
             key={task._id}
             data={task}
-            rewardDeadline={rewardDeadline}
+            prizeDeadline={prizeDeadline}
         />
     ));
 

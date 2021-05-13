@@ -27,15 +27,9 @@ export default function RegulationPage({ location }) {
     const { firstName: cliFirstName, userGame, adminGame } = useData();
 
     const currChall = userGame.targetPrize.challN;
-    const { targetPoints, prizeDesc } = adminGame.targetPrize;
+    const { targetPoints, prizeDesc, prizeDeadline } = adminGame.targetPrize;
 
-    let {
-        bizName,
-        rewardDeadline,
-        themePColor,
-        themeSColor,
-        themeBackColor,
-    } = useBizData();
+    let { bizName, themePColor, themeSColor, themeBackColor } = useBizData();
 
     const levelScore = targetPoints && targetPoints / 5;
 
@@ -45,7 +39,7 @@ export default function RegulationPage({ location }) {
         "nome-empresa": bizName || " ",
         "nome-cliente": cliFirstName || " ",
         "nome-premio": prizeDesc || " ",
-        "prazo-premio": `${rewardDeadline} dias`,
+        "prazo-premio": `${prizeDeadline} dias`,
         "ponto-premio": `${targetPoints} pontos`,
         "ponto-nivel": `${levelScore} pontos`,
         "desafio-atual": `${currChall}`,

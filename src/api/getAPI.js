@@ -121,11 +121,11 @@ async function handleError({
     if (!error || !error.response) return reject(null);
     const { status } = error.response;
 
+    if (fullCatch) return reject(error.response); // if need status and more info, enable fullCatch.
     const gotExpiredToken = status === 401;
+    if (gotExpiredToken) return await disconnect();
 
     if (axios.isCancel(error)) return isSearch && reject("canceled"); // if it is search and cancel is need as a defendor against multiple request, then isSearch is true.
-    if (gotExpiredToken) return await disconnect();
-    if (fullCatch) return reject(error.response); // if need status and more info, enable fullCatch.
 
     // can accept both .json({ error: "ooops" }) or .json("ooops")
     const gotErrMsg = error.response.data.error;

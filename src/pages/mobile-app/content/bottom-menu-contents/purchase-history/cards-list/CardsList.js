@@ -20,10 +20,11 @@ export default function CardsList({
     const [skip, setSkip] = useState(0);
 
     const gotUserPoints = Boolean(totalGeneralPoints);
-    const { role } = useData();
+    const { role, adminGame } = useData();
     const isAdmin = role === "cliente-admin";
 
-    const { themeBackColor, themePColor, targetPoints } = useBizData();
+    const { targetPoints } = adminGame.targetPrize;
+    const { themeBackColor, themePColor } = useBizData();
 
     const txtClass = selectTxtStyle(themeBackColor);
 

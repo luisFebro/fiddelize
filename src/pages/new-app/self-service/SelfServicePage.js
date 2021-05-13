@@ -55,7 +55,7 @@ function SelfServicePage({ location, history }) {
     // API
     const clientName = getQueryByName("nome-cliente", location.search);
     let targetPoints = getQueryByName("ponto-premio", location.search);
-    const rewardDesc = getQueryByName("premio-desc", location.search);
+    const prizeDesc = getQueryByName("premio-desc", location.search);
     let currPoints = getQueryByName("ponto-atual", location.search);
     if (typeof targetPoints === "object") {
         targetPoints = 500;
@@ -94,7 +94,7 @@ function SelfServicePage({ location, history }) {
                         setLocalData={setLocalData}
                         setTheme={setTheme}
                         targetPoints={targetPoints}
-                        rewardDesc={rewardDesc}
+                        prizeDesc={prizeDesc}
                     />
                 </section>
                 <AppPreview
