@@ -10,8 +10,6 @@ import DateWithIcon from "../components/date-time/DateWithIcon";
 import getQueryByName from "../utils/string/getQueryByName";
 import { useBizData } from "init";
 import { currTxtColor } from "../utils/biz/selectTxtStyle";
-import pickCurrChallData from "../utils/biz/pickCurrChallData";
-import defineCurrChallenge from "../utils/biz/defineCurrChallenge";
 import regulationText, {
     updatedAt,
 } from "./dashboard-client-admin/regulationText";
@@ -26,25 +24,18 @@ export default function RegulationPage({ location }) {
     const bizLinkName = getQueryByName("bizLinkName", location.search);
 
     useScrollUp();
-    const [cliFirstName] = useData(["firstName"]);
+    const { firstName: cliFirstName, userGame, adminGame } = useData();
+
+    const currChall = userGame.targetPrize.challN;
+    const { targetPoints, prizeDesc } = adminGame.targetPrize;
 
     let {
         bizName,
-        mainReward,
-        targetPoints,
         rewardDeadline,
         themePColor,
         themeSColor,
         themeBackColor,
-        rewardList,
-        totalPurchasePrize,
     } = useBizData();
-
-    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    targetPoints = pickedObj.targetPoints;
-    mainReward = pickedObj.mainReward;
-
-    const currChall = defineCurrChallenge(totalPurchasePrize);
 
     const levelScore = targetPoints && targetPoints / 5;
 
@@ -53,7 +44,7 @@ export default function RegulationPage({ location }) {
     const variablesObj = {
         "nome-empresa": bizName || " ",
         "nome-cliente": cliFirstName || " ",
-        "nome-premio": mainReward || " ",
+        "nome-premio": prizeDesc || " ",
         "prazo-premio": `${rewardDeadline} dias`,
         "ponto-premio": `${targetPoints} pontos`,
         "ponto-nivel": `${levelScore} pontos`,

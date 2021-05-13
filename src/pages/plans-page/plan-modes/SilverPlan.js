@@ -170,7 +170,7 @@ export default function SilverPlan({ setCurrPlan }) {
                     )}
                     <MainTitle
                         plan="Prata"
-                        planMsg="Construa seu clube de fidelidade com +5.000 apps de clientes e principais serviços da Fiddelize" // "Adquira os principais serviços da Fiddelize com desconto."
+                        planMsg="Construa seu clube de compras com +5.000 apps de clientes e principais serviços da Fiddelize" // "Adquira os principais serviços da Fiddelize com desconto."
                     />
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />

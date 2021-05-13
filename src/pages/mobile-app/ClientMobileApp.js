@@ -222,7 +222,7 @@ function ClientMobileApp({ location, history }) {
                 {isCliUser && // in near updates - rewards or discounts according to which games cli-admin has chosen
                     "Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de compras feito para você!"}
                 {isCliMember &&
-                    "Adicione pontos e clientes para o clube de fidelidade em segundos."}
+                    "Adicione pontos e clientes para o clube de compras em segundos."}
                 {isBizTeam &&
                     "Faça parte do time da Fiddelize e comece a ganhar dinheiro."}
             </p>

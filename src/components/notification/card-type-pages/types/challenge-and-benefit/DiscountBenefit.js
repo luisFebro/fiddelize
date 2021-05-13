@@ -23,7 +23,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
     const {
         senderId: customerId,
         cardId,
-        totalPrizes,
+        currChall,
         userCurrScore,
         targetPoints,
         name,
@@ -32,8 +32,6 @@ export default function DiscountBenefit({ onClose, modalData }) {
         prizeDesc,
         gender,
     } = modalData;
-
-    const currChall = totalPrizes + 1;
 
     const currCustomerScore = Number(userCurrScore);
     const leftCustomerScore = Number(userCurrScore) - Number(targetPoints);

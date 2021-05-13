@@ -62,7 +62,7 @@ export default function ClientMemberText({
                 </span>
             </p>
             <div className="mx-2">
-                <p>Baixe a nova ferramenta de pontos de fidelidade da</p>
+                <p>Baixe a nova ferramenta de pontos de compra da</p>
                 <p className="text-hero text-center">
                     {bizName && bizName.cap()}
                 </p>

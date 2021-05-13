@@ -32,7 +32,7 @@ export default function AppShowCase({ setData }) {
             <p className="app-show-case--text2 mx-2 mx-md-5 text-title text-white">
                 Crie hoje seu multi App de
                 <br />
-                pontos de fidelidade com
+                pontos de compra com
                 <br />
                 tecnologia sob medida movido a<br />
                 aumentar sua clientela e vendas

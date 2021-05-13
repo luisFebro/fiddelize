@@ -147,11 +147,11 @@ export default function getCardTypeData(cardType, options = {}) {
 // HELPERS
 function handleWelcome({ role, userFirstName, bizName }) {
     if (role === "cliente-admin")
-        return `${userFirstName}, veja como a Fiddelize vai te deixar por dentro dos pontos de fidelidade dos seus clientes`;
+        return `${userFirstName}, veja como a Fiddelize vai te deixar por dentro dos pontos de compra dos seus clientes`;
     if (role === "cliente-membro")
         return `${userFirstName}, agora você está dentro! Um app prático para seu trabalho.`;
     if (role === "cliente")
-        return `Conheça sobre como você vai ficar conectado com seus pontos de fidelidade da ${bizName}`;
+        return `Conheça sobre como você vai ficar conectado com seus pontos de compra da ${bizName}`;
 
     return " ";
 }

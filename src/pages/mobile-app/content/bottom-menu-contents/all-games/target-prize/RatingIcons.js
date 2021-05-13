@@ -1,7 +1,7 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
 import { useEffect } from "react";
 import useContext from "context";
-import useData from "init";
+import useData, { useBizData } from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "components/tooltips/Tooltip";
 import animateCSS from "utils/animateCSS";
@@ -10,11 +10,9 @@ import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import usePlayAudio from "hooks/media/usePlayAudio";
 
 export default function RatingIcons() {
-    const {
-        themeBackColor: colorBack,
-        themeSColor: colorS,
-        currPoints,
-    } = useData();
+    const { currPoints } = useData();
+
+    const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
 
     const {
         targetPoints,

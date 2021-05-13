@@ -28,7 +28,7 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
         title: "sair",
         onClick: () => {
             if (needAppForPreview) return;
-            disconnect();
+            disconnect({ msg: true });
         },
     },
 ];

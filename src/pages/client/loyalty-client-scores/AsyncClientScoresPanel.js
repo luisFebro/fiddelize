@@ -9,11 +9,9 @@ import animateNumber, {
 import { convertDotToComma } from "utils/numbers/convertDotComma";
 import isThisApp from "utils/window/isThisApp";
 import disconnect from "auth/disconnect";
-import useData, { useBizData } from "init";
-import getFirstName from "utils/string/getFirstName";
+import useData from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
-import pickCurrChallData from "utils/biz/pickCurrChallData";
 import { updateUser, readUser } from "api/frequent";
 import getAPI, {
     setLastPointsAsDone,
@@ -52,29 +50,28 @@ function AsyncClientScoresPanel({ history, location }) {
         store: "global_vars",
         dots: false,
     });
-    console.log("paidValueLoading", paidValueLoading);
-    console.log("paidValue", paidValue);
 
     // ROLES
     const {
         role,
-        name,
+        firstName,
         userId: cliUserId, // cliUserId is essencial here to read cli-users data
-        currPoints: currentScore,
-        lastPoints: lastCurrScore,
-        totalPurchasePrize = 0,
+        currPoints: currentPoints,
+        lastPoints: lastCurrPoints,
+        totalGeneralPoints,
+        userGame,
+        adminGame,
     } = useData();
-    let { totalGeneralPoints } = useData();
-    totalGeneralPoints = !totalGeneralPoints ? 0 : totalGeneralPoints;
+
+    const currChall = userGame.targetPrize.challN;
+    const { targetPoints, prizeDesc } = adminGame.targetPrize;
 
     const {
         bizId,
-        rewardList,
         themeBackColor: colorBack,
         themePColor: colorP,
         themeSColor: colorS,
     } = useBizData();
-    let { targetPoints, milestoneIcon } = useBizData();
     // END ROLES
 
     // STYLES
@@ -134,18 +131,12 @@ function AsyncClientScoresPanel({ history, location }) {
     // END USE HOOKS
 
     // MAIN VARIABLES
-    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    targetPoints = pickedObj.targetPoints;
-    // milestoneIcon = pickedObj.milestoneIcon;
-    const prizeDesc = pickedObj.mainReward;
 
     const { currPointsBefore, lastPoints, currPointsNow } = getScoreData({
-        currentScore,
+        currentScore: currentPoints,
         paidValue,
     });
 
-    const firstName = getFirstName(name) || "Olá";
-    const currChallenge = totalPurchasePrize + 1;
     const userBeatChallenge = currPointsNow >= targetPoints;
 
     const isCliAdminApp = location.search.includes("client-admin=1");
@@ -164,10 +155,11 @@ function AsyncClientScoresPanel({ history, location }) {
             );
 
             const newHighestScore =
-                parseFloat(lastPoints) >= parseFloat(lastCurrScore)
+                parseFloat(lastPoints) >= parseFloat(lastCurrPoints)
                     ? parseFloat(lastPoints)
-                    : parseFloat(lastCurrScore);
-            let objToSend = {
+                    : parseFloat(lastCurrPoints);
+
+            const objToSend = {
                 "clientUserData.bizId": bizId, // for cli-admin or if not it will not override <again className=""></again>
                 "clientUserData.lastPoints": lastPoints,
                 "clientUserData.currPoints": currPointsNow, // need to be Number to ranking in DB properly
@@ -178,16 +170,8 @@ function AsyncClientScoresPanel({ history, location }) {
                 "clientUserData.needStaffDiscount": userBeatChallenge,
             };
 
-            // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.
-            if (!totalPurchasePrize && totalPurchasePrize !== 0) {
-                objToSend = {
-                    ...objToSend,
-                    "clientUserData.totalPurchasePrize": 0,
-                };
-            }
-
             (async () => {
-                if (!paidValue) return;
+                if (!paidValue) return null;
                 // avoid user to restart page and end up adding more scores
                 const alreadySetScore = await getVar("alreadySetTempPoints");
                 if (alreadySetScore) {
@@ -259,7 +243,7 @@ function AsyncClientScoresPanel({ history, location }) {
             />
             <section className="position-absolute" style={styles.challN}>
                 <p className="text-subtitle font-weight-bold text-white text-shadow text-center m-0 text-nowrap mx-3">
-                    Desafio n.º {currChallenge}
+                    Desafio n.º {currChall}
                 </p>
             </section>
         </div>

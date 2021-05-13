@@ -9,7 +9,7 @@ SearchResult.propTypes = {
     isLoading: PropTypes.bool,
     searchTerm: PropTypes.string,
     mainSubject: PropTypes.string,
-    totalCliUserScores: PropTypes.number,
+    countCliUserGeneralPoints: PropTypes.number,
 };
 
 const styles = {
@@ -29,8 +29,8 @@ export default function SearchResult({
     allUsersLength,
     searchTerm,
     mainSubject = "usuário",
-    totalActivePoints,
-    totalCliUserScores,
+    countCliUsersCurrPoints,
+    countCliUserGeneralPoints,
 }) {
     const pluralizeBr = (word) => {
         let res;
@@ -46,7 +46,7 @@ export default function SearchResult({
     };
 
     const textInstru =
-        "É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos.";
+        "É o total geral de saldo de pontos não usados, estando assim, ativos para ser usados em jogos de compra";
 
     return (
         <div className="text-main-container my-5">
@@ -114,7 +114,7 @@ export default function SearchResult({
                                             <p className="m-0 mr-2">
                                                 <strong>
                                                     •{" "}
-                                                    {`${totalActivePoints} Pontos Ativos`}
+                                                    {`${countCliUsersCurrPoints} Pontos Ativos`}
                                                 </strong>
                                             </p>
                                             <div>
@@ -128,7 +128,7 @@ export default function SearchResult({
                                             className="text-center mt-2 py-2 px-3 font-weight-bold"
                                             style={styles.accumulativeScore}
                                         >
-                                            {`${totalCliUserScores} Pontos Acumulados`}
+                                            {`${countCliUserGeneralPoints} Pontos Acumulados`}
                                         </p>
                                     </div>
                                 )}

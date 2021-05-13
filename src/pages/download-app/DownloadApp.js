@@ -450,7 +450,7 @@ function handlePwaTitle({ isCliAdmin, isBizTeam, userName }) {
 
     return `<strong>${
         userName ? userName.cap() : "Ei"
-    },<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`;
+    },<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de compra.`;
 }
 
 /*

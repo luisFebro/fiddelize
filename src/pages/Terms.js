@@ -32,11 +32,11 @@ const text1 = (
         <h2 className="font-weight-bold text-normal">DEFINIÇÕES CHAVES</h2>
         <p>
             <strong>CLIENTE-ADMINISTRADOR</strong> - usuário que cria os apps e
-            promove o clube de fidelidade para seus clientes.
+            promove o clube de compras para seus clientes.
         </p>
         <p>
             <strong>CLIENTE-MEMBRO</strong> - usuário que auxilia o
-            cliente-administrador a gerenciar o clube de fidelidade.
+            cliente-administrador a gerenciar o clube de compras.
         </p>
         <p>
             <strong>CLIENTE-USUÁRIO</strong> - usuário que é cliente do clube de

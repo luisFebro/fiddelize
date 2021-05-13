@@ -112,7 +112,7 @@ const text2 = (
         </p>
         <p>
             É um cenário comum onde os clientes fazem suas compras e já entram
-            para o clube de fidelidade se cadastrando com seus primeiros pontos.
+            para o clube de compras se cadastrando com seus primeiros pontos.
         </p>
         <p>
             Em resumo, os <strong>pontos são criptografados no link</strong> e a

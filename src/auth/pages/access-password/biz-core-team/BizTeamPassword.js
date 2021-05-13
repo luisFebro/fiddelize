@@ -20,7 +20,7 @@ function BizTeamPassword({ history }) {
         (async () => {
             showToast("Saindo da conta...");
             await Promise.all([
-                setVar({ disconnectAgent: true }, "user"),
+                setVar({ disconnectAgent: true, msg: true }, "user"),
                 disconnect(),
             ]);
         })();

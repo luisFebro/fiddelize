@@ -10,7 +10,7 @@ import showToast from "components/toasts";
 // CUSTOM DATA
 import { setRun, useAction } from "global-data/ui";
 import { useBizData } from "init";
-import getAPI, { removeUser, countField } from "api";
+import getAPI, { removeUser } from "api";
 // END CUSTOM DATA
 
 ModalConfYesNo.propTypes = {
@@ -47,26 +47,11 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 fullCatch: true,
             })
                 .then(() => {
-                    getAPI({
-                        method: "put",
-                        url: countField(bizId, "cliente-admin"),
-                        fullCatch: true,
-                        body: {
-                            field: "clientAdminData.totalClientUsers",
-                            type: "dec",
-                            thisRole: "cliente-admin",
-                        },
-                    })
-                        .then(() => {
-                            showToast(
-                                `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
-                                { type: "success" }
-                            );
-                            setRun("runName", "RecordedClientsList", uify);
-                        })
-                        .catch((err) =>
-                            showToast(err.data.msg, { type: "error" })
-                        );
+                    showToast(
+                        `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
+                        { type: "success" }
+                    );
+                    setRun("runName", "RecordedClientsList", uify);
                 })
                 .catch((err) => showToast(err.data.msg, { type: "error" }));
         }, 5900);

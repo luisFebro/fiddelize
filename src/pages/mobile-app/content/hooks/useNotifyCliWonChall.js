@@ -15,7 +15,6 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
         bizLogo,
         lastPrizeId,
         targetPoints,
-        totalPurchasePrize,
         senderId,
         // trigger
         userIdLoading,
@@ -49,7 +48,6 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
                 lastPrizeId,
                 targetPoints,
                 currPoints,
-                totalPurchasePrize,
                 currChall,
                 fullName,
                 mainReward,

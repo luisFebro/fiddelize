@@ -14,7 +14,7 @@ export default function AsyncPurchaseHistory({ modalData }) {
         cliUserId,
         // currUserScore,
         totalGeneralPoints,
-        totalPurchasePrize,
+        currChall,
         isFromDashboard = false,
     } = modalData;
 
@@ -22,7 +22,7 @@ export default function AsyncPurchaseHistory({ modalData }) {
         _id: cliUserId,
         name: cliUserName,
         totalGeneralPoints,
-        totalPurchasePrize,
+        currChall,
         isFromDashboard,
     });
     const cardsListData = getCardsListData();

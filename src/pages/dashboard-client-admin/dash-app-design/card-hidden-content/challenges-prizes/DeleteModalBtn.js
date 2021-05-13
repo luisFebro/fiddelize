@@ -23,9 +23,9 @@ export default function DeleteModalBtn({
     const { bizId } = useBizData();
 
     const handleDelete = (arrayId) => {
-        const currChallInd = challengeNumber - 1;
+        const challN = challengeNumber;
         getAPI({
-            url: gotUsersInThisChallenge(bizId, currChallInd),
+            url: gotUsersInThisChallenge(bizId, challN),
         }).then((quantity) => {
             if (typeof quantity === "number") {
                 setErrorMsg(

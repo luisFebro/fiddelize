@@ -4,7 +4,7 @@ import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
-import getAPI, { removeUser, countField } from "api";
+import getAPI, { removeUser } from "api";
 import { setRun, useAction } from "global-data/ui";
 
 export default function RemoveMemberBtn({ modalData }) {
@@ -35,26 +35,11 @@ export default function RemoveMemberBtn({ modalData }) {
                 fullCatch: true,
             })
                 .then(() => {
-                    getAPI({
-                        method: "put",
-                        url: countField(bizId, "cliente-admin"),
-                        fullCatch: true,
-                        body: {
-                            field: "clientAdminData.totalClientUsers",
-                            type: "dec",
-                            thisRole: "cliente-admin",
-                        },
-                    })
-                        .then(() => {
-                            showToast(
-                                `Cliente ${name} foi excluído dos seus registros!`,
-                                { type: "success" }
-                            );
-                            setRun("runName", "teamMemberList", uify);
-                        })
-                        .catch((err) =>
-                            showToast(err.data.msg, { type: "error" })
-                        );
+                    showToast(
+                        `Membro ${name} foi excluído dos seus registros!`,
+                        { type: "success" }
+                    );
+                    setRun("runName", "teamMemberList", uify);
                 })
                 .catch((err) => {
                     // if (res.status !== 200)

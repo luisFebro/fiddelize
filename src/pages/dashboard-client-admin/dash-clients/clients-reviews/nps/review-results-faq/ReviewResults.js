@@ -25,7 +25,7 @@ const textQ2 = (
     <Fragment>
         <p>
             A pesquisa é feita ao final do processo de compra quando o cliente
-            termina de adicionar os seus novos pontos de fidelidade no app dos
+            termina de adicionar os seus novos pontos de compra no app dos
             clientes.
         </p>
         <p>

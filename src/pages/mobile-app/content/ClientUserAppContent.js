@@ -7,8 +7,6 @@ import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import "../ellipse.scss";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
-import pickCurrChallData from "utils/biz/pickCurrChallData";
-import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import getVar, { removeVar } from "init/var";
 import useSendSMS from "hooks/sms/useSendSMS";
 import useDidDateExpire from "hooks/dates/date-expires/useDidDateExpire";
@@ -55,34 +53,23 @@ export default function ClientUserAppContent({
         "lastPrizeDate",
     ]);
 
-    const { firstName } = useData();
+    const { firstName, userGame, adminGame } = useData();
+
+    const { currPoints = 0, lastPoints, totalGeneralPoints } = useThisData();
+    const currChall = userGame.targetPrize.challN;
+    const { milestoneIcon, prizeDesc } = adminGame.targetPrize;
+    let { targetPoints } = adminGame.targetPrize;
+    if (targetPointsTest) {
+        targetPoints = Number(targetPointsTest);
+    }
 
     const {
-        currPoints = 0,
-        lastPoints,
-        totalPurchasePrize,
-        totalGeneralPoints,
-    } = useThisData();
-    const currChall = defineCurrChallenge(totalPurchasePrize);
-
-    const {
-        rewardList,
         themeBackColor,
         arePrizesVisible,
         bizWhatsapp,
         bizName,
         bizLogo,
     } = useBizData();
-    let { targetPoints = 0, milestoneIcon } = useBizData();
-
-    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    targetPoints = pickedObj.targetPoints;
-    const { mainReward } = pickedObj;
-
-    milestoneIcon = pickedObj.milestoneIcon;
-    if (targetPointsTest) {
-        targetPoints = Number(targetPointsTest);
-    }
 
     const userBeatChallenge = currPoints >= targetPoints;
 
@@ -93,14 +80,13 @@ export default function ClientUserAppContent({
 
     useNotifyCliWonChall(businessId, {
         businessId,
-        mainReward,
+        mainReward: prizeDesc,
         fullName,
         targetPoints,
         currChall,
         currPoints,
         bizLogo,
         lastPrizeId,
-        totalPurchasePrize,
         senderId: userId,
         // trigger
         userIdLoading: loadingData,
@@ -189,14 +175,13 @@ export default function ClientUserAppContent({
             userId={userId}
             currPointsRef={currPointsRef}
             currPoints={currPoints}
-            showPercentage={showMoreComps}
+            showMoreComps={showMoreComps}
             lastPoints={lastPoints}
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
             colorBack={themeBackColor}
             colorS={colorS}
             totalGeneralPoints={totalGeneralPoints}
-            totalPurchasePrize={totalPurchasePrize}
         />
     );
 
@@ -216,7 +201,7 @@ export default function ClientUserAppContent({
         selectTxtStyle,
         playBeep,
         arePrizesVisible,
-        prizeDesc: mainReward,
+        prizeDesc,
         milestoneIcon,
         runName,
         lastPrizeDate,

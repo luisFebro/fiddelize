@@ -9,7 +9,7 @@ Nunca foi tão prático e rápido adicionar e receber pontos. Nem precisamos ped
 Quando é adicionado pontos no seu app, você é notificado com um novo cartão virtual interativo com o seu nome onde você aplica os novos pontos recebidos.
 
 @SISTEMA DE PONTOS@
-A quantidade de pontos ganhos é igual ao valor de sua compra. Por exemplo, com R$ 50 em compras, você ganha 50 pontos de fidelidade. É simples assim, ##nome-cliente!
+A quantidade de pontos ganhos é igual ao valor de sua compra. Por exemplo, com R$ 50 em compras, você ganha 50 pontos de compra. É simples assim, ##nome-cliente!
 
 @META NO DESAFIO ATUAL@
 Você já deve ter visto uma bandeirinha no app indicando sua meta.

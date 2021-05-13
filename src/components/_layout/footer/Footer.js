@@ -33,8 +33,11 @@ const Footer = ({ location }) => {
                 <h4>Sobre a Fiddelize</h4>
                 <p className="text-small text-voca-cyan">
                     Somos a primeira plataforma de criação de apps web
-                    especializada em <strong>fidelidade da clientela</strong> e
-                    ajudamos negócios a oferecer benefícios aos seus clientes.
+                    especializada em{" "}
+                    <strong>marketing de relacionamento</strong> e{" "}
+                    <strong>fidelidade da clientela</strong> e ajudamos negócios
+                    a oferecer benefícios aos seus clientes com{" "}
+                    <strong>pontos de compra</strong>.
                 </p>
             </div>
         </section>

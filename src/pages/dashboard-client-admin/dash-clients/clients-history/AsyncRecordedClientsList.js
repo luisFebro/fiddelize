@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { calendar } from "utils/dates/dateFns";
 import convertToReal from "utils/numbers/convertToReal";
-import { updateUser } from "api/frequent";
 import useData, { useBizData } from "init";
 import useAPIList, { readAllCliUsers, getTrigger } from "api/useAPIList";
 import useRun from "global-data/ui";
@@ -165,18 +164,22 @@ const handleParams = ({ search, filterName, period, getFilterDate }) => {
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
     const [isFiltering, setIsFiltering] = useState(false);
-    // TO DO: the updated totalActivePoints will be read from INIT only now
-    const { bizId, bizPlan } = useBizData();
+    const {
+        bizId,
+        bizPlan,
+        countCliUserGeneralPoints,
+        countCliUsersCurrPoints,
+        countCliUsers,
+    } = useBizData();
     const { name } = useData();
 
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
     const [data, setData] = useState({
-        totalCliUserScores: 0,
         search: "",
         cleared: "",
     });
-    const { totalCliUserScores, search, cleared } = data;
+    const { search, cleared } = data;
 
     const [filter, setFilter] = useState({
         filterName: "newCustomers",
@@ -199,7 +202,7 @@ export default function AsyncRecordedClientsList() {
     const handleSearch = (query) => {
         if (query === "_cleared")
             return setData({ ...data, search: "", cleared: true });
-        setData({ ...data, search: query, cleared: "" });
+        return setData({ ...data, search: query, cleared: "" });
     };
 
     const handleSelectedFilter = (filterData) => {
@@ -219,16 +222,6 @@ export default function AsyncRecordedClientsList() {
         });
     };
 
-    // update current amount of accumulative and active scores from all cli-users of which cli-admin.
-    // this is necessary so that we can have variables to gather these numbers sincedatabase just process them on the fly
-    // useful for central admin to know the general scores from all cli-admins
-    useEffect(() => {
-        const objToSend = {
-            "clientAdminData.totalClientUserPoints": totalCliUserScores,
-        };
-        updateUser(bizId, "cliente-admin", objToSend);
-    }, [totalCliUserScores]);
-
     const params = handleParams({ search, filterName, period, getFilterDate });
 
     const trigger = getTrigger(runName, "RecordedClientsList", {
@@ -237,7 +230,6 @@ export default function AsyncRecordedClientsList() {
 
     const {
         list,
-        content,
         loading,
         ShowLoadingSkeleton,
         error,
@@ -265,14 +257,6 @@ export default function AsyncRecordedClientsList() {
         isFiltering,
     });
 
-    useEffect(() => {
-        if (false) {
-            // content
-            const { totalCliUserScores } = extractStrData(content);
-            setData({ ...data, totalCliUserScores });
-        }
-    }, [content]);
-
     // Accordion Content
     const highlightActiveScore =
         filterName.indexOf("highestActiveScores") !== -1 ||
@@ -285,6 +269,8 @@ export default function AsyncRecordedClientsList() {
 
     const actions = list.map((user) => {
         const { clientUserData: cliUser } = user;
+
+        const gotTargetPrize = Boolean(currChall > 1);
 
         const handleSecHeading = (user) => {
             const getHighlightInfo = (filterName) => {
@@ -339,6 +325,8 @@ export default function AsyncRecordedClientsList() {
                 infoData,
             } = getHighlightInfo(filterName);
 
+            const currChall = user.clientUserData.games.targetPrize.challN;
+
             return (
                 <div style={{ marginTop: 45 }}>
                     <p
@@ -352,13 +340,11 @@ export default function AsyncRecordedClientsList() {
                             : ` • ${convertToReal(
                                   user.clientUserData.currPoints
                               )} Pontos`}
-                        {Boolean(user.clientUserData.totalPurchasePrize) && (
+                        {gotTargetPrize && (
                             <Fragment>
                                 <br />
                                 <span className="text-small font-weight-bold">
-                                    (Desafio Atual N.º{" "}
-                                    {user.clientUserData.totalPurchasePrize + 1}
-                                    )
+                                    (Desafio Atual N.º {currChall})
                                 </span>
                             </Fragment>
                         )}
@@ -378,7 +364,7 @@ export default function AsyncRecordedClientsList() {
         };
 
         const isTestMode = name === user.name.cap();
-        const needCliPrizes = cliUser.totalPurchasePrize; // 0 by default.
+        const needCliPrizes = gotTargetPrize;
         const highlightName = filterName.indexOf("alphabeticOrder") !== -1;
         const handleVisible = () => {
             if (needEmpty) return true;
@@ -522,9 +508,9 @@ export default function AsyncRecordedClientsList() {
                     />
                     <Totals
                         loading={loading}
-                        allUsersLength={listTotal}
-                        totalActivePoints={totalActivePoints}
-                        totalCliUserScores={totalCliUserScores}
+                        allUsersLength={countCliUsers}
+                        countCliUsersCurrPoints={countCliUsersCurrPoints}
+                        countCliUserGeneralPoints={countCliUserGeneralPoints}
                         period={period}
                     />
                 </Fragment>

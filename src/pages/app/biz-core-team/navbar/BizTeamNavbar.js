@@ -57,7 +57,7 @@ function BizTeamNavbar({ history }) {
                 icon: <ExitToAppIcon style={menuIconStyle} />,
                 text: "sair",
                 callback: () => {
-                    disconnect();
+                    disconnect({ msg: true });
                 },
             },
         ];

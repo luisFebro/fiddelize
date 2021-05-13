@@ -30,13 +30,13 @@ export default function useInvitationMsg({
 
         const handleTxt = () => {
             if (isNewMember) {
-                return `Segue o app do clube de fidelidade para membros da ${
+                return `Segue o app do clube de compras para membros da ${
                     bizName && bizName.toUpperCase()
                 }. Acesse: ${downloadLink.current} | Senha: ${verifPass}`;
             }
             return `${getFirstName(
                 name.toUpperCase()
-            )}, segue convite para o clube de fidelidade da ${
+            )}, segue convite para o clube de compras da ${
                 bizName && bizName.toUpperCase()
             }. Acesse: ${downloadLink.current}`;
         };

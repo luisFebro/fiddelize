@@ -53,7 +53,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Sair ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                if (!disableClick) disconnect();
+                if (!disableClick) disconnect({ msg: true });
             },
         },
         {

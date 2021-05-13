@@ -101,7 +101,7 @@ export default function ClientUserText({
                 {showAppShowCase()}
 
                 <p className="download-app--txt" style={styles.margin}>
-                    Você vai acompanhar seus pontos de fidelidade, progresso de
+                    Você vai acompanhar seus pontos de compra, progresso de
                     desafios, ter histórico compras automático, ter acesso
                     offline, avaliar sua experiência e mais.
                 </p>

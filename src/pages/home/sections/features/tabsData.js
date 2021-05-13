@@ -63,7 +63,7 @@ const dataPanelCliMember = {
             icon: "lock",
             title: "Link de cadastro com pontos",
             text:
-                "Envie pontuação no primeiro cadastro dos clientes no seu clube de fidelidade. Pontos são protegidos por criptografia no link do convite.",
+                "Envie pontuação no primeiro cadastro dos clientes no seu clube de compras. Pontos são protegidos por criptografia no link do convite.",
         },
     ],
     right: [

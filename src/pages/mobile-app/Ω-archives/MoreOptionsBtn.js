@@ -68,7 +68,7 @@ function MoreOptionsBtn({
         _id,
         currPoints,
         totalGeneralPoints,
-        totalPurchasePrize,
+        currChall,
         // purchaseHistory,
     } = useData();
 
@@ -82,7 +82,7 @@ function MoreOptionsBtn({
             cliUserId: _id,
             currUserScore: currPoints,
             totalGeneralPoints,
-            totalPurchasePrize,
+            currChall,
         });
 
         const modalData = getModalData();
@@ -107,7 +107,7 @@ function MoreOptionsBtn({
                 onClick: () => {
                     if (needAppForPreview) return;
                     (async () => {
-                        await disconnect();
+                        await disconnect({ msg: true });
                     })();
                 },
             },

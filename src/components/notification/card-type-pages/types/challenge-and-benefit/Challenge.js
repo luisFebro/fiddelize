@@ -33,7 +33,6 @@ export default function Challenge({
     const {
         currPoints,
         targetPoints,
-        totalPrizes,
         currChall,
         clientFullName,
         // confirmedChall
@@ -56,7 +55,7 @@ export default function Challenge({
             cardId,
             name: clientFullName,
             userCurrScore: Number(currPoints),
-            totalPrizes: Number(totalPrizes),
+            currChall: Number(currChall),
             prizeId,
             prizeDesc,
             updatedBy,

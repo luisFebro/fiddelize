@@ -3,16 +3,11 @@ import { convertDotToComma } from "../../utils/numbers/convertDotComma";
 const AllScores = ({
     currPointsRef,
     currPoints,
-    userId,
-    showPercentage,
+    showMoreComps,
     lastPoints,
     needAppForPreview,
     selectTxtStyle,
     colorBack,
-    // colorS,
-    totalGeneralPoints,
-    totalPurchasePrize,
-    userName,
 }) => {
     lastPoints = convertDotToComma(lastPoints);
     const selectedTxtStyle = selectTxtStyle(colorBack, { bold: true });
@@ -28,10 +23,33 @@ const AllScores = ({
                 >
                     ...
                 </p>
-                <span className={`ml-2 ${selectedTxtStyle}`}>Pontos</span>
+                {showMoreComps ? (
+                    <span
+                        className={`animated rubberBand delay-2s ml-2 ${selectedTxtStyle}`}
+                    >
+                        <img
+                            className="pts-coin"
+                            width={50}
+                            height={50}
+                            src="/img/app-pts-coin.svg"
+                            alt="moeda digital pts para benefícios"
+                        />
+                        <style jsx>
+                            {`
+                                .pts-coin {
+                                    filter: drop-shadow(
+                                        0.001em 0.001em 0.18em grey
+                                    );
+                                }
+                            `}
+                        </style>
+                    </span>
+                ) : (
+                    <span className={`ml-2 ${selectedTxtStyle}`}>Pontos</span>
+                )}
             </div>
             {/* LAST SCORE */}
-            {currPoints === 0 || !currPoints || !showPercentage ? null : (
+            {currPoints === 0 || !currPoints || !showMoreComps ? null : (
                 <section className="text-normal position-relative animated fadeIn">
                     <section>
                         <div

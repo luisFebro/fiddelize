@@ -46,9 +46,10 @@ export default function Home({ match }) {
                                 do seu negócio.
                             </h1>
                             <p className="mt-4 text-white">
-                                Faça seu app hoje. Transforme suas vendas em
-                                jogo de compras com{" "}
-                                <strong>pontos de fidelidade</strong>.
+                                Faça seu app hoje. Ofereça aos seus clientes{" "}
+                                <strong>pontos</strong> como moeda digital para
+                                trocarem por benefícios com{" "}
+                                <strong>jogos de compra</strong>.
                             </p>
                         </div>
                     </div>

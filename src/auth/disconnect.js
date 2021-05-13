@@ -8,12 +8,12 @@ const isApp = isThisApp();
 export default async function disconnect(options = {}) {
     const {
         needRedirect = true,
-        msg = true,
+        msg = false,
         rememberAccess = true,
         history,
     } = options;
 
-    if (msg) showToast("Finalizando sessão...");
+    if (msg) showToast("Finalizando sua sessão...", { dur: 15000 });
 
     const role = await getVar("role", "user");
     const isCliAdmin = role === "cliente-admin";

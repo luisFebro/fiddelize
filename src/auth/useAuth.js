@@ -21,7 +21,7 @@ export default function useAuth(options = {}) {
         // there's a focus verification to logout user automatically. Maybe this REDIRECT can be depracted in the future.
         if (!isAuthUser && history) {
             (async () => {
-                await disconnect({ needRedirect: false, msg: false });
+                await disconnect({ needRedirect: false });
                 history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
             })();
         }

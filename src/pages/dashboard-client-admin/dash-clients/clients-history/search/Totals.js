@@ -9,7 +9,7 @@ const getStyles = () => ({
         backgroundColor: "var(--themeP)",
         color: "var(--mainWhite)",
         borderRadius: "35px",
-        lineHeight: "25px",
+        lineHeight: "35px",
     },
 });
 
@@ -18,25 +18,31 @@ export default function Totals({
     loading,
     allUsersLength,
     mainSubject = "cliente",
-    totalActivePoints,
-    totalCliUserScores,
+    countCliUsersCurrPoints,
+    countCliUserGeneralPoints,
 }) {
     const styles = getStyles();
 
-    totalActivePoints = convertToReal(totalActivePoints);
-    totalCliUserScores = convertToReal(totalCliUserScores);
+    countCliUsersCurrPoints = convertToReal(countCliUsersCurrPoints);
+    countCliUserGeneralPoints = convertToReal(countCliUserGeneralPoints);
     allUsersLength = convertToReal(allUsersLength);
 
     const textInstru =
-        "É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos.";
+        "É o total geral de saldo em pontos disponível para o uso pelos clientes";
     const showActiveScores = () => (
-        <div className="m-0 d-flex">
-            <p className="text-normal font-weight-bold m-0 mr-2">
-                • {`${loading ? "..." : totalActivePoints} Pontos Ativos`}
+        <div className="m-0">
+            <p className="d-inline-block text-normal font-weight-bold m-0 mr-2">
+                • {`${countCliUsersCurrPoints} Pontos Ativos`}
             </p>
-            <div>
+            <div className="d-inline-block">
                 <InstructionBtn text={textInstru} mode="tooltip" />
             </div>
+            <p className="text-normal font-weight-bold m-0 mr-2">
+                •{" "}
+                {`${
+                    countCliUserGeneralPoints - countCliUsersCurrPoints
+                } Pontos Usados`}
+            </p>
         </div>
     );
 
@@ -45,7 +51,7 @@ export default function Totals({
             className="text-subtitle font-weight-bold text-center mt-2 py-2 px-3 font-weight-bold"
             style={styles.accumulativeScore}
         >
-            {`${loading ? "..." : totalCliUserScores} Pontos Acumulados`}
+            {`${countCliUserGeneralPoints} Pontos Gerais`}
         </p>
     );
 
@@ -69,9 +75,9 @@ export default function Totals({
                         <br />
                         <span className="mr-2 text-normal font-weight-bold">
                             •{" "}
-                            {`${
-                                loading ? "..." : allUsersLength
-                            } ${mainSubject}${allUsersLength > 1 ? "s" : ""}`}
+                            {`${allUsersLength} ${mainSubject}${
+                                allUsersLength > 1 ? "s" : ""
+                            }`}
                         </span>
                         <br />
                         {showActiveScores()}
@@ -86,8 +92,8 @@ export default function Totals({
 // <SearchResult
 //     isLoading={loading}
 //     filteredUsersLength={totalSize}
-//     totalCliUserScores={totalCliUserScores}
-//     totalActivePoints={totalActivePoints}
+//     countCliUserGeneralPoints={countCliUserGeneralPoints}
+//     countCliUsersCurrPoints={countCliUsersCurrPoints}
 //     allUsersLength={totalSize}
 //     searchTerm={searchTerm}
 //     mainSubject="cliente"

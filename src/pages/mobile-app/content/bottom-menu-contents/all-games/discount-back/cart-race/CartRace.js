@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./CartRace.scss";
 import PropTypes from "prop-types";
+import useData, { useBizData } from "init";
 import animateCartByScore, { options } from "./animateCartByScore";
-import { useBizData } from "init";
-import useData from "init";
-import defineCurrChallenge from "utils/biz/defineCurrChallenge";
-import pickCurrChallData from "utils/biz/pickCurrChallData";
+import "./CartRace.scss";
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
@@ -27,15 +24,11 @@ export default function CartRace({
     className,
     id,
 }) {
-    const { totalPurchasePrize } = useData();
-    let { targetPoints, themePColor, themeSColor, rewardList } = useBizData();
+    const { adminGame, userGame } = useData();
+    const { themePColor, themeSColor } = useBizData();
 
-    // const isCartEmpty = !totalGeneralPoints;
-
-    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    targetPoints = pickedObj.targetPoints;
-
-    const currChallenge = defineCurrChallenge(totalPurchasePrize);
+    const currChallenge = userGame.targetPrize.challN;
+    const { targetPoints } = adminGame.targetPrize;
 
     const backColor = {
         backgroundColor: `var(--themeBackground--${themePColor})`,

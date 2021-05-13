@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getVar, { removeVar } from "init/var";
 import useData from "init";
-import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import { textStyle } from "../DefaultRenderComps";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
 
@@ -16,17 +15,14 @@ export default function CliUserConfirmedChall({
     const [role] = useData(["role"]);
     const [loading, setLoading] = useState(false);
 
-    const { totalPurchasePrize } = useData();
-    const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
-
     const handleCTA = () => {
-        if (!updatedCurrChall) return;
+        if (!currChall) return;
 
         setLoading(true);
 
         removeVersion({
             key: "alreadyAlertChallenge",
-            value: updatedCurrChall,
+            value: currChall,
         }).then((res) => {
             window.location.href =
                 role === "cliente-admin"

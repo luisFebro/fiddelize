@@ -27,7 +27,7 @@ export default function AdminFidelidometro({ loading, totalScore }) {
                     display: "table",
                 }}
             >
-                {totalScore ? totalScore || 0 : "..."} pontos
+                {totalScore ? totalScore || 0 : "..."} pts
             </div>
         </section>
     );

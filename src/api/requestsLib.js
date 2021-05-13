@@ -94,8 +94,8 @@ export const updateImages = (userId) =>
     `${ROOT}/user/image/update?id=${userId}`; // PUT
 
 // challenges and rewards
-export const gotUsersInThisChallenge = (bizId, challInd) =>
-    `${ROOT}/user/check/user-challenges?id=${bizId}&challengeInd=${challInd}`; // GET
+export const gotUsersInThisChallenge = (bizId, challN) =>
+    `${ROOT}/user/check/user-challenges?bizId=${bizId}&challN=${challN}`; // GET
 
 // CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;

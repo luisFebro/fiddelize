@@ -28,14 +28,14 @@ const showTxtDefault = (txt) => (
 // EXPIRING MSGS
 const aboutToExpireMsg = ({
     limitFreePlanNewUsers,
-    totalClientUsers,
+    countCliUsers,
     name,
     handleOpenCustomerModal,
     modalData,
     handleCloseCustomerModal,
     openModal,
 }) => {
-    // const leftRegisters = limitFreePlanNewUsers - totalClientUsers;
+    // const leftRegisters = limitFreePlanNewUsers - countCliUsers;
     const txt = (
         <span>
             - Seus clientes estão começando a aparecer, {getFirstName(name)}.
@@ -101,7 +101,7 @@ const expiredMsg = ({
 export default function AsyncFreeAccountsLimitMsg() {
     const [openModal, setOpenModal] = useState(false);
     const { name } = useData();
-    const { totalClientUsers } = useBizData();
+    const { countCliUsers } = useBizData();
     const { limitFreePlanNewUsers } = useFiddelizeAdmin();
 
     const { plan: currPlan, usageTimeEnd, credits } = usePro({
@@ -122,7 +122,7 @@ export default function AsyncFreeAccountsLimitMsg() {
         setOpenModal(false);
     };
 
-    if (totalClientUsers >= limitFreePlanNewUsers || !credits) {
+    if (countCliUsers >= limitFreePlanNewUsers || !credits) {
         return expiredMsg({
             modalData,
             handleOpenCustomerModal,
@@ -130,10 +130,10 @@ export default function AsyncFreeAccountsLimitMsg() {
             openModal,
         });
     }
-    if (totalClientUsers >= 7) {
+    if (countCliUsers >= 7) {
         return aboutToExpireMsg({
             limitFreePlanNewUsers,
-            totalClientUsers,
+            countCliUsers,
             name,
             handleOpenCustomerModal,
             handleCloseCustomerModal,
