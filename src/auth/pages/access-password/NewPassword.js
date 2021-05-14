@@ -5,7 +5,6 @@ import isThisApp from "utils/window/isThisApp";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
 import useData, { useBizData } from "init";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
 import PasswordCircleFields from "components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "components/keyboards/NumericKeyboard";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
@@ -50,11 +49,10 @@ export default function NewPassword({ location, match, history }) {
         themeBackColor: backColor,
         themePColor: colorP,
         themeSColor: colorS,
+        needDark,
     } = useBizData();
 
     useBackColor(`var(--themeBackground--${backColor})`);
-
-    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
 
     useEffect(() => {
         const run = async () => {

@@ -1,11 +1,10 @@
 import { Fragment, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
+import getAPI, { setTempPointsAndMemberData } from "api";
+import useData, { useBizData } from "init";
 import SearchCustomer from "./SearchCustomer";
 import ScoreCustomer from "./ScoreCustomer";
 import SuccessMsg from "./SuccessMsg";
-import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
-import getAPI, { setTempPointsAndMemberData } from "api";
-import useData, { useBizData } from "init";
 
 const setCustomerId = async (clientName, bizId, memberId) => {
     const body = {
@@ -25,7 +24,6 @@ const setCustomerId = async (clientName, bizId, memberId) => {
 export default withRouter(FieldsHandler);
 
 function FieldsHandler({
-    history,
     closeModal,
     clientScoreOnly = false,
     clientName,
@@ -42,7 +40,10 @@ function FieldsHandler({
         bizId,
         themeBackColor: backColor,
         themePColor: colorP,
+        needDark,
+        txtColor,
     } = useBizData();
+
     const [memberId] = useData(["userId"]);
 
     useEffect(() => {
@@ -60,9 +61,6 @@ function FieldsHandler({
         }
     }, [customerName, bizId, memberId]);
 
-    const textColor = selectTxtStyle(backColor);
-    const needDark = selectTxtStyle(backColor, { needDarkBool: true }); // for icons
-
     if (clientScoreOnly) {
         return (
             <ScoreCustomer
@@ -71,7 +69,7 @@ function FieldsHandler({
                 handleCustomerScore={handleCustomerScore}
                 setCurr={setCurr}
                 customerName={customerName || clientName}
-                textColor={textColor}
+                textColor={txtColor}
                 colorP={colorP}
                 bizId={bizId}
                 clientId={customerId}
@@ -84,7 +82,7 @@ function FieldsHandler({
             {field === "name" && (
                 <SearchCustomer
                     setCurr={setCurr}
-                    textColor={textColor}
+                    textColor={txtColor}
                     bizId={bizId}
                 />
             )}
@@ -92,7 +90,7 @@ function FieldsHandler({
                 <ScoreCustomer
                     setCurr={setCurr}
                     customerName={customerName}
-                    textColor={textColor}
+                    textColor={txtColor}
                     colorP={colorP}
                     bizId={bizId}
                     clientId={customerId}
@@ -101,7 +99,7 @@ function FieldsHandler({
             {field === "success" && (
                 <SuccessMsg
                     needDark={needDark}
-                    textColor={textColor}
+                    textColor={txtColor}
                     closeModal={closeModal}
                 />
             )}

@@ -9,8 +9,7 @@ import animateNumber, {
 import { convertDotToComma } from "utils/numbers/convertDotComma";
 import isThisApp from "utils/window/isThisApp";
 import disconnect from "auth/disconnect";
-import useData from "init";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import useData, { useBizData } from "init";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
 import { updateUser, readUser } from "api/frequent";
 import getAPI, {
@@ -71,13 +70,13 @@ function AsyncClientScoresPanel({ history, location }) {
         themeBackColor: colorBack,
         themePColor: colorP,
         themeSColor: colorS,
+        txtColor,
+        txtColorStyle,
     } = useBizData();
     // END ROLES
 
     // STYLES
-    const dynamicTxtColor = selectTxtStyle(colorBack, { needDarkBool: true })
-        ? "var(--mainDark)"
-        : "var(--mainWhite)";
+    const dynamicTxtColor = txtColorStyle;
 
     const styles = getStyles({
         colorP,
@@ -228,9 +227,7 @@ function AsyncClientScoresPanel({ history, location }) {
     const showHeader = () => (
         <div className="position-relative">
             <p
-                className={`${selectTxtStyle(
-                    colorBack
-                )} m-0 margin-left-25 font-site text-em-2-3 text-shadow`}
+                className={`${txtColor} m-0 margin-left-25 font-site text-em-2-3 text-shadow`}
             >
                 {firstName},
             </p>
@@ -251,9 +248,7 @@ function AsyncClientScoresPanel({ history, location }) {
 
     const showScores = () => (
         <div
-            className={`${selectTxtStyle(
-                colorBack
-            )} text-weight-bold text-title pt-5 pb-1 px-3`}
+            className={`${txtColor} text-weight-bold text-title pt-5 pb-1 px-3`}
             style={{ backgroundColor: `var(--themePLight--${colorP})` }}
         >
             <section>

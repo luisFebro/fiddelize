@@ -13,7 +13,7 @@
 // import useAPIList, { readPurchaseHistory } from "api/useAPIList";
 // import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 // import extractStrData from "../../../../utils/string/extractStrData";
-// import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
+// import getColor from "../../../../utils/biz/getColor";
 // import { setVar } from "init/var";
 
 // const isSmall = window.Helper.isSmallScreen();
@@ -72,7 +72,7 @@
 //         themeSColor,
 //     } = useBizData();
 
-//     const txtClass = selectTxtStyle(themeBackColor);
+//     const txtClass = getColor(themeBackColor);
 
 //     const { role } = useData();
 //     const isAdmin = role === "cliente-admin";

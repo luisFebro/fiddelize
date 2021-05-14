@@ -10,7 +10,7 @@
     --themeSurface: #f7f1e3; /*white variant*/
     --themeBackground: #4a148c; /*same as primary*/
     /*on colors - text*/
-    --mainBlack: black;
+    /*--mainBlack: black; use only: black */
     --mainWhite: #ecf0f1;
 
     --mainFont: "Poppins", sans-serif;

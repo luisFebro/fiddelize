@@ -9,7 +9,6 @@ import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import showToast from "components/toasts";
 import getAPI, { checkPassword, createTk } from "api";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
 import PasswordCircleFields from "components/fields/PasswordCircleFields";
 import { Load } from "components/code-splitting/LoadableComp";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
@@ -52,11 +51,12 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         bizId,
         themeBackColor: backColor,
         themePColor: colorP,
+        txtColorStyle,
+        needDark,
     } = useBizData();
 
     const styles = getStyles();
 
-    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : backColor})`
     );
@@ -203,7 +203,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 icon="times"
                 style={{
                     ...styles.closeBtn,
-                    color: needDark ? "var(--mainDark)" : "var(--mainWhite)",
+                    color: txtColorStyle,
                 }}
             />
         </Link>

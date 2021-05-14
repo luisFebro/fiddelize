@@ -1,4 +1,4 @@
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 import RedirectLink from "components/RedirectLink";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -31,7 +31,9 @@ export default function GatewayAndCTAs({
             } container-center-col text-white text-normal text-center`}
         >
             <span
-                className={`${selectTxtStyle(themeBackColor)} font-weight-bold`}
+                className={`${
+                    getColor(themeBackColor).txtColor
+                } font-weight-bold`}
             >
                 {!isSessionOver && "Conectado por"}
                 {!isSessionOver && <br />}

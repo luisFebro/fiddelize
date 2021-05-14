@@ -6,7 +6,6 @@ import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
 import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
-import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "auth/useAuth";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
@@ -55,6 +54,8 @@ export default function TeamApp({
         themeBackColor: backColor,
         themeSColor: sColor,
         themePColor: pColor,
+        needDark,
+        txtColor,
     } = useBizData();
 
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
@@ -64,9 +65,7 @@ export default function TeamApp({
             needAdminDefaultTheme ? "default" : backColor
         })`
     );
-    const txtColor = selectTxtStyle(backColor);
 
-    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
     const styles = getStyles(needDark);
 
     const showNotifBell = () => {
@@ -189,11 +188,7 @@ export default function TeamApp({
         <section style={{ left: 10, bottom: "0px", position: "fixed" }}>
             <div className="d-flex justify-content-center">
                 <div style={styles.rootProtectionMsg}>
-                    <p
-                        className={`m-0 text-small text-center ${selectTxtStyle(
-                            backColor
-                        )}`}
-                    >
+                    <p className={`m-0 text-small text-center ${txtColor}`}>
                         Admin, funcionalidades
                         <br />
                         desativas no modo teste.

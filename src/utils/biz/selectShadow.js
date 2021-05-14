@@ -1,1 +1,0 @@
-const backColorsWhichNeedWhiteShadow = ["black", "purple"];

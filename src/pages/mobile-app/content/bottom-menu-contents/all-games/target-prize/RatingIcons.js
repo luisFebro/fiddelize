@@ -12,14 +12,13 @@ import usePlayAudio from "hooks/media/usePlayAudio";
 export default function RatingIcons() {
     const { currPoints } = useData();
 
-    const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
-
     const {
-        targetPoints,
-        milestoneIcon,
-        runName,
-        selectTxtStyle,
-    } = useContext();
+        needDark,
+        themeBackColor: colorBack,
+        themeSColor: colorS,
+    } = useBizData();
+
+    const { targetPoints, milestoneIcon, runName } = useContext();
 
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,
@@ -30,7 +29,6 @@ export default function RatingIcons() {
     const selectedIcon = appPreviewIcon || milestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
     const eachMilestone = Number(targetPoints / 5);
-    const needDark = selectTxtStyle(colorBack, { needDarkBool: true });
 
     useEffect(() => {
         paintStarsForScore({
@@ -176,7 +174,7 @@ function paintStarsForScore({ currPoints, eachMilestone, needDark }) {
     }
 }
 
-/* COselectTxtStyle(colorP, {needDarkBool: true})
+/*
 n1: the native icons sometimes can demonstrate faitures on displaying the colors,
 colorP, in mobile phones.
 Font Awesome is a cross-platform solution for that.
@@ -213,7 +211,7 @@ But conditionals like case > 5 will return undefined.
 // *
 //  * This method is fired when the user leaves the #rating element, effectively removing all hover states.
 
-// StselectTxtStyle(colorP, {needDarkBool: true}).prototype.leaveStarListener = function() {
+//
 //   this.fillStarsUpToElement(null);
 // };
 

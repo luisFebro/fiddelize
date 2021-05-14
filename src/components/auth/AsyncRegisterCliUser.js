@@ -24,7 +24,6 @@ import { doRegister } from "auth/api";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
 import useData, { useBizData } from "init";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
@@ -93,13 +92,7 @@ function ASyncRegisterCliUser({
     const cpfValue = autoCpfMaskBr(cpf);
     const phoneValue = autoPhoneMask(phone);
 
-    const {
-        themePColor,
-        themeSColor,
-        themeBackColor,
-        bizLogo,
-        bizName,
-    } = useBizData();
+    const { themePColor, themeSColor, bizLogo, bizName } = useBizData();
 
     const [
         staffId,
@@ -250,9 +243,7 @@ function ASyncRegisterCliUser({
     const showLoginForm = () => (
         <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
             <p
-                className={`${selectTxtStyle(
-                    themeBackColor
-                )} m-0 font-weight-bold text-small`}
+                className={`${txtColor} m-0 font-weight-bold text-small`}
                 style={{ whiteSpace: "nowrap" }}
             >
                 Já foi cadastrado(a)?{"  "}

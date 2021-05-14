@@ -1,7 +1,7 @@
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import Card from "@material-ui/core/Card";
 // import { useBizData } from "init";
-// import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
+// import getCOlor from "../../../../utils/biz/getCOlor";
 // import PrizesBtn from "../prizes-gallery/PrizesBtn";
 
 // const faStyle = {
@@ -18,7 +18,7 @@
 
 //     const displayMainContent = () => (
 //         <section
-//             className={`${selectTxtStyle(
+//             className={`${getCOlor(
 //                 colorP
 //             )} purchase-history-prize-card--root text-center text-purple`}
 //         >

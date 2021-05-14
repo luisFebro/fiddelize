@@ -8,7 +8,7 @@ import useData, { useBizData } from "init";
 import Spinner from "components/loadingIndicators/Spinner";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
 import useBackColor from "hooks/useBackColor";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 import { Load } from "components/code-splitting/LoadableComp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import BackButton from "components/buttons/BackButton";
@@ -139,8 +139,8 @@ export default function DownloadApp({ match, location, history }) {
 
     // STYLES
     const styles = getStyles({ isCliAdmin, pColor });
-    const txtPColor = selectTxtStyle(pColor);
-    const txtBackColor = selectTxtStyle(backColor);
+    const { txtColor: txtPColor } = getColor(pColor);
+    const { txtColor } = getColor(backColor);
     // END STYLES
 
     // HOOKS
@@ -392,7 +392,7 @@ export default function DownloadApp({ match, location, history }) {
                 errorMsg()
             ) : (
                 <Fragment>
-                    <section className={`mx-3 text-normal ${txtBackColor}`}>
+                    <section className={`mx-3 text-normal ${txtColor}`}>
                         {handleAppTypeText()}
                         {downloadAvailable && showTroubleShooting()}
                         {!downloadAvailable && showAlreadyDownloadedApp()}

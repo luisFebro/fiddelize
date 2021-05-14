@@ -23,7 +23,6 @@ import RadiusBtn from "../buttons/RadiusBtn";
 import { doRegister } from "auth/api";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
@@ -64,9 +63,9 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     const {
         themePColor,
         themeSColor,
-        themeBackColor,
         bizLogo,
         bizName,
+        txtColor,
         // bizLinkName,
     } = useBizData();
 
@@ -227,9 +226,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     const showLoginForm = () => (
         <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
             <p
-                className={`${selectTxtStyle(
-                    themeBackColor
-                )} m-0 font-weight-bold text-small`}
+                className={`${txtColor} m-0 font-weight-bold text-small`}
                 style={{ whiteSpace: "nowrap" }}
             >
                 Já foi cadastrado(a)?{"  "}

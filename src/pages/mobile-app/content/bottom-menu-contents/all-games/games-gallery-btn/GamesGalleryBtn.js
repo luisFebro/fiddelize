@@ -3,7 +3,6 @@ import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
-import { currTxtColor } from "utils/biz/selectTxtStyle";
 
 const AsyncGamesGalleryContent = Load({
     loader: () =>
@@ -13,7 +12,11 @@ const AsyncGamesGalleryContent = Load({
 });
 
 export default function GamesGalleryBtn() {
-    const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
+    const {
+        themeBackColor: colorBack,
+        themeSColor: colorS,
+        txtColorStyle,
+    } = useBizData();
 
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -24,8 +27,6 @@ export default function GamesGalleryBtn() {
     const handleFullClose = () => {
         setFullOpen(false);
     };
-
-    const thisCurrTxtColor = currTxtColor(colorBack);
 
     return (
         <section>
@@ -39,7 +40,7 @@ export default function GamesGalleryBtn() {
                     fontWeight="bolder"
                     fontSize=".9em"
                     size="large"
-                    color={thisCurrTxtColor}
+                    color={txtColorStyle}
                     backgroundColor={`var(--themeS--${colorS})`}
                     shadowColor={colorBack === "black" ? "white" : "black"}
                 />

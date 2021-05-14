@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ProtectionMsg from "auth/pages/access-password/ProtectionMsg";
 import AccessSwitcher from "components/auth/password/AccessSwitcher";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 import { getVars } from "init/var";
 
 const awesomeStyle = {
@@ -38,7 +38,7 @@ export default function AccessGateKeeper({
     }, []);
 
     const showLoginName = () => (
-        <section className={`text-normal ${selectTxtStyle(backColor)}`}>
+        <section className={`text-normal ${getColor(backColor).txtColor}`}>
             CPF: ***.***.***-{twoLastCpfDigits}
         </section>
     );
@@ -54,9 +54,9 @@ export default function AccessGateKeeper({
     const showGateKeeperCTAs = () => (
         <section className={accessClassname || "mt-3"}>
             <p
-                className={`text-subtitle text-center ${selectTxtStyle(
-                    backColor
-                )}`}
+                className={`text-subtitle text-center ${
+                    getColor(backColor).txtColor
+                }`}
             >
                 Acesso com:
             </p>

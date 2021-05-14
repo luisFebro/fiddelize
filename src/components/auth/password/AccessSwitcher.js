@@ -3,8 +3,8 @@ import showToast from "components/toasts";
 import { treatBoolStatus } from "api/trigger";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 import { Load } from "components/code-splitting/LoadableComp";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
 import disconnect from "auth/disconnect";
+import getColor from "styles/txt";
 
 const AsyncModalYesNo = Load({
     loader: () =>
@@ -42,7 +42,7 @@ export default function AccessSwitcher({
                 defaultStatus={
                     typeof rememberAccess === "boolean" ? rememberAccess : true
                 }
-                customColor={`${selectTxtStyle(backColor)} text-normal`}
+                customColor={`${getColor(backColor).txtColor} text-normal`}
                 animationOn={false}
                 needCustomColor
                 callback={handleAccessSwitcher}

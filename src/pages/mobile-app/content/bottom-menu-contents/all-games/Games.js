@@ -20,7 +20,7 @@ export const AsyncDiscountBackGame = Load({
 // end games
 
 export default function Games() {
-    const { currGame, selectedTxtStyle, didUserScroll } = useContext();
+    const { currGame, txtColor, didUserScroll } = useContext();
     const { userGame } = useData();
     if (!userGame) return <div />;
 
@@ -29,7 +29,7 @@ export default function Games() {
     const showTitle = () => (
         <section className="animated fadeIn py-4">
             <h2
-                className={`text-subtitle font-weight-bold text-center ${selectedTxtStyle}`}
+                className={`text-subtitle font-weight-bold text-center ${txtColor}`}
             >
                 {icon}
                 {nameBr}

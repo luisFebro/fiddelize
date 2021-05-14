@@ -9,6 +9,7 @@ import { convertDotToComma } from "utils/numbers/convertDotComma";
 // circular percentage
 import ReactjsPercentageCircle from "components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle";
 import getPercentage from "utils/numbers/getPercentage";
+import getColor from "styles/txt";
 
 // LESSON: if the page does not load and there is no clue what the issue is
 // probably is the propTypes which is being called in the former or wrong component.
@@ -36,14 +37,10 @@ export default function ProgressFragTracker() {
         themeSColor: colorS,
         themePColor: colorP,
         themeBackColor: colorBack,
+        txtColor,
     } = useBizData();
 
-    const {
-        selectTxtStyle,
-        targetPoints,
-        playBeep,
-        needAppForPreview,
-    } = useContext();
+    const { targetPoints, playBeep, needAppForPreview } = useContext();
 
     const eachMilestone = targetPoints / 5;
     const currMilestone = getRemainder("tens", currPoints, eachMilestone);
@@ -61,7 +58,6 @@ export default function ProgressFragTracker() {
     const showProgressFragTracker = () => (
         <ProgressFrag
             needAppForPreview={needAppForPreview}
-            selectTxtStyle={selectTxtStyle}
             playBeep={playBeep}
             targetPoints={targetPoints}
             currPoints={currPoints}
@@ -77,20 +73,12 @@ export default function ProgressFragTracker() {
             {!currPoints ? null : (
                 <Fragment>
                     {currPoints >= targetPoints ? (
-                        <p
-                            className={`m-0 mt-5 ${selectTxtStyle(colorBack, {
-                                bold: true,
-                            })}`}
-                        >
+                        <p className={`m-0 mt-5 ${txtColor}`}>
                             Você venceu o desafio!{" "}
                             <i style={styles.confettiIcon}>🎉</i>
                         </p>
                     ) : (
-                        <p
-                            className={`m-0 mt-5 ${selectTxtStyle(colorBack, {
-                                bold: true,
-                            })}`}
-                        >
+                        <p className={`m-0 mt-5 ${txtColor}`}>
                             {nextLevel === 5 ? (
                                 <span className="text-left">
                                     Opa! Falta mais{" "}
@@ -129,7 +117,7 @@ const getStylesProgress = (props) => ({
     flagIcon: {
         fontSize: "70px",
         padding: "0 5px",
-        color: props.selectTxtStyle(props.colorBack, { needDarkBool: true })
+        color: getColor(props.colorBack).needDark
             ? "var(--mainDark)"
             : "var(--mainWhite)",
     },
@@ -137,7 +125,6 @@ const getStylesProgress = (props) => ({
 
 function ProgressFrag({
     needAppForPreview,
-    selectTxtStyle,
     playBeep,
     targetPoints,
     currPoints,
@@ -162,7 +149,6 @@ function ProgressFrag({
     const styles = getStylesProgress({
         needResizeFont,
         percentageColor,
-        selectTxtStyle,
         colorBack,
     });
 

@@ -3,7 +3,7 @@ import "../_PrizeCard.scss";
 import convertToReal from "utils/numbers/convertToReal";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import Card from "@material-ui/core/Card";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import useData from "init";
 
@@ -51,9 +51,9 @@ export default function DiscountBackCard({ historyData, colorP }) {
 
     const displayMainContent = () => (
         <section
-            className={`${selectTxtStyle(
-                colorP
-            )} purchase-history-prize-card--root text-center`}
+            className={`${
+                getColor(colorP).txtColor
+            } purchase-history-prize-card--root text-center`}
         >
             <main className="gift-main-title container-center">
                 <div>

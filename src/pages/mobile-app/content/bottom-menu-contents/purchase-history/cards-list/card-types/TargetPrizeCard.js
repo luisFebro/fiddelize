@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 import "../_PrizeCard.scss";
 import convertToReal from "utils/numbers/convertToReal";
 
@@ -115,9 +115,9 @@ export default function TargetPrizeCard({ historyData, colorP }) {
 
     const displayMainContent = () => (
         <section
-            className={`${selectTxtStyle(
-                colorP
-            )} m-0 purchase-history-prize-card--root text-center`}
+            className={`${
+                getColor(colorP).txtColor
+            } m-0 purchase-history-prize-card--root text-center`}
         >
             <main className="gift-main-title container-center">
                 <div>

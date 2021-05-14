@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useData, { useBizData } from "init";
+import getColor from "styles/txt";
 import ButtonMulti, {
     faStyle,
 } from "../components/buttons/material-ui/ButtonMulti";
@@ -8,13 +10,10 @@ import isThisApp from "../utils/window/isThisApp";
 import replaceVariablesInTxt from "../utils/string/replaceVariablesInTxt";
 import DateWithIcon from "../components/date-time/DateWithIcon";
 import getQueryByName from "../utils/string/getQueryByName";
-import { useBizData } from "init";
-import { currTxtColor } from "../utils/biz/selectTxtStyle";
 import regulationText, {
     updatedAt,
 } from "./dashboard-client-admin/regulationText";
 import useBackColor from "../hooks/useBackColor";
-import useData from "init";
 import useScrollUp from "../hooks/scroll/useScrollUp";
 
 const isApp = isThisApp();
@@ -85,7 +84,7 @@ export default function RegulationPage({ location }) {
             <Link to={handlePath()}>
                 <ButtonMulti
                     title="voltar"
-                    color={currTxtColor(themePColor || "default")}
+                    color={getColor(themePColor).txtColorStyle}
                     backgroundColor={`var(--themeSDark--${themeSColor})`}
                     iconFontAwesome={
                         <FontAwesomeIcon icon="home" style={faStyle} />
@@ -94,7 +93,7 @@ export default function RegulationPage({ location }) {
                 />
             </Link>
             <DateWithIcon
-                style={{ color: currTxtColor(themeBackColor || "default") }}
+                style={{ color: getColor(themeBackColor).txtColorStyle }}
                 date={updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."
                 marginTop={0}

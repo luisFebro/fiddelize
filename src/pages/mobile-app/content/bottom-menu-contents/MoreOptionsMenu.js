@@ -36,11 +36,7 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
 export default function MoreOptionsMenu({ history }) {
     const { themeBackColor: colorBack } = useBizData();
 
-    const {
-        selectedTxtStyle,
-        needAppForCliAdmin,
-        needAppForPreview,
-    } = useContext();
+    const { txtColor, needAppForCliAdmin, needAppForPreview } = useContext();
 
     const payload = {
         history,
@@ -77,7 +73,7 @@ export default function MoreOptionsMenu({ history }) {
     ));
 
     return (
-        <section className={`mx-3 text-normal ${selectedTxtStyle}`}>
+        <section className={`mx-3 text-normal ${txtColor}`}>
             <h2 className="py-4 animated fadeIn text-subtitle font-weight-bold text-center">
                 Mais opções
             </h2>

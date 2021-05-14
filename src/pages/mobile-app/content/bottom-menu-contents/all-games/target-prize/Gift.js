@@ -26,7 +26,7 @@ const getStyles = (props) => ({
 
 export default function Gift() {
     const { userId, currPoints, firstName, adminGame } = useData();
-    const { prizeDeadline } = adminGame.targetPoints;
+    const { prizeDeadline } = adminGame.targetPrize;
 
     const {
         themeSColor: colorS,

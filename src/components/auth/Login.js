@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doLogin } from "auth/api";
 import isThisApp from "utils/window/isThisApp";
 import { useBizData } from "init";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "api/frequent";
 import { removeVar, getVars, removeVars } from "init/var";
+import getColor from "styles/txt";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";
 import Title from "../Title";
@@ -29,11 +29,7 @@ function Login({
 
     const { uify } = useGlobalContext();
 
-    const {
-        themeSColor,
-        // themePColor,
-        themeBackColor,
-    } = useBizData();
+    const { themeSColor, themeBackColor } = useBizData();
 
     const showTitle = () => (
         <Title
@@ -69,9 +65,9 @@ function Login({
     const showRegisterForm = () => (
         <div className="animated zoomIn delay-2s p-2 mt-3">
             <p
-                className={`${selectTxtStyle(
-                    isBizTeam ? "default" : themeBackColor || "default"
-                )} d-flex justify-content-center text-small`}
+                className={`${
+                    getColor(isBizTeam ? "default" : themeBackColor).txtColor
+                } d-flex justify-content-center text-small`}
             >
                 <span style={{ fontWeight: "bolder" }}>
                     Novo Cliente?

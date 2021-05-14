@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 
 const getStyles = (needDark) => ({
     rootProtectionMsg: {
@@ -13,7 +13,7 @@ const getStyles = (needDark) => ({
 });
 
 export default function ProtectionMsg({ backColor }) {
-    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
+    const { needDark, txtColor } = getColor(backColor);
 
     const styles = getStyles(needDark);
 
@@ -21,9 +21,7 @@ export default function ProtectionMsg({ backColor }) {
         <section className="d-flex justify-content-center">
             <div style={styles.rootProtectionMsg}>
                 <p
-                    className={`font-weight-bold text-small text-center ${selectTxtStyle(
-                        backColor
-                    )}`}
+                    className={`font-weight-bold text-small text-center ${txtColor}`}
                 >
                     <FontAwesomeIcon
                         className="mr-3"
@@ -35,11 +33,7 @@ export default function ProtectionMsg({ backColor }) {
                     />
                     Nunca compartilhe sua senha.
                 </p>
-                <p
-                    className={`text-small text-center ${selectTxtStyle(
-                        backColor
-                    )}`}
-                >
+                <p className={`text-small text-center ${txtColor}`}>
                     A Fiddelize não pedirá
                     <br />
                     sua senha por email ou

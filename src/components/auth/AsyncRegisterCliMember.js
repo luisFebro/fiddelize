@@ -21,7 +21,6 @@ import { doRegister } from "auth/api";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
 import useData, { useBizData } from "init";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
 // Material UI
 // import { makeStyles } from '@material-ui/core/styles';
@@ -64,7 +63,6 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
     const {
         themePColor,
         themeSColor,
-        themeBackColor,
         bizLogo,
         bizName,
         bizLinkName,
@@ -224,9 +222,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
     const showLoginForm = () => (
         <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
             <p
-                className={`${selectTxtStyle(
-                    themeBackColor
-                )} m-0 font-weight-bold text-small`}
+                className={`${txtColor} m-0 font-weight-bold text-small`}
                 style={{ whiteSpace: "nowrap" }}
             >
                 Já foi cadastrado(a)?{"  "}

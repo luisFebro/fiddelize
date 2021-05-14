@@ -19,7 +19,7 @@ export default async function loadInit(uify) {
             window.location.href = "/temporariamente-indisponivel-503";
         }
 
-        if (err.status === 401) setInitData(undefined); // set init default values
+        if (err.status === 401) setInitData(undefined, { uify }); // set init default values
     });
 
     if (!data) return;

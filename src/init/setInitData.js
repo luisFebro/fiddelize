@@ -4,34 +4,11 @@ import { setItems } from "init/lStorage";
 // for both indexDB and localstorage in one place
 // also for bootup Login.js data and recurring access with loadUserInit rest API
 export default async function setInitData(data, options = {}) {
-    // DEFAULT DATA TO BE SET WHEN THERE IS NO DATA IN INIT TO AVOID UNDEFINED ERRORS OR BAD CONFIG
-    if (!data) {
-        const defaultGame = {
-            targetPrize: {},
-            discountBack: {},
-            raffleTicket: {},
-        };
-
-        setItems("currUser", {
-            adminGame: {
-                ...defaultGame,
-            },
-            userGame: {
-                currGame: "",
-                ...defaultGame,
-            },
-        });
-        setItems("bizData", {
-            themePColor: "default",
-            themeSColor: "default",
-            themeBackColor: "default",
-        });
-
-        return Promise.resolve("default init values set");
-    }
-
     const { uify } = options;
-    if (!data || !uify) return Promise.reject("missing role, uify or data");
+    if (!uify) return Promise.reject("missing role, uify or data");
+
+    // DEFAULT DATA TO BE SET WHEN THERE IS NO DATA IN INIT TO AVOID UNDEFINED ERRORS OR BAD CONFIG
+    if (!data) return await setDefaultData(uify);
 
     const { role } = data.currUser;
 
@@ -115,14 +92,36 @@ async function setLstorageData(initData) {
 }
 // END LOCALSTORAGE
 
-/* ARCHIVES:
-const getIndexCommonData = (initData) => ({
-    role: initData.currUser && initData.currUser.role,
-    userId: initData.currUser && initData.currUser.userId,
-    appId: initData.appId,
-    bizId: initData.bizId,
-    name: initData.currUser && initData.currUser.name, // first name and last surname
-    firstName: initData.currUser && initData.currUser.firstName,
-    sexLetter: initData.currUser && initData.currUser.sexLetter,
-});
- */
+// HELPERS
+async function setDefaultData(uify) {
+    const defaultBizData = {
+        themePColor: "default",
+        themeSColor: "default",
+        themeBackColor: "default",
+    };
+
+    const defaultGame = {
+        targetPrize: {},
+        discountBack: {},
+        raffleTicket: {},
+    };
+
+    const defaultCurrUser = {
+        adminGame: {
+            ...defaultGame,
+        },
+        userGame: {
+            currGame: "",
+            ...defaultGame,
+        },
+    };
+
+    setItems("currUser", defaultCurrUser);
+    setItems("bizData", defaultBizData);
+
+    uify(["bizData", defaultBizData]);
+    uify(["currUser", defaultCurrUser]);
+    return Promise.resolve("default init values set");
+}
+
+// END HELPERS

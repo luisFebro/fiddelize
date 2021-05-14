@@ -6,7 +6,6 @@ import useData, { useBizData } from "init";
 import useAPIList, { readBuyHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "utils/numbers/convertToReal";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import PickOtherCards from "./PickOtherCards";
 
@@ -24,9 +23,7 @@ export default function CardsList({
     const isAdmin = role === "cliente-admin";
 
     const { targetPoints } = adminGame.targetPrize;
-    const { themeBackColor, themePColor } = useBizData();
-
-    const txtClass = selectTxtStyle(themeBackColor);
+    const { txtColor, themePColor } = useBizData();
 
     const params = {
         targetPoints,
@@ -58,7 +55,7 @@ export default function CardsList({
         return (
             <section className="all-points animated fadeInUp delay-3s container-center mb-5">
                 <p
-                    className={`${txtClass} text-pill text-normal d-inline-block font-weight-bold m-0 ml-2`}
+                    className={`${txtColor} text-pill text-normal d-inline-block font-weight-bold m-0 ml-2`}
                 >
                     {allPoints} pontos gerais
                     <span className="d-inline-block ml-2">

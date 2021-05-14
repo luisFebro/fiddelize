@@ -1,4 +1,4 @@
-import { convertDotToComma } from "../../utils/numbers/convertDotComma";
+import { convertDotToComma } from "utils/numbers/convertDotComma";
 
 const AllScores = ({
     currPointsRef,
@@ -6,26 +6,21 @@ const AllScores = ({
     showMoreComps,
     lastPoints,
     needAppForPreview,
-    selectTxtStyle,
-    colorBack,
+    txtColor,
 }) => {
     lastPoints = convertDotToComma(lastPoints);
-    const selectedTxtStyle = selectTxtStyle(colorBack, { bold: true });
 
     return (
         <section className="text-subtitle my-3 text-white text-center">
-            <span className={`text-title ${selectedTxtStyle}`}>Seu Saldo:</span>
+            <span className={`text-title ${txtColor}`}>Seu Saldo:</span>
             <br />
             <div className="d-flex justify-content-center">
-                <p
-                    className={`text-hero ${selectedTxtStyle}`}
-                    ref={currPointsRef}
-                >
+                <p className={`text-hero ${txtColor}`} ref={currPointsRef}>
                     ...
                 </p>
                 {showMoreComps ? (
                     <span
-                        className={`animated rubberBand delay-2s ml-2 ${selectedTxtStyle}`}
+                        className={`animated rubberBand delay-2s ml-2 ${txtColor}`}
                     >
                         <img
                             className="pts-coin"
@@ -45,7 +40,7 @@ const AllScores = ({
                         </style>
                     </span>
                 ) : (
-                    <span className={`ml-2 ${selectedTxtStyle}`}>Pontos</span>
+                    <span className={`ml-2 ${txtColor}`}>Pontos</span>
                 )}
             </div>
             {/* LAST SCORE */}

@@ -9,7 +9,7 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Zoom from "@material-ui/core/Zoom";
 import parse from "html-react-parser";
 import "./pulseWaves.css";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -59,7 +59,9 @@ export default function Tooltip({
     const [stopWave, setStopWave] = React.useState(false);
     // this useEffect solves the problem with uncontrolled vs controlled components handling.
 
-    const { themeBackColor } = useBizData();
+    const { themeBackColor, needDark } = useBizData();
+    const { txtColorStyle } = getColor(colorS);
+    const needShadow = !needDark;
 
     useEffect(() => {
         if (needOpen) {
@@ -68,9 +70,6 @@ export default function Tooltip({
             setOpen(false);
         }
     }, [needOpen]);
-
-    const { color: txtColor } = selectTxtStyle(colorS, { mode: "style" });
-    const needShadow = selectTxtStyle(colorS, { needShadow: true });
 
     const handleTooltipClose = () => {
         if (typeof onClickAway === "function") {
@@ -97,7 +96,7 @@ export default function Tooltip({
             whiteSpace: whiteSpace ? null : "nowrap",
             textShadow: needShadow ? "1px 1px 3px black" : undefined,
             width: width || "100%",
-            color: txtColor,
+            color: txtColorStyle,
             filter:
                 themeBackColor === "black" || colorS === "black"
                     ? "drop-shadow(.001em .1em .1em var(--mainWhite))"

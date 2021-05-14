@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Provider } from "context";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import useAuth from "auth/useAuth";
-import selectTxtStyle from "utils/biz/selectTxtStyle";
+import getColor from "styles/txt";
 import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import "../ellipse.scss";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
@@ -67,7 +67,13 @@ export default function ClientUserAppContent({
         targetPoints = Number(targetPointsTest);
     }
 
-    const { themeBackColor, bizWhatsapp, bizName, bizLogo } = useBizData();
+    const {
+        themeBackColor,
+        bizWhatsapp,
+        bizName,
+        bizLogo,
+        txtColor,
+    } = useBizData();
 
     const userBeatChallenge = currPoints >= targetPoints;
 
@@ -122,8 +128,6 @@ export default function ClientUserAppContent({
     };
     useAnimateNumber(currPointsRef.current, currPoints, numberOptions);
 
-    const selectedTxtStyle = selectTxtStyle(themeBackColor, { bold: true });
-
     const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative">
             <section className="position-relative">
@@ -156,9 +160,9 @@ export default function ClientUserAppContent({
                     top: "21px",
                     lineHeight: ".9em",
                 }}
-                className={`ml-3 mb-2 ${selectTxtStyle(colorP, {
-                    bold: true,
-                })} text-subtitle text-left`}
+                className={`ml-3 mb-2 ${
+                    getColor(colorP).txtColor
+                } text-subtitle text-left`}
             >
                 {greeting},
                 <br />
@@ -176,10 +180,10 @@ export default function ClientUserAppContent({
             showMoreComps={showMoreComps}
             lastPoints={lastPoints}
             needAppForPreview={needAppForPreview}
-            selectTxtStyle={selectTxtStyle}
             colorBack={themeBackColor}
             colorS={colorS}
             totalGeneralPoints={totalGeneralPoints}
+            txtColor={txtColor}
         />
     );
 
@@ -193,8 +197,7 @@ export default function ClientUserAppContent({
     const store = useGlobal({
         needAppForCliAdmin,
         needAppForPreview,
-        selectedTxtStyle,
-        selectTxtStyle,
+        txtColor,
         playBeep,
         runName,
         didUserScroll,

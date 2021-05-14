@@ -149,7 +149,7 @@ button {
     --themePDark: #12005e;
     --themeSurface: #f7f1e3;
     --themeBackground: #4a148c;
-    --mainBlack: #000;
+    /*--mainBlack: #000; use black */
     --mainWhite: #ecf0f1;
     --mainFont: "Poppins", sans-serif;
     --themeP--default: #4a148c;
