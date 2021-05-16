@@ -12,6 +12,7 @@ export default function animateCSS(
     node.classList.add("animated", animationName, speed);
 
     function handleAnimationEnd() {
+        node.style = "animation-direction: forwards;";
         node.classList.remove("animated", animationName, speed);
         node.removeEventListener("animationend", handleAnimationEnd);
 

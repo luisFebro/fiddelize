@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.23.0";
+const latestVersion = "4.23.0-50";
 
-const updateDescription = "new design for cart race and logics pt1";
+const updateDescription = "new design digital receit and discount card";
 /* HISTORY
+for cart race and logics pt1
 new data for games and totals pt3
 new cli-user design with fixed bottom tabs pt 3 | new APIS pt 3
 tests with push notifs | restructures of folders and removal of packages pt1 (easy-peasy, styled-components removed and others [replaced by uify and styled-jsx]) pt3

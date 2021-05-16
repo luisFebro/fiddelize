@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import "./_Playground.scss";
-import useBackColor from "../../hooks/useBackColor";
+import useBackColor from "hooks/useBackColor";
 
 export default function Playground() {
     useBackColor("var(--mainWhite)");
@@ -10,7 +10,14 @@ export default function Playground() {
             <h1 className="mx-3 text-title text-center my-5 text-purple">
                 Playground for testing
             </h1>
-            <main style={{ marginBottom: 700 }}></main>
+            <section className="content"></section>
+            <style jsx>
+                {`
+                    .content {
+                        margin: 150px 0 500px;
+                    }
+                `}
+            </style>
         </Fragment>
     );
 }

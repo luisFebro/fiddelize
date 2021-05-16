@@ -3,6 +3,7 @@ import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+import getColor from "styles/txt";
 
 const AsyncGamesGalleryContent = Load({
     loader: () =>
@@ -12,11 +13,9 @@ const AsyncGamesGalleryContent = Load({
 });
 
 export default function GamesGalleryBtn() {
-    const {
-        themeBackColor: colorBack,
-        themeSColor: colorS,
-        txtColorStyle,
-    } = useBizData();
+    const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
+
+    const { txtColorStyle } = getColor(colorS);
 
     const [fullOpen, setFullOpen] = useState(false);
 

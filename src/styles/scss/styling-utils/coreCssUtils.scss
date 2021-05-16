@@ -29,11 +29,13 @@
 }
 
 /*links*/
+.disabled-click,
 .disabled-link,
 .disabledLink {
     pointer-events: none;
 }
 
+.enabled-click,
 .enabled-link,
 .enabledLink {
     pointer-events: auto;

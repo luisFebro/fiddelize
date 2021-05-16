@@ -36,7 +36,7 @@ export default function getAPI({
             if (typeof cancel === "function") cancel();
             // LESSON: do not use Promise.reject inside a pure promise like this where there is reject method already. the request will fail
             showToast(
-                "Sem resposta do servidor. Verifique conexão e tente novamente",
+                "Não foi possível atualizar dados online. Verifique sua conexão e tente novamente",
                 { type: "error", dur: 10000 }
             );
             return reject(null);

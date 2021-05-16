@@ -1,37 +1,62 @@
-import React, { useEffect } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useData, { useBizData } from "init";
-import animateCartByScore from "./animateCartByScore";
+import parse from "html-react-parser";
+import convertToReal from "utils/numbers/convertToReal";
+import useContext from "context";
+import InstructionBtn from "components/buttons/InstructionBtn";
+import getPercentage from "utils/numbers/getPercentage";
+import animateCart from "./animateCart";
+import pickMsg from "./pickMsg";
 
-export default function CartRace({
-    // challengeN,
-    userName,
-    className,
-    id,
-}) {
-    const { adminGame, userGame, currPoints } = useData();
-    const { txtColor, needDark } = useBizData();
+export default function CartRace({ className, id }) {
+    const [msg, setMsg] = useState("");
+    const { adminGame, userGame, firstName } = useData();
+    const { needDark, bizName } = useBizData();
+    const { didUserScroll } = useContext();
+
+    const currPoints = 300;
 
     const { targetPoints } = adminGame.discountBack;
     const { challN: currChallenge } = userGame.discountBack;
 
-    const msgRef = React.useRef(null);
     useEffect(() => {
-        animateCartByScore(currPoints, targetPoints, {
-            currChallenge,
-            userName,
-            msgRef: msgRef.current,
+        const { eachMilestone, currLevel } = animateCart({
+            currPoints,
+            targetPoints,
         });
-    }, [userName, targetPoints, currPoints, currChallenge, msgRef]);
+
+        const msgOptions = {
+            eachMilestone,
+            currLevel,
+            currPoints,
+            currChallenge,
+            userName: firstName,
+            bizName,
+        };
+
+        const thisMsg = pickMsg(msgOptions);
+        setMsg(thisMsg);
+    }, [firstName, bizName, targetPoints, currPoints, currChallenge]);
+
+    const accMoneyAmount = 20;
+    const completePerc = getPercentage(targetPoints, currPoints);
 
     return (
         <section className={className} id={id}>
             <div className="cart-race--root mt-3">
-                <LineRoad />
-                <p
-                    ref={msgRef}
-                    className={`mt-5 ${txtColor} text-small text-center text-purple`}
-                />
+                <LineRoad needDark={needDark} />
+                {msg && didUserScroll && (
+                    <Fragment>
+                        <QuantStatus
+                            accMoneyAmount={accMoneyAmount}
+                            completePerc={completePerc}
+                        />
+                        <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 $ text-small text-center text-purple text-shadow">
+                            {parse(msg)}
+                        </p>
+                    </Fragment>
+                )}
                 <style jsx global>
                     {`
                         .cart-race--root {
@@ -52,6 +77,11 @@ export default function CartRace({
                             font-size: 45px;
                         }
 
+                        .mot-msg {
+                            position: relative;
+                            top: -15px;
+                        }
+
                         ${moveCartCss()}
                         ${paintTrackDotCss(needDark)}
                     `}
@@ -61,7 +91,72 @@ export default function CartRace({
     );
 }
 
-function LineRoad() {
+function QuantStatus({ accMoneyAmount, completePerc }) {
+    const showInstruBtn = () => {
+        const text = `
+            O valor de R$ ${accMoneyAmount} foi convertido automaticamente do seu saldo em pontos atual.
+            <br /><br />
+            Você acumula <span class="font-weight-bold">5% de desconto a cada compra</span>.
+            <br /><br />
+            Você pode usar seu vale desconto assim que bater a <strong>meta resgate de 100 pts</strong>.
+            <br /><br />
+            Lembre-se que 1 pts vale R$ 1.
+            <br />
+            Obrigada por comprar com a gente!
+        `;
+
+        return (
+            <div className="instr-acc-btn position-absolute">
+                <InstructionBtn mode="tooltip" text={text} />
+                <style jsx>
+                    {`
+                        .instr-acc-btn {
+                            top: -25px;
+                            right: -25px;
+                        }
+                    `}
+                </style>
+            </div>
+        );
+    };
+
+    const isDecimal = completePerc && completePerc.toString().includes(".");
+    return (
+        <section className="font-site quant-status text-center animated fadeInUp delay-2s my-5 d-flex justify-content-around align-items-center">
+            <div>
+                <p className={`m-0 ${isDecimal ? "text-em-2-5" : "text-em-3"}`}>
+                    {completePerc}%
+                </p>
+                <div className="title text-normal text-white">concluído</div>
+            </div>
+            <div className="position-relative">
+                <p
+                    className={`m-0 ${
+                        accMoneyAmount <= 1000 ? "text-em-3" : "text-em-2"
+                    }`}
+                >
+                    {convertToReal(accMoneyAmount, { moneySign: true })}
+                </p>
+                <div className="title text-normal text-white">acumulado</div>
+                {showInstruBtn()}
+            </div>
+            <style jsx>
+                {`
+                    .quant-status {
+                        color: #ff0;
+                    }
+
+                    .quant-status .title {
+                        position: relative;
+                        top: -15px;
+                    }
+                `}
+            </style>
+        </section>
+    );
+}
+
+function LineRoad({ needDark }) {
     return (
         <section className="track-line">
             <div id="cart" className="cart animated bounce anima-iteration-2">
@@ -104,7 +199,7 @@ function LineRoad() {
                     }
 
                     .track-line .vertical-line {
-                        background: grey;
+                        background: ${needDark ? "var(--lightGrey)" : "grey"};
                         position: absolute;
                         top: -55px;
                         left: 0px;
@@ -126,14 +221,14 @@ function LineRoad() {
 
                     .track-line .track {
                         position: relative;
-                        background: grey;
+                        background: ${needDark ? "var(--lightGrey)" : "grey"};
                         height: 10px;
                         width: 70%;
                         z-index: -1;
                     }
 
                     .track-line .track .spot {
-                        background: grey;
+                        background: ${needDark ? "var(--lightGrey)" : "grey"};
                         position: absolute;
                         width: 25px;
                         height: 25px;
@@ -144,7 +239,7 @@ function LineRoad() {
                     }
 
                     .track-line .spot.first {
-                        background: grey;
+                        background: ${needDark ? "var(--lightGrey)" : "grey"};
                         position: absolute;
                         width: 25px;
                         height: 25px;

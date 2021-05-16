@@ -13,19 +13,22 @@ CloseButton.propTypes = {
 export default function CloseButton({
     delay,
     onClick,
+    className,
     size,
     color,
     top,
     left,
     right,
+    bottom,
     position,
 }) {
     const styles = {
         closeBtn: {
             position: position || "fixed",
-            top: top || "0px",
+            top,
             left,
             right,
+            bottom,
             fontSize: size || "1.9em",
             color: color || "var(--mainWhite)",
             cursor: "pointer",
@@ -48,7 +51,7 @@ export default function CloseButton({
         <FontAwesomeIcon
             icon="times-circle"
             style={styles.closeBtn}
-            className="animated rotateIn delay-1s"
+            className={`${className} cursor-pointer animated rotateIn delay-1s`}
             onClick={(e) => closeBtn(e)}
         />
     );

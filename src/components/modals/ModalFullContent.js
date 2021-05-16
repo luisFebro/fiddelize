@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
+import useRun from "global-data/ui";
 import Dialog from "@material-ui/core/Dialog";
 import CloseButton from "../buttons/CloseButton";
 import RadiusBtn from "../buttons/RadiusBtn";
-import useRun from "global-data/ui";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 
 ModalFullContent.propTypes = {

@@ -107,6 +107,10 @@
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.2), 0 15px 12px rgba(0, 0, 0, 0.12);
 }
 
+.shadow-babadoo-filter {
+    filter: drop-shadow(0 19px 38px rgba(0, 0, 0, 0.2)) drop-shadow(0 15px 12px rgba(0, 0, 0, 0.12));
+}
+
 .shadow-elevation-black {
     /*recommended*/
     filter: drop-shadow(0.001em 0.001em 0.15em var(--mainDark));
