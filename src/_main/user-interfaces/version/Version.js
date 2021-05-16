@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.23.0-50";
+const latestVersion = "4.23.1-50";
 
 const updateDescription = "new design digital receit and discount card";
 /* HISTORY
