@@ -69,6 +69,8 @@ export default function QrScanner() {
 
                         .qrPreviewVideo {
                             background: ${`var(--themePDark--${themePColor})`};
+                            width: 300px;
+                            height: 300px;
                             max-width: 95%;
                             max-height: 60%;
                         }
