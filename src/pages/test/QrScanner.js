@@ -10,7 +10,6 @@ import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 
 export default function QrScanner() {
     const [newScannedTxt, setNewScannedTxt] = useState("");
-    console.log("newScannedTxt", newScannedTxt);
     const { themePColor, bizLogo } = useBizData();
 
     const readyDelay = useDelay(5000);
@@ -71,7 +70,7 @@ export default function QrScanner() {
                             background: ${`var(--themePDark--${themePColor})`};
                             width: 350px;
                             height: 350px;
-                            max-width: 95%;
+                            max-width: 100%;
                             max-height: 70%;
                         }
                     `}
@@ -85,7 +84,7 @@ export default function QrScanner() {
                     multiline
                     rows={3}
                     name="scannedTxt"
-                    value="qr result will appear here"
+                    value={newScannedTxt}
                     onChangeCallback={setNewScannedTxt}
                 />
             </form>

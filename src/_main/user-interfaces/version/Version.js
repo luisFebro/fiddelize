@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.24.8-30";
+const latestVersion = "4.24.10-30";
 
 const updateDescription = "qr code scanner pt3";
 /* HISTORY
