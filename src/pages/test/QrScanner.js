@@ -1,14 +1,13 @@
 // reference https://github.com/jbialobr/JsQRScanner
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Field from "components/fields";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import useDelay from "hooks/useDelay";
+import showToast from "components/toasts";
 
 export default function QrScanner() {
-    const [scannerRead, setScannerRead] = useState("a");
-    const [devices, setDevices] = useState("b");
     const { themePColor, bizLogo } = useBizData();
 
     const readyDelay = useDelay(5000);
@@ -20,9 +19,16 @@ export default function QrScanner() {
         if (!window.jbScanner) return addScannerSrc();
 
         const dataRead = readScannerProps();
-        if (window.scannerDevices)
-            setDevices(JSON.stringify(window.scannerDevices));
-        setScannerRead(JSON.stringify(dataRead));
+        if (!window.scannerDevices) return null;
+
+        const gotCamera = Boolean(window.scannerDevices[0].deviceId);
+        if (!gotCamera)
+            return showToast(
+                "Nenhum câmera foi detectada em seu dispositivo.",
+                { type: "error" }
+            );
+
+        return "ok";
     }, [readyDelay]);
 
     return (
@@ -38,26 +44,10 @@ export default function QrScanner() {
                     Escaneie o código QR no comprovante do cliente.
                 </p>
             </section>
-            <section className="container-center">
-                <main
-                    id="scanner"
-                    className="scanner font-weight-bold text-shadow text-normal text-center text-white"
-                >
-                    Iniciando Câmera...
-                </main>
-                <style jsx>
-                    {`
-                        .scanner {
-                            background: grey;
-                            padding-top: 200px;
-                            width: 300px;
-                            height: 400px;
-                        }
-                    `}
-                </style>
-            </section>
+            <main id="scanner" className="my-5" />
             <form>
                 <Field
+                    id="scannedTxt"
                     textAlign="text-center"
                     size="medium"
                     multiline
@@ -67,12 +57,6 @@ export default function QrScanner() {
                     onChangeCallback={null}
                 />
             </form>
-            <div className="text-normal text-center mx-3 text-break">
-                {scannerRead}
-            </div>
-            <div className="text-normal text-center mx-3 text-break">
-                {devices}
-            </div>
         </section>
     );
 }
@@ -112,3 +96,24 @@ function readScannerProps() {
         isScanning,
     };
 }
+
+/*
+<section className="container-center">
+    <main
+        id="scanner"
+        className="scanner font-weight-bold text-shadow text-normal text-center text-white"
+    >
+        Iniciando Câmera...
+    </main>
+    <style jsx>
+        {`
+            .scanner {
+                background: grey;
+                padding-top: 200px;
+                width: 300px;
+                height: 400px;
+            }
+        `}
+    </style>
+</section>
+ */
