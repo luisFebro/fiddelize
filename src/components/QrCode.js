@@ -5,7 +5,7 @@ const imgDefault = {
     src: "/icons/mobile-icon-512.png",
     width: 35,
     height: 35,
-    x: null, // none, will center // 76 to the bottom corner right
+    x: null, // none, 190 to corner bottom will center // 76 to the bottom corner right
     y: null, // none, will center // 76 to the bottom corner right
     excavate: false, // default false foreground to nearest whole module
 };
@@ -46,3 +46,8 @@ export default function QrCode({
         />
     );
 }
+
+/*
+
+
+ */

@@ -9,7 +9,7 @@ import "./_Pix.scss";
 export default function Pix({ location }) {
     const value = getQueryByName("v", location.search);
     const desc = getQueryByName("d", location.search);
-    const pixKey = "24289c41-0b0d-485c-a3bf-ff00ca54b4b4";
+    const pixKey = "https://fiddelize.com/scanner-id/5e8b0bfc8c616719b01abc9c"; //"24289c41-0b0d-485c-a3bf-ff00ca54b4b4";
 
     const investAmount = convertToReal(value, {
         moneySign: true,
