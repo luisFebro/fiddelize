@@ -9,13 +9,11 @@ import getPercentage from "utils/numbers/getPercentage";
 import animateCart from "./animateCart";
 import pickMsg from "./pickMsg";
 
-export default function CartRace({ className, id }) {
+export default function CartRace({ className, accuMoney }) {
     const [msg, setMsg] = useState("");
-    const { adminGame, userGame, firstName } = useData();
+    const { adminGame, userGame, firstName, currPoints } = useData();
     const { needDark, bizName } = useBizData();
     const { didUserScroll } = useContext();
-
-    const currPoints = 300;
 
     const { targetPoints } = adminGame.discountBack;
     const { challN: currChallenge } = userGame.discountBack;
@@ -39,17 +37,16 @@ export default function CartRace({ className, id }) {
         setMsg(thisMsg);
     }, [firstName, bizName, targetPoints, currPoints, currChallenge]);
 
-    const accMoneyAmount = 20;
     const completePerc = getPercentage(targetPoints, currPoints);
 
     return (
-        <section className={className} id={id}>
+        <section className={className}>
             <div className="cart-race--root mt-3">
                 <LineRoad needDark={needDark} />
                 {msg && didUserScroll && (
                     <Fragment>
                         <QuantStatus
-                            accMoneyAmount={accMoneyAmount}
+                            accuMoney={accuMoney}
                             completePerc={completePerc}
                         />
                         <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 $ text-small text-center text-purple text-shadow">
@@ -91,10 +88,10 @@ export default function CartRace({ className, id }) {
     );
 }
 
-function QuantStatus({ accMoneyAmount, completePerc }) {
+function QuantStatus({ accuMoney, completePerc }) {
     const showInstruBtn = () => {
         const text = `
-            O valor de R$ ${accMoneyAmount} foi convertido automaticamente do seu saldo em pontos atual.
+            O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual.
             <br /><br />
             Você acumula <span class="font-weight-bold">5% de desconto a cada compra</span>.
             <br /><br />
@@ -122,22 +119,22 @@ function QuantStatus({ accMoneyAmount, completePerc }) {
 
     const isDecimal = completePerc && completePerc.toString().includes(".");
     return (
-        <section className="font-site quant-status text-center animated fadeInUp delay-2s my-5 d-flex justify-content-around align-items-center">
+        <section className="font-site text-shadow quant-status text-center animated fadeInUp delay-2s my-5 d-flex justify-content-around align-items-center">
             <div>
                 <p className={`m-0 ${isDecimal ? "text-em-2-5" : "text-em-3"}`}>
                     {completePerc}%
                 </p>
-                <div className="title text-normal text-white">concluído</div>
+                <div className="title text-normal">concluído</div>
             </div>
             <div className="position-relative">
                 <p
                     className={`m-0 ${
-                        accMoneyAmount <= 1000 ? "text-em-3" : "text-em-2"
+                        accuMoney <= 1000 ? "text-em-3" : "text-em-2"
                     }`}
                 >
-                    {convertToReal(accMoneyAmount, { moneySign: true })}
+                    {convertToReal(accuMoney, { moneySign: true })}
                 </p>
-                <div className="title text-normal text-white">acumulado</div>
+                <div className="title text-normal">acumulado</div>
                 {showInstruBtn()}
             </div>
             <style jsx>
@@ -381,9 +378,7 @@ function paintTrackDotCss(needDark) {
                 border-radius: 50%;
                 height: 25px;
                 width: 25px;
-                filter: drop-shadow(${
-                    needDark ? "grey 0px 0px 4px" : "0 0 3px #ffc"
-                });
+                filter: drop-shadow(${needDark ? "grey 0px 0px 4px" : ""});
             }
         }
     `;

@@ -5,13 +5,18 @@ import useData, { useBizData } from "init";
 import QrCode from "components/QrCode";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 
-export default function DiscountTicket({ didFinish = true, eachBuyPerc }) {
+export default function DiscountTicket({
+    didBeatGame = false,
+    perc,
+    ticketAmount,
+}) {
     const [openCard, setOpenCard] = useState(false);
-    const themePColor = "default";
+
+    const { bizName, bizLogo, themePColor } = useBizData();
+    const { name, sexLetter, userId } = useData();
+
     const mainColor = `var(--themePLight--${themePColor})`;
     const pColor = `var(--themePDark--${themePColor})`;
-    const { name, sexLetter, userId } = useData();
-    const { bizName, bizLogo } = useBizData();
     const isShe = sexLetter === "a";
 
     const discountCardRef = useRef({});
@@ -29,7 +34,7 @@ export default function DiscountTicket({ didFinish = true, eachBuyPerc }) {
                 title="usar valor"
                 onClick={toggleOpen}
                 backgroundColor={`var(--themeSDark--${themePColor})`}
-                size="small"
+                size="medium"
                 variant="extended"
                 needTxtNoWrap
             />
@@ -89,7 +94,7 @@ export default function DiscountTicket({ didFinish = true, eachBuyPerc }) {
         <div className="each-buy-perc--root position-relative animated fadeInUp delay-2s container-center">
             <div className="mx-2 each-buy-perc text-white text-pill text-shadow font-site text-em-1-1 text-center">
                 <LocalMallTwoToneIcon className="mr-2" />
-                Amig{sexLetter}, acumule {eachBuyPerc}%
+                Amig{sexLetter}, acumule {perc}%
                 <br />
                 de desconto a cada nova compra
             </div>
@@ -124,19 +129,19 @@ export default function DiscountTicket({ didFinish = true, eachBuyPerc }) {
                 <section
                     ref={discountCardRef}
                     className={`${
-                        didFinish ? "" : "shake-it"
+                        didBeatGame ? "" : "shake-it"
                     } discount-card position-relative`}
                 >
                     <div className="tix">
                         <div className="tix-inner text-shadow">
-                            <span className="discount-title text-em-1-8 position-relative">
+                            <span className="discount-title text-em-2 position-relative">
                                 Vale Desconto
                                 <span className="value position-relative d-block text-em-1-8">
-                                    R$ 30
+                                    R$ {ticketAmount}
                                 </span>
                             </span>
                         </div>
-                        {didFinish ? condOpenCard : showOffBadge()}
+                        {didBeatGame ? condOpenCard : showOffBadge()}
                     </div>
                     <div className="tix tix-2 shadow-babadoo-filter position-relative">
                         <div className="tix-inner text-shadow">
@@ -293,12 +298,12 @@ export default function DiscountTicket({ didFinish = true, eachBuyPerc }) {
                 }
 
                 .tix-inner .discount-title {
-                    top: 40px;
+                    top: 15px;
                     left: 25px;
                 }
 
                 .tix-inner .discount-title .value {
-                    top: -10px;
+                    top: -18px;
                 }
 
                 .tix-inner .instru-txt {

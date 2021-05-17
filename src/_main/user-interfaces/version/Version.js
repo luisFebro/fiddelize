@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.23.1-50";
+const latestVersion = "4.24.0";
 
-const updateDescription = "new design digital receit and discount card";
+const updateDescription = "qr code scanner pt1";
 /* HISTORY
+new design digital receit and discount card
 for cart race and logics pt1
 new data for games and totals pt3
 new cli-user design with fixed bottom tabs pt 3 | new APIS pt 3
