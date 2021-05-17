@@ -47,7 +47,7 @@ export default function QrScanner() {
 
     return (
         <section className="text-white text-shadow">
-            <section className="container-center">
+            <section className="container-center-col">
                 <img src={newImg} width={width} height={height} alt="logo" />
                 <h1 className="mt-5 text-subtitle font-weight-bold text-center">
                     Registro
@@ -68,10 +68,9 @@ export default function QrScanner() {
                         }
 
                         .qrPreviewVideo {
-                            background: grey;
-                            width: 100%;
-                            height: 300px;
-                            max-height: 300px;
+                            background: ${`var(--themePDark--${themePColor})`};
+                            max-width: 95%;
+                            max-height: 60%;
                         }
                     `}
                 </style>
