@@ -1,5 +1,5 @@
 // reference https://github.com/jbialobr/JsQRScanner
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Field from "components/fields";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
@@ -9,6 +9,8 @@ import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 
 export default function QrScanner() {
+    const [newScannedTxt, setNewScannedTxt] = useState("");
+    console.log("newScannedTxt", newScannedTxt);
     const { themePColor, bizLogo } = useBizData();
 
     const readyDelay = useDelay(5000);
@@ -33,8 +35,15 @@ export default function QrScanner() {
 
     const handleNewScannedTxt = (newText) => {
         playAudio("audio_cli-staff_scanner-beep");
-        showToast(`Novo Código QR: ${newText}`, { dur: 10000 });
+        showToast(`Novo Código QR: ${newText}`, {
+            type: "success",
+            dur: 10000,
+        });
     };
+
+    useEffect(() => {
+        if (newScannedTxt) handleNewScannedTxt(newScannedTxt);
+    }, [newScannedTxt]);
 
     return (
         <section className="text-white text-shadow">
@@ -49,19 +58,23 @@ export default function QrScanner() {
                     Escaneie o código QR no comprovante do cliente.
                 </p>
             </section>
-            <main className="container-center my-5">
-                <section className="scanner--root">
-                    <div id="scanner" width="100%" height="100%" />
-                    <style jsx>
-                        {`
-                            .scanner--root {
-                                width: 200px;
-                                height: 200px;
-                                background: grey;
-                            }
-                        `}
-                    </style>
-                </section>
+            <main className="scanner--root mb-5">
+                <div id="scanner" />
+                <style jsx global>
+                    {`
+                        .scanner--root #scanner {
+                            display: flex;
+                            justify-content: center;
+                        }
+
+                        .qrPreviewVideo {
+                            background: grey;
+                            width: 100%;
+                            height: 300px;
+                            max-height: 300px;
+                        }
+                    `}
+                </style>
             </main>
             <form>
                 <Field
@@ -72,14 +85,9 @@ export default function QrScanner() {
                     rows={3}
                     name="scannedTxt"
                     value="qr result will appear here"
-                    onChangeCallback={(e) =>
-                        handleNewScannedTxt(e.target.value)
-                    }
+                    onChangeCallback={setNewScannedTxt}
                 />
             </form>
-            <button onClick={() => playAudio("audio_cli-staff_scanner-beep")}>
-                PlAY AUDIO
-            </button>
         </section>
     );
 }
