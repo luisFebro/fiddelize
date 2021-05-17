@@ -4,7 +4,7 @@ import useBackColor from "hooks/useBackColor";
 import QrScanner from "./QrScanner";
 
 export default function Playground() {
-    useBackColor("var(--mainWhite)");
+    // useBackColor("var(--mainWhite)");
 
     return (
         <Fragment>

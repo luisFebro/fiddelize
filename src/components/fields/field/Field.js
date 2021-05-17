@@ -8,6 +8,7 @@ import "./_Field.scss";
 // TextField is simply rendered as a raw <input /> tag
 
 export default function Field({
+    id,
     size = "medium",
     textAlign = "text-left",
     name,
@@ -38,6 +39,7 @@ export default function Field({
     return (
         <section className="single-field--root field">
             <TextField
+                id={id}
                 className={`${size} ${textAlign}`}
                 placeholder={placeholder}
                 name={name}

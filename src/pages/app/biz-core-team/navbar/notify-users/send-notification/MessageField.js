@@ -1,14 +1,14 @@
 import { useState, useEffect, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import useAPI, { sendPushNotifs } from "api/useAPI";
-import handleChange from "../../../../../../utils/form/use-state/handleChange";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import showToast from "../../../../../../components/toasts";
-import Title from "../../../../../../components/Title";
-import SelectField from "../../../../../../components/fields/SelectField";
-import Field from "../../../../../../components/fields/field";
-import getId from "../../../../../../utils/getId";
-import scrollIntoView from "../../../../../../utils/document/scrollIntoView";
+import handleChange from "utils/form/use-state/handleChange";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import showToast from "components/toasts";
+import Title from "components/Title";
+import SelectField from "components/fields/SelectField";
+import Field from "components/fields";
+import getId from "utils/getId";
+import scrollIntoView from "utils/document/scrollIntoView";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
