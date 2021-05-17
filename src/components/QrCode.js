@@ -46,8 +46,3 @@ export default function QrCode({
         />
     );
 }
-
-/*
-
-
- */

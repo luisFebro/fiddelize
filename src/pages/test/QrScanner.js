@@ -57,21 +57,15 @@ export default function QrScanner() {
                     Escaneie o código QR no comprovante do cliente.
                 </p>
             </section>
-            <main className="scanner--root mb-5">
-                <div id="scanner" />
+            <main id="scanner" className="mb-5">
                 <style jsx global>
                     {`
-                        .scanner--root #scanner {
-                            display: flex;
-                            justify-content: center;
-                        }
-
                         .qrPreviewVideo {
-                            background: ${`var(--themePDark--${themePColor})`};
-                            width: 350px;
-                            height: 350px;
-                            max-width: 100%;
-                            max-height: 70%;
+                            background: grey;
+                            //width: 350px;
+                            //height: 350px;
+                            width: 100%;
+                            //max-height: 70%;
                         }
                     `}
                 </style>
