@@ -70,3 +70,16 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
         }
     }, [multi, trigger, autoplay]);
 }
+
+// for programatic play
+export const playAudio = async (mediaName) => {
+    const audioSrc = await getVar(mediaName, "audios");
+    if (!audioSrc)
+        return console.log(
+            `ISSUE: the media ${mediaName.toUpperCase()} was not found in indexedDB. Check if you prerender the audio first in string64 format before using the audio.`
+        );
+
+    const audio = new Audio();
+    audio.src = audioSrc;
+    return audio.play();
+};

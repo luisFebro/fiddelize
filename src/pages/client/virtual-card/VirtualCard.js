@@ -1,19 +1,16 @@
 import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCard";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import useData from "init";
+import ThreeDFlipCard from "components/cards/3d-flip-card/ThreeDFlipCard";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import useData, { useBizData } from "init";
 import useAPI, { readTempPointsList } from "api/useAPI";
-import ReturnBtn from "../../../components/buttons/ReturnBtn";
-import { useBizData } from "init";
-import useBackColor from "../../../hooks/useBackColor";
+import ReturnBtn from "components/buttons/ReturnBtn";
+import useBackColor from "hooks/useBackColor";
 import { setVar } from "init/var";
-import usePlayAudio, {
-    prerenderAudio,
-} from "../../../hooks/media/usePlayAudio";
-import getRandomArray from "../../../utils/arrays/getRandomArray";
-import Img from "../../../components/Img";
-import getDayGreetingBr from "../../../utils/getDayGreetingBr";
+import usePlayAudio, { prerenderAudio } from "hooks/media/usePlayAudio";
+import getRandomArray from "utils/arrays/getRandomArray";
+import Img from "components/Img";
+import getDayGreetingBr from "utils/getDayGreetingBr";
 
 export default withRouter(VirtualCard);
 

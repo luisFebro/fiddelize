@@ -6,6 +6,7 @@ import { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import useDelay from "hooks/useDelay";
 import showToast from "components/toasts";
+import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 
 export default function QrScanner() {
     const { themePColor, bizLogo } = useBizData();
@@ -17,9 +18,8 @@ export default function QrScanner() {
 
     useEffect(() => {
         if (!window.jbScanner) return addScannerSrc();
-
-        const dataRead = readScannerProps();
         if (!window.scannerDevices) return null;
+        setScannerBeep();
 
         const gotCamera = Boolean(window.scannerDevices[0].deviceId);
         if (!gotCamera)
@@ -30,6 +30,11 @@ export default function QrScanner() {
 
         return "ok";
     }, [readyDelay]);
+
+    const handleNewScannedTxt = (newText) => {
+        playAudio("audio_cli-staff_scanner-beep");
+        showToast(`Novo Código QR: ${newText}`, { dur: 10000 });
+    };
 
     return (
         <section className="text-white text-shadow">
@@ -44,7 +49,20 @@ export default function QrScanner() {
                     Escaneie o código QR no comprovante do cliente.
                 </p>
             </section>
-            <main id="scanner" className="my-5" />
+            <main className="container-center my-5">
+                <section className="scanner--root">
+                    <div id="scanner" width="100%" height="100%" />
+                    <style jsx>
+                        {`
+                            .scanner--root {
+                                width: 200px;
+                                height: 200px;
+                                background: grey;
+                            }
+                        `}
+                    </style>
+                </section>
+            </main>
             <form>
                 <Field
                     id="scannedTxt"
@@ -54,9 +72,14 @@ export default function QrScanner() {
                     rows={3}
                     name="scannedTxt"
                     value="qr result will appear here"
-                    onChangeCallback={null}
+                    onChangeCallback={(e) =>
+                        handleNewScannedTxt(e.target.value)
+                    }
                 />
             </form>
+            <button onClick={() => playAudio("audio_cli-staff_scanner-beep")}>
+                PlAY AUDIO
+            </button>
         </section>
     );
 }
@@ -97,6 +120,12 @@ function readScannerProps() {
     };
 }
 
+async function setScannerBeep() {
+    await prerenderAudio(
+        "/sounds/scanner-beep.mp3",
+        "audio_cli-staff_scanner-beep"
+    );
+}
 /*
 <section className="container-center">
     <main

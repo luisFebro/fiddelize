@@ -47,7 +47,7 @@ export default function Field({
                 variant={variant}
                 onChange={(e) => {
                     handleOnChange(e, onChangeCallback);
-                    debounceCallback && handler();
+                    if (debounceCallback) handler();
                 }}
                 onKeyPress={(e) => {
                     handleEnterPress(e, enterCallback);
