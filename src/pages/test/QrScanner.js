@@ -1,6 +1,5 @@
 // reference https://github.com/jbialobr/JsQRScanner
 import { useEffect, useState } from "react";
-import Field from "components/fields";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
@@ -9,11 +8,50 @@ import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 
 export default function QrScanner() {
-    const [newScannedTxt, setNewScannedTxt] = useState("");
+    const [history, setHistory] = useState([]);
     const { themePColor, bizLogo } = useBizData();
 
-    const readyDelay = useDelay(5000);
     useBackColor(`var(--themePDark--${themePColor})`);
+
+    const readyDelay = useDelay(5000);
+    const timer = useUpdater();
+
+    async function handleNewScannedTxt(newText) {
+        await playAudio("audio_cli-staff_scanner-beep");
+        await playAudio("audio_cli-staff_detected-receipt");
+        showToast(`Novo Código QR: ${newText}`, {
+            type: "success",
+            dur: 10000,
+        });
+    }
+
+    useEffect(() => {
+        const newScannedText = window.scannedText;
+        if (!newScannedText) return null;
+
+        const alreadyScanned = history.includes(newScannedText);
+        if (alreadyScanned) return null;
+
+        setHistory((prev) => [...new Set([...prev, newScannedText])]);
+
+        const allowedScans = [
+            "discountBack",
+            "targetPrize",
+            "raffleTicket",
+            "topCustomers",
+        ];
+        const isNotAllowed = !allowedScans.some((game) =>
+            newScannedText.includes(game)
+        );
+        if (isNotAllowed)
+            return showToast(
+                "Código QR detectado não é um comprovante de benefício",
+                { type: "error" }
+            );
+
+        return handleNewScannedTxt(newScannedText);
+        // eslint-disable-next-line
+    }, [timer]);
 
     const { newImg, width, height } = removeImgFormat(bizLogo);
 
@@ -31,18 +69,6 @@ export default function QrScanner() {
 
         return "ok";
     }, [readyDelay]);
-
-    const handleNewScannedTxt = (newText) => {
-        playAudio("audio_cli-staff_scanner-beep");
-        showToast(`Novo Código QR: ${newText}`, {
-            type: "success",
-            dur: 10000,
-        });
-    };
-
-    useEffect(() => {
-        if (newScannedTxt) handleNewScannedTxt(newScannedTxt);
-    }, [newScannedTxt]);
 
     return (
         <section className="text-white text-shadow">
@@ -70,22 +96,27 @@ export default function QrScanner() {
                     `}
                 </style>
             </main>
-            <form>
-                <Field
-                    id="scannedTxt"
-                    textAlign="text-center"
-                    size="medium"
-                    multiline
-                    rows={3}
-                    name="scannedTxt"
-                    value={newScannedTxt}
-                    onChangeCallback={setNewScannedTxt}
-                />
-            </form>
         </section>
     );
 }
 
+function useUpdater(timeSpan = 1000) {
+    const [timer, setTimer] = useState(0);
+
+    useEffect(() => {
+        const runTime = setInterval(() => {
+            setTimer((prev) => prev + 1);
+        }, timeSpan);
+
+        return () => {
+            clearInterval(runTime);
+        };
+    }, [timeSpan]);
+
+    return timer;
+}
+
+// HELPERS
 function addScannerSrc() {
     const mainScripts = document.createElement("script");
 
@@ -105,30 +136,38 @@ function addScannerSrc() {
     document.body.appendChild(scriptMethods);
 }
 
-function readScannerProps() {
-    const jsScanner = window.jbScanner;
-
-    jsScanner.setScanInterval(900); // default set to 300
-    const scanInterval = jsScanner.getScanInterval();
-    const snapImageMaxSize = jsScanner.getSnapImageMaxSize();
-    const isActive = jsScanner.isActive();
-    const isScanning = jsScanner.isScanning();
-
-    return {
-        scanInterval,
-        snapImageMaxSize,
-        isActive,
-        isScanning,
-    };
-}
-
 async function setScannerBeep() {
-    await prerenderAudio(
-        "/sounds/scanner-beep.mp3",
-        "audio_cli-staff_scanner-beep"
-    );
+    await Promise.all([
+        prerenderAudio(
+            "/sounds/tts/scanner-beep/beep.mp3",
+            "audio_cli-staff_scanner-beep"
+        ),
+        prerenderAudio(
+            "/sounds/tts/scanner-beep/detected-receipt.mp3",
+            "audio_cli-staff_detected-receipt"
+        ),
+    ]);
 }
-/*
+// END HELPERS
+
+// function readScannerProps() {
+//     const jsScanner = window.jbScanner;
+
+//     jsScanner.setScanInterval(900); // default set to 300
+//     const scanInterval = jsScanner.getScanInterval();
+//     const snapImageMaxSize = jsScanner.getSnapImageMaxSize();
+//     const isActive = jsScanner.isActive();
+//     const isScanning = jsScanner.isScanning();
+
+//     return {
+//         scanInterval,
+//         snapImageMaxSize,
+//         isActive,
+//         isScanning,
+//     };
+// }
+
+/* ARCHIVES
 <section className="container-center">
     <main
         id="scanner"

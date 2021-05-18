@@ -1,8 +1,5 @@
 function onQRCodeScanned(scannedText) {
-    const scannedTextMemo = document.getElementById("scannedTxt");
-    if (!scannedTextMemo) return;
-
-    scannedTextMemo.value = scannedText;
+    window.scannedText = scannedText;
 }
 
 // funtion returning a promise with a video stream

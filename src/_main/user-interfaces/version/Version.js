@@ -3,9 +3,9 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.24.11-30";
+const latestVersion = "4.24.11-40";
 
-const updateDescription = "qr code scanner pt3";
+const updateDescription = "qr code scanner pt4";
 /* HISTORY
 new design digital receit and discount card
 for cart race and logics pt1
