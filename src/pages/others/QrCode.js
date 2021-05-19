@@ -67,7 +67,7 @@ export default function QrCode() {
     };
 
     const showQrArea = () => (
-        <section className="animated fadeInUp delay-3s">
+        <section className="new-qr--root animated fadeInUp delay-4s">
             <h2 className="text-subtitle text-center">Resultado:</h2>
             <p className="mx-3 position-relative new-qr text-normal text-break p-3 font-weight-bold">
                 {newQr}
@@ -75,6 +75,10 @@ export default function QrCode() {
             {showCopyButton()}
             <style jsx>
                 {`
+                    .new-qr--root {
+                        margin-top: 150px;
+                    }
+
                     .new-qr {
                         background: var(--mainWhite);
                         color: var(--mainPurple);
@@ -100,12 +104,8 @@ export default function QrCode() {
                 </style>
             </main>
             {newQr && showQrArea()}
+            <div id="qrCodeArea" />
             <div style={{ marginBottom: "100px" }} />
-            <div
-                id="bottomQrCode"
-                className="position-absolute"
-                style={{ bottom: 0 }}
-            />
         </section>
     );
 }
@@ -130,7 +130,7 @@ function useUpdater(timeSpan = 1000) {
 async function handleNewScannedTxt(newText, setNewQr) {
     await playAudio("audio_cli-staff_scanner-beep");
     await playAudio("audio_detected-qr-copy");
-    scrollIntoView("#bottomQrCode", { duration: 5000 });
+    scrollIntoView("#qrCodeArea", { duration: 5000 });
     setNewQr(newText);
 }
 
