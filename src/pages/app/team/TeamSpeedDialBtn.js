@@ -52,8 +52,8 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             icon: <ExitToAppIcon style={styles.muStyle} />,
             name: "Sair ►",
             backColor: `var(--themeSDark--${sColor})`,
-            onClick: () => {
-                if (!disableClick) disconnect({ msg: true });
+            onClick: async () => {
+                if (!disableClick) await disconnect({ msg: true });
             },
         },
         {

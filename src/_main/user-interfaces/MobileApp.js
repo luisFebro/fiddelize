@@ -43,6 +43,13 @@ import {
 } from "./CommonImports";
 // END PAGES
 
+const AsyncQrCode = Load({
+    loader: () =>
+        import(
+            "pages/others/QrCode" /* webpackChunkName: "free-qr-code-lazy" */
+        ),
+});
+
 const AsyncNavBar = Load({
     loading: false,
     loader: () =>
@@ -204,6 +211,7 @@ function Mobile({ location }) {
                     exact
                     component={AsyncPlayground}
                 />
+                <Route path="/codigo/qr" exact component={AsyncQrCode} />
                 <Route component={Default} />
             </Switch>
         </Fragment>

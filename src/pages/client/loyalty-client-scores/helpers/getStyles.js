@@ -21,12 +21,4 @@ export const getStyles = ({ colorP, colorS, colorBack, dynamicTxtColor }) => ({
         transform: "rotate(20deg)",
         color: dynamicTxtColor,
     },
-    challN: {
-        backgroundColor: `var(--themePDark--${colorP})`,
-        borderRadius: "50%",
-        padding: "8px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        bottom: "-30px",
-    },
 });

@@ -72,6 +72,7 @@ export default function RegisterPanelBtn({
                 <ButtonFab
                     size={size}
                     title={title}
+                    iconToLeft
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={needClick ? handleFullOpen : null}
                     iconMu={PlusIcon}

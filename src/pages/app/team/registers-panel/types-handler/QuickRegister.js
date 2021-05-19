@@ -291,11 +291,10 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     );
 
     const handleCopy = () => {
-        copyText(
-            msg,
-            () => showToast("link de convite copiado!", { type: "success" }),
-            { parentId: "root--input-copy" }
-        );
+        copyText(msg, {
+            msg: "Link de convite copiado!",
+            parentId: "root--input-copy",
+        });
     };
 
     const showGeneratedMsg = () =>

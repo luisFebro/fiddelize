@@ -21,6 +21,7 @@ import getVar, { setVar, removeVar } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
+import GamesBadge from "components/biz/GamesBadge";
 
 const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
@@ -58,11 +59,10 @@ function AsyncClientScoresPanel({ history, location }) {
         currPoints: currentPoints,
         lastPoints: lastCurrPoints,
         totalGeneralPoints,
-        userGame,
         adminGame,
+        userGame,
     } = useData();
 
-    const currChall = userGame.targetPrize.challN;
     const { targetPoints, prizeDesc } = adminGame.targetPrize;
 
     const {
@@ -90,6 +90,7 @@ function AsyncClientScoresPanel({ history, location }) {
     const animatedNumber = useRef(null);
     useBackColor(`var(--themeBackground--${colorBack})`);
     // useCount("ClientScoresPanel"); // RT = 46
+
     useEffect(() => {
         if (paidValueLoading) return;
         if (!paidValue)
@@ -232,16 +233,30 @@ function AsyncClientScoresPanel({ history, location }) {
                 {firstName},
             </p>
             <Title
+                lineHeight="45px"
+                padding="pt-3 pb-5"
                 title="Sua nova pontuação"
                 color="var(--mainWhite)"
                 fontSize="text-hero"
                 needShadow
                 backgroundColor={`var(--themePDark--${colorP})`}
             />
-            <section className="position-absolute" style={styles.challN}>
-                <p className="text-subtitle font-weight-bold text-white text-shadow text-center m-0 text-nowrap mx-3">
-                    Desafio n.º {currChall}
-                </p>
+            <section className="games-badge--root position-absolute">
+                <GamesBadge userGame={userGame} />
+                <style jsx>
+                    {`
+                        .games-badge--root {
+                            left: 50%;
+                            transform: translateX(-50%);
+                            bottom: -35px;
+                        }
+                        @media only screen and (min-width: 568px) {
+                            .games-badge--root {
+                                bottom: -30px;
+                            }
+                        }
+                    `}
+                </style>
             </section>
         </div>
     );

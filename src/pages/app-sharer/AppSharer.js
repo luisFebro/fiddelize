@@ -5,24 +5,23 @@ import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import { useBizData } from "init";
-import getQueryByName from "../../utils/string/getQueryByName";
+import getQueryByName from "utils/string/getQueryByName";
 import ButtonMulti, {
     faStyle,
-} from "../../components/buttons/material-ui/ButtonMulti";
-import { CLIENT_URL } from "../../config/clientUrl";
-import handleChange from "../../utils/form/use-state/handleChange";
-import { handleEnterPress } from "../../utils/event/isKeyPressed";
-import addSpacingPlusToQuery from "../../utils/string/addSpacingPlusToQuery";
-import scrollIntoView from "../../utils/document/scrollIntoView";
-import getFirstName from "../../utils/string/getFirstName";
-import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaButtons";
-import { handleFocus } from "../../utils/form/handleFocus";
-import copyText from "../../utils/document/copyText";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
-import showToast from "../../components/toasts";
+} from "components/buttons/material-ui/ButtonMulti";
+import { CLIENT_URL } from "config/clientUrl";
+import handleChange from "utils/form/use-state/handleChange";
+import { handleEnterPress } from "utils/event/isKeyPressed";
+import addSpacingPlusToQuery from "utils/string/addSpacingPlusToQuery";
+import scrollIntoView from "utils/document/scrollIntoView";
+import getFirstName from "utils/string/getFirstName";
+import ShareSocialMediaButtons from "components/buttons/ShareSocialMediaButtons";
+import { handleFocus } from "utils/form/handleFocus";
+import copyText from "utils/document/copyText";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import useData from "init";
-import downloadImg from "../../utils/media/download-img/downloadImg";
-import QrCode from "../../components/QrCode";
+import downloadImg from "utils/media/download-img/downloadImg";
+import QrCode from "components/QrCode";
 import "../app/team/registers-panel/types-handler/qr-code-invitation-btn/_QrInvitationModal.scss";
 
 const addSpace = (str) => addSpacingPlusToQuery(str);
@@ -319,11 +318,7 @@ export default function AppSharer({ location, match }) {
                         title="copiar link"
                         backgroundColor="var(--mainDark)"
                         size="small"
-                        onClick={() =>
-                            copyText(generatedLink, () =>
-                                showToast("Link copiado!", { type: "success" })
-                            )
-                        }
+                        onClick={() => copyText(generatedLink)}
                     />
                 </div>
                 {showLink ? (

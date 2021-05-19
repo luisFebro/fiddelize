@@ -63,7 +63,12 @@ export default function InstructionBtn({
     );
 
     return (
-        <section>
+        <section
+            style={{
+                position: "relative",
+                zIndex: 100,
+            }}
+        >
             {mode === "none" && (
                 <section>
                     <ButtonFab
@@ -78,10 +83,7 @@ export default function InstructionBtn({
             )}
 
             {mode === "tooltip" && (
-                <section
-                    className="position-relative disable-blur"
-                    onClick={null}
-                >
+                <section onClick={null}>
                     <Tooltip
                         text={text}
                         hover

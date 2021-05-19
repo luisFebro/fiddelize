@@ -6,6 +6,7 @@ import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
 import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
+import AddBenefitsBtn from "./add-benefits/AddBenefitsBtn";
 import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "auth/useAuth";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
@@ -151,7 +152,7 @@ export default function TeamApp({
     );
 
     const showCTAs = () => (
-        <section className="animated fadeInUp delay-1s my-5 container-center-col">
+        <section className="main-ctas position-relative animated fadeInUp delay-1s my-5 container-center-col">
             <div>
                 <h2 className={`m-0 text-center text-title ${txtColor}`}>
                     {firstName},{" "}
@@ -171,7 +172,7 @@ export default function TeamApp({
                 />
                 <div className="ml-3">
                     <RegisterPanelBtn
-                        title="CLIENTE"
+                        title="CLIENTES"
                         needPlusIcon
                         backColor={
                             needAdminDefaultTheme ? "default" : backColor
@@ -181,6 +182,16 @@ export default function TeamApp({
                     />
                 </div>
             </section>
+            <section className="mt-4 container-center animated fadeIn delay-3s">
+                <AddBenefitsBtn />
+            </section>
+            <style jsx>
+                {`
+                    .main-ctas {
+                        top: -30px;
+                    }
+                `}
+            </style>
         </section>
     );
 

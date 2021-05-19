@@ -1,11 +1,10 @@
 import { Fragment } from "react";
 import parse from "html-react-parser";
-import QrCode from "../../../../../../components/QrCode";
+import QrCode from "components/QrCode";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import copyText from "utils/document/copyText";
 import "./_QrInvitationModal.scss";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import RadiusBtn from "../../../../../../components/buttons/RadiusBtn";
-import showToast from "../../../../../../components/toasts";
-import copyText from "../../../../../../utils/document/copyText";
 
 const handleFgColor = (fgColor) => {
     const strongColorsRequired =
@@ -46,11 +45,10 @@ export default function QrInvitationModal({
     const selectedFgColor = handleFgColor(fgColor);
 
     const handleCopy = () => {
-        copyText(
-            qrValue,
-            () => showToast("link de convite copiado!", { type: "success" }),
-            { parentId: "root--quick-promote-input-copy" }
-        );
+        copyText(qrValue, {
+            msg: "Link de convite copiado!",
+            parentId: "root--quick-promote-input-copy",
+        });
     };
 
     const showCopyBtn = () => (

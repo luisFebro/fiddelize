@@ -1,16 +1,14 @@
 import { Fragment, useState, useEffect } from "react";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
-import useSendEmail from "../../../../../../hooks/email/useSendEmail";
+import useSendEmail from "hooks/email/useSendEmail";
 import useData from "init";
-import "./_Pix.scss";
-import QrCode from "../../../../../../components/QrCode";
-import copyText from "../../../../../../utils/document/copyText";
-import RadiusBtn from "../../../../../../components/buttons/RadiusBtn";
-import showToast from "../../../../../../components/toasts";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import QrCode from "components/QrCode";
+import copyText from "utils/document/copyText";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import convertToReal from "utils/numbers/convertToReal";
+import RedirectLink from "components/RedirectLink";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
-import RedirectLink from "../../../../../../components/RedirectLink";
-// import copyTextToClipboard from "../../../../../../utils/document/copyTextToClipboard";
+import "./_Pix.scss";
 
 // const isSmall = window.Helper.isSmallScreen();
 
@@ -98,15 +96,11 @@ export default function AsyncPix({ modalData }) {
         parentId,
         durationSuccessTxt = 2000,
     }) => {
-        copyText(
-            value,
-            () =>
-                showToast(successCopyTxt, {
-                    type: "success",
-                    dur: durationSuccessTxt,
-                }),
-            { parentId }
-        );
+        copyText(value, {
+            msg: successCopyTxt,
+            msgDur: durationSuccessTxt,
+            parentId,
+        });
     };
 
     const pixKey = "24289c41-0b0d-485c-a3bf-ff00ca54b4b4";

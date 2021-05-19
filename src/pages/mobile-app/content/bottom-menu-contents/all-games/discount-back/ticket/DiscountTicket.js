@@ -4,6 +4,8 @@ import CloseButton from "components/buttons/CloseButton";
 import useData, { useBizData } from "init";
 import QrCode from "components/QrCode";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import QrCodeReceiptBtn from "./qr-code-receipt/QrCodeReceiptBtn";
 
 export default function DiscountTicket({
     didBeatGame = false,
@@ -12,7 +14,13 @@ export default function DiscountTicket({
 }) {
     const [openCard, setOpenCard] = useState(false);
 
-    const { bizName, bizLogo, themePColor } = useBizData();
+    const {
+        bizName,
+        bizLogo,
+        themePColor,
+        themeSColor,
+        txtColor,
+    } = useBizData();
     const { name, sexLetter, userId } = useData();
 
     const mainColor = `var(--themePLight--${themePColor})`;
@@ -86,12 +94,13 @@ export default function DiscountTicket({
     const condOpenCard = !openCard && showCTA();
 
     const imageSquare = bizLogo && bizLogo.includes("h_100,w_100");
+    const { newImg } = removeImgFormat(bizLogo);
     const imageSettings = {
-        src: bizLogo,
+        src: newImg,
     };
 
     const showEachBuyPercBadge = () => (
-        <div className="each-buy-perc--root position-relative animated fadeInUp delay-2s container-center">
+        <div className="each-buy-perc--root position-relative animated fadeIn delay-1s container-center">
             <div className="mx-2 each-buy-perc text-white text-pill text-shadow font-site text-em-1-1 text-center">
                 <LocalMallTwoToneIcon className="mr-2" />
                 Amig{sexLetter}, acumule {perc}%
@@ -116,6 +125,17 @@ export default function DiscountTicket({
         </div>
     );
 
+    const qrCode = `discountBack:${userId}`;
+    const qrCodeProps = {
+        code: qrCode,
+        themePColor,
+        themeSColor,
+        bizName,
+        txtColor,
+        imageSettings,
+        imageSquare,
+    };
+
     // LESSON: when dealing with 2 classes which requires diff styles
     // do not put a number to the first elem like: class="elem elem-1" class="elem elem-2"
     // instead write class="elem" class="elem elem-2" so you will have the default elem style on both and elem-2 will take care the diff style of second elem and so on
@@ -123,8 +143,11 @@ export default function DiscountTicket({
         <Fragment>
             <section
                 className={`${
-                    openCard ? "backdrop-medium" : ""
+                    openCard ? "backdrop-medium" : "position-relative"
                 } container-center-col font-site`}
+                style={{
+                    top: -60,
+                }}
             >
                 <section
                     ref={discountCardRef}
@@ -154,13 +177,16 @@ export default function DiscountTicket({
                                     Comprovante
                                 </h2>
                                 <section className="d-flex">
-                                    <QrCode
-                                        size={100}
-                                        value={userId}
-                                        fgColor={pColor}
-                                        imageSquare={imageSquare}
-                                        imageSettings={imageSettings}
-                                    />
+                                    <div className="position-relative">
+                                        <QrCode
+                                            size={100}
+                                            value={qrCode}
+                                            fgColor={pColor}
+                                            imageSquare={imageSquare}
+                                            imageSettings={imageSettings}
+                                        />
+                                        <QrCodeReceiptBtn {...qrCodeProps} />
+                                    </div>
                                     <p className="m-0 ml-3 text-normal">
                                         {`Ganhador${isShe ? "a:" : ":"}`}
                                         <span

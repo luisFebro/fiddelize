@@ -1,10 +1,9 @@
 import { Fragment } from "react";
+import QrCode from "components/QrCode";
+import copyText from "utils/document/copyText";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import convertToReal from "utils/numbers/convertToReal";
 import "./_Pix.scss";
-import QrCode from "../../../../../../../../components/QrCode";
-import copyText from "../../../../../../../../utils/document/copyText";
-import RadiusBtn from "../../../../../../../../components/buttons/RadiusBtn";
-import showToast from "../../../../../../../../components/toasts";
-import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
 
 export default function AsyncPixDetails({ itemAmount }) {
     const pixKey = "24289c41-0b0d-485c-a3bf-ff00ca54b4b4";
@@ -18,12 +17,7 @@ export default function AsyncPixDetails({ itemAmount }) {
         successCopyTxt,
         durationSuccessTxt = 2000,
     }) => {
-        copyText(value, () =>
-            showToast(successCopyTxt, {
-                type: "success",
-                dur: durationSuccessTxt,
-            })
-        );
+        copyText(value, { msg: successCopyTxt, msgDur: durationSuccessTxt });
     };
 
     return (

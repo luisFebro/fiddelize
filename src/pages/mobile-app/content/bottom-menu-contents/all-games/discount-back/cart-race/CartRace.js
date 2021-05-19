@@ -15,7 +15,7 @@ export default function CartRace({ className, accuMoney }) {
     const { needDark, bizName } = useBizData();
     const { didUserScroll } = useContext();
 
-    const { targetPoints } = adminGame.discountBack;
+    const { targetPoints, perc } = adminGame.discountBack;
     const { challN: currChallenge } = userGame.discountBack;
 
     useEffect(() => {
@@ -48,6 +48,9 @@ export default function CartRace({ className, accuMoney }) {
                         <QuantStatus
                             accuMoney={accuMoney}
                             completePerc={completePerc}
+                            targetPoints={targetPoints}
+                            currPoints={currPoints}
+                            perc={perc}
                         />
                         <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 $ text-small text-center text-purple text-shadow">
                             {parse(msg)}
@@ -88,14 +91,20 @@ export default function CartRace({ className, accuMoney }) {
     );
 }
 
-function QuantStatus({ accuMoney, completePerc }) {
+function QuantStatus({
+    accuMoney,
+    currPoints,
+    completePerc,
+    targetPoints,
+    perc,
+}) {
     const showInstruBtn = () => {
         const text = `
-            O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual.
+            O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual de ${currPoints} pts.
             <br /><br />
-            Você acumula <span class="font-weight-bold">5% de desconto a cada compra</span>.
+            Você acumula <span class="font-weight-bold">${perc}% de desconto a cada compra</span>.
             <br /><br />
-            Você pode usar seu vale desconto assim que bater a <strong>meta resgate de 100 pts</strong>.
+            Você pode usar seu vale desconto assim que bater a <strong>meta resgate de ${targetPoints} pts</strong>.
             <br /><br />
             Lembre-se que 1 pts vale R$ 1.
             <br />

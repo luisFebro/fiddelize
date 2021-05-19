@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import getVar from "init/var";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 import copyText from "../../../../utils/document/copyText";
-import showToast from "../../../../components/toasts";
 
 export default function ShareLink() {
     const [link, setLink] = useState("fiddelize.com.br/de/...");
@@ -16,7 +15,7 @@ export default function ShareLink() {
     }, []);
 
     const handleCopy = () => {
-        copyText(link, () => showToast("link copiado!", { type: "success" }));
+        copyText(link);
     };
 
     return (

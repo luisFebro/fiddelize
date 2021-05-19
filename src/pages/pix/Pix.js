@@ -1,15 +1,13 @@
-import QrCode from "../../components/QrCode";
-import getQueryByName from "../../utils/string/getQueryByName";
-import copyText from "../../utils/document/copyText";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
-import convertToReal from "../../utils/numbers/convertToReal";
-import showToast from "../../components/toasts";
-import "./_Pix.scss";
+import QrCode from "components/QrCode";
+import getQueryByName from "utils/string/getQueryByName";
+import copyText from "utils/document/copyText";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import convertToReal from "utils/numbers/convertToReal";
 
 export default function Pix({ location }) {
     const value = getQueryByName("v", location.search);
     const desc = getQueryByName("d", location.search);
-    const pixKey = "24289c41-0b0d-485c-a3bf-ff00ca54b4b4"; // 5e8b0bfc8c616719b01abc9c
+    const pixKey = "targetPrize24289c41-0b0d-485c-a3bf-ff00ca54b4b4"; // 5e8b0bfc8c616719b01abc9c
 
     const investAmount = convertToReal(value, {
         moneySign: true,
@@ -21,12 +19,7 @@ export default function Pix({ location }) {
         successCopyTxt,
         durationSuccessTxt = 2000,
     }) => {
-        copyText(value, () =>
-            showToast(successCopyTxt, {
-                type: "success",
-                dur: durationSuccessTxt,
-            })
-        );
+        copyText(value, { msg: successCopyTxt, msgDur: durationSuccessTxt });
     };
 
     const showPixData = () => (
@@ -93,6 +86,17 @@ export default function Pix({ location }) {
                     <div className="qr-container">
                         <QrCode value={pixKey} fgColor="var(--themeP)" />
                     </div>
+                    <style jsx>
+                        {`
+                            .qr-container {
+                                padding: 20px;
+                                box-shadow: inset -10px -10px 1em grey;
+                                background-color: var(--mainWhite);
+                                border-radius: 30px;
+                                max-width: 500px;
+                            }
+                        `}
+                    </style>
                 </section>
             </section>
             {showPixData()}

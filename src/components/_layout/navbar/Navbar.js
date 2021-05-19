@@ -46,7 +46,8 @@ function Navbar({ history, location }) {
         locationNow.includes("pix") ||
         locationNow.includes("painel-de-apps") ||
         locationNow.includes("playground") ||
-        locationNow.includes("status-de-servicos");
+        locationNow.includes("status-de-servicos") ||
+        locationNow.includes("codigo");
 
     const showAccessBtn = () => (
         <Link

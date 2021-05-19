@@ -19,7 +19,6 @@ export default async function disconnect(options = {}) {
     const isCliAdmin = role === "cliente-admin";
 
     if (!role) return null;
-
     await removeStore("user");
     removeCollection("currUser");
 

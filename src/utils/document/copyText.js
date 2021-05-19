@@ -1,8 +1,15 @@
+import showToast from "components/toasts";
+
 // copy text to clipboard without a visible input field
 // https://stackoverflow.com/questions/50795042/create-a-copy-button-without-an-input-text-box
 // parentId (current div wrapper when the copy button is) = use it when inside a modal or similar, when inserting to document.body fails.
-export default function copyText(txt, callback, options = {}) {
-    const { parentId = null } = options;
+export default function copyText(txt, options = {}) {
+    const {
+        parentId = null,
+        msg = "Link copiado",
+        msgDur = 7000,
+        callback,
+    } = options;
 
     let parentElem;
     if (parentId) {
@@ -33,4 +40,6 @@ export default function copyText(txt, callback, options = {}) {
     if (typeof callback === "function") {
         callback();
     }
+
+    if (msg) showToast(msg, { type: "success", dur: msgDur });
 }

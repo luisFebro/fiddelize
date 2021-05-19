@@ -104,7 +104,8 @@ export default function Tooltip({
             // top: 20,
         },
         popper: {
-            zIndex: 20000,
+            //position: "relative",
+            //zIndex: 20000,
         },
         arrow: {
             fontSize: 25,
@@ -115,6 +116,9 @@ export default function Tooltip({
 
     const classes = radiusTooltipStyle();
 
+    // LESSON: PopperProps={{ disablePortal: true }} was causing the issue of popper/tooltip z-index not works and be behind other elements
+    // disablePortal - default: false
+    // keepMounted - default: false - Always keep the children in the DOM. This prop can be useful in SEO situation or when you want to maximize the responsiveness of the Popper.
     return (
         <ClickAwayListener onClickAway={handleTooltipClose}>
             <div
@@ -142,7 +146,7 @@ export default function Tooltip({
                     placement={placement || "top"}
                     TransitionComponent={Zoom}
                     TransitionProps={{ timeout: 200 }}
-                    PopperProps={{ disablePortal: true }}
+                    PopperProps={{ disablePortal: false, keepMounted: false }}
                 >
                     {element}
                 </TooltipMU>

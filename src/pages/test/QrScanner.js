@@ -3,27 +3,31 @@ import { useEffect, useState } from "react";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import useDelay from "hooks/useDelay";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
+import useQrScanner from "hooks/media/useQrScanner";
 
 export default function QrScanner() {
     const [history, setHistory] = useState([]);
     const { themePColor, bizLogo } = useBizData();
 
-    useBackColor(`var(--themePDark--${themePColor})`);
-
-    const readyDelay = useDelay(5000);
     const timer = useUpdater();
+
+    useBackColor(`var(--themePDark--${themePColor})`);
+    useQrScanner();
 
     async function handleNewScannedTxt(newText) {
         await playAudio("audio_cli-staff_scanner-beep");
         await playAudio("audio_cli-staff_detected-receipt");
-        showToast(`Novo Código QR: ${newText}`, {
+        showToast(`Comprovante Detectado: ${newText}`, {
             type: "success",
             dur: 10000,
         });
     }
+
+    useEffect(() => {
+        setScannerBeep();
+    }, []);
 
     useEffect(() => {
         const newScannedText = window.scannedText;
@@ -55,21 +59,6 @@ export default function QrScanner() {
 
     const { newImg, width, height } = removeImgFormat(bizLogo);
 
-    useEffect(() => {
-        if (!window.jbScanner) return addScannerSrc();
-        if (!window.scannerDevices) return null;
-        setScannerBeep();
-
-        const gotCamera = Boolean(window.scannerDevices[0].deviceId);
-        if (!gotCamera)
-            return showToast(
-                "Nenhum câmera foi detectada em seu dispositivo.",
-                { type: "error" }
-            );
-
-        return "ok";
-    }, [readyDelay]);
-
     return (
         <section className="text-white text-shadow">
             <section className="container-center-col">
@@ -88,10 +77,7 @@ export default function QrScanner() {
                     {`
                         .qrPreviewVideo {
                             background: grey;
-                            //width: 350px;
-                            //height: 350px;
                             width: 100%;
-                            //max-height: 70%;
                         }
                     `}
                 </style>
@@ -117,25 +103,6 @@ function useUpdater(timeSpan = 1000) {
 }
 
 // HELPERS
-function addScannerSrc() {
-    const mainScripts = document.createElement("script");
-
-    mainScripts.type = "text/javascript";
-    mainScripts.src = "/qr-scanner/jsqrscanner.nocache.js";
-    mainScripts.async = true;
-    mainScripts.crossorigin = "anonymous";
-    document.body.appendChild(mainScripts);
-
-    // all methods
-    const scriptMethods = document.createElement("script");
-
-    scriptMethods.type = "text/javascript";
-    scriptMethods.src = "/qr-scanner/scripts/run-scanner.js";
-    scriptMethods.async = true;
-    scriptMethods.crossorigin = "anonymous";
-    document.body.appendChild(scriptMethods);
-}
-
 async function setScannerBeep() {
     await Promise.all([
         prerenderAudio(
@@ -149,23 +116,6 @@ async function setScannerBeep() {
     ]);
 }
 // END HELPERS
-
-// function readScannerProps() {
-//     const jsScanner = window.jbScanner;
-
-//     jsScanner.setScanInterval(900); // default set to 300
-//     const scanInterval = jsScanner.getScanInterval();
-//     const snapImageMaxSize = jsScanner.getSnapImageMaxSize();
-//     const isActive = jsScanner.isActive();
-//     const isScanning = jsScanner.isScanning();
-
-//     return {
-//         scanInterval,
-//         snapImageMaxSize,
-//         isActive,
-//         isScanning,
-//     };
-// }
 
 /* ARCHIVES
 <section className="container-center">

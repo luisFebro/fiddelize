@@ -98,6 +98,7 @@ export default function ButtonFab({
     width,
     height,
     disabled = false,
+    iconToLeft = false,
 }) {
     const [toggle, setToggle] = useState("");
 
@@ -150,7 +151,11 @@ export default function ButtonFab({
     };
 
     const showMuIcon = (iconMu) => (
-        <i className={`${variant === "extended" && "ml-2"} icon-shadow`}>
+        <i
+            className={`${
+                variant === "extended" && iconToLeft ? "mr-2" : "ml-2"
+            } icon-shadow`}
+        >
             {iconMu}
         </i>
     );
@@ -202,9 +207,10 @@ export default function ButtonFab({
                     } font-weight-bold`}
                     style={{ textTransform: textTransform || "capitalize" }}
                 >
+                    {iconToLeft && iconMu && showMuIcon(iconMu)}
                     {title}
                     {iconFontAwesome && showIcon(iconFontAwesome)}
-                    {iconMu && showMuIcon(iconMu)}
+                    {!iconToLeft && iconMu && showMuIcon(iconMu)}
                 </span>
             )}
         </Fab>

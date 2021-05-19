@@ -1,8 +1,8 @@
 import { useState } from "react";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import ModalFullContent from "../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../components/code-splitting/LoadableComp";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncNewScoreModal = Load({
     loading: true,
@@ -65,6 +65,7 @@ export default function AddNewScoreBtn({
                 <ButtonFab
                     size={size}
                     title={title}
+                    iconToLeft
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={needClick ? handleFullOpen : null}
                     iconMu={PlusIcon}

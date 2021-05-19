@@ -1,5 +1,5 @@
 import { setVars } from "init/var";
-import { setItems } from "init/lStorage";
+import getItems, { setItems } from "init/lStorage";
 
 // for both indexDB and localstorage in one place
 // also for bootup Login.js data and recurring access with loadUserInit rest API
@@ -7,8 +7,12 @@ export default async function setInitData(data, options = {}) {
     const { uify } = options;
     if (!uify) return Promise.reject("missing role, uify or data");
 
+    // if got user colors, do not set default. Otherwise default colors will be set wrongly when logout
+    const [themePColor] = getItems("bizData", ["themePColor"]);
+
     // DEFAULT DATA TO BE SET WHEN THERE IS NO DATA IN INIT TO AVOID UNDEFINED ERRORS OR BAD CONFIG
-    if (!data) return await setDefaultData(uify);
+    if (!data && !themePColor) return await setDefaultData(uify);
+    if (!data) return null;
 
     const { role } = data.currUser;
 
