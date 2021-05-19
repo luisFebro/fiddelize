@@ -21,6 +21,7 @@ import {
 import RedirectLink from "pages/RedirectLink";
 import Default from "pages/Default";
 import UnavailableService from "pages/UnavailableService";
+import { Load } from "components/code-splitting/LoadableComp";
 import {
     AsyncLoginPage,
     // cli-admin
@@ -55,6 +56,13 @@ import {
     AsyncClientAppPreview,
 } from "./CommonImports";
 // END PAGES
+
+const AsyncQrCode = Load({
+    loader: () =>
+        import(
+            "pages/others/QrCode" /* webpackChunkName: "free-qr-code-lazy" */
+        ),
+});
 
 function Website({ location }) {
     const locationNow = location.pathname;
@@ -221,6 +229,7 @@ function Website({ location }) {
                     exact
                     component={AsyncPlayground}
                 />
+                <Route path="/codigo/qr" exact component={AsyncQrCode} />
                 <Route component={Default} />
             </Switch>
             {dontNeedLayout && <Footer />}

@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.25.0";
+const latestVersion = "4.25.1";
 
 const updateDescription =
     "qr code scanner pt5 || mobile app badges and new add points btn pt1";
