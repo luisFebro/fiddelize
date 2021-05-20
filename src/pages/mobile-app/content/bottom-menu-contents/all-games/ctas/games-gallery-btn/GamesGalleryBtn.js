@@ -29,21 +29,20 @@ export default function GamesGalleryBtn() {
 
     return (
         <section>
-            <div className="animated fadeInUp delay-3s">
-                <ButtonFab
-                    position="relative"
-                    onClick={handleFullOpen}
-                    title="galeria de jogos"
-                    iconFontSize="25px"
-                    variant="extended"
-                    fontWeight="bolder"
-                    fontSize=".9em"
-                    size="large"
-                    color={txtColorStyle}
-                    backgroundColor={`var(--themeS--${colorS})`}
-                    shadowColor={colorBack === "black" ? "white" : "black"}
-                />
-            </div>
+            <ButtonFab
+                position="relative"
+                onClick={handleFullOpen}
+                title="jogos de compra"
+                iconFontSize="25px"
+                variant="extended"
+                fontWeight="bolder"
+                fontSize=".9em"
+                size="large"
+                color={txtColorStyle}
+                backgroundColor={`var(--themeS--${colorS})`}
+                needBtnShadow={false}
+                shadowColor={colorBack === "black" ? "white" : "black"}
+            />
             <ModalFullContent
                 contentComp={
                     <AsyncGamesGalleryContent closeModal={handleFullClose} />

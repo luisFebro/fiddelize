@@ -17,7 +17,7 @@ import useGlobal from "./useGlobal";
 import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import GroupedAppBar from "./GroupedAppBar";
-import AllScores from "../AllScores";
+import PtsBalance from "../balance/PtsBalance";
 
 const now = new Date();
 const greeting = getDayGreetingBr();
@@ -29,7 +29,6 @@ export default function ClientUserAppContent({
     needAppForPreview,
     runName,
     colorP = "default",
-    colorS = "default",
     businessId,
     targetPointsTest,
     totalNotifications,
@@ -55,7 +54,7 @@ export default function ClientUserAppContent({
 
     const { firstName, userGame, adminGame } = useData();
 
-    const { currPoints = 0, lastPoints, totalGeneralPoints } = useThisData();
+    const { currPoints = 0 } = useThisData();
     const currChall = userGame.targetPrize.challN;
     const {
         milestoneIcon,
@@ -171,18 +170,10 @@ export default function ClientUserAppContent({
         </section>
     );
 
-    const showAllScores = () => (
-        <AllScores
-            userName={firstName}
-            userId={userId}
-            currPointsRef={currPointsRef}
-            currPoints={currPoints}
+    const showPtsBalance = () => (
+        <PtsBalance
             showMoreComps={showMoreComps}
-            lastPoints={lastPoints}
-            needAppForPreview={needAppForPreview}
-            colorBack={themeBackColor}
-            colorS={colorS}
-            totalGeneralPoints={totalGeneralPoints}
+            currPointsRef={currPointsRef}
             txtColor={txtColor}
         />
     );
@@ -219,7 +210,7 @@ export default function ClientUserAppContent({
                 } client-user-app-content`}
             >
                 {showGreetingAndNotific()}
-                {showAllScores()}
+                {showPtsBalance()}
                 <GroupedAppBar />
                 {backBtnForCliAdmin()}
                 <NotifPermissionBanner

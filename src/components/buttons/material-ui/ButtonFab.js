@@ -119,7 +119,7 @@ export default function ButtonFab({
             width,
             height,
             outline: "none",
-            color: color || "var(--mainWhite)",
+            color: color || "white", // "var(--mainWhite)"
             backgroundColor: backgroundColor || "#4834d4",
             filter:
                 needBtnShadow &&

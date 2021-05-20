@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Load } from "components/code-splitting/LoadableComp";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import useData from "init";
+import CasinoIcon from "@material-ui/icons/Casino";
+import PollIcon from "@material-ui/icons/Poll";
+
 // games
 export const AsyncTargetPrizeGame = Load({
     loader: () =>
@@ -47,6 +50,7 @@ export default function Games() {
             {currGame === "discountBack" && (
                 <AsyncDiscountBackGame didUserScroll={didUserScroll} />
             )}
+            {currGame === "topCustomers" && null}
             {currGame === "raffleTicket" && null}
         </section>
     );
@@ -79,7 +83,15 @@ function getGameData(currGame, games) {
     if (currGame === "raffleTicket") {
         return {
             nameBr: "Bilhete Premiado",
-            icon: null,
+            icon: <CasinoIcon className="mr-2" style={{ fontSize: 45 }} />,
+            challN: games ? games.raffleTicket.challN : "...",
+        };
+    }
+
+    if (currGame === "topCustomers") {
+        return {
+            nameBr: "Clientes Tops",
+            icon: <PollIcon className="mr-2" style={{ fontSize: 45 }} />,
             challN: games ? games.raffleTicket.challN : "...",
         };
     }

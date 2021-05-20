@@ -3,11 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.25.2";
+const latestVersion = "4.25.2-50";
 
-const updateDescription =
-    "qr code scanner pt5 || mobile app badges and new add points btn pt1";
+const updateDescription = "new app points management - pt1";
 /* HISTORY
+qr code scanner pt5 || mobile app badges and new add points btn pt1
 new design digital receit and discount card
 for cart race and logics pt1
 new data for games and totals pt3

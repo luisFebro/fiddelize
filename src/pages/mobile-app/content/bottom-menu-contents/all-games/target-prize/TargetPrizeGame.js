@@ -3,7 +3,7 @@ import useContext from "context";
 import { Load } from "components/code-splitting/LoadableComp";
 import RatingIcons from "./RatingIcons";
 import Gift from "./Gift";
-import GamesGalleryBtn from "../games-gallery-btn/GamesGalleryBtn";
+import GameCTAs from "../ctas/GameCTAs";
 // All component pages which are using both in website and mobile app goes here in next updates...
 
 export const AsyncProgressFragTracker = Load({
@@ -43,11 +43,7 @@ export default function TargetPrizeGame({ didUserScroll }) {
                     <div style={{ marginBottom: 100 }} />
                 </Fragment>
             )}
-            {didUserScroll && (
-                <section className="my-5 container-center">
-                    <GamesGalleryBtn />
-                </section>
-            )}
+            {didUserScroll && <GameCTAs />}
         </section>
     );
 }

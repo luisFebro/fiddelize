@@ -61,7 +61,12 @@ function GroupedAppBar({ history }) {
         },
         {
             tabLabel: "Ganhos",
-            tabIcon: <FontAwesomeIcon icon="trophy" style={{ fontSize: 19 }} />,
+            tabIcon: (
+                <FontAwesomeIcon
+                    icon="trophy"
+                    style={{ fontSize: 19, marginBottom: "12px" }}
+                />
+            ),
             tabContentPanel: undefined,
             scrollView: true,
         },

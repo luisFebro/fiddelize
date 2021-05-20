@@ -45,15 +45,16 @@ export default function Tooltip({
     needAttentionWaves,
     placement,
     needOpen,
-    whiteSpace,
+    whiteSpace = true,
     width,
     margin,
     padding,
     onClickAway,
     hover = false,
-    needClickAway = true,
     arrowBottom,
     disabled = false,
+    disablePortal = false, // need to be true to work in a modal
+    // needClickAway = true,
 }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
@@ -103,10 +104,6 @@ export default function Tooltip({
                     : "drop-shadow(.001em .1em .1em var(--mainDark))",
             // top: 20,
         },
-        popper: {
-            //position: "relative",
-            //zIndex: 20000,
-        },
         arrow: {
             fontSize: 25,
             color: backgroundColor || "var(--themeSDark)",
@@ -117,7 +114,7 @@ export default function Tooltip({
     const classes = radiusTooltipStyle();
 
     // LESSON: PopperProps={{ disablePortal: true }} was causing the issue of popper/tooltip z-index not works and be behind other elements
-    // disablePortal - default: false
+    // disablePortal - default: false - Disable the portal behavior. The children stay within it's parent DOM hierarchy.
     // keepMounted - default: false - Always keep the children in the DOM. This prop can be useful in SEO situation or when you want to maximize the responsiveness of the Popper.
     return (
         <ClickAwayListener onClickAway={handleTooltipClose}>
@@ -146,7 +143,7 @@ export default function Tooltip({
                     placement={placement || "top"}
                     TransitionComponent={Zoom}
                     TransitionProps={{ timeout: 200 }}
-                    PopperProps={{ disablePortal: false, keepMounted: false }}
+                    PopperProps={{ disablePortal, keepMounted: false }}
                 >
                     {element}
                 </TooltipMU>

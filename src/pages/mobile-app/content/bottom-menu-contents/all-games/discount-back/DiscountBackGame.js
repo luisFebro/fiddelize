@@ -1,8 +1,8 @@
 import { Fragment } from "react";
-import useData, { useBizData } from "init";
+import useData from "init";
 import { Load } from "components/code-splitting/LoadableComp";
-import GamesGalleryBtn from "../games-gallery-btn/GamesGalleryBtn";
 import CartRace from "./cart-race/CartRace";
+import GameCTAs from "../ctas/GameCTAs";
 
 export const AsyncDiscountTicket = Load({
     loader: () =>
@@ -12,7 +12,6 @@ export const AsyncDiscountTicket = Load({
 });
 
 export default function DiscountBackGame({ didUserScroll }) {
-    const { themeSColor: colorS, themeBackColor: colorBack } = useBizData();
     const { adminGame, currPoints } = useData();
 
     const { targetPoints, perc } = adminGame.discountBack;
@@ -54,16 +53,7 @@ export default function DiscountBackGame({ didUserScroll }) {
                 className="mt-5 animated fadeInUp faster"
                 accuMoney={accuMoney}
             />
-            {didUserScroll && (
-                <Fragment>
-                    <section className="my-5 container-center">
-                        <GamesGalleryBtn
-                            colorS={colorS}
-                            colorBack={colorBack}
-                        />
-                    </section>
-                </Fragment>
-            )}
+            {didUserScroll && <GameCTAs />}
         </section>
     );
 }
