@@ -11,17 +11,13 @@ import isThisApp from "utils/window/isThisApp";
 import disconnect from "auth/disconnect";
 import useData, { useBizData } from "init";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
-import { updateUser, readUser } from "api/frequent";
-import getAPI, {
-    setLastPointsAsDone,
-    addBuyHistory,
-    readBuyHistory,
-} from "api";
+import { updateUser, readUser, sendNotification } from "api/frequent";
+import getAPI, { addBuyHistory, readBuyHistory } from "api";
 import getVar, { setVar, removeVar } from "init/var";
 import useBackColor from "hooks/useBackColor";
+import GamesBadge from "components/biz/GamesBadge";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
-import GamesBadge from "components/biz/GamesBadge";
 
 const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
@@ -64,6 +60,7 @@ function AsyncClientScoresPanel({ history, location }) {
     } = useData();
 
     const { targetPoints, prizeDesc } = adminGame.targetPrize;
+    const { challN } = userGame.targetPrize;
 
     const {
         bizId,
@@ -72,6 +69,8 @@ function AsyncClientScoresPanel({ history, location }) {
         themeSColor: colorS,
         txtColor,
         txtColorStyle,
+        bizLogo,
+        bizName,
     } = useBizData();
     // END ROLES
 
@@ -137,7 +136,10 @@ function AsyncClientScoresPanel({ history, location }) {
         paidValue,
     });
 
-    const userBeatChallenge = currPointsNow >= targetPoints;
+    const { didBeatGame, beatGameListBr } = checkForBeatGames({
+        adminGame,
+        currPoints: currPointsNow,
+    });
 
     const isCliAdminApp = location.search.includes("client-admin=1");
     const path = isCliAdminApp ? "/mobile-app?client-admin=1" : "/mobile-app";
@@ -167,7 +169,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     totalGeneralPoints + Number(lastPoints),
                 "clientUserData.filterLastPurchase": new Date(),
                 "clientUserData.filterHighestPurchase": newHighestScore,
-                "clientUserData.needStaffDiscount": userBeatChallenge,
+                "clientUserData.needStaffDiscount": didBeatGame,
             };
 
             (async () => {
@@ -184,13 +186,6 @@ function AsyncClientScoresPanel({ history, location }) {
                     console.log
                 );
 
-                if (role === "cliente") {
-                    await getAPI({
-                        method: "post",
-                        url: setLastPointsAsDone(cliUserId),
-                    });
-                }
-
                 const historyObj = {
                     targetPoints,
                     value: lastPoints,
@@ -204,17 +199,42 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 showToast("Pontuação Registrada!", { type: "success" });
 
-                if (userBeatChallenge) {
+                if (didBeatGame) {
                     const params = {
                         targetPoints,
                         noResponse: true,
                         prizeDesc,
                     };
 
-                    await getAPI({
-                        url: readBuyHistory(cliUserId),
-                        params,
-                    });
+                    const pushNotifData = {
+                        isPushNotif: true,
+                        type: "confirmedChall",
+                        userId: cliUserId,
+                        role: "cliente",
+                        payload: {
+                            customerName: null,
+                            bizName,
+                            currChall: challN,
+                            bizLogo,
+                        },
+                        notifCard: {
+                            cardType: "challenge",
+                            subtype: "confirmedChall",
+                            currChall: challN,
+                            prizeDeadline: 30,
+                            prizeDesc,
+                            // senderId: bizId,
+                        },
+                    };
+
+                    await Promise.all([
+                        sendNotification(cliUserId, "challenge", pushNotifData),
+                        getAPI({
+                            url: readBuyHistory(cliUserId),
+                            params,
+                        }),
+                    ]);
+
                     setFinishedWork(true);
                 } else {
                     setFinishedWork(true);
@@ -306,7 +326,7 @@ function AsyncClientScoresPanel({ history, location }) {
     );
 
     const handleHomeBtnClick = async () => {
-        if (userBeatChallenge) {
+        if (didBeatGame) {
             await prerenderAudio(
                 "/sounds/cornet-and-applauses.mp3",
                 "audio-client-won-prize"
@@ -400,28 +420,30 @@ function AsyncClientScoresPanel({ history, location }) {
 
 export default withRouter(AsyncClientScoresPanel);
 
-/* ARCHIVES
-const showSharingBtn = () => (
-    <Link
-        to={`/${bizLinkName}/compartilhar-app?negocio=${bizName}&id=${bizId}&role=${role}`}
-    >
-        <ButtonFab
-            position="relative"
-            top={-10}
-            left={70}
-            title={`compartilhar app`}
-            iconFontAwesome="fas fa-heart"
-            iconFontSize="16px"
-            variant="extended"
-            fontWeight="bolder"
-            fontSize=".9em"
-            color="var(--mainWhite)"
-            backgroundColor="var(--themeSDark)"
-        />
-    </Link>
-);
-*/
+// HELPERS
+function checkForBeatGames({ currPoints, adminGame }) {
+    const { targetPrize, discountBack, availableGames } = adminGame;
+    const { targetPoints: targetPointsTargetPrize } = targetPrize;
+    const { targetPoints: targetPointsDiscountBack } = discountBack;
 
-/* COMMENTS
-LESSON: <p> is better for aligning texts instead of <span>
-*/
+    const isGameAvailable = (name) => {
+        return availableGames.includes(name);
+    };
+
+    const didBeatTargetPrizeGame =
+        currPoints >= targetPointsTargetPrize && isGameAvailable("targetPrize");
+    const didBeatDiscountBackGame =
+        currPoints >= targetPointsDiscountBack &&
+        isGameAvailable("discountBack");
+
+    const didBeatGame = didBeatTargetPrizeGame || didBeatDiscountBackGame;
+
+    const beatGameListBr = [];
+    if (didBeatTargetPrizeGame) beatGameList.push("Prêmio Alvo");
+    if (didBeatDiscountBackGame) beatGameList.push("Desconto Retornado");
+    return {
+        didBeatGame,
+        beatGameListBr,
+    };
+}
+// END HELPERS

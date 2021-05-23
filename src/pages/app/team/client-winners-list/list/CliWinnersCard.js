@@ -4,7 +4,7 @@ import { fromNow, formatDMY } from "utils/dates/dateFns";
 import useData from "init";
 import useAPI, {
     toggleDoneUrl,
-    changePrizeStatus,
+    changeBenefitStatus,
     treatBoolStatus,
 } from "api/useAPI";
 import ActionBtn from "./ActionBtn";
@@ -33,10 +33,10 @@ function CliWinnersCard(props, ref) {
     const {
         _id: taskId,
         done = false,
-        taskType = "pendingDelivery",
+        // taskType = "pendingDelivery",
         taskTitle = "Entrega de Prêmio",
         content = "cliUserId:123;cliUserName:Ana Rodrigues;prizeDesc:tickets 1;challNum:5;deadline:14/07/20;",
-        madeBy = "Febro",
+        // madeBy = "Febro",
         madeDate = "11/08/20 às 10:50",
         createdAt = new Date(),
     } = data;
@@ -77,7 +77,7 @@ function CliWinnersCard(props, ref) {
     });
     useAPI({
         method: "put",
-        url: changePrizeStatus(cliUserId, "received"),
+        url: changeBenefitStatus(cliUserId, "received"),
         params: prizeParams,
         trigger,
     });
@@ -174,9 +174,9 @@ function CliWinnersCard(props, ref) {
                         {done && moreInfo && (
                             <p className="text-white">
                                 <span className="font-weight-bold">
-                                    • FEITO POR:{" "}
+                                    • ENTREGUE POR:{" "}
                                 </span>{" "}
-                                {madeBy}
+                                madeBy
                             </p>
                         )}
                         {showDate()}

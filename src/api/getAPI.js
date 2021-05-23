@@ -23,6 +23,7 @@ export default function getAPI({
     errDur = 7000,
     sucMsg = false,
     sucDur = 7000,
+    timeoutMsgOn = true,
 }) {
     if (!url) throw new Error("A URL is required!");
 
@@ -35,10 +36,11 @@ export default function getAPI({
         const stopRequest = setTimeout(() => {
             if (typeof cancel === "function") cancel();
             // LESSON: do not use Promise.reject inside a pure promise like this where there is reject method already. the request will fail
-            showToast(
-                "Não foi possível atualizar dados online. Verifique sua conexão e tente novamente",
-                { type: "error", dur: 10000 }
-            );
+            if (timeoutMsgOn)
+                showToast(
+                    "Não foi possível atualizar dados online. Verifique sua conexão e tente novamente",
+                    { type: "warning", dur: 10000 }
+                );
             return reject(null);
         }, timeout);
 

@@ -14,30 +14,20 @@ export const AsyncDiscountTicket = Load({
 export default function DiscountBackGame({ didUserScroll }) {
     const { adminGame, currPoints } = useData();
 
-    const { targetPoints, perc } = adminGame.discountBack;
+    const { perc, targetPoints } = adminGame.discountBack;
     const didBeatGame = currPoints >= targetPoints;
-    const accuMoney = getAccuMoney(currPoints, perc);
-    const ticketAmount = didBeatGame
-        ? accuMoney
-        : getAccuMoney(targetPoints, perc);
+    const ticketAmount = getAccuMoney(targetPoints, perc);
+    const accuMoney = didBeatGame
+        ? ticketAmount
+        : getAccuMoney(currPoints, perc);
 
     const showTicket = () => (
         <Fragment>
-            {didBeatGame ? (
-                <section className="text-center font-weight-bold text-normal animated fadeInUp">
-                    Com seu saldo de{" "}
-                    <span className="text-title">{currPoints} pts,</span>
-                    <br />
-                    você ganha:
-                </section>
-            ) : (
-                <section className="text-center font-weight-bold text-normal animated fadeInUp">
-                    A cada{" "}
-                    <span className="text-title">{targetPoints} pts,</span>
-                    <br />
-                    você ganha:
-                </section>
-            )}
+            <section className="text-center font-weight-bold text-normal animated fadeInUp">
+                A cada <span className="text-title">{targetPoints} pts,</span>
+                <br />
+                você ganha:
+            </section>
             <AsyncDiscountTicket
                 ticketAmount={ticketAmount}
                 didBeatGame={didBeatGame}

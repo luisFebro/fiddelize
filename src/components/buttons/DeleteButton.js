@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const muStyle = {
-    transform: "scale(1.2)",
+    transform: "scale(0.9)",
     filter: "drop-shadow(.5px .5px 1.5px black)",
     color: "#fff",
 };
@@ -29,6 +29,7 @@ export default function DeleteButton({
     left,
     bottom,
     onClick,
+    transform = "scale(1.2)",
 }) {
     const classes = useStyles();
 
@@ -38,10 +39,10 @@ export default function DeleteButton({
             size="small"
             style={{
                 position: position || "relative",
-                top: `${top || 0}px`,
-                right: `${right || 0}px`,
-                left: `${left || 0}px`,
-                bottom: `${bottom || 0}px`,
+                top,
+                right,
+                left,
+                bottom,
                 outline: "none",
                 color: "var(--mainWhite)",
                 backgroundColor: "var(--expenseRed)",
@@ -49,7 +50,7 @@ export default function DeleteButton({
             aria-label="Botão deletar"
             className={classes.fab}
         >
-            <DeleteIcon style={muStyle} />
+            <DeleteIcon style={{ ...muStyle, transform }} />
         </Fab>
     );
 }

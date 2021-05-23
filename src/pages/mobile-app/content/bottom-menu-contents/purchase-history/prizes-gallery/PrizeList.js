@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Trophy from "./Trophy";
 import useAPIList, { readPrizes } from "api/useAPIList";
 import { useBizData } from "init";
 import Tooltip from "components/tooltips/Tooltip";
 import { fromNow, formatDMY } from "utils/dates/dateFns";
+import Trophy from "./Trophy";
 
 export default function PrizeList({ userId }) {
     const [skip, setSkip] = useState(0);

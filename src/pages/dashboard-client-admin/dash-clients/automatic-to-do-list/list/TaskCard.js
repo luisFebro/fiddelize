@@ -3,7 +3,7 @@ import Card from "@material-ui/core/Card";
 import { fromNow, formatDMY } from "../../../../../utils/dates/dateFns";
 import useAPI, {
     toggleDoneUrl,
-    changePrizeStatus,
+    changeBenefitStatus,
     treatBoolStatus,
 } from "api/useAPI";
 import ActionBtn from "./ActionBtn";
@@ -33,13 +33,13 @@ function TaskCard(props, ref) {
     const {
         _id: taskId,
         done = false,
-        taskType = "pendingDelivery",
         taskTitle = "Entrega de Prêmio",
         content = "cliUserId:123;cliUserName:Ana Rodrigues;prizeDesc:tickets 1;challNum:5;deadline:14/07/20;",
-        madeBy = "Febro",
         deliveredBy,
         madeDate = "11/08/20 às 10:50",
         createdAt = new Date(),
+        // taskType = "pendingDelivery",
+        // madeBy = "Febro",
     } = data;
 
     const {
@@ -79,7 +79,7 @@ function TaskCard(props, ref) {
     });
     useAPI({
         method: "put",
-        url: changePrizeStatus(cliUserId, "received"),
+        url: changeBenefitStatus(cliUserId, "received"),
         params: prizeParams,
         trigger,
     });
@@ -173,14 +173,6 @@ function TaskCard(props, ref) {
                     {showTitle()}
                     <main className="desc text-left text-small text-white">
                         {showCardDesc()}
-                        {done && moreInfo && (
-                            <p className="text-white">
-                                <span className="font-weight-bold">
-                                    • CONFIRMADO POR:{" "}
-                                </span>{" "}
-                                {madeBy}
-                            </p>
-                        )}
                         {done && moreInfo && (
                             <p className="text-white">
                                 <span className="font-weight-bold">

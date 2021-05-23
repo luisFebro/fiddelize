@@ -5,7 +5,6 @@ import useData, { useBizData } from "init";
 import useAPIList, { readAllCliUsers, getTrigger } from "api/useAPIList";
 import useRun from "global-data/ui";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import extractStrData from "utils/string/extractStrData";
 import { Load } from "components/code-splitting/LoadableComp";
 import useElemShowOnScroll from "hooks/scroll/useElemShowOnScroll";
 import getFirstName from "utils/string/getFirstName";
@@ -13,12 +12,12 @@ import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import getFilterDate from "utils/dates/getFilterDate";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SearchField, { ROOT } from "components/search/SearchField";
 import RegisterPanelBtn from "./register-panel-btn/RegisterPanelBtn";
 import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import "./_RecordedClientsList.scss";
 import Totals from "./search/Totals";
-import ClientsSearch from "./search/ClientsSearch";
 
 const AsyncFreeAccountsLimitMsg = Load({
     loader: () =>
@@ -171,7 +170,7 @@ export default function AsyncRecordedClientsList() {
         countCliUsersCurrPoints,
         countCliUsers,
     } = useBizData();
-    const { name } = useData();
+    const { name, userId: adminId } = useData();
 
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
@@ -270,10 +269,12 @@ export default function AsyncRecordedClientsList() {
     const actions = list.map((user) => {
         const { clientUserData: cliUser } = user;
 
-        const gotTargetPrize = Boolean(currChall > 1);
+        const { totalGeneralPoints, currPoints } = cliUser;
 
-        const handleSecHeading = (user) => {
-            const getHighlightInfo = (filterName) => {
+        const gotTargetPrize = Boolean(totalGeneralPoints !== currPoints);
+
+        const handleSecHeading = () => {
+            const getHighlightInfo = () => {
                 const needHighlight = gotArrayThisItem(activeArray, filterName);
                 let infoTitle;
                 let infoData;
@@ -323,9 +324,7 @@ export default function AsyncRecordedClientsList() {
                 hightlightThisInfo,
                 infoTitle,
                 infoData,
-            } = getHighlightInfo(filterName);
-
-            const currChall = user.clientUserData.games.targetPrize.challN;
+            } = getHighlightInfo();
 
             return (
                 <div style={{ marginTop: 45 }}>
@@ -343,8 +342,9 @@ export default function AsyncRecordedClientsList() {
                         {gotTargetPrize && (
                             <Fragment>
                                 <br />
+                                {/* Here it gonna be the BadgesGame */}
                                 <span className="text-small font-weight-bold">
-                                    (Desafio Atual N.º {currChall})
+                                    (Desafio Atual N.º 0)
                                 </span>
                             </Fragment>
                         )}
@@ -405,7 +405,7 @@ export default function AsyncRecordedClientsList() {
                     )}
                 </span>
             ),
-            secondaryHeading: handleSecHeading(user),
+            secondaryHeading: handleSecHeading(),
             userData: user,
             needBadgeForTestMode: isTestMode,
             needCliPrizes,
@@ -451,6 +451,13 @@ export default function AsyncRecordedClientsList() {
 
     const [openSearch, setOpenSearch] = useState(false);
 
+    const autocompleteProps = {
+        placeholder: "Ei, procure um cliente",
+        noOptionsText: "Nenhum cliente encontrado",
+        disableOpenOnFocus: true,
+        offlineKey: "history_adminClients",
+    };
+
     return (
         <Fragment>
             {listTotal !== 0 || emptyType === "filter" ? (
@@ -474,7 +481,11 @@ export default function AsyncRecordedClientsList() {
                         </section>
                     ) : (
                         <section className="animated slideInLeft fast">
-                            <ClientsSearch handleSearch={handleSearch} />
+                            <SearchField
+                                callback={handleSearch}
+                                searchUrl={`${ROOT}/sms/read/contacts?userId=${adminId}&autocomplete=true&autocompleteLimit=7`}
+                                autocompleteProps={autocompleteProps}
+                            />
                         </section>
                     )}
                 </Fragment>

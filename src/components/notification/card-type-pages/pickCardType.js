@@ -1,11 +1,9 @@
 import LoadableVisible from "../../code-splitting/LoadableVisible";
 // CARD TYPES
-// import BirthdaysInWeek from "./types/BirthdaysInWeek";
-// import FiddelizeSystem from "./types/FiddelizeSystem";
-const AsyncChallenge = LoadableVisible({
+const AsyncCliUserConfirmedChall = LoadableVisible({
     loader: () =>
         import(
-            "./types/challenge-and-benefit/Challenge" /* webpackChunkName: "challenge-picked-notif-page-lazy" */
+            "./types/CliUserConfirmedChall" /* webpackChunkName: "cli-user-conf-challenge-picked-notif-page-lazy" */
         ),
 });
 const AsyncBirthdayGreeting = LoadableVisible({
@@ -67,7 +65,7 @@ export default function pickCardType(cardType, options = {}) {
     const typeList = {
         welcome: <AsyncWelcome {...defaultProps} bizLogo={bizLogo} />,
         challenge: (
-            <AsyncChallenge
+            <AsyncCliUserConfirmedChall
                 {...defaultProps}
                 bizLogo={bizLogo}
                 cardId={cardId}

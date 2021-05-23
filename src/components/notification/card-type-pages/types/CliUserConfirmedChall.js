@@ -1,0 +1,112 @@
+import { useState, Fragment } from "react";
+import {
+    ShowTitle,
+    ShowIllustration,
+    ShowBrief,
+    textStyle,
+} from "./DefaultRenderComps";
+import { addDays, formatDMY } from "utils/dates/dateFns";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import getVar, { removeVar } from "init/var";
+import extractStrData from "utils/string/extractStrData";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+
+export default function CliUserConfirmedChall({
+    role,
+    mainImg,
+    content,
+    userName,
+    bizLogo,
+    brief,
+}) {
+    const [loading, setLoading] = useState(false);
+
+    const {
+        currChall,
+        // confirmedChall
+        prizeDeadline = 30,
+        prizeDesc,
+        prizeConfirmationDate,
+    } = extractStrData(content);
+
+    const addedDaysToDate = prizeConfirmationDate
+        ? addDays(new Date(prizeConfirmationDate), Number(prizeDeadline) + 1)
+        : new Date();
+    const deadlineDate = formatDMY(addedDaysToDate);
+
+    const handleCTA = () => {
+        if (!currChall) return;
+
+        setLoading(true);
+
+        removeVersion({
+            key: "alreadyAlertChallenge",
+            value: currChall,
+        }).then(() => {
+            window.location.href =
+                role === "cliente-admin"
+                    ? "/mobile-app?client-admin=1"
+                    : "/mobile-app";
+
+            removeVar("pendingChall");
+            setLoading(false);
+        });
+    };
+
+    return (
+        <Fragment>
+            <ShowTitle text="Confirmação de Prêmio" />
+            <ShowIllustration role={role} mainImg={mainImg} bizLogo={bizLogo} />
+            <ShowBrief brief={brief} />
+            <section className={textStyle}>
+                <header className="font-weight-bold">
+                    {userName}, segue os detalhes:
+                </header>
+                <br />
+                <p>
+                    ✔ Prêmio do desafio nº {currChall}:
+                    <br />
+                    <strong> • {prizeDesc}</strong>
+                </p>
+                <p>
+                    ✔ Prazo para resgatar prêmio:
+                    <br />
+                    <strong>
+                        • {prizeDeadline} dias
+                        <br />
+                        <span> (até {deadlineDate})</span>
+                    </strong>
+                </p>
+                <section className="container-center my-5">
+                    <ButtonFab
+                        title={
+                            loading ? "Processando..." : "Começar novo desafio"
+                        }
+                        onClick={handleCTA}
+                        iconFontAwesome={
+                            <FontAwesomeIcon icon="minus-circle" />
+                        }
+                        backgroundColor="var(--themeSDark)"
+                        variant="extended"
+                        position="relative"
+                        size="large"
+                    />
+                </section>
+            </section>
+        </Fragment>
+    );
+}
+
+// HELPERS
+// handle the variable version to be removed - challenge_1 - always insert _1 to get the version.
+function removeVersion({ key, value }) {
+    if (!key || !value) return null;
+
+    return getVar(key).then((storedVersion) => {
+        const currVersion = Number(value);
+        if (currVersion >= Number(storedVersion)) {
+            removeVar(key);
+        }
+    });
+}
+// END HELPERS

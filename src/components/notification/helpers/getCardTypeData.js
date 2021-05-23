@@ -34,17 +34,10 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "challenge": {
-            const {
-                currChall: thisCurrChall,
-                prizeDesc,
-                clientFullName,
-                targetPoints,
-            } = extractStrData(content);
+            const { currChall: thisCurrChall, prizeDesc } = extractStrData(
+                content
+            );
 
-            if (subtype === "clientWonChall") {
-                title = "Desafio Concluído";
-                brief = `Cliente §${clientFullName}§ concluiu desafio N.° ${thisCurrChall} com meta de §${targetPoints} pontos§ e ganhou prêmio: §${prizeDesc}§.`;
-            }
             if (subtype === "confirmedChall") {
                 title = "Desafio Confirmado";
                 brief = `Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio (${prizeDesc}) disponível para resgate.`;
@@ -111,7 +104,7 @@ export default function getCardTypeData(cardType, options = {}) {
                 title = "Nova Pontuação";
                 brief = `Opa! ${getFirstName(
                     userName
-                )}, você recebeu §${tempPoints} pontos§ no seu novo cartão de compra virtual da ${bizName}.`;
+                )}, você recebeu saldo de §${tempPoints} PTS§ no seu novo cartão de compra virtual da ${bizName}.`;
                 circularImg = "/img/icons/notif/fidelity-card.svg";
             }
             break;
@@ -155,3 +148,12 @@ function handleWelcome({ role, userFirstName, bizName }) {
 
     return " ";
 }
+
+/* ARCHIVES
+
+if (subtype === "cliEentWonChall") {
+    title = "Desafio Concluído";
+    brief = `Cliente §${clientFullName}§ concluiu desafio N.° ${thisCurrChall} com meta de §${targetPoints} pontos§ e ganhou prêmio: §${prizeDesc}§.`;
+}
+
+ */

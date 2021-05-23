@@ -1,12 +1,14 @@
 import showToast from "components/toasts";
 import getAPI, { login, register, loadDataInit } from "api";
 import setInitData from "init/setInitData";
+import disconnect from "auth/disconnect";
 
 export default async function loadInit(uify) {
     const data = await getAPI({
         method: "post",
         url: loadDataInit(),
         fullCatch: true,
+        timeoutMsgOn: false,
     }).catch(async (err) => {
         if (!err) return;
         // const errorMsg = err.data && err.data.error;
@@ -19,7 +21,15 @@ export default async function loadInit(uify) {
             window.location.href = "/temporariamente-indisponivel-503";
         }
 
-        if (err.status === 401) setInitData(undefined, { uify }); // set init default values
+        if (err.status === 401) {
+            setInitData(undefined, { uify }); // set init default values
+
+            const areLoginPages =
+                window.location.href.indexOf("mobile-app") >= 0 ||
+                window.location.href.pathname === "/";
+
+            if (!areLoginPages) disconnect();
+        }
     });
 
     if (!data) return;

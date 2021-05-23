@@ -73,7 +73,6 @@ export const ShowActionBtn = ({
     titleCliUser = "Conhecer seu App",
     titleCliAdmin = "Abrir Painel de Controle",
     titleCliMember = "Conhecer App",
-    isConfirmedChall = false,
     children,
     callback,
 }) => {

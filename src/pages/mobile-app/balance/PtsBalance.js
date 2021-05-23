@@ -10,9 +10,7 @@ export default function PtsBalance({ showMoreComps, currPointsRef, txtColor }) {
                     ...
                 </p>
                 {showMoreComps ? (
-                    <span
-                        className={`animated fadeIn delay-1s ml-2 ${txtColor}`}
-                    >
+                    <span className={`animated fadeIn ml-2 ${txtColor}`}>
                         <img
                             className="pts-coin"
                             width={50}

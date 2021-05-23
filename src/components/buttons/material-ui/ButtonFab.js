@@ -152,9 +152,10 @@ export default function ButtonFab({
 
     const showMuIcon = (iconMu) => (
         <i
-            className={`${
-                variant === "extended" && iconToLeft ? "mr-2" : "ml-2"
-            } icon-shadow`}
+            className={`${handleIconMargin({
+                variant,
+                iconToLeft,
+            })} icon-shadow`}
         >
             {iconMu}
         </i>
@@ -216,3 +217,12 @@ export default function ButtonFab({
         </Fab>
     );
 }
+
+// HELPERS
+function handleIconMargin({ variant, iconToLeft }) {
+    if (variant === "extended" && iconToLeft) return "mr-2";
+    if (variant === "extended") return "ml-2";
+
+    return "";
+}
+// END HELPERS

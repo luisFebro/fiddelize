@@ -29,12 +29,10 @@ export default function QrCodeScannerBtn() {
         <section>
             <ButtonFab
                 size="large"
-                title="Escanear"
-                iconMu={<CropFreeIcon style={{ fontSize: 30 }} />}
+                iconMu={<CropFreeIcon style={{ fontSize: 35 }} />}
                 backgroundColor={`var(--themeSDark--${themeSColor})`}
                 onClick={handleFullOpen}
                 position="relative"
-                variant="extended"
             />
             <ModalFullContent
                 contentComp={<AsyncQrCodeScanner />}

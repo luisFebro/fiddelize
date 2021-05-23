@@ -12,9 +12,8 @@
 
 // export default function PrizeCard({ historyData, colorP, colorS }) {
 //     const currChallengeN = historyData.challengeN;
-//     const { isPrizeConfirmed } = historyData;
-//     const { isPrizeReceived } = historyData;
-//     const { isPrizeExpired } = historyData;
+//     const { isBenefitReceived } = historyData;
+//     const { isBenefitExpired } = historyData;
 
 //     const displayMainContent = () => (
 //         <section
@@ -61,7 +60,6 @@
 //                 </p>
 //                 <div className="confirmed-status text-small">
 //                     <p className="font-weight-bold">Confirmado:</p>
-//                     {isPrizeConfirmed ? (
 //                         <div className="icon animated rubberBand delay-2s repeat-2">
 //                             <FontAwesomeIcon
 //                                 icon="check-circle"
@@ -79,9 +77,9 @@
 //                 </div>
 //                 <div className="received-status text-small">
 //                     <p className="font-weight-bold">
-//                         {isPrizeExpired ? "Expirado" : "Recebido:"}
+//                         {isBenefitExpired ? "Expirado" : "Recebido:"}
 //                     </p>
-//                     {isPrizeReceived && !isPrizeExpired && (
+//                     {isBenefitReceived && !isBenefitExpired && (
 //                         <div className="icon animated rubberBand delay-2s repeat-2">
 //                             <FontAwesomeIcon
 //                                 icon="check-circle"
@@ -90,7 +88,7 @@
 //                         </div>
 //                     )}
 
-//                     {!isPrizeReceived && !isPrizeExpired && (
+//                     {!isBenefitReceived && !isBenefitExpired && (
 //                         <div className="icon">
 //                             <FontAwesomeIcon
 //                                 icon="times-circle"
@@ -99,7 +97,7 @@
 //                         </div>
 //                     )}
 
-//                     {isPrizeExpired && (
+//                     {isBenefitExpired && (
 //                         <div className="icon">
 //                             <FontAwesomeIcon
 //                                 icon="times-circle"

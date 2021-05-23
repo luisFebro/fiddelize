@@ -23,12 +23,17 @@ export default function ModalConfYesNo({
     setFullOpen,
     contentComp,
     actionFunc,
+    marginCTA,
 }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
 
-    const showActionBtns = (dispatch) => (
+    const showActionBtns = () => (
         <section>
-            <div className="mt-5 d-flex justify-content-center">
+            <div
+                className={`${
+                    marginCTA || "mt-5"
+                } d-flex justify-content-center`}
+            >
                 <ButtonMulti
                     title="NÃO"
                     onClick={() => setFullOpen(false)}
@@ -52,7 +57,12 @@ export default function ModalConfYesNo({
 
     const showTitle = () => (
         <DialogTitle id="form-dialog-title">
-            <p className="text-subtitle text-purple text-center font-weight-bold">
+            <p
+                className="m-0 text-subtitle text-purple text-center font-weight-bold"
+                style={{
+                    lineHeight: "30px",
+                }}
+            >
                 {title && parse(title)}
             </p>
         </DialogTitle>
@@ -60,9 +70,8 @@ export default function ModalConfYesNo({
 
     const showSubTitle = () => (
         <DialogContentText>
-            <div className="mx-3 text-normal text-center">
+            <div className="m-0 mx-3 text-normal text-center">
                 {subTitle && parse(subTitle)}
-                <br />
             </div>
         </DialogContentText>
     );

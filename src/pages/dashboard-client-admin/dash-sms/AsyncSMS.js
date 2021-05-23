@@ -15,7 +15,6 @@ import CreditsBalance from "./credits-balance/CreditsBalance";
 import RecipientOptions from "./recipient-options/RecipientOptions";
 import MessageField from "./message/MessageField";
 import SmsHistory from "./history/SmsHistory";
-import AutomaticSMS from "./automatic-sms/AutomaticSMS";
 
 const AsyncSMSSuggestions = Load({
     loader: () =>
@@ -134,8 +133,6 @@ export default function AsyncSMS() {
                     contactList={contactList}
                 />
             )}
-            <hr className="lazer-purple" />
-            <AutomaticSMS />
             <hr className="lazer-purple" />
             <SmsHistory handleUpdateSession={handleUpdateSession} />
         </Fragment>

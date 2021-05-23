@@ -96,7 +96,7 @@ export default function AddPointsContent({ closeModal }) {
     };
 
     const showCliIdentifierArea = () => (
-        <main className="animated fadeInUp delay-1s slow cli-identifier--root position-relative mt-5">
+        <main className="animated fadeInUp delay-1s slow cli-identifier--root position-relative">
             <h2 className="font-site text-em-2-5 font-weight-bold py-2">
                 Cliente:
             </h2>
@@ -106,7 +106,6 @@ export default function AddPointsContent({ closeModal }) {
             <section className="mt-3 container-center">
                 <div className="qr-container">
                     <QrCode
-                        size={190}
                         value={userId}
                         fgColor={themePColor}
                         imageSettings={imageSettings}
@@ -129,6 +128,7 @@ export default function AddPointsContent({ closeModal }) {
             <style jsx>
                 {`
                     .cli-identifier--root {
+                        margin-top: 40px;
                         padding: 15px;
                         background: var(--themePDark--${themeBackColor});
                         border-radius: 25px;

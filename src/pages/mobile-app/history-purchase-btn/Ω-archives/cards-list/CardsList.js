@@ -124,7 +124,6 @@
 //             const foundPendingChallenge = list.find(
 //                 (card) =>
 //                     card.cardType === "benefit" &&
-//                     card.isPrizeConfirmed === false
 //             );
 //             if (foundPendingChallenge) {
 //                 setVar({ pendingChall: true });

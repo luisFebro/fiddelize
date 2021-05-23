@@ -17,7 +17,7 @@ import { getUniqueId } from "api/useAPI";
 import SuccessOp from "./SuccessOp";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
 import usePro from "../../../../../hooks/pro/usePro";
-import getAPI, { encryptLinkScore } from "api";
+import getAPI, { encryptPointsLink } from "api";
 import useInvitationMsg from "./hooks/useInvitationMsg";
 import copyText from "../../../../../utils/document/copyText";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
@@ -90,7 +90,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const [linkId] = useData(["linkId"]);
 
     const { bizId, bizName, bizLinkName } = useBizData();
-    const { name: userName } = useData();
+    const { userId, name: userName } = useData();
 
     const smsBalance = useCheckBalance();
 
@@ -108,13 +108,14 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         (async () => {
             const scoreToken = await getAPI({
                 method: "post",
-                url: encryptLinkScore(),
+                url: encryptPointsLink(),
                 needAuth: true,
                 body: {
                     score: dbScore,
                     cliFirstName,
                     bizCode,
-                    userId: bizId,
+                    bizId,
+                    userId, // for auth
                 },
             });
             if (!scoreToken) return null;

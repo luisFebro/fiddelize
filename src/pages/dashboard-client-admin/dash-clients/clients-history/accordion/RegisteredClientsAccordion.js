@@ -6,14 +6,9 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PropTypes from "prop-types";
-import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import RadiusBtn from "components/buttons/RadiusBtn";
-import showToast from "components/toasts";
 import useRun from "global-data/ui";
-
-import "./RecordedClientsAccordion.scss";
+import PrizesBtn from "pages/mobile-app/content/bottom-menu-contents/purchase-history/prizes-gallery/PrizesBtn";
 import ToggleBtn from "./ToggleBtn";
-import PrizesBtn from "../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn";
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();
@@ -117,7 +112,7 @@ export default function RegisteredClientsAccordion({
                             style={styles.prizesBtn}
                         >
                             <PrizesBtn
-                                title="prêmios"
+                                title="benefícios"
                                 size="extra-small"
                                 targetId={panel._id}
                                 radiusBtn

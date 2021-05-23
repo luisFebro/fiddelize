@@ -12,27 +12,22 @@ export default async function disconnect(options = {}) {
         rememberAccess = true,
         history,
     } = options;
-
+    if (!needRedirect && !history) return null;
     if (msg) showToast("Finalizando sua sessão...", { dur: 15000 });
 
-    const role = await getVar("role", "user");
-    const isCliAdmin = role === "cliente-admin";
-
-    if (!role) return null;
     await removeStore("user");
     removeCollection("currUser");
 
     // post essential data set
+    const role = await getVar("role", "user");
+    const isCliAdmin = role === "cliente-admin";
     if (isCliAdmin) await setVars({ rememberAccess }, "user");
-    setItems("currUser", { role });
+    if (role) setItems("currUser", { role });
     // end
 
-    if (!needRedirect && !history) return null;
-
-    if (history) {
-        return isApp ? history.push("/mobile-app") : history.push("/");
-    }
-
+    if (history) return isApp ? history.push("/mobile-app") : history.push("/");
     const destiny = isApp ? "/mobile-app" : "/acesso/verificacao";
-    return (window.location.href = destiny);
+    window.location.href = destiny;
+
+    return null;
 }

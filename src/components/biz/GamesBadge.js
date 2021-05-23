@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CasinoIcon from "@material-ui/icons/Casino";
 import PollIcon from "@material-ui/icons/Poll";
 
-const gameIconsStore = {
+export const gameIconsStore = {
     targetPrize: <FontAwesomeIcon icon="gift" />,
     discountBack: <LoyaltyIcon />,
     raffleTicket: <CasinoIcon />,
@@ -48,17 +48,15 @@ export default function GamesBadge({ userGame = userGamesTest }) {
         <section className="games-badge-inside--root container-center">
             <section className="badge d-table shadow-elevation-white text-white text-shadow">
                 <div className="d-flex position-relative">
-                    {gamesList.map((g) => {
-                        return (
-                            <div
-                                key={g.gameName}
-                                className="core mx-2 badge container-center text-normal font-weight-bold"
-                            >
-                                {g.icon}
-                                {gamesCount === 1 && " Desafio "}n.º {g.challN}
-                            </div>
-                        );
-                    })}
+                    {gamesList.map((g) => (
+                        <div
+                            key={g.gameName}
+                            className="core mx-2 badge container-center text-normal font-weight-bold"
+                        >
+                            {g.icon}
+                            {gamesCount === 1 && " Desafio "}n.º {g.challN}
+                        </div>
+                    ))}
                 </div>
             </section>
             <style jsx>

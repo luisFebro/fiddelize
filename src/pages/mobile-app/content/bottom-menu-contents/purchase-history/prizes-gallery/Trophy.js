@@ -10,15 +10,14 @@ const trophyTypes = {
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function Trophy({ data }) {
-    let {
+    const {
         type = "custom",
         challN = 1,
-        challIcon = "heart",
-        prizeDesc = "Um par de ingressos",
-        isConfirmed = false,
         isDelivered = false,
         isExpired = false,
     } = data;
+
+    let { challIcon = "heart", prizeDesc = "Um par de ingressos" } = data;
 
     const isTypeSecret = type === "secret";
     const isTypeCustom = type === "custom";
@@ -46,15 +45,6 @@ export default function Trophy({ data }) {
                 isTypeCustom ? undefined : "d-none"
             } prize-status-icons`}
         >
-            <section className="confirmed">
-                <div className="status-icon">{showIconStatus(isConfirmed)}</div>
-                <div className={`icon ${isConfirmed ? "ok" : "pending"}`}>
-                    <FontAwesomeIcon
-                        icon="thumbs-up"
-                        className={`${isConfirmed ? "shadow" : ""}`}
-                    />
-                </div>
-            </section>
             <section className="delivered">
                 <div className="status-icon">
                     {showIconStatus(isDelivered, true)}

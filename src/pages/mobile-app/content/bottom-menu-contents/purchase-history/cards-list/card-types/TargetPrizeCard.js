@@ -10,9 +10,8 @@ export default function TargetPrizeCard({ historyData, colorP }) {
         value,
         desc,
         challengeN,
-        isPrizeConfirmed,
-        isPrizeExpired,
-        isPrizeReceived,
+        isBenefitExpired,
+        isBenefitReceived,
     } = historyData;
 
     const showDiscountedPoints = () => (
@@ -57,29 +56,11 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                 >
                     STATUS
                 </p>
-                <div className="confirmed-status text-small">
-                    <p className="font-weight-bold">Confirmado:</p>
-                    {isPrizeConfirmed ? (
-                        <div className="icon animated rubberBand delay-2s repeat-2">
-                            <FontAwesomeIcon
-                                icon="check-circle"
-                                style={{ color: "green", fontSize: "20px" }}
-                            />
-                        </div>
-                    ) : (
-                        <div className="icon">
-                            <FontAwesomeIcon
-                                icon="times-circle"
-                                style={{ color: "grey", fontSize: "20px" }}
-                            />
-                        </div>
-                    )}
-                </div>
                 <div className="received-status text-small">
                     <p className="font-weight-bold">
-                        {isPrizeExpired ? "Expirado" : "Recebido:"}
+                        {isBenefitExpired ? "Expirado" : "Recebido:"}
                     </p>
-                    {isPrizeReceived && !isPrizeExpired && (
+                    {isBenefitReceived && !isBenefitExpired && (
                         <div className="icon animated rubberBand delay-2s repeat-2">
                             <FontAwesomeIcon
                                 icon="check-circle"
@@ -88,7 +69,7 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                         </div>
                     )}
 
-                    {!isPrizeReceived && !isPrizeExpired && (
+                    {!isBenefitReceived && !isBenefitExpired && (
                         <div className="icon">
                             <FontAwesomeIcon
                                 icon="times-circle"
@@ -97,7 +78,7 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                         </div>
                     )}
 
-                    {isPrizeExpired && (
+                    {isBenefitExpired && (
                         <div className="icon">
                             <FontAwesomeIcon
                                 icon="times-circle"
@@ -151,7 +132,7 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                 Você ganhou:{" "}
                 <span className="d-inline-block text-normal">{desc}</span>
             </p>
-            {isPrizeConfirmed && showDiscountedPoints()}
+            {showDiscountedPoints()}
         </section>
     );
 

@@ -1,12 +1,13 @@
 import { Fragment } from "react";
 import Card from "@material-ui/core/Card";
-import { formatDMY, fromNow } from "utils/dates/dateFns";
+import { formatDMY } from "utils/dates/dateFns";
 import convertToReal from "utils/numbers/convertToReal";
 // points are removed for these 4 main reasons:
 // 1. incorrect amount of points
 // 2. points sent more than once
 // 3. points sent to a wrong customer.
-// 4. custom short justification by cli-admin
+// 4. reinbursement
+// 5. custom short justification by cli-admin
 
 export default function InOutCard({ historyData }) {
     const { cardType, desc, value, createdAt = new Date() } = historyData;

@@ -31,6 +31,22 @@ const AsyncPurchaseHistory = LoadableVisible({
         ),
 });
 
+const AsyncReceivedBenefits = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./bottom-menu-contents/received-benefits/ReceivedBenefits" /* webpackChunkName: "received-benefits-content-lazy" */
+        ),
+});
+
+const AsyncBizReview = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./bottom-menu-contents/biz-review/BizReview" /* webpackChunkName: "biz-review-content-lazy" */
+        ),
+});
+
 function GroupedAppBar({ history }) {
     const { firstName, userId, totalGeneralPoints } = useData();
 
@@ -67,7 +83,7 @@ function GroupedAppBar({ history }) {
                     style={{ fontSize: 19, marginBottom: "12px" }}
                 />
             ),
-            tabContentPanel: undefined,
+            tabContentPanel: <AsyncReceivedBenefits />,
             scrollView: true,
         },
         {
@@ -85,7 +101,7 @@ function GroupedAppBar({ history }) {
         {
             tabLabel: "Avalie",
             tabIcon: <StarsIcon />,
-            tabContentPanel: undefined,
+            tabContentPanel: <AsyncBizReview />,
             scrollView: true,
         },
         {

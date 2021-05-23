@@ -1,4 +1,3 @@
-import React from "react";
 import QrCode from "components/QrCode";
 
 export default function QrCodeReceipt({
@@ -16,7 +15,7 @@ export default function QrCodeReceipt({
                 <br />
                 da {bizName}
             </h1>
-            <section className="container-center">
+            <section className="container-center-col">
                 <p className="mt-3 text-normal text-center">
                     Escaneiar Código:
                 </p>
@@ -41,9 +40,10 @@ export default function QrCodeReceipt({
                 </style>
             </section>
             <p className="mt-3 text-small mx-3">
-                <strong>Importante:</strong> o código deve ser lido e validado
-                apenas por um membro da equipe da {bizName}
+                <strong>Importante:</strong> o código QR deve ser lido e
+                validado apenas por um membro da equipe da {bizName}
             </p>
+            <div style={{ marginBottom: 150 }} />
         </section>
     );
 }

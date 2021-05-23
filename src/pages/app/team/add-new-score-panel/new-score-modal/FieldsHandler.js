@@ -1,23 +1,21 @@
 import { Fragment, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import getAPI, { setTempPointsAndMemberData } from "api";
+import getAPI, { getUserIdByName } from "api";
 import useData, { useBizData } from "init";
-import SearchCustomer from "./SearchCustomer";
-import ScoreCustomer from "./ScoreCustomer";
+import SearchField, { ROOT } from "components/search/SearchField";
+import AddTempPoints from "./AddTempPoints";
 import SuccessMsg from "./SuccessMsg";
 
 const setCustomerId = async (clientName, bizId, memberId) => {
-    const body = {
-        needClientIdOnly: true,
+    const params = {
         userId: memberId, // for auth token only
         bizId,
         clientName,
     };
 
     return await getAPI({
-        method: "post",
-        url: setTempPointsAndMemberData(),
-        body,
+        url: getUserIdByName(),
+        params,
     });
 };
 
@@ -36,19 +34,11 @@ function FieldsHandler({
     });
     const { field, customerName, customerId } = curr;
 
-    const {
-        bizId,
-        themeBackColor: backColor,
-        themePColor: colorP,
-        needDark,
-        txtColor,
-    } = useBizData();
+    const { bizId, themePColor: colorP, needDark, txtColor } = useBizData();
 
-    const [memberId] = useData(["userId"]);
+    const { userId: memberId } = useData();
 
     useEffect(() => {
-        if (memberId === "...") return;
-
         if (customerName && bizId) {
             (async () => {
                 const thisCustomerId = await setCustomerId(
@@ -63,7 +53,7 @@ function FieldsHandler({
 
     if (clientScoreOnly) {
         return (
-            <ScoreCustomer
+            <AddTempPoints
                 clientScoreOnly
                 closeModal={closeModal}
                 handleCustomerScore={handleCustomerScore}
@@ -77,17 +67,45 @@ function FieldsHandler({
         );
     }
 
+    const handleSelectedVal = (newVal) => {
+        setCurr((prev) => ({
+            ...prev,
+            field: "score",
+            customerName: newVal,
+        }));
+    };
+
+    const autocompleteProps = {
+        autoFocus: true,
+        placeholder: "",
+        noOptionsText: "Cliente não cadastrado",
+    };
+
     return (
         <Fragment>
             {field === "name" && (
-                <SearchCustomer
-                    setCurr={setCurr}
-                    textColor={txtColor}
-                    bizId={bizId}
-                />
+                <section>
+                    <h1
+                        className={`animated fadeInUp delay-1s text-center ${txtColor} text-subtitle font-weight-bold`}
+                        style={{
+                            marginTop: "1rem",
+                            marginBottom: "4rem",
+                            lineHeight: "30px",
+                        }}
+                    >
+                        Qual é o nome
+                        <br />
+                        do cliente?
+                    </h1>
+                    <SearchField
+                        callback={handleSelectedVal}
+                        searchUrl={`${ROOT}/sms/read/contacts?userId=${bizId}&autocomplete=true&autocompleteLimit=7`}
+                        autocompleteProps={autocompleteProps}
+                    />
+                </section>
             )}
             {field === "score" && (
-                <ScoreCustomer
+                <AddTempPoints
                     setCurr={setCurr}
                     customerName={customerName}
                     textColor={txtColor}

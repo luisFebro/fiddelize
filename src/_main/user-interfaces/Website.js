@@ -57,10 +57,10 @@ import {
 } from "./CommonImports";
 // END PAGES
 
-const AsyncQrCode = Load({
+const AsyncQrCodeScanner = Load({
     loader: () =>
         import(
-            "pages/others/QrCode" /* webpackChunkName: "free-qr-code-lazy" */
+            "pages/others/QrCodeScanner" /* webpackChunkName: "free-qr-code-lazy" */
         ),
 });
 
@@ -229,7 +229,7 @@ function Website({ location }) {
                     exact
                     component={AsyncPlayground}
                 />
-                <Route path="/codigo/qr" exact component={AsyncQrCode} />
+                <Route path="/codigo/qr" exact component={AsyncQrCodeScanner} />
                 <Route component={Default} />
             </Switch>
             {dontNeedLayout && <Footer />}

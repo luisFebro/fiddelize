@@ -2,6 +2,8 @@ import { ROOT } from "api/root";
 /*
  URLs ONLY
 */
+// GENERAL DATA
+export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
 
 // AUTH AND PASSWORD
 export const register = () => `${ROOT}/auth/register`; // POST
@@ -26,30 +28,31 @@ export const readAllCliUsers = (cliAdminId) =>
 export const readHighestScores = (cliAdminId) =>
     `${ROOT}/user/list/highest-scores?bizId=${cliAdminId}`;
 
-// purchase's history
+// buy's history
 export const readBuyHistory = (userId) =>
     `${ROOT}/user/list/buy-history/${userId}`; // GET
 export const addBuyHistory = (userId) => `${ROOT}/user/buy-history/${userId}`; // PUT
 export const readPrizes = (userId) =>
     `${ROOT}/user/list/purchase-history/prizes/${userId}`;
-export const changePrizeStatus = (cliUserId, statusType) =>
+export const changeBenefitStatus = (cliUserId, statusType) =>
     `${ROOT}/user/purchase-history/update-status/${cliUserId}?statusType=${statusType}`; // PUT
 
-// temp score
-export const readTempPointsList = (userId) =>
-    `${ROOT}/user/cli-user/temp-score/list?userId=${userId}`;
-export const setLastPointsAsDone = (userId) =>
-    `${ROOT}/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
-export const encryptLinkScore = () =>
-    `${ROOT}/user/cli-user/temp-score/encrypt`; // POST
+// points and benefits
+export const changeBenefit = () => `${ROOT}/user/cli-user/change-benefit`; // PUT
+export const addTempPoints = () => `${ROOT}/user/cli-user/temp-points/add`;
+export const removeTempPoints = () =>
+    `${ROOT}/user/cli-user/temp-points/remove`;
+export const readLastTempPoints = (userId) =>
+    `${ROOT}/user/cli-user/last-temp-points?userId=${userId}`;
+export const encryptPointsLink = () =>
+    `${ROOT}/user/cli-user/temp-points/encrypt`; // POST
 export const isLinkAllowed = () =>
-    `${ROOT}/user/cli-user/temp-score/allowed-link`; // GET
+    `${ROOT}/user/cli-user/temp-points/allowed-link`; // GET
 
 // CLI-ADMIN
 // Automatic Tasks
 export const readTasks = (userId, doneStatus) =>
     `${ROOT}/task/read/${userId}?doneStatus=${doneStatus}&thisRole=cliente-admin`; // GET
-export const addTask = (userId) => `${ROOT}/task/add?userId=${userId}`; // PUT
 export const toggleDoneUrl = () => `${ROOT}/task/toggle`; // PUT
 export const removeTaskAndExpireCliPrize = () =>
     `${ROOT}/task/remove-and-expire`;
@@ -102,8 +105,6 @@ export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;
 export const readOneMemberTasksList = () =>
     `${ROOT}/user/team/member-history/list`;
-export const setTempPointsAndMemberData = () =>
-    `${ROOT}/user/team/temp-user-score-member`;
 export const getMembersPodium = (bizId) =>
     `${ROOT}/user/team/members/podium?bizId=${bizId}`;
 
@@ -166,7 +167,6 @@ export const markAllAsSeen = (userId) =>
     `${ROOT}/notification/mark-all-seen/${userId}`; // PUT
 export const readNotifications = (userId) =>
     `${ROOT}/notification/read/${userId}`; // GET
-export const setNotifAuthor = () => `${ROOT}/notification/set-notif-author`; // POST
 
 // ACCOUNT, DOWNLOAD AND URLS
 export const createInstantApp = () => `${ROOT}/user/instant-app`; // POST

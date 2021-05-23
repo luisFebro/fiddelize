@@ -8,18 +8,14 @@ import "../ellipse.scss";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
 import getVar, { removeVar } from "init/var";
-import useSendSMS from "hooks/sms/useSendSMS";
-import useDidDateExpire from "hooks/dates/date-expires/useDidDateExpire";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
 import useData from "init";
 import useGlobal from "./useGlobal";
-import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import GroupedAppBar from "./GroupedAppBar";
 import PtsBalance from "../balance/PtsBalance";
 
-const now = new Date();
 const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
@@ -29,28 +25,14 @@ export default function ClientUserAppContent({
     needAppForPreview,
     runName,
     colorP = "default",
-    businessId,
+    // businessId,
     targetPointsTest,
     totalNotifications,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currPointsRef = useRef(null);
 
-    const [
-        userId,
-        role,
-        fullName,
-        lastPrizeId,
-        lastPrizeDate,
-        loadingData,
-    ] = useData([
-        "userId",
-        "role",
-        "firstName",
-        "name",
-        "lastPrizeId",
-        "lastPrizeDate",
-    ]);
+    const [role, lastPrizeDate] = useData(["role", "lastPrizeDate"]);
 
     const { firstName, userGame, adminGame } = useData();
 
@@ -66,13 +48,7 @@ export default function ClientUserAppContent({
         targetPoints = Number(targetPointsTest);
     }
 
-    const {
-        themeBackColor,
-        bizWhatsapp,
-        bizName,
-        bizLogo,
-        txtColor,
-    } = useBizData();
+    const { themeBackColor, bizName, txtColor } = useBizData();
 
     const userBeatChallenge = currPoints >= targetPoints;
 
@@ -81,41 +57,11 @@ export default function ClientUserAppContent({
 
     const isAuth = useAuth();
 
-    useNotifyCliWonChall(businessId, {
-        businessId,
-        prizeDesc,
-        fullName,
-        targetPoints,
-        currChall,
-        currPoints,
-        bizLogo,
-        lastPrizeId,
-        senderId: userId,
-        // trigger
-        userIdLoading: loadingData,
-        userBeatChallenge,
-        playBeep,
-    });
-
-    const needMissingMsg = useDidDateExpire({
-        dateToExpire: lastPrizeDate,
-        userId,
-        trigger: !needAppForPreview && !loadingData && lastPrizeDate,
-    });
-
-    // this can be soon depracated with a push notification.
-    const autoSMSMissingPurchase = getAutoSMSObj({
-        needMissingMsg,
-        businessId,
-        firstName,
-        bizWhatsapp,
-    });
-    useSendSMS(autoSMSMissingPurchase);
-
     const confettiOptions = React.useCallback(
         () => ({ trigger: userBeatChallenge, showMoreComps }),
         [userBeatChallenge, showMoreComps]
     );
+
     useAnimateConfetti(confettiOptions());
     const triggerNumberAnima =
         (isAuth && role === "cliente") ||
@@ -227,24 +173,6 @@ export default function ClientUserAppContent({
 function playBeep() {
     const elem = document.querySelector("#appBtn");
     elem.play();
-}
-
-function getAutoSMSObj(data) {
-    const { needMissingMsg } = data;
-
-    return {
-        trigger: needMissingMsg,
-        serviceType: "missingPurchase",
-        userId: data.businessId,
-        smsId: now.getMonth(),
-        customMsg: "",
-        contactList: [
-            {
-                name: data.firstName,
-                phone: data.bizWhatsapp,
-            },
-        ],
-    };
 }
 // END HELPERS
 
