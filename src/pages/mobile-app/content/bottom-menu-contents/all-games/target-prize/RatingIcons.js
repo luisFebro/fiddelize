@@ -10,15 +10,15 @@ import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import usePlayAudio from "hooks/media/usePlayAudio";
 
 export default function RatingIcons() {
-    const { currPoints } = useData();
+    const { currPoints, adminGame } = useData();
+    const { targetPoints, milestoneIcon } = adminGame.targetPrize;
+    const { runName } = useContext();
 
     const {
         needDark,
         themeBackColor: colorBack,
         themeSColor: colorS,
     } = useBizData();
-
-    const { targetPoints, milestoneIcon, runName } = useContext();
 
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import getItems, { setItems, removeItems } from "init/lStorage";
+import { removeVar } from "init/var";
 import usePlayAudio from "hooks/media/usePlayAudio";
 
 const localCollection = "onceChecked";
@@ -23,7 +24,7 @@ export default function useAnimateConfetti(options = {}) {
 
     const [runSound, setRunSound] = useState(false);
 
-    usePlayAudio(null, "audio-client-won-prize", {
+    usePlayAudio(null, "audio-client-won-benefit", {
         autoplay: true,
         trigger: trigger && runSound,
     });
@@ -53,6 +54,7 @@ export default function useAnimateConfetti(options = {}) {
             removeItems(localCollection, ["confettiPlay"]);
         }
 
+        removeVar("didBeatGame");
         return () => {
             cancel = true;
             loadConfetti("stop");

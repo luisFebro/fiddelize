@@ -40,6 +40,7 @@ export default function ChooseDialog({ benefitsList, closeModal }) {
                                 needTxtNoWrap
                                 position="relative"
                                 gameName={g.game}
+                                closeModal={closeModal}
                             />
                         </div>
                     </div>

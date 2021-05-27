@@ -74,7 +74,7 @@ function ASyncRegisterCliUser({
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
-        register: {},
+        staff: {},
         tempPoints: "", // for member tasks newClient Record
         memberRole: "", // for member tasks newClient Record
         linkCode: "",
@@ -92,7 +92,13 @@ function ASyncRegisterCliUser({
     const cpfValue = autoCpfMaskBr(cpf);
     const phoneValue = autoPhoneMask(phone);
 
-    const { themePColor, themeSColor, bizLogo, bizName } = useBizData();
+    const {
+        themePColor,
+        txtColor,
+        themeSColor,
+        bizLogo,
+        bizName,
+    } = useBizData();
 
     const [
         staffId,
@@ -100,6 +106,7 @@ function ASyncRegisterCliUser({
         memberRole,
         memberRoleAlt,
         memberJob,
+        memberName,
         userScore,
         lastRegisterBizId,
         linkCode,
@@ -109,6 +116,7 @@ function ASyncRegisterCliUser({
         "memberRole",
         "role",
         "memberJob",
+        "memberName",
         "userScore",
         "lastRegisterBizId",
         "linkCode",
@@ -123,9 +131,11 @@ function ASyncRegisterCliUser({
                     ...prev,
                     bizImg: bizLogo,
                     bizName,
-                    register: {
+                    staff: {
                         id: memberId || staffId,
                         job: memberJob || "admin",
+                        role: memberRole || memberRoleAlt,
+                        name: memberName,
                     },
                     tempPoints: userScore,
                     memberRole: memberRole || memberRoleAlt, // if not found memberRole, it means it is a complete register before sending link invitation.

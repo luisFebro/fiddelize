@@ -12,7 +12,7 @@ import { Load } from "../../components/code-splitting/LoadableComp";
 const AsyncNewScoreModal = Load({
     loader: () =>
         import(
-            "../app/team/add-new-score-panel/new-score-modal/AsyncNewScoreModal" /* webpackChunkName: "add-scores-full-page-lazy" */
+            "../app/team/add-points/content/FieldsHandler" /* webpackChunkName: "add-points-full-page-lazy" */
         ),
 });
 

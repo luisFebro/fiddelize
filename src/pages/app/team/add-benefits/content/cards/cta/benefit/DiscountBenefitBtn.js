@@ -17,12 +17,15 @@ export default function DiscountBenefitBtn(props) {
         title = "aplicar",
         needTxtNoWrap = false,
         position = "absolute",
+        closeModal,
     } = props;
     const [fullOpen, setFullOpen] = useState(false);
     const { themeSColor } = useBizData();
 
     const handleFullOpen = () => {
         setFullOpen(true);
+        // close the current modal after open another one
+        closeModal();
     };
 
     const handleFullClose = () => {

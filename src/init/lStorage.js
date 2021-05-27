@@ -45,7 +45,8 @@ export function setItems(collectionName, dataObj) {
 
     const result = { ...priorData, ...dataObj };
 
-    return localStorage.setItem(collectionName, JSON.stringify(result));
+    localStorage.setItem(collectionName, JSON.stringify(result));
+    return "done";
 }
 
 export function removeItems(collectionName, namesArray) {
@@ -63,8 +64,8 @@ export function removeItems(collectionName, namesArray) {
 
     namesArray.forEach((key) => {
         if (!currData[key])
-            throw new Error(
-                `the key ${key.toUpperCase()} is not available in the ${collectionName.toUpperCase()}'s collection`
+            return console.log(
+                `WARNING: the key ${key.toUpperCase()} is not available in the ${collectionName.toUpperCase()}'s collection`
             );
         delete currData[key];
     });

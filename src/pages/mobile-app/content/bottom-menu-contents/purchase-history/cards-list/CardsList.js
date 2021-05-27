@@ -12,7 +12,6 @@ import PickOtherCards from "./PickOtherCards";
 export default function CardsList({
     cliUserId,
     cliUserFirstName,
-    isFromDashboard,
     totalGeneralPoints,
 }) {
     const { firstName } = useData();
@@ -27,7 +26,6 @@ export default function CardsList({
 
     const params = {
         targetPoints,
-        isFromDashboard,
     };
 
     const {

@@ -4,71 +4,24 @@ import Title from "components/Title";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
-import { useUpdateUser } from "api/frequent";
-import { treatBoolStatus } from "api/useAPI";
 import PremiumButton from "components/buttons/premium/PremiumButton";
 import getId from "utils/getId";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 import List from "./List.js";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
     const [needAdd, setNeedAdd] = useState("");
     const [hideAddBtn, setHideAddBtn] = useState(false);
-    const [visibleToggleBtn, setVisibleToggleBtn] = useState(undefined);
 
     const { bizId } = useBizData();
-    const { adminGame } = useData();
-    const { arePrizesVisible } = adminGame.targetPrize;
-
-    // LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths
-    const body = {
-        "clientAdminData.games.targetPrize.arePrizesVisible": treatBoolStatus(
-            visibleToggleBtn
-        ),
-    };
-    useUpdateUser(bizId, "cliente-admin", body);
-
-    const handleVisibility = (res) => {
-        setVisibleToggleBtn(res);
-    };
 
     const styles = {
         iconPos: {
             top: 0,
             right: -50,
         },
-        visibleInstruBtn: {
-            top: -15,
-            right: -15,
-        },
     };
-
-    const showPrizeAndGoalsVisibility = () => (
-        <section className="container-center-col">
-            <section className="position-relative">
-                <header className="mb-3 text-purple font-weight-bold text-subtitle text-center">
-                    Revelar prêmios e metas para clientes?
-                </header>
-                <div
-                    className="position-absolute"
-                    style={styles.visibleInstruBtn}
-                >
-                    <InstructionBtn
-                        mode="modal"
-                        article="GiftVisibility_art1"
-                    />
-                </div>
-            </section>
-            <SwitchBtn
-                titleLeft="Escondido<br />Durante<br />Desafios"
-                titleRight="Sempre<br />Revelado"
-                callback={handleVisibility}
-                defaultStatus={arePrizesVisible}
-            />
-            <hr className="lazer-purple" />
-        </section>
-    );
 
     const showBtnAction = () =>
         !hideAddBtn && (
@@ -134,8 +87,43 @@ export default function HiddenGoalsAndRewards() {
 
     return (
         <div className="hidden-content--root text-normal">
-            {showPrizeAndGoalsVisibility()}
             {showChallModeSection()}
         </div>
     );
 }
+
+/* ARCHIVES
+// LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths
+    const body = {
+        "clientAdminData.games.targetPrize.arePrizgfdgfdesVisible": treatBoolStatus(
+            visibleToggleBtn
+        ),
+    };
+    useUpdateUser(bizId, "cliente-admin", body);
+
+const showPrizeAndGoalsVisibility = () => (
+    <section className="container-center-col">
+        <section className="position-relative">
+            <header className="mb-3 text-purple font-weight-bold text-subtitle text-center">
+                Revelar prêmios e metas para clientes?
+            </header>
+            <div
+                className="position-absolute"
+                style={styles.visibleInstruBtn}
+            >
+                <InstructionBtn
+                    mode="modal"
+                    article="GiftVisibility_art1"
+                />
+            </div>
+        </section>
+        <SwitchBtn
+            titleLeft="Escondido<br />Durante<br />Desafios"
+            titleRight="Sempre<br />Revelado"
+            callback={handleVisibility}
+            defaultStatus={arePrizesdfgfdVisible}
+        />
+        <hr className="lazer-purple" />
+    </section>
+);
+ */

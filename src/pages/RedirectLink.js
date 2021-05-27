@@ -10,7 +10,7 @@ export default function RedirectLink({ match }) {
     useEffect(() => {
         getAPI({
             url: getUrlLink(code),
-            fullCatch: true,
+            timeout: 10000000,
         })
             .then((link) => {
                 (async () => {
@@ -19,16 +19,16 @@ export default function RedirectLink({ match }) {
                 })();
             })
             .catch((err) => {
-                if (err.status === 500)
+                if (!err)
                     return setError("Problema de Conexão. Tente novamente...");
-                if (err.status !== 200) return setError("Link Inválido!");
+                return setError(err);
             });
     }, [code]);
 
     return (
         <div
             style={{ backgroundColor: "var(--mainWhite)", minHeight: "350px" }}
-            className="mt-2"
+            className="mt-3 pt-1"
         >
             <div className="text-title text-purple m-3">
                 {error ? (

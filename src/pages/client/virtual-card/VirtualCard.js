@@ -6,11 +6,12 @@ import useData, { useBizData } from "init";
 import useAPI, { readLastTempPoints } from "api/useAPI";
 import ReturnBtn from "components/buttons/ReturnBtn";
 import useBackColor from "hooks/useBackColor";
-import { setVar } from "init/var";
+import getVar, { setVars, setVar } from "init/var";
 import usePlayAudio, { prerenderAudio } from "hooks/media/usePlayAudio";
 import getRandomArray from "utils/arrays/getRandomArray";
 import Img from "components/Img";
 import getDayGreetingBr from "utils/getDayGreetingBr";
+import showToast from "components/toasts";
 
 export default withRouter(VirtualCard);
 
@@ -142,30 +143,43 @@ function VirtualCard({ history }) {
 
     useEffect(() => {
         if (cardsData === false) {
-            setData({
-                ...data,
-                loading: false,
-                showNoCardMsg: true,
-            });
-        }
-
-        if (cardsData && cardsData.tempPoints) {
             setData((prev) => ({
                 ...prev,
                 loading: false,
-                score: cardsData.tempPoints,
-                createdAt: new Date(cardsData.createdAt),
+                showNoCardMsg: true,
             }));
+        }
+
+        if (cardsData && cardsData.tempPoints) {
+            Promise.all([
+                setVars({
+                    paidValue: cardsData.tempPoints,
+                    staff: cardsData.staff,
+                }),
+                setData((prev) => ({
+                    ...prev,
+                    loading: false,
+                    score: cardsData.tempPoints,
+                    createdAt: new Date(cardsData.createdAt),
+                })),
+            ]);
         }
     }, [cardsData]);
 
     const handlePathAndData = () => {
-        setVar({ paidValue: score }).then((res) => {
-            if (isCliAdmin) {
-                history.push("/cliente/pontos-fidelidade?client-admin=1");
-            } else {
-                history.push("/cliente/pontos-fidelidade");
-            }
+        // check card data if set before redirect
+        getVar("paidValue").then((val) => {
+            if (!val)
+                return showToast(
+                    "Não foi possível processar dados do cartão. Tente entrar novamente",
+                    { type: "error", dur: 10000 }
+                );
+            if (isCliAdmin)
+                return history.push(
+                    "/cliente/pontos-fidelidade?client-admin=1"
+                );
+
+            return history.push("/cliente/pontos-fidelidade");
         });
     };
 

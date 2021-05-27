@@ -24,7 +24,7 @@ import {
     AsyncTeamPassword,
     AsyncTeamApp,
     AsyncVirtualCard,
-    AsyncScorePanel,
+    AsyncPointsPanel,
     AsyncPix,
     AsyncAppsPanel,
     // biz team comps
@@ -91,7 +91,7 @@ function Mobile({ location }) {
                 <Route
                     path="/cliente/pontos-fidelidade"
                     exact
-                    component={AsyncScorePanel}
+                    component={AsyncPointsPanel}
                 />
                 <Route path="/regulamento/" exact component={RegulationPage} />
                 <Route

@@ -20,11 +20,6 @@ function ClientAppPreview({ location }) {
     const targetPoints = getQueryByName("targetPoints", location.search);
     const currPoints = getQueryByName("currPoints", location.search);
 
-    const useThisData = () => ({
-        currPoints: Number(currPoints) || 100,
-        lastPoints: 20,
-    });
-
     const { newImg: formattedImg, isSquared } = removeImgFormat(logoUrlPreview);
     const logoSrc = logoUrlPreview
         ? formattedImg
@@ -60,11 +55,9 @@ function ClientAppPreview({ location }) {
         <Fragment>
             {showLogo()}
             <ClientUserAppContent
-                useThisData={useThisData}
                 useBizData={useBizData}
                 needAppForPreview
                 runName={runName}
-                targetPointsTest={targetPoints}
                 colorP={colorP}
                 colorS={colorS}
                 colorBack={colorBack}

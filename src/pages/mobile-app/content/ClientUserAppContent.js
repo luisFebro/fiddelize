@@ -7,7 +7,7 @@ import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import "../ellipse.scss";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
-import getVar, { removeVar } from "init/var";
+import { useVar } from "init/var";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
 import useData from "init";
@@ -19,49 +19,26 @@ import PtsBalance from "../balance/PtsBalance";
 const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
-    useThisData,
     useBizData,
     needAppForCliAdmin,
     needAppForPreview,
     runName,
     colorP = "default",
-    // businessId,
-    targetPointsTest,
     totalNotifications,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const currPointsRef = useRef(null);
-
-    const [role, lastPrizeDate] = useData(["role", "lastPrizeDate"]);
-
-    const { firstName, userGame, adminGame } = useData();
-
-    const { currPoints = 0 } = useThisData();
-    const currChall = userGame.targetPrize.challN;
-    const {
-        milestoneIcon,
-        prizeDesc,
-        arePrizesVisible,
-    } = adminGame.targetPrize;
-    let { targetPoints } = adminGame.targetPrize;
-    if (targetPointsTest) {
-        targetPoints = Number(targetPointsTest);
-    }
-
-    const { themeBackColor, bizName, txtColor } = useBizData();
-
-    const userBeatChallenge = currPoints >= targetPoints;
-
-    useAlreadyAlertChallenge(currPoints);
-    const didUserScroll = useDidScroll();
 
     const isAuth = useAuth();
+    const didUserScroll = useDidScroll();
+    const didBeatGame = useVar("didBeatGame");
+
+    const { currPoints = 100, firstName, role } = useData();
+    const { themeBackColor, txtColor } = useBizData();
 
     const confettiOptions = React.useCallback(
-        () => ({ trigger: userBeatChallenge, showMoreComps }),
-        [userBeatChallenge, showMoreComps]
+        () => ({ trigger: didBeatGame, showMoreComps }),
+        [didBeatGame, showMoreComps]
     );
-
     useAnimateConfetti(confettiOptions());
     const triggerNumberAnima =
         (isAuth && role === "cliente") ||
@@ -71,6 +48,7 @@ export default function ClientUserAppContent({
         trigger: triggerNumberAnima,
         callback: setShowMoreComps,
     };
+    const currPointsRef = useRef(null);
     useAnimateNumber(currPointsRef.current, currPoints, numberOptions);
 
     const showGreetingAndNotific = () => (
@@ -138,14 +116,6 @@ export default function ClientUserAppContent({
         playBeep,
         runName,
         didUserScroll,
-        // from targetPrize
-        targetPoints,
-        currChall,
-        arePrizesVisible,
-        prizeDesc,
-        milestoneIcon,
-        lastPrizeDate,
-        bizName,
     });
 
     return (
@@ -175,22 +145,6 @@ function playBeep() {
     elem.play();
 }
 // END HELPERS
-
-// HOOKS
-function useAlreadyAlertChallenge(currPoints) {
-    useEffect(() => {
-        if (!currPoints) {
-            (async () => {
-                const gotValue = await getVar("alreadyAlertChallenge");
-                if (!gotValue) return;
-
-                await removeVar("alreadyAlertChallenge");
-                await removeVar("pendingChall");
-            })();
-        }
-    }, [currPoints]);
-}
-// END HOOKS
 
 /* COMMENTS
 n1:

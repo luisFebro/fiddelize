@@ -1,4 +1,5 @@
 export default function getIntOrFloat(number) {
+    if (!number) return 0;
     let res;
     // validation
     const isValidFormat = parseFloat(Number(number)) || Number(number) === 0;

@@ -7,6 +7,7 @@ export default function setStorageRegisterDone() {
             "needAppRegister",
             "memberRole",
             "memberJob",
+            "memberName",
             "userScore",
             "linkCode",
             "primaryAgent",

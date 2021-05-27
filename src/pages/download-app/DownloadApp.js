@@ -4,7 +4,7 @@ import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import PwaInstaller from "components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "config/clientUrl";
 import checkIfElemIsVisible from "utils/window/checkIfElemIsVisible";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 import Spinner from "components/loadingIndicators/Spinner";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
 import useBackColor from "hooks/useBackColor";
@@ -120,6 +120,7 @@ export default function DownloadApp({ match, location, history }) {
         pColor,
         userScore,
         memberJob,
+        memberName,
         linkId,
         // roles
         isBizTeam,
@@ -186,14 +187,12 @@ export default function DownloadApp({ match, location, history }) {
             bizId,
             memberId: linkId,
             memberJob,
+            memberName,
             primaryAgent,
         });
     }
     // admin app config
     const { themePColor, themeSColor, themeBackColor } = useBizData();
-
-    const { adminGame } = useData();
-    const { milestoneIcon } = adminGame.targetPrize;
 
     useEffect(() => {
         if (whichRole !== "cliente-admin") return;
@@ -204,7 +203,6 @@ export default function DownloadApp({ match, location, history }) {
     if (needSelfServiceData) {
         const newBizData = {
             bizLogo,
-            milestoneIcon,
             themePColor,
             themeSColor,
             themeBackColor,
@@ -265,6 +263,7 @@ export default function DownloadApp({ match, location, history }) {
             // cli-user
             memberJob,
             memberId: linkId,
+            memberName,
             userScore,
         };
 

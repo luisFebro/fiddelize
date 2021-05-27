@@ -31,7 +31,9 @@ const getStyles = () => ({
 });
 
 export default function ProgressFragTracker() {
-    const { currPoints } = useData();
+    const { currPoints, adminGame } = useData();
+
+    const { targetPoints } = adminGame.targetPrize;
 
     const {
         themeSColor: colorS,
@@ -40,7 +42,7 @@ export default function ProgressFragTracker() {
         txtColor,
     } = useBizData();
 
-    const { targetPoints, playBeep, needAppForPreview } = useContext();
+    const { playBeep, needAppForPreview } = useContext();
 
     const eachMilestone = targetPoints / 5;
     const currMilestone = getRemainder("tens", currPoints, eachMilestone);

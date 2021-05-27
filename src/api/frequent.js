@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { ROOT } from "api/root";
 // generic rest APIs which are called more than 5 times and reusable in any component go here.
 
@@ -64,29 +64,7 @@ export const updateUser = async (userId, role, body) => {
     });
 };
 
-export const useUpdateUser = (userId, role, body, options = {}) => {
-    const { trigger } = options;
-
-    const thisBody = useMemo(() => body, []);
-
-    useEffect(() => {
-        if (!trigger) return;
-
-        const params = {
-            userId,
-            role,
-        };
-
-        getAPI({
-            method: "put",
-            url: `${ROOT}/user/update`,
-            body: thisBody,
-            params,
-        });
-    }, [userId, role, thisBody, trigger]);
-};
-
-// WARNING: sending notifications should prioritarily happen in the backend. This method is to maintain prior frontend implement
+// WARNING: sending notifications should prioritarily happen in the backend. This method is to maintain prior frontend implementation
 export const sendNotification = async (userId, cardType, options = {}) => {
     const { subtype, nT, content, role, name, senderId } = options;
 

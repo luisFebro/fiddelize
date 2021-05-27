@@ -7,7 +7,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 export const AsyncBuyRating = Load({
     loader: () =>
         import(
-            "pages/client/loyalty-client-scores/rating/BuyRating" /* webpackChunkName: "buy-rating-comp-lazy" */
+            "pages/client/points-panel/rating/BuyRating" /* webpackChunkName: "buy-rating-comp-lazy" */
         ),
 });
 

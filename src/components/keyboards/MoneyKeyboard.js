@@ -48,7 +48,7 @@ export default function MoneyKeyboard({
 
     return (
         <section className="container-center">
-            <section className="root animated fadeInUp delay-1s">
+            <section className="root animated fadeInUp">
                 <section>
                     <div
                         onClick={() => {

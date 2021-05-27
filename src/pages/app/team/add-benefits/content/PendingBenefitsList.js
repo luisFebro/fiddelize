@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import SearchField, { ROOT } from "components/search/SearchField";
 import { useBizData } from "init";
-import QrCodeScannerBtn from "./receipt-qr-code-scanner/QrCodeScannerBtn";
+import BenefitScannerBtn from "./benefit-scanner/BenefitScannerBtn";
 import PendingCard from "./cards/PendingCard";
 
 export default function PendingBenefitsList() {
@@ -27,7 +27,7 @@ export default function PendingBenefitsList() {
                 <span className="d-inline-block text-normal font-weight-bold mr-3">
                     ou
                 </span>
-                <QrCodeScannerBtn />
+                <BenefitScannerBtn />
                 <style jsx>
                     {`
                         .or-scanner {

@@ -31,7 +31,6 @@ export const readHighestScores = (cliAdminId) =>
 // buy's history
 export const readBuyHistory = (userId) =>
     `${ROOT}/user/list/buy-history/${userId}`; // GET
-export const addBuyHistory = (userId) => `${ROOT}/user/buy-history/${userId}`; // PUT
 export const readPrizes = (userId) =>
     `${ROOT}/user/list/purchase-history/prizes/${userId}`;
 export const changeBenefitStatus = (cliUserId, statusType) =>
@@ -42,6 +41,8 @@ export const changeBenefit = () => `${ROOT}/user/cli-user/change-benefit`; // PU
 export const addTempPoints = () => `${ROOT}/user/cli-user/temp-points/add`;
 export const removeTempPoints = () =>
     `${ROOT}/user/cli-user/temp-points/remove`;
+export const addPoints = () => `${ROOT}/user/cli-user/pts/add`;
+export const removePoints = () => `${ROOT}/user/cli-user/pts/remove`;
 export const readLastTempPoints = (userId) =>
     `${ROOT}/user/cli-user/last-temp-points?userId=${userId}`;
 export const encryptPointsLink = () =>

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import convertBlobToData from "../../utils/media/convertBlobToData";
 import getVar from "init/var";
+import convertBlobToData from "utils/media/convertBlobToData";
 
 // For prerender audio when we need to use the mediaElem name twice, one to prerender the audio and to actually play it.
 // to use programmatically.
@@ -20,7 +20,7 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
     let { delay, trigger, multi, autoplay = false, onendedCallback } = options;
 
     if (!delay) delay = 0;
-    if (typeof trigger !== "boolean") trigger = true;
+    if (typeof trigger !== "boolean" && trigger !== null) trigger = true;
 
     const getSingleElem = (audio) => {
         const mediaBtn = document.querySelector(mediaElem);

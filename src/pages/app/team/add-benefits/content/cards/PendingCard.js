@@ -6,7 +6,7 @@ import SelectedCTA from "./cta/SelectedCTA";
 const benefitsListTest = [
     {
         game: "targetPrize",
-        desc: "Ticket de Ingresso muito top meu deus",
+        desc: "Ticket de Ingresso",
     },
     {
         game: "discountBack",

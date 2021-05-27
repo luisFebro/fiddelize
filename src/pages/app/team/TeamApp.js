@@ -1,24 +1,24 @@
 import { Fragment } from "react";
 import useData, { useBizData } from "init";
-import { Load } from "../../../components/code-splitting/LoadableComp";
-import getDayGreetingBr from "../../../utils/getDayGreetingBr";
+import { Load } from "components/code-splitting/LoadableComp";
+import getDayGreetingBr from "utils/getDayGreetingBr";
+import useAuth from "auth/useAuth";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
+import useBackColor from "hooks/useBackColor";
 import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
 import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
-import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
+import AddTempPointsBtn from "./add-points/AddTempPointsBtn";
 import AddBenefitsBtn from "./add-benefits/AddBenefitsBtn";
-import useBackColor from "../../../hooks/useBackColor";
-import useAuth from "auth/useAuth";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
-import removeImgFormat from "../../../utils/biz/removeImgFormat";
-import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
-// import ReturnBtn from '../../../components/buttons/ReturnBtn';
+// import ReturnBtn from 'components/buttons/ReturnBtn';
 
 export const AsyncBellNotifBtn = Load({
     loading: false,
     loader: () =>
         import(
-            "../../../components/notification/BellNotifBtn" /* webpackChunkName: "bell-notif-team-lazy" */
+            "components/notification/BellNotifBtn" /* webpackChunkName: "bell-notif-team-lazy" */
         ),
 });
 
@@ -165,7 +165,7 @@ export default function TeamApp({
                 </h2>
             </div>
             <section className="animated fadeIn delay-2s mt-4 container-center">
-                <AddNewScoreBtn
+                <AddTempPointsBtn
                     backColor={needAdminDefaultTheme ? "default" : backColor}
                     sColor={needAdminDefaultTheme ? "default" : sColor}
                     needClick={!isPreviewMode}

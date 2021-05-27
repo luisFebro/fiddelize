@@ -24,7 +24,7 @@ const getStyles = () => ({
 
 const filter = getFilterDate();
 // IMPORTANT: check how the url from both cliMember and cliUser for how does the job works on both...
-export default function InstantAccount({
+export default function InstantApp({
     payload,
     txtPColor,
     pColor,
@@ -37,6 +37,7 @@ export default function InstantAccount({
         bizImg,
         primaryAgent,
         memberJob,
+        memberName,
         memberId,
         userScore,
         isCliAdmin,
@@ -63,16 +64,14 @@ export default function InstantAccount({
         bizName,
         bizImg,
         // ONLY CLI-USER verify these data
-        register: isCliUser && {
+        staff: isCliUser && {
             id: memberId || bizId,
             job: memberJob || "admin",
+            role: getMemberJob(memberJob),
+            name: memberName,
         },
         tempPoints: userScore, // for member tasks newClient Record
-        memberRole: !isCliUser
-            ? undefined
-            : memberJob
-            ? "cliente-membro"
-            : "cliente-admin", // for member tasks newClient Record
+        memberRole: !isCliUser ? undefined : getMemberJob(getMemberJob), // for member tasks newClient Record
         linkCode: "", // e.g alan_yvs493z0 or pedro_nucleo:fiddelize, etc // this is fetched from url param to check if it is authorized.
     };
 
@@ -200,3 +199,9 @@ export default function InstantAccount({
         </section>
     );
 }
+
+// HELPERS
+function getMemberJob(memberJob) {
+    return memberJob ? "cliente-membro" : "cliente-admin";
+}
+// END HELPERS

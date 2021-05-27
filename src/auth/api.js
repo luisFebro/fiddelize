@@ -1,7 +1,7 @@
 import showToast from "components/toasts";
 import getAPI, { login, register, loadDataInit } from "api";
 import setInitData from "init/setInitData";
-import disconnect from "auth/disconnect";
+// import disconnect from "auth/disconnect";
 
 export default async function loadInit(uify) {
     const data = await getAPI({
@@ -24,11 +24,13 @@ export default async function loadInit(uify) {
         if (err.status === 401) {
             setInitData(undefined, { uify }); // set init default values
 
-            const areLoginPages =
-                window.location.href.indexOf("mobile-app") >= 0 ||
-                window.location.href.pathname === "/";
+            // This is making website crazily disconnect even in the homepage
+            // thre is now the checkValidSession that can handle this disconnection
+            // const areLoginPages =
+            //     window.location.href.indexOf("mobile-app") >= 0 ||
+            //     window.location.href.pathname === "/";
 
-            if (!areLoginPages) disconnect();
+            // if (!areLoginPages) disconnect();
         }
     });
 

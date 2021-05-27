@@ -117,7 +117,7 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
             <div className="score-text pt-3 text-center text-subtitle text-white text-3d-shadow">
                 Vale
                 <span className="text-title"> {score} </span>
-                pontos
+                PTS
             </div>
             <div className="holder text-3d-shadow">
                 {name && name.toUpperCase()}

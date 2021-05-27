@@ -50,11 +50,11 @@ export default function Picture({
             {isResponsive ? (
                 <Fragment>
                     <source
-                        srcSet={triggeredImg(webp)}
+                        srcSet={triggeredImg(png)} // webp
                         media="(min-width: 500px)"
                     />
                     <source
-                        srcSet={triggeredImg(`${path}-small.webp`)}
+                        srcSet={triggeredImg(`${path}-small.png`)} // -small.webp
                         media="(max-width: 500px)"
                     />
                     <source
@@ -68,7 +68,6 @@ export default function Picture({
                 </Fragment>
             ) : (
                 <Fragment>
-                    <source srcSet={triggeredImg(webp)} type="image/webp" />
                     <source srcSet={triggeredImg(png)} type="image/png" />
                 </Fragment>
             )}
@@ -86,3 +85,7 @@ export default function Picture({
         </picture>
     );
 }
+
+/*
+<source srcSet={triggeredImg(webp)} type="image/webp" />
+ */

@@ -7,6 +7,7 @@ export default function handleRoleStorage({
     bizId,
     memberId,
     memberJob,
+    memberName,
     primaryAgent,
 }) {
     const isBizTeam = whichRole === "nucleo-equipe";
@@ -25,6 +26,7 @@ export default function handleRoleStorage({
             role: whichRole,
             lastRegisterBizId: bizId,
             memberId,
+            memberName,
             memberRole: memberJob ? "cliente-membro" : "cliente-admin",
             memberJob: memberJob || "admin",
             userScore,

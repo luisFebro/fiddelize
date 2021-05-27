@@ -4,9 +4,10 @@ export default function setStorageRegisterDone() {
     removeVars(
         [
             "memberId",
-            "needAppRegister",
+            "memberName",
             "memberRole",
             "memberJob",
+            "needAppRegister",
             "userScore",
             "linkCode",
             "primaryAgent",

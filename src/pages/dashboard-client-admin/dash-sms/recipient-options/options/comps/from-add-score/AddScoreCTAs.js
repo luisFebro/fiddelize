@@ -1,8 +1,7 @@
 import { useState } from "react";
-import AddNewScoreBtn from "../../../../../../app/team/add-new-score-panel/AddNewScoreBtn";
-import useData from "init";
-import { useBizData } from "init";
-import { convertBrToDollar } from "../../../../../../../utils/numbers/convertDotComma";
+import useData, { useBizData } from "init";
+import { convertBrToDollar } from "utils/numbers/convertDotComma";
+import AddNewScoreBtn from "../../../../../../app/team/add-points/AddTempPointsBtn";
 
 export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
     const [data, setData] = useState({

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import localforage from "localforage";
 import isObj from "utils/isObj";
 
@@ -22,6 +23,18 @@ export default function getVar(key, options = {}) {
 
     return variablesStore(storeName).getItem(key);
 }
+
+export const useVar = (key, options = {}) => {
+    const { dots = false } = options;
+
+    const [val, setVal] = useState(dots ? "..." : null);
+
+    useEffect(() => {
+        getVar(key).then((value) => setVal(value));
+    }, [key]);
+
+    return val;
+};
 
 export const setVar = (obj, options) => {
     const storeName = handleStoreName(options);

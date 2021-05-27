@@ -20,8 +20,8 @@ export default function ShowExpansiblePanel() {
         },
         {
             id: 1,
-            name: "Desafios e<br />Prêmios",
-            leftIcon: <FontAwesomeIcon icon="gem" />,
+            name: "Jogos<br />de Compra",
+            leftIcon: <FontAwesomeIcon icon="gamepad" />,
             hiddenContent: <HiddenChallengesAndPrize />,
         },
     ];

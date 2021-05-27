@@ -91,11 +91,11 @@ export const AsyncVirtualCard = Load({
         ),
 });
 
-// FIDELITY SCORES
-export const AsyncScorePanel = Load({
+// FIDELITY POINTS
+export const AsyncPointsPanel = Load({
     loader: () =>
         import(
-            "../../pages/client/loyalty-client-scores" /* webpackChunkName: "client-score-panel-page-lazy" */
+            "../../pages/client/points-panel/AsyncPointsPanel" /* webpackChunkName: "client-points-panel-page-lazy" */
         ),
 });
 

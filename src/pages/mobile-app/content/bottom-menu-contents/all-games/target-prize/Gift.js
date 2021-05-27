@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useContext from "context";
 import useData, { useBizData } from "init";
 import Tooltip from "components/tooltips/Tooltip";
 import useDatesCountdown from "hooks/dates/useDatesCountdown";
@@ -25,22 +24,22 @@ const getStyles = (props) => ({
 });
 
 export default function Gift() {
-    const { userId, currPoints, firstName, adminGame } = useData();
-    const { prizeDeadline } = adminGame.targetPrize;
+    const {
+        lastPrizeDate,
+        userId,
+        currPoints,
+        firstName,
+        adminGame,
+        userGame,
+    } = useData();
+    const { targetPoints, prizeDeadline, prizeDesc } = adminGame.targetPrize;
+    const { challN: currChall } = userGame.targetPrize;
 
     const {
         themeSColor: colorS,
         themePColor: colorP,
         themeBackColor: colorBack,
     } = useBizData();
-
-    const {
-        currChall,
-        targetPoints,
-        lastPrizeDate,
-        arePrizesVisible,
-        prizeDesc,
-    } = useContext();
 
     const [isGiftOpen, setIsGiftOpen] = useState(false);
 
@@ -60,18 +59,11 @@ export default function Gift() {
         colorS,
     });
 
-    const visibleTxt = `
+    const tooltipTxt = `
         <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
         • ${firstName}, você ganha <strong>${prizeDesc}</strong> ao concluir este desafio.
         <br />
     `;
-
-    const hiddenTxt = `
-        <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
-        • ${firstName}, o prêmio é uma surpresa e será revelado assim que este desafio for concluído.
-        <br />
-    `;
-    const tooltipTxt = arePrizesVisible ? visibleTxt : hiddenTxt;
 
     const plural = finalDeadline > 1 ? "s" : "";
     const showPrizeDeadline = () => (
@@ -142,8 +134,8 @@ export default function Gift() {
         );
 
         const challengeInProgress = () => (
-            <section className={!arePrizesVisible ? "shake-it pt-5" : "pt-5"}>
-                <div className="position-relative">
+            <section className="pt-5">
+                <div>
                     <Tooltip
                         needArrow
                         whiteSpace
@@ -154,30 +146,13 @@ export default function Gift() {
                                 {displayGiftBox({
                                     needSmallBox: true,
                                     disableClick: true,
-                                    opacity:
-                                        userBeatedChall || arePrizesVisible
-                                            ? 1
-                                            : 0.5,
+                                    opacity: 1,
                                 })}
                             </div>
                         }
                         backgroundColor={`var(--themeS--${colorS})`}
                         colorS={colorS}
                     />
-                    {!arePrizesVisible && (
-                        <p
-                            className="text-hero animated fadeIn delay-3s"
-                            style={{
-                                fontSize: 80,
-                                position: "absolute",
-                                top: "-10%",
-                                left: "60%",
-                                transform: "translateX(-60%)",
-                            }}
-                        >
-                            ?
-                        </p>
-                    )}
                 </div>
             </section>
         );
@@ -209,3 +184,22 @@ export default function Gift() {
         </div>
     );
 }
+
+/* ARCHIVES
+
+{!arefsdfdsPrizesVisible && (
+    <p
+        className="text-hero animated fadeIn delay-3s"
+        style={{
+            fontSize: 80,
+            position: "absolute",
+            top: "-10%",
+            left: "60%",
+            transform: "translateX(-60%)",
+        }}
+    >
+        ?
+    </p>
+)}
+
+ */

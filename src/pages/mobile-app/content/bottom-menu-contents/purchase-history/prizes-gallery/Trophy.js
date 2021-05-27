@@ -4,7 +4,6 @@ import Img from "components/Img";
 const trophyTypes = {
     custom: "/img/icons/trophies/gallery-trophy.svg",
     semisecret: "/img/icons/trophies/trophy-silhouette.svg",
-    secret: "/img/icons/trophies/trophy-secret-silhouette.png",
 };
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -17,15 +16,9 @@ export default function Trophy({ data }) {
         isExpired = false,
     } = data;
 
-    let { challIcon = "heart", prizeDesc = "Um par de ingressos" } = data;
+    const { challIcon = "heart", prizeDesc = "Um par de ingressos" } = data;
 
-    const isTypeSecret = type === "secret";
     const isTypeCustom = type === "custom";
-
-    if (isTypeSecret) {
-        prizeDesc = "";
-        challIcon = "";
-    }
 
     const showIconStatus = (status, needExpired) => {
         const expiredCss = needExpired && isExpired ? "expired" : "";
@@ -105,15 +98,13 @@ export default function Trophy({ data }) {
                 </div>
                 {showPrizeStatusIcons()}
             </section>
-            {!isTypeSecret && (
-                <section
-                    className={`${
-                        isTypeCustom ? "text-purple" : "text-grey"
-                    } prize-desc text-normal text-center`}
-                >
-                    {description}
-                </section>
-            )}
+            <section
+                className={`${
+                    isTypeCustom ? "text-purple" : "text-grey"
+                } prize-desc text-normal text-center`}
+            >
+                {description}
+            </section>
         </section>
     );
 }

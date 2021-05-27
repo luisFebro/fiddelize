@@ -81,8 +81,8 @@ export default function ClientMemberText({
                     baixam o app, fazem o cadastro e começam a receber pontos.
                     <br />
                     <br />
-                    Cadastre os pontos em menos de 30 segundos. Os clientes
-                    recebem direto no app deles em tempo real.
+                    Cadastre pontos em menos de 10 segundos. Os clientes recebem
+                    direto no app deles em tempo real.
                 </p>
                 <p className="download-app--txt" style={styles.margin}>
                     Comece a usar! Baixe o seu app logo a baixo.

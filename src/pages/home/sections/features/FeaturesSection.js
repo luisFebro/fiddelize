@@ -36,14 +36,25 @@ export default function FeaturesSection() {
                 <p className="mx-3 parag-pts-coin">
                     A{" "}
                     <strong>
-                        pts{" "}
+                        PTS{" "}
                         <em className="font-site text-em-0-8 font-weight-bold">
                             (pronúncia: pítis)
                         </em>
                     </strong>{" "}
-                    é a <strong>primeira moeda digital</strong> para seu negócio
-                    oferecer benefícios para seus clientes com{" "}
-                    <strong>pontos de compra</strong>.
+                    é a <strong>primeira moeda digital</strong> para negócios
+                    usada como <strong>troca de benefícios</strong> como
+                    descontos e prêmios.
+                </p>
+                <p className="mx-3 parag-pts-coin mt-3">
+                    <strong>Valores da moeda</strong> somente podem ser lidos e
+                    modificados pelo seu negócio e usada exclusivamente pelos
+                    seus clientes.
+                </p>
+                <p className="mx-3 parag-pts-coin mt-3">
+                    <strong>Integridade e segurança</strong> da PTS é feita com
+                    a mesma criptografia usada em carteiras que protegem o
+                    Bitcoin (algoritmo AES 256) que torna o armazenamento
+                    virtualmente impenetrável mesmo com ataques de força bruta.
                 </p>
             </section>
             <style jsx>

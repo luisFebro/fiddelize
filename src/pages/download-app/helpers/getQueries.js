@@ -9,7 +9,18 @@ const getWhichRole = (queries) => {
 };
 
 export default function getQueries({ location }) {
-    const mainData = ["negocio", "id", "logo", "bc", "pc", "sc", "mj", "li"];
+    // bc - back color | pc - primary color | sc - secondary color | mj - memberJob | mn - memberName | li - linkId
+    const mainData = [
+        "negocio",
+        "id",
+        "logo",
+        "bc",
+        "pc",
+        "sc",
+        "mj",
+        "mn",
+        "li",
+    ];
 
     const mainQueries = mainData.map((q) => getQueryByName(q, location.search));
     const [bizName, bizId] = mainQueries;
@@ -30,7 +41,7 @@ export default function getQueries({ location }) {
         isCliAdmin,
         isTeamMember,
         isClientUser,
-        isPanel,
+        // isPanel,
     ] = roleQueries;
     const isValidRoleType =
         isBizTeam || isCliAdmin || isTeamMember || isClientUser;
