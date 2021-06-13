@@ -13,11 +13,18 @@ import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
 import AsyncVersion from "../../_main/user-interfaces/version/AsyncVersion";
 // import ClientUserAppContent from "./content/ClientUserAppContent";
+//
+const AsyncGatewayAndCTAs = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "./start-comps/GatewayAndCTAs" /* webpackChunkName: "gateway-and-cts-comp-lazy" */
+        ),
+});
 
 const AsyncClientUserAppContent = Load({
     loading: true,
@@ -134,13 +141,14 @@ function ClientMobileApp({ location, history }) {
     let isCliUser = role === "cliente";
 
     const isSessionOver = !isAuthUser;
-    const needStaffLogout = isStaff && isSessionOver && rememberAccess;
+    const needAdminLogout = isSessionOver && rememberAccess;
 
     if (needAppForCliAdmin) {
         isCliAdmin = false;
         isCliUser = true;
     }
-    const accessCheck = !isStaff || (!loadingData && !rememberAccess);
+
+    const accessCheck = !isStaff && !loadingData && !rememberAccess; //
     // END MAIN VARIABLES
 
     const versionReady = useDelay(2000);
@@ -272,7 +280,7 @@ function ClientMobileApp({ location, history }) {
     const conditionRegister = loginOrRegister === "register";
     const conditionLogin =
         (loginOrRegister === "login" && accessCheck) ||
-        (loginOrRegister === "login" && !isAuthUser);
+        (loginOrRegister === "login" && !isAuthUser && !needAdminLogout);
 
     if (loadingData) {
         return (
@@ -331,8 +339,8 @@ function ClientMobileApp({ location, history }) {
 
             {!isAuthUser && (
                 <section>
-                    {needStaffLogout && (
-                        <GatewayAndCTAs
+                    {needAdminLogout && (
+                        <AsyncGatewayAndCTAs
                             isSessionOver={isSessionOver}
                             themeBackColor={themeBackColor}
                             themeSColor={themeSColor}
@@ -364,7 +372,7 @@ function ClientMobileApp({ location, history }) {
                     {isCliAdmin && !isSessionOver && showNotificationBell()}
                     {isCliAdmin && !isCliUser && (
                         <Fragment>
-                            <GatewayAndCTAs
+                            <AsyncGatewayAndCTAs
                                 isSessionOver={isSessionOver}
                                 themeBackColor={themeBackColor}
                                 themeSColor={themeSColor}

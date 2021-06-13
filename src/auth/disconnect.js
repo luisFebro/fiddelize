@@ -1,6 +1,6 @@
 import isThisApp from "utils/window/isThisApp";
 import { removeCollection, setItems } from "init/lStorage";
-import getVar, { setVars, removeStore } from "init/var";
+import { getVars, setVars, removeStore } from "init/var";
 import showToast from "components/toasts";
 import showProgress from "components/loadingIndicators/progress";
 
@@ -19,15 +19,20 @@ export default async function disconnect(options = {}) {
         showToast("Finalizando sua sessão...", { dur: 15000 });
     }
 
-    const [role] = await Promise.all([
-        getVar("role", "user"),
-        removeStore("user"),
-        removeCollAsync(),
-    ]);
+    const [role, userId, name, twoLastCpfDigits] = await getVars(
+        ["role", "userId", "name", "twoLastCpfDigits"],
+        "user"
+    );
+
+    await Promise.all([removeStore("user"), removeCollAsync()]);
 
     // post essential data set
     const isCliAdmin = role === "cliente-admin";
-    if (isCliAdmin) await setVars({ rememberAccess }, "user");
+    if (isCliAdmin)
+        await setVars(
+            { rememberAccess, userId, name, twoLastCpfDigits },
+            "user"
+        );
     if (role) setItems("currUser", { role });
     // end
 

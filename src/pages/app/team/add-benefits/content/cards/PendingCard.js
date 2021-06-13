@@ -1,36 +1,52 @@
 import { Fragment } from "react";
 import { useBizData } from "init";
 import { gameIconsStore } from "components/biz/GamesBadge";
+import getFirstName from "utils/string/getFirstName";
+import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
+import getItems from "init/lStorage";
 import SelectedCTA from "./cta/SelectedCTA";
 
-const benefitsListTest = [
-    {
-        game: "targetPrize",
-        desc: "Ticket de Ingresso",
-    },
-    {
-        game: "discountBack",
-        desc: "R$ 50 de desconto",
-    },
-];
-
-const allBenefitGames = benefitsListTest.map((d) => d.game);
+const [lastDate] = getItems("global", ["lastDatePendingBenefitCard"]);
 
 export default function PendingCard({ data }) {
-    const { name, benefitsList = benefitsListTest } = data;
+    const { beatGameList, currPoints, customerId, gender } = data;
+    let { customerName } = data;
+    customerName = getFirstName(customerName && customerName.cap(), {
+        addSurname: true,
+    });
 
-    const { themePColor, themeSColor } = useBizData();
-    const availableBenefitsCount = benefitsList.length;
+    let cardCreatedAt = null;
+    let recordId = "";
+
+    const allBenefitGames = [];
+    beatGameList.forEach((d) => {
+        const allData = d.data;
+        if (allData.length)
+            allData.forEach((thisD) => {
+                allBenefitGames.push(thisD);
+                cardCreatedAt = d.createdAt;
+                recordId = d.recordId;
+            });
+    });
+
+    const { themePColor } = useBizData();
+    const availableBenefitsCount = allBenefitGames.length;
     const pluralBenefits = availableBenefitsCount > 1 ? "s" : "";
 
     const gameItemProps = {
         availableBenefitsCount,
+        customerId,
+        recordId,
         themePColor,
+        customerName,
+        currPoints,
+        gender,
+        gameName: allBenefitGames.length === 1 && allBenefitGames[0].game,
     };
 
     const showBenefitsArea = () => (
         <section className="d-flex my-3 benefits-area">
-            {benefitsList
+            {allBenefitGames
                 .map((d, ind) => (
                     <Fragment key={d.game}>
                         <GameItem d={d} ind={ind} {...gameItemProps} />
@@ -43,9 +59,26 @@ export default function PendingCard({ data }) {
         </section>
     );
 
+    const showNewCardBadge = () => {
+        const isCardNew = checkCardNew({ targetDate: cardCreatedAt, lastDate });
+
+        return (
+            <div
+                className="position-absolute"
+                style={{
+                    top: -15,
+                    right: 0,
+                }}
+            >
+                {isCardNew && <NewCardPill />}
+            </div>
+        );
+    };
+
     return (
-        <section className="benefit-card--root mb-3 position-relative text-normal text-white text-shadow">
-            <h2 className="text-subtitle font-weight-bold">{name}</h2>
+        <section className="benefit-card--root mb-4 position-relative text-normal text-white text-shadow">
+            {showNewCardBadge()}
+            <h2 className="text-subtitle font-weight-bold">{customerName}</h2>
             <p className="m-0 text-normal">
                 <span className="highlight-benefits text-pill">
                     {availableBenefitsCount} Benefício{pluralBenefits}
@@ -53,11 +86,7 @@ export default function PendingCard({ data }) {
                 disponí{pluralBenefits === "s" ? "veis:" : "vel:"}
             </p>
             {showBenefitsArea()}
-            <SelectedCTA
-                benefitsList={benefitsList}
-                allBenefitGames={allBenefitGames}
-                themeSColor={themeSColor}
-            />
+            <SelectedCTA allBenefitGames={allBenefitGames} {...gameItemProps} />
             <style jsx>
                 {`
                     .benefit-card--root {
@@ -126,7 +155,7 @@ function BenefitInfo({ d, themePColor }) {
     return (
         <section className="benefit-info text-small text-break font-weight-bold text-left">
             <strong className="d-block text-center">GANHO:</strong>
-            {truncate(d.desc, 20)}
+            {truncate(d.benefitDesc, 20)}
             <style jsx>
                 {`
                     .benefit-info {

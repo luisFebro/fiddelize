@@ -1,26 +1,69 @@
-import { Fragment } from "react";
-import SearchField, { ROOT } from "components/search/SearchField";
-import { useBizData } from "init";
+import { Fragment, useState } from "react";
+import SearchField from "components/search/SearchField";
+import useData, { useBizData } from "init";
+import useAPIList, {
+    readBenefitCards,
+    benefitCardsAutocomplete,
+} from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
+import { setItems } from "init/lStorage";
+import useRun from "global-data/ui";
 import BenefitScannerBtn from "./benefit-scanner/BenefitScannerBtn";
 import PendingCard from "./cards/PendingCard";
 
-export default function PendingBenefitsList() {
-    const { bizId } = useBizData();
+setItems("global", { lastDatePendingBenefitCard: new Date() });
 
-    const handleSelectedVal = (newVal) => {
-        console.log(newVal);
+export default function PendingBenefitsList() {
+    const [skip, setSkip] = useState(0);
+    const [search, setSearch] = useState("");
+    const { bizId } = useBizData();
+    const { userId } = useData();
+
+    const params = {
+        type: "pending",
+        userId, // for auth
+        adminId: bizId,
+        search,
+    };
+
+    const { runName } = useRun();
+
+    const {
+        list = [],
+        listTotal: benefitsCount,
+        needEmptyIllustra,
+        isPlural,
+        hasMore,
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        ShowOverMsg,
+    } = useAPIList({
+        url: readBenefitCards(),
+        skip,
+        params,
+        listName: "PendingBenefitsList",
+        limit: 10,
+        trigger: runName || search || true,
+    });
+
+    // SEARCH
+    const handleSearch = (entry) => {
+        if (entry === "_cleared") return setSearch("");
+        return setSearch(entry);
     };
 
     const autocompleteProps = {
         placeholder: "Procure nome cliente",
-        noOptionsText: "Cliente não encontrado ou sem benefícios",
+        noOptionsText: "Cliente não encontrado ou sem benefícios pendentes",
     };
 
     const showCustomerSearch = () => (
         <Fragment>
             <SearchField
-                callback={handleSelectedVal}
-                searchUrl={`${ROOT}/sms/read/contacts?userId=${bizId}&autocomplete=true&autocompleteLimit=7`}
+                callback={handleSearch}
+                searchUrl={benefitCardsAutocomplete(bizId)}
                 autocompleteProps={autocompleteProps}
             />
             <div className="or-scanner position-relative d-flex justify-content-end align-items-center mr-3">
@@ -38,10 +81,22 @@ export default function PendingBenefitsList() {
             </div>
         </Fragment>
     );
+    // END SEARCH
 
-    const benefitsCount = 2;
-    const needIllustration = benefitsCount === 0;
-    const plural = benefitsCount > 1 ? "s" : "";
+    // INFINITY LOADING LIST
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+    const showCard = (data) => <PendingCard data={data} />;
+
+    const listMap = list.map((data, ind) =>
+        checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
+            <section key={data._id} ref={detectedCard}>
+                {showCard(data)}
+            </section>
+        ) : (
+            <section key={data._id}>{showCard(data)}</section>
+        )
+    );
+    // END INFINITY LOADING LIST
 
     const showEmptyIllustration = () => (
         <section className="mx-3 my-5 container-center-col">
@@ -56,25 +111,22 @@ export default function PendingBenefitsList() {
         </section>
     );
 
-    if (needIllustration) return showEmptyIllustration();
-
-    const data = {
-        name: "Luis Febro",
-    };
-
     return (
         <section className="text-purple mx-3">
-            {showCustomerSearch()}
+            {!needEmptyIllustra && showCustomerSearch()}
             {Boolean(benefitsCount) && (
                 <h2 className="my-3 text-normal font-weight-bold text-center">
                     <span className="text-subtitle font-weight-bold">
-                        {benefitsCount} cliente{plural}
+                        {benefitsCount} cliente{isPlural}
                     </span>{" "}
-                    com benefício{plural} a receber.
+                    com benefício{isPlural} a receber.
                 </h2>
             )}
-            <PendingCard data={data} />
-            <div style={{ marginBottom: 150 }} />
+            {listMap}
+            {loading && <ShowLoadingSkeleton />}
+            {needEmptyIllustra && showEmptyIllustration()}
+            {error && <ShowError />}
+            <ShowOverMsg />
         </section>
     );
 }

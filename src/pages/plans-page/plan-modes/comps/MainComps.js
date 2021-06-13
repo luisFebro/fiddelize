@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import SwitchBtn from "../../../../components/buttons/material-ui/SwitchBtn";
-import convertToReal from "../../../../utils/numbers/convertToReal";
-import animateCSS from "../../../../utils/animateCSS";
-import NotificationBadge from "../../../../components/NotificationBadge";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
+import convertToReal from "utils/numbers/convertToReal";
+import animateCSS from "utils/animateCSS";
+import NotificationBadge from "components/badges/NotificationBadge";
 import "./_MainComps.scss";
 
 const isSmall = window.Helper.isSmallScreen();

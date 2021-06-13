@@ -1,6 +1,6 @@
 import getAPI, { createTk } from "api";
-import { setItems } from "init/lStorage";
 import { setVar } from "init/var";
+import { setItems } from "init/lStorage";
 
 export default async function renewToken(options = {}) {
     const { role, userId, bizId, clickedAppUserId } = options;
@@ -29,5 +29,5 @@ export default async function renewToken(options = {}) {
         token: newToken,
     });
 
-    return "done";
+    return newToken;
 }

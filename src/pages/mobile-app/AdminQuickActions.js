@@ -3,11 +3,14 @@ import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import SpeedDialButton from "../../components/buttons/SpeedDialButton";
-import useData, { useBizData } from "init";
-// SpeedDial and Icons
-import ModalFullContent from "../../components/modals/ModalFullContent";
-import { Load } from "../../components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
+import SpeedDialButton from "components/buttons/SpeedDialButton";
+import { Load } from "components/code-splitting/LoadableComp";
+import { useBizData } from "init";
+import DotBadge from "components/badges/DotBadge";
+import getItems from "init/lStorage";
+
+const [benefitsNotif] = getItems("bizData", ["benefitsNotif"]);
 
 const AsyncNewScoreModal = Load({
     loader: () =>
@@ -29,6 +32,14 @@ const AsyncPromoteModal = Load({
     loader: () =>
         import(
             "./QuickPromote" /* webpackChunkName: "promote-full-page-lazy" */
+        ),
+});
+
+const AsyncBenefitsContent = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "pages/app/team/add-benefits/content/BenefitsContent" /* webpackChunkName: "benefits-content-page-lazy" */
         ),
 });
 
@@ -54,10 +65,11 @@ function MoreOptionsBtn({
     const [newScoreOpen, setNewScore] = useState(false);
     const [newCustomerOpen, setNewCustomer] = useState(false);
     const [promoteOpen, setPromote] = useState(false);
+    const [benefitsOpen, setBenefits] = useState(false);
 
     const styles = getStyles();
 
-    const { userId } = useData();
+    // const { userId } = useData();
     const { themeBackColor: backColor } = useBizData();
 
     const speedDial = {
@@ -70,10 +82,23 @@ function MoreOptionsBtn({
                         style={{ ...styles.muStyle, transform: "scale(1.3)" }}
                     />
                 ),
-                name: "Divulgar ►",
+                name: "Divulgar",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     setPromote(true);
+                },
+            },
+            {
+                icon: (
+                    <FontAwesomeIcon
+                        icon="trophy"
+                        style={{ ...styles.muStyle, transform: "scale(1.3)" }}
+                    />
+                ),
+                name: "+ Benefícios",
+                backColor: `var(--themeSDark--${colorS})`,
+                onClick: () => {
+                    setBenefits(true);
                 },
             },
             {
@@ -85,7 +110,7 @@ function MoreOptionsBtn({
                         }}
                     />
                 ),
-                name: "Cadastrar Pontos ►",
+                name: "+ Pontos",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     setNewScore(true);
@@ -94,7 +119,7 @@ function MoreOptionsBtn({
             },
             {
                 icon: <PersonAddIcon style={styles.muStyle} />,
-                name: "Cadastrar Cliente ►",
+                name: "+ Clientes",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     setNewCustomer(true);
@@ -153,6 +178,25 @@ function MoreOptionsBtn({
         );
     };
 
+    const showBenefitsComp = () => {
+        const handlePromoteClose = () => {
+            setPromote(false);
+        };
+
+        const Comp = (
+            <AsyncBenefitsContent handleFullClose={handlePromoteClose} />
+        );
+
+        return (
+            <ModalFullContent
+                contentComp={Comp}
+                fullOpen={benefitsOpen}
+                setFullOpen={setBenefits}
+                needIndex={false}
+            />
+        );
+    };
+
     const [openStatus, setOpenStatus] = useState(false);
     return (
         <div className="position-relative">
@@ -197,9 +241,18 @@ function MoreOptionsBtn({
                 }}
                 hidden={!showMoreBtn}
             />
+            <section
+                className="position-absolute"
+                style={{ bottom: 40, right: 15 }}
+            >
+                <DotBadge invisible={!benefitsNotif}>
+                    <div />
+                </DotBadge>
+            </section>
             {newScoreOpen && showNewScoreComp()}
             {newCustomerOpen && showNewCustomerComp()}
             {promoteOpen && showNewPromoteComp()}
+            {benefitsOpen && showBenefitsComp()}
         </div>
     );
 }

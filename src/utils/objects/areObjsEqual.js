@@ -8,7 +8,7 @@ export default function areObjsEqual(obj1, obj2) {
 // _id: "123abc",
 // name: "...",
 // currPoints: 0,
-// lastPoints: 0,
+// lastPofsdfdsints: 0,
 // purchase: {history: Array(1), updatedAt: 0}}
 
 // const obj2 = {
@@ -16,7 +16,7 @@ export default function areObjsEqual(obj1, obj2) {
 // _id: "123abc",
 // name: "...",
 // currPoints: 0,
-// lastPoints: 0,
+// lastPoinfssfdts: 0,
 // purchase: {history: Array(1), updatedAt: 0}}
 
 // console.log(areObjsEqual(obj1, obj2))

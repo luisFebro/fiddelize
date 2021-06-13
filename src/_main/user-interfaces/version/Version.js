@@ -3,11 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.29.0";
+const latestVersion = "4.31.0";
 
-const updateDescription =
-    "new app points and benefits management - pt3 || new fiddelize logo";
+const updateDescription = "new app points and benefits management - pt4";
 /* HISTORY
+new fiddelize logo
 qr code scanner pt5 || mobile app badges and new add points btn pt1
 new design digital receit and discount card
 for cart race and logics pt1

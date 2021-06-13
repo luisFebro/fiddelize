@@ -92,10 +92,11 @@ export const AsyncVirtualCard = Load({
 });
 
 // FIDELITY POINTS
+// using webpackMode because the page is not loading due to err_content_decoding_failed 200
 export const AsyncPointsPanel = Load({
     loader: () =>
         import(
-            "../../pages/client/points-panel/AsyncPointsPanel" /* webpackChunkName: "client-points-panel-page-lazy" */
+            "../../pages/client/points-panel/AsyncPointsPanel" /* webpackMode: "eager", webpackChunkName: "client-points-panel-page-lazy" */
         ),
 });
 

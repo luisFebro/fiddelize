@@ -1,10 +1,10 @@
-import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { fromNow } from "../../../../../../utils/dates/dateFns";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import getFirstName from "../../../../../../utils/string/getFirstName";
-import showToast from "../../../../../../components/toasts";
-import convertPhoneStrToInt from "../../../../../../utils/numbers/convertPhoneStrToInt";
+import { fromNow } from "utils/dates/dateFns";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import getFirstName from "utils/string/getFirstName";
+import showToast from "components/toasts";
+import convertPhoneStrToInt from "utils/numbers/convertPhoneStrToInt";
+import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 
 const getSmileyGrade = (g) => {
     if (!g) return {};
@@ -21,7 +21,7 @@ const getSmileyGrade = (g) => {
     if (g <= 10) return { grade: "grade-10", icon: "grin-alt" };
 };
 
-export default function BuyReviewCard({ data = {}, isCardNew }) {
+export default function BuyReviewCard({ data = {}, lastDateChecked }) {
     const { reportUpdatedAt, clientName, review, finalGrade, whatsapp } = data;
     const { grade: color, icon } = getSmileyGrade(finalGrade);
 
@@ -61,6 +61,11 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
         </div>
     );
 
+    const isCardNew = checkCardNew({
+        targetDate: data.reportUpdatedAt,
+        lastDate: lastDateChecked,
+    });
+
     const showCard = () => (
         <section className="buy-review--root shadow-babadoo">
             <div
@@ -70,7 +75,7 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
                     right: 0,
                 }}
             >
-                {showNewCardBadge(isCardNew)}
+                {isCardNew && <NewCardPill />}
             </div>
             <span className="text-normal">
                 <span className="font-weight-bold text-purple">
@@ -96,32 +101,4 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
     );
 
     return showCard();
-}
-
-const getStyles = () => ({
-    newBadge: {
-        borderRadius: "30px",
-        padding: "2px 6px",
-        border: "3px solid var(--themePLight)",
-        background: "var(--themeP)",
-        color: "var(--vocarizaCyan)",
-        animationDuration: "3s",
-    },
-});
-
-function showNewCardBadge(isCardNew) {
-    const styles = getStyles();
-
-    return (
-        <Fragment>
-            {isCardNew && (
-                <div
-                    style={styles.newBadge}
-                    className="font-weight-bold animated fadeInUp delay-1s text-small text-center"
-                >
-                    Novo
-                </div>
-            )}
-        </Fragment>
-    );
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Provider } from "context";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import useAuth from "auth/useAuth";

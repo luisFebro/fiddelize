@@ -1,6 +1,6 @@
 // reference: https://stackoverflow.com/questions/16994662/count-animation-from-number-a-to-b
+import convertToReal from "utils/numbers/convertToReal";
 import getDecimalPart from "./getDecimalPart";
-import { convertDotToComma } from "./convertDotComma";
 // e. g
 // animateNumber(
 //     animatedNumber.current,
@@ -38,7 +38,7 @@ export default function animateNumber(ref, start, end, duration, next) {
             const finalNumber =
                 Math.floor(end) + parseFloat(getDecimalPart(end));
             if (!isInteger) {
-                obj.innerHTML = convertDotToComma(finalNumber);
+                obj.innerHTML = convertToReal(finalNumber);
             }
 
             clearInterval(timer);

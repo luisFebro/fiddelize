@@ -82,7 +82,7 @@ export default function AutoCompleteSearch({
     openOnFocus = true,
     freeSolo = false,
     placeholder = "Procure alguma coisa...",
-    formWidth = "100%",
+    // formWidth = "100%",
     needArrowEndAdornment = false,
     needAuth = true,
     autoHighlight = true,
@@ -104,7 +104,7 @@ export default function AutoCompleteSearch({
     const didUserStartTyping = Boolean(searchChange.length);
 
     const token = useToken();
-    let { firstName: name } = useData();
+    const { firstName: name } = useData();
 
     const styles = getStyles({ fieldBack, themeColor, txtFont });
 
@@ -136,9 +136,10 @@ export default function AutoCompleteSearch({
             if (data) {
                 setNeedHistory(true);
                 setOptions(data);
-            } else {
-                !ignoreEmptyHist && setOptions([" "]);
+                return;
             }
+
+            if (!ignoreEmptyHist) setOptions([" "]);
         });
     };
 
@@ -158,14 +159,18 @@ export default function AutoCompleteSearch({
             setLoading(false);
         }, timeout);
 
-        open && setLoading(true);
+        if (open) setLoading(true);
 
         const config = {
             url: newSearchUrl,
             method: "get",
             headers: chooseHeader({ token, needAuth }),
-            cancelToken: new axios.CancelToken((c) => (cancel = c)),
+            cancelToken: new axios.CancelToken((c) => {
+                cancel = c;
+            }),
         };
+
+        if (!didUserStartTyping) return;
 
         async function doRequest() {
             try {
@@ -178,7 +183,7 @@ export default function AutoCompleteSearch({
                     if (response.data.length === 0) {
                         getValuesHistory();
                     } else {
-                        didUserStartTyping && setOptions(response.data);
+                        if (didUserStartTyping) setOptions(response.data);
                     }
                 }
 

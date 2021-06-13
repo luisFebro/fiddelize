@@ -11,6 +11,7 @@ import showToast from "components/toasts";
 import getAPI, { checkPassword, createTk } from "api";
 import PasswordCircleFields from "components/fields/PasswordCircleFields";
 import { Load } from "components/code-splitting/LoadableComp";
+import { useAction } from "global-data/ui";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import Lock from "./interative-lock/Lock";
 import ProtectionMsg from "./ProtectionMsg";
@@ -57,6 +58,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
 
     const styles = getStyles();
 
+    const uify = useAction();
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : backColor})`
     );
@@ -181,7 +183,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
 
                 // wait for the lock animation to end...
                 setTimeout(async () => {
-                    await authenticate(newToken, { history, role });
+                    await authenticate(newToken, { history, role, uify });
                 }, 1000);
             })();
         }

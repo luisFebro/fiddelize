@@ -10,10 +10,6 @@ const handleCliAdmin = ({ uify, history, bizLinkName }) => {
 
     if (!bizLinkName) {
         const thisBizCodeName = getItems("bizData", ["bizLinkName"]);
-        console.log(
-            "thisBizCodeName APPACCESSALGORITHM CHECK",
-            thisBizCodeName
-        );
         return history.push(
             `/${thisBizCodeName}/cliente-admin/painel-de-controle`
         );
@@ -70,13 +66,18 @@ export default async function handleOpenApp({
         };
 
         await signInUserData(null, userData);
+
         // IMPORTANT: userId is used as the current id to be authorized by system. the clickedAppUserId, of course, it is clicked app id.
-        await renewToken({
+        const newToken = await renewToken({
             userId,
             bizId,
             clickedAppUserId,
             role: appRole,
+            uify,
         });
+
+        // update token in UI since uify can not be passed to renewToken because is a hook. It should have a Component parent.
+        if (!isCliUser) uify(["currUser", { token: newToken }]);
     }
 
     if (!isFiddelizeApp) {

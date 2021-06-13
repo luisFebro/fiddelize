@@ -67,7 +67,7 @@ export default function useAPIList({
     });
     const { list, listTotal, chunksTotal, content } = data;
 
-    let [loading, setLoading] = useState(false);
+    let [loading, setLoading] = useState(true);
     let [error, setError] = useState(false);
     const [reload, setReload] = useState(false);
     const [hasMore, setHasMore] = useState(false);
@@ -82,9 +82,9 @@ export default function useAPIList({
 
     // IMPORTABLE VARIABLES
     const isPlural = listTotal > 1 ? "s" : "";
-    const gotListItems = list && list.length;
+    const gotListItems = list.length;
     const noBlocking = !loading && !error;
-    const needEmptyIllustra = noBlocking && list && !list.length;
+    const needEmptyIllustra = !loading && noBlocking && !list.length;
     const readyShowElems = noBlocking && !needEmptyIllustra;
     let emptyType = "virgin";
     // END IMPORTABLE VARIABLES
@@ -122,7 +122,7 @@ export default function useAPIList({
     }, [isOffline, offlineBtn, offlineList]);
 
     useEffect(() => {
-        setLoading(false);
+        if (data.list.length) setLoading(false);
     }, [data.list]);
 
     function handleSuccess({ response, stopRequest, updateOnly }) {
@@ -136,7 +136,7 @@ export default function useAPIList({
         const { listTotal } = response.data;
         const { chunksTotal } = response.data;
         const { content } = response.data; // for all other kind of data
-        IS_DEV && console.log("listType", listType);
+        if (IS_DEV) console.log("listType", listType);
 
         setData({
             ...data,
@@ -159,12 +159,7 @@ export default function useAPIList({
         setLoading(false);
 
         const gotExpiredToken = status === 401;
-        if (gotExpiredToken) {
-            window.location.href = isApp
-                ? "/mobile-app"
-                : "/acesso/verificacao";
-            disconnect();
-        }
+        if (gotExpiredToken) disconnect();
     }
 
     useEffect(() => {
@@ -187,7 +182,6 @@ export default function useAPIList({
             handleError();
         }, timeout);
 
-        setLoading(true);
         setError(false);
 
         const config = {
@@ -234,7 +228,6 @@ export default function useAPIList({
     };
 
     const handleOfflineBtn = () => {
-        setLoading(true);
         setOfflineBtn(true);
         setLoading(false);
     };

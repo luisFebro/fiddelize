@@ -11,6 +11,13 @@ export const gameIconsStore = {
     topCustomers: <PollIcon />,
 };
 
+export const gameBrNameStore = {
+    targetPrize: "Prêmio Alvo",
+    discountBack: "Desconto Retornado",
+    raffleTicket: "Bilhete Premiado",
+    topCustomers: "Clientes Tops",
+};
+
 const userGamesTest = {
     targetPrize: {
         challN: 5,

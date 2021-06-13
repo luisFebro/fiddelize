@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import NotificationBadge from "../../../NotificationBadge";
+import NotificationBadge from "../../../badges/NotificationBadge";
 import usePlayAudio from "../../../../hooks/media/usePlayAudio";
 import "./_style.scss";
 

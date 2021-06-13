@@ -22,7 +22,7 @@ export default function LoginPage() {
         "name",
         "role",
     ]);
-    const needGateKeeper = rememberAccess === true && role === "cliente-admin";
+    const needGateKeeper = rememberAccess === true;
 
     return (
         <Fragment>

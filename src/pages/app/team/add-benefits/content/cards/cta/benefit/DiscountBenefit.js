@@ -1,30 +1,38 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { convertDotToComma } from "utils/numbers/convertDotComma";
+import convertToReal from "utils/numbers/convertToReal";
 import useData from "init";
 import getAPI, { changeBenefit } from "api";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import showToast from "components/toasts";
 import { gameIconsStore } from "components/biz/GamesBadge";
 import getFirstName from "utils/string/getFirstName";
+import { setRun, useAction } from "global-data/ui";
+import getId from "utils/getId";
 import FaqPoints from "./FaqPoints";
 // import scrollIntoView from "utils/document/scrollIntoView";
 
 export default function DiscountBenefit(props) {
     const [disableCTA, setDisableCTA] = useState(false);
 
-    const { onClose, gameName } = props;
+    const uify = useAction();
 
     const {
-        customerId = "1233213",
-        customerName = "Luis Febro Bruno Feitoza",
-        _id: benefitId = "1234",
-        currChall = 5,
-        currPoints = 150,
-        targetPoints = 100,
-        benefitDesc = "ticket de ingresso",
-        gender = "Ele",
+        closeModal,
+        customerId,
+        recordId,
+        totalBenefitsList,
+        allBenefitGames,
+        currPoints,
+        customerName,
+        gender,
+        gameName,
     } = props;
+
+    const benefitData = allBenefitGames.find((g) => g.game === gameName);
+    const benefitId = benefitData && benefitData.id;
+    const { benefitDesc, currChall, targetPoints } = benefitData;
+
     const name = getFirstName(customerName, { addSurname: true });
 
     const {
@@ -40,11 +48,22 @@ export default function DiscountBenefit(props) {
     const handleDiscount = async () => {
         setDisableCTA(true);
 
+        // used to check unavailable games
+        const allAvailableGames = allBenefitGames.map((g) => ({
+            game: g.game,
+            targetPoints: g.targetPoints,
+        }));
+
         const benefitBody = {
+            allAvailableGames,
             customerId,
+            recordId,
             benefitId,
+            benefitTarget: targetPoints,
+            benefitDesc,
             isReceived: true,
             newPoints: leftCustomerPoints,
+            totalBenefitsList,
             gameName,
             currChall,
             staff: {
@@ -55,24 +74,28 @@ export default function DiscountBenefit(props) {
             },
         };
 
-        showToast("Aplicando benefício...");
+        const uniqueId = getId();
 
-        getAPI({
+        await getAPI({
             method: "put",
             url: changeBenefit(),
             body: benefitBody,
             params: { userId: staffId }, // for token verify
         });
 
+        setRun("runName", `PendingBenefitsList${uniqueId}`, uify);
+
         showToast(
-            `Benefício registrado sucesso, ${firstStaffName}! Agora ${gender.toUpperCase()} cliente ${
+            `Benefício registrado com sucesso, ${firstStaffName}! Agora ${
+                gender === "Ele" ? "seu" : "sua"
+            } cliente ${
                 name && name.toUpperCase()
             } já pode receber o benefício. (${benefitDesc})`,
             { type: "success", dur: 15000 }
         );
 
         setTimeout(() => {
-            onClose();
+            closeModal();
         }, 2500);
 
         return false;
@@ -86,46 +109,43 @@ export default function DiscountBenefit(props) {
                 Benefício pelo cliente
             </h2>
             <div className="all-game-info text-left text-normal text-white text-shadow mt-3 mb-1 text-center">
-                <p className="pt-1 m-0 font-weight-bold">
-                    Jogo de compra concluído
-                </p>
-                <div className="discount-benefit-game-title container-center">
+                <p className="discount-benefit-game-title pt-1 m-0 font-weight-bold">
                     {gameIconsStore[gameName]}
-                    <p className="m-0 pb-2 text-left font-weight-bold">
-                        <span className="font-weight-normal">
-                            {getGameName(gameName)}
+                    {getGameName(gameName)}
+                    <br />
+                    <span className="d-block position-relative">
+                        N.º {currChall}
+                    </span>
+                </p>
+                <div>
+                    <p className="mx-3 pb-2 text-left font-weight-bold">
+                        <span className="d-block font-weight-normal">
+                            {benefitDesc}
                         </span>
-                        <br />
-                        <span className="font-weight-normal">
-                            Desafio:
-                        </span> N.º {currChall}
-                        <br />
                         <span className="font-weight-normal">Meta:</span>{" "}
-                        {targetPoints} pts
+                        {targetPoints} PTS
                     </p>
                 </div>
             </div>
             <div className="mt-4 text-left text-normal text-purple">
-                <p className="m-0">✔ Saldo Atual do cliente:</p>
+                <p className="m-0">✔ Saldo do cliente:</p>
                 <p>
                     <strong>
-                        • {convertDotToComma(currCustomerPoints)} Pts
+                        + {convertToReal(currCustomerPoints)} PTS (atual)
+                        <br />- {targetPoints} PTS
                     </strong>
                 </p>
+                <div className="container-center justify-content-start">
+                    <p className="text-pill text-white text-shadow font-weight-bold text-nowrap text-em-1-4">
+                        {convertToReal(leftCustomerPoints)} PTS
+                    </p>
+                </div>
             </div>
-            <div className="text-left text-normal text-purple my-1">
-                <p className="m-0">✔ Cliente fica com:</p>
-                <p className="font-weight-bold text-nowrap">
-                    • {convertDotToComma(leftCustomerPoints)} Pts Restantes
-                </p>
-            </div>
-            <p className="text-normal font-weight-bold mt-3 mx-3 m-0">
-                Confirmar benefício e descontar pontos?
-            </p>
             <section className="container-center mt-3 mb-5">
                 <ButtonFab
                     disabled={disableCTA}
-                    title="Aplicar"
+                    title="Confirmar recebimento"
+                    width="100%"
                     onClick={handleDiscount}
                     iconFontAwesome={<FontAwesomeIcon icon="minus-circle" />}
                     backgroundColor="var(--themeSDark)"
@@ -146,7 +166,11 @@ export default function DiscountBenefit(props) {
 
                     .discount-benefit-game-title svg {
                         font-size: 45px;
-                        margin-right: 30px;
+                        margin-right: 20px;
+                    }
+
+                    .discount-benefit-game-title span {
+                        top: -10px;
                     }
                 `}
             </style>
@@ -189,6 +213,10 @@ Even if you click right on the <p/> element, the action goes to the <div> elemen
 </div>
 
 /* ARCHIVES
+<p className="text-normal font-weight-bold mt-3 mx-3 m-0">
+    Confirmar benefício e descontar pontos?
+</p>
+
 const instruTxt =
         "A pontuação atual é descontada e zerada no app do cliente, iniciando um novo desafio. Mas o valor fica registrado no histórico de compras do cliente para consulta.";
 

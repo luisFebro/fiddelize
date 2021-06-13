@@ -22,7 +22,7 @@ export default function SuccessMsg({
     // const [succMsg] = useData(["text_cli-member_msg-score"], "audios");
     const { userId: memberId, name: memberName } = useData();
 
-    const lastPoints = useVar("lastTempPoints", { dots: true });
+    const lastTempPoints = useVar("lastTempPoints", { dots: true });
 
     const { bizLogo, txtColorStyle } = useBizData();
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
@@ -59,7 +59,7 @@ export default function SuccessMsg({
         // LESSON: this line won't be executed if there is an 400 status error.
         // No need to set a if(!data) return.
         showToast(
-            `Saldo de ${lastPoints} PTS desfeito e removido da conta do cliente`,
+            `Saldo de ${lastTempPoints} PTS desfeito e removido da conta do cliente`,
             { dur: 10000 }
         );
         closeModal();
@@ -90,7 +90,7 @@ export default function SuccessMsg({
                 {cliUserName}
                 <br />
                 <span className="text-subtitle">recebeu:</span>{" "}
-                <strong className="text-title">{lastPoints} PTS</strong>
+                <strong className="text-title">{lastTempPoints} PTS</strong>
                 <br />
                 <strong className="text-normal">Feito por: {memberName}</strong>
             </h2>

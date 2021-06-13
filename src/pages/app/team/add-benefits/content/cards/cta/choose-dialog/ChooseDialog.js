@@ -7,7 +7,8 @@ const selectBenefitType = (game) => {
     return "prêmio";
 };
 
-export default function ChooseDialog({ benefitsList, closeModal }) {
+export default function ChooseDialog(props) {
+    const { allBenefitGames } = props;
     const { themePColor } = useBizData();
 
     const showTitle = () => (
@@ -23,7 +24,7 @@ export default function ChooseDialog({ benefitsList, closeModal }) {
         <section className="text-white mx-3">
             {showTitle()}
             <section className="d-flex text-shadow justify-content-around animated fadeInUp choose-options-area">
-                {benefitsList.map((g) => (
+                {allBenefitGames.map((g) => (
                     <div key={g.game} className="card position-relative">
                         <div className="icon-wrapper">
                             {gameIconsStore[g.game]}
@@ -32,15 +33,19 @@ export default function ChooseDialog({ benefitsList, closeModal }) {
                             {selectBenefitType(g.game)}
                         </h2>
                         <p className="text-small pb-5 font-weight-bold">
-                            {g.desc}
+                            {g.benefitDesc}
                         </p>
                         <div className="cta my-3 container-center position-absolute">
                             <DiscountBenefitBtn
                                 title="este aqui"
                                 needTxtNoWrap
                                 position="relative"
-                                gameName={g.game}
-                                closeModal={closeModal}
+                                totalBenefitsList={
+                                    allBenefitGames && allBenefitGames.length
+                                }
+                                {...props}
+                                {...g}
+                                gameName={g.game} // LESSON: this order matters, DO NOT CHANGE IT! to override undefined gameName picked from one single benefit select
                             />
                         </div>
                     </div>

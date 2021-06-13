@@ -1,15 +1,15 @@
 import { useState, Fragment } from "react";
+import { addDays, formatDMY } from "utils/dates/dateFns";
+import getVar from "init/var";
+import extractStrData from "utils/string/extractStrData";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { gameBrNameStore } from "components/biz/GamesBadge";
 import {
     ShowTitle,
     ShowIllustration,
     ShowBrief,
     textStyle,
 } from "./DefaultRenderComps";
-import { addDays, formatDMY } from "utils/dates/dateFns";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getVar, { removeVar } from "init/var";
-import extractStrData from "utils/string/extractStrData";
-import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
 export default function CliUserConfirmedChall({
     role,
@@ -21,13 +21,12 @@ export default function CliUserConfirmedChall({
 }) {
     const [loading, setLoading] = useState(false);
 
-    const {
-        currChall,
-        // confirmedChall
-        prizeDeadline = 30,
-        prizeDesc,
-        prizeConfirmationDate,
-    } = extractStrData(content);
+    const { beatGamesData, prizeConfirmationDate } = extractStrData(content);
+
+    const beatGamesDataTreated = JSON.parse(beatGamesData);
+    const totalBenefits = beatGamesDataTreated && beatGamesDataTreated.length;
+
+    const prizeDeadline = 30;
 
     const addedDaysToDate = prizeConfirmationDate
         ? addDays(new Date(prizeConfirmationDate), Number(prizeDeadline) + 1)
@@ -35,57 +34,69 @@ export default function CliUserConfirmedChall({
     const deadlineDate = formatDMY(addedDaysToDate);
 
     const handleCTA = () => {
-        if (!currChall) return;
-
         setLoading(true);
 
-        removeVersion({
-            key: "alreadyAlertChallenge",
-            value: currChall,
-        }).then(() => {
-            window.location.href =
-                role === "cliente-admin"
-                    ? "/mobile-app?client-admin=1"
-                    : "/mobile-app";
+        window.location.href =
+            role === "cliente-admin"
+                ? "/mobile-app?client-admin=1"
+                : "/mobile-app";
 
-            removeVar("pendingChall");
-            setLoading(false);
-        });
+        setLoading(false);
     };
+
+    const showBenefitList = () => (
+        <Fragment>
+            {beatGamesDataTreated.map((elem) => (
+                <section key={elem.game} className="mt-5 text-normal">
+                    <h2 className="text-subtitle font-weight-bold">
+                        {gameBrNameStore[elem.game]} N.º {elem.currChall}
+                    </h2>
+                    ✔ Meta alcançada:
+                    <h2 className="text-normal font-weight-bold">
+                        {elem.targetPoints} PTS
+                    </h2>
+                    ✔ Benefício:
+                    <h2 className="text-normal font-weight-bold">
+                        {elem.benefitDesc}
+                    </h2>
+                    {elem.game === "targetPrize" && (
+                        <p>
+                            ✔ Prazo para resgatar prêmio:
+                            <br />
+                            <strong>
+                                • {prizeDeadline} dias
+                                <br />
+                                <span> (até {deadlineDate})</span>
+                            </strong>
+                        </p>
+                    )}
+                </section>
+            ))}
+        </Fragment>
+    );
 
     return (
         <Fragment>
-            <ShowTitle text="Confirmação de Prêmio" />
+            <ShowTitle text="Benefícios Disponíveis" />
             <ShowIllustration role={role} mainImg={mainImg} bizLogo={bizLogo} />
             <ShowBrief brief={brief} />
             <section className={textStyle}>
-                <header className="font-weight-bold">
-                    {userName}, segue os detalhes:
+                <header className="mt-3 font-weight-bold">
+                    {userName}, segue detalhes benefícios disponíveis:
                 </header>
-                <br />
-                <p>
-                    ✔ Prêmio do desafio nº {currChall}:
-                    <br />
-                    <strong> • {prizeDesc}</strong>
-                </p>
-                <p>
-                    ✔ Prazo para resgatar prêmio:
-                    <br />
-                    <strong>
-                        • {prizeDeadline} dias
-                        <br />
-                        <span> (até {deadlineDate})</span>
-                    </strong>
-                </p>
+                {showBenefitList()}
+                {totalBenefits > 1 && (
+                    <p className="text-small mt-5 font-weight-bold">
+                        <strong className="text-normal">Notas:</strong>
+                        <br />- Você pode escolher qual benefício quer resgatar
+                        de acordo com o seu{" "}
+                        <strong>saldo disponível em PTS</strong>.
+                    </p>
+                )}
                 <section className="container-center my-5">
                     <ButtonFab
-                        title={
-                            loading ? "Processando..." : "Começar novo desafio"
-                        }
+                        title={loading ? "Processando..." : "Voltar"}
                         onClick={handleCTA}
-                        iconFontAwesome={
-                            <FontAwesomeIcon icon="minus-circle" />
-                        }
                         backgroundColor="var(--themeSDark)"
                         variant="extended"
                         position="relative"
@@ -99,14 +110,14 @@ export default function CliUserConfirmedChall({
 
 // HELPERS
 // handle the variable version to be removed - challenge_1 - always insert _1 to get the version.
-function removeVersion({ key, value }) {
-    if (!key || !value) return null;
+// function removeVersion({ key, value }) {
+//     if (!key || !value) return null;
 
-    return getVar(key).then((storedVersion) => {
-        const currVersion = Number(value);
-        if (currVersion >= Number(storedVersion)) {
-            removeVar(key);
-        }
-    });
-}
+//     return getVar(key).then((storedVersion) => {
+//         const currVersion = Number(value);
+//         if (currVersion >= Number(storedVersion)) {
+//             removeVar(key);
+//         }
+//     });
+// }
 // END HELPERS

@@ -2,8 +2,12 @@ import { useState } from "react";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
+import DotBadge from "components/badges/DotBadge";
 import { Load } from "components/code-splitting/LoadableComp";
 import { useBizData } from "init";
+import getItems from "init/lStorage";
+
+const [benefitsNotif] = getItems("bizData", ["benefitsNotif"]);
 
 const AsyncBenefitsContent = Load({
     loading: true,
@@ -35,22 +39,23 @@ export default function AddBenefitsBtn() {
 
     return (
         <section>
-            <ButtonFab
-                size="large"
-                title="BENEFÍCIOS"
-                iconToLeft
-                backgroundColor={`var(--themeSDark--${themeSColor})`}
-                onClick={handleFullOpen}
-                iconMu={PlusIcon}
-                position="relative"
-                variant="extended"
-            />
+            <DotBadge invisible={!benefitsNotif}>
+                <ButtonFab
+                    size="large"
+                    title="BENEFÍCIOS"
+                    iconToLeft
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
+                    onClick={handleFullOpen}
+                    iconMu={PlusIcon}
+                    position="relative"
+                    variant="extended"
+                />
+            </DotBadge>
             <ModalFullContent
                 contentComp={<AsyncBenefitsContent />}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}
-                backgroundColor="var(--mainWhite)"
             />
         </section>
     );

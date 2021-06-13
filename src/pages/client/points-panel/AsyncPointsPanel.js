@@ -16,10 +16,10 @@ import getAPI, { addPoints } from "api";
 import getVar, { setVar, removeVars } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import GamesBadge from "components/biz/GamesBadge";
-import getIntOrFloat from "utils/numbers/getIntOrFloat";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
 import useCheckBeatGames from "./hooks/useCheckBeatGames";
+// import getIntOrFloat from "utils/numbers/getIntOrFloat";
 
 const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
@@ -49,7 +49,7 @@ function AsyncPointsPanel({ history, location }) {
         store: "global_vars",
         dots: false,
     });
-    paidValue = getIntOrFloat(paidValue);
+    // paidValue = getIntOrFloat(paidValue);
 
     // MAIN VARIABLES
     const {
@@ -97,16 +97,16 @@ function AsyncPointsPanel({ history, location }) {
     const animatedNumber = useRef(null);
     useBackColor(`var(--themeBackground--${colorBack})`);
 
-    useEffect(() => {
-        if (cardDataLoading) return;
-        getVar("alreadySetTempPoints").then((alreadySetScore) => {
-            // avoid user to restart page and end up adding more scores
-            if (alreadySetScore) setVar({ alreadySetTempPoints: false });
-            if (!paidValue || alreadySetScore) history.push(path);
-        });
+    // useEffect(() => {
+    //     if (cardDataLoading) return;
+    //     getVar("alreadySetTempPoints").then((alreadySetScore) => {
+    //         // avoid user to restart page and end up adding more scores
+    //         if (alreadySetScore) setVar({ alreadySetTempPoints: false });
+    //         if (!paidValue || alreadySetScore) history.push(path);
+    //     });
 
-        // eslint-disable-next-line
-    }, [cardDataLoading, paidValue]);
+    //     // eslint-disable-next-line
+    // }, [cardDataLoading, paidValue]);
 
     useEffect(() => {
         (async () => {
@@ -160,7 +160,7 @@ function AsyncPointsPanel({ history, location }) {
 
             const bodyPoints = {
                 userId: cliUserId, // for auth
-                lastPoints: paidValue,
+                paidValue,
                 currPoints: currPointsNow,
                 totalGeneralPoints: totalGeneralPoints + paidValue,
                 staff,
@@ -238,7 +238,7 @@ function AsyncPointsPanel({ history, location }) {
                     className="position-relative text-center text-hero"
                     style={{ top: -15 }}
                 >
-                    {convertDotToComma(currPointsBefore || 100)}{" "}
+                    {convertDotToComma(currPointsBefore)}{" "}
                     <span className="text-subtitle font-weight-bold">PTS</span>
                 </p>
             </section>
@@ -248,6 +248,7 @@ function AsyncPointsPanel({ history, location }) {
                     className="position-relative container-center"
                     style={{ top: -15 }}
                 >
+                    <p className="mr-2 text-center text-hero">+</p>
                     <p className="text-center text-hero" ref={animatedNumber}>
                         ...
                     </p>

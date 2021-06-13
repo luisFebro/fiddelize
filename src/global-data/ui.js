@@ -30,6 +30,13 @@ export const setRun = (type, data, uify) => {
 
 // pass uify to update data instantly in the UI. Use it only when data is in another component. For local ones, use local states to update instantly
 // e.g update picture in the ui
+/*
+updateUI(
+    "bizData",
+    { "clientAdminData.bizLogo": bizLogoLink },
+    uify
+);
+ */
 export const updateUI = (storeName, data, uify) => {
     const treatedData = treatObjForUify(data);
 

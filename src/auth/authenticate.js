@@ -1,6 +1,7 @@
 import { setVars, setVar } from "init/var";
 import isThisApp from "utils/window/isThisApp";
-import getItems, { setItems } from "init/lStorage";
+import getItems from "init/lStorage";
+import { updateUI } from "global-data/ui";
 
 const isApp = isThisApp();
 
@@ -32,16 +33,19 @@ export default async function authenticate(newToken, options = {}) {
         throw new Error(
             "authenticate requires an valid JWT token as the first parameter"
         );
-    const { history, role } = options;
+    const { history, role, uify } = options;
     // these variables are set and avaiable after CPF login.
 
     await setVars({ success: true, token: newToken }, "user");
-    setItems("currUser", {
-        token: newToken,
-    });
+    updateUI(
+        "currUser",
+        {
+            token: newToken,
+        },
+        uify
+    );
 
     const { bizLinkName } = getItems("bizData", ["bizLinkName"]);
-    console.log("bizLinkName AUTHENTICATE CHECK", bizLinkName);
 
     if (role === "cliente-admin") {
         await setVar({ welcomeMsg: true });

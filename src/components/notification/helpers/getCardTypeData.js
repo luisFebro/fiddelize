@@ -1,6 +1,6 @@
-import getFirstName from "../../../utils/string/getFirstName";
-import extractStrData from "../../../utils/string/extractStrData";
-import { formatDMY } from "../../../utils/dates/dateFns";
+import getFirstName from "utils/string/getFirstName";
+import extractStrData from "utils/string/extractStrData";
+import { formatDMY } from "utils/dates/dateFns";
 
 export default function getCardTypeData(cardType, options = {}) {
     const { genderLetter, userName, bizName, role, content, subtype } = options;
@@ -34,14 +34,29 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "challenge": {
-            const { currChall: thisCurrChall, prizeDesc } = extractStrData(
-                content
+            const { beatGamesData } = extractStrData(content);
+
+            const beatGamesDataTreated = JSON.parse(beatGamesData);
+            const gameData = beatGamesDataTreated.map(
+                (elem) => elem.benefitDesc
             );
 
-            if (subtype === "confirmedChall") {
-                title = "Desafio Confirmado";
-                brief = `Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio (${prizeDesc}) disponível para resgate.`;
-            }
+            const totalBenefits = gameData.length;
+            const plural = totalBenefits > 1 ? "s" : "";
+
+            const handleBenefitDesc = () => {
+                if (plural) return `, incluindo ${gameData[0]},`;
+                return ` (${gameData[0]})`;
+            };
+            const action =
+                plural === "s" ? `escolhidos para resgate` : "resgatado";
+            title = `Benefício${plural} Disponíve${
+                plural === "s" ? "is" : "l"
+            }`;
+            brief = `§${totalBenefits} benefício${plural}§${handleBenefitDesc()} já pode${
+                plural === "s" ? "m" : ""
+            } ser ${action} na sua próxima compra na §${bizName}§`;
+
             circularImg = "/img/icons/trophies/fiddelize-trophy.svg";
             break;
         }

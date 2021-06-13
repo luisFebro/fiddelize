@@ -8,7 +8,6 @@ import useData from "init";
 import { updateUser } from "api/frequent";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import "./_BuyReviewList.scss";
-import { isAfter } from "utils/dates/dateFns";
 import BuyReviewCard from "./BuyReviewCard";
 import BuyReviewFilter from "./BuyReviewFilter";
 
@@ -42,7 +41,6 @@ export default function BuyReviewList({ lastDateChecked, isBizAdmin = false }) {
         ShowLoadingSkeleton,
         error,
         ShowError,
-        needEmptyIllustra,
         hasMore,
         isOffline,
         ShowOverMsg,
@@ -78,14 +76,8 @@ export default function BuyReviewList({ lastDateChecked, isBizAdmin = false }) {
     const showList = () => (
         <section className="container-center-col">
             {reviewsList.map((re, ind) => {
-                const isCardNew = isAfter(
-                    // is reportUpdated newest/latest than when admin checked it in the last time?
-                    new Date(re.reportUpdatedAt),
-                    new Date(lastDateChecked)
-                );
-
                 const commonCardData = {
-                    isCardNew,
+                    lastDateChecked,
                     data: re,
                 };
 

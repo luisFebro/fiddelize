@@ -3,19 +3,19 @@ import { gameIconsStore } from "components/biz/GamesBadge";
 import { calendar } from "utils/dates/dateFns";
 import UndoContentBtn from "./undo/UndoContentBtn";
 
-const benefitTest = {
-    game: "targetPrize",
-    desc: "2 pares de Ticket de Ingresso para cinema",
-    doneDate: new Date(),
-    doneBy: "Luis Febro",
-};
-
 export default function DoneCard({ data }) {
-    const { name, benefit = benefitTest } = data;
+    const {
+        game,
+        benefitDesc,
+        doneBy,
+        customerName,
+        beatGameList,
+        updatedAt,
+    } = data;
 
     const { themePColor } = useBizData();
 
-    const selectBenefitType = (game) => {
+    const selectBenefitType = () => {
         if (game === "discountBack") return "vale";
         return "prêmio";
     };
@@ -44,34 +44,32 @@ export default function DoneCard({ data }) {
     );
 
     return (
-        <section className="benefit-card--root mb-3 position-relative text-normal text-white text-shadow">
+        <section className="benefit-card--root mb-4 position-relative text-normal text-white text-shadow">
             <h2
                 className="text-subtitle font-weight-bold"
                 style={{ lineHeight: "25px" }}
             >
-                {name}
+                {customerName && customerName.cap()}
                 <span className="d-inline-block m-0 ml-2 text-normal">
                     recebeu:
                 </span>
             </h2>
             <section className="d-flex my-2">
                 <div className="container-center-col">
-                    {gameIconsStore[benefit.game]}
+                    {gameIconsStore[game]}
                     <span className="font-weight-bold text-small">
-                        {selectBenefitType(benefit.game)}
+                        {selectBenefitType(game)}
                     </span>
                 </div>
-                <div className="benefit-desc position-relative text-normal ml-3">
-                    {benefit.desc}
+                <div className="benefit-desc px-2 position-relative text-normal ml-3">
+                    {benefitDesc}
                 </div>
             </section>
             <div className="text-small">
                 <strong>feito por:</strong>
                 <br />
-                {benefit.doneBy}
-                <strong className="mt-1 d-block">
-                    {calendar(benefit.doneDate)}
-                </strong>
+                {doneBy}
+                <strong className="mt-1 d-block">{calendar(updatedAt)}</strong>
             </div>
             {showStatusBadge()}
             <style jsx>

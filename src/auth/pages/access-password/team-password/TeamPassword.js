@@ -11,6 +11,7 @@ import useBackColor from "hooks/useBackColor";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import disconnect from "auth/disconnect";
 import getId from "utils/getId";
+import { useAction } from "global-data/ui";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -33,6 +34,7 @@ export default function TeamPassword({ history }) {
 
     const { bizId, themeBackColor: backColor } = useBizData();
     useBackColor(`var(--themeBackground--${backColor})`);
+    const uify = useAction();
 
     const styles = getStyles();
 
@@ -52,10 +54,7 @@ export default function TeamPassword({ history }) {
             loader: true,
         }).catch((err) => {
             if (err.status !== 200)
-                return showToast(
-                    "Algo deu errado ao verificar nova senha. Tente novamente",
-                    { type: "error" }
-                );
+                return showToast("Senha incorreta.", { type: "error" });
 
             return null;
         });
@@ -75,7 +74,7 @@ export default function TeamPassword({ history }) {
             body: bodyForToken,
         });
 
-        await authenticate(token, { history, role });
+        await authenticate(token, { history, role, uify });
     };
 
     const handleLogout = () => {

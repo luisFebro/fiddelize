@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "@material-ui/core/Card";
 import PropTypes from "prop-types";
 import useSexLetter from "hooks/biz/useSexLetter";
-import { useBizData } from "init";
-import useData from "init";
-import useDelay from "../../hooks/useDelay";
-import { fromNow } from "../../utils/dates/dateFns";
+import useData, { useBizData } from "init";
+import useDelay from "hooks/useDelay";
+import { fromNow } from "utils/dates/dateFns";
+import NewCardPill from "components/pills/NewCardPill";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
 
@@ -28,14 +28,6 @@ const getStyles = ({ clicked, backColor, grayScaleReady }) => ({
     card: {
         backgroundColor: !clicked ? `var(--themePDark--${backColor})` : "grey",
         overflow: "visible",
-    },
-    newBadge: {
-        borderRadius: "40%",
-        padding: "0px 4px",
-        border: "3px solid var(--mainWhite)",
-        background: "var(--niceUiYellow)",
-        color: "var(--mainDark)",
-        animationDuration: "3s",
     },
     circularImg: {
         filter: clicked && grayScaleReady ? "grayscale(100%)" : "grayscale(0%)",
@@ -116,16 +108,7 @@ function NotifCard(props) {
 
     const showActionBtn = () => <CardActionBtn {...ctaProps} />;
 
-    const showNewCardBadge = () =>
-        !isCliMember &&
-        isCardNew && (
-            <div
-                style={styles.newBadge}
-                className="font-weight-bold animated fadeInUp delay-3s delay-3s text-small text-center"
-            >
-                Novo
-            </div>
-        );
+    const showNewCardBadge = () => !isCliMember && isCardNew && <NewCardPill />;
 
     const showCircularImg = () => (
         <div

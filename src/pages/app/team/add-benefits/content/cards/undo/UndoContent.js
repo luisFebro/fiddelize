@@ -8,8 +8,8 @@ export default function UndoContent() {
             cliente
             <br />
             <br />
-            &gt; O saldo do cliente é restaurado para o valor antes da aplicação
-            do benefício.
+            &gt; O saldo do cliente e o número do desafio são restaurados para
+            os valores antes da aplicação do benefício.
             <p className="mt-3 m-0 font-weight-bold text-center text-normal">
                 Confirmado?
             </p>

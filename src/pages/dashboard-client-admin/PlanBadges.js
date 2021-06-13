@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NotificationBadge from "../../components/NotificationBadge";
+import NotificationBadge from "../../components/badges/NotificationBadge";
 import useData from "init";
 import { useBizData } from "init";
 import RadiusBtn from "../../components/buttons/RadiusBtn";

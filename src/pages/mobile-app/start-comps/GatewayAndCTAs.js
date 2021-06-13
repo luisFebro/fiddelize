@@ -1,16 +1,9 @@
 import getColor from "styles/txt";
 import RedirectLink from "components/RedirectLink";
 import RadiusBtn from "components/buttons/RadiusBtn";
-import { Load } from "components/code-splitting/LoadableComp";
 import disconnect from "auth/disconnect";
 
-const AsyncAccessGateKeeper = Load({
-    loading: false,
-    loader: () =>
-        import(
-            "auth/pages/access-password/mobile-app/AccessGateKeeper" /* webpackChunkName: "gate-keeper-comp-lazy" */
-        ),
-});
+import AccessGateKeeper from "auth/pages/access-password/mobile-app/AccessGateKeeper";
 
 export default function GatewayAndCTAs({
     isSessionOver,
@@ -21,7 +14,7 @@ export default function GatewayAndCTAs({
     loadingAccess,
 }) {
     const handleLogout = () => {
-        disconnect();
+        disconnect({ msg: true });
     };
 
     return (
@@ -63,7 +56,7 @@ export default function GatewayAndCTAs({
                 </section>
             )}
             {isSessionOver && !loadingAccess && (
-                <AsyncAccessGateKeeper
+                <AccessGateKeeper
                     backColor={themeBackColor}
                     sColor={themeSColor}
                 />

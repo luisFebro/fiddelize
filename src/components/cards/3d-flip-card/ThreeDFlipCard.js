@@ -2,8 +2,9 @@
 import { Fragment, useEffect } from "react";
 import "./_ThreeDFlipCard.scss";
 import { useBizData } from "init";
-import { formatSlashDMY } from "../../../utils/dates/dateFns";
-import removeImgFormat from "../../../utils/biz/removeImgFormat";
+import { formatSlashDMY } from "utils/dates/dateFns";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import convertToReal from "utils/numbers/convertToReal";
 
 function getTransformValue(v1, v2, value) {
     return (((v1 / v2) * value - value / 2) * 1).toFixed(1);
@@ -116,7 +117,7 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
             </div>
             <div className="score-text pt-3 text-center text-subtitle text-white text-3d-shadow">
                 Vale
-                <span className="text-title"> {score} </span>
+                <span className="text-title"> {convertToReal(score)} </span>
                 PTS
             </div>
             <div className="holder text-3d-shadow">

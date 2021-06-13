@@ -36,7 +36,7 @@ export default function convertToReal(number, options = {}) {
 
     res = number.toLocaleString("pt-BR", config);
 
-    const needComma = (number) => number < 1000 && comma;
+    const needComma = () => number < 1000 && comma;
     if (needComma(number)) {
         res = res.toString().replace(".", ",");
     }

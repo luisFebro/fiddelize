@@ -4,10 +4,11 @@ import FaqAccordion from "components/expansion-panels/faq/FaqAccordion";
 const ptsCurrency = (
     <Fragment>
         <p>
-            A PTS (pronúncia: pítis) é a moeda digital exclusiva de pontos de
-            compra para troca de benefícios como descontos e prêmios. A maneira
-            como é usada é por meio de jogos de compra onde o cliente atinge a
-            meta em pontos e troca com o seu saldo em pts
+            A PTS (pronúncia: pítis) é a moeda digital exclusiva de{" "}
+            <strong>pontos de compra</strong> para troca de benefícios como
+            descontos e prêmios. É usada principalmente em jogos de compra onde
+            o cliente precisa atingir uma meta em PTS (pontos) para trocar por
+            benefícios oferecidos por negócios.
         </p>
         <img
             className="mt-3 img-center shadow-babadoo-filter"
