@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchField from "components/search/SearchField";
 import useData, { useBizData } from "init";
 import useAPIList, {
@@ -23,6 +23,12 @@ export default function DoneBenefitsList() {
     };
 
     const { runName } = useRun();
+    useEffect(() => {
+        if (runName) {
+            setSkip(0);
+            setSearch("");
+        }
+    }, [runName]);
 
     const {
         list = [],
@@ -34,19 +40,24 @@ export default function DoneBenefitsList() {
         ShowLoadingSkeleton,
         error,
         ShowError,
+        isOffline,
         ShowOverMsg,
     } = useAPIList({
         url: readBenefitCards(),
         skip,
         params,
-        listName: "PendingBenefitsList",
-        limit: 10,
-        trigger: runName || true,
+        listName: "DoneBenefitsList",
+        disableDupFilter: true,
+        trigger: search || runName || true, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
     });
 
     // SEARCH
     const handleSearch = (entry) => {
-        if (entry === "_cleared") return setSearch("");
+        if (entry === "_cleared") {
+            setSearch("");
+            setSkip(0);
+            return null;
+        }
         return setSearch(entry);
     };
 
@@ -58,18 +69,23 @@ export default function DoneBenefitsList() {
     const showCustomerSearch = () => (
         <SearchField
             callback={handleSearch}
-            searchUrl={benefitCardsAutocomplete(bizId)}
+            searchUrl={benefitCardsAutocomplete(bizId, { isReceived: true })}
             autocompleteProps={autocompleteProps}
         />
     );
     // END SEARCH
 
     // INFINITY LOADING LIST
-    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+    const detectedCard = useElemDetection({
+        loading,
+        hasMore,
+        setSkip,
+        isOffline,
+    });
     const showCard = (data) => <DoneCard data={data} />;
 
     const listMap = list.map((data, ind) =>
-        checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
+        checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
             <section key={data._id} ref={detectedCard}>
                 {showCard(data)}
             </section>

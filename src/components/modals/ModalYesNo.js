@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -6,6 +6,7 @@ import parse from "html-react-parser";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
+import getId from "utils/getId";
 
 ModalConfYesNo.propTypes = {
     title: PropTypes.string,
@@ -26,6 +27,12 @@ export default function ModalConfYesNo({
     marginCTA,
 }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
+
+    const newUpdate = getId();
+
+    useEffect(() => {
+        setIsYesBtnDisabled(false);
+    }, [newUpdate]);
 
     const showActionBtns = () => (
         <section>

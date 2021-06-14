@@ -109,7 +109,6 @@ export default function AsyncCardsList() {
     const showAccordion = () => {
         const actions = list.map((data) => {
             const { escrowEndDate, paymentMethod } = data;
-            console.log("paymentMethod", paymentMethod);
             const daysLeftMoneyAvalaible = !escrowEndDate
                 ? null
                 : getDatesCountdown(escrowEndDate);

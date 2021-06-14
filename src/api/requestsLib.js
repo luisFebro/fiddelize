@@ -38,8 +38,8 @@ export const changeBenefitStatus = (cliUserId, statusType) =>
 
 // points and benefits
 export const readBenefitCards = () => `${ROOT}/user/cli-user/list/benefits`; // GET
-export const benefitCardsAutocomplete = (bizId, limit = 5) =>
-    `${ROOT}/user/cli-user/list/benefit-cards/autocomplete?bizId=${bizId}&limit=${limit}`; // GET
+export const benefitCardsAutocomplete = (bizId, { isReceived, limit = 5 }) =>
+    `${ROOT}/user/cli-user/list/benefit-cards/autocomplete?bizId=${bizId}&limit=${limit}&isReceived=${isReceived}`; // GET
 export const changeBenefit = () => `${ROOT}/user/cli-user/change-benefit`; // PUT
 export const addTempPoints = () => `${ROOT}/user/cli-user/temp-points/add`;
 export const removeTempPoints = () =>

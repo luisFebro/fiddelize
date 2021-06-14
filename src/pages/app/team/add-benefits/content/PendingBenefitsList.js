@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import SearchField from "components/search/SearchField";
 import useData, { useBizData } from "init";
 import useAPIList, {
@@ -28,6 +28,13 @@ export default function PendingBenefitsList() {
 
     const { runName } = useRun();
 
+    useEffect(() => {
+        if (runName) {
+            setSkip(0);
+            setSearch("");
+        }
+    }, [runName]);
+
     const {
         list = [],
         listTotal: benefitsCount,
@@ -38,19 +45,24 @@ export default function PendingBenefitsList() {
         ShowLoadingSkeleton,
         error,
         ShowError,
+        isOffline,
         ShowOverMsg,
     } = useAPIList({
         url: readBenefitCards(),
         skip,
         params,
         listName: "PendingBenefitsList",
-        limit: 10,
-        trigger: runName || search || true,
+        filterId: "customerId", // IMPORTANT: this is to avoid duplication. the default is _id, if not found, it will be loading issue. Set here the actual id of each card
+        trigger: search || runName || true,
     });
 
     // SEARCH
     const handleSearch = (entry) => {
-        if (entry === "_cleared") return setSearch("");
+        if (entry === "_cleared") {
+            setSearch("");
+            setSkip(0);
+            return null;
+        }
         return setSearch(entry);
     };
 
@@ -63,7 +75,9 @@ export default function PendingBenefitsList() {
         <Fragment>
             <SearchField
                 callback={handleSearch}
-                searchUrl={benefitCardsAutocomplete(bizId)}
+                searchUrl={benefitCardsAutocomplete(bizId, {
+                    isReceived: false,
+                })}
                 autocompleteProps={autocompleteProps}
             />
             <div className="or-scanner position-relative d-flex justify-content-end align-items-center mr-3">
@@ -84,11 +98,16 @@ export default function PendingBenefitsList() {
     // END SEARCH
 
     // INFINITY LOADING LIST
-    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+    const detectedCard = useElemDetection({
+        loading,
+        hasMore,
+        setSkip,
+        isOffline,
+    });
     const showCard = (data) => <PendingCard data={data} />;
 
     const listMap = list.map((data, ind) =>
-        checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
+        checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
             <section key={data._id} ref={detectedCard}>
                 {showCard(data)}
             </section>

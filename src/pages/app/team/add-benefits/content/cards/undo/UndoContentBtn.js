@@ -1,8 +1,14 @@
 import { useState } from "react";
-import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
 import DeleteButton from "components/buttons/DeleteButton";
 import ModalConfYesNo from "components/modals/ModalYesNo";
+import showToast from "components/toasts";
+import getItems from "init/lStorage";
+import getAPI, { changeBenefit } from "api";
+import { setRun, useAction } from "global-data/ui";
+import getId from "utils/getId";
+
+const [staffId] = getItems("currUser", ["userId"]);
 
 const AsyncUndoContent = Load({
     loading: true,
@@ -12,8 +18,18 @@ const AsyncUndoContent = Load({
         ),
 });
 
-export default function UndoBtn(props) {
+export default function UndoContentBtn(props) {
     const [fullOpen, setFullOpen] = useState(false);
+
+    const uify = useAction();
+
+    const {
+        gender,
+        customerName,
+        currPoints,
+        targetPoints,
+        benefitDesc,
+    } = props;
 
     const handleFullOpen = () => {
         setFullOpen(true);
@@ -23,7 +39,38 @@ export default function UndoBtn(props) {
         setFullOpen(false);
     };
 
-    const handleRemoval = () => {
+    const handleRemoval = async () => {
+        const benefitBody = {
+            isReceived: false,
+            restorePoints: currPoints + targetPoints,
+            customerId: props.customerId,
+            benefitId: props.benefitId,
+            recordId: props.recordId,
+            currChall: props.currChall,
+            gameName: props.gameName,
+            staff: {
+                name: props.doneBy,
+            },
+        };
+
+        await getAPI({
+            method: "put",
+            url: changeBenefit(),
+            body: benefitBody,
+            params: { userId: staffId }, // for token verify
+        });
+
+        const uniqueId = getId();
+        setRun("runName", `DoneBenefitsList${uniqueId}`, uify);
+
+        showToast(
+            `A aplicação do benefício (${benefitDesc}) d${
+                gender === "Ele" ? "o" : "a"
+            } cliente ${
+                customerName && customerName.toUpperCase()
+            } foi revertida e pontos restaurados`,
+            { type: "success" }
+        );
         handleFullClose();
     };
 

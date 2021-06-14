@@ -11,10 +11,10 @@ import disconnect from "auth/disconnect";
 import Skeleton from "components/multimedia/Skeleton";
 import { IS_DEV } from "config/clientUrl";
 import extractStrData from "utils/string/extractStrData";
-import isThisApp from "utils/window/isThisApp";
+// import isThisApp from "utils/window/isThisApp";
 import Spinner from "components/loadingIndicators/Spinner";
 
-const isApp = isThisApp();
+// const isApp = isThisApp();
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
@@ -57,7 +57,8 @@ export default function useAPIList({
     forceTrigger = false, // by default, in this API, trigger only serves as a reload rathan than preventing the list loading. To activate this later behavior, put it as true
     listName, // offline usage
     needAuth = true,
-    isFiltering = false,
+    filterId = "_id",
+    disableDupFilter = false, // disable equal matching filter
 }) {
     const [data, setData] = useState({
         list: [],
@@ -103,10 +104,12 @@ export default function useAPIList({
     });
 
     useEffect(() => {
-        if (trigger) {
-            setUpdateFirstChunkOnly(true);
-        }
+        if (trigger) setUpdateFirstChunkOnly(trigger);
     }, [trigger]);
+
+    useEffect(() => {
+        if (data.list.length) setLoading(false);
+    }, [data.list]);
 
     useEffect(() => {
         if (isOffline || offlineBtn) {
@@ -121,21 +124,20 @@ export default function useAPIList({
         return () => setIgnore(true);
     }, [isOffline, offlineBtn, offlineList]);
 
-    useEffect(() => {
-        if (data.list.length) setLoading(false);
-    }, [data.list]);
-
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
-        const listType = updateOnly
-            ? response.data.list
+
+        const handledListUnion = disableDupFilter
+            ? [...list, ...response.data.list]
             : [...list, ...response.data.list].filter(
                   (val, ind, arr) =>
-                      arr.findIndex((t) => t._id === val._id) === ind
-              ); // allow only unique objects by comparing their ids
-        const { listTotal } = response.data;
-        const { chunksTotal } = response.data;
-        const { content } = response.data; // for all other kind of data
+                      arr.findIndex((t) => t[filterId] === val[filterId]) ===
+                      ind
+              );
+
+        const listType = updateOnly ? response.data.list : handledListUnion; // allow only unique objects by comparing their ids
+
+        const { listTotal, chunksTotal, content } = response.data;
         if (IS_DEV) console.log("listType", listType);
 
         setData({
@@ -167,12 +169,13 @@ export default function useAPIList({
             if (!trigger) return;
         }
 
-        let cancel;
-
-        if (reachedChunksLimit && !isFiltering) {
+        if (reachedChunksLimit && !updateFirstChunkOnly) {
+            //
             if (hasMore) setHasMore(false);
             return;
         }
+
+        let cancel;
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         if (updateOnly) skip = 0;
@@ -183,6 +186,7 @@ export default function useAPIList({
         }, timeout);
 
         setError(false);
+        setLoading(true);
 
         const config = {
             url,
@@ -190,7 +194,9 @@ export default function useAPIList({
             data: body,
             params: { ...params, skip },
             headers: chooseHeader({ token, needAuth }),
-            cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
+            cancelToken: new axios.CancelToken((c) => {
+                cancel = c;
+            }), // n1
         };
 
         setUpdateFirstChunkOnly(false);
@@ -210,6 +216,7 @@ export default function useAPIList({
 
                     const { status } = e.response;
                     handleError(status);
+                    setUpdateFirstChunkOnly(false);
                 }
             }
         }
@@ -217,10 +224,10 @@ export default function useAPIList({
         doRequest();
 
         return () => {
-            cancel();
+            // cancel();
             clearTimeout(stopRequest);
         };
-    }, [trigger, reload, skip, reachedChunksLimit, isFiltering]);
+    }, [trigger, reload, skip, reachedChunksLimit, updateFirstChunkOnly]);
 
     const handleReloadBtn = () => {
         if (isOffline) window.location.href = "/mobile-app";

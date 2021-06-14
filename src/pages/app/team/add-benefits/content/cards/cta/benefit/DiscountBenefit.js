@@ -74,8 +74,6 @@ export default function DiscountBenefit(props) {
             },
         };
 
-        const uniqueId = getId();
-
         await getAPI({
             method: "put",
             url: changeBenefit(),
@@ -83,6 +81,7 @@ export default function DiscountBenefit(props) {
             params: { userId: staffId }, // for token verify
         });
 
+        const uniqueId = getId();
         setRun("runName", `PendingBenefitsList${uniqueId}`, uify);
 
         showToast(

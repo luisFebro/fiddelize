@@ -5,9 +5,6 @@ import ModalFullContent from "components/modals/ModalFullContent";
 import DotBadge from "components/badges/DotBadge";
 import { Load } from "components/code-splitting/LoadableComp";
 import { useBizData } from "init";
-import getItems from "init/lStorage";
-
-const [benefitsNotif] = getItems("bizData", ["benefitsNotif"]);
 
 const AsyncBenefitsContent = Load({
     loading: true,
@@ -27,7 +24,7 @@ const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
 export default function AddBenefitsBtn() {
     const [fullOpen, setFullOpen] = useState(false);
-    const { themeSColor } = useBizData();
+    const { themeSColor, benefitsNotif } = useBizData();
 
     const handleFullOpen = () => {
         setFullOpen(true);

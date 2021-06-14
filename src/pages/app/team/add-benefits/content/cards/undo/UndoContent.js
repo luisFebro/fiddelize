@@ -4,8 +4,8 @@ export default function UndoContent() {
             <p className="text-normal font-weight-bold">
                 Todas as seguintes ações são desfeitas:
             </p>
-            &gt; A opção de RECEBIDO é desmarcada no histórico de compra do
-            cliente
+            &gt; O benefício adicionado é <strong>REMOVIDO</strong> do histórico
+            do cliente
             <br />
             <br />
             &gt; O saldo do cliente e o número do desafio são restaurados para

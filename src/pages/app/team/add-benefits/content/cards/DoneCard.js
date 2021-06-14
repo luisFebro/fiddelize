@@ -3,15 +3,8 @@ import { gameIconsStore } from "components/biz/GamesBadge";
 import { calendar } from "utils/dates/dateFns";
 import UndoContentBtn from "./undo/UndoContentBtn";
 
-export default function DoneCard({ data }) {
-    const {
-        game,
-        benefitDesc,
-        doneBy,
-        customerName,
-        beatGameList,
-        updatedAt,
-    } = data;
+export default function DoneCard({ data = {} }) {
+    const { game, benefitDesc, doneBy, customerName, updatedAt } = data;
 
     const { themePColor } = useBizData();
 
@@ -20,13 +13,27 @@ export default function DoneCard({ data }) {
         return "prêmio";
     };
 
+    const undoProps = {
+        customerId: data.customerId,
+        benefitId: data.id,
+        recordId: data.recordId,
+        currChall: data.currChall,
+        gameName: data.game,
+        customerName,
+        doneBy,
+        benefitDesc,
+        currPoints: data.currPoints,
+        targetPoints: data.targetPoints,
+        gender: data.gender,
+    };
+
     const showStatusBadge = () => (
         <section className="done-card-status position-absolute">
             <section className="d-flex">
                 <div className="container-center">
                     <p className="badge text-pill">Aplicado</p>
                 </div>
-                <UndoContentBtn />
+                <UndoContentBtn {...undoProps} />
             </section>
             <style jsx>
                 {`
