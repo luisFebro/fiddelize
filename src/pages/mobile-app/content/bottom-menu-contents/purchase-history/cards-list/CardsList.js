@@ -158,7 +158,7 @@ export default function CardsList({
             <div className="card-score font-weight-bold text-subtitle text-center">
                 {convertToReal(historyData.value)}
                 <span className="d-inline-block text-small font-weight-bold ml-1">
-                    pts
+                    PTS
                 </span>
                 <style jsx>
                     {`

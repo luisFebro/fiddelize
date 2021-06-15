@@ -20,7 +20,7 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                 <p className="discounted-points text-subtitle font-weight-bold">
                     -{convertToReal(value)}
                     <span className="d-inline-block text-small font-weight-bold ml-1">
-                        pts
+                        PTS
                     </span>
                 </p>
             </div>

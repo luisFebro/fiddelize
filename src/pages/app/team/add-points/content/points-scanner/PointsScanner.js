@@ -24,7 +24,7 @@ export default function PointsScanner({ callback }) {
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
 
         const allowedScans = "fiddelize_customer_pts::";
-        const isNotAllowed = !allowedScans.includes(newScannedText);
+        const isNotAllowed = !newScannedText.includes(allowedScans);
         if (isNotAllowed)
             return showToast(
                 "Código QR detectado não é válido para ler dados do cliente",
@@ -44,11 +44,9 @@ export default function PointsScanner({ callback }) {
             <section className="container-center-col">
                 <img src={newImg} width={width} height={height} alt="logo" />
                 <h1 className="mt-5 text-subtitle font-weight-bold text-center">
-                    Encontre cliente
-                    <br />
-                    com código QR
+                    Encontre cliente com código QR
                 </h1>
-                <p className="mb-5 text-normal text-center">
+                <p className="mb-5 mx-2 text-normal text-center">
                     Escaneie o código QR no app do cliente.
                 </p>
             </section>

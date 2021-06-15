@@ -57,7 +57,7 @@ export default function AddPointsContent({ closeModal }) {
             Você recebe saldo de acordo com a quantidade de cada compra.
             <br />
             <br />
-            R$ 1 vale 1 pts.
+            R$ 1 vale 1 PTS.
             <br />
             Boas compras!
         `;

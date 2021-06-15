@@ -89,7 +89,7 @@ const removeBalanceTxt = (
 // Por que é preciso aplicar benefício pendente antes de adicionar novos pontos
 const dataArray = [
     {
-        title: "O que é pts?",
+        title: "O que é PTS?",
         text: ptsCurrency,
     },
     {
@@ -98,7 +98,7 @@ const dataArray = [
         text: multipleBenefits,
     },
     {
-        title: "O que acontece com o saldo em pontos (pts) excedente?",
+        title: "O que acontece com o saldo em pontos (PTS) excedente?",
         text: excedingPoints,
     },
     {

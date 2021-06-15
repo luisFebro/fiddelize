@@ -100,13 +100,13 @@ function QuantStatus({
 }) {
     const showInstruBtn = () => {
         const text = `
-            O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual de ${currPoints} pts.
+            O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual de ${currPoints} PTS.
             <br /><br />
             Você acumula <span class="font-weight-bold">${perc}% de desconto a cada compra</span>.
             <br /><br />
-            Você pode usar seu vale desconto assim que bater a <strong>meta resgate de ${targetPoints} pts</strong>.
+            Você pode usar seu vale desconto assim que bater a <strong>meta resgate de ${targetPoints} PTS</strong>.
             <br /><br />
-            Lembre-se que 1 pts vale R$ 1.
+            Lembre-se que 1 PTS vale R$ 1.
             <br />
             Obrigada por comprar com a gente!
         `;

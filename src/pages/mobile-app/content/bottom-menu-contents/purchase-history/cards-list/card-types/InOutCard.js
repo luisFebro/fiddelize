@@ -22,7 +22,7 @@ export default function InOutCard({ historyData }) {
                     {isCardIn ? "" : "-"}
                     {convertToReal(value)}
                     <span className="d-inline-block text-small font-weight-bold ml-1">
-                        pts
+                        PTS
                     </span>
                 </p>
             </div>

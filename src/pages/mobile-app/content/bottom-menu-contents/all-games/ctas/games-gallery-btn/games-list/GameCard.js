@@ -109,7 +109,11 @@ export default function GameCard({ data, closeModal }) {
         if (isDisabled) return null;
 
         return (
-            <InstructionBtn mode="tooltip" text={text} tooltipProps={null} />
+            <InstructionBtn
+                mode="tooltip"
+                text={text}
+                tooltipProps={{ disablePortal: true }}
+            />
         );
     };
 

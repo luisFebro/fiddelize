@@ -48,12 +48,10 @@ export default function BenefitScanner() {
             <section className="container-center-col">
                 <img src={newImg} width={width} height={height} alt="logo" />
                 <h1 className="mt-5 text-subtitle font-weight-bold text-center">
-                    Registro
-                    <br />
-                    comprovante digital
+                    Registre benefício do cliente com código QR
                 </h1>
-                <p className="mb-5 text-normal text-center">
-                    Escaneie o código QR no comprovante do cliente.
+                <p className="mb-5 mx-2 text-normal text-center">
+                    Escaneie o código no app do cliente.
                 </p>
             </section>
         );
