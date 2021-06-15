@@ -22,13 +22,15 @@ export default function DoneBenefitsList() {
         search,
     };
 
+    // UPDATE
     const { runName } = useRun();
     useEffect(() => {
         if (runName) {
             setSkip(0);
-            setSearch("");
+            if (!search) setSearch("");
         }
-    }, [runName]);
+    }, [runName, search]);
+    // END UPDATE
 
     const {
         list = [],

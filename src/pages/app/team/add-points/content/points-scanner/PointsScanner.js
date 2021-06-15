@@ -5,7 +5,7 @@ import useQrScanner from "hooks/media/useQrScanner";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 
-export default function PointsScanner() {
+export default function PointsScanner({ callback }) {
     const [history, setHistory] = useState([]);
     const { bizLogo } = useBizData();
 
@@ -23,22 +23,18 @@ export default function PointsScanner() {
 
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
 
-        const allowedScans = [
-            "discountBack",
-            "targetPrize",
-            "raffleTicket",
-            "topCustomers",
-        ];
-        const isNotAllowed = !allowedScans.some((game) =>
-            newScannedText.includes(game)
-        );
+        const allowedScans = "fiddelize_customer_pts::";
+        const isNotAllowed = !allowedScans.includes(newScannedText);
         if (isNotAllowed)
             return showToast(
-                "Código QR detectado não é um comprovante de benefício",
+                "Código QR detectado não é válido para ler dados do cliente",
                 { type: "error" }
             );
 
-        return handleNewScannedTxt(newScannedText);
+        playAudio("audio_cli-staff_scanner-beep").then(() => {
+            callback(newScannedText);
+        });
+
         // eslint-disable-next-line
     }, [timer]);
 
@@ -48,12 +44,12 @@ export default function PointsScanner() {
             <section className="container-center-col">
                 <img src={newImg} width={width} height={height} alt="logo" />
                 <h1 className="mt-5 text-subtitle font-weight-bold text-center">
-                    Registro
+                    Encontre cliente
                     <br />
-                    comprovante digital
+                    com código QR
                 </h1>
                 <p className="mb-5 text-normal text-center">
-                    Escaneie o código QR no comprovante do cliente.
+                    Escaneie o código QR no app do cliente.
                 </p>
             </section>
         );
@@ -93,15 +89,6 @@ function useUpdater(timeSpan = 1000) {
 }
 
 // HELPERS
-async function handleNewScannedTxt(newText) {
-    await playAudio("audio_cli-staff_scanner-beep");
-    await playAudio("audio_cli-staff_detected-receipt");
-    showToast(`Comprovante Detectado: ${newText}`, {
-        type: "success",
-        dur: 10000,
-    });
-}
-
 async function setScannerBeep() {
     await Promise.all([
         prerenderAudio(

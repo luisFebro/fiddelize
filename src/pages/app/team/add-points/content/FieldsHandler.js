@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import getAPI, { getUserIdByName } from "api";
 import useData, { useBizData } from "init";
 import SearchField, { ROOT } from "components/search/SearchField";
+import extractStrData from "utils/string/extractStrData";
 import AddTempPoints from "./AddTempPoints";
 import SuccessMsg from "./SuccessMsg";
 import PointsScannerBtn from "./points-scanner/PointsScannerBtn";
@@ -32,15 +33,16 @@ function FieldsHandler({
         field: "name", // name
         customerName: "",
         customerId: "",
+        isQrCode: false,
     });
-    const { field, customerName, customerId } = curr;
+    const { field, customerName, customerId, isQrCode } = curr;
 
     const { bizId, themePColor: colorP, needDark, txtColor } = useBizData();
 
     const { userId: memberId } = useData();
 
     useEffect(() => {
-        if (customerName && bizId) {
+        if (customerName && bizId && !isQrCode) {
             (async () => {
                 const thisCustomerId = await setCustomerId(
                     customerName,
@@ -50,7 +52,7 @@ function FieldsHandler({
                 setCurr((prev) => ({ ...prev, customerId: thisCustomerId }));
             })();
         }
-    }, [customerName, bizId, memberId]);
+    }, [customerName, bizId, memberId, isQrCode]);
 
     if (clientScoreOnly) {
         return (
@@ -76,6 +78,26 @@ function FieldsHandler({
         }));
     };
 
+    const handleScannerValue = (val) => {
+        const getScannedId = () => {
+            if (!val) return null;
+            const VALIDATOR_IND = 24; // length of fiddelize_customer_pts::
+
+            const content = val.slice(VALIDATOR_IND);
+            // returns e.g fiddelize_customer_pts::customerId:123;customerName:Luis Febro;
+            return extractStrData(content);
+        };
+
+        const qrCodeData = getScannedId(val);
+
+        setCurr((prev) => ({
+            ...prev,
+            isQrCode: true,
+            field: "points",
+            ...qrCodeData,
+        }));
+    };
+
     const showCustomerSearch = () => {
         const autocompleteProps = {
             autoFocus: true,
@@ -96,7 +118,7 @@ function FieldsHandler({
                     >
                         ou
                     </span>
-                    <PointsScannerBtn />
+                    <PointsScannerBtn callback={handleScannerValue} />
                     <style jsx>
                         {`
                             .or-scanner {

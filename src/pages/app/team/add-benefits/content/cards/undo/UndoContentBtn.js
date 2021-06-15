@@ -26,7 +26,7 @@ export default function UndoContentBtn(props) {
     const {
         gender,
         customerName,
-        currPoints,
+        // currPoints,
         targetPoints,
         benefitDesc,
     } = props;
@@ -42,7 +42,7 @@ export default function UndoContentBtn(props) {
     const handleRemoval = async () => {
         const benefitBody = {
             isReceived: false,
-            restorePoints: currPoints + targetPoints,
+            restorePoints: targetPoints,
             customerId: props.customerId,
             benefitId: props.benefitId,
             recordId: props.recordId,

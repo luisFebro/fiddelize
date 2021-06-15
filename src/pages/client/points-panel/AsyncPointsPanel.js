@@ -56,7 +56,6 @@ function AsyncPointsPanel({ history, location }) {
         firstName,
         userId: cliUserId, // cliUserId is essencial here to read cli-users data
         currPoints,
-        totalGeneralPoints,
         userGame,
     } = useData();
 
@@ -97,16 +96,16 @@ function AsyncPointsPanel({ history, location }) {
     const animatedNumber = useRef(null);
     useBackColor(`var(--themeBackground--${colorBack})`);
 
-    // useEffect(() => {
-    //     if (cardDataLoading) return;
-    //     getVar("alreadySetTempPoints").then((alreadySetScore) => {
-    //         // avoid user to restart page and end up adding more scores
-    //         if (alreadySetScore) setVar({ alreadySetTempPoints: false });
-    //         if (!paidValue || alreadySetScore) history.push(path);
-    //     });
+    useEffect(() => {
+        if (cardDataLoading) return;
+        getVar("alreadySetTempPoints").then((alreadySetScore) => {
+            // avoid user to restart page and end up adding more scores
+            if (alreadySetScore) setVar({ alreadySetTempPoints: false });
+            if (!paidValue || alreadySetScore) history.push(path);
+        });
 
-    //     // eslint-disable-next-line
-    // }, [cardDataLoading, paidValue]);
+        // eslint-disable-next-line
+    }, [cardDataLoading, paidValue]);
 
     useEffect(() => {
         (async () => {
@@ -161,8 +160,7 @@ function AsyncPointsPanel({ history, location }) {
             const bodyPoints = {
                 userId: cliUserId, // for auth
                 paidValue,
-                currPoints: currPointsNow,
-                totalGeneralPoints: totalGeneralPoints + paidValue,
+                newPoints: paidValue,
                 staff,
                 // data to set the card so that we can track and set benefits card
                 didBeatGame,

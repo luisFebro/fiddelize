@@ -106,7 +106,7 @@ export default function AddPointsContent({ closeModal }) {
             <section className="mt-3 container-center">
                 <div className="qr-container">
                     <QrCode
-                        value={userId}
+                        value={`fiddelize_customer_pts::customerId:${userId};customerName:${name};`}
                         fgColor={themePColor}
                         imageSettings={imageSettings}
                         imageSquare={imageSquare}

@@ -14,6 +14,7 @@ import FaqPoints from "./FaqPoints";
 
 export default function DiscountBenefit(props) {
     const [disableCTA, setDisableCTA] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const uify = useAction();
 
@@ -62,7 +63,7 @@ export default function DiscountBenefit(props) {
             benefitTarget: targetPoints,
             benefitDesc,
             isReceived: true,
-            newPoints: leftCustomerPoints,
+            newPoints: Number(targetPoints),
             totalBenefitsList,
             gameName,
             currChall,
@@ -80,6 +81,8 @@ export default function DiscountBenefit(props) {
             body: benefitBody,
             params: { userId: staffId }, // for token verify
         });
+
+        setLoading(false);
 
         const uniqueId = getId();
         setRun("runName", `PendingBenefitsList${uniqueId}`, uify);
@@ -102,11 +105,19 @@ export default function DiscountBenefit(props) {
 
     const showBriefAndCTA = () => (
         <section className="margin-auto-90 text-center">
-            <h2 className="mt-2 mb-4 text-center text-purple text-subtitle font-weight-bold">
+            <h2 className="mt-2 text-center text-purple text-subtitle font-weight-bold">
                 Recebimento de
                 <br />
                 Benefício pelo cliente
             </h2>
+            <p
+                style={{
+                    top: "15px",
+                }}
+                className="position-relative text-normal text-left"
+            >
+                para: <strong>{name && name.cap()}</strong>
+            </p>
             <div className="all-game-info text-left text-normal text-white text-shadow mt-3 mb-1 text-center">
                 <p className="discount-benefit-game-title pt-1 m-0 font-weight-bold">
                     {gameIconsStore[gameName]}
@@ -179,6 +190,20 @@ export default function DiscountBenefit(props) {
     // const scrollIntoQASession = () => {
     //     scrollIntoView("#bottomQASession", { duration: 5000, mainContainer: "#bottomQASession" });
     // }
+    if (!loading) {
+        return (
+            <section className="full-height text-center">
+                <h2 className="mt-2 mb-4 text-center text-purple text-subtitle font-weight-bold">
+                    Recebimento de
+                    <br />
+                    Benefício pelo cliente
+                </h2>
+                <p className="animated fadeInUp mt-5 text-subtitle font-weight-bold text-purple text-purple">
+                    Finalizando...
+                </p>
+            </section>
+        );
+    }
 
     return (
         <section className="text-purple">

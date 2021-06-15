@@ -13,7 +13,7 @@ const AsyncPointsScanner = Load({
         ),
 });
 
-export default function PointsScannerBtn() {
+export default function PointsScannerBtn(props) {
     const [fullOpen, setFullOpen] = useState(false);
     const { themeSColor, themePColor } = useBizData();
 
@@ -39,7 +39,7 @@ export default function PointsScannerBtn() {
                 shadowColor="grey"
             />
             <ModalFullContent
-                contentComp={<AsyncPointsScanner />}
+                contentComp={<AsyncPointsScanner {...props} />}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}
