@@ -40,8 +40,10 @@ export const getScannedData = (value) => {
     if (!value) return null;
     if (typeof value !== "string")
         throw new Error("Value argument should be a string");
-
-    const allowedValidators = ["fiddelize_customer_pts", "fiddelize_buy_games"];
+    // TEST
+    alert(value);
+    // END TEST
+    const allowedValidators = ["customer_pts", "buy_games"];
     const gotDelimeter = value.includes("::");
     if (
         !gotDelimeter ||
