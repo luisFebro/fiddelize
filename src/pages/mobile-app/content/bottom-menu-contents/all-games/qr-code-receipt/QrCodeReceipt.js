@@ -1,13 +1,22 @@
 import QrCode from "components/QrCode";
+import { encrypt } from "utils/security/xCipherFront";
+import useData, { useBizData } from "init";
+import removeImgFormat from "utils/biz/removeImgFormat";
 
-export default function QrCodeReceipt({
-    code,
-    themePColor,
-    bizName,
-    txtColor,
-    imageSquare,
-    imageSettings,
-}) {
+export default function QrCodeReceipt() {
+    const { userId, name } = useData();
+    const { bizName, bizLogo, themePColor, txtColor } = useBizData();
+
+    const { newImg, isSquared } = removeImgFormat(bizLogo);
+    const imageSettings = {
+        src: newImg,
+    };
+
+    const encryptedCode = encrypt(
+        `fiddelize_buy_games::customerId:${userId};customerName:${name};`
+    ); // do not forget semicollon here to separate data
+    const pColor = `var(--themePDark--${themePColor})`;
+
     return (
         <section className={`${txtColor}`}>
             <h1 className="my-3 text-subtitle text-center mx-3">
@@ -21,9 +30,9 @@ export default function QrCodeReceipt({
                 </p>
                 <div className="qr-container">
                     <QrCode
-                        value={code}
-                        fgColor={`var(--themeP--${themePColor})`}
-                        imageSquare={imageSquare}
+                        value={encryptedCode}
+                        fgColor={pColor}
+                        imageSquare={isSquared}
                         imageSettings={imageSettings}
                     />
                 </div>

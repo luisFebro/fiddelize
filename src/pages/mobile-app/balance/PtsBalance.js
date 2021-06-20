@@ -3,8 +3,9 @@ import AddPointsBtn from "./add-points-btn/AddPointsBtn";
 export default function PtsBalance({ showMoreComps, currPointsRef, txtColor }) {
     return (
         <section className="text-subtitle mt-3 text-white text-center">
-            <span className={`text-title ${txtColor}`}>Seu Saldo:</span>
-            <br />
+            <span className={`d-block mb-3 text-title ${txtColor}`}>
+                Saldo:
+            </span>
             <div className="d-flex justify-content-center">
                 <p className={`m-0 text-hero ${txtColor}`} ref={currPointsRef}>
                     ...

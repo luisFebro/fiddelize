@@ -141,7 +141,7 @@ function ClientMobileApp({ location, history }) {
     let isCliUser = role === "cliente";
 
     const isSessionOver = !isAuthUser;
-    const needAdminLogout = isSessionOver && rememberAccess;
+    const needAdminLogout = isSessionOver && rememberAccess && isCliAdmin;
 
     if (needAppForCliAdmin) {
         isCliAdmin = false;

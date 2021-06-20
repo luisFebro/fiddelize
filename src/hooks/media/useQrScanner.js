@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 import showToast from "components/toasts";
 import useDelay from "hooks/useDelay";
+import extractStrData from "utils/string/extractStrData";
 
 // start off qr code scanner
-export default function useQrScanner() {
+export default function useQrScanner({ stopTrigger }) {
     const readyDelay = useDelay(5000);
     const once = useRef(false);
     const onceCamMsg = useRef(false);
@@ -25,7 +26,36 @@ export default function useQrScanner() {
 
         return "ok";
     }, [readyDelay, once.current, onceCamMsg.current]);
+
+    useEffect(() => {
+        if (!window.jbScanner) return;
+        if (stopTrigger) window.jbScanner.stopScanning();
+    }, [stopTrigger]);
 }
+
+// value e.g fiddelize_customer_pts::customerId:123;customerName:Luis Febro;
+// the value is decrypted from Scanners components
+// returns object
+export const getScannedData = (value) => {
+    if (!value) return null;
+    if (typeof value !== "string")
+        throw new Error("Value argument should be a string");
+
+    const allowedValidators = ["fiddelize_customer_pts", "fiddelize_buy_games"];
+    const gotDelimeter = value.includes("::");
+    if (
+        !gotDelimeter ||
+        !allowedValidators.some((allowedValidator) =>
+            value.includes(allowedValidator)
+        )
+    )
+        throw new Error("Invalid Validator");
+
+    const delimeterInd = value.indexOf("::");
+    const VALIDATOR_IND = delimeterInd + 2; // 2 represents th delimeter length (::) to get the right value || length of fiddelize_customer_pts::
+    const content = value.slice(VALIDATOR_IND);
+    return extractStrData(content);
+};
 
 // HELPERS
 function addScannerSrc() {

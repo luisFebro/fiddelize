@@ -12,6 +12,7 @@ function encrypt(data, options = {}) {
     return CryptoAES.encrypt(finalData, KRYPTO_SECRET).toString();
 }
 
+// return an empty string if any value other than an encripted data. exception: if null, undefined
 function decrypt(ciphertext, options = {}) {
     const { isObj = false } = options;
 

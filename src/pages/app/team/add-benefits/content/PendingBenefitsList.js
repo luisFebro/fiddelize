@@ -8,8 +8,19 @@ import useAPIList, {
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import { setItems } from "init/lStorage";
 import useRun from "global-data/ui";
+import { getScannedData } from "hooks/media/useQrScanner";
+import { Load } from "components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
+import showToast from "components/toasts";
 import BenefitScannerBtn from "./benefit-scanner/BenefitScannerBtn";
 import PendingCard from "./cards/PendingCard";
+
+export const AsyncScannerHandler = Load({
+    loader: () =>
+        import(
+            "./cards/cta/scanner-handler/BenefitScannerHandler" /* webpackChunkName: "scanner-handler" */
+        ),
+});
 
 setItems("global", { lastDatePendingBenefitCard: new Date() });
 
@@ -18,6 +29,25 @@ export default function PendingBenefitsList() {
     const [search, setSearch] = useState("");
     const { bizId } = useBizData();
     const { userId } = useData();
+
+    // SCANNER PANEL
+    const [scanner, setScanner] = useState({
+        scannerOpen: false,
+        scannerData: null,
+    });
+    const { scannerData, scannerOpen } = scanner;
+    const handleScannerClose = () => {
+        setScanner((prev) => ({
+            ...prev,
+            scannerOpen: false,
+        }));
+    };
+
+    const scannerProps = {
+        closeModal: handleScannerClose,
+        scannerData,
+    };
+    // END SCANNER PANEL
 
     const params = {
         type: "pending",
@@ -72,6 +102,17 @@ export default function PendingBenefitsList() {
         noOptionsText: "Cliente não encontrado ou sem benefícios pendentes",
     };
 
+    const handleScannedVal = (val) => {
+        const qrCodeData = getScannedData(val);
+        if (!qrCodeData)
+            return showToast("Código QR inválido.", { type: "error" });
+
+        return setScanner({
+            data: qrCodeData,
+            scannerOpen: true,
+        });
+    };
+
     const showCustomerSearch = () => (
         <Fragment>
             <SearchField
@@ -85,7 +126,7 @@ export default function PendingBenefitsList() {
                 <span className="d-inline-block text-normal font-weight-bold mr-3">
                     ou
                 </span>
-                <BenefitScannerBtn />
+                <BenefitScannerBtn callback={handleScannedVal} />
                 <style jsx>
                     {`
                         .or-scanner {
@@ -147,6 +188,13 @@ export default function PendingBenefitsList() {
             {needEmptyIllustra && showEmptyIllustration()}
             {error && <ShowError />}
             <ShowOverMsg />
+            {scannerOpen && (
+                <ModalFullContent
+                    contentComp={<AsyncScannerHandler {...scannerProps} />}
+                    fullOpen={scannerOpen}
+                    setFullOpen={handleScannerClose}
+                />
+            )}
         </section>
     );
 }

@@ -13,7 +13,7 @@ const AsyncBenefitScanner = Load({
         ),
 });
 
-export default function BenefitScannerBtn() {
+export default function BenefitScannerBtn(props) {
     const [fullOpen, setFullOpen] = useState(false);
     const { themeSColor, themePColor } = useBizData();
 
@@ -35,7 +35,12 @@ export default function BenefitScannerBtn() {
                 position="relative"
             />
             <ModalFullContent
-                contentComp={<AsyncBenefitScanner />}
+                contentComp={
+                    <AsyncBenefitScanner
+                        closeModal={handleFullClose}
+                        {...props}
+                    />
+                }
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}

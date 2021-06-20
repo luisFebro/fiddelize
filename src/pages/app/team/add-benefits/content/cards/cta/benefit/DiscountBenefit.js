@@ -20,6 +20,7 @@ export default function DiscountBenefit(props) {
 
     const {
         closeModal,
+        closeScanner, // only for qrCode
         customerId,
         recordId,
         totalBenefitsList,
@@ -64,7 +65,7 @@ export default function DiscountBenefit(props) {
             benefitDesc,
             isReceived: true,
             newPoints: Number(targetPoints),
-            totalBenefitsList,
+            totalBenefitsList: totalBenefitsList || 1,
             gameName,
             currChall,
             staff: {
@@ -98,6 +99,7 @@ export default function DiscountBenefit(props) {
 
         setTimeout(() => {
             closeModal();
+            if (typeof closeScanner === "function") closeScanner();
         }, 2500);
 
         return false;

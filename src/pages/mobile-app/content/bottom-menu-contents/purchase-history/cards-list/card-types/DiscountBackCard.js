@@ -5,29 +5,27 @@ import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import Card from "@material-ui/core/Card";
 import getColor from "styles/txt";
 import InstructionBtn from "components/buttons/InstructionBtn";
+import getPercentage from "utils/numbers/getPercentage";
 import useData from "init";
 
 export default function DiscountBackCard({ historyData, colorP }) {
-    // discountPoints: this value can be used to tell how much discount was taken in discountback
-    const {
-        value,
-        discountPoints = 200,
-        discountPerc = 10,
-        challengeN,
-    } = historyData;
+    const { value: discountPoints, desc, challN } = historyData;
     const { firstName } = useData();
+
+    const discountMoney = getDiscountMoney(desc);
+    const discountPerc = getPercentage(discountPoints, discountMoney);
 
     const showDiscountedPoints = () => (
         <Fragment>
             <div className="discounted-points--root">
                 <InstructionBtn
                     mode="tooltip"
-                    text={`Você atingiu a meta de ${discountPoints} pts e recebeu R$ 20 (${discountPerc}% de desconto) acumulado das suas compras. Parabéns, ${firstName}!`}
+                    text={`Você atingiu a meta de ${discountPoints} PTS e recebeu R$ ${discountMoney} que foi o valor ${discountPerc}% de desconto acumulado a cada compra. Parabéns, ${firstName}!`}
                 />
                 <p className="mb-1 ml-3 discounted-points text-subtitle font-weight-bold">
                     -{convertToReal(discountPoints)}
                     <span className="d-inline-block text-small font-weight-bold ml-1">
-                        pts
+                        PTS
                     </span>
                 </p>
             </div>
@@ -63,7 +61,7 @@ export default function DiscountBackCard({ historyData, colorP }) {
                     Desconto Retornado
                     <br />
                     <span className="text-subtitle font-weight-bold">
-                        N.º {challengeN}
+                        N.º {challN}
                     </span>
                 </span>
                 <style jsx>
@@ -86,7 +84,7 @@ export default function DiscountBackCard({ historyData, colorP }) {
             <p className="m-0 my-2 text-left font-site text-em-1-1">
                 Você recebeu:{" "}
                 <span className="d-inline-block text-normal font-weight-bold">
-                    {`${convertToReal(value, { moneySign: true })}`}
+                    {`${convertToReal(discountMoney, { moneySign: true })}`}
                     <span style={{ fontWeight: "normal" }}>
                         {" "}
                         de desconto em compras.
@@ -108,3 +106,16 @@ export default function DiscountBackCard({ historyData, colorP }) {
         </section>
     );
 }
+
+// HELPERS
+function getDiscountMoney(desc) {
+    if (!desc) return 0;
+    // get value from desc
+    const startInd = 3; //R$(space)
+    const percInd = desc.indexOf("de");
+    const endInd = percInd - 1;
+    const discountPerc = Number(desc.slice(startInd, endInd));
+
+    return discountPerc;
+}
+// END HELPERS

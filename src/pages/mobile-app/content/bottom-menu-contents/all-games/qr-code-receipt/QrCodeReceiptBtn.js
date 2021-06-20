@@ -1,8 +1,9 @@
 import { useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
-import QrCodeReceipt from "./QrCodeReceipt";
 import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";
+import { useBizData } from "init";
+import QrCodeReceipt from "./QrCodeReceipt";
 // import { Load } from "../../../../components/code-splitting/LoadableComp";
 
 // const Async = Load({
@@ -12,9 +13,9 @@ import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";
 //         ),
 // });
 
-export default function QrCodeReceiptBtn(props) {
+export default function QrCodeReceiptBtn() {
     const [fullOpen, setFullOpen] = useState(false);
-    const { themePColor, themeSColor } = props;
+    const { themePColor, themeSColor } = useBizData();
 
     const handleFullOpen = () => {
         setFullOpen(true);
@@ -35,7 +36,7 @@ export default function QrCodeReceiptBtn(props) {
                 left={-20}
             />
             <ModalFullContent
-                contentComp={<QrCodeReceipt {...props} />}
+                contentComp={<QrCodeReceipt />}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 backgroundColor={`var(--themeBackground--${themePColor})`}

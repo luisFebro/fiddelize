@@ -7,6 +7,7 @@ import useAPIList, { readBuyHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "utils/numbers/convertToReal";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import PickOtherCards from "./PickOtherCards";
 
 export default function CardsList({
@@ -16,13 +17,14 @@ export default function CardsList({
 }) {
     const { firstName } = useData();
     const [skip, setSkip] = useState(0);
+    const [showMore, setShowMore] = useState(false);
 
     const gotUserPoints = Boolean(totalGeneralPoints);
     const { role, adminGame } = useData();
     const isAdmin = role === "cliente-admin";
 
     const { targetPoints } = adminGame.targetPrize;
-    const { txtColor, themePColor } = useBizData();
+    const { txtColor, themePColor, themeSColor: sColor } = useBizData();
 
     const params = {
         targetPoints,
@@ -42,6 +44,7 @@ export default function CardsList({
         url: readBuyHistory(cliUserId),
         params,
         skip,
+        filterId: "id",
         listName: "buyPointCardsList",
     });
 
@@ -130,7 +133,7 @@ export default function CardsList({
     }
 
     function RecordCard({ historyData }) {
-        const { desc, isLastRecordCard, createdAt } = historyData;
+        const { desc, registerKey, isLastRecordCard, createdAt } = historyData;
 
         const showDesc = () => (
             <section className="desc text-left">
@@ -138,11 +141,49 @@ export default function CardsList({
                     <span className="d-inline-block mt-1 font-weight-bold text-normal">
                         {desc}
                     </span>
-                    <div className="timestamp mt-1 text-small font-weight-bold">
-                        {formatDMY(createdAt)}
-                        <br />
-                        {fromNow(createdAt)}
-                    </div>
+                    {showMore ? (
+                        <div className="timestamp mt-1 text-small font-weight-bold">
+                            chave de validação da quantia de moeda PTS:
+                            <br />
+                            <div
+                                className="card-register-key"
+                                style={{ width: 200 }}
+                            >
+                                <p className="text-break">{registerKey}</p>
+                                <style jsx>
+                                    {`
+                                        .card-register-key p {
+                                            background: var(--mainWhite);
+                                            color: var(
+                                                --themePDark--${themePColor}
+                                            );
+                                            padding: 5px;
+                                            border-radius: 15px;
+                                        }
+                                    `}
+                                </style>
+                            </div>
+                            {formatDMY(createdAt)}
+                            <br />
+                            {fromNow(createdAt)}
+                        </div>
+                    ) : (
+                        <div className="timestamp mt-1">
+                            <ButtonFab
+                                title="registro"
+                                backgroundColor={`var(--themeSDark--${sColor})`}
+                                onClick={() => setShowMore(true)}
+                                position="relative"
+                                variant="extended"
+                                size="small"
+                                needBtnShadow
+                                shadowColor="grey"
+                            />
+                            <span className="d-block mt-2 text-small font-weight-bold">
+                                {fromNow(createdAt)}
+                            </span>
+                        </div>
+                    )}
                     <style jsx>
                         {`
                             .timestamp {

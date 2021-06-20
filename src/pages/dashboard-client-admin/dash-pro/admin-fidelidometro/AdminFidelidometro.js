@@ -41,7 +41,7 @@ export default function AdminFidelidometro({ loading, totalScore }) {
     return (
         <section className="my-5" style={styles.root}>
             <div className="text-subtitle py-3 text-white text-center font-weight-bold">
-                Seu Saldo:
+                Saldo:
             </div>
             {showScore()}
             {showPrizeGalleryBtn()}

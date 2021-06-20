@@ -39,7 +39,12 @@ export default function PointsScannerBtn(props) {
                 shadowColor="grey"
             />
             <ModalFullContent
-                contentComp={<AsyncPointsScanner {...props} />}
+                contentComp={
+                    <AsyncPointsScanner
+                        closeModal={handleFullClose}
+                        {...props}
+                    />
+                }
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}

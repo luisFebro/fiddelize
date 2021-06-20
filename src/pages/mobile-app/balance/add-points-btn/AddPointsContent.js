@@ -6,6 +6,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Tooltip from "components/tooltips/Tooltip";
 import useDelay from "hooks/useDelay";
 import getItems, { setItems } from "init/lStorage";
+import { encrypt } from "utils/security/xCipherFront";
 
 const [ptsInfo] = getItems("onceChecked", ["ptsInfo"]);
 
@@ -95,6 +96,10 @@ export default function AddPointsContent({ closeModal }) {
         );
     };
 
+    const qrCodeData = encrypt(
+        `fiddelize_customer_pts::customerId:${userId};customerName:${name};`
+    );
+
     const showCliIdentifierArea = () => (
         <main className="animated fadeInUp delay-1s slow cli-identifier--root position-relative">
             <h2 className="font-site text-em-2-5 font-weight-bold py-2">
@@ -106,7 +111,7 @@ export default function AddPointsContent({ closeModal }) {
             <section className="mt-3 container-center">
                 <div className="qr-container">
                     <QrCode
-                        value={`fiddelize_customer_pts::customerId:${userId};customerName:${name};`}
+                        value={qrCodeData}
                         fgColor={themePColor}
                         imageSettings={imageSettings}
                         imageSquare={imageSquare}
@@ -157,8 +162,14 @@ export default function AddPointsContent({ closeModal }) {
                 Seu celular descarregou ou você esqueceu?
             </h2>
             <p className="font-site text-em-1-2 font-weight-bold">
-                Sem problemas, informe apenas seu nome e sobrenome para receber
-                suas moedas digitais em sua compra
+                Sem problemas! Informe apenas seu{" "}
+                <span
+                    className="text-em-1-3"
+                    style={{ textDecoration: "underline" }}
+                >
+                    nome e sobrenome
+                </span>{" "}
+                para receber suas moedas digitais em sua compra
             </p>
         </section>
     );

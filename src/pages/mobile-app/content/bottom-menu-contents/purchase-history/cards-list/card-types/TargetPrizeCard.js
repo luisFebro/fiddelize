@@ -6,13 +6,7 @@ import "../_PrizeCard.scss";
 import convertToReal from "utils/numbers/convertToReal";
 
 export default function TargetPrizeCard({ historyData, colorP }) {
-    const {
-        value,
-        desc,
-        challengeN,
-        isBenefitExpired,
-        isBenefitReceived,
-    } = historyData;
+    const { value, desc, challN, isBenefitExpired } = historyData;
 
     const showDiscountedPoints = () => (
         <Fragment>
@@ -60,20 +54,11 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                     <p className="font-weight-bold">
                         {isBenefitExpired ? "Expirado" : "Recebido:"}
                     </p>
-                    {isBenefitReceived && !isBenefitExpired && (
+                    {!isBenefitExpired && (
                         <div className="icon animated rubberBand delay-2s repeat-2">
                             <FontAwesomeIcon
                                 icon="check-circle"
                                 style={{ color: "green", fontSize: "20px" }}
-                            />
-                        </div>
-                    )}
-
-                    {!isBenefitReceived && !isBenefitExpired && (
-                        <div className="icon">
-                            <FontAwesomeIcon
-                                icon="times-circle"
-                                style={{ color: "grey", fontSize: "20px" }}
                             />
                         </div>
                     )}
@@ -108,7 +93,7 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                     Prêmio Alvo
                     <br />
                     <span className="text-subtitle font-weight-bold">
-                        N.º {challengeN}
+                        N.º {challN}
                     </span>
                 </span>
                 <style jsx>

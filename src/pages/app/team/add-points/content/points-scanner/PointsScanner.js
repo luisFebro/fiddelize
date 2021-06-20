@@ -4,12 +4,14 @@ import { useBizData } from "init";
 import useQrScanner from "hooks/media/useQrScanner";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
+import { decrypt } from "utils/security/xCipherFront";
 
-export default function PointsScanner({ callback }) {
+export default function PointsScanner({ closeModal, callback }) {
     const [history, setHistory] = useState([]);
     const { bizLogo } = useBizData();
+    const [stop, setStop] = useState(false);
 
-    useQrScanner();
+    useQrScanner({ stopTrigger: stop });
     const timer = useUpdater();
 
     useEffect(() => {
@@ -17,14 +19,16 @@ export default function PointsScanner({ callback }) {
     }, []);
 
     useEffect(() => {
-        const newScannedText = window.scannedText;
+        // DEFAULT SETTINGS
+        const newScannedText = decrypt(window.scannedText);
         const alreadyScanned = history.includes(newScannedText);
         if (!newScannedText || alreadyScanned) return null;
 
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
+        // END DEFAULT SETTINGS
 
-        const allowedScans = "fiddelize_customer_pts::";
-        const isNotAllowed = !newScannedText.includes(allowedScans);
+        const scanValidator = "fiddelize_customer_pts::";
+        const isNotAllowed = !newScannedText.includes(scanValidator);
         if (isNotAllowed)
             return showToast(
                 "Código QR detectado não é válido para ler dados do cliente",
@@ -32,9 +36,12 @@ export default function PointsScanner({ callback }) {
             );
 
         playAudio("audio_cli-staff_scanner-beep").then(() => {
+            setStop(true);
             callback(newScannedText);
+            closeModal();
         });
 
+        return null;
         // eslint-disable-next-line
     }, [timer]);
 

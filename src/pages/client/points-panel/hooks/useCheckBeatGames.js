@@ -82,8 +82,8 @@ function checkGame(gameName, { list, currPoints }) {
 function handleBenefitDesc(game) {
     if (game === "targetPrize") return adminGame[game].prizeDesc;
     if (game === "discountBack") {
-        const discountValue = adminGame[game].targetMoney;
-        return `${discountValue}% de desconto.`;
+        const discountMoney = adminGame[game].targetMoney;
+        return `R$ ${discountMoney} de desconto.`;
     }
 
     return null;

@@ -1,10 +1,9 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NotificationBadge from "../../components/badges/NotificationBadge";
-import useData from "init";
-import { useBizData } from "init";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
+import useData, { useBizData } from "init";
+import NotificationBadge from "components/badges/NotificationBadge";
+import RadiusBtn from "components/buttons/RadiusBtn";
 
 export default withRouter(PlanBadges);
 
@@ -14,7 +13,7 @@ function PlanBadges({ history }) {
 
     const isFree = bizPlan === "gratis";
 
-    const [data, totalServs] = useData([
+    const [data, totalServs, loading] = useData([
         "orders_clientAdmin",
         "totalServices_clientAdmin",
     ]);
@@ -87,7 +86,7 @@ function PlanBadges({ history }) {
                 {!isFree && "plano "}
                 {bizPlan}
             </span>
-            {displayProOrdersBtn()}
+            {!loading && displayProOrdersBtn()}
         </section>
     );
 

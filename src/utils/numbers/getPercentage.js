@@ -1,8 +1,6 @@
 // this function is good for many values to know each percetage out of a total value
-// e.g total 100 for 4 parts gives back 25 (a number)
-// also has a mode to return the value in which a perc represents from a total targetValue
-// e.g total 200 for 50 (%) returns 100.
-// getPercentage(800, 15, { mode: "value" }). This will return the amount which representes 15% out of R$800
+// getPercentage(300, 10, { mode: "perc" }) === 3,3 (%)
+// getPercentage(300, 10, { mode: "value" }) === 30 (value)
 export default function getPercentage(targetValue, curValue, options = {}) {
     const { mode = "perc", moreThan100 = false } = options; // mode: perc|value
 

@@ -5,7 +5,8 @@ import useData, { useBizData } from "init";
 import QrCode from "components/QrCode";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import QrCodeReceiptBtn from "./qr-code-receipt/QrCodeReceiptBtn";
+import { encrypt } from "utils/security/xCipherFront";
+import QrCodeReceiptBtn from "../../qr-code-receipt/QrCodeReceiptBtn";
 
 export default function DiscountTicket({
     didBeatGame = false,
@@ -14,13 +15,7 @@ export default function DiscountTicket({
 }) {
     const [openCard, setOpenCard] = useState(false);
 
-    const {
-        bizName,
-        bizLogo,
-        themePColor,
-        themeSColor,
-        txtColor,
-    } = useBizData();
+    const { bizName, bizLogo, themePColor } = useBizData();
     const { name, sexLetter, userId } = useData();
 
     const mainColor = `var(--themePLight--${themePColor})`;
@@ -93,8 +88,7 @@ export default function DiscountTicket({
 
     const condOpenCard = !openCard && showCTA();
 
-    const imageSquare = bizLogo && bizLogo.includes("h_100,w_100");
-    const { newImg } = removeImgFormat(bizLogo);
+    const { newImg, isSquared } = removeImgFormat(bizLogo);
     const imageSettings = {
         src: newImg,
     };
@@ -125,16 +119,9 @@ export default function DiscountTicket({
         </div>
     );
 
-    const qrCode = `discountBack:${userId}`;
-    const qrCodeProps = {
-        code: qrCode,
-        themePColor,
-        themeSColor,
-        bizName,
-        txtColor,
-        imageSettings,
-        imageSquare,
-    };
+    const qrCode = encrypt(
+        `fiddelize_buy_games::customerId:${userId};customerName:${name};`
+    );
 
     // LESSON: when dealing with 2 classes which requires diff styles
     // do not put a number to the first elem like: class="elem elem-1" class="elem elem-2"
@@ -182,10 +169,10 @@ export default function DiscountTicket({
                                             size={100}
                                             value={qrCode}
                                             fgColor={pColor}
-                                            imageSquare={imageSquare}
+                                            imageSquare={isSquared}
                                             imageSettings={imageSettings}
                                         />
-                                        <QrCodeReceiptBtn {...qrCodeProps} />
+                                        <QrCodeReceiptBtn />
                                     </div>
                                     <p className="m-0 ml-3 text-normal">
                                         {`Ganhador${isShe ? "a:" : ":"}`}

@@ -4,12 +4,14 @@ import { useBizData } from "init";
 import useQrScanner from "hooks/media/useQrScanner";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
+import { decrypt } from "utils/security/xCipherFront";
 
-export default function BenefitScanner() {
+export default function BenefitScanner({ closeModal, callback }) {
     const [history, setHistory] = useState([]);
     const { bizLogo } = useBizData();
+    const [stop, setStop] = useState(false);
 
-    useQrScanner();
+    useQrScanner({ stopTrigger: stop });
     const timer = useUpdater();
 
     useEffect(() => {
@@ -17,28 +19,29 @@ export default function BenefitScanner() {
     }, []);
 
     useEffect(() => {
-        const newScannedText = window.scannedText;
+        // DEFAULT SETTINGS
+        const newScannedText = decrypt(window.scannedText);
         const alreadyScanned = history.includes(newScannedText);
         if (!newScannedText || alreadyScanned) return null;
 
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
+        // END DEFAULT SETTINGS
 
-        const allowedScans = [
-            "discountBack",
-            "targetPrize",
-            "raffleTicket",
-            "topCustomers",
-        ];
-        const isNotAllowed = !allowedScans.some((game) =>
-            newScannedText.includes(game)
-        );
+        const scanValidator = "fiddelize_buy_games::";
+        const isNotAllowed = !newScannedText.includes(scanValidator);
         if (isNotAllowed)
             return showToast(
-                "Código QR detectado não é um comprovante de benefício",
+                "Código QR detectado não é válido para ler dados do cliente",
                 { type: "error" }
             );
 
-        return handleNewScannedTxt(newScannedText);
+        playAudio("audio_cli-staff_scanner-beep").then(() => {
+            setStop(true);
+            callback(newScannedText);
+            closeModal();
+        });
+
+        return null;
         // eslint-disable-next-line
     }, [timer]);
 
@@ -91,15 +94,6 @@ function useUpdater(timeSpan = 1000) {
 }
 
 // HELPERS
-async function handleNewScannedTxt(newText) {
-    await playAudio("audio_cli-staff_scanner-beep");
-    await playAudio("audio_cli-staff_detected-receipt");
-    showToast(`Comprovante Detectado: ${newText}`, {
-        type: "success",
-        dur: 10000,
-    });
-}
-
 async function setScannerBeep() {
     await Promise.all([
         prerenderAudio(

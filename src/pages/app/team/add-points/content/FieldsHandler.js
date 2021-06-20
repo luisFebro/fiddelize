@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import getAPI, { getUserIdByName } from "api";
 import useData, { useBizData } from "init";
 import SearchField, { ROOT } from "components/search/SearchField";
-import extractStrData from "utils/string/extractStrData";
+import { getScannedData } from "hooks/media/useQrScanner";
 import AddTempPoints from "./AddTempPoints";
 import SuccessMsg from "./SuccessMsg";
 import PointsScannerBtn from "./points-scanner/PointsScannerBtn";
@@ -78,17 +78,8 @@ function FieldsHandler({
         }));
     };
 
-    const handleScannerValue = (val) => {
-        const getScannedId = () => {
-            if (!val) return null;
-            const VALIDATOR_IND = 24; // length of fiddelize_customer_pts::
-
-            const content = val.slice(VALIDATOR_IND);
-            // returns e.g fiddelize_customer_pts::customerId:123;customerName:Luis Febro;
-            return extractStrData(content);
-        };
-
-        const qrCodeData = getScannedId(val);
+    const handleScannedVal = (val) => {
+        const qrCodeData = getScannedData(val);
 
         setCurr((prev) => ({
             ...prev,
@@ -118,7 +109,7 @@ function FieldsHandler({
                     >
                         ou
                     </span>
-                    <PointsScannerBtn callback={handleScannerValue} />
+                    <PointsScannerBtn callback={handleScannedVal} />
                     <style jsx>
                         {`
                             .or-scanner {

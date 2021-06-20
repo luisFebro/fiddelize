@@ -3,9 +3,9 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.31.1-50";
+const latestVersion = "4.32.0";
 
-const updateDescription = "scanners pt 2";
+const updateDescription = "scanners pt 3";
 /* HISTORY
 new app points and benefits management - pt5
 new fiddelize logo
