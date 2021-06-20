@@ -108,7 +108,7 @@ export default function PendingBenefitsList() {
             return showToast("Código QR inválido.", { type: "error" });
 
         return setScanner({
-            data: qrCodeData,
+            scannerData: qrCodeData,
             scannerOpen: true,
         });
     };

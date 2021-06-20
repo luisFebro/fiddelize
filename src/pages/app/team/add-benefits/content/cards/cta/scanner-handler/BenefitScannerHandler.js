@@ -44,10 +44,12 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
 
     useEffect(() => {
         (async () => {
-            if (!scannerData)
+            if (!scannerData) {
+                setDone(true);
                 return showToast("Código QR não é válido ou já usado", {
                     type: "error",
                 });
+            }
 
             setDone(false);
             const data = await getAPI({
