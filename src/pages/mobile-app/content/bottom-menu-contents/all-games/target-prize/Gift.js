@@ -4,6 +4,7 @@ import Tooltip from "components/tooltips/Tooltip";
 import useDatesCountdown from "hooks/dates/useDatesCountdown";
 import usePlayAudio from "hooks/media/usePlayAudio";
 import GiftBox from "./gift-box/GiftBox";
+import QrCodeReceitBtn from "../qr-code-receipt/QrCodeReceiptBtn";
 
 const getStyles = (props) => ({
     deadlineBoard: {
@@ -92,6 +93,7 @@ export default function Gift() {
                         </p>
                     )}
                 </div>
+                <QrCodeReceitBtn type="receiptText" />
                 <p
                     className="text-small text-center font-weight-bold position-absolute text-nowrap"
                     style={styles.deadlineTitle}

@@ -110,7 +110,7 @@ export default function AddPointsContent({ closeModal }) {
                 <div className="qr-container">
                     <QrCode
                         value={qrCodeData}
-                        fgColor={themePColor}
+                        fgColor={`var(--themePDark--${themePColor})`}
                         imageSettings={imageSettings}
                         imageSquare={imageSquare}
                     />

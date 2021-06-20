@@ -8,14 +8,15 @@ import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 
 export default function BenefitScanner({ closeModal, callback }) {
     const [history, setHistory] = useState([]);
-    const { bizLogo } = useBizData();
     const [stop, setStop] = useState(false);
+    const { bizLogo } = useBizData();
 
     useQrScanner({ stopTrigger: stop });
     const timer = useUpdater();
 
     useEffect(() => {
         setScannerBeep();
+        setStop(false);
     }, []);
 
     useEffect(() => {
@@ -38,6 +39,7 @@ export default function BenefitScanner({ closeModal, callback }) {
         playAudio("audio_cli-staff_scanner-beep").then(() => {
             setStop(true);
             callback(newScannedText);
+            setHistory([]);
             closeModal();
         });
 

@@ -16,6 +16,7 @@ export default function PointsScanner({ closeModal, callback }) {
 
     useEffect(() => {
         setScannerBeep();
+        setStop(false);
     }, []);
 
     useEffect(() => {
@@ -37,6 +38,7 @@ export default function PointsScanner({ closeModal, callback }) {
 
         playAudio("audio_cli-staff_scanner-beep").then(() => {
             setStop(true);
+            setHistory([]);
             callback(newScannedText);
             closeModal();
         });

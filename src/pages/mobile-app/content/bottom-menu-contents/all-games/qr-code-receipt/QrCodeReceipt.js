@@ -19,14 +19,29 @@ export default function QrCodeReceipt() {
     return (
         <section className={`${txtColor}`}>
             <h1 className="my-3 text-subtitle text-center mx-3">
-                Comprovante de benefício
+                Comprovante de benefício da
                 <br />
-                da {bizName}
+                {bizName}
             </h1>
-            <section className="container-center-col">
-                <p className="mt-3 text-normal text-center">
-                    Escaneiar Código:
+            <section className="container-center text-center qr-code-receipt text-normal">
+                De:{" "}
+                <p className="mb-4 ml-3 cli-name text-title d-inline-block">
+                    {name}
                 </p>
+                <style jsx>
+                    {`
+                        .qr-code-receipt .cli-name {
+                            display: table;
+                            padding: 3px 20px;
+                            border-radius: 25px;
+                            background: var(--mainWhite);
+                            text-shadow: none;
+                            color: var(--themePDark--${themePColor});
+                        }
+                    `}
+                </style>
+            </section>
+            <section className="container-center-col">
                 <div className="qr-container">
                     <QrCode
                         value={code}
@@ -47,11 +62,11 @@ export default function QrCodeReceipt() {
                     `}
                 </style>
             </section>
-            <p className="mt-3 text-small mx-3">
-                <strong>Importante:</strong> o código QR deve ser lido e
-                validado apenas por um membro da equipe da {bizName}
+            <p className="mt-5 text-small mx-3">
+                <strong>Importante:</strong> o código QR deve ser escaneado e
+                validado por um membro da equipe da {bizName}
             </p>
-            <div style={{ marginBottom: 150 }} />
+            <div style={{ marginBottom: 200 }} />
         </section>
     );
 }

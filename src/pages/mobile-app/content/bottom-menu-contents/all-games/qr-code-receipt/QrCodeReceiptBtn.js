@@ -13,7 +13,11 @@ import QrCodeReceipt from "./QrCodeReceipt";
 //         ),
 // });
 
-export default function QrCodeReceiptBtn() {
+export default function QrCodeReceiptBtn({
+    type = "expand", //
+    top,
+    left,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
     const { themePColor, themeSColor } = useBizData();
 
@@ -27,14 +31,27 @@ export default function QrCodeReceiptBtn() {
 
     return (
         <section>
-            <ButtonFab
-                size="small"
-                iconMu={<ZoomOutMapIcon />}
-                onClick={handleFullOpen}
-                backgroundColor={`var(--themeSDark--${themeSColor})`}
-                top={-30}
-                left={-20}
-            />
+            {type === "expand" && (
+                <ButtonFab
+                    size="small"
+                    iconMu={<ZoomOutMapIcon />}
+                    onClick={handleFullOpen}
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
+                    top={-30}
+                    left={-20}
+                />
+            )}
+            {type === "receiptText" && (
+                <ButtonFab
+                    size="small"
+                    title="comprovante"
+                    onClick={handleFullOpen}
+                    variant="extended"
+                    backgroundColor={`var(--themeS--${themeSColor})`}
+                    top={top || -70}
+                    left={left || -30}
+                />
+            )}
             <ModalFullContent
                 contentComp={<QrCodeReceipt />}
                 fullOpen={fullOpen}
