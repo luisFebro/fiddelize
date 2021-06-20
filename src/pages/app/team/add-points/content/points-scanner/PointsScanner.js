@@ -4,7 +4,7 @@ import { useBizData } from "init";
 import useQrScanner from "hooks/media/useQrScanner";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
-import { decrypt } from "utils/security/xCipherFront";
+// import { decrypt } from "utils/security/xCipherFront";
 
 export default function PointsScanner({ closeModal, callback }) {
     const [history, setHistory] = useState([]);
@@ -20,14 +20,14 @@ export default function PointsScanner({ closeModal, callback }) {
 
     useEffect(() => {
         // DEFAULT SETTINGS
-        const newScannedText = decrypt(window.scannedText);
+        const newScannedText = window.scannedText;
         const alreadyScanned = history.includes(newScannedText);
         if (!newScannedText || alreadyScanned) return null;
 
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
         // END DEFAULT SETTINGS
 
-        const scanValidator = "fiddelize_customer_pts::";
+        const scanValidator = "customer_pts::";
         const isNotAllowed = !newScannedText.includes(scanValidator);
         if (isNotAllowed)
             return showToast(

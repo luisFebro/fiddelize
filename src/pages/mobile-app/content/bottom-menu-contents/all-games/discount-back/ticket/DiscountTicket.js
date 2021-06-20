@@ -5,8 +5,8 @@ import useData, { useBizData } from "init";
 import QrCode from "components/QrCode";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import { encrypt } from "utils/security/xCipherFront";
 import QrCodeReceiptBtn from "../../qr-code-receipt/QrCodeReceiptBtn";
+// import { encrypt } from "utils/security/xCipherFront";
 
 export default function DiscountTicket({
     didBeatGame = false,
@@ -119,9 +119,7 @@ export default function DiscountTicket({
         </div>
     );
 
-    const qrCode = encrypt(
-        `fiddelize_buy_games::customerId:${userId};customerName:${name};`
-    );
+    const qrCode = `buy_games::customerId:${userId};customerName:${name};`;
 
     // LESSON: when dealing with 2 classes which requires diff styles
     // do not put a number to the first elem like: class="elem elem-1" class="elem elem-2"

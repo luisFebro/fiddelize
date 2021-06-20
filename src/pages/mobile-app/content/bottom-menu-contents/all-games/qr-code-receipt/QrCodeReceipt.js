@@ -1,7 +1,7 @@
 import QrCode from "components/QrCode";
-import { encrypt } from "utils/security/xCipherFront";
 import useData, { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
+// import { encrypt } from "utils/security/xCipherFront";
 
 export default function QrCodeReceipt() {
     const { userId, name } = useData();
@@ -12,9 +12,8 @@ export default function QrCodeReceipt() {
         src: newImg,
     };
 
-    const encryptedCode = encrypt(
-        `fiddelize_buy_games::customerId:${userId};customerName:${name};`
-    ); // do not forget semicollon here to separate data
+    // removed encrypted code makes harder detection for average phone to read so far
+    const code = `buy_games::customerId:${userId};customerName:${name};`; // do not forget semicollon here to separate data
     const pColor = `var(--themePDark--${themePColor})`;
 
     return (
@@ -30,7 +29,7 @@ export default function QrCodeReceipt() {
                 </p>
                 <div className="qr-container">
                     <QrCode
-                        value={encryptedCode}
+                        value={code}
                         fgColor={pColor}
                         imageSquare={isSquared}
                         imageSettings={imageSettings}

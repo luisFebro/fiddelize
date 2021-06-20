@@ -30,7 +30,7 @@ const ttsStore = [
     {
         audio: `${defaultPath}/certo-tempo-real-cliente.mp3`,
         text:
-            "Certo! Pontos de fidelidade adicionados em tempo real para o cliente",
+            "Certo! Pontos de compra adicionados em tempo real para o cliente",
     },
     {
         audio: `${defaultPath}/finalizado-pontos-disponivel-app-cliente.mp3`,
@@ -50,9 +50,9 @@ const ttsStore = [
         text: "Pontos creditados para o cliente. Obrigada por voltar!",
     },
     {
-        audio: `${defaultPath}/pontos-de-fidelidade-adicionado-app-cliente-com-sucesso.mp3`,
+        audio: `${defaultPath}/pontos-de-compra-adicionado-app-cliente-com-sucesso.mp3`,
         text:
-            "Pontos de fidelidade adicionados no aplicativo do cliente com sucesso!",
+            "Pontos de compra foram adicionados no aplicativo do cliente com sucesso!",
     },
     {
         audio: `${defaultPath}/pontos-enviados-com-sucesso-obrigada-por-adicionar.mp3`,

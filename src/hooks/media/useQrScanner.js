@@ -33,7 +33,7 @@ export default function useQrScanner({ stopTrigger }) {
     }, [stopTrigger]);
 }
 
-// value e.g fiddelize_customer_pts::customerId:123;customerName:Luis Febro;
+// value e.g customer_pts::customerId:123;customerName:Luis Febro;
 // the value is decrypted from Scanners components
 // returns object
 export const getScannedData = (value) => {
@@ -52,7 +52,7 @@ export const getScannedData = (value) => {
         throw new Error("Invalid Validator");
 
     const delimeterInd = value.indexOf("::");
-    const VALIDATOR_IND = delimeterInd + 2; // 2 represents th delimeter length (::) to get the right value || length of fiddelize_customer_pts::
+    const VALIDATOR_IND = delimeterInd + 2; // 2 represents th delimeter length (::) to get the right value || length of customer_pts::
     const content = value.slice(VALIDATOR_IND);
     return extractStrData(content);
 };
