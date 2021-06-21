@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.32.8";
+const latestVersion = "4.32.9";
 
 const updateDescription = "scanners pt 3";
 /* HISTORY

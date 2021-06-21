@@ -4,11 +4,10 @@ import { useBizData } from "init";
 import useQrScanner from "hooks/media/useQrScanner";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
+import getVar, { setVar } from "init/var";
 // import { decrypt } from "utils/security/xCipherFront";
 
 export default function PointsScanner({ closeModal, callback }) {
-    const [history, setHistory] = useState([]);
-    const [ignorePriorVal, setIgnorePriorVal] = useState(true);
     const { bizLogo } = useBizData();
     const [stop, setStop] = useState(false);
 
@@ -21,30 +20,37 @@ export default function PointsScanner({ closeModal, callback }) {
     }, []);
 
     useEffect(() => {
-        // DEFAULT SETTINGS
-        const newScannedText = window.scannedText;
-        const alreadyScanned = history.includes(newScannedText);
-        if (alreadyScanned) return showToast("Código QR já foi escaneado");
-        if (!newScannedText) return null;
-
-        setHistory((prev) => [...new Set([...prev, newScannedText])]);
-        // END DEFAULT SETTINGS
-
         const scanValidator = "customer_pts::";
-        const isNotAllowed = !newScannedText.includes(scanValidator);
-        if (isNotAllowed)
-            return showToast(
-                "Código QR detectado não é válido para ler dados do cliente",
-                { type: "error" }
-            );
 
-        playAudio("audio_cli-staff_scanner-beep").then(() => {
-            setStop(true);
-            callback(newScannedText);
-            closeModal();
-        });
+        (async () => {
+            const newScannedText = window.scannedText;
+            const priorScannedText = await getVar("qrCodePtsLastTxt");
+            const alreadyScanned =
+                newScannedText && newScannedText === priorScannedText;
+            if (alreadyScanned)
+                return showToast(
+                    "Código QR do cliente já foi escaneado. Escaneie um código diferente.",
+                    { dur: 10000 }
+                );
+            if (!newScannedText) return null;
 
-        return null;
+            await setVar({ qrCodePtsLastTxt: newScannedText });
+
+            const isNotAllowed = !newScannedText.includes(scanValidator);
+            if (isNotAllowed)
+                return showToast(
+                    "Código QR detectado não é válido para ler dados do cliente",
+                    { type: "error" }
+                );
+
+            playAudio("audio_cli-staff_scanner-beep").then(() => {
+                setStop(true);
+                callback(newScannedText);
+                closeModal();
+            });
+
+            return null;
+        })();
         // eslint-disable-next-line
     }, [timer]);
 
@@ -127,3 +133,7 @@ async function setScannerBeep() {
 //         isScanning,
 //     };
 // }
+
+/* ARCHIVE
+setHistory((prev) => [...new Set([...prev, newScannedText])]);
+*/
