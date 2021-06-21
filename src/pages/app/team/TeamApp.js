@@ -152,19 +152,19 @@ export default function TeamApp({
     );
 
     const showCTAs = () => (
-        <section className="main-ctas position-relative animated fadeInUp delay-1s my-5 container-center-col">
+        <section className="main-ctas position-relative animated fadeInUp my-5 container-center-col">
             <div>
                 <h2 className={`m-0 text-center text-title ${txtColor}`}>
                     {firstName},{" "}
                     {getDayGreetingBr({ lowercase: true, lateHours: false })}!
                 </h2>
                 <h2
-                    className={`text-center animated fadeIn delay-2s text-subtitle ${txtColor} font-weight-bold`}
+                    className={`text-center animated fadeIn delay-3s text-subtitle ${txtColor} font-weight-bold`}
                 >
                     o que cadastrar?
                 </h2>
             </div>
-            <section className="animated fadeIn delay-2s mt-4 container-center">
+            <section className="animated fadeIn mt-4 container-center">
                 <AddTempPointsBtn
                     backColor={needAdminDefaultTheme ? "default" : backColor}
                     sColor={needAdminDefaultTheme ? "default" : sColor}
@@ -182,7 +182,7 @@ export default function TeamApp({
                     />
                 </div>
             </section>
-            <section className="mt-4 container-center animated fadeIn delay-3s">
+            <section className="mt-4 container-center animated fadeIn delay-1s">
                 <AddBenefitsBtn />
             </section>
             <style jsx>

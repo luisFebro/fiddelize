@@ -23,18 +23,26 @@ const setCustomerId = async (clientName, bizId, memberId) => {
 
 export default withRouter(FieldsHandler);
 
+const defaultCurrData = {
+    field: "name",
+    customerName: "",
+    customerId: "",
+    isQrCode: false,
+};
+
 function FieldsHandler({
     closeModal,
     clientScoreOnly = false,
     clientName,
     handleCustomerScore,
 }) {
-    const [curr, setCurr] = useState({
-        field: "name", // name
-        customerName: "",
-        customerId: "",
-        isQrCode: false,
-    });
+    const [curr, setCurr] = useState(defaultCurrData);
+
+    useEffect(() => {
+        // make sure data is new every time the dialog is entered because when using qr code, the data is preserved and force skipping searching a new name
+        setCurr(defaultCurrData);
+    }, []);
+
     const { field, customerName, customerId, isQrCode } = curr;
 
     const { bizId, themePColor: colorP, needDark, txtColor } = useBizData();

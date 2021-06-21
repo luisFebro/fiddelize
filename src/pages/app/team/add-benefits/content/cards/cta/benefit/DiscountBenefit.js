@@ -65,6 +65,7 @@ export default function DiscountBenefit(props) {
             benefitDesc,
             isReceived: true,
             newPoints: Number(targetPoints),
+            newBalance: leftCustomerPoints,
             totalBenefitsList: totalBenefitsList || 1,
             gameName,
             currChall,

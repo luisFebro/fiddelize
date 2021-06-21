@@ -53,7 +53,7 @@ export default function DiscountBenefitBtn(props) {
                 }
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
-                needIndex={false}
+                needIndex
                 backgroundColor="var(--mainWhite)"
             />
         </section>

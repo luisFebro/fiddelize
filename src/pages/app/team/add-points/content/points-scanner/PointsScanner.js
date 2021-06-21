@@ -6,17 +6,21 @@ import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 // import { decrypt } from "utils/security/xCipherFront";
 
-export default function PointsScanner({ closeModal, callback }) {
+export default function PointsScanner({
+    closeModal,
+    callback,
+    PointsScannerBtn,
+}) {
     const [history, setHistory] = useState([]);
     const { bizLogo } = useBizData();
-    const [stop, setStop] = useState(false);
+    // const [stop, setStop] = useState(false);
 
-    useQrScanner({ stopTrigger: stop });
+    useQrScanner(); // { stopTrigger: stop } not removing recording icon...
     const timer = useUpdater();
 
     useEffect(() => {
         setScannerBeep();
-        setStop(false);
+        // setStop(false);
     }, []);
 
     useEffect(() => {
@@ -37,7 +41,7 @@ export default function PointsScanner({ closeModal, callback }) {
             );
 
         playAudio("audio_cli-staff_scanner-beep").then(() => {
-            setStop(true);
+            // setStop(true);
             setHistory([]);
             callback(newScannedText);
             closeModal();
