@@ -13,14 +13,14 @@ export default function PointsScanner({
 }) {
     const [history, setHistory] = useState([]);
     const { bizLogo } = useBizData();
-    // const [stop, setStop] = useState(false);
+    const [stop, setStop] = useState(false);
 
-    useQrScanner(); // { stopTrigger: stop } not removing recording icon...
+    useQrScanner({ stopTrigger: stop });
     const timer = useUpdater();
 
     useEffect(() => {
         setScannerBeep();
-        // setStop(false);
+        setStop(false);
     }, []);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export default function PointsScanner({
             );
 
         playAudio("audio_cli-staff_scanner-beep").then(() => {
-            // setStop(true);
+            setStop(true);
             setHistory([]);
             callback(newScannedText);
             closeModal();

@@ -9,14 +9,14 @@ import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 export default function BenefitScanner({ closeModal, callback }) {
     const [history, setHistory] = useState([]);
     const { bizLogo } = useBizData();
-    // const [stop, setStop] = useState(false);
+    const [stop, setStop] = useState(false);
 
-    useQrScanner(); // { stopTrigger: stop }
+    useQrScanner({ stopTrigger: stop });
     const timer = useUpdater();
 
     useEffect(() => {
         setScannerBeep();
-        // setStop(false);
+        setStop(false);
     }, []);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function BenefitScanner({ closeModal, callback }) {
             callback(newScannedText);
             setHistory([]);
             closeModal();
-            // setStop(true);
+            setStop(true);
         });
 
         return null;
