@@ -23,7 +23,8 @@ export default function BenefitScanner({ closeModal, callback }) {
         // DEFAULT SETTINGS
         const newScannedText = window.scannedText;
         const alreadyScanned = history.includes(newScannedText);
-        if (!newScannedText || alreadyScanned) return null;
+        if (alreadyScanned) return showToast("Código QR já foi escaneado");
+        if (!newScannedText) return null;
 
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
         // END DEFAULT SETTINGS
@@ -38,7 +39,6 @@ export default function BenefitScanner({ closeModal, callback }) {
 
         playAudio("audio_cli-staff_scanner-beep").then(() => {
             callback(newScannedText);
-            setHistory([]);
             closeModal();
             setStop(true);
         });

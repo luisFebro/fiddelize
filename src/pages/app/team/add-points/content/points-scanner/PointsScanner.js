@@ -6,12 +6,9 @@ import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 // import { decrypt } from "utils/security/xCipherFront";
 
-export default function PointsScanner({
-    closeModal,
-    callback,
-    PointsScannerBtn,
-}) {
+export default function PointsScanner({ closeModal, callback }) {
     const [history, setHistory] = useState([]);
+    const [ignorePriorVal, setIgnorePriorVal] = useState(true);
     const { bizLogo } = useBizData();
     const [stop, setStop] = useState(false);
 
@@ -27,7 +24,8 @@ export default function PointsScanner({
         // DEFAULT SETTINGS
         const newScannedText = window.scannedText;
         const alreadyScanned = history.includes(newScannedText);
-        if (!newScannedText || alreadyScanned) return null;
+        if (alreadyScanned) return showToast("Código QR já foi escaneado");
+        if (!newScannedText) return null;
 
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
         // END DEFAULT SETTINGS
@@ -42,7 +40,6 @@ export default function PointsScanner({
 
         playAudio("audio_cli-staff_scanner-beep").then(() => {
             setStop(true);
-            setHistory([]);
             callback(newScannedText);
             closeModal();
         });
