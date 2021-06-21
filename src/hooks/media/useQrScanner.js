@@ -4,7 +4,8 @@ import useDelay from "hooks/useDelay";
 import extractStrData from "utils/string/extractStrData";
 
 // start off qr code scanner
-export default function useQrScanner({ stopTrigger }) {
+export default function useQrScanner() {
+    // { stopTrigger } // stopTrigger not making the camera logo to disappear after usage...
     const readyDelay = useDelay(5000);
     const once = useRef(false);
     const onceCamMsg = useRef(false);
@@ -29,8 +30,9 @@ export default function useQrScanner({ stopTrigger }) {
 
     useEffect(() => {
         if (!window.jbScanner) return;
-        if (stopTrigger) window.jbScanner.stopScanning();
-    }, [stopTrigger]);
+        // if (stopTrigger) window.jbScanner.stopScanning();
+        // { stopTrigger }
+    }, []);
 }
 
 // value e.g customer_pts::customerId:123;customerName:Luis Febro;
