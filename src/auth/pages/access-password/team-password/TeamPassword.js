@@ -89,10 +89,9 @@ export default function TeamPassword({ history }) {
             }),
          */
         (async () => {
-            showToast("Saindo da conta...");
             await Promise.all([
                 setVar({ disconnectCliMember: true, msg: true }, "user"),
-                disconnect(),
+                disconnect({ msg: true }),
             ]);
         })();
     };

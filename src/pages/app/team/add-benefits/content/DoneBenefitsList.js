@@ -23,11 +23,11 @@ export default function DoneBenefitsList() {
     };
 
     // UPDATE
-    const { runName } = useRun();
+    const { runName } = useRun(); // for update list from other comps
     useEffect(() => {
         if (runName) {
             setSkip(0);
-            if (!search) setSearch("");
+            setSearch("");
         }
     }, [runName, search]);
     // END UPDATE

@@ -104,11 +104,13 @@ export const updateImages = (userId) =>
 export const gotUsersInThisChallenge = (bizId, challN) =>
     `${ROOT}/user/check/user-challenges?bizId=${bizId}&challN=${challN}`; // GET
 
-// CLI-MEMBER
+// TEAM/CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;
 export const readOneMemberTasksList = () =>
     `${ROOT}/user/team/member-history/list`;
+export const teamAutocomplete = (bizId, { memberId, isAdmin }) =>
+    `${ROOT}/user/team/autocomplete?bizId=${bizId}&memberId=${memberId}&isAdmin=${isAdmin}&limit=5`;
 export const getMembersPodium = (bizId) =>
     `${ROOT}/user/team/members/podium?bizId=${bizId}`;
 

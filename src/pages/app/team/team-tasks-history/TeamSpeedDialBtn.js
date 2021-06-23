@@ -34,7 +34,7 @@ const getStyles = () => ({
 });
 
 export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
-    const [teamTasks, openTeamTasks] = useState(false);
+    const [memberTasks, openMemberTasks] = useState(false);
 
     const styles = getStyles();
 
@@ -76,7 +76,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Tarefas Recentes ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                !disableClick && openTeamTasks(true);
+                !disableClick && openMemberTasks(true);
                 // playBeep();
             },
         },
@@ -98,11 +98,12 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                 }}
                 hidden={false}
             />
-            {teamTasks && (
+            {memberTasks && (
                 <ModalFullContent
                     contentComp={<AsyncTeamTasksList />}
-                    fullOpen={teamTasks}
-                    setFullOpen={openTeamTasks}
+                    fullOpen={memberTasks}
+                    setFullOpen={openMemberTasks}
+                    needIndex={false}
                 />
             )}
         </Fragment>

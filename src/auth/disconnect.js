@@ -14,10 +14,9 @@ export default async function disconnect(options = {}) {
         history,
     } = options;
     if (!needRedirect && !history) return null;
-    if (msg) {
-        showProgress("go");
-        showToast("Finalizando sua sessão...", { dur: 15000 });
-    }
+
+    showProgress("go");
+    if (msg) showToast("Finalizando sua sessão...", { dur: 15000 });
 
     const [role, userId, name, twoLastCpfDigits] = await getVars(
         ["role", "userId", "name", "twoLastCpfDigits"],

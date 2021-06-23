@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import useRun from "global-data/ui";
-import getFirstName from "../../../../../../../../utils/string/getFirstName";
+import getFirstName from "utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -23,7 +23,7 @@ function PanelHiddenContent({ history, data }) {
                 </h2>
             </section>
             {data.memberTask === "newClient" && (
-                <p className="mb-4 text-normal font-weight-bold text-shadow">
+                <p className="mb-4 main-font text-em-0-9 font-weight-bold text-shadow">
                     • Cadastrou com:
                     <span className="d-block main-font text-em-1-2 font-weight-bold">
                         {data.clientScore
@@ -32,10 +32,20 @@ function PanelHiddenContent({ history, data }) {
                     </span>
                 </p>
             )}
-            <p className="mb-4 text-normal font-weight-bold text-shadow">
+            {data.taskDesc && (
+                <p className="mb-4 main-font text-em-0-9 font-weight-bold text-shadow">
+                    • Descrição:
+                    <span className="d-block main-font text-em-1-2 font-weight-bold">
+                        {data.taskDesc}
+                    </span>
+                </p>
+            )}
+            <p className="mb-4 main-font text-em-0-9 font-weight-bold text-shadow">
                 • Pelo membro:
                 <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
-                    {getFirstName(data.memberName, { addSurname: true })}
+                    {getFirstName(data.memberName && data.memberName.cap(), {
+                        addSurname: true,
+                    })}
                 </span>
             </p>
         </section>

@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.32.9";
+const latestVersion = "4.32.0-50";
 
-const updateDescription = "scanners pt 3";
+const updateDescription = "team management pt 1";
 /* HISTORY
+scanners pt 3
 new app points and benefits management - pt5
 new fiddelize logo
 qr code scanner pt5 || mobile app badges and new add points btn pt1

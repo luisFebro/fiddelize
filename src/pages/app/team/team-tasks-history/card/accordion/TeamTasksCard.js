@@ -35,22 +35,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const getStyles = ({ color, backgroundColor }) => ({
-    accordion: {
-        color,
-        backgroundColor,
-        margin: "15px 0 0",
-    },
-    totalPrizesBadge: {
-        top: 0,
-        right: -33,
-        borderRadius: "50px",
-        backgroundColor: "var(--niceUiYellow)",
-        border: "3px solid grey",
-        zIndex: 10,
-    },
-});
-
 export default function TeamTasksCard({
     detectedCard,
     checkDetectedElem,
@@ -58,10 +42,6 @@ export default function TeamTasksCard({
     needToggleButton = false,
 }) {
     const classes = useStyles();
-    const styles = getStyles({
-        color: "var(--mainWhite)",
-        backgroundColor: "var(--themePLight)",
-    });
 
     const showPanel = (panel) => (
         <section>
@@ -100,8 +80,12 @@ export default function TeamTasksCard({
     const showAccordion = ({ panel }) => (
         <Accordion
             TransitionProps={{ unmountOnExit: true }}
-            className="disabledLink"
-            style={styles.accordion}
+            className="card-accordion disabledLink"
+            style={{
+                color: "var(--mainWhite)",
+                backgroundColor: "var(--themePLight)",
+                margin: "15px 0 0",
+            }}
         >
             {showPanel(panel)}
             {showHiddenPanel(panel)}
@@ -111,10 +95,10 @@ export default function TeamTasksCard({
     const ActionsMap = actions.map((panel, ind) => {
         const props = {
             key: ind,
-            className: "position-relative mx-3 mb-5",
+            className: "position-relative mx-3 mt-3",
         };
 
-        return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? (
+        return checkDetectedElem({ list: actions, ind, indFromLast: 2 }) ? (
             <div {...props} ref={detectedCard}>
                 {showAccordion({ panel })}
             </div>

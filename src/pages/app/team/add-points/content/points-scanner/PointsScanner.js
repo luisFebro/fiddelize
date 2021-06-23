@@ -27,12 +27,7 @@ export default function PointsScanner({ closeModal, callback }) {
             const priorScannedText = await getVar("qrCodePtsLastTxt");
             const alreadyScanned =
                 newScannedText && newScannedText === priorScannedText;
-            if (alreadyScanned)
-                return showToast(
-                    "Código QR do cliente já foi escaneado. Escaneie um código diferente.",
-                    { dur: 10000 }
-                );
-            if (!newScannedText) return null;
+            if (!newScannedText || alreadyScanned) return null;
 
             await setVar({ qrCodePtsLastTxt: newScannedText });
 

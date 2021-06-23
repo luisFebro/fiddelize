@@ -126,7 +126,6 @@ export default function useAPIList({
 
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
-
         const handledListUnion = disableDupFilter
             ? [...list, ...response.data.list]
             : [...list, ...response.data.list].filter(
@@ -170,7 +169,6 @@ export default function useAPIList({
         }
 
         if (reachedChunksLimit && !updateFirstChunkOnly) {
-            //
             if (hasMore) setHasMore(false);
             return;
         }
@@ -178,7 +176,7 @@ export default function useAPIList({
         let cancel;
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
-        if (updateOnly) skip = 0;
+        if (skip === 0 && !updateFirstChunkOnly) return;
 
         const stopRequest = setTimeout(() => {
             cancel();

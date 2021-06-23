@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import useAPI, { getProData } from "api/useAPI";
 import getVar from "init/var";
 import getDatesCountdown from "../dates/getDatesCountdown";
@@ -36,11 +36,12 @@ export default function usePro(options = {}) {
     } = data;
 
     const { bizId, bizPlan } = useBizData();
+    const { role } = useData();
 
     const { data: backData, loading } = useAPI({
         url: getProData(bizId || userId), // userId used if user not logged in.
         dataName: "proData",
-        trigger: trigger && bizId,
+        trigger: trigger && bizId && role === "cliente-admin",
     });
 
     // if some error happens, then fetch from most recent offline data storage
