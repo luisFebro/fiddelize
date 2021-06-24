@@ -50,7 +50,7 @@ export const handleNextField = (e, currField, options = {}) => {
 
     if (event === "onKeyPress") {
         if (isKeyPressed(e, "Enter")) {
-            const needRun = addFieldToQueue();
+            const needRun = true; //addFieldToQueue(); after the first register, the nextfield won't work untill user reload page to clear used fields
             if (needRun) runNextField();
 
             runCallback();

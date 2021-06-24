@@ -30,12 +30,13 @@ export default function TeamTasksFilter({
     handlePeriodFilter,
     emptyType = "filter",
     gotData,
+    show = true,
 }) {
     const defaultPeriodIcon = <DateRangeIcon />;
 
     const showCategories = () =>
-        (listTotal !== 0 || emptyType === "filter") && (
-            <section className="mt-5 position-relative text-p text-left pl-2">
+        ((show && listTotal !== 0) || (show && emptyType === "filter")) && (
+            <section className="mt-4 animated fadeInUp position-relative text-p text-left pl-2">
                 <AnimaIconsSelect
                     callback={handlePeriodFilter}
                     defaultSelected="Hoje"
@@ -46,7 +47,7 @@ export default function TeamTasksFilter({
                     needReverseBtn={false}
                     zIndex={4}
                 />
-                <section className="my-3">
+                <section className="mb-3">
                     <FilterStatus loading={loading} gotData={gotData} />
                 </section>
             </section>

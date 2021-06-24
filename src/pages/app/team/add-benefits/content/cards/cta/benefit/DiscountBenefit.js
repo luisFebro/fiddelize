@@ -18,6 +18,8 @@ export default function DiscountBenefit(props) {
 
     const uify = useAction();
 
+    const [staffJob] = useData(["memberJob"], { dots: false });
+
     const {
         closeModal,
         closeScanner, // only for qrCode
@@ -71,9 +73,9 @@ export default function DiscountBenefit(props) {
             currChall,
             staff: {
                 id: staffId,
+                job: staffJob || "admin",
                 role,
                 name: staffName,
-                updatedAt: new Date(),
             },
         };
 

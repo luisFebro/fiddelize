@@ -1,19 +1,13 @@
 import PropTypes from "prop-types";
-import useRun from "global-data/ui";
+// import useRun from "global-data/ui";
 import getFirstName from "utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-const getStyles = () => ({
-    empty: {},
-});
-
-function PanelHiddenContent({ history, data }) {
-    const { runArray } = useRun();
-
-    const styles = getStyles();
+function PanelHiddenContent({ data }) {
+    // const { runArray } = useRun();
 
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
@@ -45,7 +39,8 @@ function PanelHiddenContent({ history, data }) {
                 <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
                     {getFirstName(data.memberName && data.memberName.cap(), {
                         addSurname: true,
-                    })}
+                    })}{" "}
+                    <span className="text-em-0-9">({data.memberJob})</span>
                 </span>
             </p>
         </section>

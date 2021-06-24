@@ -18,6 +18,7 @@ export default function getAPI({
     trigger = true,
     isSearch = false,
     fullCatch = false, // return full catch obj to handle
+    fullThen = false,
     loader = false,
     errMsg = false,
     errDur = 7000,
@@ -79,6 +80,7 @@ export default function getAPI({
         await Promise.all([
             handleProgress("end", { loader }),
             handleSuccess({
+                fullThen,
                 resolve,
                 success,
                 sucMsg,
@@ -97,7 +99,8 @@ async function handleProgress(type, { loader = false }) {
     return await showProgress(type);
 }
 
-async function handleSuccess({ resolve, success, sucMsg, sucDur }) {
+async function handleSuccess({ resolve, success, sucMsg, sucDur, fullThen }) {
+    if (fullThen) return success;
     if (!success || !success.data) return resolve(null);
     // can accept both .json({ msg: "ok" }) or .json("ok")
     const gotSucMsg = success.data.msg;

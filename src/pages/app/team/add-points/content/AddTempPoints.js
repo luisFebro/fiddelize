@@ -107,7 +107,7 @@ export default function AddTempPoints({
     const [setFullOpen] = useState(false);
 
     const { userId: staffId, name, role } = useData();
-    const [staffJob, loadingStaff] = useData(["memberJob"], { dots: false });
+    const [staffJob] = useData(["memberJob"], { dots: false });
 
     const { bizLogo, bizName } = useBizData();
 
@@ -176,12 +176,6 @@ export default function AddTempPoints({
     };
 
     const handleConfirm = () => {
-        if (!staffJob && !loadingStaff)
-            return showToast(
-                "Dados faltando... Por favor, desconecte-se da sua conta e tente novamente",
-                { type: "error", dur: 10000 }
-            );
-
         (async () => {
             const selectedTTS = getRandomArray(ttsStore);
             const { audio, text } = selectedTTS;

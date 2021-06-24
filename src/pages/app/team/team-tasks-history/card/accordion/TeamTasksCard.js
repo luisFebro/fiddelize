@@ -92,9 +92,9 @@ export default function TeamTasksCard({
         </Accordion>
     );
 
-    const ActionsMap = actions.map((panel, ind) => {
+    const ActionsMap = actions.map((panel = {}, ind) => {
         const props = {
-            key: ind,
+            key: panel._id || panel.cardId || ind,
             className: "position-relative mx-3 mt-3",
         };
 

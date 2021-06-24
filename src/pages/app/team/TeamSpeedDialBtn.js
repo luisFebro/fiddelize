@@ -67,7 +67,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Trocar App ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                !disableClick && history.push("/painel-de-apps");
+                if (!disableClick) history.push("/painel-de-apps");
                 // playBeep();
             },
         },
@@ -76,7 +76,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Tarefas Recentes ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                !disableClick && openTeamTasks(true);
+                if (!disableClick) openTeamTasks(true);
                 // playBeep();
             },
         },
@@ -103,6 +103,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                     contentComp={<AsyncTeamTasksList />}
                     fullOpen={teamTasks}
                     setFullOpen={openTeamTasks}
+                    needIndex={false}
                 />
             )}
         </Fragment>

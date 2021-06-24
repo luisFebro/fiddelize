@@ -13,17 +13,17 @@ import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ReactGA from "react-ga";
-import Title from "../Title";
+import useData, { useBizData } from "init";
+import { doRegister } from "auth/api";
 import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
-import { doRegister } from "auth/api";
+import Title from "../Title";
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import useData, { useBizData } from "init";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
@@ -59,6 +59,7 @@ function ASyncRegisterCliUser({
     isStaff = false,
     callback,
     setLoginOrRegister,
+    needAlreadyRegisterBtn = false,
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
@@ -98,6 +99,7 @@ function ASyncRegisterCliUser({
         themeSColor,
         bizLogo,
         bizName,
+        bizId,
     } = useBizData();
 
     const [
@@ -141,7 +143,7 @@ function ASyncRegisterCliUser({
                     memberRole: memberRole || memberRoleAlt, // if not found memberRole, it means it is a complete register before sending link invitation.
                     clientUserData: {
                         ...data.clientUserData,
-                        bizId: lastRegisterBizId,
+                        bizId: lastRegisterBizId || bizId,
                     },
                     linkCode,
                 }));
@@ -200,27 +202,21 @@ function ASyncRegisterCliUser({
             ...data,
         };
 
-        if (!lastRegisterBizId) {
-            showToast(
-                "O ID do app não foi encontrado. Tente reinstalar o app na página de convite.",
-                { type: "error" }
-            );
-        }
-
         showToast("Registrando... Aguarde um momento.", { dur: 4000 });
 
         doRegister(newUser).then((res) => {
-            if (res.status !== 200) {
-                showToast(res.data.msg || res.data.error, { type: "error" });
-                // detect field errors
-                const thisModalFields = Object.keys(data);
-                const foundObjError = detectErrorField(
-                    res.data.msg,
-                    thisModalFields
-                );
-                setFieldError(foundObjError);
-                return;
-            }
+            console.log("res registerCliUser", res);
+            // if (res.status !== 200) {
+            //     showToast(res.data.msg || res.data.error, { type: "error" });
+            //     // detect field errors
+            //     const thisModalFields = Object.keys(data);
+            //     const foundObjError = detectErrorField(
+            //         res.data.msg,
+            //         thisModalFields
+            //     );
+            //     setFieldError(foundObjError);
+            //     return;
+            // }
 
             setStorageRegisterDone();
 
@@ -555,7 +551,7 @@ function ASyncRegisterCliUser({
                 {showForm()}
                 {showButtonActions()}
             </Card>
-            {showLoginForm()}
+            {needAlreadyRegisterBtn && showLoginForm()}
         </div>
     );
 }

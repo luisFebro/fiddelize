@@ -241,6 +241,7 @@ function ClientMobileApp({ location, history }) {
                     <div className="position-relative" style={{ top: -120 }}>
                         {isCliUser && (
                             <AsyncRegisterCliUser
+                                needAlreadyRegisterBtn
                                 setLoginOrRegister={setLoginOrRegister}
                             />
                         )}

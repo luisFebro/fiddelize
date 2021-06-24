@@ -24,13 +24,14 @@ export default function getVar(key, options = {}) {
     return variablesStore(storeName).getItem(key);
 }
 
+// for user's data, prefer using useData like const [staffJob, loadingStaff] = useData(["memberJob"], { dots: false });
 export const useVar = (key, options = {}) => {
-    const { dots = false } = options;
+    const { dots = false, store } = options;
 
     const [val, setVal] = useState(dots ? "..." : null);
 
     useEffect(() => {
-        getVar(key).then((value) => setVal(value));
+        getVar(key, store).then((value) => setVal(value));
     }, [key]);
 
     return val;

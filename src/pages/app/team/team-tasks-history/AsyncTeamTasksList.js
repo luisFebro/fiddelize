@@ -7,6 +7,7 @@ import useAPIList, {
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun from "global-data/ui";
 import SearchField from "components/search/SearchField";
+import getVar, { setVar } from "init/var";
 import Cards from "./card/Cards";
 import TeamTasksFilter from "./TeamTasksFilter";
 // import extractStrData from '../../../../../../utils/string/extractStrData';
@@ -25,25 +26,21 @@ export default function AsyncTeamTasksList() {
         memberId,
         bizId,
         search,
-        filter: filter || "all",
+        filter: filter || "all", // filter should be empty to avoid duplicate request...
         skip,
         limit: 5,
     };
 
     // UPDATE
-    const { runName: updateName } = useRun(); // for update list from other comps
-    const [runName, setRunName] = useState(updateName);
-    useEffect(() => {
-        if (filter) {
-            setSkip(0);
-            // setSearch("");
-            setRunName("");
-        }
-        if (runName) {
-            setSkip(0);
-            // setSearch("");
-        }
-    }, [runName, search, filter]);
+    const { runName } = useRun(); // for update list from other comps
+    useUpdate({
+        filter,
+        search,
+        setSkip,
+        setSearch,
+        setFilter,
+        runName,
+    });
     // END UPDATE
 
     const {
@@ -64,7 +61,7 @@ export default function AsyncTeamTasksList() {
         params,
         filterId: "createdAt",
         listName: "teamTasksList",
-        trigger: search || runName || filter, // filter should be last since there's a value
+        trigger: search || filter || runName,
     });
 
     // SEARCH
@@ -103,6 +100,7 @@ export default function AsyncTeamTasksList() {
                 listTotal={listTotal}
                 handlePeriodFilter={handlePeriodFilter}
                 loading={loading}
+                show={!search}
             />
         );
     };
@@ -127,14 +125,14 @@ export default function AsyncTeamTasksList() {
     );
 
     const showEmptyIllustration = () => (
-        <section className="mx-3 my-5 container-center-col">
+        <section className="mx-3 mb-5 container-center-col">
             <img
                 width={300}
                 src={"/img/illustrations/empty-data.svg" || "/img/error.png"}
                 alt="sem tarefas recentes"
             />
-            <h2 className="mt-3 text-normal font-weight-bold text-grey">
-                Nenhuma tarefa {filter === "today" ? "para hoje" : "até agora"}
+            <h2 className="text-normal font-weight-bold text-grey">
+                Nenhuma tarefa {filter === "today" ? "feita hoje" : "até agora"}
             </h2>
         </section>
     );
@@ -161,3 +159,23 @@ export default function AsyncTeamTasksList() {
         </section>
     );
 }
+
+// HOOKS
+function useUpdate({ runName, filter, search, setSkip, setSearch, setFilter }) {
+    useEffect(() => {
+        if (filter || runName || search) setSkip(0);
+        if (runName) {
+            setFilter("");
+            setSearch("");
+        }
+
+        getVar("teamTasksFilter").then((storeFilter) => {
+            if (storeFilter !== filter) setSearch("");
+            setVar({ teamTasksFilter: filter });
+        });
+
+        // eslint-disable-next-line
+    }, [runName, search, filter]);
+}
+
+// END HOOKS

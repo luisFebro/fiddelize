@@ -1,5 +1,5 @@
 import getFirstName from "utils/string/getFirstName";
-import { calendar } from "utils/dates/dateFns";
+import { fromNow } from "utils/dates/dateFns";
 import TeamTasksCard from "./accordion/TeamTasksCard";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 
@@ -86,7 +86,7 @@ function SecHeading({ data }) {
         <section>
             <p className="team-tasks date-badge text-nowrap position-relative d-block m-0 mt-2">
                 <span className="text-small text-shadow font-weight-bold">
-                    Feito: {calendar(data.createdAt)}.
+                    Feito {fromNow(data.createdAt)}.
                 </span>
                 <style jsx>
                     {`

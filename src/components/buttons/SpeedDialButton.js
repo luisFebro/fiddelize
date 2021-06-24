@@ -141,6 +141,7 @@ export default function SpeedDialButton({
                                   action.onClick();
                                   handleClose();
                               }}
+                              onMouseOver={(e) => e.preventDefault()}
                               FabProps={{
                                   style: {
                                       color: "#fff",

@@ -47,6 +47,7 @@ export const doRegister = async (objToSend) => {
         body: objToSend,
         timeout: 30000,
         loader: true,
+        fullThen: true,
         fullCatch: true,
     }).catch((err) => {
         if (!err) return null;
