@@ -3,9 +3,9 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.32.0-80";
+const latestVersion = "4.33.0";
 
-const updateDescription = "team management pt 2";
+const updateDescription = "team management pt 3";
 /* HISTORY
 scanners pt 3
 new app points and benefits management - pt5

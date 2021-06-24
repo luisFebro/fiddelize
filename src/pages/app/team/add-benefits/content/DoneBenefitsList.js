@@ -25,7 +25,7 @@ export default function DoneBenefitsList() {
     // UPDATE
     const { runName } = useRun(); // for update list from other comps
     useEffect(() => {
-        if (runName) {
+        if (runName && runName.includes("DoneBenefitsList")) {
             setSkip(0);
             setSearch("");
         }

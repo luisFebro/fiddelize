@@ -61,7 +61,7 @@ export default function AsyncTeamTasksList() {
         params,
         filterId: "createdAt",
         listName: "teamTasksList",
-        trigger: search || filter || runName,
+        trigger: search || filter || runName || true,
     });
 
     // SEARCH
@@ -164,7 +164,7 @@ export default function AsyncTeamTasksList() {
 function useUpdate({ runName, filter, search, setSkip, setSearch, setFilter }) {
     useEffect(() => {
         if (filter || runName || search) setSkip(0);
-        if (runName) {
+        if (runName && runName.includes("AsyncTeamTasksList")) {
             setFilter("");
             setSearch("");
         }

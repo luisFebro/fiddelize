@@ -21,8 +21,8 @@ function PanelHiddenContent({ data }) {
                     • Cadastrou com:
                     <span className="d-block main-font text-em-1-2 font-weight-bold">
                         {data.clientScore
-                            ? `${data.clientScore} Pontos.`
-                            : "0 Pontos."}
+                            ? `${data.clientScore} PTS.`
+                            : "0 PTS."}
                     </span>
                 </p>
             )}

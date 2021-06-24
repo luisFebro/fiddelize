@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import useDelay from "../../../../hooks/useDelay";
 import TypesHandler from "./types-handler/TypesHandler";
 import useAuth from "auth/useAuth";
@@ -19,11 +19,13 @@ const getStyles = () => ({
 export default withRouter(RegistersPanel);
 
 function RegistersPanel({ history, isNewMember = false }) {
+    const { role } = useData();
     const { bizLogo, bizLinkName } = useBizData();
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
     useAuth({ history, roles: "cliente-membro, cliente-admin" });
 
     const styles = getStyles();
+    const isAdmin = role === "cliente-admin";
 
     const readyTypesHandler = useDelay(1500);
 
@@ -46,7 +48,8 @@ function RegistersPanel({ history, isNewMember = false }) {
 
     const showSharerPageLink = () =>
         readyTypesHandler &&
-        !isNewMember && (
+        !isNewMember &&
+        isAdmin && (
             <section className="my-3 text-right mr-3">
                 <Link
                     to={`/${bizLinkName}/compartilhar-app`}

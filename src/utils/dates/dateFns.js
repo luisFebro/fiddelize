@@ -36,12 +36,20 @@ const now = new Date();
 
 const formatDMY = (date, short = false, needYear = true) =>
     getDayMonthBr(date, { needYear, short });
-const fromNow = (pastDate, locale) =>
-    formatDistance(new Date(pastDate), now, {
+const fromNow = (pastDate, locale) => {
+    const result = formatDistance(new Date(pastDate), new Date(now), {
         addSuffix: true,
         locale: pick(locale),
         includeSeconds: true,
     });
+    if (result && result.includes("segundos")) return "há poucos segundos";
+
+    const number = Number(result.slice(3, 5));
+    if (!Number.isNaN(number) && number >= 30) return "há cerca de 30 minutos";
+    if (result && (result.includes("minutos") || result.includes("em")))
+        return "há poucos minutos";
+    return result;
+};
 // calendar needs a customformatlike ``{ sameElse: 'll'}`` in moment.
 const calendar = (date, locale) =>
     formatRelative(new Date(date), now, { locale: pick(locale) });

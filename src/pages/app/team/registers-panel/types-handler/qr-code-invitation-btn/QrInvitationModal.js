@@ -70,7 +70,7 @@ export default function QrInvitationModal({
                 <h1 className="mt-3 mb-4 mx-3 text-center text-shadow text-white text-normal font-weight-bold">
                     {cliName && cliName.cap()}, escaneie{" "}
                     {isNewMember ? "novo" : "e baixe aqui o"} app do clube de
-                    fidelidade da {bizName}
+                    compras da {bizName}
                     {isNewMember ? " - versão para membros" : ""}
                 </h1>
             ) : null}

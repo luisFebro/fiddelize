@@ -123,6 +123,7 @@ function ASyncRegisterCliUser({
         "lastRegisterBizId",
         "linkCode",
     ]);
+    const { name: appMemberName } = useData();
 
     const isReady = bizLogo && bizName && memberId !== "...";
     useEffect(() => {
@@ -137,7 +138,7 @@ function ASyncRegisterCliUser({
                         id: memberId || staffId,
                         job: memberJob || "admin",
                         role: memberRole || memberRoleAlt,
-                        name: memberName,
+                        name: memberName || appMemberName,
                     },
                     tempPoints: userScore,
                     memberRole: memberRole || memberRoleAlt, // if not found memberRole, it means it is a complete register before sending link invitation.
@@ -195,7 +196,7 @@ function ASyncRegisterCliUser({
         handleNextField(null, null, { clearFields: true });
     };
 
-    const registerThisUser = (e) => {
+    const registerThisUser = async () => {
         setActionBtnDisabled(true);
 
         const newUser = {
@@ -203,47 +204,45 @@ function ASyncRegisterCliUser({
         };
 
         showToast("Registrando... Aguarde um momento.", { dur: 4000 });
-
-        doRegister(newUser).then((res) => {
-            console.log("res registerCliUser", res);
-            // if (res.status !== 200) {
-            //     showToast(res.data.msg || res.data.error, { type: "error" });
-            //     // detect field errors
-            //     const thisModalFields = Object.keys(data);
-            //     const foundObjError = detectErrorField(
-            //         res.data.msg,
-            //         thisModalFields
-            //     );
-            //     setFieldError(foundObjError);
-            //     return;
-            // }
-
-            setStorageRegisterDone();
-
-            ReactGA.event({
-                category: "cliUser",
-                action: "Created an account",
-                label: "form",
-                nonInteraction: true,
-                transport: "beacon",
-            });
-
-            if (!isStaff) removeCollection("onceChecked");
-
-            clearData();
-
-            if (isStaff) {
-                const payload = { name, phone, email };
-                callback(payload);
-            } else {
-                setLoginOrRegister("login");
-                showToast(
-                    `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
-                    { type: "success", dur: 10000 }
+        const ok = await doRegister(newUser).catch((res) => {
+            if (res.status !== 200) {
+                showToast(res.data.msg || res.data.error, { type: "error" });
+                // detect field errors
+                const thisModalFields = Object.keys(data);
+                const foundObjError = detectErrorField(
+                    res.data.msg,
+                    thisModalFields
                 );
-                // sendEmail(res.data.authUserId);
+                setFieldError(foundObjError);
             }
         });
+        if (!ok) return null;
+
+        setStorageRegisterDone();
+
+        ReactGA.event({
+            category: "cliUser",
+            action: "Created an account",
+            label: "form",
+            nonInteraction: true,
+            transport: "beacon",
+        });
+
+        if (!isStaff) removeCollection("onceChecked");
+
+        clearData();
+
+        if (isStaff) {
+            const payload = { name, phone, email };
+            callback(payload);
+        } else {
+            setLoginOrRegister("login");
+            showToast(
+                `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
+                { type: "success", dur: 10000 }
+            );
+            // sendEmail(res.data.authUserId);
+        }
     };
 
     const showLoginForm = () => (

@@ -60,9 +60,9 @@ export default function PendingBenefitsList() {
     // UPDATE
     const { runName } = useRun();
     useEffect(() => {
-        if (runName) {
+        if (runName && runName.includes("PendingBenefitsList")) {
             setSkip(0);
-            if (!search) setSearch("");
+            setSearch("");
         }
     }, [runName, search]);
     // END UPDATE
