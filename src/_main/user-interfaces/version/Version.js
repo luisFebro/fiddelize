@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.33.0";
+const latestVersion = "4.33.1";
 
 const updateDescription = "team management pt 3";
 /* HISTORY

@@ -68,10 +68,11 @@ export default function AsyncTeamTasksList() {
     const handleSearch = (entry) => {
         if (entry === "_cleared") {
             setSearch("");
-            setSkip(0);
-            return null;
+            return;
         }
-        return setSearch(entry);
+
+        setSkip(0);
+        setSearch(entry);
     };
 
     const autocompleteProps = {
