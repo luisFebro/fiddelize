@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import DeleteButton from "components/buttons/DeleteButton";
-import ModalConfYesNo from "components/modals/ModalYesNo";
+import ModalYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
-import getItems from "init/lStorage";
 import getAPI, { changeBenefit } from "api";
 import { setRun, useAction } from "global-data/ui";
 import getId from "utils/getId";
-
-const [staffId] = getItems("currUser", ["userId"]);
+import useData from "init";
 
 const AsyncUndoContent = Load({
     loading: true,
@@ -22,6 +20,7 @@ export default function UndoContentBtn(props) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const uify = useAction();
+    const { userId: staffId } = useData();
 
     const {
         gender,
@@ -82,7 +81,7 @@ export default function UndoContentBtn(props) {
                 transform="scale(0.9)"
                 onClick={handleFullOpen}
             />
-            <ModalConfYesNo
+            <ModalYesNo
                 title="Remoção de Benefício Realizado"
                 setFullOpen={setFullOpen}
                 fullOpen={fullOpen}

@@ -2,8 +2,8 @@
 import SortIcon from "@material-ui/icons/Sort";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import AnimaIconsSelect from "../../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
-import FilterStatus from "../../../../../../components/selects/anima-icons-select/FilterStatus";
+import AnimaIconsSelect from "components/fields/anima-icons-select/AnimaIconsSelect";
+import FilterStatus from "components/fields/anima-icons-select/FilterStatus";
 
 const filterOptions = (isPro) => [
     {

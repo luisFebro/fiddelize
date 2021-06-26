@@ -211,6 +211,7 @@ export default function BuyRating({
                             InputProps={{
                                 style: styles.fieldFormValue,
                             }}
+                            // eslint-disable-next-line
                             inputProps={{
                                 maxLength: MAX_LEN,
                             }}

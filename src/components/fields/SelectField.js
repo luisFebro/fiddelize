@@ -5,12 +5,14 @@ import handleChange from "../../utils/form/use-state/handleChange";
 
 /* EXAMPLES
 title = "selecione valor:"
-valuesArray = [
+valuesArray={[
     { val:"optionA", showVal: "opção A" },
     { val:"optionB", showVal: "opção B" },
-]
+]}
 
  */
+
+// warning: if inside a modal, verify the zIndex in case of not appearing the popup menu;
 export default function SelectField({
     title = "",
     valuesArray,
@@ -23,7 +25,7 @@ export default function SelectField({
     const { selected } = data;
 
     useEffect(() => {
-        setData({ ...data, selected: title });
+        setData((prev) => ({ ...prev, selected: title }));
     }, [title]);
 
     useEffect(() => {
@@ -54,13 +56,11 @@ export default function SelectField({
                     </span>
                 </MenuItem>
                 {valuesArray &&
-                    valuesArray.map((elem, ind) => {
-                        return (
-                            <MenuItem key={ind} value={elem.val}>
-                                {elem.showVal}
-                            </MenuItem>
-                        );
-                    })}
+                    valuesArray.map((elem, ind) => (
+                        <MenuItem key={ind} value={elem.val}>
+                            {elem.showVal}
+                        </MenuItem>
+                    ))}
             </Select>
         </section>
     );

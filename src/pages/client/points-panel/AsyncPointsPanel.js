@@ -159,7 +159,6 @@ function AsyncPointsPanel({ history, location }) {
 
             const bodyPoints = {
                 userId: cliUserId, // for auth
-                paidValue,
                 newPoints: paidValue,
                 staff,
                 // data to set the card so that we can track and set benefits card

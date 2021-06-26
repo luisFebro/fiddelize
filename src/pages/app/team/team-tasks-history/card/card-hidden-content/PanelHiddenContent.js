@@ -1,13 +1,14 @@
-import PropTypes from "prop-types";
-// import useRun from "global-data/ui";
 import getFirstName from "utils/string/getFirstName";
+import PtsRemovalPanelBtn from "./pts-removal-panel/PtsRemovalPanelBtn";
 
-PanelHiddenContent.propTypes = {
-    data: PropTypes.object.isRequired,
-};
-
-function PanelHiddenContent({ data }) {
-    // const { runArray } = useRun();
+function PanelHiddenContent({ data = {} }) {
+    const showRemovePointsBtn = () => (
+        <PtsRemovalPanelBtn
+            clientId={data.clientId}
+            clientName={data.clientName}
+            value={data.value}
+        />
+    );
 
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
@@ -43,6 +44,7 @@ function PanelHiddenContent({ data }) {
                     <span className="text-em-0-9">({data.memberJob})</span>
                 </span>
             </p>
+            {data.memberTask === "newPoints" && showRemovePointsBtn()}
         </section>
     );
 }

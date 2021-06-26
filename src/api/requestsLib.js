@@ -44,8 +44,8 @@ export const changeBenefit = () => `${ROOT}/user/cli-user/change-benefit`; // PU
 export const addTempPoints = () => `${ROOT}/user/cli-user/temp-points/add`;
 export const removeTempPoints = () =>
     `${ROOT}/user/cli-user/temp-points/remove`;
-export const addPoints = () => `${ROOT}/user/cli-user/pts/add`;
-export const removePoints = () => `${ROOT}/user/cli-user/pts/remove`;
+export const addPoints = () => `${ROOT}/user/cli-user/pts/add`; // POST
+export const removePoints = () => `${ROOT}/user/cli-user/pts/remove`; // DELETE
 export const readLastTempPoints = (userId) =>
     `${ROOT}/user/cli-user/last-temp-points?userId=${userId}`;
 export const encryptPointsLink = () =>

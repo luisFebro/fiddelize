@@ -8,9 +8,9 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import EventIcon from "@material-ui/icons/Event";
-import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
-import AnimaIconsSelect from "../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
-import FilterStatus from "../../../../../components/selects/anima-icons-select/FilterStatus";
+import PremiumButton from "components/buttons/premium/PremiumButton";
+import AnimaIconsSelect from "components/fields/anima-icons-select/AnimaIconsSelect";
+import FilterStatus from "components/fields/anima-icons-select/FilterStatus";
 
 // do not include btn styling for free options...
 const mainOptions = (isPro) => [
