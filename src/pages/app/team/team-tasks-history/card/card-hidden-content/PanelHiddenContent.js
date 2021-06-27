@@ -1,4 +1,11 @@
 import getFirstName from "utils/string/getFirstName";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import showToast from "components/toasts";
+import convertPhoneStrToInt from "utils/numbers/convertPhoneStrToInt";
+import runLinkTagOnClick from "utils/tags/runLinkTagOnClick";
+import getAPI, { decode } from "api";
+import useData from "init";
 import PtsRemovalPanelBtn from "./pts-removal-panel/PtsRemovalPanelBtn";
 
 function PanelHiddenContent({ data = {} }) {
@@ -9,6 +16,48 @@ function PanelHiddenContent({ data = {} }) {
             value={data.value}
         />
     );
+
+    const { userId: staffId } = useData();
+
+    const showTalkToClientBtn = () => {
+        const handleWhatsappRedirect = () => {
+            showToast("Um momento. Redirecionando...", { dur: 15000 });
+
+            (async () => {
+                const phone = await getAPI({
+                    method: "post",
+                    url: decode(),
+                    body: {
+                        code: data.clientPhone,
+                        userId: staffId,
+                    },
+                });
+                const convertedWhatsapp = convertPhoneStrToInt(phone);
+                const cliFirstName = getFirstName(
+                    data.clientName && data.clientName.cap()
+                );
+                const defaultWhatsappTxt = `Oi ${cliFirstName}! `;
+
+                runLinkTagOnClick(
+                    `https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${defaultWhatsappTxt}`
+                );
+            })();
+        };
+
+        return (
+            <div className="mb-4 position-relative">
+                <ButtonFab
+                    title="Falar com cliente"
+                    backgroundColor="var(--themeSDark--default)"
+                    onClick={handleWhatsappRedirect}
+                    iconFontAwesome={<FontAwesomeIcon icon="comment" />}
+                    position="relative"
+                    variant="extended"
+                    size="small"
+                />
+            </div>
+        );
+    };
 
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
@@ -30,20 +79,41 @@ function PanelHiddenContent({ data = {} }) {
             {data.taskDesc && (
                 <p className="mb-4 main-font text-em-0-9 font-weight-bold text-shadow">
                     • Descrição:
-                    <span className="d-block main-font text-em-1-2 font-weight-bold">
+                    <span className="d-block main-font text-em-1 font-weight-bold">
                         {data.taskDesc}
                     </span>
                 </p>
             )}
+            <p className="panel-hidden mb-4 main-font text-em-0-9 font-weight-bold text-shadow">
+                • Última Avaliação:
+                <span className="text-pill text-center review-desc d-block main-font text-em-1">
+                    {data.clientLastReport
+                        ? `"${data.clientLastReport}"`
+                        : "Nenhuma"}
+                </span>
+                <span className="d-block text-center text-normal">
+                    {data.clientLastXpScore
+                        ? `Nota ${data.clientLastXpScore}`
+                        : "Sem nota"}
+                </span>
+                <style jsx>
+                    {`
+                        .panel-hidden .review-desc {
+                            padding: 5px 10px;
+                        }
+                    `}
+                </style>
+            </p>
             <p className="mb-4 main-font text-em-0-9 font-weight-bold text-shadow">
                 • Pelo membro:
-                <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
+                <span className="d-inline-block main-font text-em-1">
                     {getFirstName(data.memberName && data.memberName.cap(), {
                         addSurname: true,
                     })}{" "}
                     <span className="text-em-0-9">({data.memberJob})</span>
                 </span>
             </p>
+            {showTalkToClientBtn()}
             {data.memberTask === "newPoints" && showRemovePointsBtn()}
         </section>
     );

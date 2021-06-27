@@ -3,10 +3,15 @@ import { fromNow } from "utils/dates/dateFns";
 import TeamTasksCard from "./accordion/TeamTasksCard";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 
-export default function Cards({ list, detectedCard, checkDetectedElem }) {
+export default function Cards({
+    isAdmin,
+    list,
+    detectedCard,
+    checkDetectedElem,
+}) {
     const actions = list.map((data) => {
         const MainHeading = <MainH data={data} />;
-        const SecondaryHeading = <SecHeading data={data} />;
+        const SecondaryHeading = <SecHeading data={data} isAdmin={isAdmin} />;
         const HiddenPanel = <PanelHiddenContent data={data} />;
 
         return {
@@ -38,8 +43,10 @@ function MainH({ data }) {
     function DisplayTask({ task, points }) {
         const handleTaskDesc = () => {
             if (task === "newClient") return "+ Novo Cliente";
-            if (task === "newPoints") return `+ ${points} Pontos`;
+            if (task === "newPoints") return `+ ${points} PTS`;
             if (task === "newBenefit") return `+ Benefício`;
+            if (task === "in") return `+ ${points} PTS extra`;
+            if (task === "out") return `- ${points} PTS`;
             return null;
         };
 
@@ -81,11 +88,22 @@ function MainH({ data }) {
     );
 }
 
-function SecHeading({ data }) {
+function SecHeading({ data, isAdmin }) {
     return (
         <section>
             <p className="team-tasks date-badge text-nowrap position-relative d-block m-0 mt-2">
                 <span className="text-small text-shadow font-weight-bold">
+                    {isAdmin && (
+                        <span className="d-block">
+                            Por:{" "}
+                            {getFirstName(
+                                data.memberName && data.memberName.cap(),
+                                {
+                                    addSurname: true,
+                                }
+                            )}
+                        </span>
+                    )}
                     Feito {fromNow(data.createdAt)}.
                 </span>
                 <style jsx>

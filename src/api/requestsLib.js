@@ -19,6 +19,7 @@ export const createPassword = () => `${ROOT}/auth/pswd/create`;
 export const readVerificationPass = (bizId) =>
     `${ROOT}/admin/verification-pass/${bizId}`; // GET
 export const checkVerificationPass = () => `${ROOT}/admin/verification-pass`; // POST
+export const decode = () => `${ROOT}/auth/text/decode`; // POST
 // export const makeGoogleLogin = () => `${ROOT}/auth/google`; // POST
 
 // CLI-USER

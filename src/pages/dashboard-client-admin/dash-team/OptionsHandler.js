@@ -1,17 +1,11 @@
 import { useState } from "react";
-import { Load } from "../../../components/code-splitting/LoadableComp";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { Load } from "components/code-splitting/LoadableComp";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
-const faStyle = {
-    fontSize: "25px",
-    filter: "drop-shadow(grey 0.5px 0.5px 1.5px)",
-    color: "white",
-};
-
-const AsyncTasks = Load({
+const AsyncTeamTasksList = Load({
     loader: () =>
         import(
-            "./tasks/AsyncTasks" /* webpackChunkName: "team-tasks-comp-lazy" */
+            "pages/app/team/team-tasks-history/AsyncTeamTasksList" /* webpackChunkName: "team-tasks-comp-lazy" */
         ),
 });
 
@@ -42,13 +36,13 @@ export default function OptionHandler() {
                     size="large"
                 />
             </div>
-            <div className="ml-3 mt-5">
+            <div className="ml-3 mt-5 mb-3">
                 <span className="text-purple text-subtitle font-weight-bold">
                     {isTask ? "Tarefas Recentes:" : ""}
                 </span>
             </div>
 
-            {isTask && <AsyncTasks />}
+            {isTask && <AsyncTeamTasksList isAdmin needTitle={false} />}
             {option === "members" && <AsyncMembers />}
         </section>
     );

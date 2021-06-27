@@ -84,7 +84,7 @@ export default function BuyReviewCard({ data = {}, lastDateChecked }) {
                 relatou:
             </span>
             <p className="review-body my-2 text-left">
-                <em>"{review}"</em>
+                <em>&quot;{review}&quot;</em>
             </p>
             <div className="final-grade-area d-flex justify-content-around align-items-center">
                 <p className="m-0 text-normal">Nota Final:</p>

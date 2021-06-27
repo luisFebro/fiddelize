@@ -40,6 +40,7 @@ export default function BuyRating({
     defaultScale,
     defaultGrade,
     defaultBuyReport,
+    defaultXpScore,
     removeReportField,
     onlyReportField,
 }) {
@@ -72,8 +73,9 @@ export default function BuyRating({
     useEffect(() => {
         if (defaultScale) setScale(defaultScale);
         if (defaultBuyReport) setBuyReport(defaultBuyReport);
-        if (defaultGrade) setGrade(defaultGrade);
-    }, [defaultScale, defaultBuyReport]);
+        if (defaultGrade || defaultXpScore)
+            setGrade(defaultXpScore || defaultGrade);
+    }, [defaultScale, defaultBuyReport, defaultXpScore]);
 
     const handleGrade = (newGrade) => {
         setGrade(newGrade);
@@ -99,7 +101,6 @@ export default function BuyRating({
 
     const handleReportEditDone = async () => {
         if (!buyReport) return;
-        showToast("Atualizando...", { dur: 3000 });
         const body = {
             "clientUserData.review.buyReport": buyReport,
             "clientUserData.review.reportUpdatedAt": new Date(),
@@ -125,7 +126,7 @@ export default function BuyRating({
             {!onlyReportField && (
                 <Fragment>
                     <h2
-                        className="question text-shadow"
+                        className="question text-shadow text-subtitle"
                         style={{
                             fontSize: isNPS ? "1.4rem" : undefined,
                             textAlign: isNPS ? "left" : undefined,
@@ -177,13 +178,16 @@ export default function BuyRating({
                 <h2
                     className={`${
                         onlyReportField ? "" : "mt-5"
-                    } mb-3 text-shadow text-white text-center`}
+                    } mb-3 text-subtitle text-shadow text-white text-center`}
                 >
-                    {defaultBuyReport && "Seu Último "}Relato de Compra
+                    {defaultBuyReport && "Último "}relato de compra:
                 </h2>
                 {Boolean(defaultBuyReport) && !switchEdit ? (
                     <section className="mt-3">
-                        <p className="text-white text-shadow text-normal font-weight-bold mx-3">
+                        <p
+                            style={{ borderRadius: 20 }}
+                            className="text-pill text-white text-shadow text-normal mx-3"
+                        >
                             {buyReport
                                 ? `"${buyReport}"`
                                 : defaultBuyReport === " "

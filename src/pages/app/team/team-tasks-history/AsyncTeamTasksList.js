@@ -13,17 +13,21 @@ import TeamTasksFilter from "./TeamTasksFilter";
 // import extractStrData from '../../../../../../utils/string/extractStrData';
 // import { isScheduledDate } from '../../../../../../utils/dates/dateFns';
 
-export default function AsyncTeamTasksList() {
+export default function AsyncTeamTasksList({
+    needTitle = true,
+    isAdmin = false,
+}) {
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("");
 
     const { bizId } = useBizData();
-    const { userId: memberId } = useData();
+    const { userId: staffId } = useData();
 
     const params = {
-        userId: memberId, // for token check
-        memberId,
+        isAdmin,
+        userId: staffId, // for token check
+        memberId: isAdmin ? undefined : staffId,
         bizId,
         search,
         filter: filter || "all", // filter should be empty to avoid duplicate request...
@@ -83,7 +87,7 @@ export default function AsyncTeamTasksList() {
     const showCustomerSearch = () => (
         <SearchField
             callback={handleSearch}
-            searchUrl={teamAutocomplete(bizId, { memberId, isAdmin: false })}
+            searchUrl={teamAutocomplete(bizId, { memberId: staffId, isAdmin })}
             autocompleteProps={autocompleteProps}
         />
     );
@@ -141,6 +145,7 @@ export default function AsyncTeamTasksList() {
     const showCards = () => (
         <Cards
             list={list}
+            isAdmin={isAdmin}
             detectedCard={detectedCard}
             checkDetectedElem={checkDetectedElem}
         />
@@ -149,7 +154,7 @@ export default function AsyncTeamTasksList() {
 
     return (
         <section className="mx-3">
-            {showTitle()}
+            {needTitle && showTitle()}
             {!needEmptyIllustra && showCustomerSearch()}
             {showFilter()}
             {showCards()}

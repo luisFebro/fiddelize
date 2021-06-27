@@ -21,6 +21,7 @@ import getAPI, { encryptPointsLink } from "api";
 import useInvitationMsg from "./hooks/useInvitationMsg";
 import copyText from "../../../../../utils/document/copyText";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
+import runLinkTagOnClick from "utils/tags/runLinkTagOnClick";
 import QrInvitationBtn from "./qr-code-invitation-btn/QrInvitationBtn";
 
 const Async = Load({
@@ -41,14 +42,6 @@ const getStyles = () => ({
         borderRadius: "30px",
     },
 });
-
-const runLink = (url) => {
-    const a = document.createElement("a");
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.href = url;
-    a.click();
-};
 
 const getSmsObj = ({ bizId, name, meanPayload }) => ({
     isAutomatic: false,
@@ -202,7 +195,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         if (type === "whatsapp") {
             const convertedWhatsapp = convertPhoneStrToInt(number);
             const whatsUrl = `https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${msg}`;
-            runLink(whatsUrl);
+            runLinkTagOnClick(whatsUrl);
             handleSuccessOp("Encaminhado", handleNewRegister, true);
         }
     };
@@ -219,7 +212,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         const subject = `${name.cap()}, convite da ${bizName && bizName.cap()}`;
         const emailUrl = `mailto:${email}?subject=${subject}&body=${msg}`;
 
-        runLink(emailUrl);
+        runLinkTagOnClick(emailUrl);
         handleSuccessOp("Encaminhado", handleNewRegister, true);
     };
     // End Actions
