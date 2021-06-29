@@ -1,18 +1,30 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import useAPI, { getMembersPodium } from "api/useAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import truncateWords from "utils/string/truncateWords";
 import { useBizData } from "init";
 import Img from "components/Img";
+import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 
 export default function RankingPondium() {
+    const [type, setType] = useState("true");
     const { bizId } = useBizData();
 
-    const { data: highestData, gotData, loading } = useAPI({
+    const isRegister = type.includes("true");
+
+    const { data: highestData, gotData } = useAPI({
         url: getMembersPodium(bizId),
         needAuth: false,
         dataName: "membersPodium",
+        params: {
+            filter: isRegister ? "register" : "pts",
+        },
+        trigger: type || true,
     });
+
+    const handleSwitchChange = (thisType) => {
+        setType(thisType);
+    };
 
     const showScores = () => (
         <Fragment>
@@ -20,18 +32,20 @@ export default function RankingPondium() {
                 const css = ["first-place", "second-place", "third-place"];
                 const itemsList = gotData && highestData[ind];
 
-                const registerTotal = itemsList && itemsList.value;
+                const valTotal = itemsList && itemsList.value;
                 const memberName = truncateWords(
                     itemsList && itemsList.name.cap(),
                     13
                 );
+
+                const mainSubject = isRegister ? "Cadastros" : "PTS";
 
                 return (
                     <div
                         key={ind}
                         className={`${css[ind]} text-purple position-absolute animated zoomIn delay-2s`}
                     >
-                        {!itemsList ? (
+                        {!itemsList || highestData[ind].value === 0 ? (
                             <FontAwesomeIcon
                                 icon="question"
                                 style={{
@@ -42,17 +56,15 @@ export default function RankingPondium() {
                         ) : (
                             <p
                                 className={
-                                    ind === 0
-                                        ? "bounce-repeat animated bounce delay-3s"
-                                        : ""
+                                    ind === 0 ? "animated bounce delay-3s" : ""
                                 }
                             >
                                 <span
                                     style={{ top: "14px" }}
                                     className="text-nowrap position-relative text-subtitle font-weight-bold text-shadow-white"
                                 >
-                                    {registerTotal}{" "}
-                                    {Boolean(ind === 0) && "Cadastros"}
+                                    {valTotal}{" "}
+                                    {Boolean(ind === 0) && mainSubject}
                                 </span>
                                 <br />
                                 <span className="d-inline-block mt-2 text-normal font-weight-bold text-shadow-white">
@@ -68,7 +80,10 @@ export default function RankingPondium() {
 
     return (
         <section className="root animated fadeIn my-3 container-center flex-column">
-            <div className="position-relative" style={{ marginTop: "30px" }}>
+            <div
+                className="mb-3 position-relative"
+                style={{ marginTop: "30px" }}
+            >
                 <Img
                     className="shadow-elevation-black"
                     src="/img/icons/podium.png"
@@ -79,16 +94,19 @@ export default function RankingPondium() {
                 />
                 {showScores()}
             </div>
+            <SwitchBtn
+                titleLeft="PTS"
+                titleRight="Cadastros"
+                defaultStatus={isRegister}
+                animationOn
+                callback={handleSwitchChange}
+            />
             <hr className="lazer-purple" />
             <style jsx global>
                 {`
                     .root {
                         display: flex;
                         justify-content: center;
-                    }
-
-                    .root .bounce-repeat {
-                        animation-iteration-count: 2;
                     }
 
                     .root .podium-title {

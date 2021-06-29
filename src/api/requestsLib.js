@@ -55,13 +55,6 @@ export const isLinkAllowed = () =>
     `${ROOT}/user/cli-user/temp-points/allowed-link`; // GET
 
 // CLI-ADMIN
-// Automatic Tasks
-export const readTasks = (userId, doneStatus) =>
-    `${ROOT}/task/read/${userId}?doneStatus=${doneStatus}&thisRole=cliente-admin`; // GET
-export const toggleDoneUrl = () => `${ROOT}/task/toggle`; // PUT
-export const removeTaskAndExpireCliPrize = () =>
-    `${ROOT}/task/remove-and-expire`;
-
 // sms
 export const readContacts = (userId) =>
     `${ROOT}/sms/read/contacts?userId=${userId}`;
@@ -108,12 +101,12 @@ export const gotUsersInThisChallenge = (bizId, challN) =>
 // TEAM/CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;
-export const readOneMemberTasksList = () =>
-    `${ROOT}/user/team/member-history/list`;
-export const teamAutocomplete = (bizId, { memberId, isAdmin }) =>
-    `${ROOT}/user/team/autocomplete?bizId=${bizId}&memberId=${memberId}&isAdmin=${isAdmin}&limit=5`;
+export const teamAutocomplete = (bizId, { adminName, memberId, isAdmin }) =>
+    `${ROOT}/user/team/autocomplete?bizId=${bizId}&memberId=${memberId}&isAdmin=${isAdmin}&adminName=${adminName}&limit=5`;
 export const getMembersPodium = (bizId) =>
     `${ROOT}/user/team/members/podium?bizId=${bizId}`;
+export const getSingleMemberPodium = (bizId, memberId) =>
+    `${ROOT}/user/team/single-member/podium?bizId=${bizId}&memberId=${memberId}`;
 
 // BIZ FIDDELIZE TEAM
 export const readAgentIncomeHistory = () =>

@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
-import useAPIList, {
-    readOneMemberTasksList,
-    teamAutocomplete,
-} from "api/useAPIList";
+import useAPIList, { readTeamTaskList, teamAutocomplete } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun from "global-data/ui";
 import SearchField from "components/search/SearchField";
@@ -22,7 +19,7 @@ export default function AsyncTeamTasksList({
     const [filter, setFilter] = useState("");
 
     const { bizId } = useBizData();
-    const { userId: staffId } = useData();
+    const { userId: staffId, name } = useData();
 
     const params = {
         isAdmin,
@@ -30,7 +27,7 @@ export default function AsyncTeamTasksList({
         memberId: isAdmin ? undefined : staffId,
         bizId,
         search,
-        filter: filter || "all", // filter should be empty to avoid duplicate request...
+        filter: filter || "today", // filter should be empty to avoid duplicate request...
         skip,
         limit: 5,
     };
@@ -60,7 +57,7 @@ export default function AsyncTeamTasksList({
         listTotal,
         gotData,
     } = useAPIList({
-        url: readOneMemberTasksList(),
+        url: readTeamTaskList(),
         skip,
         params,
         filterId: "createdAt",
@@ -79,15 +76,20 @@ export default function AsyncTeamTasksList({
         setSearch(entry);
     };
 
+    const subject = isAdmin ? "membro" : "cliente";
     const autocompleteProps = {
-        placeholder: "Procure um cliente",
-        noOptionsText: "Cliente não encontrado",
+        placeholder: `Procure um ${subject}`,
+        noOptionsText: `${subject.cap()} não encontrado`,
     };
 
     const showCustomerSearch = () => (
         <SearchField
             callback={handleSearch}
-            searchUrl={teamAutocomplete(bizId, { memberId: staffId, isAdmin })}
+            searchUrl={teamAutocomplete(bizId, {
+                adminName: isAdmin ? name : null,
+                memberId: isAdmin ? null : staffId,
+                isAdmin,
+            })}
             autocompleteProps={autocompleteProps}
         />
     );
@@ -102,6 +104,11 @@ export default function AsyncTeamTasksList({
         return (
             <TeamTasksFilter
                 gotData={gotData}
+                offlineKey={
+                    isAdmin
+                        ? "selectedPeriodFilter_adminTasksHistory"
+                        : "selectedPeriodFilter_memberTasksHistory"
+                }
                 listTotal={listTotal}
                 handlePeriodFilter={handlePeriodFilter}
                 loading={loading}

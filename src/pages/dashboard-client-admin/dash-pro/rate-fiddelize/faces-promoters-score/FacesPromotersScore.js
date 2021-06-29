@@ -33,7 +33,6 @@ export default function FacesPromotersScore({
     showToast,
 }) {
     const handleUpdate = async () => {
-        showToast("Enviando...");
         const body = {
             "clientAdminData.review.nps": scale,
             "clientAdminData.review.npsUpdatedAt": new Date(),

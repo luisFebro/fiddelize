@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
-import Title from "../../../../components/Title";
-import ProCreditsBadge from "../../../../components/pro/ProCreditsBadge";
+import LoadableVisible from "components/code-splitting/LoadableVisible";
+import Title from "components/Title";
+import ProCreditsBadge from "components/pro/ProCreditsBadge";
 
 const AsyncRankingPondium = LoadableVisible({
     loading: true,
@@ -24,6 +24,7 @@ export default function AsyncMembers() {
         <Fragment>
             <Title
                 title="&#187; Pódio Equipe"
+                subTitle="todos os tempos"
                 color="var(--themeP)"
                 margin="mb-5"
                 padding=" "

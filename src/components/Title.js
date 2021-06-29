@@ -37,7 +37,7 @@ export default function Title({
         >
             {parse(title)}
             <p
-                className={`${subTitleClassName} mt-2 text-subtitle`}
+                className={`${subTitleClassName} text-normal font-weight-bold mb-3`}
                 style={{
                     color: subColor || color,
                     marginBottom: 0,

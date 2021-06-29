@@ -1,25 +1,24 @@
 import { Fragment, useState } from "react";
+import { calendar } from "utils/dates/dateFns";
+import getFirstName from "utils/string/getFirstName";
+import { useBizData } from "init";
+import useAPIList, { readTeamMemberList, getTrigger } from "api/useAPIList";
+import useRun from "global-data/ui";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import MembersCard from "./card/accordion/MembersCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
-import { calendar } from "../../../../../utils/dates/dateFns";
-import { useBizData } from "init";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import useAPIList, { readTeamMemberList, getTrigger } from "api/useAPIList";
-import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
-import useRun from "global-data/ui";
 // need to handle update when the component amount cuz it is not working sometimes. The element is not detected.
 // import useDetectScrollSingle from "../../../../../hooks/scroll/useDetectScrollSingle";
-
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
     dateBadge: {
-        left: isSmall ? -15 : 0,
+        left: isSmall ? -15 : -5,
         bottom: isSmall ? -30 : -20,
         backgroundColor: "var(--themeP)",
         padding: "0px 15px",
-        borderRadius: "20%",
+        borderRadius: "20px",
     },
 });
 
@@ -43,7 +42,7 @@ export default function AsyncCardsList() {
 
     const styles = getStyles();
 
-    const showCTA = true; // useDetectScrollSingle("#showNewCTA");
+    const showCTA = true;
     const showFixedCTA = () =>
         showCTA && (
             <section
@@ -62,7 +61,7 @@ export default function AsyncCardsList() {
     const params = { bizId, skip };
 
     const { runName } = useRun();
-    const trigger = getTrigger(runName, "teamMemberList");
+    const trigger = getTrigger(runName, "teamMemberList") || true;
 
     const {
         list,
@@ -111,9 +110,9 @@ export default function AsyncCardsList() {
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}
                     >
-                        <span className="main-font text-em-1 font-weight-bold">
+                        <span className="main-font text-em-0-9">
                             Atuação:{" "}
-                            <span className="font-weight-bold main-font text-em-1-2">
+                            <span className="main-font text-em-0-9">
                                 {data.job}
                             </span>
                         </span>

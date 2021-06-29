@@ -1,5 +1,5 @@
 import Title from "components/Title";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 import LoadableVisible from "components/code-splitting/LoadableVisible";
 import DashSectionTitle from "../../DashSectionTitle";
 import ClientReviews from "./clients-reviews/ClientsReviews";
@@ -30,7 +30,6 @@ const getTitle = (bizName) => (
 
 export default function DashClients() {
     const { bizName } = useBizData();
-    const { name } = useData();
 
     const SectionTitle = getTitle(bizName);
 
@@ -41,7 +40,7 @@ export default function DashClients() {
             <hr className="lazer-purple" />
             <Title
                 title="&#187; Pódio Fidelidade"
-                sutTitle="Maiores pontuações de todos os tempos"
+                subTitle="todos os tempos"
                 color="var(--themeP)"
                 margin="my-5"
                 padding=" "

@@ -53,7 +53,7 @@ export default function ClientProfile({ data, title, subtitle }) {
                 {showMainFormData()}
             </div>
             <CreatedAtBr
-                createdAt={createdAt}
+                createdAt={createdAt === "..." ? new Date() : createdAt}
                 backgroundColor="var(--mainWhite)"
             />
         </section>

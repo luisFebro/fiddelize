@@ -20,7 +20,8 @@ export default function SeeProfileBtn({ modalData = {} }) {
     const { data: payload, loading } = useReadUser(
         _id,
         "cliente-membro",
-        select
+        select,
+        { trigger: fullOpen }
     );
 
     const data = {
@@ -49,10 +50,6 @@ export default function SeeProfileBtn({ modalData = {} }) {
 
     const onOpen = () => {
         setFullOpen(true);
-    };
-
-    const onClose = () => {
-        setFullOpen(false);
     };
 
     return (

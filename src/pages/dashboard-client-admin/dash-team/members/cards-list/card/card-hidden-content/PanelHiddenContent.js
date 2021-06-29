@@ -1,11 +1,24 @@
 import { Fragment } from "react";
+import getFirstName from "utils/string/getFirstName";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAPI, { getSingleMemberPodium } from "api/useAPI";
+import { useBizData } from "init";
 import RemoveMemberBtn from "./cta/RemoveMemberBtn";
 import SeeProfileBtn from "./cta/SeeProfileBtn";
-import getFirstName from "../../../../../../../utils/string/getFirstName";
 
-function PanelHiddenContent({ history, data }) {
-    const { newClientTotal, newPointsTotal } = data;
+function PanelHiddenContent({ data }) {
+    const memberId = data._id;
+    const { bizId } = useBizData();
+
+    const { data: dataTotal } = useAPI({
+        url: getSingleMemberPodium(bizId, memberId),
+        params: {
+            isAdmin: bizId === memberId,
+        },
+    });
+
+    const newClientTotal = dataTotal ? dataTotal.newClientTotal : "...";
+    const newPointsTotal = dataTotal ? dataTotal.newPointsTotal : "...";
 
     const name = getFirstName(data.name && data.name.cap(), {
         addSurname: true,
@@ -13,7 +26,7 @@ function PanelHiddenContent({ history, data }) {
 
     const modalData = {
         name,
-        _id: data._id,
+        _id: memberId,
     };
 
     return (
@@ -25,19 +38,19 @@ function PanelHiddenContent({ history, data }) {
             </section>
             <p className="mb-4 text-normal font-weight-bold text-shadow">
                 • Totais Gerais:
-                <span className="d-block main-font text-em-1-2 font-weight-bold">
+                <span className="d-block main-font text-em-1 font-weight-bold">
                     <FontAwesomeIcon
                         icon="check"
                         className="mr-2 shadow-elevation-black"
                     />
-                    {newClientTotal} Cadastros.
+                    {newClientTotal} Novos Clientes.
                 </span>
-                <span className="d-block main-font text-em-1-0 font-weight-bold">
+                <span className="d-block main-font text-em-1 font-weight-bold">
                     <FontAwesomeIcon
                         icon="check"
                         className="mr-2 shadow-elevation-black"
                     />
-                    {newPointsTotal} Pontos de clientes.
+                    {newPointsTotal} PTS.
                 </span>
             </p>
             {data.job !== "admin" && (

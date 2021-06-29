@@ -111,7 +111,7 @@ export default function MembersCard({
     const ActionsMap = actions.map((panel, ind) => {
         const props = {
             key: ind,
-            className: "position-relative mx-3 mb-5",
+            className: "position-relative mx-3 mb-3",
         };
 
         return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? (

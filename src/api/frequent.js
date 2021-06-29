@@ -37,8 +37,8 @@ export const useReadUser = (userId, role, select, options = {}) => {
             url: `${ROOT}/user/read`,
             params,
         })
-            .then((res) => {
-                setData(res.data);
+            .then((data) => {
+                setData(data);
                 setLoading(false);
             })
             .catch((err) => {

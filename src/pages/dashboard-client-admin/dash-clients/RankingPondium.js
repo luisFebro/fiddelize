@@ -43,9 +43,7 @@ export default function RankingPondium() {
                         ) : (
                             <p
                                 className={
-                                    ind === 0
-                                        ? "bounce-repeat animated bounce delay-3s"
-                                        : ""
+                                    ind === 0 ? "animated bounce delay-3s" : ""
                                 }
                             >
                                 <span
@@ -95,10 +93,6 @@ export default function RankingPondium() {
                     .root {
                         display: flex;
                         justify-content: center;
-                    }
-
-                    .root .bounce-repeat {
-                        animation-iteration-count: 2;
                     }
 
                     .root .podium-title {

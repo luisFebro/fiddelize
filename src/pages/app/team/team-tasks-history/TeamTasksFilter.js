@@ -31,6 +31,7 @@ export default function TeamTasksFilter({
     emptyType = "filter",
     gotData,
     show = true,
+    offlineKey,
 }) {
     const defaultPeriodIcon = <DateRangeIcon />;
 
@@ -42,7 +43,7 @@ export default function TeamTasksFilter({
                     defaultSelected="Hoje"
                     optionsArray={periodOptions}
                     defaultSideIcon={defaultPeriodIcon}
-                    offlineKey="selectedPeriodFilter_memberTasksHistory"
+                    offlineKey={offlineKey}
                     width={200}
                     needReverseBtn={false}
                     zIndex={4}
