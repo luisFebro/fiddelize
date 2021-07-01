@@ -64,9 +64,9 @@ export default function InOutCard({ historyData }) {
     );
 
     const displayMainContent = () => (
-        <section className="p-2 text-shadow text-white text-center">
-            <main className="title container-center">
-                <span className="benefit-title d-inline-block ml-3 text-normal font-weight-bold">
+        <section className="p-2 text-shadow text-white">
+            <main className="title">
+                <span className="mt-2 benefit-title d-block text-left d-inline-block text-normal font-weight-bold">
                     {mainTitle}
                 </span>
                 <style jsx>
@@ -98,7 +98,7 @@ export default function InOutCard({ historyData }) {
     );
 
     return (
-        <section className="my-5 position-relative">
+        <section className="my-3 position-relative">
             <Card
                 key={historyData.desc}
                 style={{

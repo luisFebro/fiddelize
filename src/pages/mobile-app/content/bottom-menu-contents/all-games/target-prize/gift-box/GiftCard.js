@@ -1,6 +1,5 @@
 import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import PrizesBtn from "../../../../../history-purchase-btn/prizes-gallery/PrizesBtn";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 

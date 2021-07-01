@@ -34,12 +34,10 @@ export default function animateNumber(ref, start, end, duration, next) {
         current += increment;
         obj.innerHTML = current;
         if (current >= end) {
-            const isInteger = Number.isInteger(parseFloat(end));
+            // const isInteger = Number.isInteger(parseFloat(end));
             const finalNumber =
                 Math.floor(end) + parseFloat(getDecimalPart(end));
-            if (!isInteger) {
-                obj.innerHTML = convertToReal(finalNumber);
-            }
+            obj.innerHTML = convertToReal(finalNumber);
 
             clearInterval(timer);
             next(true);

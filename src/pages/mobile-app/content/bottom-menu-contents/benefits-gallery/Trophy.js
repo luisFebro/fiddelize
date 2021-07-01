@@ -1,24 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Img from "components/Img";
-
-const trophyTypes = {
-    custom: "/img/icons/trophies/gallery-trophy.svg",
-    semisecret: "/img/icons/trophies/trophy-silhouette.svg",
-};
+import { gameIconsStore } from "components/biz/GamesBadge";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function Trophy({ data }) {
     const {
-        type = "custom",
-        challN = 1,
-        isDelivered = false,
+        gameType = "targetPrize",
+        isDelivered = true,
+        benefitDesc = "Um par de ingressos",
         isExpired = false,
     } = data;
 
-    const { challIcon = "heart", prizeDesc = "Um par de ingressos" } = data;
-
-    const isTypeCustom = type === "custom";
+    const isTypeCustom = true;
 
     const showIconStatus = (status, needExpired) => {
         const expiredCss = needExpired && isExpired ? "expired" : "";
@@ -58,24 +52,15 @@ export default function Trophy({ data }) {
         </section>
     );
 
-    const description = prizeDesc && truncate(prizeDesc, 18);
+    const description = benefitDesc && truncate(benefitDesc, 18);
     return (
         <section className="trophy--root">
-            <h2
-                className={`${
-                    isTypeCustom ? "text-purple" : "text-grey"
-                } text-center text-subtitle font-weight-bold`}
-            >
-                Desafio
-                <br />
-                n.º {challN}
-            </h2>
             <section className="trophy-design">
                 <div className="d-block">
                     <Img
                         mode="skeleton"
                         skelWidth={125}
-                        src={trophyTypes[type]}
+                        src="/img/icons/trophies/gallery-trophy.svg"
                         className={
                             isTypeCustom ? "shadow-elevation-black" : undefined
                         }
@@ -94,7 +79,7 @@ export default function Trophy({ data }) {
                         }`,
                     }}
                 >
-                    <FontAwesomeIcon icon={challIcon} />
+                    {gameIconsStore[gameType]}
                 </div>
                 {showPrizeStatusIcons()}
             </section>

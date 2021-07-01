@@ -5,10 +5,10 @@ import CasinoIcon from "@material-ui/icons/Casino";
 import PollIcon from "@material-ui/icons/Poll";
 
 export const gameIconsStore = {
-    targetPrize: <FontAwesomeIcon icon="gift" />,
-    discountBack: <LoyaltyIcon />,
-    raffleTicket: <CasinoIcon />,
-    topCustomers: <PollIcon />,
+    targetPrize: <FontAwesomeIcon style={{ fontSize: 40 }} icon="gift" />,
+    discountBack: <LoyaltyIcon style={{ fontSize: 50 }} />,
+    raffleTicket: <CasinoIcon style={{ fontSize: 50 }} />,
+    topCustomers: <PollIcon style={{ fontSize: 50 }} />,
 };
 
 export const gameBrNameStore = {
@@ -18,22 +18,23 @@ export const gameBrNameStore = {
     topCustomers: "Clientes Tops",
 };
 
-const userGamesTest = {
-    targetPrize: {
-        challN: 5,
-    },
-    discountBack: {
-        challN: 3,
-    },
-    raffleTicket: {
-        challN: 1,
-    },
-    topCustomers: {
-        challN: 1,
-    },
-};
+// userGame data example
+// const userGamesTest = {
+//     targetPrize: {
+//         challN: 5,
+//     },
+//     discountBack: {
+//         challN: 3,
+//     },
+//     raffleTicket: {
+//         challN: 1,
+//     },
+//     topCustomers: {
+//         challN: 1,
+//     },
+// };
 
-export default function GamesBadge({ userGame = userGamesTest }) {
+export default function GamesBadge({ userGame }) {
     const { adminGame } = useData();
     const { themePColor } = useBizData();
 

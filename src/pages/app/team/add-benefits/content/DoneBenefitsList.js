@@ -70,11 +70,15 @@ export default function DoneBenefitsList() {
     };
 
     const showCustomerSearch = () => (
-        <SearchField
-            callback={handleSearch}
-            searchUrl={benefitCardsAutocomplete(bizId, { isReceived: true })}
-            autocompleteProps={autocompleteProps}
-        />
+        <section className="animated fadeInUp">
+            <SearchField
+                callback={handleSearch}
+                searchUrl={benefitCardsAutocomplete(bizId, {
+                    isReceived: true,
+                })}
+                autocompleteProps={autocompleteProps}
+            />
+        </section>
     );
     // END SEARCH
 
@@ -113,7 +117,7 @@ export default function DoneBenefitsList() {
 
     return (
         <section className="text-purple mx-3">
-            {!needEmptyIllustra && showCustomerSearch()}
+            {!needEmptyIllustra && filter === "all" && showCustomerSearch()}
             {Boolean(benefitsCount) && (
                 <h2 className="my-3 text-normal font-weight-bold text-center">
                     <span className="text-subtitle font-weight-bold">

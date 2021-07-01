@@ -53,7 +53,7 @@ export default function useAPIList({
     skip = null,
     limit = 5,
     timeout = IS_DEV ? 30000 : 10000, // default: 10000
-    trigger,
+    trigger = true,
     forceTrigger = false, // by default, in this API, trigger only serves as a reload rathan than preventing the list loading. To activate this later behavior, put it as true
     listName, // offline usage
     needAuth = true,

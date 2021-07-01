@@ -44,12 +44,14 @@ export default function QrCodeReceiptBtn({
             {type === "receiptText" && (
                 <ButtonFab
                     size="small"
-                    title="comprovante"
+                    title="abrir comprovante"
+                    needTxtNoWrap
+                    textTransform="lowercase"
                     onClick={handleFullOpen}
                     variant="extended"
                     backgroundColor={`var(--themeS--${themeSColor})`}
                     top={top || -70}
-                    left={left || -30}
+                    left={left || -70}
                 />
             )}
             <ModalFullContent

@@ -1,12 +1,20 @@
 import { useState, Fragment } from "react";
 import ModalFullContent from "components/modals/ModalFullContent";
-import PrizesGallery from "./PrizesGallery";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import RadiusBtn from "components/buttons/RadiusBtn";
+import LoadableVisible from "components/code-splitting/LoadableComp";
 
-export default function PrizesBtn({
+const AsyncBenefitsGalleryList = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./BenefitsGalleryList.js" /* webpackChunkName: "benefits-gallery-content-lazy" */
+        ),
+});
+
+export default function BenefitsBtn({
     colorS,
-    title = "Ver seu Prêmio",
+    title = "",
     position = "relative",
     top = -10,
     shadowColor = null,
@@ -25,7 +33,7 @@ export default function PrizesBtn({
         setFullOpen(false);
     };
 
-    const Gallery = <PrizesGallery targetId={targetId} />;
+    const Gallery = <AsyncBenefitsGalleryList targetId={targetId} />;
 
     const showBtn = () => (
         <Fragment>

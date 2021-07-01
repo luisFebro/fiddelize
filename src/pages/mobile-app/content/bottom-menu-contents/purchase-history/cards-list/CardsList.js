@@ -170,7 +170,8 @@ export default function CardsList({
                     ) : (
                         <div className="timestamp mt-1">
                             <ButtonFab
-                                title="registro"
+                                title="ver registro"
+                                textTransform="lowercase"
                                 backgroundColor={`var(--themeSDark--${sColor})`}
                                 onClick={() => setShowMore(true)}
                                 position="relative"
@@ -337,29 +338,3 @@ function showNoBuyIllustration(firstName) {
         </div>
     );
 }
-
-/* ORIGINAL BODY
-
-<div>
-    {!gotUserPoints ? (
-        illustrationIfEmpty()
-    ) : (
-        <Fragment>
-            {!userCardsReady ? (
-                <Spinner marginY={100} size="small" />
-            ) : (
-                <Fragment>
-                    {showChallDelayAlert()}
-                    {showAllTimeTotal()}
-                    {showOfflineStatus()}
-                    {mainData}
-                    {loading && <ShowLoadingSkeleton size="large" />}
-                    {error && <ShowError />}
-                    {showOverMsg()}
-                </Fragment>
-            )}
-        </Fragment>
-    )}
-</div>
-
- */

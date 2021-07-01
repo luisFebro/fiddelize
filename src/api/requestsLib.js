@@ -34,8 +34,6 @@ export const readBuyHistory = (userId) =>
     `${ROOT}/user/list/buy-history/${userId}`; // GET
 export const readPrizes = (userId) =>
     `${ROOT}/user/list/purchase-history/prizes/${userId}`;
-export const changeBenefitStatus = (cliUserId, statusType) =>
-    `${ROOT}/user/purchase-history/update-status/${cliUserId}?statusType=${statusType}`; // PUT
 
 // points and benefits
 export const readBenefitCards = () => `${ROOT}/user/cli-user/list/benefits`; // GET

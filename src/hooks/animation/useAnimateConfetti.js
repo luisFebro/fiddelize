@@ -39,11 +39,9 @@ export default function useAnimateConfetti(options = {}) {
                 loadConfetti("start");
                 setItems(localCollection, { confettiPlay: true });
             } else {
-                const condToStopConfetti =
-                    loadConfetti("isRunning") && showMoreComps;
-                if (condToStopConfetti) {
-                    setTimeout(() => loadConfetti("stop"), 5000);
-                }
+                // const condToStopConfetti =
+                //     loadConfetti("isRunning") && showMoreComps;
+                setTimeout(() => loadConfetti("stop"), 15000);
             }
         };
 

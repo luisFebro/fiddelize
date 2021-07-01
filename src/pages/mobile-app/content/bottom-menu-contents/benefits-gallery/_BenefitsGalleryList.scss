@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-around;
     flex-flow: row wrap;
-    margin-bottom: 200px;
 
     h2 {
         line-height: 24px;
@@ -41,7 +40,8 @@
 .prize-status-icons {
     position: absolute;
     bottom: 5%;
-    transform: translateX(50%);
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     padding: 0px;
     z-index: 1000;
@@ -55,7 +55,8 @@
         filter: drop-shadow(.001em .1em .1em var(--mainDark));
         font-size: 15px;
         top: -2px;
-        transform: translateX(40%);
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 1500;
     }
 
@@ -101,5 +102,4 @@
     }
 
 }
-
 // END TROPHY

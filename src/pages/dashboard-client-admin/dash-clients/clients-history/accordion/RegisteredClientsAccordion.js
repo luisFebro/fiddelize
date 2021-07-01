@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PropTypes from "prop-types";
 import useRun from "global-data/ui";
-import PrizesBtn from "pages/mobile-app/content/bottom-menu-contents/purchase-history/prizes-gallery/PrizesBtn";
+import BenefitsBtn from "pages/mobile-app/content/bottom-menu-contents/benefits-gallery/BenefitsBtn";
 import ToggleBtn from "./ToggleBtn";
 // End Customized Data
 
@@ -56,7 +56,7 @@ const getStyles = ({ color, backgroundColor }) => ({
         right: 55,
         bottom: 85,
     },
-    prizesBtn: {
+    benefitsBtn: {
         bottom: -25,
         left: "50%",
         transform: "translateX(-50%)",
@@ -109,9 +109,9 @@ export default function RegisteredClientsAccordion({
                         </div>
                         <div
                             className="position-absolute"
-                            style={styles.prizesBtn}
+                            style={styles.benefitsBtn}
                         >
-                            <PrizesBtn
+                            <BenefitsBtn
                                 title="benefícios"
                                 size="extra-small"
                                 targetId={panel._id}

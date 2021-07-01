@@ -1,4 +1,4 @@
-import convertToReal from "../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
 import AdminPrizesBtn from "./admin-prizes-modal/AdminPrizesBtn";
 
 const getStyles = () => ({

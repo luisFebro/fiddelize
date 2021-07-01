@@ -1,5 +1,4 @@
 import { withRouter } from "react-router-dom";
-import BarChartIcon from "@material-ui/icons/BarChart";
 import StarsIcon from "@material-ui/icons/Stars";
 import useData, { useBizData } from "init";
 // import HomeIcon from "@material-ui/icons/Home";
@@ -31,11 +30,11 @@ const AsyncPurchaseHistory = LoadableVisible({
         ),
 });
 
-const AsyncReceivedBenefits = LoadableVisible({
+const AsyncBenefitsGalleryList = LoadableVisible({
     loading: true,
     loader: () =>
         import(
-            "./bottom-menu-contents/received-benefits/ReceivedBenefits" /* webpackChunkName: "received-benefits-content-lazy" */
+            "./bottom-menu-contents/benefits-gallery/BenefitsGalleryList" /* webpackChunkName: "benefits-gallery-content-lazy" */
         ),
 });
 
@@ -76,14 +75,14 @@ function GroupedAppBar({ history }) {
             scrollView: true,
         },
         {
-            tabLabel: "Ganhos",
+            tabLabel: "Galeria",
             tabIcon: (
                 <FontAwesomeIcon
                     icon="trophy"
                     style={{ fontSize: 19, marginBottom: "12px" }}
                 />
             ),
-            tabContentPanel: <AsyncReceivedBenefits />,
+            tabContentPanel: <AsyncBenefitsGalleryList />,
             scrollView: true,
         },
         {
@@ -124,14 +123,3 @@ function GroupedAppBar({ history }) {
 }
 
 export default withRouter(GroupedAppBar);
-
-/* ARCHIVES
-
-{
-    tabLabel: "Ranking",
-    tabIcon: <BarChartIcon />,
-    tabContentPanel: undefined,
-    scrollView: true,
-},
-
- */

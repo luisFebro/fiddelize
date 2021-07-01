@@ -83,15 +83,17 @@ export default function AsyncTeamTasksList({
     };
 
     const showCustomerSearch = () => (
-        <SearchField
-            callback={handleSearch}
-            searchUrl={teamAutocomplete(bizId, {
-                adminName: isAdmin ? name : null,
-                memberId: isAdmin ? null : staffId,
-                isAdmin,
-            })}
-            autocompleteProps={autocompleteProps}
-        />
+        <section className="animated fadeInUp">
+            <SearchField
+                callback={handleSearch}
+                searchUrl={teamAutocomplete(bizId, {
+                    adminName: isAdmin ? name : null,
+                    memberId: isAdmin ? null : staffId,
+                    isAdmin,
+                })}
+                autocompleteProps={autocompleteProps}
+            />
+        </section>
     );
     // END SEARCH
 
@@ -162,7 +164,7 @@ export default function AsyncTeamTasksList({
     return (
         <section className="mx-3">
             {needTitle && showTitle()}
-            {!needEmptyIllustra && showCustomerSearch()}
+            {!needEmptyIllustra && filter === "all" && showCustomerSearch()}
             {showFilter()}
             {showCards()}
             {loading && <ShowLoadingSkeleton />}
