@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.34.0-50";
+const latestVersion = "4.35.0";
 
-const updateDescription = "benefits gallery";
+const updateDescription = "support";
 /* HISTORY
+benefits gallery
 team management pt 5
 scanners pt 3
 new app points and benefits management - pt5

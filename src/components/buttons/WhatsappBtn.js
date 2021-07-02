@@ -9,13 +9,19 @@ WhatsappBtn.propTypes = {
     elsePhone: PropTypes.string,
 };
 
-export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
+export default function WhatsappBtn({
+    title = "Iniciar chat",
+    elsePhone,
+    supportName,
+    isDisabled,
+    icon = "comment",
+}) {
     const { bizWhatsapp, bizName, themeSColor } = useBizData();
 
     const targetedNumber = elsePhone || bizWhatsapp;
     const convertedWhatsapp = convertPhoneStrToInt(targetedNumber);
     const greetingTxt = elsePhone
-        ? `Oi ${supportName}, vim pelo app para suporte da Fiddelize e preciso `
+        ? `Oi, vim pelo app da ${bizName} para suporte e preciso `
         : `Oi, vim pelo app da ${bizName} e preciso `;
 
     return (
@@ -30,14 +36,14 @@ export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
             }
         >
             <ButtonMulti
-                title="Iniciar chat"
+                title={title}
                 onClick={null}
                 disabled={isDisabled}
                 color="var(--mainWhite)"
                 backgroundColor={`var(--themeSDark--${themeSColor})`}
                 backColorOnHover={`var(--themeSDark--${themeSColor})`}
                 iconFontAwesome={
-                    <FontAwesomeIcon icon="comment" style={faStyle} />
+                    <FontAwesomeIcon icon={icon} style={faStyle} />
                 }
             />
         </a>

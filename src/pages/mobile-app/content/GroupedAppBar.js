@@ -46,6 +46,14 @@ const AsyncBizReview = LoadableVisible({
         ),
 });
 
+const AsyncSupportBizContact = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./bottom-menu-contents/support/SupportBizContact" /* webpackChunkName: "support-biz-contact-content-lazy" */
+        ),
+});
+
 function GroupedAppBar({ history }) {
     const { firstName, userId, totalGeneralPoints } = useData();
 
@@ -106,7 +114,7 @@ function GroupedAppBar({ history }) {
         {
             tabLabel: "Suporte",
             tabIcon: <QuestionAnswerIcon />,
-            tabContentPanel: undefined,
+            tabContentPanel: <AsyncSupportBizContact />,
             scrollView: true,
         },
         {

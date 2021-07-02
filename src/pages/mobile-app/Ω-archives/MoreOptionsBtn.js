@@ -228,32 +228,7 @@ function MoreOptionsBtn({
 
 export default withRouter(MoreOptionsBtn);
 
-const ContactComp = () => {
-    const showTitle = () => (
-        <div className="my-4">
-            <p className="text-subtitle text-purple text-center font-weight-bold">
-                &#187; Fale conosco
-            </p>
-        </div>
-    );
-
-    return (
-        <Fragment>
-            {showTitle()}
-            <div className="mx-4">
-                <img
-                    className="img-fluid"
-                    height="auto"
-                    src={`${CLIENT_URL}/img/illustrations/online-chat.svg`}
-                    alt="chat online"
-                />
-            </div>
-            <div style={{ height: "100%" }} className="container-center">
-                <WhatsappBtn />
-            </div>
-        </Fragment>
-    );
-};
+const ContactComp = () => {};
 
 /* ARCHIVES
 const lastOption = tooltip1;

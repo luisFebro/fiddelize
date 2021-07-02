@@ -4,11 +4,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import ButtonMulti, {
     faStyle,
-} from "../../../components/buttons/material-ui/ButtonMulti";
-import WhatsappBtn from "../../../components/buttons/WhatsappBtn";
+} from "components/buttons/material-ui/ButtonMulti";
+import WhatsappBtn from "components/buttons/WhatsappBtn";
+import Img from "components/Img";
+import animateCSS from "utils/animateCSS";
 import { useFiddelizeAdmin } from "init";
-import animateCSS from "../../../utils/animateCSS";
-import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -36,55 +36,18 @@ export default function FiddelizeContact() {
                 )
             }
         >
-            <p
-                className="text-nowrap position-relative text-center text-subtitle text-purple"
-                style={{ top: "35px" }}
-            >
-                Qual suporte você precisa?
-            </p>
-            <section
-                style={{ height: "100%", flex: "1 1 0px" }}
-                className="d-flex justify-content-around"
-            >
-                <div className="container-center-col">
-                    <ButtonMulti
-                        title="Comercial"
-                        onClick={() => setOpenThisComp("sales")}
-                        color="var(--mainWhite)"
-                        backgroundColor="var(--themeP)"
-                        backColorOnHover="var(--themeP)"
-                        iconFontAwesome={
-                            <FontAwesomeIcon icon="chart-pie" style={faStyle} />
-                        }
-                    />
-                    <p className="text-small text-grey text-left">
-                        investimentos, parcerias,
-                        <br />
-                        sugestões, assuntos
-                        <br />
-                        comercias.
-                    </p>
-                </div>
-                <div className="container-center-col">
-                    <ButtonMulti
-                        title="Técnico"
-                        onClick={() => setOpenThisComp("tech")}
-                        color="var(--mainWhite)"
-                        backgroundColor="var(--themeP)"
-                        backColorOnHover="var(--themeP)"
-                        iconFontAwesome={
-                            <FontAwesomeIcon icon="cogs" style={faStyle} />
-                        }
-                    />
-                    <p className="text-small text-grey text-left">
-                        sugestões, dúvidas, relatar
-                        <br />
-                        falhas, design, assuntos
-                        <br />
-                        sobre os apps ou plataforma.
-                    </p>
-                </div>
-            </section>
+            <div className="container-center">
+                <ButtonMulti
+                    title="Solicitar chat"
+                    onClick={() => setOpenThisComp("tech")}
+                    color="var(--mainWhite)"
+                    backgroundColor="var(--themeP)"
+                    backColorOnHover="var(--themeP)"
+                    iconFontAwesome={
+                        <FontAwesomeIcon icon="comment" style={faStyle} />
+                    }
+                />
+            </div>
         </div>
     );
 
@@ -122,32 +85,11 @@ export default function FiddelizeContact() {
                 className="animated zoomIn container-center-col"
                 style={{ height: "100%" }}
             >
-                <p className="text-center text-subtitle text-purple my-3">
-                    Suporte Técnico
-                </p>
                 {showConfirmBox()}
                 <WhatsappBtn
+                    title="iniciar chat"
                     isDisabled={!isChecked}
                     elsePhone={mainTechWhatsapp}
-                    supportName="Febro"
-                />
-            </div>
-        );
-
-    const showSalesSupport = () =>
-        openThisComp === "sales" && (
-            <div
-                className="animated zoomIn container-center-col"
-                style={{ height: "100%" }}
-            >
-                <p className="text-center text-subtitle text-purple my-3">
-                    Suporte Comercial
-                </p>
-                {showConfirmBox()}
-                <WhatsappBtn
-                    isDisabled={true}
-                    elsePhone={null}
-                    supportName=""
                 />
             </div>
         );
@@ -170,7 +112,6 @@ export default function FiddelizeContact() {
                 />
             </div>
             {showMainContent()}
-            {showSalesSupport()}
             {showTechSupport()}
         </Fragment>
     );
