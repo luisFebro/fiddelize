@@ -53,8 +53,10 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Suporte ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                showToast("Um momento. Redirecionando...", { dur: 12000 });
-                window.location.href = `https://api.whatsapp.com/send?phone=5592992817363`;
+                if (!disableClick) {
+                    showToast("Um momento. Redirecionando...", { dur: 12000 });
+                    window.location.href = `https://api.whatsapp.com/send?phone=5592992817363`;
+                }
             },
         },
         {

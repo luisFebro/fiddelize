@@ -11,7 +11,13 @@ import pickMsg from "./pickMsg";
 
 export default function CartRace({ className, accuMoney }) {
     const [msg, setMsg] = useState("");
-    const { adminGame, userGame, firstName, currPoints } = useData();
+    const { firstName } = useData();
+    let { currPoints } = useData();
+    currPoints = currPoints || 100;
+    let { adminGame, userGame } = useData();
+    adminGame = adminGame || { discountBack: { targetPoints: 300, perc: 10 } };
+    userGame = userGame || { discountBack: { challN: 1 } };
+
     const { needDark, bizName } = useBizData();
     const { didUserScroll } = useContext();
 

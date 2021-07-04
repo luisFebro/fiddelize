@@ -11,8 +11,10 @@ export const AsyncDiscountTicket = Load({
         ),
 });
 
-export default function DiscountBackGame({ didUserScroll }) {
-    const { adminGame, currPoints } = useData();
+export default function DiscountBackGame({ didUserScroll, needClick }) {
+    const { currPoints } = useData();
+    let { adminGame } = useData();
+    adminGame = adminGame || { discountBack: { perc: 10, targetPoints: 300 } };
 
     const { perc, targetPoints } = adminGame.discountBack;
     const didBeatGame = currPoints >= targetPoints;
@@ -43,7 +45,7 @@ export default function DiscountBackGame({ didUserScroll }) {
                 className="mt-5 animated fadeInUp faster"
                 accuMoney={accuMoney}
             />
-            {didUserScroll && <GameCTAs />}
+            {didUserScroll && <GameCTAs needClick={needClick} />}
         </section>
     );
 }

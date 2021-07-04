@@ -33,7 +33,7 @@ export default function ClientUserAppContent({
     const didBeatGame = useVar("didBeatGame");
 
     const { currPoints = 100, firstName, role } = useData();
-    const { themeBackColor, txtColor } = useBizData();
+    const { themeBackColor, txtColor, needDark } = useBizData();
 
     const confettiOptions = React.useCallback(
         () => ({ trigger: didBeatGame, showMoreComps }),
@@ -61,10 +61,11 @@ export default function ClientUserAppContent({
                         width: needAppForPreview && "21.8em",
                     }}
                 />
-                <div className={`${needAppForPreview && "disabledLink"}`}>
+                <div>
                     <AsyncBellNotifBtn
                         position="absolute"
                         forceCliUser
+                        needClick={!(needAppForPreview || needAppForCliAdmin)}
                         top={21}
                         left={needAppForPreview ? 258 : 270}
                         notifBorderColor={`var(--themeBackground--${themeBackColor})`}
@@ -118,6 +119,33 @@ export default function ClientUserAppContent({
         didUserScroll,
     });
 
+    const showAdminTestMsg = () => (
+        <section style={{ left: 10, top: "0px", position: "fixed" }}>
+            <div className="admin-design-mode d-flex justify-content-center">
+                <div>
+                    <p className={`m-0 text-small text-center ${txtColor}`}>
+                        Admin, funcionalidades
+                        <br />
+                        desativas no modo design.
+                        <br />
+                        Somente para <strong>fins visuais</strong>.
+                    </p>
+                    <style jsx>
+                        {`
+                            .admin-design-mode {
+                                border-radius: 30px;
+                                padding: 7px;
+                                border: ${needDark
+                                    ? "1px solid #000;"
+                                    : "1px solid #fff;"};
+                            }
+                        `}
+                    </style>
+                </div>
+            </div>
+        </section>
+    );
+
     return (
         <Provider store={store}>
             <section
@@ -127,13 +155,16 @@ export default function ClientUserAppContent({
             >
                 {showGreetingAndNotific()}
                 {showPtsBalance()}
-                <GroupedAppBar />
+                <GroupedAppBar
+                    isPreviewMode={needAppForCliAdmin || needAppForPreview}
+                />
                 {backBtnForCliAdmin()}
                 <NotifPermissionBanner
                     title="Receba notificações sobre seus benefícios!"
                     subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
                 />
                 <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
+                {needAppForCliAdmin && showAdminTestMsg()}
             </section>
         </Provider>
     );

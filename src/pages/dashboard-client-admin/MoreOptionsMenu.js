@@ -63,14 +63,14 @@ export default function MoreOptionsMenu({ location, history }) {
                 ),
         },
         {
-            icon: <FontAwesomeIcon icon="mobile-alt" style={menuIconStyle} />,
-            text: "testar apps",
-            callback: () => handleFullOpen("testModal"),
-        },
-        {
             icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,
             text: "trocar app",
             callback: () => history.push("/painel-de-apps"),
+        },
+        {
+            icon: <FontAwesomeIcon icon="mobile-alt" style={menuIconStyle} />,
+            text: "outros apps",
+            callback: () => handleFullOpen("testModal"),
         },
         {
             icon: <FontAwesomeIcon icon="comment" style={menuIconStyle} />,

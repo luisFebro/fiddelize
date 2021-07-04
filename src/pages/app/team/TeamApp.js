@@ -22,14 +22,6 @@ export const AsyncBellNotifBtn = Load({
         ),
 });
 
-const getStyles = (needDark) => ({
-    rootProtectionMsg: {
-        borderRadius: "30px",
-        padding: "7px",
-        border: needDark ? "1px solid #000" : "1px solid #fff",
-    },
-});
-
 export default function TeamApp({
     history,
     location,
@@ -66,8 +58,6 @@ export default function TeamApp({
             needAdminDefaultTheme ? "default" : backColor
         })`
     );
-
-    const styles = getStyles(needDark);
 
     const showNotifBell = () => {
         const displayBack = () => (
@@ -183,7 +173,7 @@ export default function TeamApp({
                 </div>
             </section>
             <section className="mt-4 container-center animated fadeIn delay-1s">
-                <AddBenefitsBtn />
+                <AddBenefitsBtn needClick={!isPreviewMode} />
             </section>
             <style jsx>
                 {`
@@ -197,15 +187,26 @@ export default function TeamApp({
 
     const showAdminTestMsg = () => (
         <section style={{ left: 10, bottom: "0px", position: "fixed" }}>
-            <div className="d-flex justify-content-center">
-                <div style={styles.rootProtectionMsg}>
+            <div className="admin-design-mode d-flex justify-content-center">
+                <div>
                     <p className={`m-0 text-small text-center ${txtColor}`}>
                         Admin, funcionalidades
                         <br />
-                        desativas no modo teste.
+                        desativas no modo design.
                         <br />
                         Somente para <strong>fins visuais</strong>.
                     </p>
+                    <style jsx>
+                        {`
+                            .admin-design-mode {
+                                border-radius: 30px;
+                                padding: 7px;
+                                border: ${needDark
+                                    ? "1px solid #000;"
+                                    : "1px solid #fff;"};
+                            }
+                        `}
+                    </style>
                 </div>
             </div>
         </section>

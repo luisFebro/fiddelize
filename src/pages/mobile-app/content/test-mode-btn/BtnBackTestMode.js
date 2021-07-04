@@ -40,7 +40,7 @@ function BtnBackTestMode({
                 }}
             >
                 <div className="container">
-                    {!isCliUser && <p className="title">Modo Teste {mode}</p>}
+                    {!isCliUser && <p className="title">Modo Design {mode}</p>}
                     <div className="btn">
                         <RadiusBtn
                             size="extra-small"
@@ -49,7 +49,7 @@ function BtnBackTestMode({
                             onClick={handleBackBtnClick}
                         />
                     </div>
-                    {isCliUser && <p className="title">Modo Teste {mode}</p>}
+                    {isCliUser && <p className="title">Modo Design {mode}</p>}
                 </div>
                 <div
                     className="position-fixed"

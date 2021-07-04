@@ -55,10 +55,9 @@ export default function AsyncTestModeContent() {
 
     return (
         <section style={{ marginTop: 100 }}>
-            <h1 className="mb-5 text-subtitle text-purple text-center font-weight-bold">
-                Qual app para ver
-                <br />
-                no modo teste?
+            <h1 className="mb-5 mx-3 text-subtitle text-purple text-center font-weight-bold">
+                Escolha e veja como fica outros apps disponíveis para seu
+                negócio
             </h1>
             <section className="mt-3 animated fadeInUp container-center">
                 <div className="mr-3">{showClientCard()}</div>

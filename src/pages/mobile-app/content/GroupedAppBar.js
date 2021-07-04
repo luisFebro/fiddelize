@@ -54,7 +54,7 @@ const AsyncSupportBizContact = LoadableVisible({
         ),
 });
 
-function GroupedAppBar({ history }) {
+function GroupedAppBar({ history, isPreviewMode }) {
     const { firstName, userId, totalGeneralPoints } = useData();
 
     const { themePColor: colorP, themeBackColor: colorBack } = useBizData();
@@ -72,7 +72,7 @@ function GroupedAppBar({ history }) {
         {
             tabLabel: "Jogo",
             tabIcon: <SportsEsportsIcon />,
-            tabContentPanel: <Games />,
+            tabContentPanel: <Games isPreviewMode={isPreviewMode} />,
             scrollView: true,
             colorBack,
         },
@@ -99,10 +99,8 @@ function GroupedAppBar({ history }) {
             tabContentPanel: undefined,
             scrollView: false,
             onClick: () => {
-                const path = needAppForCliAdmin
-                    ? "/cartao-virtual?client-admin=1"
-                    : "/cartao-virtual";
-                history.push(path);
+                if (needAppForCliAdmin) return;
+                history.push("/cartao-virtual");
             },
         },
         {
@@ -127,7 +125,13 @@ function GroupedAppBar({ history }) {
         },
     ];
 
-    return <BottomTabs data={data} showAppBar={didUserScroll} />;
+    return (
+        <BottomTabs
+            data={data}
+            showAppBar={didUserScroll}
+            disableClick={needAppForCliAdmin}
+        />
+    );
 }
 
 export default withRouter(GroupedAppBar);

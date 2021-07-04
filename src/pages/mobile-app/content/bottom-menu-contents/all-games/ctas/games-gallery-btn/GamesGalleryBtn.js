@@ -12,7 +12,7 @@ const AsyncGamesGalleryContent = Load({
         ),
 });
 
-export default function GamesGalleryBtn() {
+export default function GamesGalleryBtn({ needClick = true }) {
     const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
 
     const { txtColorStyle } = getColor(colorS);
@@ -31,7 +31,7 @@ export default function GamesGalleryBtn() {
         <section>
             <ButtonFab
                 position="relative"
-                onClick={handleFullOpen}
+                onClick={needClick ? handleFullOpen : null}
                 title="jogos de compra"
                 iconFontSize="25px"
                 variant="extended"

@@ -22,12 +22,16 @@ export const AsyncDiscountBackGame = Load({
 });
 // end games
 
-export default function Games() {
-    const { currGame, didUserScroll } = useContext();
+export default function Games({ isPreviewMode = false }) {
+    const { didUserScroll } = useContext();
+    let { currGame } = useContext();
+    currGame = isPreviewMode ? "discountBack" : currGame;
     const { userGame } = useData();
-    if (!userGame) return <div />;
+    if (!userGame && !isPreviewMode) return <div />;
 
-    const { icon, nameBr, challN } = getGameData(currGame, userGame);
+    const { icon, nameBr } = getGameData(currGame, userGame);
+    let { challN = 1 } = getGameData(currGame, userGame);
+    challN = isPreviewMode ? 1 : challN;
 
     const showTitle = () => (
         <section className="animated fadeIn py-4">
@@ -48,7 +52,10 @@ export default function Games() {
                 <AsyncTargetPrizeGame didUserScroll={didUserScroll} />
             )}
             {currGame === "discountBack" && (
-                <AsyncDiscountBackGame didUserScroll={didUserScroll} />
+                <AsyncDiscountBackGame
+                    didUserScroll={didUserScroll}
+                    needClick={isPreviewMode}
+                />
             )}
             {currGame === "topCustomers" && null}
             {currGame === "raffleTicket" && null}

@@ -71,6 +71,7 @@ export default function BottomTabs({
     data,
     needTabFullWidth = false,
     showAppBar = true,
+    disableClick,
 }) {
     const props = {
         color: mainColor,
@@ -93,6 +94,7 @@ export default function BottomTabs({
     }, [data]);
 
     const handleChange = (event, newValue) => {
+        if (disableClick) return;
         setValue(newValue);
 
         // handle click actions
