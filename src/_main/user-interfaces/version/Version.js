@@ -3,9 +3,9 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.35.0-30";
+const latestVersion = "4.35.0-50";
 
-const updateDescription = "amurreto pt 3";
+const updateDescription = "amurreto pt 4";
 /* HISTORY
 benefits gallery
 team management pt 5
