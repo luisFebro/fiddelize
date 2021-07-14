@@ -2,7 +2,7 @@
 // getPercentage(300, 10, { mode: "perc" }) === 3,3 (%)
 // getPercentage(300, 10, { mode: "value" }) === 30 (value)
 export default function getPercentage(targetValue, curValue, options = {}) {
-    const { mode = "perc", moreThan100 = false } = options; // mode: perc|value
+    const { mode = "perc", moreThan100 = false, toFixed } = options; // mode: perc|value
 
     if (typeof targetValue !== `number`) {
         targetValue = Number(targetValue);
@@ -31,6 +31,6 @@ export default function getPercentage(targetValue, curValue, options = {}) {
     let number = mode === "perc" ? perc : value;
 
     const isInteger = Number.isInteger(parseFloat(number));
-    number = isInteger ? number.toFixed(0) : number.toFixed(1);
+    number = isInteger ? number.toFixed(0) : number.toFixed(toFixed || 1);
     return parseFloat(number);
 }

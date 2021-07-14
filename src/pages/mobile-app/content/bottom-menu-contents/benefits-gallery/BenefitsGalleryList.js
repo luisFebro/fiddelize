@@ -33,6 +33,7 @@ export default function BenefitsGalleryList({ targetId }) {
         skip,
         listName: "BenefitsGalleryList",
         filterId: "id",
+        trigger: true,
     });
 
     // INFINITY LOADING LIST

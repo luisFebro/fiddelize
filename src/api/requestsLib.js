@@ -5,6 +5,10 @@ import { ROOT } from "api/root";
 // GENERAL DATA
 export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
 
+// AMURRETO TRADES
+export const readTradesHistory = () => `${ROOT}/amurreto/trades/history`; // GET
+// END AMURRETO TRADES
+
 // AUTH AND PASSWORD
 export const register = () => `${ROOT}/auth/register`; // POST
 export const login = () => `${ROOT}/auth/login`; // POST

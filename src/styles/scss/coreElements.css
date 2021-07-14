@@ -70,6 +70,16 @@ hr.lazer {
     );
 }
 
+hr.lazer,
+hr.lazer.white {
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0),
+        white,
+        rgba(0, 0, 0, 0)
+    );
+}
+
 hr.lazer-purple {
     margin: 40px 0;
     width: 100%;

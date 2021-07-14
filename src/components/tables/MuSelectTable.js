@@ -72,6 +72,35 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/* headCells and rowsData usage example
+const headCells = [
+    { id: "date", numeric: false, disablePadding: false, label: "Data" },
+    { id: "capital", numeric: true, disablePadding: false, label: "Qtde. Cota" },
+    {
+        id: "base",
+        numeric: true,
+        disablePadding: false,
+        label: "Qtde. Base",
+    },
+    { id: "market", numeric: true, disablePadding: false, label: "P. mercado" },
+    { id: "strategy", numeric: false, disablePadding: false, label: "Estratégia" },
+    { id: "fee", numeric: false, disablePadding: false, label: "Taxa" },
+];
+
+const tableListTest = [
+    {
+        date: "23/07/21",
+        capital: "R$ 83.34 (100%)",
+        base: 0.004563,
+        market: 177.841,
+        strategy: "emaBull9OVer20",
+        fee: "R$ 0.25 (0.3%)",
+    }
+]
+
+each row need to have the same id specified in the headCells
+*/
+
 export default function MuSelectTable({
     headCells = [],
     rowsData = [],
