@@ -4,11 +4,18 @@ import getPercentage from "utils/numbers/getPercentage";
 import TradeCard from "./accordion/TradeCard";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 
-export default function Cards({ list, detectedCard, checkDetectedElem }) {
+export default function Cards({
+    list,
+    isLiveTrade,
+    detectedCard,
+    checkDetectedElem,
+}) {
     const actions = list.map((data) => {
-        const MainHeading = <MainH data={data} />;
+        const MainHeading = <MainH data={data} isLiveTrade={isLiveTrade} />;
         const SecondaryHeading = <SecHeading data={data} />;
-        const HiddenPanel = <PanelHiddenContent data={data} />;
+        const HiddenPanel = (
+            <PanelHiddenContent data={data} isLiveTrade={isLiveTrade} />
+        );
 
         return {
             _id: data.createdAt,
@@ -35,7 +42,7 @@ export default function Cards({ list, detectedCard, checkDetectedElem }) {
 }
 
 // COMPS
-function MainH({ data }) {
+function MainH({ data, isLiveTrade }) {
     function DisplayAsset({ symbol }) {
         return (
             <section className="d-flex">
@@ -53,24 +60,24 @@ function MainH({ data }) {
         return (
             <section className="text-small position-absolute card-show-prices">
                 <p className="m-0 text-shadow">
-                    {convertToReal(buyPrice, {
-                        moneySign: true,
-                        needFraction: true,
-                    })}{" "}
-                    (V)
-                </p>
-                <p className="text-shadow">
+                    (V){" "}
                     {convertToReal(sellPrice, {
                         moneySign: true,
                         needFraction: true,
                     })}{" "}
-                    (C)
+                </p>
+                <p className="text-shadow">
+                    (C){" "}
+                    {convertToReal(buyPrice, {
+                        moneySign: true,
+                        needFraction: true,
+                    })}{" "}
                 </p>
                 <style jsx>
                     {`
                         .card-show-prices {
                             top: -5px;
-                            right: -65px;
+                            right: -55px;
                         }
                     `}
                 </style>
@@ -96,7 +103,7 @@ function MainH({ data }) {
                 style={{ lineHeight: "25px" }}
             >
                 <span className="d-block main-font text-em-0-9 font-weight-bold">
-                    saldo:
+                    saldo {isLiveTrade ? "líquido" : ""}:
                     <br />
                     <span className="text-pill d-inline-block mt-1 font-weight-bold main-font text-em-1-2">
                         {convertToReal(finalBalanceAmount, {
@@ -106,10 +113,13 @@ function MainH({ data }) {
                     </span>
                 </span>
                 <span className="mt-3 d-block main-font text-em-0-8 font-weight-bold">
-                    lucro:{"  "}
-                    <span className="card-profit text-pill d-inline-block mt-1 font-weight-bold">
-                        {convertToReal(netProfitAmount, { moneySign: true })}{" "}
-                        <span className="profit-color">
+                    {isPlusProfit ? "lucro: " : "perca: "}
+                    <span className="card-profit text-pill profit-color d-inline-block mt-1 font-weight-bold">
+                        {convertToReal(netProfitAmount, {
+                            moneySign: true,
+                            needFraction: true,
+                        })}{" "}
+                        <span>
                             ({isPlusProfit ? "+" : ""}
                             {netProfitPerc}%)
                         </span>
@@ -118,7 +128,7 @@ function MainH({ data }) {
                                 .profit-color {
                                     color: ${isPlusProfit
                                         ? "green"
-                                        : "var(--expenseRed)"};
+                                        : "var(--expenseRed)"} !important;
                                 }
                             `}
                         </style>

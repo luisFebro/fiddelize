@@ -40,6 +40,7 @@ import {
     AsyncPrivacyPolicy,
     // test
     AsyncPlayground,
+    AsyncAmurretoAltrabot,
 } from "./CommonImports";
 // END PAGES
 
@@ -203,6 +204,11 @@ function Mobile({ location }) {
                     path="/test/playground"
                     exact
                     component={AsyncPlayground}
+                />
+                <Route
+                    path="/amurreto/altrabot"
+                    exact
+                    component={AsyncAmurretoAltrabot}
                 />
                 <Route component={Default} />
             </Switch>

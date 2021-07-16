@@ -50,10 +50,11 @@ import {
     AsyncServicesStatus,
     AsyncTerms,
     AsyncPrivacyPolicy,
-    // test
-    AsyncPlayground,
     // exclusive website
     AsyncClientAppPreview,
+    // test
+    AsyncPlayground,
+    AsyncAmurretoAltrabot,
 } from "./CommonImports";
 // END PAGES
 
@@ -230,6 +231,11 @@ function Website({ location }) {
                     component={AsyncPlayground}
                 />
                 <Route path="/codigo/qr" exact component={AsyncQrCodeScanner} />
+                <Route
+                    path="/amurreto/altrabot"
+                    exact
+                    component={AsyncAmurretoAltrabot}
+                />
                 <Route component={Default} />
             </Switch>
             {dontNeedLayout && <Footer />}

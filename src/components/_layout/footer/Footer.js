@@ -25,7 +25,9 @@ const Footer = ({ location }) => {
     };
 
     const isBlackList =
-        locationNow.includes("baixe-app") || locationNow.includes("/t/app");
+        locationNow.includes("baixe-app") ||
+        locationNow.includes("/t/app") ||
+        locationNow.includes("altrabot");
 
     const showAboutColumn = () => (
         <section className="col-md-4">

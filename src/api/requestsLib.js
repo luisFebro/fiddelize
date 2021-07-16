@@ -6,7 +6,8 @@ import { ROOT } from "api/root";
 export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
 
 // AMURRETO TRADES
-export const readTradesHistory = () => `${ROOT}/amurreto/trades/history`; // GET
+export const readTradesHistory = () =>
+    `https://amurreto.herokuapp.com/api/altrabot/trades/history`; // GET
 // END AMURRETO TRADES
 
 // AUTH AND PASSWORD

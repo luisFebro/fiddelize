@@ -197,3 +197,12 @@ export const AsyncPlayground = Load({
         ),
 });
 // END TEST
+
+// AMURRETO
+export const AsyncAmurretoAltrabot = Load({
+    loader: () =>
+        import(
+            "../../pages/amurreto/altrabot/MainAltrabot" /* webpackChunkName: "amurreto-altrabot-lazy" */
+        ),
+});
+// END AMURRETO
