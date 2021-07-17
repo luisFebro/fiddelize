@@ -7,21 +7,22 @@ import Cards from "./card/Cards";
 export default function LiveTradeList() {
     const [skip, setSkip] = useState(0);
     const [trigger, setTrigger] = useState(true);
-    const [stopTimer, setStopTimer] = useState(false);
+    const [timerTrigger, setTimerTrigger] = useState(false);
+    const [stopTrigger, setStopTrigger] = useState(false);
 
-    // useEffect(() => {
-    //     // update data every focus time.
-    //     window.addEventListener("focus", async () => {
-    //         setTrigger(getId());
-    //     });
-    // }, []);
+    useEffect(() => {
+        // update data every focus time.
+        window.addEventListener("focus", async () => {
+            setTrigger(getId());
+        });
+    }, []);
 
     const params = {
         status: "pending",
     };
 
-    const timer = useTimer({ trigger: stopTimer });
-    const maxTimer = timer >= 30;
+    const timer = useTimer({ trigger: timerTrigger, stop: stopTrigger });
+    const maxTimer = timer >= 180;
 
     const {
         list = [],
@@ -41,13 +42,14 @@ export default function LiveTradeList() {
         params,
         listName: "LiveAltrabotList",
         disableDupFilter: true,
-        trigger: timer, // maxTimer ? trigger :
+        trigger: !timerTrigger || maxTimer ? trigger : timer,
     });
 
     useEffect(() => {
-        if (stopTimer) return;
-        if (!loading && list.length) setStopTimer(true);
-    }, [loading, list, stopTimer]);
+        if (timerTrigger) return;
+        if (!loading && list.length) setTimerTrigger(true);
+        if (maxTimer) setStopTrigger(true);
+    }, [loading, list, timerTrigger, maxTimer]);
 
     // INFINITY LOADING LIST
     const detectedCard = useElemDetection({
@@ -93,7 +95,7 @@ export default function LiveTradeList() {
     return (
         <section className="mx-3">
             {showTitle()}
-            {!Boolean(list.length) && showEmptyIllustration()}
+            {!loading && !Boolean(list.length) && showEmptyIllustration()}
             {showCards()}
             {error && <ShowError />}
             <div style={{ marginBottom: 150 }} />
@@ -106,8 +108,8 @@ export default function LiveTradeList() {
 <ShowOverMsg />
 <ShowLoadingSkeleton />
  */
-function useTimer(timeSpan = 1000, options = {}) {
-    const { trigger = false } = options;
+function useTimer(options = {}) {
+    const { timeSpan = 1000, stop = false, trigger = false } = options;
 
     const [timer, setTimer] = useState(0);
 
@@ -117,10 +119,12 @@ function useTimer(timeSpan = 1000, options = {}) {
             setTimer((prev) => prev + 1);
         }, timeSpan);
 
+        if (stop) clearInterval(runTime);
+
         return () => {
             clearInterval(runTime);
         };
-    }, [timeSpan, trigger]);
+    }, [timeSpan, trigger, stop]);
 
     return timer;
 }
