@@ -95,9 +95,9 @@ export default function LiveTradeList() {
             {showTitle()}
             {needEmptyIllustra && showEmptyIllustration()}
             {showCards()}
-            {false && <ShowLoadingSkeleton />}
+            {/*<ShowLoadingSkeleton />*/}
             {error && <ShowError />}
-            {false && <ShowOverMsg />}
+            {/*<ShowOverMsg />*/}
             <div style={{ marginBottom: 150 }} />
         </section>
     );
