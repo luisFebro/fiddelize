@@ -2,6 +2,8 @@ import { Fragment, useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
+import useAPI, { getTotalResults } from "api/useAPI";
+import convertToReal from "utils/numbers/convertToReal";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -25,6 +27,14 @@ export default function MainAltrabot() {
 
     useBackColor("var(--mainWhite)");
 
+    const { data } = useAPI({
+        url: getTotalResults(),
+    });
+
+    const totalNetProfitAmount = Math.abs(data && data.totalNetProfitAmount);
+    const totalNetProfitPerc = data && data.totalNetProfitPerc;
+    const isPlusProfit = totalNetProfitPerc >= 0;
+
     const showContentSwitcher = () => (
         <section className="my-4">
             <div className="d-flex justify-content-end mr-3">
@@ -39,6 +49,40 @@ export default function MainAltrabot() {
                     variant="extended"
                 />
             </div>
+        </section>
+    );
+
+    const showTotalResults = () => (
+        <section className="total-result font-site text-white text-shadow">
+            <h2 className="pt-1 px-3 text-small font-weight-bold">
+                Lucro Líquido Total:
+            </h2>
+            <p className="m-0 mb-1 container-center core-data d-table text-pill">
+                {!isPlusProfit ? "- " : ""}
+                {convertToReal(totalNetProfitAmount, {
+                    moneySign: true,
+                    needFraction: true,
+                })}
+                <br />({totalNetProfitPerc}%)
+            </p>
+            <style jsx>
+                {`
+                    .total-result {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        background: var(--themeP);
+                        border-radius: 0 0 30px;
+                    }
+
+                    .total-result .core-data {
+                        background-color: #fff;
+                        border-radius: 20px;
+                        color: ${isPlusProfit ? "green" : "var(--expenseRed)"};
+                        text-shadow: none;
+                    }
+                `}
+            </style>
         </section>
     );
 
@@ -69,7 +113,7 @@ export default function MainAltrabot() {
                     </h1>
                 </section>
             </section>
-
+            {showTotalResults()}
             {showContentSwitcher()}
             {isPending ? <AsyncLiveTradesList /> : <AsyncDoneList />}
         </Fragment>

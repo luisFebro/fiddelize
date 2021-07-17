@@ -89,7 +89,7 @@ function MainH({ data, isLiveTrade }) {
     const netProfitPerc = getPercentage(finalBalanceAmount, netProfitAmount, {
         toFixed: 2,
     });
-    const isPlusProfit = netProfitPerc > 0;
+    const isPlusProfit = netProfitPerc >= 0;
 
     return (
         <section className="d-flex flex-column align-self-start">

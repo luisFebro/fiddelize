@@ -8,6 +8,8 @@ export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
 // AMURRETO TRADES
 export const readTradesHistory = () =>
     `https://amurreto.herokuapp.com/api/altrabot/trades/history`; // GET
+export const getTotalResults = () =>
+    `https://amurreto.herokuapp.com/api/altrabot/trades/total/results`;
 // END AMURRETO TRADES
 
 // AUTH AND PASSWORD

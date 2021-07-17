@@ -9,45 +9,45 @@ export default function LiveTradeList() {
     const [trigger, setTrigger] = useState(true);
     const [stopTimer, setStopTimer] = useState(false);
 
-    useEffect(() => {
-        // update data every focus time.
-        window.addEventListener("focus", async () => {
-            setTrigger(getId());
-        });
-    }, []);
+    // useEffect(() => {
+    //     // update data every focus time.
+    //     window.addEventListener("focus", async () => {
+    //         setTrigger(getId());
+    //     });
+    // }, []);
 
     const params = {
         status: "pending",
     };
 
-    const timer = useTimer({ stop: stopTimer });
+    const timer = useTimer({ trigger: stopTimer });
     const maxTimer = timer >= 30;
 
     const {
         list = [],
         // listTotal,
         loading,
-        ShowLoadingSkeleton,
+        // ShowLoadingSkeleton,
         error,
         ShowError,
-        ShowOverMsg,
+        // ShowOverMsg,
         // isPlural,
         hasMore,
         isOffline,
-        needEmptyIllustra,
+        // needEmptyIllustra,
     } = useAPIList({
         url: readTradesHistory(),
         skip,
         params,
         listName: "LiveAltrabotList",
         disableDupFilter: true,
-        trigger: maxTimer ? trigger : timer,
+        trigger: timer, // maxTimer ? trigger :
     });
 
     useEffect(() => {
         if (stopTimer) return;
-        if ((!loading && !list.length) || maxTimer) setStopTimer(true);
-    }, [loading, list, stopTimer, maxTimer]);
+        if (!loading && list.length) setStopTimer(true);
+    }, [loading, list, stopTimer]);
 
     // INFINITY LOADING LIST
     const detectedCard = useElemDetection({
@@ -93,33 +93,34 @@ export default function LiveTradeList() {
     return (
         <section className="mx-3">
             {showTitle()}
-            {needEmptyIllustra && showEmptyIllustration()}
+            {!Boolean(list.length) && showEmptyIllustration()}
             {showCards()}
-            {/*<ShowLoadingSkeleton />*/}
             {error && <ShowError />}
-            {/*<ShowOverMsg />*/}
             <div style={{ marginBottom: 150 }} />
         </section>
     );
 }
 
 // HELPERS
+/*
+<ShowOverMsg />
+<ShowLoadingSkeleton />
+ */
 function useTimer(timeSpan = 1000, options = {}) {
-    const { stop = false } = options;
+    const { trigger = false } = options;
 
     const [timer, setTimer] = useState(0);
 
     useEffect(() => {
+        if (!trigger) return null;
         const runTime = setInterval(() => {
             setTimer((prev) => prev + 1);
         }, timeSpan);
 
-        if (stop) clearInterval(runTime);
-
         return () => {
             clearInterval(runTime);
         };
-    }, [timeSpan, stop]);
+    }, [timeSpan, trigger]);
 
     return timer;
 }
