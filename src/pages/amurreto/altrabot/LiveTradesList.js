@@ -22,7 +22,7 @@ export default function LiveTradeList() {
     };
 
     const timer = useTimer({ trigger: timerTrigger, stop: stopTrigger });
-    const maxTimer = timer >= 180;
+    const maxTimer = timer >= 30;
 
     const {
         list = [],

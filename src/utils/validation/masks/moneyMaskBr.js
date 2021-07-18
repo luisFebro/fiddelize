@@ -8,6 +8,7 @@ String.prototype.reverse = function () {
 // you should use convertBrToDollar from convertDotComma to get the right converted value.
 export default function moneyMaskBr(targetStr) {
     if (!targetStr) return;
+    if (typeof targetStr !== "string") targetStr = targetStr.toString();
     // const key = (!ev) ? window.event.keyCode : ev.which;
     const value = targetStr.replace(/[^\d]+/gi, "").reverse();
     let result = "";

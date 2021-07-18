@@ -13,7 +13,7 @@ export default function InOutCard({ historyData }) {
     const { cardType, desc, value, createdAt = new Date() } = historyData;
 
     const isCardIn = cardType === "in";
-    const mainTitle = `Pontos ${isCardIn ? "Adicionados" : "Removidos"}`;
+    const mainTitle = `Pontos ${isCardIn ? "Extras" : "Removidos"}`;
 
     const showPoints = () => (
         <Fragment>
@@ -36,10 +36,10 @@ export default function InOutCard({ historyData }) {
                         padding: 0px 8px;
                         background: ${isCardIn
                             ? "var(--mainDark)"
-                            : "var(--mainWhite)"};
+                            : "var(--mainWhite)"} !important;
                         color: ${isCardIn
                             ? "rgb(255, 255, 0)"
-                            : "var(--expenseRed)"};
+                            : "var(--expenseRed)"} !important;
                         border-radius: 25px;
                         text-shadow: none;
                     }
