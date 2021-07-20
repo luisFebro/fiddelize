@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.36.0-50";
+const latestVersion = "4.37.0";
 
-const updateDescription = "customer birthday and pts - email pt 2";
+const updateDescription = "customer birthday and pts";
 /* HISTORY
+customer birthday and pts
 benefits gallery
 team management pt 5
 scanners pt 3

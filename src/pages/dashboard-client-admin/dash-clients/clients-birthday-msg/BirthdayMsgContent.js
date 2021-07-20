@@ -169,12 +169,44 @@ export default function BirthdayMsgContent() {
     );
 
     const showNotes = () => (
-        <div className="mx-3 text-purple mb-5">
-            <p className="m-0 text-normal">Nota:</p>
-            <p className="text-small font-weight-bold">
-                O nome do cliente é incluído de forma automática e a mensagem
-                fica neste padrão: &quot;Ei [NOME CLIENTE], [SUA MENSAGEM DE
-                ANIVERSÁRIO].&quot;
+        <div className="mx-3 text-purple text-normal mb-5">
+            <p className="font-weight-bold">Como a mensagem é enviada?</p>
+            <p>
+                Sua mensagem é enviada com sua marca como uma notificação para o
+                app do cliente e/ou email como mostrado no exemplo a seguir:
+            </p>
+            <div className="my-2 container-center">
+                <img
+                    className="shadow-babadoo"
+                    width={300}
+                    src="/img/demos/customer-birthdays/customer-birthday-1.png"
+                    alt="1"
+                />
+            </div>
+            <div className="mt-4 mb-2 container-center">
+                <img
+                    className="shadow-babadoo"
+                    width={300}
+                    src="/img/demos/customer-birthdays/customer-birthday-2.png"
+                    alt="2"
+                />
+            </div>
+            <p className="my-4">
+                Caso opte por dar alguns PTS no dia do aniversário dos clientes,
+                a quantia é registrada no histórico de compras como{" "}
+                <strong>pontos extras</strong>.
+            </p>
+            <div className="my-2 container-center">
+                <img
+                    className="shadow-babadoo"
+                    width={300}
+                    src="/img/demos/customer-birthdays/customer-birthday-3.png"
+                    alt="3"
+                />
+            </div>
+            <p className="my-4">
+                O nome do cliente é incluído automaticamente no título de cada
+                notificação.
             </p>
         </div>
     );
