@@ -3,13 +3,13 @@ import Card from "@material-ui/core/Card";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
-import EditButton from "../../../../../components/buttons/EditButton";
-import handleChange from "../../../../../utils/form/use-state/handleChange";
-import findAndReplaceObjInArray from "../../../../../utils/arrays/findAndReplaceObjInArray";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import EditLevelIconModalBtn from "./EditLevelIconModalBtn";
-import DeleteModalBtn from "./DeleteModalBtn";
-import getId from "../../../../../utils/getId";
+import EditButton from "components/buttons/EditButton";
+import handleChange from "utils/form/use-state/handleChange";
+import findAndReplaceObjInArray from "utils/arrays/findAndReplaceObjInArray";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import getId from "utils/getId";
+import EditLevelIconModalBtn from "./chall-helpers/EditLevelIconModalBtn";
+import DeleteModalBtn from "./chall-helpers/DeleteModalBtn";
 
 const truncate = (text, leng) => window.Helper.truncate(text, leng);
 
@@ -22,6 +22,36 @@ ChallComp.propTypes = {
     currChallNumber: PropTypes.number,
 };
 
+const getStyles = () => ({
+    card: {
+        backgroundColor: "var(--themeP)",
+        borderRadius: "15px",
+        padding: "15px",
+        overflow: "visible",
+    },
+    actionBtns: {
+        top: -45,
+        right: -20,
+    },
+    levelIcon: {
+        fontSize: 40,
+        color: "#ff0",
+        filter: "drop-shadow(0 0 40px #ffc)",
+    },
+    iconBanner: {
+        width: 80,
+        lineHeight: "18px",
+        backgroundColor: "var(--mainWhite)",
+        boxShadow: "inset 0 0 .3em #000",
+    },
+    fieldForm: {
+        padding: "5px 10px",
+        color: "var(--mainPurple)",
+        backgroundColor: "var(--mainWhite)",
+        font: "normal 1em Poppins, sans-serif",
+    },
+});
+
 export default function ChallComp({
     id,
     icon,
@@ -33,7 +63,6 @@ export default function ChallComp({
     setChallengesArray,
     showToast,
     currChallNumber,
-    milestoneIcon,
     updateThisUser,
 }) {
     const [data, setData] = useState({
@@ -55,42 +84,13 @@ export default function ChallComp({
     }, [selectedIcon]);
 
     const txtStyle = "text-small text-white text-center m-0";
-    const styles = {
-        card: {
-            backgroundColor: "var(--themeP)",
-            borderRadius: "15px",
-            padding: "15px",
-            overflow: "visible",
-        },
-        actionBtns: {
-            top: -45,
-            right: -20,
-        },
-        levelIcon: {
-            fontSize: 40,
-            color: "#ff0",
-            filter: "drop-shadow(0 0 40px #ffc)",
-        },
-        iconBanner: {
-            width: 80,
-            lineHeight: "18px",
-            backgroundColor: "var(--mainWhite)",
-            boxShadow: "inset 0 0 .3em #000",
-        },
-        fieldForm: {
-            padding: "5px 10px",
-            color: "var(--mainPurple)",
-            backgroundColor: "var(--mainWhite)",
-            font: "normal 1em Poppins, sans-serif",
-        },
-    };
+    const styles = getStyles();
 
     const handleDataChange = () => {
-        showToast("Fazendo alterações...");
         const updatedArray = [
             {
                 id: data.id,
-                icon: isFirst ? milestoneIcon : data.icon,
+                milestoneIcon: data.icon,
                 targetPoints: Number(data.targetPoints),
                 prizeDesc: data.prizeDesc && data.prizeDesc.toLowerCase(),
             },
@@ -110,9 +110,7 @@ export default function ChallComp({
             className="container-center flex-row flex-md-column justify-content-start"
             style={{ flexBasis: "20%" }}
         >
-            <p className={txtStyle}>
-                {isFirst ? "Ícone Principal:" : "Ícone Desafio:"}
-            </p>
+            <p className={txtStyle}>Ícone Desafio:</p>
             <FontAwesomeIcon
                 className="ml-md-0 ml-3"
                 icon={data.icon}
@@ -120,22 +118,13 @@ export default function ChallComp({
             />
             {edit && (
                 <Fragment>
-                    {isFirst ? (
-                        <p
-                            className="ml-3 ml-md-0 mt-2 text-center animated zoomIn position-relative text-small text-purple"
-                            style={styles.iconBanner}
-                        >
-                            Edite em design
-                        </p>
-                    ) : (
-                        <div className="ml-3 ml-md-0 container-center animated zoomIn">
-                            <EditLevelIconModalBtn
-                                currChallNumber={data.currChallNumber}
-                                currIcon={data.icon}
-                                setSelectedIcon={setSelectedIcon}
-                            />
-                        </div>
-                    )}
+                    <div className="ml-3 ml-md-0 container-center animated zoomIn">
+                        <EditLevelIconModalBtn
+                            currChallNumber={data.currChallNumber}
+                            currIcon={data.icon}
+                            setSelectedIcon={setSelectedIcon}
+                        />
+                    </div>
                 </Fragment>
             )}
         </div>
@@ -146,10 +135,10 @@ export default function ChallComp({
             className="container-center flex-row flex-md-column"
             style={{ flexBasis: "20%" }}
         >
-            <p className={txtStyle}>Ponto-Prêmio:</p>
+            <p className={txtStyle}>Meta em Pontos:</p>
             {!edit ? (
                 <p className="text-subtitle font-weight-bold text-center m-0 ml-md-0 ml-3">
-                    {data.targetPoints}
+                    {data.targetPoints} PTS
                 </p>
             ) : (
                 <div className="animated zoomIn ml-md-0 ml-3">
@@ -220,28 +209,16 @@ export default function ChallComp({
                     <ButtonFab
                         position="relative"
                         onClick={() => {
-                            const lastButOnetargetPoints = isFirst
-                                ? 0
-                                : challengesArray[challengesArray.length - 2]
-                                      .targetPoints;
-                            if (
-                                !isFirst &&
-                                data.targetPoints < lastButOnetargetPoints
-                            )
-                                return showToast(
-                                    "O ponto-prêmio do desafio atual deve ser maior que o anterior",
-                                    { type: "error" }
-                                );
                             if (!Number(data.targetPoints)) {
-                                showToast(
+                                return showToast(
                                     "Em ponto-prêmio, insira apenas números.",
                                     { type: "error" }
                                 );
-                            } else {
-                                handleDataChange();
-                                setEdit(false);
-                                setSaveChangeBtn(false);
                             }
+
+                            handleDataChange();
+                            setEdit(false);
+                            setSaveChangeBtn(false);
                         }}
                         title="salvar"
                         iconFontAwesome={<FontAwesomeIcon icon="save" />}
@@ -257,13 +234,11 @@ export default function ChallComp({
                 </div>
             ) : (
                 <Fragment>
-                    {!isFirst && (
-                        <DeleteModalBtn
-                            id={data.id}
-                            challengeNumber={currChallNumber}
-                            updateThisUser={updateThisUser}
-                        />
-                    )}
+                    <DeleteModalBtn
+                        id={data.id}
+                        challengeNumber={currChallNumber}
+                        updateThisUser={updateThisUser}
+                    />
                     <EditButton onClick={() => setEdit(!edit)} />
                 </Fragment>
             )}

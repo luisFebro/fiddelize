@@ -15,10 +15,10 @@ const AsyncTeam = LoadableVisible({
             "./dash-team" /* webpackChunkName: "cli-admin-app-team-session-lazy" */
         ),
 });
-const AsyncAppDesign = LoadableVisible({
+const AsyncApp = LoadableVisible({
     loader: () =>
         import(
-            "./dash-app-design" /* webpackChunkName: "cli-admin-app-design-session-lazy" */
+            "./dash-app" /* webpackChunkName: "cli-admin-app-session-lazy" */
         ),
 });
 const AsyncSMS = LoadableVisible({
@@ -59,7 +59,7 @@ const data = [
     {
         tabLabel: "App",
         tabIcon: <PhonelinkSetupIcon style={muStyle} />,
-        tabContentPanel: <AsyncAppDesign />,
+        tabContentPanel: <AsyncApp />,
         boxPadding: 1,
     },
     {

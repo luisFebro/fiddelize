@@ -1,8 +1,8 @@
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
-import HiddenDesignApp from "../card-hidden-content/design/HiddenDesignApp";
-import HiddenChallengesAndPrize from "../card-hidden-content/challenges-prizes/HiddenChallengesAndPrize";
+import AppDesign from "../design/AppDesign";
+import MainBuyGames from "../buy-games/MainBuyGames";
 
 const faStyle = {
     fontSize: "40px",
@@ -10,19 +10,19 @@ const faStyle = {
     color: "white",
 };
 
-export default function ShowExpansiblePanel() {
+export default function ShowMainPanels() {
     const configList = [
         {
             id: 0,
-            name: "Design<br />Personalizado",
+            name: "Design<br />Geral",
             leftIcon: <FontAwesomeIcon icon="palette" />,
-            hiddenContent: <HiddenDesignApp />,
+            hiddenContent: <AppDesign />,
         },
         {
             id: 1,
             name: "Jogos<br />de Compra",
             leftIcon: <FontAwesomeIcon icon="gamepad" />,
-            hiddenContent: <HiddenChallengesAndPrize />,
+            hiddenContent: <MainBuyGames />,
         },
     ];
 

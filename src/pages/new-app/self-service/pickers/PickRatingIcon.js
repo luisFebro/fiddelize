@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
-import CarouselFlickity from "../../../../components/carousels/CarouselFlickity";
-import { milestoneIcons } from "../../../../global-data/milestoneIcons";
+import useData from "init";
+import CarouselFlickity from "components/carousels/CarouselFlickity";
+import { milestoneIcons } from "global-data/milestoneIcons";
 import {
     milestoneIconsSorted,
     getIconIndex,
-} from "../../../../global-data/milestoneIconsSorted";
-import useData from "init";
+} from "global-data/milestoneIconsSorted";
 
 PickRatingIcon.propTypes = {
     step: PropTypes.number,

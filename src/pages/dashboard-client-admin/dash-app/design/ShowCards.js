@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import OptionCard from "./OptionCard";
 import useData, { useBizData } from "init";
 import useAuth from "auth/useAuth";
+import { translateColorToPtBr } from "global-data/uiColors";
+import useImg, { Img } from "hooks/media/useImg";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import OptionCard from "./OptionCard";
 import "./style.scss";
-import { translateColorToPtBr } from "../../../../../global-data/uiColors";
-import useImg, { Img } from "../../../../../hooks/media/useImg";
-import removeImgFormat from "../../../../../utils/biz/removeImgFormat";
 
 export default function ShowCards({ setOpenComp }) {
     const { adminGame } = useData();
@@ -174,11 +174,16 @@ export default function ShowCards({ setOpenComp }) {
                 mainContent={colorContent()}
                 onBtnClick={() => setOpenComp("colors")}
             />
-            <OptionCard
-                title="Ícone de<br />Nível Principal:"
-                mainContent={iconContent()}
-                onBtnClick={() => setOpenComp("icon")}
-            />
         </section>
     );
 }
+
+/*
+
+<OptionCard
+    title="Ícone de<br />Nível Principal:"
+    mainContent={iconContent()}
+    onBtnClick={() => setOpenComp("icon")}
+/>
+
+ */

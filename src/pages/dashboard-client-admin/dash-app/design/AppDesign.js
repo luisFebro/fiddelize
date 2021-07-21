@@ -1,24 +1,14 @@
 import { useState, useEffect } from "react";
-import animateCSS from "../../../../../utils/animateCSS";
 import ShowLogoComp from "./ShowLogoComp";
 import ShowColorsComp from "./ShowColorsComp";
-import ShowIconComp from "./ShowIconComp";
 import ShowCards from "./ShowCards";
 
-export default function HiddenDesignApp() {
+export default function AppDesign() {
     const [hideMain, setHideMain] = useState(false);
     const [openComp, setOpenComp] = useState("");
 
     useEffect(() => {
-        if (openComp) {
-            animateCSS(
-                "#cards",
-                "zoomOut",
-                "normal",
-                () => setHideMain(true),
-                true
-            );
-        }
+        if (openComp) setHideMain(true);
     }, [openComp]);
 
     const handleBackToCardsFunc = () => {
@@ -39,10 +29,15 @@ export default function HiddenDesignApp() {
                 openComp={openComp}
                 onBackBtnClick={handleBackToCardsFunc}
             />
-            <ShowIconComp
-                openComp={openComp}
-                onBackBtnClick={handleBackToCardsFunc}
-            />
         </section>
     );
 }
+
+/* ARCHIVES
+
+<ShowIconComp
+    openComp={openComp}
+    onBackBtnClick={handleBackToCardsFunc}
+/>
+
+ */

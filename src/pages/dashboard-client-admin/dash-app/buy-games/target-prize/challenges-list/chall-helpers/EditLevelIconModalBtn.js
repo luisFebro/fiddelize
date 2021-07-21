@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
-import ModalFullContent from "../../../../../components/modals/ModalFullContent";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import CarouselFlickity from "../../../../../components/carousels/CarouselFlickity";
+import ModalFullContent from "components/modals/ModalFullContent";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import CarouselFlickity from "components/carousels/CarouselFlickity";
 import {
     milestoneIconsSorted,
     getIconIndex,
-} from "../../../../../global-data/milestoneIconsSorted";
+} from "global-data/milestoneIconsSorted";
 
 EditLevelIconModalBtn.propTypes = {
     currChallNumber: PropTypes.number,

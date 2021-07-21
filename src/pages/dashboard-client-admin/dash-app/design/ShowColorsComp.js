@@ -1,6 +1,6 @@
 import { Fragment } from "react";
-import PickTheming from "../../../../new-app/self-service/pickers/PickTheming";
-import BackButton from "../../../../../components/buttons/BackButton";
+import BackButton from "components/buttons/BackButton";
+import PickTheming from "../../../new-app/self-service/pickers/PickTheming";
 
 export default function ShowColorsComp({ openComp, onBackBtnClick }) {
     const showBackBtn = () => (

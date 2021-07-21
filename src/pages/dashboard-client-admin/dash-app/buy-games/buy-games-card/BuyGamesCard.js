@@ -1,90 +1,63 @@
 import { useState } from "react";
-import useContext from "context";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
 import InstructionBtn from "components/buttons/InstructionBtn";
-import { updateUser } from "api/frequent";
-import useData, { useBizData } from "init";
-import getGameCardData from "pages/dashboard-client-admin/dash-app/buy-games/buy-games-card/getGameCardData";
-import "pages/dashboard-client-admin/dash-app/buy-games/buy-games-card/_Card.scss";
+import { useBizData } from "init";
+import getGameCardData from "./getGameCardData";
+import "./_Card.scss";
 
-export default function GameCard({ data, closeModal }) {
+export default function BuyGamesCard({ data, setComp }) {
     const [loading, setLoading] = useState(false);
-    const { userId, adminGame } = useData();
-    const { perc } = adminGame.discountBack;
-    const { setCurrGame, currGame } = useContext();
-    const { themeBackColor, themePColor, themeSColor, bizName } = useBizData();
+    // const { userId } = useData();
+
+    const { themeBackColor, themePColor, themeSColor } = useBizData();
     const { gameName, on } = data;
 
-    const isCurrGame = gameName === currGame;
     const isDisabled = !on;
 
     const { nameBr, icon, concept } = getGameCardData({
+        isAdmin: true,
         gameName,
         isDisabled,
-        bizName,
-        discountPerc: perc,
     });
 
+    const mainCtaTitle = isDisabled ? "ativar" : "opções";
     const showCTA = () => (
         <ButtonFab
-            title={loading ? "iniciando..." : "acessar"}
+            title={loading ? "iniciando..." : mainCtaTitle}
             variant="extended"
             size="small"
+            width="100%"
             position="relative"
             backgroundColor={`var(--themeS--${themeSColor})`}
             onClick={async () => {
                 setLoading(true);
-                await updateUser(userId, "cliente", {
-                    "clientUserData.games.currGame": gameName,
-                });
-                setCurrGame(gameName);
-                closeModal();
+                setComp(gameName);
                 setLoading(false);
             }}
         />
     );
 
-    const showDisabledBadge = () => (
-        <section className="deactivated-badge text-pill text-small font-weight-bold">
-            desativado
+    const showStatusBadge = () => (
+        <section className="deactivated-badge text-small text-white text-shadow font-weight-bold">
+            {isDisabled ? "desativado" : "ativo"}
             <style jsx>
                 {`
                     .deactivated-badge {
-                        background: grey;
+                        background: ${isDisabled
+                            ? "grey"
+                            : "var(--incomeGreen)"};
                         padding: 5px 10px;
+                        border-radius: 5px;
                     }
                 `}
             </style>
         </section>
     );
 
-    const showCurrGameBadge = () => (
-        <p className="default-game-badge animated fadeInUp delay-1s">
-            JOGO ATUAL <DoneOutlineIcon />
-            <style jsx>
-                {`
-                    .default-game-badge {
-                        position: absolute;
-                        top: -5px;
-                        left: -5px;
-                        padding: 2px 10px;
-                        color: var(--themeSLight);
-                        font: bold 0.7rem var(--mainFont), sans-serif;
-                        background: var(--themeP);
-                        border-radius: 30px;
-                        white-space: nowrap !important;
-                    }
-                `}
-            </style>
-        </p>
-    );
-
     const showFooter = () => (
         <section className="card-footer">
-            {isCurrGame && showCurrGameBadge()}
             <p
-                className="desc font-weight-bold"
+                className="m-0 desc font-weight-bold"
                 style={{
                     color: isDisabled
                         ? "#808080cf"
@@ -93,9 +66,8 @@ export default function GameCard({ data, closeModal }) {
             >
                 {nameBr}
             </p>
-            <div className="container-center">
-                {isDisabled ? showDisabledBadge() : showCTA()}
-            </div>
+            <div className="container-center">{showStatusBadge()}</div>
+            <div className="container-center">{showCTA()}</div>
         </section>
     );
 

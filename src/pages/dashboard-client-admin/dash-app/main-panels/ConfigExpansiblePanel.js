@@ -98,7 +98,13 @@ export default function ConfigExpansiblePanel({
     );
 
     const showHiddenPanel = (panel) => (
-        <AccordionDetails style={{ padding: "8px 0 24px", border: "none" }}>
+        <AccordionDetails
+            style={{
+                display: "block",
+                padding: "8px 0 24px",
+                border: "none",
+            }}
+        >
             {panel.hiddenContent}
         </AccordionDetails>
     );

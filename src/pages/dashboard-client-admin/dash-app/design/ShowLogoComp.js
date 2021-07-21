@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import PickLogo from "../../../../new-app/self-service/pickers/PickLogo";
 import { useBizData } from "init";
-import BackButton from "../../../../../components/buttons/BackButton";
+import BackButton from "components/buttons/BackButton";
+import PickLogo from "../../../new-app/self-service/pickers/PickLogo";
 
 export default function ShowLogoComp({ openComp, onBackBtnClick }) {
     const { bizId, bizLinkName } = useBizData();

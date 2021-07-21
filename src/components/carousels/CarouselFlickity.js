@@ -22,7 +22,7 @@ export default function CarouselFlickity({
     setSelectedIcon,
     setOpenModal,
 }) {
-    const [iconSelected, setIconSelected] = useState(data[0].milestoneIcon);
+    const [iconSelected, setIconSelected] = useState(data[0].icon);
     const [iconReady, setIconReady] = useState(false);
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
@@ -89,8 +89,7 @@ export default function CarouselFlickity({
         const condRunSelect = isFromDash ? !iconReady : true;
         flkty.on("change", (index) =>
             setTimeout(
-                () =>
-                    condRunSelect && setIconSelected(data[index].milestoneIcon),
+                () => condRunSelect && setIconSelected(data[index].icon),
                 1000
             )
         );
@@ -124,12 +123,12 @@ export default function CarouselFlickity({
             <div className="main-carousel">
                 {data.map((card) => (
                     <div
-                        key={card.milestoneIcon}
+                        key={card.icon}
                         className="carousel-cell no-outline d-flex flex-column justify-content-center align-content-item"
                     >
                         <div className="container-center">
                             <FontAwesomeIcon
-                                icon={card.milestoneIcon}
+                                icon={card.icon}
                                 className="card-icons"
                             />
                         </div>

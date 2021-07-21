@@ -4,7 +4,7 @@ import parse from "html-react-parser";
 import PropTypes from "prop-types";
 import ButtonMulti, {
     faStyle,
-} from "../../../../../components/buttons/material-ui/ButtonMulti";
+} from "components/buttons/material-ui/ButtonMulti";
 
 OptionCard.propTypes = {
     title: PropTypes.string,

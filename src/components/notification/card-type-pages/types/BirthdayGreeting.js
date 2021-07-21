@@ -1,7 +1,7 @@
 import {
     ShowTitle,
     ShowIllustration,
-    ShowBrief,
+    // ShowBrief,
     ShowActionBtn,
 } from "./DefaultRenderComps";
 import extractStrData from "../../../../utils/string/extractStrData";
@@ -51,7 +51,7 @@ export default function BirthdayGreeting({
             <strong className="font-weight-bold text-subtitle">
                 {birthdayPTS} PTS
             </strong>{" "}
-            nas suas compras na Cherie's Beauty. Aproveite!
+            nas suas compras. Aproveite!
         </section>
     );
 

@@ -54,7 +54,7 @@ export default function Games({ isPreviewMode = false }) {
             {currGame === "discountBack" && (
                 <AsyncDiscountBackGame
                     didUserScroll={didUserScroll}
-                    needClick={isPreviewMode}
+                    needClick={!isPreviewMode}
                 />
             )}
             {currGame === "topCustomers" && null}

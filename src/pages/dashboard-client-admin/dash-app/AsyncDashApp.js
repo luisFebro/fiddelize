@@ -1,17 +1,17 @@
 import { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
-import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
-import "./DashAppDesign.scss";
+import ShowMainPanels from "./main-panels/ShowMainPanels";
+import "./DashApp.scss";
 
 const AppDesignTitle = <Title />;
-export default function DashAppDesign() {
+export default function AsyncDashApp() {
     return (
         <Fragment>
             <div style={{ marginTop: "16px", display: "block" }}>
                 <DashSectionTitle title={AppDesignTitle} />
             </div>
             <main className="mt-2">
-                <ShowConfigExpansiblePanel />
+                <ShowMainPanels />
             </main>
         </Fragment>
     );

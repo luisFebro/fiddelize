@@ -1,4 +1,4 @@
-.bank-card--root * {
+.card--root * {
     // this prevent gallery to be initialized as one column only
     box-sizing: border-box !important;
     &:before,
@@ -7,7 +7,7 @@
     }
 }
 
-.bank-card--root {
+.card--root {
     border-color: transparent;
     position: relative;
     display: flex;
@@ -44,7 +44,7 @@
     }
 
     & .card-footer > .desc {
-        height: 3em; // default 4em; for shorter desc like names just 2em
+        height: 2.2em; // default 4em; for shorter desc like names just 2em
         overflow: hidden;
         font: normal 1.3rem var(--mainFont), sans-serif;
         line-height: 25px;
