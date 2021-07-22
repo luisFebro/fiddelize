@@ -35,5 +35,6 @@ export default function NumberField(props) {
         );
     }
 
-    return <Field {...props} type="number" />;
+    const treatedIntValue = value && value.toString().replace(/[^\d]+/gi, ""); // to avoid values like 900--
+    return <Field {...props} value={treatedIntValue} type="number" />;
 }

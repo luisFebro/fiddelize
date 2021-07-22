@@ -36,6 +36,7 @@ export default function RatingIcons() {
             eachMilestone,
             needDark,
         });
+
         // eslint-disable-next-line
     }, [currPoints, eachMilestone, needDark]);
 
@@ -46,7 +47,11 @@ export default function RatingIcons() {
 
     const handleEffect = (e) => {
         const currIconElemParent = e.target.parentElement;
-        animateCSS(currIconElemParent, "rubberBand", "fast");
+        const isIconFilled =
+            currIconElemParent &&
+            currIconElemParent.classList.contains("filled");
+        // filled icons getting grey that's why we only animate if it is already grey icon
+        if (!isIconFilled) animateCSS(currIconElemParent, "rubberBand", "fast");
     };
 
     return (
@@ -107,7 +112,7 @@ export default function RatingIcons() {
                     }
 
                     .icon:hover {
-                        color: white;
+                        //color: white;
                         opacity: 1;
                         transform: rotateX(0deg);
                         text-shadow: 0 0 30px grey;
@@ -161,15 +166,15 @@ function paintStarsForScore({ currPoints, eachMilestone, needDark }) {
         if (count++ <= indScore) {
             const selectedIcon = document.querySelector(`#${iconInArray}`);
             const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-            setTimeout(
-                () =>
-                    (selectedIcon.style.cssText = `z-index: 1000; color: #ff0; opacity: 1; transform: rotateX(0deg); ${
-                        needDark
-                            ? "filter: drop-shadow(grey 0px 0px 4px);"
-                            : "filter: drop-shadow(0 0 20px #ffc);"
-                    }`),
-                delayToAnimated
-            );
+            if (!selectedIcon) return;
+            setTimeout(() => {
+                selectedIcon.classList.add("filled");
+                selectedIcon.style.cssText = `z-index: 1000; color: #ff0; opacity: 1; transform: rotateX(0deg); ${
+                    needDark
+                        ? "filter: drop-shadow(grey 0px 0px 4px);"
+                        : "filter: drop-shadow(0 0 20px #ffc);"
+                }`;
+            }, delayToAnimated);
         }
     }
 }

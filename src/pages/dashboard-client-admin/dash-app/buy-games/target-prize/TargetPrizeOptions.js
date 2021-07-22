@@ -4,8 +4,8 @@ import InstructionBtn from "components/buttons/InstructionBtn";
 import { gameIconsStore } from "components/biz/GamesBadge";
 import BackButton from "components/buttons/BackButton";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn.js";
-import { useReadUser, updateUser } from "api/frequent";
 import useData from "init";
+import { useReadUser, updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import NumberField from "components/fields/NumberField";
 import RadiusBtn from "components/buttons/RadiusBtn";
@@ -19,6 +19,8 @@ export default function TargetPrizeOptions({ setComp }) {
         prizeDeadline: null,
         challList: [],
     });
+
+    const GAME = "targetPrize";
     const { on, prizeDeadline, challList } = optionData;
 
     const [triggerList, setTriggerList] = useState("");
@@ -28,22 +30,26 @@ export default function TargetPrizeOptions({ setComp }) {
     const { data, loading } = useReadUser(
         userId,
         "cliente-admin",
-        "clientAdminData.games.targetPrize",
+        `clientAdminData.games.${GAME}`,
         {
             trigger: triggerList || userId, // triggerList is an random id
         }
     );
 
     useEffect(() => {
-        if (data) {
-            const { targetPrize } = data.clientAdminData.games;
-            setOptionData((prev) => ({
-                ...prev,
-                on: targetPrize && targetPrize.on,
-                prizeDeadline: targetPrize && targetPrize.prizeDeadline,
-                challList: targetPrize && targetPrize.challList,
-            }));
-        }
+        if (!data) return;
+
+        const {
+            on: thisOn,
+            prizeDeadline: deadline,
+            challList: list,
+        } = data.clientAdminData.games[GAME];
+        setOptionData((prev) => ({
+            ...prev,
+            on: thisOn,
+            prizeDeadline: deadline,
+            challList: list,
+        }));
     }, [data]);
 
     const styles = {
@@ -69,7 +75,7 @@ export default function TargetPrizeOptions({ setComp }) {
 
     const showGameTitle = () => (
         <section className="my-3 container-center">
-            {gameIconsStore.targetPrize}
+            {gameIconsStore[GAME]}
             <h1
                 className="ml-3 text-pill text-subtitle font-weight-bold text-center"
                 style={{
@@ -86,7 +92,7 @@ export default function TargetPrizeOptions({ setComp }) {
             const isTruthy = res && res.includes("true");
 
             const dataToSend = {
-                "clientAdminData.games.targetPrize.on": isTruthy,
+                [`clientAdminData.games.${GAME}.on`]: isTruthy,
             };
 
             await updateUser(userId, "cliente-admin", dataToSend);
@@ -103,7 +109,7 @@ export default function TargetPrizeOptions({ setComp }) {
 
         const handlePrizeDeadline = async () => {
             const dataToSend = {
-                "clientAdminData.games.targetPrize.prizeDeadline": prizeDeadline,
+                [`clientAdminData.games.${GAME}.prizeDeadline`]: prizeDeadline,
             };
             await updateUser(userId, "cliente-admin", dataToSend);
             showToast(
@@ -195,6 +201,7 @@ export default function TargetPrizeOptions({ setComp }) {
 }
 
 /* ARCHIVES
+
 <PremiumButton
     right={-60}
     top={-40}
@@ -202,36 +209,4 @@ export default function TargetPrizeOptions({ setComp }) {
     proPage="PremmiosClientes_pro"
 />
 
-// LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths
-    const body = {
-        "clientAdminData.games.targetPrize.arePrizgfdgfdesVisible": treatBoolStatus(
-            visibleToggleBtn
-        ),
-    };
-    useUpdateUser(bizId, "cliente-admin", body);
-
-const showPrizeAndGoalsVisibility = () => (
-    <section className="container-center-col">
-        <section className="position-relative">
-            <header className="mb-3 text-purple font-weight-bold text-subtitle text-center">
-                Revelar prêmios e metas para clientes?
-            </header>
-            <div
-                className="position-absolute"
-                style={styles.visibleInstruBtn}
-            >
-                <InstructionBtn
-                    mode="modal"
-                    article="GiftVisibility_art1"
-                />
-            </div>
-        </section>
-        <SwitchBtn
-            titleLeft="Escondido<br />Durante<br />Desafios"
-            titleRight="Sempre<br />Revelado"
-            callback={handleVisibility}
-        />
-        <hr className="lazer-purple" />
-    </section>
-);
- */
+*/

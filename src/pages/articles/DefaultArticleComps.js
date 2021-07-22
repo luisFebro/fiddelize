@@ -14,7 +14,7 @@ export const ShowTitle = ({ title = "some main title" }) => (
 );
 
 export const ShowArticleTitle = ({ title = "some title" }) => (
-    <h2 className="my-4 font-site text-em-1-3 text-purple text-center font-weight-bold">
+    <h2 className="my-4 font-site text-em-1-3 text-purple text-center font-weight-bold mx-3">
         {title}
     </h2>
 );

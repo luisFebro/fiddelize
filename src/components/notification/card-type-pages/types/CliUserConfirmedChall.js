@@ -20,12 +20,14 @@ export default function CliUserConfirmedChall({
 }) {
     const [loading, setLoading] = useState(false);
 
-    const { beatGamesData, prizeConfirmationDate } = extractStrData(content);
+    const {
+        prizeDeadline,
+        beatGamesData,
+        prizeConfirmationDate,
+    } = extractStrData(content);
 
     const beatGamesDataTreated = JSON.parse(beatGamesData);
     const totalBenefits = beatGamesDataTreated && beatGamesDataTreated.length;
-
-    const prizeDeadline = 30;
 
     const addedDaysToDate = prizeConfirmationDate
         ? addDays(new Date(prizeConfirmationDate), Number(prizeDeadline) + 1)
@@ -63,7 +65,7 @@ export default function CliUserConfirmedChall({
                             ✔ Prazo para resgatar prêmio:
                             <br />
                             <strong>
-                                • {prizeDeadline} dias
+                                • {prizeDeadline || 30} dias
                                 <br />
                                 <span> (até {deadlineDate})</span>
                             </strong>

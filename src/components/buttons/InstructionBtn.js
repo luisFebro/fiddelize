@@ -11,14 +11,12 @@ export default function InstructionBtn({
     text,
     onClick,
     mode = "none", // "none", "tooltip", "modal"
-    article = "SomeArticle_art1",
+    article,
     animated = false,
     tooltipProps,
     // blurEffect = false,
 }) {
     const [needOpen, setNeedOpen] = useState(false);
-    // const [closeBtn, setShowCloseBtn] = useState(false);
-
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
@@ -34,7 +32,7 @@ export default function InstructionBtn({
 
     const DefaultIcon = (
         <FontAwesomeIcon
-            icon="question-circle"
+            icon={article ? "exclamation-circle" : "question-circle"}
             className="d-flex align-items-center"
             style={{ fontSize: 30 }}
         />

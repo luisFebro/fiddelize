@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function GiftCard({ prizeDesc, colorS }) {
-    prizeDesc = truncate("2 tickets de ingresso cinema", 21);
+    prizeDesc = truncate(prizeDesc, 21);
     const lightColor = `var(--themeSLight--${colorS})`;
     const darkColor = `var(--themeSDark--${colorS})`;
 

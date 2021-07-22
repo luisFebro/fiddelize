@@ -38,14 +38,16 @@ export default function BuyGamesCard({ data, setComp }) {
     );
 
     const showStatusBadge = () => (
-        <section className="deactivated-badge text-small text-white text-shadow font-weight-bold">
+        <section
+            className={`font-site text-em-0-9 ${
+                isDisabled ? "text-grey" : "text-sys-green"
+            } font-weight-bold buy-game-badge`}
+        >
             {isDisabled ? "desativado" : "ativo"}
             <style jsx>
                 {`
-                    .deactivated-badge {
-                        background: ${isDisabled
-                            ? "grey"
-                            : "var(--incomeGreen)"};
+                    .buy-game-badge {
+                        background-color: "var(--lightGrey)";
                         padding: 5px 10px;
                         border-radius: 5px;
                     }

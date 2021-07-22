@@ -7,7 +7,6 @@ import EditButton from "components/buttons/EditButton";
 import handleChange from "utils/form/use-state/handleChange";
 import findAndReplaceObjInArray from "utils/arrays/findAndReplaceObjInArray";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import getId from "utils/getId";
 import EditLevelIconModalBtn from "./chall-helpers/EditLevelIconModalBtn";
 import DeleteModalBtn from "./chall-helpers/DeleteModalBtn";
 
@@ -56,7 +55,6 @@ export default function ChallComp({
     icon,
     targetPoints,
     prizeDesc,
-    setNeedUpdateData,
     challengesArray,
     setChallengesArray,
     showToast,
@@ -98,8 +96,10 @@ export default function ChallComp({
             updatedArray,
             "id"
         );
+
         setChallengesArray(newArray);
-        setNeedUpdateData(getId());
+        updateThisUser(true, { updatedData: newArray });
+
         setTimeout(() => setEdit(false), 2000);
     };
 
@@ -200,10 +200,7 @@ export default function ChallComp({
             style={{ width: "120px" }}
         >
             {saveChangeBtn ? (
-                <div
-                    className="animated rubberBand delay-2s"
-                    style={{ animationIterationCount: 2 }}
-                >
+                <div className="animated rubberBand delay-2s">
                     <ButtonFab
                         position="relative"
                         onClick={() => {

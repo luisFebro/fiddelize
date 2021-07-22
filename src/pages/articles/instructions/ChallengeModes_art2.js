@@ -17,100 +17,122 @@ const Body = () => {
     return (
         <article style={{ position: "relative" }} className={textStyle}>
             <p>
-                Cada etapa onde o seu cliente busca alcançar um prêmio com
-                pontos de compras é chamado de desafio na Fiddelize.
-                <strong> São dois os tipos: constante e progressivo.</strong>
+                Conquistar clientes e fazer eles retornarem ao seu negócio está
+                cada vez mais importante em um mundo cheio de mudanças.
             </p>
-
+            <p>
+                Uma forma comprovada pelo mercado e oferecido pela Fiddelize é
+                um jogo de compra que vai ajudar você nesta conquista oferecendo
+                um diferencial a mais que seus clientes certamente ficarão
+                interessados: prêmio ao atingir determinada quantidade em pontos
+                de compra.
+            </p>
+            <h3 className="my-3 font-site text-purple">Desafios:</h3>
+            <p>
+                Cada edição onde o seu cliente busca alcançar um prêmio
+                acumulando a moeda PTS ou pontos de compra é chamado de desafio
+                na Fiddelize. Assim fica fácil de saber em qual edição do jogo
+                eles estão ou saberem seu histórico.
+            </p>
             <ShowPicture
                 imgContainerClass="challenge-modes--picture"
                 dataSrc="/img/articles/challenge-modes/pic-1.png"
                 reference=""
-                subtitle="modo constante"
+                subtitle="adicionando prêmios"
             />
-
-            <h3 className="my-3 font-site text-purple">Modo constante</h3>
-
+            <h3 className="my-3 font-site text-purple">Prêmios:</h3>
             <p>
-                Define um <strong>único prêmio</strong> para todos os desafios.
-                Ideal se você precisa de apenas uma opção de prêmio. Esse é o
-                modo padrão.
+                Você pode personalizar e adicionar um ou mais prêmios de acordo
+                com sua estratégia comercial. A maior parte dos negócios
+                oferecerem apenas um prêmio, mas suas possibilidades na
+                Fiddelize te permite criar <strong>múltiplos prêmios</strong>
             </p>
 
             <p>
-                Exemplos práticos do modo constante:
+                Alguns exemplos práticos de único prêmio:
                 <br />- Uma churrascaria que oferece um almoço extra para cada
                 desafio concluído.
                 <br />- Uma academia oferece 1 par de ingressos toda vez que os
-                clientes alcançarem 500 pontos.
-            </p>
-
-            <h3 className="my-3 font-site text-purple">Modo progressivo</h3>
-
-            <ShowPicture
-                imgContainerClass="challenge-modes--picture"
-                dataSrc="/img/articles/challenge-modes/pic-2.png"
-                reference=""
-                subtitle="modo progressivo"
-            />
-
-            <p>
-                Define <strong>mais opções de prêmios</strong> para uma
-                sequência de desafios com metas progressivas. Ideal para uma
-                lista de prêmios. É ativado automaticamente ao adicionar mais
-                desafios.
-            </p>
-
-            <p>
-                Exemplo prático do modo progressivo: Um salão de beleza oferece
-                3 prêmios.
-            </p>
-            <p>- prêmio 1: ganha 1 corte de cabelo unissex para 200 pontos.</p>
-            <p>
-                - prêmio 2: ganha massagem + hidratação para mais 300 pontos.
-                (500 pontos acumulados)
+                clientes alcançarem 800 PTS.
             </p>
             <p>
-                - prêmio 3: ganha corte de cabelo + massage + hidratação para
-                mais 400 pontos (900 pontos acumulados).
+                Exemplo prático de negócio oferendo diferentes prêmios:
+                <br />
+                Um salão de beleza oferece 3 prêmios.
+            </p>
+            <p>
+                <strong>- prêmio 1:</strong> ganha 1 corte de cabelo unissex
+                para meta de 400 PTS no desafio N.º 1
+            </p>
+            <p>
+                <strong>- prêmio 2:</strong> ganha massagem + hidratação para
+                meta de 600 PTS no desafio N.º 2
+            </p>
+            <p>
+                <strong>- prêmio 3:</strong> ganha corte de cabelo + massagem +
+                hidratação para meta de 1.000 PTS no desafio N.º 3.
             </p>
             <br />
             <p>
-                O cliente que finalizar um desafio, tem sua pontuação atual
-                zerada, porém no seu histórico de compras é acumulativo e sempre
-                registrado.
+                Note que os valores das metas vão ficando maiores ou usam uma
+                abordagem progressiva para cada nova edição de desafio. Mas você
+                pode seguir outras estratégias como só mudar os prêmios mas com
+                valores das metas iguais ou similares. Ou mesmo metas menores
+                que anteriores.
             </p>
-
             <p>
-                O legal é que cada cliente pode avançar do seu ritmo de compra
-                que a Fiddelize registra e mostra quais os prêmios e pontos de
-                cada desafio de forma individual e personalizada, além de que
-                todos os pontos são registrados no histórico de compras
-                automático.
+                Você deve se perguntar o que acontece quando o cliente atingir o
+                último prêmio, qual será o próximo? Bom, a resposta é simples: o
+                último prêmio adicionado na lista junto com a meta em pontos e
+                ícone de desafio é{" "}
+                <strong>
+                    repetido para todas os demais desafios do cliente.
+                </strong>
+            </p>
+            <p>
+                O cliente que finalizar um desafio, tem sua pontuação atual
+                zerada, porém no seu <strong>histórico de compras</strong> é
+                acumulativo e sempre registrado.
+            </p>
+            <p>
+                No App do cliente também tem um{" "}
+                <strong>histórico de benefícios</strong> onde ficam registrados
+                as conquistas dos seus clientes de todos os jogos incluindo o
+                prêmio alvo.
             </p>
 
             <ShowPicture
                 imgContainerClass="challenge-modes--picture"
                 dataSrc="/img/articles/challenge-modes/pic-3.png"
                 reference=""
-                subtitle="modo progressivo"
+                subtitle="galeria de benefícios do cliente"
             />
 
             <p>
-                Para mais informações e regras, veja as NOTAS logo abaixo do
-                último card desta sessão de desafios e prêmios.
+                O legal é que cada cliente avançar no seu ritmo de compra que a
+                Fiddelize registra e mostra quais os prêmios e pontos de cada
+                desafio de forma individual e personalizada.
             </p>
-
+            <h3 className="my-3 font-site text-purple">Ícone de desafios:</h3>
             <p>
                 Ah! E você pode <strong>personalizar o ícone</strong> de cada
-                desafio. Escolha o que mais combina para o seu negócio.
+                desafio. Escolha o que mais combina para o seu negócio ou
+                prêmios oferecidos.
             </p>
 
             <ShowPicture
                 imgContainerClass="challenge-modes--picture"
                 dataSrc="/img/articles/challenge-modes/pic-4.png"
                 reference=""
-                subtitle="modo progressivo"
+                subtitle="seleção ícone"
+            />
+            <br />
+            <br />
+            <ShowPicture
+                imgContainerClass="challenge-modes--picture"
+                dataSrc="/img/articles/challenge-modes/pic-5.png"
+                reference=""
+                subtitle="ícone no app do cliente no jogo prêmio alvo"
             />
         </article>
     );
@@ -120,7 +142,7 @@ export default function Article() {
     return (
         <section>
             <ShowTitle title="Fiddelize Ensina" />
-            <ShowArticleTitle title="Dois Modos de Desafios" />
+            <ShowArticleTitle title="Como o Jogo de Prêmio Alvo pode ajudar a conquistar seus clientes?" />
             <ShowPicture
                 src="/img/articles/challenge-modes/main.jpg"
                 timeout={2000}

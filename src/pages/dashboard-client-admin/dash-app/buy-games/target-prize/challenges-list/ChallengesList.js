@@ -14,11 +14,8 @@ export default function ChallengesList({ challList, loading }) {
         if (challList && challList.length) setChallengesArray(challList);
     }, [challList]);
 
-    const [needUpdateData, setNeedUpdateData] = useState(false);
-    // const [switchAddBtn, setSwitchAddBtn] = useState(false);
-
     const updateThisUser = (needMsg = true, opts = {}) => {
-        const { deleteThisId } = opts;
+        const { deleteThisId, updatedData } = opts;
 
         let newModifiedArray;
         if (deleteThisId) {
@@ -30,19 +27,14 @@ export default function ChallengesList({ challList, loading }) {
         }
 
         const dataToSend = {
-            "clientAdminData.games.targetPrize.challList": newModifiedArray,
+            "clientAdminData.games.targetPrize.challList":
+                updatedData || newModifiedArray,
         };
 
         updateUser(bizId, "cliente-admin", dataToSend).then(() => {
             if (needMsg) showToast("Alterações salvas!", { type: "success" });
         });
     };
-
-    useEffect(() => {
-        if (needUpdateData) updateThisUser();
-
-        // eslint-disable-next-line
-    }, [needUpdateData]);
 
     const txtStyle = "text-normal text-left font-weight-bold";
 
@@ -66,7 +58,6 @@ export default function ChallengesList({ challList, loading }) {
                         <p className={txtStyle}>Para Desafio n.º {ind + 1}:</p>
                     )}
                     <ChallComp
-                        setNeedUpdateData={setNeedUpdateData}
                         currChallNumber={ind + 1}
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}
