@@ -3,6 +3,8 @@ import { ROOT } from "api/root";
  URLs ONLY
 */
 // GENERAL DATA
+export const removeUser = (userId) => `${ROOT}/user/${userId}`; // DELETE
+export const pushElemToField = () => `${ROOT}/user/field/array/push`; // PUT
 export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
 
 // AMURRETO TRADES
@@ -99,10 +101,6 @@ export const uploadImages = (fileName) =>
 export const updateImages = (userId) =>
     `${ROOT}/user/image/update?id=${userId}`; // PUT
 
-// challenges and rewards
-export const gotUsersInThisChallenge = (bizId, challN) =>
-    `${ROOT}/user/check/user-challenges?bizId=${bizId}&challN=${challN}`; // GET
-
 // TEAM/CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;
@@ -136,9 +134,6 @@ export const readFinanceTransactions = () =>
     `${ROOT}/admin/finance/transaction-history`; // GET
 export const addFinanceTransaction = () =>
     `${ROOT}/admin/finance/add-transaction`; // POST
-
-// USERS' DATA
-export const removeUser = (userId) => `/api/user/${userId}`;
 
 // REVIEWS
 export const getBuyReviewsList = () => `${ROOT}/reviews/list/buy-reviews`;

@@ -1,9 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 import parse from "html-react-parser";
-import getId from "../../../utils/getId";
+import getId from "utils/getId";
 import { useBizData } from "init";
 
 export { treatBoolStatus } from "api/trigger";
@@ -51,9 +51,13 @@ export default function SwitchBtn({
     customColor,
     animationOn = true,
     needCustomColor = false,
-    // loading = false,
+    loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
+
+    useEffect(() => {
+        if (defaultStatus) setChecked(true);
+    }, [defaultStatus]);
 
     const switchData = useRef(data);
 
@@ -97,6 +101,15 @@ export default function SwitchBtn({
 
     titleLeft = parse(titleLeft);
     titleRight = parse(titleRight);
+
+    if (loading) {
+        return (
+            <p className="text-center font-weight-bold text-normal text-purple">
+                Carregando...
+            </p>
+        );
+    }
+
     return (
         <section className="d-flex justify-content-center" style={styles.pill}>
             <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">

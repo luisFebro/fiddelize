@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import getFirstName from "utils/string/getFirstName";
-import useData from "init";
+// import useData from "init";
 
 export default function ShowBizNotes() {
     const [openNote, setOpenNote] = useState(false);
 
-    let { name } = useData();
-    name = getFirstName(name);
+    // let { name } = useData();
+    // name = getFirstName(name);
 
     return (
         <section className="text-center text-normal animated fadeIn">
@@ -26,16 +25,20 @@ export default function ShowBizNotes() {
                 </div>
             </div>
             {openNote && (
-                <p className="text-small text-left text-purple mt-3 animated rubberBand">
+                <p className="text-small text-left text-purple mt-3 animated fadeIn">
                     - Quando{" "}
-                    <strong>o cliente finalizar todos os desafios</strong> desta
-                    lista, o último desafio estipulado será repetido na
-                    sequencia com o mesma meta em pontos, descrição de prêmio e
-                    ícone de desafio.
+                    <strong>um cliente finalizar todos os desafios</strong>{" "}
+                    desta lista, o <strong>último desafio estipulado</strong>{" "}
+                    será repetido na sequencia com o mesma meta em pontos,
+                    descrição de prêmio e ícone de desafio.
                     <br />
-                    <br />- Se tiver clientes com pontuação ativa em um{" "}
-                    <strong>desafio, não é possível exclui-lo. </strong>
-                    Porém você <strong>poderá ainda editá-lo</strong>.
+                    <br />- Todos os clientes passam por{" "}
+                    <strong>cada desafio desde o primeiro</strong>, de forma
+                    personalizada e individual em cada app.
+                    <br />
+                    <br />- É preciso de pelo menos{" "}
+                    <strong>um prêmio com metas e ícone</strong> enquanto este
+                    jogo (prêmio alvo) estiver ativo.
                 </p>
             )}
         </section>

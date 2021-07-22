@@ -20,6 +20,7 @@ export default function CarouselFlickity({
     isFromDash,
     currIconInd,
     setSelectedIcon,
+    selectOnlyIcon = false,
     setOpenModal,
 }) {
     const [iconSelected, setIconSelected] = useState(data[0].icon);
@@ -62,6 +63,7 @@ export default function CarouselFlickity({
         if (!isFromDash) {
             setRun("runName", iconSelected, uify);
         }
+        if (selectOnlyIcon) setSelectedIcon(iconSelected);
     }, [isFromDash, iconSelected]);
 
     const carouselElem = document.querySelector(".main-carousel");
@@ -153,7 +155,7 @@ export default function CarouselFlickity({
                     titleAfterOk="Ícone salvo."
                 />
             )}
-            {setSelectedIcon && needUpdateBtn && (
+            {!selectOnlyIcon && setSelectedIcon && needUpdateBtn && (
                 <section className="animated zoomIn container-center">
                     <ButtonMulti
                         onClick={() => {

@@ -20,7 +20,7 @@ export default function BuyGamesCard({ data, setComp }) {
         isDisabled,
     });
 
-    const mainCtaTitle = isDisabled ? "ativar" : "opções";
+    const mainCtaTitle = "opções";
     const showCTA = () => (
         <ButtonFab
             title={loading ? "iniciando..." : mainCtaTitle}

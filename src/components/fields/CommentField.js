@@ -16,6 +16,7 @@ export default function CommentField({
     value,
     placeholder = "escreva seu comentário",
     maxLen = 300,
+    maxLenColor = "purple",
 }) {
     const styles = getStyles();
 
@@ -39,7 +40,9 @@ export default function CommentField({
                 variant="outlined"
                 fullWidth
             />
-            <div className="mb-3 position-relative text-purple text-left">
+            <div
+                className={`mb-3 position-relative text-${maxLenColor} text-left`}
+            >
                 <span className="font-site text-em-0-9 font-weight-bold">
                     {value ? value.length : 0}/{maxLen} characteres
                 </span>

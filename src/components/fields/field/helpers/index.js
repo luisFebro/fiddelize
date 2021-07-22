@@ -12,8 +12,8 @@ export const handleOnChange = (e, changeCallback) => {
     if (!changeCallback || !name) return null;
 
     return changeCallback((prev) => {
-        const needString = typeof prev === "string";
-        if (needString) return value;
+        const needOnlyValue = typeof prev !== "object";
+        if (needOnlyValue) return value;
 
         return {
             ...prev,

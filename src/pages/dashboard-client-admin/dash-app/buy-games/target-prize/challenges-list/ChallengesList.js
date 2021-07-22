@@ -1,33 +1,18 @@
 import { useState, useEffect } from "react";
-import useData, { useBizData } from "init";
-import { useReadUser, updateUser } from "api/frequent";
+import { useBizData } from "init";
+import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
-import { useAction } from "global-data/ui";
 import ChallComp from "./ChallComp";
 
-export default function ChallengesList({ triggerList }) {
+export default function ChallengesList({ challList, loading }) {
     const { bizId } = useBizData();
-    const { userId } = useData();
 
-    const uify = useAction();
-
-    const { data, loading } = useReadUser(
-        userId,
-        "cliente-admin",
-        "clientAdminData.games.targetPrize.challList",
-        {
-            trigger: triggerList || userId, // triggerList is an random id
-        }
-    );
     const [challengesArray, setChallengesArray] = useState([]); // challList
     const isConstantMode = challengesArray.length < 2;
 
     useEffect(() => {
-        if (data)
-            setChallengesArray(
-                data.clientAdminData.games.targetPrize.challList
-            );
-    }, [data]);
+        if (challList && challList.length) setChallengesArray(challList);
+    }, [challList]);
 
     const [needUpdateData, setNeedUpdateData] = useState(false);
     // const [switchAddBtn, setSwitchAddBtn] = useState(false);
@@ -45,16 +30,18 @@ export default function ChallengesList({ triggerList }) {
         }
 
         const dataToSend = {
-            "clientAdminData.games.targetPrize.challList": challengesArray,
+            "clientAdminData.games.targetPrize.challList": newModifiedArray,
         };
 
-        updateUser(bizId, "cliente-admin", dataToSend, { uify }).then(() => {
+        updateUser(bizId, "cliente-admin", dataToSend).then(() => {
             if (needMsg) showToast("Alterações salvas!", { type: "success" });
         });
     };
 
     useEffect(() => {
         if (needUpdateData) updateThisUser();
+
+        // eslint-disable-next-line
     }, [needUpdateData]);
 
     const txtStyle = "text-normal text-left font-weight-bold";
@@ -80,7 +67,6 @@ export default function ChallengesList({ triggerList }) {
                     )}
                     <ChallComp
                         setNeedUpdateData={setNeedUpdateData}
-                        isFirst={ind === 0}
                         currChallNumber={ind + 1}
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}

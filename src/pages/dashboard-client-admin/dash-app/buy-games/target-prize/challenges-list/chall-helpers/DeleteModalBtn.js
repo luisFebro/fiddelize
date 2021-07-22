@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import DeleteButton from "components/buttons/DeleteButton";
 import { useBizData } from "init";
-import getAPI, { gotUsersInThisChallenge } from "api";
 import ModalYesNo from "components/modals/ModalYesNo";
 
 DeleteModalBtn.propTypes = {
@@ -23,25 +22,14 @@ export default function DeleteModalBtn({
     const { bizId } = useBizData();
 
     const handleDelete = (arrayId) => {
-        const challN = challengeNumber;
-        getAPI({
-            url: gotUsersInThisChallenge(bizId, challN),
-        }).then((quantity) => {
-            if (typeof quantity === "number") {
-                setErrorMsg(
-                    `Não é possível excluir.<br />Tem ${quantity} cliente(s) neste desafio.`
-                );
-            } else {
-                updateThisUser(false, { deleteThisId: arrayId });
-            }
-        });
+        updateThisUser(true, { deleteThisId: arrayId });
     };
 
     return (
         <section>
             <DeleteButton onClick={() => setFullOpen(true)} />
             <ModalYesNo
-                title="Exclusão de desafio"
+                title="Exclusão de prêmio"
                 contentComp={
                     <DeleteContent
                         errorMsg={errorMsg}
@@ -69,7 +57,7 @@ const DeleteContent = ({ errorMsg, challengeNumber }) => {
                 <p className={`${txtStyle} text-purple`}>
                     Confirmado a exclusão do
                     <br />
-                    desafio n.º {challengeNumber} ?
+                    prêmio n.º {challengeNumber} ?
                 </p>
             )}
         </div>

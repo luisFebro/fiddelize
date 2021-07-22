@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ROOT } from "api/root";
 // generic rest APIs which are called more than 5 times and reusable in any component go here.
 
-import getAPI from "api";
+import getAPI, { pushElemToField as thisPushElemToField } from "api";
 
 // readNewData
 export const readUser = async (userId, role, select) => {
@@ -61,6 +61,23 @@ export const updateUser = async (userId, role, body) => {
         url: `${ROOT}/user/update`,
         body,
         params,
+    });
+};
+
+export const pushElemToField = async (userId, role, field, options = {}) => {
+    const { firstIn = false } = options;
+
+    const body = {
+        userId,
+        role,
+        field,
+        firstIn,
+    };
+
+    await getAPI({
+        method: "put",
+        url: thisPushElemToField(),
+        body,
     });
 };
 

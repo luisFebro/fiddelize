@@ -18,7 +18,6 @@ ChallComp.propTypes = {
     icon: PropTypes.string,
     targetPoints: PropTypes.number,
     prizeDesc: PropTypes.string,
-    isFirst: PropTypes.bool,
     currChallNumber: PropTypes.number,
 };
 
@@ -57,7 +56,6 @@ export default function ChallComp({
     icon,
     targetPoints,
     prizeDesc,
-    isFirst,
     setNeedUpdateData,
     challengesArray,
     setChallengesArray,

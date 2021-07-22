@@ -40,7 +40,12 @@ export default function AddNewPrizeBtn(props) {
                 needBtnShadow={false}
             />
             <ModalFullContent
-                contentComp={<AsyncNewPrizeContent {...props} />}
+                contentComp={
+                    <AsyncNewPrizeContent
+                        {...props}
+                        closeModal={handleFullClose}
+                    />
+                }
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />

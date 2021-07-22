@@ -1,8 +1,7 @@
 import { useCallback } from "react";
 import TextField from "@material-ui/core/TextField";
+import debounce from "utils/performance/debounce";
 import { handleEnterPress, handleOnChange } from "./helpers/index";
-import debounce from "../../../utils/performance/debounce";
-import "./_Field.scss";
 
 // Warning: use a <form></form> wrapper to a group or even an individual field.
 // TextField is simply rendered as a raw <input /> tag
@@ -22,6 +21,7 @@ export default function Field({
     onChangeCallback = () => null,
     // backgroundColor = "var(--mainWhite)",
     multiline = false,
+    width,
     rows = 3,
     fullWidth = true,
     debounceCallback = () => null,
@@ -37,7 +37,7 @@ export default function Field({
     const handler = useCallback(debounce(debounceCallback), []);
 
     return (
-        <section className="single-field--root field">
+        <section className={`single-field--root field width${width}`}>
             <TextField
                 id={id}
                 className={`${size} ${textAlign}`}
@@ -56,8 +56,65 @@ export default function Field({
                 autoComplete={autoComplete}
                 multiline={multiline}
                 rows={multiline ? rows : undefined}
-                fullWidth={fullWidth}
+                fullWidth={width ? false : fullWidth}
             />
+            <style jsx>
+                {`
+                    .single-field--root.field.width${width}
+                        .MuiFormControl-root {
+                        width: ${width ? `${width}px` : "none"};
+                    }
+                `}
+            </style>
+            <style jsx>
+                {`
+                    .single-field--root.field .MuiInputBase-input {
+                        background-color: #fff !important;
+                        z-index: 2000;
+                        color: var(--themeP) !important;
+                        font: var(--mainFont);
+                        padding: 10px;
+                    }
+
+                    .single-field--root.field .large {
+                        margin: 0 5px !important;
+                    }
+
+                    .single-field--root.field .large div .MuiInputBase-input {
+                        font-size: 2.5em;
+                    }
+
+                    .single-field--root.field
+                        .large
+                        div
+                        .MuiInputBase-input
+                        .MuiOutlinedInput-input {
+                        padding: 10.5px 14px;
+                    }
+
+                    .single-field--root.field .medium div .MuiInputBase-input {
+                        font-size: 1.5em;
+                    }
+
+                    .single-field--root.field .small div .MuiInputBase-input {
+                        font-size: 1em;
+                    }
+
+                    .single-field--root.field
+                        .text-left
+                        div
+                        .MuiInputBase-input {
+                        text-align: left !important;
+                    }
+
+                    .single-field--root.field
+                        .text-center
+                        div
+                        .MuiInputBase-input {
+                        text-align: center !important;
+                    }
+                `}
+            </style>
         </section>
     );
 }
