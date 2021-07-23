@@ -75,10 +75,14 @@ function PanelHiddenContent({ data = {}, isLiveTrade }) {
                     • Inicial:
                     <span className="d-block font-weight-bold">
                         {capitalPosition &&
-                            convertToReal(capitalPosition.amount, {
-                                moneySign: true,
-                                needFraction: true,
-                            })}
+                            convertToReal(
+                                treatedBuyTableList[0] &&
+                                    treatedBuyTableList[0].quoteAmount,
+                                {
+                                    moneySign: true,
+                                    needFraction: true,
+                                }
+                            )}
                     </span>
                 </p>
                 <p className="mb-4 font-weight-bold text-shadow">
@@ -282,6 +286,7 @@ function treatTableList(data = {}) {
                 moneySign: true,
                 needFraction: true,
             })} (${feePerc}%)`,
+            quoteAmount,
         };
     });
 }

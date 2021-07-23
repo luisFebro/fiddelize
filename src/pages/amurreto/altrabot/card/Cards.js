@@ -114,7 +114,11 @@ function MainH({ data, isLiveTrade }) {
                 </span>
                 <span className="mt-3 d-block main-font text-em-0-8 font-weight-bold">
                     {isPlusProfit ? "lucro: " : "perca: "}
-                    <span className="card-profit text-pill profit-color d-inline-block mt-1 font-weight-bold">
+                    <span
+                        className={`text-pill ${
+                            isPlusProfit ? "text-sys-green" : "text-red"
+                        } card-profit d-inline-block mt-1 font-weight-bold`}
+                    >
                         {convertToReal(netProfitAmount, {
                             moneySign: true,
                             needFraction: true,
@@ -123,15 +127,6 @@ function MainH({ data, isLiveTrade }) {
                             ({isPlusProfit ? "+" : ""}
                             {netProfitPerc}%)
                         </span>
-                        <style jsx>
-                            {`
-                                .profit-color {
-                                    color: ${isPlusProfit
-                                        ? "green"
-                                        : "var(--expenseRed)"} !important;
-                                }
-                            `}
-                        </style>
                         <style jsx>
                             {`
                                 .card-profit {

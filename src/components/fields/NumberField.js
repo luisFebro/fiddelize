@@ -12,29 +12,23 @@ export default function NumberField(props) {
     if (!types.includes(type)) throw new Error(`Invalid type. Only ${types}`);
     const isFloat = type === "float";
 
-    const [float, setFloat] = useState("0");
-    const maskedValue = isFloat ? moneyMaskBr(float) : null;
+    const [num, setNum] = useState("0");
+
+    const intCondValue = num && num.toString().replace(/[^\d]+/gi, ""); // to avoid values like 900--
+    const maskedValue = isFloat ? moneyMaskBr(num) : intCondValue;
 
     useEffect(() => {
-        if (isFloat && float === "0" && value)
-            setFloat(value && value.toString());
+        if (num === "0" && value) setNum(value && value.toString());
         const e = {
             target: {
                 name: props.name,
                 value: convertBrToDollar(maskedValue) || 0,
             },
         };
-        if (isFloat && float !== "0") handleOnChange(e, onChangeCallback);
+        if (num !== "0") handleOnChange(e, onChangeCallback);
 
         // eslint-disable-next-line
-    }, [maskedValue, value, float, isFloat]);
+    }, [maskedValue, value, num]);
 
-    if (isFloat) {
-        return (
-            <Field {...props} value={maskedValue} onChangeCallback={setFloat} />
-        );
-    }
-
-    const treatedIntValue = value && value.toString().replace(/[^\d]+/gi, ""); // to avoid values like 900--
-    return <Field {...props} value={treatedIntValue} type="number" />;
+    return <Field {...props} value={maskedValue} onChangeCallback={setNum} />;
 }

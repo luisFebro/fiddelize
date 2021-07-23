@@ -26,11 +26,11 @@
 }
 
 .text-red {
-    color: var(--mainRed);
+    color: var(--mainRed) !important;
 }
 
 .text-expense-red {
-    color: var(--expenseRed);
+    color: var(--expenseRed) !important;
 }
 
 .text-dark-yellow {
@@ -58,7 +58,7 @@
 }
 
 .text-sys-green {
-    color: green;
+    color: green !important;
 }
 
 .text-green {

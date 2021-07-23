@@ -8,14 +8,16 @@ import NumberField from "components/fields/NumberField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "components/buttons/InstructionBtn";
+import convertToReal from "utils/numbers/convertToReal";
+import getPercentage from "utils/numbers/getPercentage";
 import useData from "init";
 
 export default function DiscountBackOptions({ setComp }) {
     const [optionData, setOptionData] = useState({
         on: null,
-        targetPoints: null,
         targetMoney: null,
         perc: null,
+        targetPoints: 0,
     });
     const GAME = "discountBack";
 
@@ -34,19 +36,30 @@ export default function DiscountBackOptions({ setComp }) {
     );
 
     useEffect(() => {
+        if (targetPoints && perc)
+            setOptionData((prev) => ({
+                ...prev,
+                targetMoney: getPercentage(targetPoints, perc, {
+                    mode: "value",
+                }),
+            }));
+        else setOptionData((prev) => ({ ...prev, targetMoney: 0 }));
+    }, [targetPoints, perc]);
+
+    useEffect(() => {
         if (!data) return;
 
         const {
             on: thisOn,
             targetMoney: voucherVal,
-            targetPoints: tPts,
+            targetPoints: pts,
             perc: buyPerc,
         } = data.clientAdminData.games[GAME];
         setOptionData((prev) => ({
             ...prev,
             on: thisOn,
             targetMoney: voucherVal,
-            targetPoints: tPts,
+            targetPoints: pts,
             perc: buyPerc,
         }));
     }, [data]);
@@ -115,23 +128,49 @@ export default function DiscountBackOptions({ setComp }) {
         );
     };
 
+    const handleUpdate = async () => {
+        if (!targetMoney)
+            return showToast("Insira valor do VALE DESCONTO", {
+                type: "error",
+            });
+        if (!perc)
+            return showToast("Insira PERCENTUAL de cada compra", {
+                type: "error",
+            });
+        if (!targetPoints)
+            return showToast("Insira o valor da META RESGATE", {
+                type: "error",
+            });
+
+        const dataToSend = {
+            [`clientAdminData.games.${GAME}.targetMoney`]: targetMoney,
+            [`clientAdminData.games.${GAME}.perc`]: perc,
+            [`clientAdminData.games.${GAME}.targetPoints`]: targetPoints,
+        };
+
+        await updateUser(userId, "cliente-admin", dataToSend);
+
+        return showToast("Alterações salvas", { type: "success" });
+    };
+
     const showGameOptions = () => (
         <form className="my-5 discount-back-form text-shadow">
             <h2 className="text-center text-subtitle font-weight-bold my-3">
                 Ajustes Principais
             </h2>
             <p className="mb-1 d-inline-block line-height-25 text-left font-weight-bold">
-                Valor em R$
-                <br />
-                do Vale Desconto:
+                Meta de Resgate:
             </p>
             <span className="ml-3 d-inline-block">
                 <InstructionBtn
                     text={`
-                        O VALE DESCONTO é o valor final que o cliente recebe e é sempre fixo.
+                        META DE RESGATE é o "TAL VALOR" na famosa frase de marketing: "a cada TAL VALOR em compras, ganhe X% de desconto".
                         <br />
                         <br />
-                        Para receber esse vale, o cliente precisa alcançar a meta de resgate em pontos.
+                        Ou seja, é a meta mínima que o cliente precisa alcançar para receber um desconto.
+                        <br />
+                        <br />
+                        Você pode dizer tanto PTS/pontos ou reais; como preferir: 1 PTS vale o mesmo que R$ 1!
                     `}
                     mode="tooltip"
                     animated={false}
@@ -139,23 +178,31 @@ export default function DiscountBackOptions({ setComp }) {
             </span>
             <NumberField
                 type="integer"
-                name="targetMoney"
+                name="targetPoints"
                 textAlign="text-left"
                 size="large"
                 width={170}
                 placeholder="R$ 0"
-                value={targetMoney}
+                value={targetPoints}
                 onChangeCallback={setOptionData}
                 zIndex={0}
             />
             <p className="mb-1 d-inline-block mt-4 line-height-25 text-left font-weight-bold">
                 Percentual
                 <br />
-                por compra:
+                acumulativo:
             </p>
             <span className="ml-3 d-inline-block">
                 <InstructionBtn
-                    text="PERCENTUAL POR COMPRA é o valor percentual que seus clientes acumulam a cada compra. Valores frequentes estão entre 5% até 20%, ou você escolhe de acordo com sua estratégia comercial."
+                    text={`
+                        PERCENTUAL ACUMULATIVO é o "TAL DESCONTO" na famosa frase de marketing: "a cada R$ X em compras, ganhe TAL DESCONTO"
+                        <br />
+                        <br />
+                        Seus clientes acumulam a cada compra este valor percentual até atingirem a meta de resgate onde trocam por um vale desconto.
+                        <br />
+                        <br />
+                        Valores percentuais frequentes estão entre 5% até 20%, ou você escolhe outro valor de acordo com sua estratégia comercial.
+                    `}
                     mode="tooltip"
                     animated={false}
                 />
@@ -177,35 +224,33 @@ export default function DiscountBackOptions({ setComp }) {
                 </p>
             </div>
             <p className="m-0 mt-4 d-inline-block text-left font-weight-bold">
-                Meta de Resgate:
+                Vale Desconto fica:
             </p>
             <span className="ml-3 d-inline-block">
                 <InstructionBtn
                     text={`
-                        META DE RESGATE é o valor total mínimo em pontos/PTS que o cliente precisa acumular para receber um cupom de desconto. 1 PTS vale R$ 1.
+                        O VALE DESCONTO é o valor em reais final que o cliente recebe ao alcançar a meta de resgate em PTS.
                         <br />
                         <br />
-                        A meta de resgate é calculada automaticamente e a fórmula é simples:
+                        Seu valor é gerado automaticamente e é o resultado percentual da meta de resgate acima.
                         <br />
                         <br />
-                        V = valor vale desconto
-                        <br />
-                        P = percetual por compra
+                        Seu cliente recebe sempre o mesmo valor de vale desconto. Se as compras acumuladas excederem a meta de resgate, o restante fica para a próxima meta de resgate.
                         <br />
                         <br />
-                        V x P = meta de resgate
+                        No app dos seus clientes, o valor de PTS acumulado é convertido automaticamente no valor acumulado do vale desconto para assim o cliente acompanhar seu progresso até alcançar 100% do valor.
                     `}
                     mode="tooltip"
                     animated={false}
                 />
             </span>
             <p className="text-title d-table text-pill goal-value">
-                {targetPoints} PTS
+                {convertToReal(targetMoney, { moneySign: true })}
             </p>
             <div className="container-center mb-4 mt-5">
                 <ButtonFab
                     position="relative"
-                    onClick={() => null}
+                    onClick={handleUpdate}
                     title="salvar alterações"
                     iconFontAwesome={<FontAwesomeIcon icon="save" />}
                     variant="extended"
@@ -240,16 +285,23 @@ export default function DiscountBackOptions({ setComp }) {
             <h2 className="text-normal font-weight-bold">
                 Exemplos práticos de divulgação para clientes:
             </h2>
-            <p className="text-grey font-italic font-weight-bold">
+            <p className="mt-2 text-grey font-italic font-weight-bold">
                 &quot;A cada{" "}
                 <span className="text-pill">R$ {targetPoints}</span> em compras,
-                você ganha um vale desconto no valor de{" "}
+                nossa clientela ganha <span className="text-pill">{perc}%</span>{" "}
+                de desconto!&quot;
+            </p>
+            <p className="text-grey font-italic font-weight-bold">ou</p>
+            <p className="text-grey font-italic font-weight-bold">
+                &quot;A cada{" "}
+                <span className="text-pill">{targetPoints} PTS</span> em
+                compras, você ganha um vale desconto no valor de{" "}
                 <span className="text-pill">R${targetMoney}</span>&quot;
             </p>
             <p className="text-grey font-italic font-weight-bold">ou</p>
             <p className="text-grey font-italic font-weight-bold">
                 &quot;A cada compra, você ganha PTS - a moeda digital de pontos
-                de compra para troca de benefícios - e acumula{" "}
+                de compra para troca de benefícios - e acumula até{" "}
                 <span className="text-pill">{perc}%</span> de desconto no nosso
                 clube de compras&quot;
             </p>
