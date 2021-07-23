@@ -85,6 +85,7 @@ const TotalInvest = ({ totalInvest, totalServices }) => {
             badgeInvisible={false}
             backgroundColor="var(--mainRed)"
             borderColor="var(--mainWhite)"
+            animationName="none"
             top={-6}
             right={25}
             fontSize="15px"

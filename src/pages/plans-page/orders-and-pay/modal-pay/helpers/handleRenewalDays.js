@@ -5,7 +5,7 @@ const checkUltimateRenewal = ({ ordersStatement, bizPlanList }) => {
     if ((bizPlanList && !bizPlanList.length) || !ordersStatement)
         return { res: false };
 
-    const lastOrderServices = ordersStatement && Object.keys(ordersStatement); // only services e.g ["Novvos Clientes, Prêmmios Clientes"]
+    const lastOrderServices = ordersStatement && Object.keys(ordersStatement); // only services e.g ["Novvos Clientes, P. Clientes"]
 
     let res = false;
     let ultimateDaysLeft;

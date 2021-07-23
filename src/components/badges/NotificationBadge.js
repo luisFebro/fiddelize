@@ -18,12 +18,13 @@ function NotificationBadge({
     padding,
     fontSize,
     badgeValue = 0,
-    badgeInvisible,
     backgroundColor,
     borderColor,
     right,
     top,
     onClick,
+    animationName = "zoomIn",
+    // badgeInvisible,
 }) {
     const BorderedBadge = withStyles((theme) => ({
         badge: {
@@ -38,7 +39,7 @@ function NotificationBadge({
             color: "white",
             borderRadius: "50%",
             textShadow: "1px 1px 3px black",
-            animationName: "zoomIn",
+            animationName,
             animationDuration: "1s",
         },
     }))(Badge);

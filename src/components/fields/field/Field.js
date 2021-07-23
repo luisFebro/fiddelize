@@ -25,6 +25,7 @@ export default function Field({
     rows = 3,
     fullWidth = true,
     debounceCallback = () => null,
+    zIndex = 2000,
 }) {
     const sizes = ["small", "medium", "large"];
     const variants = ["filled", "outlined", "standard"];
@@ -112,6 +113,13 @@ export default function Field({
                         div
                         .MuiInputBase-input {
                         text-align: center !important;
+                    }
+                `}
+            </style>
+            <style jsx>
+                {`
+                    .single-field--root.field .MuiInputBase-input {
+                        z-index: ${zIndex} !important;
                     }
                 `}
             </style>

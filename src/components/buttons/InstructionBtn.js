@@ -50,7 +50,9 @@ export default function InstructionBtn({
                 backgroundColor="var(--mainWhite)"
                 iconFontAwesome={
                     <FontAwesomeIcon
-                        icon="info-circle"
+                        icon={
+                            article ? "exclamation-circle" : "question-circle"
+                        }
                         className="d-flex align-items-center"
                         style={{ fontSize: 30 }}
                     />

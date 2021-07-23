@@ -45,32 +45,6 @@ const proVersion = (styles) => [
         proPage: "",
     },
     {
-        name: "Prêmmios Clientes",
-        price: {
-            yearly: 50,
-            monthly: 25,
-        },
-        silver: {
-            name: "Prêmmios Clientes<br />ilimitados",
-            price: {
-                yearly: 40,
-                monthly: 20,
-            },
-        },
-        gold: {
-            name: "Prêmmios Clientes<br />ilimitados",
-            price: {
-                yearly: 40,
-                monthly: 20,
-            },
-        },
-        Icon: <FontAwesomeIcon icon="trophy" style={styles.muStyle} />,
-        cardDesc:
-            "Mantenha seus clientes ainda mais engajados oferecendo mais opções de desafios, prêmios e metas.",
-        customIcon: "/img/pro-features/premmios-clientes/premmios-clientes.svg",
-        proPage: "PremmiosClientes_pro",
-    },
-    {
         name: "Orgganize Clientes",
         price: {
             yearly: 50,

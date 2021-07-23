@@ -18,15 +18,8 @@ export default function BirthdayGreeting({
     const thisBirthdate = formatDMY(birthdayDate);
 
     const showBirthdayMsg = () => (
-        <section className="text-normal text-italic font-weight-bold mx-3 text-grey my-5">
+        <section className="text-normal font-italic font-weight-bold mx-3 text-grey my-5">
             &quot;{brief}&quot;
-            <style jsx>
-                {`
-                    .text-italic {
-                        font-style: italic !important;
-                    }
-                `}
-            </style>
         </section>
     );
 

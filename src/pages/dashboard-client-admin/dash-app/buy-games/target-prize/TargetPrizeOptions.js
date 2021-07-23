@@ -199,14 +199,3 @@ export default function TargetPrizeOptions({ setComp }) {
         </section>
     );
 }
-
-/* ARCHIVES
-
-<PremiumButton
-    right={-60}
-    top={-40}
-    service="Prêmmios Clientes"
-    proPage="PremmiosClientes_pro"
-/>
-
-*/

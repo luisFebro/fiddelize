@@ -36,6 +36,10 @@
     font-weight: 700 !important;
 }
 
+.font-italic {
+    font-style: italic !important;
+}
+
 .text-white {
     color: #fff !important;
 }
