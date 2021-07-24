@@ -211,9 +211,16 @@ export default function ChallComp({
                                 );
                             }
 
+                            if (!data.prizeDesc)
+                                return showToast("Insira alguma descrição", {
+                                    type: "error",
+                                });
+
                             handleDataChange();
                             setEdit(false);
                             setSaveChangeBtn(false);
+
+                            return null;
                         }}
                         title="salvar"
                         iconFontAwesome={<FontAwesomeIcon icon="save" />}
@@ -229,11 +236,13 @@ export default function ChallComp({
                 </div>
             ) : (
                 <Fragment>
-                    <DeleteModalBtn
-                        id={data.id}
-                        challengeNumber={currChallNumber}
-                        updateThisUser={updateThisUser}
-                    />
+                    {currChallNumber !== 1 && (
+                        <DeleteModalBtn
+                            id={data.id}
+                            challengeNumber={currChallNumber}
+                            updateThisUser={updateThisUser}
+                        />
+                    )}
                     <EditButton onClick={() => setEdit(!edit)} />
                 </Fragment>
             )}

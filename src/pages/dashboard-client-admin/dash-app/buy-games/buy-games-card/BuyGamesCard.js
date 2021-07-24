@@ -5,16 +5,17 @@ import { useBizData } from "init";
 import getGameCardData from "./getGameCardData";
 import "./_Card.scss";
 
-export default function BuyGamesCard({ data, setComp }) {
+export default function BuyGamesCard(props) {
     const [loading, setLoading] = useState(false);
-    // const { userId } = useData();
+
+    const { setComp, gameData } = props;
 
     const { themeBackColor, themePColor, themeSColor } = useBizData();
-    const { gameName, on } = data;
+    const { gameName, on } = gameData;
 
     const isDisabled = !on;
 
-    const { nameBr, icon, concept } = getGameCardData({
+    const { nameBr, icon, article } = getGameCardData({
         isAdmin: true,
         gameName,
         isDisabled,
@@ -31,7 +32,10 @@ export default function BuyGamesCard({ data, setComp }) {
             backgroundColor={`var(--themeS--${themeSColor})`}
             onClick={async () => {
                 setLoading(true);
-                setComp(gameName);
+                setComp({
+                    name: gameName,
+                    props,
+                });
                 setLoading(false);
             }}
         />
@@ -73,24 +77,9 @@ export default function BuyGamesCard({ data, setComp }) {
         </section>
     );
 
-    const showAboutBtn = () => {
-        const text = `
-            <p class="text-center">${nameBr && nameBr.toUpperCase()}</p>
-            ${concept}
-            <br />
-            <br />
-            STATUS: disponível.
-        `;
-        if (isDisabled) return null;
-
-        return (
-            <InstructionBtn
-                mode="tooltip"
-                text={text}
-                tooltipProps={{ disablePortal: true }}
-            />
-        );
-    };
+    const showArticleBtn = () => (
+        <InstructionBtn mode="modal" article={article} />
+    );
 
     return (
         <main
@@ -98,7 +87,7 @@ export default function BuyGamesCard({ data, setComp }) {
         >
             <section className="position-relative shadow-babadoo card--root">
                 <div className="about-btn position-absolute">
-                    {showAboutBtn()}
+                    {showArticleBtn()}
                 </div>
                 <div
                     className="img-container p-4 p-sm-3"
@@ -122,3 +111,13 @@ export default function BuyGamesCard({ data, setComp }) {
     );
 }
 // END HELPERS
+
+/* ARCHIVES
+const text = `
+    <p class="text-center">${nameBr && nameBr.toUpperCase()}</p>
+    ${concept}
+    <br />
+    <br />
+    STATUS: disponível.
+`;
+ */

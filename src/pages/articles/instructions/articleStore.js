@@ -1,5 +1,12 @@
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
+const AsyncDiscountBack = Load({
+    loader: () =>
+        import(
+            "./DiscountBack" /* webpackChunkName: "instru-article-page-lazy" */
+        ),
+});
+
 const AsyncChallengeModes = Load({
     loader: () =>
         import(
@@ -19,8 +26,11 @@ const AsyncWhySMS = Load({
         ),
 });
 
-export const articleStore = {
-    ChallengeModes_art2: <AsyncChallengeModes />,
+const articleStore = {
+    DiscountBack: <AsyncDiscountBack />,
+    TargetPrize: <AsyncChallengeModes />,
     ScoreDiscount_art3: <AsyncScoreDiscount />,
     WhySMS_art4: <AsyncWhySMS />,
 };
+
+export default articleStore;

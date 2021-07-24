@@ -44,7 +44,6 @@ export default function SwitchBtn({
     titleQuestion = "",
     callback,
     defaultStatus = false,
-    disabled = false,
     data = "",
     pillStyle = false,
     pillBack,
@@ -52,8 +51,16 @@ export default function SwitchBtn({
     animationOn = true,
     needCustomColor = false,
     loading = false,
+    disabled = false,
+    disableToLeft = false,
+    disableToRight = false,
+    disableToLeftCallback = () => null,
+    disableToRightCallback = () => null,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
+    const isRight = checked && checked.toString().includes("true");
+    const needDisableToLeft = isRight && disableToLeft;
+    const needDisableToRight = !isRight && disableToRight;
 
     useEffect(() => {
         if (defaultStatus) setChecked(true);
@@ -72,24 +79,33 @@ export default function SwitchBtn({
     });
 
     const handleChange = (event) => {
+        if (needDisableToLeft) return disableToLeftCallback();
+        if (needDisableToRight) return disableToRightCallback();
+
         const status = event.target.checked;
         const statusId = getStatusWithId(status);
 
-        setChecked(status);
         if (typeof callback === "function")
             callback(statusId, switchData.current);
+        return setChecked(status);
     };
 
     const setTrue = () => {
+        if (needDisableToRight) return disableToRightCallback();
+
         setChecked(true);
         if (typeof callback === "function")
             callback(getStatusWithId(true), switchData.current);
+        return null;
     };
 
     const setFalse = () => {
+        if (needDisableToLeft) return disableToLeftCallback();
+
         setChecked(false);
         if (typeof callback === "function")
             callback(getStatusWithId(false), switchData.current);
+        return null;
     };
 
     const on = `m-0 ${animationOn ? "animated rubberBand" : ""} text-normal ${

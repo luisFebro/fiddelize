@@ -12,6 +12,7 @@ export default function getGameCardData({
         return {
             nameBr: "Prêmio Alvo",
             concept: handleConcept("targetPrize", { isAdmin, bizName }),
+            article: "TargetPrize",
             icon: (
                 <FontAwesomeIcon
                     icon="gift"
@@ -27,6 +28,7 @@ export default function getGameCardData({
     if (gameName === "discountBack") {
         return {
             nameBr: "Desconto Retornado",
+            article: "DiscountBack",
             concept: handleConcept("discountBack", { isAdmin, discountPerc }),
             icon: (
                 <LoyaltyIcon
@@ -50,6 +52,7 @@ function handleConcept(type, options = {}) {
 
     if (type === "targetPrize") {
         if (isAdmin)
+            // admin not being used, replaced by article
             return "Seu negócio entrega um prêmio (produto, serviço, etc) para clientes que conseguirem atingir determinado quantia em PTS/pontos";
         return `Acumule pontos e troque por um prêmio da ${
             bizName && bizName.toUpperCase()
@@ -58,6 +61,7 @@ function handleConcept(type, options = {}) {
 
     if (type === "discountBack") {
         if (isAdmin)
+            // admin not being used, replaced by article
             return "Seus clientes acumulam X porcento a cada compra definido pelo seu negócio. Após atingirem um valor mínimo que é o resgate em pontos, eles ganham um cupom de desconto como valor também feito pelo seu negócio. O jogo é seu!";
         return `Seu dinheiro é retornado em forma de ${discountPerc}% de desconto acumulado em cada compra. Seus pontos são convertidos em um cupom de desconto ao alcançar a meta de resgate em pontos.`;
     }

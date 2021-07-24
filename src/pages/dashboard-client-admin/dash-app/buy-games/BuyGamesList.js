@@ -1,18 +1,39 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import useData from "init";
+import { useReadUser } from "api/frequent";
 import BuyGamesCard from "./buy-games-card/BuyGamesCard";
 
-export default function BuyGamesList(props) {
-    const { adminGame } = useData();
+export default function BuyGamesList({ currComp, setComp }) {
+    const [triggerList, setTriggerList] = useState("");
+    const { userId } = useData();
     const allGamesList = [];
-    let allAvailableGamesCount = 0;
 
-    Object.keys(adminGame).forEach((gameName) => {
-        if (!adminGame || typeof adminGame[gameName].on !== "boolean") return;
-        if (adminGame[gameName].on) allAvailableGamesCount += 1;
+    const { data, loading } = useReadUser(
+        userId,
+        "cliente-admin",
+        `clientAdminData.games`,
+        {
+            trigger: triggerList || userId, // triggerList is an random id
+        }
+    );
+
+    if (loading && !data) {
+        return (
+            <p className="my-5 hidden-content--root text-normal text-purple font-weight-bold">
+                Verificando jogos de compras...
+            </p>
+        );
+    }
+
+    let allAvailableGamesCount = 0;
+    const gamesFromDb = data.clientAdminData.games;
+    Object.keys(gamesFromDb).forEach((gameName) => {
+        if (!gamesFromDb || typeof gamesFromDb[gameName].on !== "boolean")
+            return;
+        if (gamesFromDb[gameName].on) allAvailableGamesCount += 1;
         allGamesList.push({
             gameName,
-            ...adminGame[gameName],
+            ...gamesFromDb[gameName],
         });
     });
 
@@ -21,18 +42,35 @@ export default function BuyGamesList(props) {
 
     return (
         <section className="hidden-content--root text-normal">
-            {!allGamesList.length && (
-                <p className="text-normal text-purple font-weight-bold">
-                    Verificando disponíveis...
-                </p>
-            )}
             <section className="container">
                 <div className="row">
-                    {allGamesList.map((data) => (
-                        <Fragment key={data.gameName}>
-                            <BuyGamesCard data={data} {...props} />
-                        </Fragment>
-                    ))}
+                    {allGamesList.map((thisData) => {
+                        // NOT WORKING - need update challList without having to click on the game card
+                        if (triggerList && currComp === "targetPrize")
+                            setComp({
+                                name: thisData.gameName,
+                                props: {
+                                    setTriggerList,
+                                    loading,
+                                    setComp,
+                                    needBlockDisableNextGame,
+                                },
+                            });
+
+                        return (
+                            <Fragment key={thisData.gameName}>
+                                <BuyGamesCard
+                                    gameData={thisData}
+                                    setTriggerList={setTriggerList}
+                                    loading={loading}
+                                    setComp={setComp}
+                                    needBlockDisableNextGame={
+                                        needBlockDisableNextGame
+                                    }
+                                />
+                            </Fragment>
+                        );
+                    })}
                 </div>
             </section>
         </section>

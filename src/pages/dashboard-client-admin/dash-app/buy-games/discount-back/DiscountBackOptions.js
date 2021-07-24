@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import BackButton from "components/buttons/BackButton";
 import { gameIconsStore } from "components/biz/GamesBadge";
-import { useReadUser, updateUser } from "api/frequent";
+import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn.js";
 import NumberField from "components/fields/NumberField";
@@ -10,30 +10,29 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import convertToReal from "utils/numbers/convertToReal";
 import getPercentage from "utils/numbers/getPercentage";
+import getId from "utils/getId";
 import useData from "init";
 
-export default function DiscountBackOptions({ setComp }) {
+export default function DiscountBackOptions({
+    setComp,
+    loading,
+    setTriggerList,
+    gameData,
+    needBlockDisableNextGame = false,
+}) {
     const [optionData, setOptionData] = useState({
+        updatedOnce: false, // make sure user saved data before activating game
         on: null,
-        targetMoney: null,
         perc: null,
-        targetPoints: 0,
+        targetPoints: null,
+        targetMoney: 0,
     });
     const GAME = "discountBack";
 
-    const { on, targetPoints, targetMoney, perc } = optionData;
-    const needShowResult = Boolean(targetMoney && targetMoney && perc);
+    const { updatedOnce, on, targetPoints, targetMoney, perc } = optionData;
+    const allDataReady = Boolean(targetMoney && targetMoney && perc);
 
     const { userId } = useData();
-
-    const { data, loading } = useReadUser(
-        userId,
-        "cliente-admin",
-        `clientAdminData.games.${GAME}`,
-        {
-            trigger: userId,
-        }
-    );
 
     useEffect(() => {
         if (targetPoints && perc)
@@ -47,26 +46,30 @@ export default function DiscountBackOptions({ setComp }) {
     }, [targetPoints, perc]);
 
     useEffect(() => {
-        if (!data) return;
+        if (!gameData) return;
 
         const {
             on: thisOn,
             targetMoney: voucherVal,
             targetPoints: pts,
             perc: buyPerc,
-        } = data.clientAdminData.games[GAME];
+        } = gameData;
         setOptionData((prev) => ({
             ...prev,
             on: thisOn,
-            targetMoney: voucherVal,
+            targetMoney: !voucherVal ? 0 : voucherVal,
             targetPoints: pts,
             perc: buyPerc,
+            updatedOnce: false,
         }));
-    }, [data]);
+    }, [gameData]);
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
-            <BackButton title="Voltar" onClick={() => setComp(null)} />
+            <BackButton
+                title="Voltar"
+                onClick={() => setComp({ name: "", props: {} })}
+            />
         </div>
     );
 
@@ -112,6 +115,9 @@ export default function DiscountBackOptions({ setComp }) {
                 type: isTruthy ? "success" : "warning",
                 dur: 9000,
             });
+
+            // update main list
+            setTriggerList(getId());
         };
 
         return (
@@ -122,6 +128,20 @@ export default function DiscountBackOptions({ setComp }) {
                     titleRight="Sim"
                     defaultStatus={on}
                     loading={loading}
+                    disableToLeft={needBlockDisableNextGame}
+                    disableToLeftCallback={() =>
+                        showToast(
+                            "Pelo menos um jogo deve fica ativo para clientes",
+                            { type: "error" }
+                        )
+                    }
+                    disableToRight={!allDataReady || !updatedOnce}
+                    disableToRightCallback={() =>
+                        showToast(
+                            "Favor, preencha e salve todos os campos abaixo para ativar o jogo",
+                            { type: "error" }
+                        )
+                    }
                     callback={handleActivation}
                 />
             </section>
@@ -129,16 +149,16 @@ export default function DiscountBackOptions({ setComp }) {
     };
 
     const handleUpdate = async () => {
-        if (!targetMoney)
-            return showToast("Insira valor do VALE DESCONTO", {
+        if (!targetPoints)
+            return showToast("Insira o valor da META RESGATE", {
                 type: "error",
             });
         if (!perc)
             return showToast("Insira PERCENTUAL de cada compra", {
                 type: "error",
             });
-        if (!targetPoints)
-            return showToast("Insira o valor da META RESGATE", {
+        if (!targetMoney)
+            return showToast("Insira valor do VALE DESCONTO", {
                 type: "error",
             });
 
@@ -149,7 +169,7 @@ export default function DiscountBackOptions({ setComp }) {
         };
 
         await updateUser(userId, "cliente-admin", dataToSend);
-
+        setOptionData((prev) => ({ ...prev, updatedOnce: true }));
         return showToast("Alterações salvas", { type: "success" });
     };
 
@@ -176,17 +196,22 @@ export default function DiscountBackOptions({ setComp }) {
                     animated={false}
                 />
             </span>
-            <NumberField
-                type="integer"
-                name="targetPoints"
-                textAlign="text-left"
-                size="large"
-                width={170}
-                placeholder="R$ 0"
-                value={targetPoints}
-                onChangeCallback={setOptionData}
-                zIndex={0}
-            />
+            <div className="d-flex">
+                <NumberField
+                    type="integer"
+                    name="targetPoints"
+                    textAlign="text-left"
+                    size="large"
+                    width={170}
+                    placeholder="0"
+                    value={targetPoints}
+                    onChangeCallback={setOptionData}
+                    zIndex={0}
+                />
+                <p className="d-inline-block text-subtitle font-weight-bold">
+                    PTS
+                </p>
+            </div>
             <p className="mb-1 d-inline-block mt-4 line-height-25 text-left font-weight-bold">
                 Percentual
                 <br />
@@ -318,7 +343,7 @@ export default function DiscountBackOptions({ setComp }) {
             {showGameTitle()}
             {showPowerSwitch()}
             {showGameOptions()}
-            {needShowResult && showGeneratedAd()}
+            {allDataReady && showGeneratedAd()}
         </section>
     );
 }

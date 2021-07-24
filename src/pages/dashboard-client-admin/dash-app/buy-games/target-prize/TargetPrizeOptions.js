@@ -1,67 +1,60 @@
 import { useState, Fragment, useEffect } from "react";
 import Title from "components/Title";
-import InstructionBtn from "components/buttons/InstructionBtn";
 import { gameIconsStore } from "components/biz/GamesBadge";
 import BackButton from "components/buttons/BackButton";
-import SwitchBtn from "components/buttons/material-ui/SwitchBtn.js";
+import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 import useData from "init";
-import { useReadUser, updateUser } from "api/frequent";
+import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import NumberField from "components/fields/NumberField";
 import RadiusBtn from "components/buttons/RadiusBtn";
+import getId from "utils/getId";
 import ChallengesList from "./challenges-list/ChallengesList";
 import ShowBizNotes from "./challenges-list/ShowBizNotes";
 import AddNewPrizeBtn from "./add-new-prize/AddNewPrizeBtn";
 
-export default function TargetPrizeOptions({ setComp }) {
+export default function TargetPrizeOptions({
+    setComp,
+    loading,
+    gameData,
+    setTriggerList,
+    needBlockDisableNextGame = false,
+}) {
     const [optionData, setOptionData] = useState({
+        updatedOnce: false, // make sure user saved data before activating game
         on: null,
         prizeDeadline: null,
         challList: [],
     });
 
     const GAME = "targetPrize";
-    const { on, prizeDeadline, challList } = optionData;
+    const { on, prizeDeadline, challList, updatedOnce } = optionData;
+    const allDataReady = Boolean(prizeDeadline && challList.length);
 
-    const [triggerList, setTriggerList] = useState("");
     const { userId } = useData();
 
-    // const { bizId } = useBizData();
-    const { data, loading } = useReadUser(
-        userId,
-        "cliente-admin",
-        `clientAdminData.games.${GAME}`,
-        {
-            trigger: triggerList || userId, // triggerList is an random id
-        }
-    );
-
     useEffect(() => {
-        if (!data) return;
+        if (!gameData) return;
 
         const {
             on: thisOn,
             prizeDeadline: deadline,
             challList: list,
-        } = data.clientAdminData.games[GAME];
+        } = gameData;
         setOptionData((prev) => ({
             ...prev,
             on: thisOn,
             prizeDeadline: deadline,
             challList: list,
         }));
-    }, [data]);
-
-    const styles = {
-        iconPos: {
-            top: 0,
-            right: -20,
-        },
-    };
+    }, [gameData]);
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
-            <BackButton title="Voltar" onClick={() => setComp(null)} />
+            <BackButton
+                title="Voltar"
+                onClick={() => setComp({ name: "", props: {} })}
+            />
         </div>
     );
 
@@ -105,6 +98,9 @@ export default function TargetPrizeOptions({ setComp }) {
                 type: isTruthy ? "success" : "warning",
                 dur: 9000,
             });
+
+            // update main list
+            setTriggerList(getId());
         };
 
         const handlePrizeDeadline = async () => {
@@ -127,6 +123,20 @@ export default function TargetPrizeOptions({ setComp }) {
                     defaultStatus={on}
                     loading={loading}
                     callback={handleActivation}
+                    disableToLeft={needBlockDisableNextGame}
+                    disableToLeftCallback={() =>
+                        showToast(
+                            "Pelo menos um jogo deve fica ativo para clientes",
+                            { type: "error" }
+                        )
+                    }
+                    disableToRight={!allDataReady || !updatedOnce}
+                    disableToRightCallback={() =>
+                        showToast(
+                            "Favor, preencha e salve todos os dados abaixo para ativar o jogo",
+                            { type: "error" }
+                        )
+                    }
                 />
                 <p className="mt-5 text-center font-weight-bold">
                     Prazo Resgate Prêmio:
@@ -171,15 +181,13 @@ export default function TargetPrizeOptions({ setComp }) {
                         className="font-weight-bold"
                         subTitleClassName=" "
                     />
-                    <div className="position-absolute" style={styles.iconPos}>
-                        <InstructionBtn
-                            mode="modal"
-                            article="ChallengeModes_art2"
-                        />
-                    </div>
                 </section>
             </div>
-            <ChallengesList loading={loading} challList={challList} />
+            <ChallengesList
+                loading={loading}
+                challList={challList}
+                setOptionData={setOptionData}
+            />
         </Fragment>
     );
 

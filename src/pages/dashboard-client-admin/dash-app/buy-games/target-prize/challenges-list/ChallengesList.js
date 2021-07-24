@@ -4,14 +4,18 @@ import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import ChallComp from "./ChallComp";
 
-export default function ChallengesList({ challList, loading }) {
+export default function ChallengesList({ challList, loading, setOptionData }) {
     const { bizId } = useBizData();
 
     const [challengesArray, setChallengesArray] = useState([]); // challList
     const isConstantMode = challengesArray.length < 2;
 
     useEffect(() => {
-        if (challList && challList.length) setChallengesArray(challList);
+        if (challList && challList.length) {
+            setOptionData((prev) => ({ ...prev, updatedOnce: true }));
+            setChallengesArray(challList);
+        }
+        // eslint-disable-next-line
     }, [challList]);
 
     const updateThisUser = (needMsg = true, opts = {}) => {

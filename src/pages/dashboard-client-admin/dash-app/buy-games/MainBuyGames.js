@@ -17,16 +17,22 @@ export const AsyncDiscountBackOptions = Load({
 });
 
 export default function MainBuyGames() {
-    const [comp, setComp] = useState(null);
+    const [comp, setComp] = useState({
+        name: "",
+        props: {},
+    });
+    const { name, props } = comp;
 
     return (
         <section>
-            {!comp && <BuyGamesList setComp={setComp} />}
-            {comp === "targetPrize" && (
-                <AsyncTargetPrizeOptions setComp={setComp} />
+            {!name && (
+                <BuyGamesList currComp={name} setComp={setComp} {...props} />
             )}
-            {comp === "discountBack" && (
-                <AsyncDiscountBackOptions setComp={setComp} />
+            {name === "targetPrize" && (
+                <AsyncTargetPrizeOptions setComp={setComp} {...props} />
+            )}
+            {name === "discountBack" && (
+                <AsyncDiscountBackOptions setComp={setComp} {...props} />
             )}
         </section>
     );

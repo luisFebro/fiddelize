@@ -140,13 +140,13 @@ const Body = ({ picClass, rootPath }) => {
 };
 
 export default function Article() {
-    const picClass = "target-prize--picture";
-    const rootPath = "/img/articles/games/target-prize";
+    const picClass = "discount-back--picture";
+    const rootPath = "/img/articles/games/discount-back";
 
     return (
         <section>
             <ShowTitle title="Fiddelize Ensina" />
-            <ShowArticleTitle title="Como o Jogo de Prêmio Alvo pode ajudar a conquistar seus clientes?" />
+            <ShowArticleTitle title="Como o Jogo de Desconto Retornado pode ajudar a conquistar seus clientes?" />
             <ShowPicture
                 src={`${rootPath}/main.jpg`}
                 timeout={2000}
