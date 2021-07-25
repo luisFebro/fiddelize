@@ -15,126 +15,122 @@ const Body = ({ picClass, rootPath }) => {
 
     useElemShowOnScroll(`.${picClass}`, opts);
 
+    /*
+    Seus clientes acumulam X porcento a cada compra definido pelo seu negócio. Após atingirem um valor mínimo que é o resgate em pontos, eles ganham um cupom de desconto como valor também feito pelo seu negócio. O jogo é seu!
+     */
+
     return (
         <article style={{ position: "relative" }} className={textStyle}>
             <p>
-                Conquistar clientes e fazer eles retornarem ao seu negócio está
-                cada vez mais importante em um mundo cheio de mudanças.
+                Desconto retornado é um jogo de compra adaptado e otimizado do{" "}
+                <span className="font-italic">cashback</span> que é uma forma de
+                oferecer desconto pela frequência das compras.
             </p>
             <p>
-                Uma forma comprovada pelo mercado e oferecido pela Fiddelize é
-                um jogo de compra que vai ajudar você nesta conquista oferecendo
-                um diferencial a mais que seus clientes certamente ficarão
-                interessados: prêmio ao atingir determinada quantidade em pontos
-                de compra.
+                É uma tática de marketing de relacionamento que nasceu e ficou
+                popular nos Estados Unidos e na Europa. Já no Brasil, vem
+                ganhando força principalmente com milhas e apps com programas de
+                fidelidade em sites de e-commerce.
             </p>
-            <h3 className="my-3 font-site text-purple">Desafios:</h3>
             <p>
-                Cada edição onde o seu cliente busca alcançar um prêmio
-                acumulando a moeda PTS ou pontos de compra é chamado de desafio
-                na Fiddelize. Assim fica fácil de saber em qual edição do jogo
-                eles estão ou saberem seu histórico.
+                A tática pode ser usado na prática e encontrada em abordagens de
+                marketing como: &quot;
+                <span className="font-italic">
+                    a cada R$ 100 em compras, ganhe 5% de desconto
+                </span>
+                &quot;. Usamos essa abordagem como base para simplificar a ideia
+                do jogo por ser popular no marketing.
             </p>
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-1.png`}
                 reference=""
-                subtitle="adicionando prêmios"
+                subtitle="app do cliente: vale desconto digital e meta resgate em PTS"
             />
-            <h3 className="my-3 font-site text-purple">Prêmios:</h3>
             <p>
-                Você pode personalizar e adicionar um ou mais prêmios de acordo
-                com sua estratégia comercial. A maior parte dos negócios
-                oferecerem apenas um prêmio, mas suas possibilidades na
-                Fiddelize te permite criar <strong>múltiplos prêmios</strong>
-            </p>
-
-            <p>
-                Alguns exemplos práticos de único prêmio:
-                <br />- Uma churrascaria que oferece um almoço extra para cada
-                desafio concluído.
-                <br />- Uma academia oferece 1 par de ingressos toda vez que os
-                clientes alcançarem 800 PTS.
+                O <strong>objetivo</strong> do desconto retornado é que os
+                clientes fiquem interessados em retornar a comprar porque
+                receberão desconto ao acumular um determinado percentual a cada
+                compra que poderão usar como desconto em suas próximas compras.
             </p>
             <p>
-                Exemplo prático de negócio oferendo diferentes prêmios:
-                <br />
-                Um salão de beleza oferece 3 prêmios.
+                Na Fiddelize, colocamos o jogo no próximo nível por empoderar
+                empreendedores com uma <strong>moeda digital</strong> exclusiva
+                para troca de benefícios e permitir controle abrangente do jogo.
+                Além de oferecer funcionalidades exclusivas para os clientes com
+                direito a <strong>comprovante</strong> com código QR
+                personalizado, <strong>cartão de compra</strong> e{" "}
+                <strong>vale desconto digital</strong>.
+            </p>
+            <ShowPicture
+                imgContainerClass={picClass}
+                dataSrc={`${rootPath}/pic-2.png`}
+                reference=""
+                subtitle="app cliente: comprovante digital com código QR"
+            />
+            <h3 className="my-3 font-site text-purple">
+                Como funciona o sistema de pontos?
+            </h3>
+            <p>
+                Assim como os demais jogos da Fiddelize, seus clientes recebem{" "}
+                <strong>moedas digitais a cada compra</strong> chamadas de PTS
+                (pronúncia: pítis) que sempre tem o mesmo valor que o real para
+                manter a simplicidade e clareza na conversão.
             </p>
             <p>
-                <strong>- prêmio 1:</strong> ganha 1 corte de cabelo unissex
-                para meta de 400 PTS no desafio N.º 1
+                No jogo de compra desconto retorno, a quantidade de moeda PTS do
+                cliente é automaticamente convertida para gerar o vale desconto
+                baseado em um percentual acumulativo definido pelo seu negócio
+                indo nas opções do jogo.
             </p>
             <p>
-                <strong>- prêmio 2:</strong> ganha massagem + hidratação para
-                meta de 600 PTS no desafio N.º 2
-            </p>
-            <p>
-                <strong>- prêmio 3:</strong> ganha corte de cabelo + massagem +
-                hidratação para meta de 1.000 PTS no desafio N.º 3.
-            </p>
-            <br />
-            <p>
-                Note que os valores das metas vão ficando maiores ou usam uma
-                abordagem progressiva para cada nova edição de desafio. Mas você
-                pode seguir outras estratégias como só mudar os prêmios mas com
-                valores das metas iguais ou similares. Ou mesmo metas menores
-                que anteriores.
-            </p>
-            <p>
-                Você deve se perguntar o que acontece quando o cliente atingir o
-                último prêmio, qual será o próximo? Bom, a resposta é simples: o
-                último prêmio adicionado na lista junto com a meta em pontos e
-                ícone de desafio é{" "}
+                A moeda PTS foi fundamentada em várias camadas de segurança
+                incluindo{" "}
                 <strong>
-                    repetido para todas os demais desafios do cliente.
-                </strong>
+                    criptografia com AES256, chaves de sessão, proteção de rotas
+                    e sistema de autorização
+                </strong>{" "}
+                para que a moeda possa ser usada exclusivamente em seu negócio e
+                que cada transação seja totalmente transparente tanto para sua
+                equipe e clientes, facilitando assim a identificação de
+                eventuais erros como envio de pontos para cliente errado ou
+                envio de quantidade errada da moeda.
             </p>
-            <p>
-                O cliente que finalizar um desafio, tem sua pontuação atual
-                zerada, porém no seu <strong>histórico de compras</strong> é
-                acumulativo e sempre registrado.
-            </p>
-            <p>
-                No App do cliente também tem um{" "}
-                <strong>histórico de benefícios</strong> onde ficam registrados
-                as conquistas dos seus clientes de todos os jogos incluindo o
-                prêmio alvo.
-            </p>
-
+            <h3 className="my-3 font-site text-purple">
+                Jogo no app do cliente
+            </h3>
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-3.png`}
                 reference=""
-                subtitle="galeria de benefícios do cliente"
+                subtitle="app cliente: carrinho interativo e dados do progresso do cliente"
             />
-
             <p>
-                O legal é que cada cliente avançar no seu ritmo de compra que a
-                Fiddelize registra e mostra quais os prêmios e pontos de cada
-                desafio de forma individual e personalizada.
+                Além do vale desconto digital personalizado como sua marca e
+                cores e comprovantes com código QR, seus clientes acompanham
+                seus processos e sabem quanto já acumularam até bater a meta e
+                resgatar o vale desconto, tendo um carrinho de compra que indica
+                quanto falta para conquistar o vale desconto.
             </p>
-            <h3 className="my-3 font-site text-purple">Ícone de desafios:</h3>
-            <p>
-                Ah! E você pode <strong>personalizar o ícone</strong> de cada
-                desafio. Escolha o que mais combina para o seu negócio ou
-                prêmios oferecidos.
-            </p>
-
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-4.png`}
                 reference=""
-                subtitle="seleção ícone"
+                subtitle="app cliente: cada nível do jogo, uma frase informando progresso."
             />
-            <br />
-            <br />
-            <ShowPicture
-                imgContainerClass={picClass}
-                dataSrc={`${rootPath}/pic-5.png`}
-                reference=""
-                subtitle="ícone no app do cliente no jogo prêmio alvo"
-            />
+            <p>
+                Tudo com um dose de motivação para continuar jogando e comprando
+                do seu negócio.
+            </p>
+            <h3 className="my-3 font-site text-purple">Público Alvo</h3>
+            <p>
+                Pode ser implementado por negócios de diferentes portes,
+                principalmente para empreendedores com estabelecimentos físicos
+                interessados na força do marketing combinada com tecnologia e
+                que estão procurando diferenciais como a possibilidade em
+                oferecer uma moeda digital para troca de benefícios para
+                clientes.
+            </p>
         </article>
     );
 };

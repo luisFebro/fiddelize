@@ -8,13 +8,13 @@ import ModalYesNo from "components/modals/ModalYesNo";
 DeleteModalBtn.propTypes = {
     id: PropTypes.string,
     challengeNumber: PropTypes.number,
-    updateThisUser: PropTypes.func,
+    updateLocalList: PropTypes.func,
 };
 
 export default function DeleteModalBtn({
     id,
     challengeNumber,
-    updateThisUser,
+    updateLocalList,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
@@ -22,7 +22,7 @@ export default function DeleteModalBtn({
     const { bizId } = useBizData();
 
     const handleDelete = (arrayId) => {
-        updateThisUser(true, { deleteThisId: arrayId });
+        updateLocalList({ deleteThisId: arrayId, needMsg: true });
     };
 
     return (

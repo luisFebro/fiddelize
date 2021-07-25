@@ -1,6 +1,6 @@
 import { useState } from "react";
 import getId from "utils/getId";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 // import Field from "components/fields/field";
 import CommentField from "components/fields/CommentField";
 import showToast from "components/toasts";
@@ -12,27 +12,7 @@ import { pushElemToField } from "api/frequent";
 import NumberField from "components/fields/NumberField";
 import useData from "init";
 
-const getStyles = () => ({
-    fieldFormValue: {
-        backgroundColor: "var(--mainWhite)",
-        color: "var(--themeP)",
-        fontSize: "20px",
-        fontFamily: "var(--mainFont)",
-    },
-    fieldFormValueForPts: {
-        backgroundColor: "var(--mainWhite)",
-        color: "var(--themeP)",
-        fontSize: "3em",
-        zIndex: 2000,
-        width: 180,
-        padding: 0,
-    },
-    input: {
-        padding: "10px",
-    },
-});
-
-export default function AddNewPrizeContent({ setTriggerList, closeModal }) {
+export default function AddNewPrizeContent({ updateLocalList, closeModal }) {
     const [data, setData] = useState({
         targetPoints: "",
     });
@@ -42,8 +22,6 @@ export default function AddNewPrizeContent({ setTriggerList, closeModal }) {
 
     const [milestoneIcon, setSelectedIcon] = useState("");
     const [prizeDesc, setPrizeDesc] = useState("");
-
-    const styles = getStyles();
 
     const handleUpdateData = async () => {
         if (!prizeDesc)
@@ -62,19 +40,24 @@ export default function AddNewPrizeContent({ setTriggerList, closeModal }) {
                 { type: "error", dur: 8000 }
             );
 
+        const prizeData = {
+            id: getId(),
+            milestoneIcon,
+            prizeDesc,
+            targetPoints,
+        };
+
         const field = {
-            "clientAdminData.games.targetPrize.challList": {
-                id: getId(),
-                milestoneIcon,
-                prizeDesc,
-                targetPoints,
-            },
+            "clientAdminData.games.targetPrize.challList": prizeData,
         };
 
         await pushElemToField(userId, "cliente-admin", field);
 
+        updateLocalList({
+            updateOnlyLocalItem: prizeData,
+        });
+
         showToast("Prêmio adicionado com sucesso!", { type: "success" });
-        setTriggerList(getId());
         closeModal();
 
         return "ok";

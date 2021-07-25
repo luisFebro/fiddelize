@@ -3,6 +3,7 @@ import { useBizData } from "init";
 import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import ChallComp from "./ChallComp";
+import AddNewPrizeBtn from "../add-new-prize/AddNewPrizeBtn";
 
 export default function ChallengesList({ challList, loading, setOptionData }) {
     const { bizId } = useBizData();
@@ -11,15 +12,25 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
     const isConstantMode = challengesArray.length < 2;
 
     useEffect(() => {
-        if (challList && challList.length) {
+        if (challList && challList.length) setChallengesArray(challList);
+        if (challengesArray && challengesArray.length)
             setOptionData((prev) => ({ ...prev, updatedOnce: true }));
-            setChallengesArray(challList);
-        }
         // eslint-disable-next-line
-    }, [challList]);
+    }, [challList, challengesArray]);
 
-    const updateThisUser = (needMsg = true, opts = {}) => {
-        const { deleteThisId, updatedData } = opts;
+    const updateLocalList = (opts = {}) => {
+        const {
+            needMsg,
+            deleteThisId,
+            updatedData,
+            updateOnlyLocalItem,
+        } = opts;
+
+        if (updateOnlyLocalItem)
+            return setChallengesArray((priorList) => [
+                ...priorList,
+                updateOnlyLocalItem,
+            ]);
 
         let newModifiedArray;
         if (deleteThisId) {
@@ -35,12 +46,20 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
                 updatedData || newModifiedArray,
         };
 
-        updateUser(bizId, "cliente-admin", dataToSend).then(() => {
+        return updateUser(bizId, "cliente-admin", dataToSend).then(() => {
             if (needMsg) showToast("Alterações salvas!", { type: "success" });
         });
     };
 
     const txtStyle = "text-normal text-left font-weight-bold";
+
+    const showNewPrizeBtn = () => (
+        <div className="container-center my-5">
+            <section className="position-relative">
+                <AddNewPrizeBtn updateLocalList={updateLocalList} />
+            </section>
+        </div>
+    );
 
     return (
         <div className="mt-5">
@@ -70,10 +89,11 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
                         icon={chall.milestoneIcon}
                         targetPoints={chall.targetPoints}
                         prizeDesc={chall.prizeDesc}
-                        updateThisUser={updateThisUser}
+                        updateLocalList={updateLocalList}
                     />
                 </div>
             ))}
+            {showNewPrizeBtn()}
         </div>
     );
 }

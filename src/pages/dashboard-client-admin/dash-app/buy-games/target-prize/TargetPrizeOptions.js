@@ -11,7 +11,6 @@ import RadiusBtn from "components/buttons/RadiusBtn";
 import getId from "utils/getId";
 import ChallengesList from "./challenges-list/ChallengesList";
 import ShowBizNotes from "./challenges-list/ShowBizNotes";
-import AddNewPrizeBtn from "./add-new-prize/AddNewPrizeBtn";
 
 export default function TargetPrizeOptions({
     setComp,
@@ -29,7 +28,7 @@ export default function TargetPrizeOptions({
 
     const GAME = "targetPrize";
     const { on, prizeDeadline, challList, updatedOnce } = optionData;
-    const allDataReady = Boolean(prizeDeadline && challList.length);
+    const allDataReady = Boolean(prizeDeadline);
 
     const { userId } = useData();
 
@@ -55,14 +54,6 @@ export default function TargetPrizeOptions({
                 title="Voltar"
                 onClick={() => setComp({ name: "", props: {} })}
             />
-        </div>
-    );
-
-    const showBtnAction = () => (
-        <div className="container-center my-5">
-            <section className="position-relative">
-                <AddNewPrizeBtn setTriggerList={setTriggerList} />
-            </section>
         </div>
     );
 
@@ -202,7 +193,6 @@ export default function TargetPrizeOptions({
             {showControlOptions()}
             <hr className="lazer-purple" />
             {showChallengesList()}
-            {showBtnAction()}
             <ShowBizNotes />
         </section>
     );

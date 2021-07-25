@@ -25,9 +25,7 @@ export default function MainBuyGames() {
 
     return (
         <section>
-            {!name && (
-                <BuyGamesList currComp={name} setComp={setComp} {...props} />
-            )}
+            {!name && <BuyGamesList setComp={setComp} {...props} />}
             {name === "targetPrize" && (
                 <AsyncTargetPrizeOptions setComp={setComp} {...props} />
             )}

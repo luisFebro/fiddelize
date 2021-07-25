@@ -1,9 +1,9 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import useData from "init";
 import { useReadUser } from "api/frequent";
 import BuyGamesCard from "./buy-games-card/BuyGamesCard";
 
-export default function BuyGamesList({ currComp, setComp }) {
+export default function BuyGamesList({ setComp }) {
     const [triggerList, setTriggerList] = useState("");
     const { userId } = useData();
     const allGamesList = [];
@@ -44,33 +44,19 @@ export default function BuyGamesList({ currComp, setComp }) {
         <section className="hidden-content--root text-normal">
             <section className="container">
                 <div className="row">
-                    {allGamesList.map((thisData) => {
-                        // NOT WORKING - need update challList without having to click on the game card
-                        if (triggerList && currComp === "targetPrize")
-                            setComp({
-                                name: thisData.gameName,
-                                props: {
-                                    setTriggerList,
-                                    loading,
-                                    setComp,
-                                    needBlockDisableNextGame,
-                                },
-                            });
-
-                        return (
-                            <Fragment key={thisData.gameName}>
-                                <BuyGamesCard
-                                    gameData={thisData}
-                                    setTriggerList={setTriggerList}
-                                    loading={loading}
-                                    setComp={setComp}
-                                    needBlockDisableNextGame={
-                                        needBlockDisableNextGame
-                                    }
-                                />
-                            </Fragment>
-                        );
-                    })}
+                    {allGamesList.map((thisData) => (
+                        <Fragment key={thisData.gameName}>
+                            <BuyGamesCard
+                                gameData={thisData}
+                                setTriggerList={setTriggerList}
+                                loading={loading}
+                                setComp={setComp}
+                                needBlockDisableNextGame={
+                                    needBlockDisableNextGame
+                                }
+                            />
+                        </Fragment>
+                    ))}
                 </div>
             </section>
         </section>

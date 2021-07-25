@@ -59,7 +59,7 @@ export default function ChallComp({
     setChallengesArray,
     showToast,
     currChallNumber,
-    updateThisUser,
+    updateLocalList,
 }) {
     const [data, setData] = useState({
         currChallNumber,
@@ -98,7 +98,7 @@ export default function ChallComp({
         );
 
         setChallengesArray(newArray);
-        updateThisUser(true, { updatedData: newArray });
+        updateLocalList({ needMsg: true, updatedData: newArray });
 
         setTimeout(() => setEdit(false), 2000);
     };
@@ -240,7 +240,7 @@ export default function ChallComp({
                         <DeleteModalBtn
                             id={data.id}
                             challengeNumber={currChallNumber}
-                            updateThisUser={updateThisUser}
+                            updateLocalList={updateLocalList}
                         />
                     )}
                     <EditButton onClick={() => setEdit(!edit)} />
