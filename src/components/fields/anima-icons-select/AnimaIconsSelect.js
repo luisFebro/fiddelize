@@ -4,12 +4,11 @@ import "./_AnimaIconsSelect.scss";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import handleChange from "../../../utils/form/use-state/handleChange";
+import handleChange from "utils/form/use-state/handleChange";
+import usePro from "hooks/pro/usePro";
+import { useOfflineData } from "hooks/storage/useOfflineListData";
+import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import ButtonFab from "../../buttons/material-ui/ButtonFab";
-import usePro from "../../../hooks/pro/usePro";
-import { useOfflineData } from "../../../hooks/storage/useOfflineListData";
-import CheckBoxForm from "../../CheckBoxForm";
-import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 
 const getStyles = () => ({
     currIcon: {
@@ -42,20 +41,6 @@ const handleTrigger = (dataArray, options = {}) => {
 
     if (needSkipReverse) return false;
     return !selected ? true : selected; // update at launch to fetch any offline data there is. Else update in every selected changing
-};
-
-const handleNeedEmptyOption = (dataArray, options = {}) => {
-    const { selected, isPro } = options;
-
-    const emptyOptions = [];
-    dataArray(isPro).forEach((emp) => {
-        if (emp.showEmptyOption === true) {
-            emptyOptions.push(emp.reverseBr);
-        }
-    });
-
-    const needEmptyOpt = gotArrayThisItem(emptyOptions, selected);
-    return needEmptyOpt;
 };
 
 export default function AnimaIconsSelect({
@@ -96,10 +81,6 @@ export default function AnimaIconsSelect({
 
     const styles = getStyles();
 
-    const needEmptyOpt = handleNeedEmptyOption(optionsArray, {
-        selected,
-        isPro,
-    });
     const needTriggerOffData = handleTrigger(optionsArray, {
         selected,
         isPro,
@@ -176,16 +157,6 @@ export default function AnimaIconsSelect({
             callback({ selected: title, isReversed: false, needEmpty: true });
         }
     }, [selected, title]);
-
-    const handleShowEmptyCards = (isChecked) => {
-        if (typeof callback === "function") {
-            callback({
-                selected: title,
-                isReversed: false,
-                needEmpty: isChecked,
-            });
-        }
-    };
 
     const togglePanel = () => {
         setPanel((prev) => !prev);
@@ -337,16 +308,6 @@ export default function AnimaIconsSelect({
                     {CurrIcon}
                 </div>
                 {showReverseBtn()}
-                {needEmptyOpt && (
-                    <CheckBoxForm
-                        margin="120px 0"
-                        txtFontweight
-                        defaultState
-                        text="mostrar resultados vazios."
-                        callback={handleShowEmptyCards}
-                        position="position-absolute"
-                    />
-                )}
             </section>
             <div
                 className={panel ? "anima-icons-overlay" : ""}

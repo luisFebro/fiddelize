@@ -31,7 +31,7 @@ const reducer = (state, action) => {
 
         return {
             ...state,
-            runArray: [...prior, ...payload],
+            runArray: [...new Set([...prior, payload])],
         };
     }
     return state;

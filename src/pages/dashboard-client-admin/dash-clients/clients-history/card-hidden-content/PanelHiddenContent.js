@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import useRun from "global-data/ui";
+import InstructionBtn from "components/buttons/InstructionBtn";
+import getFirstName from "utils/string/getFirstName";
 import ActionBtns from "./ActionBtns";
-import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
-import getFirstName from "../../../../../utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
+export default function PanelHiddenContent({ data }) {
     const { runArray } = useRun();
 
     const styles = {
@@ -65,22 +65,17 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
             <section className="position-relative text-normal enabledLink panel-hidden-content--root">
                 {showInfos()}
                 <div className="animated flipInY slow delay-1s">
-                    <ActionBtns
-                        data={data}
-                        needBadgeForTestMode={needBadgeForTestMode}
-                    />
+                    <ActionBtns data={data} />
                 </div>
                 <section
                     className="position-absolute d-flex"
                     style={{ bottom: -15, right: -15 }}
                 >
-                    {!needBadgeForTestMode && (
-                        <p className="m-0 text-normal text-white text-shadow">
-                            Descontar
-                            <br />
-                            Pontos ?{" "}
-                        </p>
-                    )}
+                    <p className="m-0 text-normal text-white text-shadow">
+                        Descontar
+                        <br />
+                        Pontos ?{" "}
+                    </p>
                     <section className="align-self-end">
                         <InstructionBtn
                             mode="modal"

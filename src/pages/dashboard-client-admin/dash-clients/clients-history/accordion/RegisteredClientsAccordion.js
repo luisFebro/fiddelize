@@ -53,13 +53,13 @@ const getStyles = ({ color, backgroundColor }) => ({
         zIndex: 10,
     },
     trophyPrizes: {
-        right: 55,
-        bottom: 85,
+        right: 45,
+        bottom: 55,
     },
     benefitsBtn: {
         bottom: -25,
-        left: "50%",
-        transform: "translateX(-50%)",
+        left: "40%",
+        transform: "translateX(-40%)",
     },
 });
 
@@ -160,7 +160,16 @@ export default function RegisteredClientsAccordion({
     );
 
     const showHiddenPanel = (panel) => (
-        <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
+        <AccordionDetails>
+            {panel.hiddenContent}
+            <style jsx global>
+                {`
+                    .MuiAccordionDetails-root {
+                        display: block;
+                    }
+                `}
+            </style>
+        </AccordionDetails>
     );
 
     const showAccordion = ({ panel }) => (
@@ -180,7 +189,7 @@ export default function RegisteredClientsAccordion({
             className: "position-relative mb-3",
         };
 
-        if (!panel.isVisible) return;
+        if (!panel.isVisible) return null;
 
         return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? ( // 5 is in the middle of 10 chunks series to avoid detect card after reversing the order. The middle will be untouched unless user scroll down.
             <div {...props} ref={detectedCard}>

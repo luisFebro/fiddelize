@@ -1,28 +1,11 @@
-import { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
-import Typography from "@material-ui/core/Typography";
-import PropTypes from "prop-types";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 
 const isSmall = window.Helper.isSmallScreen();
-
-TradeCard.propTypes = {
-    actions: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            mainHeading: PropTypes.object, // parser
-            secondaryHeading: PropTypes.object, // parser
-            hiddenContent: PropTypes.any,
-        })
-    ).isRequired,
-    backgroundColor: PropTypes.string,
-    color: PropTypes.string,
-    needToggleButton: PropTypes.bool,
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {

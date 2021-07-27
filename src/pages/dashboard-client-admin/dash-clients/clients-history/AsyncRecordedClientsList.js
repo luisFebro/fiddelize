@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from "react";
-import { calendar } from "utils/dates/dateFns";
 import convertToReal from "utils/numbers/convertToReal";
 import useData, { useBizData } from "init";
 import useAPIList, { readAllCliUsers, getTrigger } from "api/useAPIList";
@@ -8,11 +7,11 @@ import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import { Load } from "components/code-splitting/LoadableComp";
 import useElemShowOnScroll from "hooks/scroll/useElemShowOnScroll";
 import getFirstName from "utils/string/getFirstName";
-import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import getFilterDate from "utils/dates/getFilterDate";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SearchField, { ROOT } from "components/search/SearchField";
+import getHighlightFilterData from "./helpers/getHighlightFilterData";
 import RegisterPanelBtn from "./register-panel-btn/RegisterPanelBtn";
 import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
@@ -38,86 +37,6 @@ const Filters = Load({
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
-
-const activeArray = [
-    "newCustomers",
-    "veteranCustomers",
-    "birthdayCustomers",
-    "buyMoreCustomers",
-    "buyLessCustomers",
-    "highestSinglePurchases",
-    "lowestSinglePurchases",
-    "lastPurchases",
-    "firstPurchases",
-];
-
-const getInfoElem = (target, options = {}) => {
-    const { user } = options;
-    const getElemMaker = (condition, value, emptyMsg, size) => (
-        <Fragment>
-            {!condition ? (
-                <span
-                    className={`${
-                        size ? "text-normal" : "text-small"
-                    } font-weight-bold`}
-                >
-                    {emptyMsg}
-                </span>
-            ) : (
-                <span
-                    className={`${
-                        size ? "text-normal" : "text-small"
-                    } font-weight-bold`}
-                >
-                    {value}.
-                </span>
-            )}
-        </Fragment>
-    );
-    if (target === "newCustomers") {
-        const condition = user.createdAt;
-        const value = calendar(user.createdAt);
-        const emptyMsg = "Sem data.";
-        return getElemMaker(condition, value, emptyMsg);
-    }
-
-    if (target === "lastPurchases") {
-        const condition =
-            user.clientUserData && user.clientUserData.filterLastPurchase;
-        const value =
-            condition && calendar(user.clientUserData.filterLastPurchase);
-        const emptyMsg = "Sem data registrada.";
-        return getElemMaker(condition, value, emptyMsg);
-    }
-
-    if (target === "birthdayCustomers") {
-        const condition =
-            user.clientUserData && user.clientUserData.filterBirthday;
-        const value = condition && user.birthday;
-        const emptyMsg = "Sem data de aniversário.";
-        return getElemMaker(condition, value, emptyMsg);
-    }
-
-    if (target === "buyMoreCustomers") {
-        const condition =
-            user.clientUserData && user.clientUserData.totalGeneralPoints;
-        const value = convertToReal(
-            condition && user.clientUserData.totalGeneralPoints
-        );
-        const emptyMsg = "R$ 0.00";
-        return getElemMaker(condition, `R$ ${value}`, emptyMsg, true);
-    }
-
-    if (target === "highestSinglePurchases") {
-        const condition =
-            user.clientUserData && user.clientUserData.filterHighestPurchase;
-        const value = convertToReal(
-            condition && user.clientUserData.filterHighestPurchase
-        );
-        const emptyMsg = "R$ 0.00";
-        return getElemMaker(condition, `R$ ${value}`, emptyMsg, true);
-    }
-};
 
 const handleParams = ({ search, filterName, period, getFilterDate }) => {
     const { day, week: weekCode, month: monthCode, year } = getFilterDate();
@@ -166,11 +85,11 @@ export default function AsyncRecordedClientsList() {
     const {
         bizId,
         bizPlan,
-        countCliUserGeneralPoints,
+        countCliUsersGeneralPoints,
         countCliUsersCurrPoints,
         countCliUsers,
     } = useBizData();
-    const { name, userId: adminId } = useData();
+    const { userId: adminId } = useData();
 
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
@@ -257,13 +176,13 @@ export default function AsyncRecordedClientsList() {
     });
 
     // Accordion Content
-    const highlightActiveScore =
+    const highlightActivePoints =
         filterName.indexOf("highestActiveScores") !== -1 ||
         filterName.indexOf("lowestActiveScores") !== -1;
     const defaultCond =
         filterName === "newCustomers" ||
         filterName === "veteranCustomers" ||
-        highlightActiveScore ||
+        highlightActivePoints ||
         filterName.indexOf("alphabeticOrder") !== -1;
 
     const actions = list.map((user) => {
@@ -274,63 +193,19 @@ export default function AsyncRecordedClientsList() {
         const gotTargetPrize = Boolean(totalGeneralPoints !== currPoints);
 
         const handleSecHeading = () => {
-            const getHighlightInfo = () => {
-                const needHighlight = gotArrayThisItem(activeArray, filterName);
-                let infoTitle;
-                let infoData;
-
-                if (defaultCond) {
-                    infoTitle = "• Cadastro feito:";
-                    infoData = getInfoElem("newCustomers", { user });
-                }
-
-                if (
-                    filterName === "lastPurchases" ||
-                    filterName === "firstPurchases"
-                ) {
-                    infoTitle = "• Última compra:";
-                    infoData = getInfoElem("lastPurchases", { user });
-                }
-
-                if (filterName === "birthdayCustomers") {
-                    infoTitle = "• Aniversário em:";
-                    infoData = getInfoElem("birthdayCustomers", { user });
-                }
-
-                if (
-                    filterName === "buyMoreCustomers" ||
-                    filterName === "buyLessCustomers"
-                ) {
-                    infoTitle = "• Já comprou:";
-                    infoData = getInfoElem("buyMoreCustomers", { user });
-                }
-
-                if (
-                    filterName === "highestSinglePurchases" ||
-                    filterName === "lowestSinglePurchases"
-                ) {
-                    infoTitle = "• Maior Compra:";
-                    infoData = getInfoElem("highestSinglePurchases", { user });
-                }
-
-                return {
-                    hightlightThisInfo: needHighlight,
-                    infoTitle,
-                    infoData,
-                };
-            };
-
             const {
                 hightlightThisInfo,
                 infoTitle,
                 infoData,
-            } = getHighlightInfo();
+            } = getHighlightFilterData({ filterName, user, defaultCond });
 
             return (
                 <div style={{ marginTop: 45 }}>
                     <p
                         className={`${
-                            highlightActiveScore ? "recorded-clients-badge" : ""
+                            highlightActivePoints
+                                ? "recorded-clients-badge"
+                                : ""
                         } text-subtitle text-shadow font-weight-bold m-0 mt-4`}
                         style={{ lineHeight: "19px" }}
                     >
@@ -339,15 +214,6 @@ export default function AsyncRecordedClientsList() {
                             : ` • ${convertToReal(
                                   user.clientUserData.currPoints
                               )} Pontos`}
-                        {gotTargetPrize && (
-                            <Fragment>
-                                <br />
-                                {/* Here it gonna be the BadgesGame */}
-                                <span className="text-small font-weight-bold">
-                                    (Desafio Atual N.º 0)
-                                </span>
-                            </Fragment>
-                        )}
                     </p>
                     <span
                         className={`${
@@ -363,8 +229,6 @@ export default function AsyncRecordedClientsList() {
             );
         };
 
-        const isTestMode = name === user.name.cap();
-        const needCliPrizes = gotTargetPrize;
         const highlightName = filterName.indexOf("alphabeticOrder") !== -1;
         const handleVisible = () => {
             if (needEmpty) return true;
@@ -407,14 +271,8 @@ export default function AsyncRecordedClientsList() {
             ),
             secondaryHeading: handleSecHeading(),
             userData: user,
-            needBadgeForTestMode: isTestMode,
-            needCliPrizes,
-            hiddenContent: (
-                <PanelHiddenContent
-                    data={user}
-                    needBadgeForTestMode={isTestMode}
-                />
-            ),
+            needCliPrizes: gotTargetPrize,
+            hiddenContent: <PanelHiddenContent data={user} />,
         };
     });
 
@@ -452,7 +310,7 @@ export default function AsyncRecordedClientsList() {
     const [openSearch, setOpenSearch] = useState(false);
 
     const autocompleteProps = {
-        placeholder: "Ei, procure um cliente",
+        placeholder: "procure um cliente",
         noOptionsText: "Nenhum cliente encontrado",
         disableOpenOnFocus: true,
         offlineKey: "history_adminClients",
@@ -460,6 +318,13 @@ export default function AsyncRecordedClientsList() {
 
     return (
         <Fragment>
+            <Totals
+                loading={loading}
+                allUsersLength={countCliUsers}
+                countCliUsersCurrPoints={countCliUsersCurrPoints}
+                countCliUsersGeneralPoints={countCliUsersGeneralPoints}
+                period={period}
+            />
             {listTotal !== 0 || emptyType === "filter" ? (
                 <Fragment>
                     {openSearch === false ? (
@@ -491,7 +356,7 @@ export default function AsyncRecordedClientsList() {
                 </Fragment>
             ) : (
                 <p className="my-2 font-weight-bold text-purple text-normal text-center">
-                    Preparando tudo...
+                    Preparando histórico...
                 </p>
             )}
             {openSearch ? (
@@ -504,7 +369,7 @@ export default function AsyncRecordedClientsList() {
                         backgroundColor="var(--themeSDark)"
                         needIconShadow
                         variant="extended"
-                        title="Filtros e Totais"
+                        title="Mostrar filtros"
                         textTransform=" "
                     />
                 </section>
@@ -516,13 +381,6 @@ export default function AsyncRecordedClientsList() {
                         handleSelectedFilter={handleSelectedFilter}
                         handlePeriodFilter={handlePeriodFilter}
                         emptyType={emptyType}
-                    />
-                    <Totals
-                        loading={loading}
-                        allUsersLength={countCliUsers}
-                        countCliUsersCurrPoints={countCliUsersCurrPoints}
-                        countCliUserGeneralPoints={countCliUserGeneralPoints}
-                        period={period}
                     />
                 </Fragment>
             )}
@@ -545,3 +403,16 @@ export default function AsyncRecordedClientsList() {
 /* COMMENTS
 n1: <span> does not work with alignments and lineheight, only <p> elemnets...
 */
+
+/* ARCHIVES
+
+{gotTargetPrize && (
+    <Fragment>
+        <br />
+        <span className="text-small font-weight-bold">
+            (Desafio Atual N.º 0)
+        </span>
+    </Fragment>
+)}
+
+ */

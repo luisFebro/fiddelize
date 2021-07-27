@@ -3,9 +3,9 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.39.0";
+const latestVersion = "4.39.0-50";
 
-const updateDescription = "cli-admin app - buy games session pt 7";
+const updateDescription = "cli-admin app - buy games session pt 8";
 /* HISTORY
 customer birthday and pts
 benefits gallery

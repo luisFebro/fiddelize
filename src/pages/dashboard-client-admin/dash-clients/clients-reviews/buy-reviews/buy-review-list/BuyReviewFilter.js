@@ -11,8 +11,6 @@ const filterOptions = (isPro) => [
         title: "all",
         reverseBr: null,
         reverse: null,
-        showEmptyOption: null,
-        isPro: false,
         Icon: <SortIcon />,
     },
     {
@@ -20,8 +18,6 @@ const filterOptions = (isPro) => [
         title: "highGrades",
         reverseBr: null,
         reverse: null,
-        showEmptyOption: null,
-        isPro: false,
         Icon: <ArrowUpwardIcon />,
     },
     {
@@ -29,8 +25,6 @@ const filterOptions = (isPro) => [
         title: "lowGrades",
         reverseBr: null,
         reverse: null,
-        showEmptyOption: null,
-        isPro: false,
         Icon: <ArrowDownwardIcon />,
     },
 ];

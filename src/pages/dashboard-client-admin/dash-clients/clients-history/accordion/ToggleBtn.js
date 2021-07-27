@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonFab, {
-    faStyle,
-} from "../../../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab, { faStyle } from "components/buttons/material-ui/ButtonFab";
 import { setRun, useAction } from "global-data/ui";
 
 export default function ToggleBtn({ cardId, onClick }) {
-    const [panelId, setPanelId] = useState("");
-    const [togglePanel, setTogglePanel] = useState(false);
-
     const uify = useAction();
 
     return (
@@ -21,7 +16,7 @@ export default function ToggleBtn({ cardId, onClick }) {
             iconAfterClick={<FontAwesomeIcon icon="minus" style={faStyle} />}
             toggleStatus={cardId}
             needClickAndToggle
-            onClick={() => setRun("runName", cardId, uify)}
+            onClick={() => setRun("runArray", cardId, uify)}
         />
     );
 }

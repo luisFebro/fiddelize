@@ -9,7 +9,7 @@ SearchResult.propTypes = {
     isLoading: PropTypes.bool,
     searchTerm: PropTypes.string,
     mainSubject: PropTypes.string,
-    countCliUserGeneralPoints: PropTypes.number,
+    countCliUsersGeneralPoints: PropTypes.number,
 };
 
 const styles = {
@@ -30,7 +30,7 @@ export default function SearchResult({
     searchTerm,
     mainSubject = "usuário",
     countCliUsersCurrPoints,
-    countCliUserGeneralPoints,
+    countCliUsersGeneralPoints,
 }) {
     const pluralizeBr = (word) => {
         let res;
@@ -128,7 +128,7 @@ export default function SearchResult({
                                             className="text-center mt-2 py-2 px-3 font-weight-bold"
                                             style={styles.accumulativeScore}
                                         >
-                                            {`${countCliUserGeneralPoints} Pontos Acumulados`}
+                                            {`${countCliUsersGeneralPoints} Pontos Acumulados`}
                                         </p>
                                     </div>
                                 )}

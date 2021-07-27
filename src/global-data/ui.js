@@ -4,6 +4,7 @@ import { setItems } from "init/lStorage";
 // these methods aim to update ui data globally
 export default function useRun() {
     const data = useGlobalContext();
+    console.log("data", data);
 
     return {
         run: data.run,

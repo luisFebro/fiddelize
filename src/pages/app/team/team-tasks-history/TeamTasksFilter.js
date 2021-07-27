@@ -9,8 +9,6 @@ const periodOptions = (isPro) => [
         title: "all",
         reverseBr: null,
         reverse: null,
-        showEmptyOption: null,
-        isPro: false,
         Icon: <EventIcon />,
     },
     {
@@ -18,8 +16,6 @@ const periodOptions = (isPro) => [
         title: "today",
         reverseBr: null,
         reverse: null,
-        showEmptyOption: null,
-        isPro: false,
         Icon: <EventIcon />,
     },
 ];

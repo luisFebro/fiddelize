@@ -39,7 +39,7 @@ export default function DashClients() {
             <ClientReviews />
             <hr className="lazer-purple" />
             <Title
-                title="&#187; Pódio Fidelidade"
+                title="&#187; Pódio Maiores Fãs"
                 subTitle="todos os tempos"
                 color="var(--themeP)"
                 margin="my-5"
@@ -77,7 +77,7 @@ export default function DashClients() {
             <Title
                 title="&#187; Histórico de Clientes"
                 color="var(--themeP)"
-                margin=""
+                margin="mb-0"
             />
             <AsyncRecordedClientsList />
         </div>

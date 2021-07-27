@@ -7,11 +7,11 @@ import PurchaseHistoryBtn from "../../../../mobile-app/history-purchase-btn/Purc
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function ActionBtns({ data, needBadgeForTestMode }) {
+export default function ActionBtns({ data }) {
     return (
         <section>
             {showBlobActionBtns(data)}
-            {showDeleteBtn(data, needBadgeForTestMode)}
+            {showDeleteBtn(data)}
             <style jsx global>
                 {`
                     .title-blob-action {
@@ -100,25 +100,24 @@ const showBlobActionBtns = (data) => (
     </main>
 );
 
-const showDeleteBtn = (data, needBadgeForTestMode) =>
-    !needBadgeForTestMode && (
-        <div className="animated zoomIn mt-5">
-            <YesNoModalBtn
-                button={{
-                    iconFontAwesome: <FontAwesomeIcon icon="trash-alt" />,
-                    backgroundColor: "var(--expenseRed)",
-                    title: "excluir",
-                    variant: "extended",
-                    position: "relative",
-                    size: "small",
-                }}
-                modalData={{
-                    title: "Confirmação<br />de Exclusão de Cliente",
-                    subTitle: `Nota: o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
-                    itemData: data,
-                }}
-                setRun={null}
-                run={null}
-            />
-        </div>
-    );
+const showDeleteBtn = (data) => (
+    <div className="animated zoomIn mt-5">
+        <YesNoModalBtn
+            button={{
+                iconFontAwesome: <FontAwesomeIcon icon="trash-alt" />,
+                backgroundColor: "var(--expenseRed)",
+                title: "excluir",
+                variant: "extended",
+                position: "relative",
+                size: "small",
+            }}
+            modalData={{
+                title: "Confirmação<br />de Exclusão de Cliente",
+                subTitle: `Nota: o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
+                itemData: data,
+            }}
+            setRun={null}
+            run={null}
+        />
+    </div>
+);

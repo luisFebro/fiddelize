@@ -4,9 +4,6 @@ import ButtonFab, { faStyle } from "components/buttons/material-ui/ButtonFab";
 import { setRun, useAction } from "global-data/ui";
 
 export default function ToggleBtn({ cardId, onClick }) {
-    const [panelId, setPanelId] = useState("");
-    const [togglePanel, setTogglePanel] = useState(false);
-
     const uify = useAction();
 
     return (

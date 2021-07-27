@@ -74,6 +74,7 @@ export default function BenefitsBtn({
                 contentComp={Gallery}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
+                needIndex={false}
             />
         </section>
     );
