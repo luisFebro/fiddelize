@@ -119,8 +119,8 @@ const periodOptions = (isPro) => [
 
 export default function Filters({
     listTotal,
-    handleSelectedFilter,
     loading,
+    handleMainFilter,
     handlePeriodFilter,
     emptyType,
 }) {
@@ -143,8 +143,9 @@ export default function Filters({
 
                 <br />
                 <AnimaIconsSelect
-                    callback={handleSelectedFilter}
+                    callback={handleMainFilter}
                     optionsArray={mainOptions}
+                    defaultSelected="Clientes Novos"
                     defaultSideIcon={defaultMainIcon}
                     offlineKey="selectedMainFilter"
                     checkServicePro="orgganize_clients"

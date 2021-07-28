@@ -1,14 +1,14 @@
 import { useState } from "react";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import ModalFullContent from "../../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncNewRegister = Load({
     loading: true,
     loader: () =>
         import(
-            "../../../../app/team/registers-panel/RegistersPanel" /* webpackChunkName: "new-member-or-customer-register-page-lazy" */
+            "../../../../app/team/registers-panel/RegistersPanel.js" /* webpackChunkName: "new-member-or-customer-register-page-lazy" */
         ),
 });
 
@@ -16,7 +16,7 @@ const AsyncTeamApp = Load({
     loading: true,
     loader: () =>
         import(
-            "../../../../app/team/TeamApp" /* webpackChunkName: "team-app-lazy" */
+            "../../../../app/team/TeamApp.js" /* webpackChunkName: "team-app-lazy" */
         ),
 });
 

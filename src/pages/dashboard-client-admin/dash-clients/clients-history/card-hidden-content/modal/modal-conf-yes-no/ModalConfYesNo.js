@@ -4,20 +4,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
-import PropTypes from "prop-types";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import showToast from "components/toasts";
 // CUSTOM DATA
 import { setRun, useAction } from "global-data/ui";
 import { useBizData } from "init";
 import getAPI, { removeUser } from "api";
+import getId from "utils/getId";
 // END CUSTOM DATA
-
-ModalConfYesNo.propTypes = {
-    open: PropTypes.bool,
-    onClose: PropTypes.func,
-    modalData: PropTypes.object,
-};
 
 export default function ModalConfYesNo({ open, onClose, modalData }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
@@ -51,7 +45,8 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                         `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
                         { type: "success" }
                     );
-                    setRun("runName", "RecordedClientsList", uify);
+                    setRun("runName", `RecordedClientsList_${getId()}`, uify);
+                    onClose();
                 })
                 .catch((err) => showToast(err.data.msg, { type: "error" }));
         }, 5900);

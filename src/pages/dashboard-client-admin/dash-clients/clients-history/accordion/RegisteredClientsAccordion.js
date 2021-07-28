@@ -189,9 +189,9 @@ export default function RegisteredClientsAccordion({
             className: "position-relative mb-3",
         };
 
-        if (!panel.isVisible) return null;
+        // if (!panel.isVisible) return null;
 
-        return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? ( // 5 is in the middle of 10 chunks series to avoid detect card after reversing the order. The middle will be untouched unless user scroll down.
+        return checkDetectedElem({ list: actions, ind, indFromLast: 2 }) ? ( // X value of indFromLast is in the middle of total cards chunks series to avoid detect card after reversing the order. The middle will be untouched unless user scroll down.
             <div {...props} ref={detectedCard}>
                 {showAccordion({ panel })}
             </div>

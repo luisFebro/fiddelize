@@ -10,11 +10,9 @@ export default function useElemDetection({
     setSkip,
     handleSkip,
     isOffline = false,
-    isFiltering = false,
 }) {
     return useCallback(
         (elem) => {
-            if (isFiltering) return;
             if (isOffline) return;
             if (loading) return; // constantly calls the API ifwe do not return...
 

@@ -3,7 +3,7 @@ import getFirstName from "utils/string/getFirstName";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 import ClientProfile from "./modal-content-pages/ClientProfile";
-import PurchaseHistoryBtn from "../../../../mobile-app/history-purchase-btn/PurchaseHistoryBtn";
+import PurchaseHistoryBtn from "./history-purchase-btn/PurchaseHistoryBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -33,12 +33,12 @@ const ShowHistoryBtn = ({ data, isFromDashboard = true }) => {
         cliUserFirstName: getFirstName(name && name.cap()),
         cliUserId: _id,
         totalGeneralPoints: clientUserData.totalGeneralPoints,
-        isFromDashboard: true,
+        isStaff: true,
     });
 
     const modalData = getModalData();
 
-    return <PurchaseHistoryBtn from="clientsHistory" modalData={modalData} />;
+    return <PurchaseHistoryBtn {...modalData} />;
 };
 
 const showProfileBtn = (data) => (
@@ -79,21 +79,9 @@ const showBlobActionBtns = (data) => (
         </p>
         <section className={`container-center ${isSmall && "flex-column"}`}>
             <div className="blob-action-btn--root history-btn position-relative">
-                <p className="star position-absolute star-align">
-                    <FontAwesomeIcon
-                        icon="star"
-                        className="star-blob-medium animated rotateIn fast delay-5s"
-                    />
-                </p>
                 <ShowHistoryBtn data={data} />
             </div>
             <div className="position-relative blob-action-btn--root">
-                <p className="star position-absolute star-align">
-                    <FontAwesomeIcon
-                        icon="star"
-                        className="star-blob-medium animated rotateIn fast delay-5s"
-                    />
-                </p>
                 {showProfileBtn(data)}
             </div>
         </section>

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
-import useAPIList, { readTeamTaskList, teamAutocomplete } from "api/useAPIList";
+import useAPIList, {
+    readTeamTaskList,
+    teamAutocomplete,
+    watchTrigger,
+} from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun from "global-data/ui";
 import SearchField from "components/search/SearchField";
-import getVar, { setVar } from "init/var";
 import Cards from "./card/Cards";
 import TeamTasksFilter from "./TeamTasksFilter";
 // import extractStrData from '../../../../../../utils/string/extractStrData';
@@ -34,13 +37,19 @@ export default function AsyncTeamTasksList({
 
     // UPDATE
     const { runName } = useRun(); // for update list from other comps
-    useUpdate({
+    const comp = "TeamTasksList"; // NOT BEING USED FOR NOW
+
+    const trigger = watchTrigger({
+        runName,
+        comp,
+        triggerVars: `${filter}_${search}`,
+    });
+
+    useClearSkip({
         filter,
         search,
-        setSkip,
-        setSearch,
-        setFilter,
         runName,
+        setSkip,
     });
     // END UPDATE
 
@@ -62,7 +71,7 @@ export default function AsyncTeamTasksList({
         params,
         filterId: "createdAt",
         listName: "teamTasksList",
-        trigger: search || filter || runName || true,
+        trigger,
     });
 
     // SEARCH
@@ -176,19 +185,9 @@ export default function AsyncTeamTasksList({
 }
 
 // HOOKS
-function useUpdate({ runName, filter, search, setSkip, setSearch, setFilter }) {
+function useClearSkip({ runName, filter, search, setSkip }) {
     useEffect(() => {
         if (filter || runName || search) setSkip(0);
-        if (runName && runName.includes("AsyncTeamTasksList")) {
-            setFilter("");
-            setSearch("");
-        }
-
-        getVar("teamTasksFilter").then((storeFilter) => {
-            if (storeFilter !== filter) setSearch("");
-            setVar({ teamTasksFilter: filter });
-        });
-
         // eslint-disable-next-line
     }, [runName, search, filter]);
 }

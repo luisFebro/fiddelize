@@ -2,13 +2,15 @@ import parse from "html-react-parser";
 import CardsList from "./cards-list/CardsList";
 
 export default function PurchaseHistory(buyData) {
-    const { isFromDashboard, cliUserFirstName } = buyData;
+    const { isStaff, cliUserFirstName } = buyData;
 
     const mainTitle = parse(
-        `Histórico de Compras ${
-            isFromDashboard ? `<br /> de ${cliUserFirstName}` : ""
-        }`
+        `Histórico de Compras ${isStaff ? `<br /> de ${cliUserFirstName}` : ""}`
     );
+
+    const subtitle = isStaff
+        ? "Saldo em PTS e registro de compras do cliente"
+        : "Acompanhe uso do seu saldo e registro de compras";
 
     const showTitle = () => (
         <section className="py-4">
@@ -21,7 +23,7 @@ export default function PurchaseHistory(buyData) {
                     lineHeight: "25px",
                 }}
             >
-                Acompanhe uso do seu saldo e registro de compras
+                {subtitle}
             </h2>
         </section>
     );

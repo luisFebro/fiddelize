@@ -46,7 +46,7 @@ const handleTrigger = (dataArray, options = {}) => {
 export default function AnimaIconsSelect({
     optionsArray,
     defaultSideIcon,
-    defaultSelected = "Clientes Novos",
+    defaultSelected,
     offlineKey,
     callback,
     width,
@@ -154,7 +154,7 @@ export default function AnimaIconsSelect({
 
     useEffect(() => {
         if (typeof callback === "function") {
-            callback({ selected: title, isReversed: false, needEmpty: true });
+            callback({ selected: title, isReversed: false });
         }
     }, [selected, title]);
 

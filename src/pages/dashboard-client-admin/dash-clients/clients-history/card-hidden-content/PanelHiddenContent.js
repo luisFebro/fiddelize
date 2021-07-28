@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import useRun from "global-data/ui";
 import InstructionBtn from "components/buttons/InstructionBtn";
-import getFirstName from "utils/string/getFirstName";
 import ActionBtns from "./ActionBtns";
+// import getFirstName from "utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -11,21 +11,11 @@ PanelHiddenContent.propTypes = {
 export default function PanelHiddenContent({ data }) {
     const { runArray } = useRun();
 
-    const styles = {
-        pointsContainer: {
-            position: "relative",
-        },
-    };
-
     const showInfos = () => {
         const infos = {
             // "Última Pontuação": data && data.clientUserData.lastPoints, //
-            "Pontuação Acumulada":
-                data && data.clientUserData.totalGeneralPoints,
-            "Feito por":
-                data &&
-                data.register &&
-                getFirstName(data.register.member.cap(), { addSurname: true }),
+            "Saldo Atual": data && data.clientUserData.currPoints,
+            "Pontuação Geral": data && data.clientUserData.totalGeneralPoints,
         };
 
         const infoKeys = Object.keys(infos);
@@ -44,7 +34,9 @@ export default function PanelHiddenContent({ data }) {
                             {infoValues[ind] && infoValues[ind] !== "0" ? (
                                 <span className="font-site text-em-0-9 font-weight-bold">
                                     {infoValues[ind]}{" "}
-                                    {key.includes("Pontuação") && "Pontos."}
+                                    {(key.includes("Pontuação") ||
+                                        key.includes("Saldo")) &&
+                                        "PTS."}
                                 </span>
                             ) : (
                                 <span className="text-small font-weight-bold">
@@ -74,7 +66,7 @@ export default function PanelHiddenContent({ data }) {
                     <p className="m-0 text-normal text-white text-shadow">
                         Descontar
                         <br />
-                        Pontos ?{" "}
+                        Moedas?{" "}
                     </p>
                     <section className="align-self-end">
                         <InstructionBtn
@@ -89,6 +81,17 @@ export default function PanelHiddenContent({ data }) {
 }
 
 /* ARCHIVES
+const styles = {
+    pointsContainer: {
+        position: "relative",
+    },
+};
+
 <p className="animated flip slow delay-2s"> first flip that I was looking for with the style of  a n entire 360 with zooming.
 <CreatedAtBr createdAt={createdAt} />
+"Feito por":
+data &&
+data.register &&
+getFirstName(data.register.member.cap(), { addSurname: true })
+
 */

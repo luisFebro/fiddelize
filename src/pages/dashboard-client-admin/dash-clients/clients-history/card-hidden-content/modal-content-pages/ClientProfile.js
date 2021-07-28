@@ -49,7 +49,7 @@ export default function ClientProfile({ data, title, subtitle }) {
     return (
         <section className="text-purple text-normal">
             {title && showMainTitle()}
-            <div className="container-center" style={{ marginTop: 180 }}>
+            <div className="container-center" style={{ marginTop: 20 }}>
                 {showMainFormData()}
             </div>
             <CreatedAtBr

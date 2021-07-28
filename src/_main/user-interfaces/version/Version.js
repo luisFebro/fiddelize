@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.39.0-50";
+const latestVersion = "4.39.0-90";
 
-const updateDescription = "cli-admin app - buy games session pt 8";
+const updateDescription = "cli-admin: new customer history";
 /* HISTORY
+cli-admin app - buy games session pt 9
 customer birthday and pts
 benefits gallery
 team management pt 5

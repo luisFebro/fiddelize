@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import useData, { useBizData } from "init";
-import useAPIList, { readAllCliUsers, getTrigger } from "api/useAPIList";
+import useAPIList, { readAllCliUsers, watchTrigger } from "api/useAPIList";
 import useRun from "global-data/ui";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -38,50 +38,15 @@ const Filters = Load({
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
 
-const handleParams = ({ search, filterName, period, getFilterDate }) => {
-    const { day, week: weekCode, month: monthCode, year } = getFilterDate();
-
-    if (search) return { role: "cliente", filter: "alphabeticOrder", search };
-
-    switch (period) {
-        case "all":
-            return { role: "cliente", filter: filterName };
-        case "day":
-            return {
-                role: "cliente",
-                filter: filterName,
-                period,
-                day,
-            };
-        case "week":
-            return {
-                role: "cliente",
-                filter: filterName,
-                period,
-                week: weekCode,
-            };
-        case "month":
-            return {
-                role: "cliente",
-                filter: filterName,
-                period,
-                month: monthCode,
-            };
-        case "year":
-            return {
-                role: "cliente",
-                filter: filterName,
-                period,
-                year,
-            };
-        default:
-            return { role: "cliente", filter: filterName };
-    }
-};
-
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
-    const [isFiltering, setIsFiltering] = useState(false);
+    const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState({
+        filterName: "",
+        period: "",
+    });
+    const { filterName, period } = filter;
+
     const {
         bizId,
         bizPlan,
@@ -93,58 +58,25 @@ export default function AsyncRecordedClientsList() {
 
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
-    const [data, setData] = useState({
-        search: "",
-        cleared: "",
-    });
-    const { search, cleared } = data;
+    // UPDATE
+    const { runName } = useRun(); // for update list from other comps
+    const comp = "RecordedClientsList";
 
-    const [filter, setFilter] = useState({
-        filterName: "newCustomers",
-        period: "all",
-        needEmpty: true,
+    const trigger = watchTrigger({
+        runName,
+        comp,
+        triggerVars: `${filterName}_${period}_${search}`,
     });
 
-    const { filterName, period, needEmpty } = filter;
-    const { runName } = useRun();
-
-    useEffect(() => {
-        if ((filterName && period) || runName === "RecordedClientsList") {
-            setIsFiltering(true);
-            setTimeout(() => {
-                setIsFiltering(false);
-            }, 4000);
-        }
-    }, [filterName, period, runName, search, cleared]);
-
-    const handleSearch = (query) => {
-        if (query === "_cleared")
-            return setData({ ...data, search: "", cleared: true });
-        return setData({ ...data, search: query, cleared: "" });
-    };
-
-    const handleSelectedFilter = (filterData) => {
-        setSkip(0);
-        setFilter({
-            ...filter,
-            filterName: filterData.selected,
-            needEmpty: filterData.needEmpty,
-        });
-    };
-
-    const handlePeriodFilter = (filterData) => {
-        setSkip(0);
-        setFilter({
-            ...filter,
-            period: filterData.selected,
-        });
-    };
-
-    const params = handleParams({ search, filterName, period, getFilterDate });
-
-    const trigger = getTrigger(runName, "RecordedClientsList", {
-        cond2: `${filterName}_${period}_${search}_${cleared}`,
+    useClearSkip({
+        filter: filterName,
+        search,
+        setSkip,
+        runName,
     });
+
+    const params = handleParams({ search, filterName, period });
+    // END UPDATE
 
     const {
         list,
@@ -162,18 +94,100 @@ export default function AsyncRecordedClientsList() {
         url: readAllCliUsers(bizId),
         skip,
         params,
-        trigger,
-        isFiltering,
         listName: "recordedClientsList",
+        trigger,
     });
 
+    // SEARCH
+    const [openSearch, setOpenSearch] = useState(false);
+
+    function showSearch() {
+        const autocompleteProps = {
+            placeholder: "procure um cliente",
+            noOptionsText: "Nenhum cliente encontrado",
+            disableOpenOnFocus: true,
+            offlineKey: "history_adminClients",
+        };
+
+        const handleSearch = (entry) => {
+            if (entry === "_cleared") {
+                setSearch("");
+                return;
+            }
+
+            setSkip(0);
+            setSearch(entry);
+        };
+
+        return (
+            <Fragment>
+                {openSearch === false ? (
+                    <section className="container-center">
+                        <ButtonFab
+                            position="relative"
+                            size="large"
+                            onClick={() => setOpenSearch(true)}
+                            color="var(--mainWhite)"
+                            backgroundColor="var(--themeSDark)"
+                            iconFontAwesome={
+                                <FontAwesomeIcon
+                                    icon="search"
+                                    style={{ fontSize: 30 }}
+                                />
+                            }
+                            needIconShadow
+                        />
+                    </section>
+                ) : (
+                    <section className="animated slideInLeft fast">
+                        <SearchField
+                            callback={handleSearch}
+                            searchUrl={`${ROOT}/sms/read/contacts?userId=${adminId}&autocomplete=true&autocompleteLimit=7`}
+                            autocompleteProps={autocompleteProps}
+                        />
+                    </section>
+                )}
+            </Fragment>
+        );
+    }
+    // END SEARCH
+
+    // FILTER
+    function showFilter() {
+        const handleMainFilter = (filterData) => {
+            setFilter({
+                ...filter,
+                filterName: filterData.selected,
+            });
+        };
+
+        const handlePeriodFilter = (filterData) => {
+            setFilter({
+                ...filter,
+                period: filterData.selected,
+            });
+        };
+
+        return (
+            <Filters
+                listTotal={listTotal}
+                loading={loading}
+                handleMainFilter={handleMainFilter}
+                handlePeriodFilter={handlePeriodFilter}
+                emptyType={emptyType}
+            />
+        );
+    }
+    // END FILTER
+
+    // INFINITY LOADING LIST
     const detectedCard = useElemDetection({
         loading,
         hasMore,
         setSkip,
         isOffline,
-        isFiltering,
     });
+    // END INFINITY LOADING LIST
 
     // Accordion Content
     const highlightActivePoints =
@@ -230,33 +244,9 @@ export default function AsyncRecordedClientsList() {
         };
 
         const highlightName = filterName.indexOf("alphabeticOrder") !== -1;
-        const handleVisible = () => {
-            if (needEmpty) return true;
-            if (filterName === "birthdayCustomers") {
-                return !!cliUser.filterBirthday;
-            }
-            if (filterName === "buyLessCustomers") {
-                return !!cliUser.totalGeneralPoints;
-            }
-            if (filterName === "firstPurchases") {
-                return !!cliUser.filterLastPurchase;
-            }
-            if (filterName === "lowestActiveScores") {
-                return !!cliUser.currPoints;
-            }
-            if (filterName === "lowestSinglePurchases") {
-                return !!cliUser.filterHighestPurchase;
-            }
-            if (defaultCond) {
-                return true;
-            }
 
-            return true;
-        };
-        const isVisible = handleVisible();
         return {
             _id: user._id,
-            isVisible,
             mainHeading: (
                 <span
                     className={`${
@@ -307,15 +297,6 @@ export default function AsyncRecordedClientsList() {
 
     const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
 
-    const [openSearch, setOpenSearch] = useState(false);
-
-    const autocompleteProps = {
-        placeholder: "procure um cliente",
-        noOptionsText: "Nenhum cliente encontrado",
-        disableOpenOnFocus: true,
-        offlineKey: "history_adminClients",
-    };
-
     return (
         <Fragment>
             <Totals
@@ -326,34 +307,7 @@ export default function AsyncRecordedClientsList() {
                 period={period}
             />
             {listTotal !== 0 || emptyType === "filter" ? (
-                <Fragment>
-                    {openSearch === false ? (
-                        <section className="container-center">
-                            <ButtonFab
-                                position="relative"
-                                size="large"
-                                onClick={() => setOpenSearch(true)}
-                                color="var(--mainWhite)"
-                                backgroundColor="var(--themeSDark)"
-                                iconFontAwesome={
-                                    <FontAwesomeIcon
-                                        icon="search"
-                                        style={{ fontSize: 30 }}
-                                    />
-                                }
-                                needIconShadow
-                            />
-                        </section>
-                    ) : (
-                        <section className="animated slideInLeft fast">
-                            <SearchField
-                                callback={handleSearch}
-                                searchUrl={`${ROOT}/sms/read/contacts?userId=${adminId}&autocomplete=true&autocompleteLimit=7`}
-                                autocompleteProps={autocompleteProps}
-                            />
-                        </section>
-                    )}
-                </Fragment>
+                showSearch()
             ) : (
                 <p className="my-2 font-weight-bold text-purple text-normal text-center">
                     Preparando histórico...
@@ -374,15 +328,7 @@ export default function AsyncRecordedClientsList() {
                     />
                 </section>
             ) : (
-                <Fragment>
-                    <Filters
-                        listTotal={listTotal}
-                        loading={loading}
-                        handleSelectedFilter={handleSelectedFilter}
-                        handlePeriodFilter={handlePeriodFilter}
-                        emptyType={emptyType}
-                    />
-                </Fragment>
+                showFilter()
             )}
             {needEmptyIllustra ? (
                 <AsyncShowIllustra emptyType={emptyType} />
@@ -400,19 +346,101 @@ export default function AsyncRecordedClientsList() {
     );
 }
 
+function useClearSkip({ runName, filter, period, search, setSkip }) {
+    // all new type of update should initilize on the 0 position otherwise it will skip the first docs
+
+    useEffect(() => {
+        if (filter || runName || search || period) setSkip(0);
+        // eslint-disable-next-line
+    }, [runName, search, filter, period]);
+}
+
+// HELPERS
+function handleParams({ search, filterName, period = "day" }) {
+    if (!filterName) return {};
+    const { day, week: weekCode, month: monthCode, year } = getFilterDate();
+
+    const defaultVal = {
+        role: "cliente",
+        limit: 5,
+    };
+
+    if (search) return { ...defaultVal, search, filter: "alphabeticOrder" };
+
+    switch (period) {
+        case "all":
+            return { ...defaultVal, filter: filterName };
+        case "day":
+            return {
+                ...defaultVal,
+                filter: filterName,
+                period,
+                day,
+            };
+        case "week":
+            return {
+                ...defaultVal,
+                filter: filterName,
+                period,
+                week: weekCode,
+            };
+        case "month":
+            return {
+                ...defaultVal,
+                filter: filterName,
+                period,
+                month: monthCode,
+            };
+        case "year":
+            return {
+                ...defaultVal,
+                filter: filterName,
+                period,
+                year,
+            };
+        default:
+            return { ...defaultVal, filter: filterName };
+    }
+}
+// END HELPERS
+
 /* COMMENTS
 n1: <span> does not work with alignments and lineheight, only <p> elemnets...
 */
 
 /* ARCHIVES
 
-{gotTargetPrize && (
-    <Fragment>
-        <br />
-        <span className="text-small font-weight-bold">
-            (Desafio Atual N.º 0)
-        </span>
-    </Fragment>
-)}
+useEffect(() => {
+    if ((filterName && period) || runName === "RecordedClientsList") {
+        setIsFiltering(true);
+        setTimeout(() => {
+            setIsFiltering(false);
+        }, 4000);
+    }
+}, [filterName, period, runName, search, cleared]);
+
+const handleVisible = () => {
+    // if (needEmpty) return true;
+    if (filterName === "birthdayCustomers") {
+        return !!cliUser.filterBirthday;
+    }
+    if (filterName === "buyLessCustomers") {
+        return !!cliUser.totalGeneralPoints;
+    }
+    if (filterName === "firstPurchases") {
+        return !!cliUser.filterLastPurchase;
+    }
+    if (filterName === "lowestActiveScores") {
+        return !!cliUser.currPoints;
+    }
+    if (filterName === "lowestSinglePurchases") {
+        return !!cliUser.filterHighestPurchase;
+    }
+    if (defaultCond) {
+        return true;
+    }
+
+    return true;
+};
 
  */

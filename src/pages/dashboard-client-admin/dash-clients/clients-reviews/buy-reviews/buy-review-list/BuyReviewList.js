@@ -52,6 +52,7 @@ export default function BuyReviewList({ lastDateChecked, isBizAdmin = false }) {
         params,
         listName: isBizAdmin ? "xpReviewList" : "buyReviewList",
         trigger,
+        filterId: "clientName",
         isFiltering,
     });
 

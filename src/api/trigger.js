@@ -2,9 +2,30 @@ import getId from "utils/getId";
 
 const getUniqueId = () => getId();
 
-// trigger if there is the name of the component which is sending request from redux
-// the component should be followed by an unique id so that it can be trigger.
 // use it for useAPIList only since trigger does not return nothing as data, only works for updating if necessary later...
+function watchTrigger({
+    comp, // e.g "RecordedClientsList" - current list component's name
+    runName, // e.g "RecordedClientsList_123dffds" it should have an id and it is from another component like a delete comp which deletes a card and need to reload the list
+    triggerVars, // e.g `${filterName}_${period}_${search}` it should includes all variables which needed to be watched for changing and trigger the list inside the current list component
+}) {
+    const gotTriggerVars =
+        triggerVars && window.sessionStorage.getItem("triggerVars");
+    const isNewTriggerVars = gotTriggerVars !== triggerVars;
+    if (!gotTriggerVars || isNewTriggerVars)
+        window.sessionStorage.setItem("triggerVars", triggerVars);
+    // return random runName id to be triggered
+    if (!isNewTriggerVars && runName && runName.toString().includes(comp))
+        return runName;
+
+    if (isNewTriggerVars) {
+        // returns the new sequence of triggerVars
+        return triggerVars;
+    }
+
+    return false;
+}
+
+// should be replaced by watchTrigger...
 function getTrigger(runNameWithId, targetName, options = {}) {
     const { cond2 } = options;
     let trigger1 = runNameWithId;
@@ -60,4 +81,4 @@ function treatBoolStatus(boolStr) {
 // const falseStatus = "false_1321321432432434323"
 // const res = treatFalseStatus(falseStatus); // false boolean
 
-export { getTrigger, needTrigger, getUniqueId, treatBoolStatus };
+export { watchTrigger, getTrigger, needTrigger, getUniqueId, treatBoolStatus };
