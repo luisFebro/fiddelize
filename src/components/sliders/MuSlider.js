@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const useStyles = makeStyles(() => ({
     // LESSON
@@ -47,6 +48,7 @@ export default function MuSlider({
     disabled = false,
     max = 300,
     min = 1,
+    needSlideInstru = false,
 }) {
     const [labelSize, setLabelSize] = useState(null);
     const classes = useStyles({ color, labelSize, width });
@@ -63,26 +65,39 @@ export default function MuSlider({
         if (typeof callback === "function") callback(newValue);
     };
 
+    const showSlideInstru = () => (
+        <div className="add-credits-slide text-purple font-weight-bold container-center text-small">
+            <FontAwesomeIcon className="mr-2" icon="arrow-left" />
+            {"  "}
+            Deslize para mudar
+            {"  "}
+            <FontAwesomeIcon className="ml-2" icon="arrow-right" />
+        </div>
+    );
+
     return (
-        <Slider
-            aria-label="deslizador"
-            onChange={handleChange}
-            classes={{
-                root: classes.root,
-                valueLabel: classes.valueLabel,
-                track: classes.track,
-                rail: classes.rail,
-                thumb: classes.thumb,
-            }}
-            valueLabelDisplay={valueLabelDisplay}
-            step={step}
-            value={value}
-            min={min}
-            max={disabled ? 1 : max}
-            orientation="horizontal"
-            disabled={disabled}
-            marks={marks}
-        />
+        <Fragment>
+            <Slider
+                aria-label="deslizador"
+                onChange={handleChange}
+                classes={{
+                    root: classes.root,
+                    valueLabel: classes.valueLabel,
+                    track: classes.track,
+                    rail: classes.rail,
+                    thumb: classes.thumb,
+                }}
+                valueLabelDisplay={valueLabelDisplay}
+                step={step}
+                value={value}
+                min={min}
+                max={disabled ? 1 : max}
+                orientation="horizontal"
+                disabled={disabled}
+                marks={marks}
+            />
+            {needSlideInstru && showSlideInstru()}
+        </Fragment>
     );
 }
 

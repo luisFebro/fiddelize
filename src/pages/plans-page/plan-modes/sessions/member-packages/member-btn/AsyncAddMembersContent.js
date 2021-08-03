@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
+import NotesSwitcher from "components/buttons/NotesSwitcher";
 import setProRenewal from "utils/biz/setProRenewal";
 import { PeriodSelection } from "../../../comps/MainComps";
 import Simulator from "./Simulator";
@@ -31,10 +31,6 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
 
     period = period || innerPeriod;
 
-    // useEffect(() => {
-    //     isCreditsBadge && setProRef({ setData, period, planBr: currPlan });
-    // }, [period, currPlan]);
-
     const handleInnerPeriod = (newPeriod) => {
         setData({ ...data, innerPeriod: newPeriod });
     };
@@ -61,11 +57,8 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         </div>
     );
 
-    const showNotes = () => (
+    const notes = (
         <section className="my-3 text-left mx-3">
-            <p className="text-purple text-left text-subtitle font-weight-bold m-0">
-                Notas <FontAwesomeIcon icon="info-circle" />
-            </p>
             <p className="text-small text-left text-purple mt-3">
                 - Os créditos são <strong>liberados automaticamente</strong>{" "}
                 após a aprovação do pagamento.
@@ -73,21 +66,28 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
             <p className="text-small text-left text-purple mt-3">
                 - Os apps dos membros são
                 <strong> temporariamente desativados</strong> após a expiração
-                do plano.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Com a exceção do seu <strong>primeiro app de membro</strong>{" "}
-                da sua conta, que é grátis e sem tempo de expiração.
+                do plano caso não haja renovação.
             </p>
             <p className="text-small text-left text-purple mt-3">
                 - Renove o tempo de uso do serviço facilmente indo no seu painel
-                na aba PRO.
+                na <strong>aba PRO</strong>.
             </p>
             <p className="text-small text-left text-purple mt-3">
                 - Você é notificado <strong>5 dias</strong> antes do prazo
                 expirar.
             </p>
         </section>
+    );
+
+    const showNotes = () => (
+        <NotesSwitcher
+            color="text-purple"
+            btnStyle={{ top: -35, right: -80 }}
+            btnSize="small"
+            notes={notes}
+            rootClassName="mx-3"
+            shadowTitle={undefined}
+        />
     );
 
     const handleCTA = () => {
@@ -121,9 +121,10 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
     };
 
     const showCTA = () => (
-        <section className="my-5 container-center">
+        <section className="my-5 mx-3 container-center">
             <ButtonFab
                 size="large"
+                width="100%"
                 title="Adicionar"
                 onClick={handleCTA}
                 backgroundColor="var(--themeSDark--default)"
@@ -133,14 +134,21 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         </section>
     );
 
-    const showIllustration = () => (
-        <Img
-            src="/img/pro-features/novvos/novvos-membros.svg"
-            className=""
-            alt="ilustração principal"
-            width={200}
-            height="auto"
-        />
+    const showIllustrationAndAbout = () => (
+        <Fragment>
+            <Img
+                src="/img/pro-features/novvos/novvos-membros.svg"
+                className=""
+                alt="ilustração principal"
+                width={200}
+                height="auto"
+            />
+            <p className="mx-3 text-normal text-purple">
+                Membros da sua equipe te ajudam a cadastrar moedas e clientes,
+                ver históricos e avaliações, confirmar benefícios, recebimentos
+                e mais. Invista em novos cadastros!
+            </p>
+        </Fragment>
     );
 
     const showPeriodSelection = () => (
@@ -150,11 +158,8 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
     return (
         <section>
             {showTitle()}
-            {showIllustration()}
+            {showIllustrationAndAbout()}
             {isCreditsBadge && showPeriodSelection()}
-            <p className="my-3 text-purple text-center text-subtitle">
-                Deslize para mudar a quantidade de membros.
-            </p>
             <Simulator
                 handleData={handleData}
                 period={period}

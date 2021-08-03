@@ -164,9 +164,9 @@ export default function AddClientsToCart({
                     : "Aumente seu alcance de novos cadastros"}
                 {disableCliUser && (
                     <span className="d-block text-normal text-purple text-center">
-                        Membros da sua equipe te ajudam a cadastrar pontos e
-                        clientes, confirmar desafios e entregas. Tudo em
-                        segundos.
+                        Membros da sua equipe te ajudam a cadastrar moedas e
+                        clientes, ver históricos e avaliações, confirmar
+                        benefícios, recebimentos e mais!
                     </span>
                 )}
             </p>

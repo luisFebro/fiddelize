@@ -105,10 +105,7 @@ export default function Simulator({ handleData, period, currPlan }) {
         moneySign: true,
         needFraction: true,
     });
-    const yearToMonthUnit = convertToReal(unit / 12, {
-        moneySign: true,
-        needFraction: true,
-    });
+
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
     // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
 
@@ -127,35 +124,52 @@ export default function Simulator({ handleData, period, currPlan }) {
                 style={styles.totalUnits}
             >
                 <span className="text-em-1-2 font-site text-nowrap">
-                    + {totalReal} {subject}
-                    {packages === 1 ? "" : "s"}
+                    + {totalReal}
+                    <span className="d-block line-height-35">
+                        Novo{packages === 1 ? "" : "s"}
+                        <span className="d-block m-0">
+                            {subject}
+                            {packages === 1 ? "" : "s"}
+                        </span>
+                    </span>
                 </span>
-                <br />
                 <div
-                    className={`text-em-${
+                    className={`mt-2 text-grey position-relative d-block text-em-${
                         isYearly ? "1-3" : unitSizeDec
                     } font-site ${
                         unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
                     }`}
-                    style={{ lineHeight: "20px" }}
+                    style={{
+                        lineHeight: "15px",
+                        top: -10,
+                        right: -30,
+                    }}
                 >
                     <span className="text-title"> X </span>
                     {unitReal}
-                    {isYearly && (
-                        <span className="d-inline-block text-small">
-                            apenas <strong>{yearToMonthUnit}</strong>{" "}
-                            {packages !== 1 && "(cada)"} ao mês
-                        </span>
-                    )}
+                    <span
+                        className="position-relative d-block text-small font-weight-bold"
+                        style={{
+                            top: -10,
+                            right: -50,
+                        }}
+                    >
+                        cada
+                    </span>
                 </div>
             </span>
         </section>
     );
 
     const showAutoFinalTotal = () => (
-        <section className="mt-2 mb-5 text-hero text-purple text-center">
-            <span className="d-inline-block text-title">R$</span>
-            {totalFinalMoneyReal}
+        <section className="mt-1 mb-5 container-center text-hero text-purple text-center">
+            <div className="text-pill">
+                <span className="d-inline-block text-title">R$</span>
+                {totalFinalMoneyReal}
+                <span className="d-block text-small font-weight-bold">
+                    {isYearly ? "por ano" : "por mês"}
+                </span>
+            </div>
         </section>
     );
 
@@ -166,11 +180,11 @@ export default function Simulator({ handleData, period, currPlan }) {
     };
 
     const showSummary = () => (
-        <section className="my-5 zoomIn animated">
-            <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
+        <section className="invest-brief text-shadow my-5 zoomIn animated">
+            <h2 className="my-2 line-height-30 text-center text-subtitle font-weight-bold m-0">
                 Resumo de Investimento
             </h2>
-            <div className="text-normal text-left text-purple">
+            <div className="text-normal text-left">
                 ✔ Plano: {handlePlanName()}{" "}
                 {period === "yearly" ? "Anual" : "Mensal"}
                 <br />✔ Total de {subject}s:{" "}
@@ -189,6 +203,16 @@ export default function Simulator({ handleData, period, currPlan }) {
                     R$ {totalFinalMoneyReal}
                 </span>
             </div>
+            <style jsx>
+                {`
+                    .invest-brief {
+                        background: var(--themeP);
+                        border-radius: 20px;
+                        color: #fff;
+                        padding: 5px 8px;
+                    }
+                `}
+            </style>
         </section>
     );
 
@@ -202,6 +226,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                 value={packages}
                 callback={handlePackages}
                 disabled={!!newQuantity}
+                needSlideInstru
             />
             {packages <= 4 && !newQuantity && (
                 <div

@@ -3,9 +3,9 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.40.0-50";
+const latestVersion = "4.40.0-60";
 
-const updateDescription = "new plan pages and logics - pt 1";
+const updateDescription = "new plan pages and logics - pt 2";
 /* HISTORY
 cli-admin: new customer history
 cli-admin app - buy games session pt 9

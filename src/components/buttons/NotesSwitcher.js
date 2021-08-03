@@ -5,6 +5,7 @@ import RadiusBtn from "./RadiusBtn";
 export default function NotesSwitcher({
     color = "text-white",
     btnStyle = { top: "-10px" },
+    btnSize = "extra-small",
     notes,
     rootClassName,
     shadowTitle,
@@ -23,7 +24,7 @@ export default function NotesSwitcher({
                     <RadiusBtn
                         title={openNote ? "Fechar" : "Ver todas"}
                         onClick={() => setOpenNote(!openNote)}
-                        size="extra-small"
+                        size={btnSize}
                     />
                 </div>
             </div>
