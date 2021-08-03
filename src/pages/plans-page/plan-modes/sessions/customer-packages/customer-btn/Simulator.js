@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
-import MuSlider from "../../../../../../components/sliders/MuSlider";
-import getIncreasedPerc from "../../../../../../utils/numbers/getIncreasedPerc";
-import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
+import convertToReal from "utils/numbers/convertToReal";
+import MuSlider from "components/sliders/MuSlider";
+import { addDays, formatSlashDMY } from "utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -40,29 +39,25 @@ const getStyles = () => ({
     },
 });
 
-const packageMarks = [
+const countMarks = [
     {
-        value: 1,
+        value: 500,
         label: "",
     },
     {
-        value: 5,
+        value: 600,
         label: "",
     },
     {
-        value: 10,
+        value: 700,
         label: "",
     },
     {
-        value: 50,
+        value: 800,
         label: "",
     },
     {
-        value: 100,
-        label: "",
-    },
-    {
-        value: 200,
+        value: 1000,
         label: "",
     },
 ];
@@ -71,37 +66,26 @@ const getCustomersData = (packages, options = {}) => {
     const { initialPrice, period } = options;
     const isYearly = period === "yearly";
     // unit, expires, unitSizeDec, unitSizeInc
-    if (packages === 1)
-        return [isYearly ? initialPrice : 0.3, null, "1-1", "1-1"];
-    if (packages === 5) return [isYearly ? 0.3 : 0.12, null, "1", "1-2"];
-    if (packages === 10) return [isYearly ? 0.2 : 0.1, null, "0-9", "1-3"];
-    if (packages === 50) return [0.08, null, "0-9", "1-3"];
-    if (packages === 100) return [0.06, null, "0-9", "1-3"];
-    if (packages === 200) return [0.04, null, "0-9", "1-3"];
-    // if(packages >= 500 && packages < 1000) return [0.09, null, "0-8", "1-4"];
-    // if(packages >= 1000) return [0.08, null, "0-6", "1-5"];
+    if (packages === 500) return [isYearly ? 0.6 : 0.06, null, "1-1", "1-1"];
+    if (packages === 600) return [isYearly ? 0.59 : 0.059, null, "1", "1-2"];
+    if (packages === 700) return [isYearly ? 0.57 : 0.057, null, "0-9", "1-3"];
+    if (packages === 800) return [isYearly ? 0.56 : 0.056, null, "0-8", "1-4"];
+
+    return [isYearly ? 0.5 : 0.05, null, "0-8", "1-4"];
 };
 
-export default function Simulator({
-    handleData,
-    period,
-    currPlan,
-    animaDisabled,
-}) {
-    const [packages, setPackages] = useState(1);
-    const [discountDiff, setDiscountDiff] = useState(null);
-    const [increasedPerc, setIncreasedPerc] = useState(null);
+export default function Simulator({ handleData, period, currPlan }) {
+    const [packages, setPackages] = useState(500);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
         usageDays: 30,
         formattedExpiryDate: "",
     });
-    const { newQuantity, expiryDate, usageDays, formattedExpiryDate } = data;
+
+    const { newQuantity, usageDays, formattedExpiryDate } = data;
 
     const isYearly = period === "yearly";
-
-    const initialPrice = period === "yearly" ? 1.0 : 0.3;
 
     useEffect(() => {
         let thisUsageDays = 30;
@@ -121,14 +105,11 @@ export default function Simulator({
         if (newQuantity && !Number.isNaN(newQuantity)) {
             setPackages(newQuantity);
         } else {
-            setPackages(1);
+            setPackages(500);
         }
     }, [newQuantity]);
 
-    const [unit, expires, unitSizeDec, unitSizeInc] = getCustomersData(
-        packages,
-        { initialPrice, period }
-    );
+    const [unit, , unitSizeDec] = getCustomersData(packages, isYearly);
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -136,63 +117,59 @@ export default function Simulator({
 
     const styles = getStyles();
 
-    const oneCustomersPackage = 100;
-    const totalCustomers = oneCustomersPackage * packages;
-    const customersUnit = unit;
-    const totalFinalMoney = totalCustomers * customersUnit;
-    const firstPhasePrice = totalCustomers * initialPrice;
+    const subject = "cliente";
+    const onePackage = 1;
+    const totalUnits = onePackage * packages;
+    const totalFinalMoney = totalUnits * unit;
 
-    const totalCustomersReal = convertToReal(totalCustomers);
-    const customersUnitReal = convertToReal(customersUnit, {
+    const MAX_UNIT_YEAR = 1000;
+    const MAX_UNIT_MONTH = 1000;
+
+    const totalReal = convertToReal(totalUnits);
+    const unitReal = unit.toFixed(3);
+    const yearToMonthUnit = convertToReal(unit / 12, {
         moneySign: true,
         needFraction: true,
     });
-    const totalFinalMoneyReal = convertToReal(totalFinalMoney);
-    const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
-    const firstPhasePriceReal = convertToReal(firstPhasePrice, {
-        moneySign: true,
-    });
+    const totalFinalMoneyReal = Math.round(Number(totalFinalMoney));
+    // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
 
     useEffect(() => {
         handleData({
             totalPackage: packages,
-            totalCustomers,
+            totalUnits,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
     }, [packages]);
-
-    useEffect(() => {
-        if (unit !== 0.14) {
-            const diff = firstPhasePrice - totalFinalMoney;
-            const incPerc = getIncreasedPerc(totalFinalMoney, firstPhasePrice);
-            setDiscountDiff(diff);
-            setIncreasedPerc(incPerc);
-        } else {
-            setDiscountDiff(null);
-        }
-    }, [unit, firstPhasePrice]);
 
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
             <span
                 className="d-inline-block ml-2 text-title text-purple"
-                style={styles.totalCustomers}
+                style={styles.totalUnits}
             >
-                <span
-                    className={`text-em-${unitSizeInc} font-site text-nowrap`}
-                >
-                    {totalCustomersReal} cliente
-                    {totalCustomersReal === 1 ? "" : "s"}
+                <span className="text-em-1-2 font-site text-nowrap">
+                    + {totalReal} {subject}
+                    {packages === 1 ? "" : "s"}
                 </span>
                 <br />
-                <span className="text-title"> X </span>
-                <span
-                    className={`text-em-${unitSizeDec} font-site ${
+                <div
+                    className={`text-em-${
+                        isYearly ? "1-3" : unitSizeDec
+                    } font-site ${
                         unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
                     }`}
+                    style={{ lineHeight: "20px" }}
                 >
-                    {customersUnitReal} (cada)
-                </span>
+                    <span className="text-title"> X </span>
+                    R$ {unitReal}
+                    {isYearly && (
+                        <span className="d-inline-block text-small">
+                            apenas <strong>{yearToMonthUnit}</strong>{" "}
+                            {packages !== 1 && "(cada)"} ao mês
+                        </span>
+                    )}
+                </div>
             </span>
         </section>
     );
@@ -204,29 +181,10 @@ export default function Simulator({
         </section>
     );
 
-    const showDiffDiscount = () =>
-        Boolean(discountDiff) && (
-            <section
-                className={`my-5 ${animaDisabled ? "" : "zoomIn animated"}`}
-            >
-                <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
-                    Automatizador de Desconto
-                </h2>
-                <p className="text-normal text-purple text-left">
-                    Você economiza{" "}
-                    <span className="text-subtitle font-weight-bold">
-                        {discountDiffReal} ({Math.ceil(increasedPerc)}%)
-                    </span>{" "}
-                    comparado com o preço total de {firstPhasePriceReal} - R$
-                    1,00 por cliente (preço de 1 pacote);
-                </p>
-            </section>
-        );
-
     const handlePlanName = () => {
         if (currPlan === "ouro") return currPlan.cap();
         if (currPlan === "prata") return currPlan.cap();
-        return "Meu Bronze";
+        return "Bronze";
     };
 
     const showSummary = () => (
@@ -237,13 +195,9 @@ export default function Simulator({
             <div className="text-normal text-left text-purple">
                 ✔ Plano: {handlePlanName()}{" "}
                 {period === "yearly" ? "Anual" : "Mensal"}
-                <br />✔ Total de Pacotes:{" "}
+                <br />✔ Total de {subject}s:{" "}
                 <span className="text-subtitle font-weight-bold">
                     {packages}
-                </span>
-                <br />✔ Total de clientes:{" "}
-                <span className="text-subtitle font-weight-bold">
-                    {totalCustomersReal}
                 </span>
                 <br />✔ Validade:{" "}
                 <span className="text-normal font-weight-bold">
@@ -264,63 +218,37 @@ export default function Simulator({
         <section className="position-relative">
             <MuSlider
                 color="var(--themeP)"
-                max={isYearly ? 200 : 10}
+                max={isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
+                min={500}
+                marks={countMarks}
                 step={null}
-                marks={packageMarks}
                 value={packages}
                 callback={handlePackages}
                 disabled={!!newQuantity}
             />
-            {packages <= (isYearly ? 130 : 3) && !newQuantity && (
+            {packages <= 860 && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardRight}
                 >
-                    {isYearly ? 200 : 10}
+                    {isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
                     <br />
-                    pacotes
+                    {subject}s
                 </div>
             )}
 
-            {packages >= (isYearly ? 55 : 3) && !newQuantity && (
+            {packages >= 600 && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}
                 >
-                    1<br />
-                    pacote
+                    500
+                    <br />
+                    {subject}s
                 </div>
             )}
         </section>
     );
-
-    // const showQuantityField = () => (
-    //     (packages >= 290 || Boolean(newQuantity)) &&
-    //     <section className="animated fadeInUp slow
-    //     my-3 d-flex align-items-center justify-content-end">
-    //         <p className="text-purple font-weight-bold text-normal text-center mr-2">
-    //             Precisa de mais pacotes?
-    //         </p>
-    //         <div>
-    //             <p className="m-0 text-left text-purple text-normal font-weight-bold">
-    //                 Insira aqui:
-    //             </p>
-    //             <TextField
-    //                 InputProps={{ style: styles.quantityField }}
-    //                 variant="outlined"
-    //                 onChange={handleChange(setData)}
-    //                 onKeyPress={null}
-    //                 autoComplete="off"
-    //                 type="tel"
-    //                 name="newQuantity"
-    //                 value={newQuantity}
-    //             />
-    //             <p className="m-0 text-right text-purple text-normal font-weight-bold">
-    //                 Quantidade
-    //             </p>
-    //         </div>
-    //     </section>
-    // );
 
     return (
         <section className="my-5 mx-4">

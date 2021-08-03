@@ -23,8 +23,8 @@ const getStyles = () => ({
 export default function PremiumButton({
     btnType = "crown", // crown or pill (conhecer)
     callback,
-    service, // "Orgganize Clientes"
-    proPage = "OrgganizeClients_1",
+    service,
+    proPage,
     top,
     left,
     right,

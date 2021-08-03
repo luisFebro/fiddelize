@@ -14,9 +14,6 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
         service,
     });
 
-    // const { runName } = useRun();
-    // if(runName === "ProCreditsBadge") credits -= 1;
-
     const modalData = {
         isCreditsBadge: true, // it will allow period choice and handle individual order
         currPlan: currPlan === "gratis" ? "bronze" : currPlan,

@@ -32,7 +32,7 @@ const getStyles = () => ({
     },
 });
 
-export default function ServicesGalleryCard({ handleNewOrder, data }) {
+export default function ServicesGalleryCard({ handleItem, data }) {
     const {
         serviceName,
         servicePrice,
@@ -51,15 +51,16 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
     const serviceMonthlyPrice =
         isYearly && convertToReal(servicePrice / 12, { moneySign: true });
 
-    const toggleSelection = (cardName) => {
+    const toggleSelection = () => {
         setSelected((prev) => !prev);
-        const orderObj = {
-            amount: 1,
-            price: servicePrice,
+        const item = {
+            name: serviceName,
+            count: 1,
+            amount: servicePrice,
         };
-        handleNewOrder(serviceName, {
-            order: orderObj,
-            removeOrderGroup: !selected ? undefined : serviceName,
+
+        handleItem(!selected ? "add" : "remove", {
+            item,
         });
     };
 

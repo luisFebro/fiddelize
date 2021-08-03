@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
     },
     valueLabel: {
         left: "calc(-50% + 4px)",
-        font: (props) => `bold ${props.labelSize || "17px"} var(--mainFont)`,
+        font: (props) => `bold ${props.labelSize || "15px"} var(--mainFont)`,
     },
     thumb: {
         height: 28,
@@ -46,13 +46,14 @@ export default function MuSlider({
     value,
     disabled = false,
     max = 300,
+    min = 1,
 }) {
     const [labelSize, setLabelSize] = useState(null);
     const classes = useStyles({ color, labelSize, width });
 
     useEffect(() => {
         if (value === 1000) {
-            setLabelSize("13px");
+            setLabelSize("10px");
         } else {
             setLabelSize(null);
         }
@@ -76,7 +77,7 @@ export default function MuSlider({
             valueLabelDisplay={valueLabelDisplay}
             step={step}
             value={value}
-            min={1}
+            min={min}
             max={disabled ? 1 : max}
             orientation="horizontal"
             disabled={disabled}

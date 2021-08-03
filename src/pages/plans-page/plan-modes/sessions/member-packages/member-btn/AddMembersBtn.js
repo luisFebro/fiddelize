@@ -34,11 +34,7 @@ export default function AddMembersBtn({ btnTitle = "Adicionar", modalData }) {
     };
 
     const AsyncAddCustomersContent = (
-        <Async
-            modalData={modalData}
-            handleFullClose={handleFullClose}
-            needRemoveCurrValue={btnTitle === "Alterar"}
-        />
+        <Async modalData={modalData} handleFullClose={handleFullClose} />
     );
 
     return (

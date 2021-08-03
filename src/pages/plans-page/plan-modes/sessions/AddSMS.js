@@ -1,4 +1,5 @@
-import convertToReal from "../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
+import DeleteButton from "components/buttons/DeleteButton";
 import AddSMSBtn from "../../../dashboard-client-admin/dash-sms/credits-balance/add-sms-btn/AddSMSBtn";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -9,12 +10,16 @@ const getStyles = () => ({
     credits: { top: isSmall ? "50px" : "70px", right: "0px" },
 });
 
-export default function AddSMS({
-    smsOrder = { amount: 0, price: 0 },
-    handleNewOrder,
-}) {
-    const addedSMS = convertToReal(smsOrder.amount);
-    const smsPrice = convertToReal(smsOrder.price, { moneySign: true });
+export default function AddSMS({ orderList, handleItem }) {
+    const smsOrder = orderList.find((o) => o.name === "sms") || {
+        name: "sms",
+        count: 0,
+        amount: 0,
+    };
+
+    const gotItems = Boolean(smsOrder.count);
+    const addedSMS = convertToReal(smsOrder.count);
+    const smsPrice = convertToReal(smsOrder.amount, { moneySign: true });
 
     const styles = getStyles();
 
@@ -22,7 +27,7 @@ export default function AddSMS({
         <section className="position-relative">
             <div className="container-center-col">
                 <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
-                    Envie SMS
+                    Envvio SMS &#174;
                     <span className="d-block text-normal text-purple text-center">
                         Invista em SMS e use quando precisar sem prazo para
                         expirar
@@ -46,12 +51,22 @@ export default function AddSMS({
                 <p className="ml-5 mt-3 text-center text-subtitle font-weight-bold text-purple">
                     {smsPrice}
                 </p>
-                <AddSMSBtn
-                    btnTitle={smsOrder.amount ? "Alterar" : "Adicionar"}
-                    handleNewOrder={handleNewOrder}
-                    smsOrder={smsOrder}
-                    classPosition="mt-2"
-                />
+                <section className="container-center">
+                    <AddSMSBtn
+                        btnTitle={gotItems ? "Alterar" : "Adicionar"}
+                        handleItem={handleItem}
+                        smsOrder={smsOrder}
+                        classPosition="mt-2"
+                    />
+                    {gotItems && (
+                        <div className="ml-3">
+                            <DeleteButton
+                                position="relative"
+                                onClick={() => handleItem("remove", "sms")}
+                            />
+                        </div>
+                    )}
+                </section>
             </div>
         </section>
     );

@@ -122,7 +122,7 @@ export default function Article() {
     return (
         <section>
             <ShowTitle title="Fiddelize Ensina" />
-            <ShowArticleTitle title="Como descontar pontos quando cliente conclui um desafio?" />
+            <ShowArticleTitle title="Como descontar moedas quando cliente conclui um desafio?" />
             <ShowPicture
                 src="/img/articles/score-discount/main.jpg"
                 timeout={2000}

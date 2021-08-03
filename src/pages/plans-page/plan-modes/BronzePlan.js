@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -18,6 +18,8 @@ import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import AddClientsToCart from "./sessions/AddClientsToCart";
 import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
 import AddSMS from "./sessions/AddSMS";
+import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
+import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
@@ -39,72 +41,31 @@ const getStyles = () => ({
 
 export default function BronzePlan({ setCurrPlan }) {
     const [nextPage, setNextPage] = useState(false);
-    const [currService, setCurrService] = useState(null);
     const [data, setData] = useState({
-        totalInvest: 0,
-        totalServices: 0,
-        period: "yearly",
-        orders: {}, // e.g { "Novvos Clientes": { amount: 0, price: 0, expiryDate: dateFormat }
+        orderCount: 0,
+        orderAmount: 0,
+        orderList: [],
+        period: "monthly",
     });
-    const { totalInvest, totalServices, period, orders } = data;
-    // console.table(data); // for objects without the necessary of using JSON.stringify(obj)
-    const showMainUpperOpts = useDetectScrollSingle(".period-selection");
+    const { orderList, orderAmount, orderCount, period } = data;
+    // console.table("orderList", orderList);
+
+    const handleItem = (action, payload) => {
+        const actions = ["update", "remove"];
+        if (!actions.includes(action))
+            throw new Error(`Invalid action. Only ${actions}`);
+        const isUpdate = action === "update";
+
+        if (isUpdate) updateItem({ ...payload, setData });
+        else removeItem({ itemName: payload, setData });
+    };
+    useOrderTotal({ orderList, setData });
+
     useScrollUp();
     const isScrollingUpward = useDetectScrollUp();
-
-    useEffect(() => {
-        let total = 0;
-
-        let totalServ = 0;
-        for (const serv in orders) {
-            ++totalServ;
-            total += orders[serv].price;
-        }
-
-        setData({
-            ...data,
-            totalInvest: total,
-            totalServices: totalServ,
-        });
-    }, [orders]);
+    const showMainUpperOpts = useDetectScrollSingle(".period-selection");
 
     const styles = getStyles();
-
-    const handleNewOrder = (serviceName, options = {}) => {
-        setCurrService(serviceName);
-
-        const {
-            order,
-            orderGroup,
-            orderGroupPrice = 0,
-            removeOrderGroup,
-        } = options;
-
-        const orderPrice = order ? order.price : orderGroupPrice;
-        const newTotal = orderPrice;
-
-        // for SMS logics
-        const needCurrRemoval = order && order.removeCurr;
-        needCurrRemoval &&
-            setData({
-                ...data,
-                orders: { ...orders, [serviceName]: orders[serviceName] },
-            });
-
-        const handleOrderShape = () => {
-            if (removeOrderGroup) {
-                const newOrder = orders;
-                delete newOrder[removeOrderGroup];
-                return { ...orders, ...newOrder };
-            }
-            return orderGroup
-                ? { ...orders, ...orderGroup }
-                : { ...orders, [serviceName]: order };
-        };
-        const ordersObj = handleOrderShape();
-
-        setData({ ...data, orders: ordersObj });
-    };
 
     const handlePeriod = (newPeriod) => {
         setData({ ...data, period: newPeriod });
@@ -124,12 +85,12 @@ export default function BronzePlan({ setCurrPlan }) {
     );
 
     const modalClientsData = {
-        handleNewOrder,
+        handleItem,
         period,
     };
 
     const handleNextPage = () => {
-        if (!totalInvest)
+        if (!orderAmount)
             return showToast("Carrinho Vazio! Selecione algum serviço.");
         setNextPage(true);
     };
@@ -152,9 +113,11 @@ export default function BronzePlan({ setCurrPlan }) {
                         showPlanSwitchBtns()
                     )}
                     <MainTitle
-                        customPlanTitle="Meu"
+                        customPlanTitle="Meu Plano"
                         plan="Bronze"
-                        planMsg="Faça seu próprio plano.<br />Escolha seu preço."
+                        planMsg={`
+                            Escolha preços e quantidades para um plano do tamanho que precisar!
+                        `}
                     />
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />
@@ -163,25 +126,26 @@ export default function BronzePlan({ setCurrPlan }) {
 
                     <AddClientsToCart
                         modalData={modalClientsData}
-                        clientOrder={orders[currService]}
-                        currService={currService}
+                        orderList={orderList}
                     />
                     <div style={{ marginBottom: 100 }} />
 
-                    <ServicesGallery
-                        handleNewOrder={handleNewOrder}
-                        period={period}
-                    />
-                    <div style={{ marginBottom: 50 }} />
-
                     <AddSMS
-                        smsOrder={orders.sms}
-                        handleNewOrder={handleNewOrder}
+                        orderList={orderList}
+                        handleItem={handleItem}
                         top={-80}
                     />
+                    <div style={{ marginBottom: 100 }} />
+
+                    <ServicesGallery handleItem={handleItem} period={period} />
+                    <div style={{ marginBottom: 100 }} />
+
+                    <IntegratedServicesCard />
+                    <div style={{ marginBottom: 100 }} />
+
                     <TotalInvest
-                        totalInvest={totalInvest}
-                        totalServices={totalServices}
+                        orderAmount={orderAmount}
+                        orderCount={orderCount}
                     />
                     <ContinueBtn onClick={handleNextPage} />
                 </section>
@@ -190,8 +154,8 @@ export default function BronzePlan({ setCurrPlan }) {
                     plan="bronze"
                     period={period}
                     setNextPage={setNextPage}
-                    orders={orders}
-                    orderTotal={totalInvest}
+                    orderList={orderList}
+                    orderTotal={orderAmount}
                 />
             )}
         </section>

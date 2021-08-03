@@ -21,7 +21,7 @@ const getStyles = (props) => ({
 
 export default function AddSMSBtn({
     btnTitle = "Adicionar",
-    handleNewOrder,
+    handleItem,
     smsOrder,
     classPosition = "mt-5 ml-3",
     modalData,
@@ -42,8 +42,7 @@ export default function AddSMSBtn({
     const AsyncAddSMSContent = (
         <Async
             currValues={smsOrder}
-            needRemoveCurrValue={btnTitle === "Alterar"}
-            handleNewOrder={handleNewOrder}
+            handleItem={handleItem}
             handleFullClose={handleFullClose}
             modalData={modalData}
         />
@@ -53,6 +52,7 @@ export default function AddSMSBtn({
         <section className={btnTitle !== "Adicionar" ? "" : classPosition}>
             <ButtonFab
                 size="large"
+                width="100%"
                 title={btnTitle}
                 onClick={handleFullOpen}
                 backgroundColor="var(--themeSDark--default)"

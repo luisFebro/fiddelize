@@ -1,21 +1,18 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
+import getFirstName from "utils/string/getFirstName";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import Img from "components/Img";
+import setProRenewal from "utils/biz/setProRenewal";
 import Simulator from "./Simulator";
-import useData from "init";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import Img from "../../../../../components/Img";
-import setProRenewal from "../../../../../utils/biz/setProRenewal";
 
 export default withRouter(AsyncAddSMSContent);
 
 function AsyncAddSMSContent({
     history,
-    handleNewOrder,
+    handleItem,
     handleFullClose,
-    needRemoveCurrValue,
-    currValues,
     modalData,
 }) {
     // end fromSession
@@ -28,7 +25,7 @@ function AsyncAddSMSContent({
         totalSMS: 0,
         inv: 0,
     });
-    const { inv, totalSMS, totalPackage, SKU } = data;
+    const { inv, totalSMS, totalPackage } = data;
 
     const handleData = (newData) => {
         setData({
@@ -36,9 +33,6 @@ function AsyncAddSMSContent({
             ...newData,
         });
     };
-
-    let { name: userName } = useData();
-    userName = getFirstName(userName);
 
     const showTitle = () => (
         <div className="mt-4">
@@ -61,27 +55,29 @@ function AsyncAddSMSContent({
     );
 
     const handleCTA = () => {
-        const needCurrRemoval = needRemoveCurrValue; // && currValues.amount !== totalSMS;
-        const isFunc = typeof handleNewOrder === "function";
+        const isFunc = typeof handleItem === "function";
 
-        const orderObj = {
+        const item = {
+            name: "sms",
+            count: totalSMS,
+            amount: inv,
             totalPackage,
-            amount: totalSMS,
-            price: inv,
-            removeCurr: !!needCurrRemoval,
         };
-        isFunc && handleNewOrder("sms", { order: orderObj });
-        isFunc && handleFullClose();
+
+        if (isFunc) {
+            handleItem("update", { item });
+            handleFullClose();
+        }
 
         if (isFromSession) {
             setProRenewal({
                 expiryDate: "2050-11-26T16:51:32.848Z", // a very late hard-coded date cuz it does not expires.
-                orders: { sms: orderObj },
+                orderList: [{ sms: item }],
                 period: "yearly",
                 planBr: currPlan,
                 ref: undefined,
                 investAmount: inv,
-            }).then((res) => {
+            }).then(() => {
                 history.push("/pedidos/admin");
             });
         }

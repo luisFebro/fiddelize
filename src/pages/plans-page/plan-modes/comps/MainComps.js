@@ -62,7 +62,7 @@ const ContinueBtn = ({ onClick }) => {
     );
 };
 
-const TotalInvest = ({ totalInvest, totalServices }) => {
+const TotalInvest = ({ orderAmount, orderCount }) => {
     const styles = getStyles();
 
     const totalCartRef = useRef();
@@ -75,13 +75,13 @@ const TotalInvest = ({ totalInvest, totalServices }) => {
                 "normal",
                 () => null
             );
-    }, [totalInvest, totalCartRef]);
+    }, [orderAmount, totalCartRef]);
 
-    const totalCart = convertToReal(totalInvest, { moneySign: true });
+    const totalCart = convertToReal(orderAmount, { moneySign: true });
 
     const showCart = () => (
         <NotificationBadge
-            badgeValue={totalServices}
+            badgeValue={orderCount}
             badgeInvisible={false}
             backgroundColor="var(--mainRed)"
             borderColor="var(--mainWhite)"
@@ -129,12 +129,20 @@ const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
             className={containerCenter ? "container-center" : undefined}
             style={!containerCenter ? styles.rootPeriod : undefined}
         >
+            <p
+                className="position-relative mb-2 font-site text-em-1 text-white"
+                style={{
+                    left: 15,
+                }}
+            >
+                Qual duração do plano?
+            </p>
             <SwitchBtn
                 titleQuestion=""
                 titleLeft="Mensal"
                 titleRight="Anual"
                 callback={handlePeriodChange}
-                defaultStatus
+                defaultStatus={false}
                 pillStyle
                 pillBack="var(--mainWhite)"
             />

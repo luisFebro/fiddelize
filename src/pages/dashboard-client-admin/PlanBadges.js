@@ -15,7 +15,7 @@ function PlanBadges({ history }) {
 
     const [data, totalServs, loading] = useData([
         "orders_clientAdmin",
-        "totalServices_clientAdmin",
+        "orderCount_clientAdmin",
     ]);
 
     const destiny = data ? "/pedidos/admin" : "/planos?cliente-admin=1";

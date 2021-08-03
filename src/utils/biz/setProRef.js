@@ -2,7 +2,7 @@ import getVar from "init/var";
 import { getServiceSKU } from "../string/getSKUCode.js";
 
 export default function setProRef({ setData, planBr, period }) {
-    getVar("totalServices_clientAdmin").then((totalServ) => {
+    getVar("orderCount_clientAdmin").then((totalServ) => {
         const thisCode = getServiceSKU({
             plan: planBr,
             total: totalServ || 1,

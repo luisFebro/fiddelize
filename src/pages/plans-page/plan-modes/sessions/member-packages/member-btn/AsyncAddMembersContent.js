@@ -1,24 +1,17 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
-import Simulator from "./Simulator";
-import useData from "init";
-import getFirstName from "../../../../../../utils/string/getFirstName";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import Img from "../../../../../../components/Img";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import Img from "components/Img";
+import setProRenewal from "utils/biz/setProRenewal";
 import { PeriodSelection } from "../../../comps/MainComps";
-import setProRenewal from "../../../../../../utils/biz/setProRenewal";
+import Simulator from "./Simulator";
 
 export default withRouter(AsyncAddMembersContent);
 
-function AsyncAddMembersContent({
-    history,
-    modalData,
-    handleFullClose,
-    needRemoveCurrValue,
-}) {
+function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
     let {
-        handleNewOrder,
+        handleItem,
         period,
         // creditsBadge
         isCreditsBadge,
@@ -29,12 +22,12 @@ function AsyncAddMembersContent({
 
     const [data, setData] = useState({
         totalPackage: 0,
-        totalCustomers: 0,
         inv: 0,
-        innerPeriod: "yearly",
+        innerPeriod: "monthly",
+        // totalMembers: 0,
         // SKU: "",
     });
-    const { inv, totalCustomers, totalPackage, innerPeriod } = data;
+    const { inv, totalPackage, innerPeriod } = data;
 
     period = period || innerPeriod;
 
@@ -52,9 +45,6 @@ function AsyncAddMembersContent({
             ...newData,
         });
     };
-
-    let { name: userName } = useData();
-    userName = getFirstName(userName);
 
     const handlePeriodName = () => {
         if (isCreditsBadge) return "";
@@ -101,32 +91,30 @@ function AsyncAddMembersContent({
     );
 
     const handleCTA = () => {
-        const needCurrRemoval = needRemoveCurrValue; // && currValues.amount !== totalCustomers;
-        const isFunc = typeof handleNewOrder === "function";
+        const isFunc = typeof handleItem === "function";
 
-        const orderObj = {
-            totalPackage,
-            amount: totalCustomers,
-            price: inv,
-            removeCurr: needCurrRemoval
-                ? true
-                : !isCreditsBadge
-                ? false
-                : undefined,
+        // totalPackage is the count since there is no package
+        const item = {
+            name: "Novvos Membros",
+            count: totalPackage,
+            amount: inv,
         };
-        isFunc && handleNewOrder("Novvos Membros", { order: orderObj });
-        isFunc && handleFullClose();
+
+        if (isFunc) {
+            handleItem("update", { item });
+            handleFullClose();
+        }
 
         if (isCreditsBadge) {
             setProRenewal({
                 expiryDate,
-                orders: { "Novvos Membros": orderObj },
+                orderList: [{ "Novvos Membros": item }],
                 period: innerPeriod,
                 planBr: currPlan,
                 ref: undefined,
                 investAmount: inv,
                 isSingleRenewal: true,
-            }).then((res) => {
+            }).then(() => {
                 history.push("/pedidos/admin");
             });
         }

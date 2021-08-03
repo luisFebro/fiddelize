@@ -1,34 +1,25 @@
-import convertToReal from "../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
 // Handle object into object and return custom data for table:
-// const thisModel = { currPlan: {amount: 4, price: 350}}
+// const thisModel = { currPlan: {count: 4, amount: 350}}
 
-const handleServiceName = ({
-    serv,
-    plan,
-    period,
-    amount,
-    totalPackage,
-    packageQtt,
-}) => {
+const handleServiceName = ({ serv, plan, period, count }) => {
+    const plural = count > 1 ? "s" : "";
+
     if (serv === "currPlan")
-        return `Plano ${plan || "profissional"} ${
-            period === "yearly" ? "anual" : !plan ? "" : "mensal"
-        } com ${amount} serviços`;
+        return `Plano ${plan || "profissional"} ${handlePeriod({
+            plan,
+            period,
+        })}${handleDesc({ plan })}`;
 
-    if (serv === "sms")
-        return `${totalPackage} ${
-            totalPackage === 1 ? "pacote" : "pacotes"
-        } com ${convertToReal(packageQtt)} SMS`;
+    if (serv === "sms") return `${convertToReal(count)} SMS`;
 
     if (serv === "Novvos Clientes")
-        return `Novvos Clientes - ${totalPackage} ${
-            totalPackage === 1 ? "pacote" : "pacotes"
-        } com ${convertToReal(packageQtt)} clientes`;
+        return `Novvos Clientes com +${convertToReal(
+            count
+        )} cadastro${plural} de cliente${plural}`;
 
     if (serv === "Novvos Membros")
-        return `Novvos Membros - serviço com ${totalPackage} ${
-            totalPackage === 1 ? "membro" : "membros"
-        }`;
+        return `Novvos Membros com +${count} cadastro${plural} de membro${plural}`;
 
     return serv;
 };
@@ -39,52 +30,53 @@ const getElem = (elem) => (
     </span>
 );
 
-export default function getOrderTableList(orders, options = {}) {
+export default function getOrderTableList(orderList, options = {}) {
     const { plan, period } = options;
 
-    const newList = [];
-    let thisTotalServ = 0;
-
-    for (const serv in orders) {
-        let { amount, price, totalPackage, isPreSale } = orders[serv];
-        price = convertToReal(price, {
+    const newList = orderList.map((item) => {
+        const { count, name } = item;
+        let { amount } = item;
+        amount = convertToReal(amount, {
             moneySign: true,
             needFraction: true,
         });
 
-        let packageQtt;
-        if (totalPackage) {
-            packageQtt = amount;
-            amount = 1;
-        }
-
-        thisTotalServ += amount;
-
         const serviceElem = (
             <span className="d-inline-block" style={{ width: 250 }}>
                 {handleServiceName({
-                    serv,
+                    serv: name,
                     plan,
                     period,
-                    amount,
-                    totalPackage,
-                    packageQtt,
+                    count,
                 })}
-                {isPreSale && (
-                    <span className="d-inline-block ml-2 text-pill theme-back-blue">
-                        pré-venda
-                    </span>
-                )}
             </span>
         );
 
-        const orderItem = {
-            quantity: getElem(amount),
+        return {
+            quantity: getElem(1),
             service: serviceElem,
-            finalValue: getElem(price),
+            finalValue: getElem(amount),
         };
-        newList.push(orderItem);
-    }
+    });
 
-    return { newList, thisTotalServ };
+    return {
+        newList,
+        thisTotalServ: orderList && orderList.length,
+    };
 }
+
+// HELPERS
+function handleDesc({ plan }) {
+    if (plan === "ouro") return " com cadastro ilimitado de clientes e membros";
+    if (plan === "prata")
+        return " com cadastro de até 2.000 clientes e 10 membros";
+
+    return "";
+}
+
+function handlePeriod({ plan, period }) {
+    if (period === "yearly") return "anual";
+    if (!plan) return "";
+    return "mensal";
+}
+// END HELPERS

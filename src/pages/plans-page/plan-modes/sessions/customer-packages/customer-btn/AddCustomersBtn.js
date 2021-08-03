@@ -38,11 +38,7 @@ export default function AddCustomersBtn({
     };
 
     const AsyncAddCustomersContent = (
-        <Async
-            modalData={modalData}
-            handleFullClose={handleFullClose}
-            needRemoveCurrValue={btnTitle === "Alterar"}
-        />
+        <Async modalData={modalData} handleFullClose={handleFullClose} />
     );
 
     return (

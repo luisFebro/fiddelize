@@ -1,9 +1,9 @@
-import { setVar } from "init/var";
+import { setVars } from "init/var";
 import getDatesCountdown from "../../hooks/dates/getDatesCountdown";
 
 export default async function setProRenewal({
     expiryDate,
-    orders,
+    orderList,
     investAmount,
     planBr,
     ref,
@@ -13,27 +13,14 @@ export default async function setProRenewal({
 }) {
     const daysLeft = getDatesCountdown(expiryDate);
 
-    return await Promise.all([
-        setVar({
-            orders_clientAdmin: orders,
-        }),
-        setVar({
-            totalMoney_clientAdmin: investAmount,
-        }),
-        setVar({
-            planPeriod_clientAdmin: period, // "yearly" : "monthly"
-        }),
-        setVar({
-            ordersPlan_clientAdmin: planBr,
-        }),
-        setVar({
-            renewalDaysLeft_clientAdmin: daysLeft || 0,
-        }),
-        setVar({
-            renewalRef_clientAdmin: ref,
-        }),
-        setVar({
-            isSingleRenewal_clientAdmin: isSingleRenewal,
-        }),
-    ]);
+    return await setVars({
+        orders_clientAdmin: orderList,
+        staff: cardsData.staff,
+        totalMoney_clientAdmin: investAmount,
+        planPeriod_clientAdmin: period, // "yearly" : "monthly"
+        ordersPlan_clientAdmin: planBr,
+        renewalDaysLeft_clientAdmin: daysLeft || 0,
+        renewalRef_clientAdmin: ref,
+        isSingleRenewal_clientAdmin: isSingleRenewal,
+    });
 }

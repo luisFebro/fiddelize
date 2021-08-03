@@ -1,14 +1,7 @@
-import { Load } from "../../code-splitting/LoadableComp";
-
-const AsyncOrgganizeClients = Load({
-    loader: () =>
-        import(
-            "./feature-pages/OrgganizeClients_1" /* webpackChunkName: "pro-feature-page-lazy" */
-        ),
-});
+// import { Load } from "../../code-splitting/LoadableComp";
 
 const featureStore = (data) => ({
-    OrgganizeClients_1: <AsyncOrgganizeClients data={data} />,
+    OrgganizeClients_1: null, // <AsyncOrgganizeClients data={data} />
 });
 
 export default function pickFeature({
@@ -21,3 +14,11 @@ export default function pickFeature({
 
     return pickComp;
 }
+
+// ARCHIVES
+// const AsyncOrgganizeClients = Load({
+//     loader: () =>
+//         import(
+//             "./feature-pages/OrgganizeClients_1" /* webpackChunkName: "pro-feature-page-lazy"
+//         ),
+// });

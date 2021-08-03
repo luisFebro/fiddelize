@@ -12,11 +12,12 @@ import useBackColor from "../../../hooks/useBackColor";
 import getServices from "./sessions/services/getServices";
 import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
 import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
+import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
 
 // sessions
-import ServicesCard from "./sessions/services/ServicesCard";
-import AddClientsToCart from "./sessions/AddClientsToCart";
+import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
 import AddSMS from "./sessions/AddSMS";
+// import AddClientsToCart from "./sessions/AddClientsToCart";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
@@ -36,110 +37,43 @@ const getStyles = () => ({
     },
 });
 
-const defaultOrders = {
-    currPlan: { amount: 0, price: 0 },
-};
-
 export default function GoldPlan({ setCurrPlan }) {
     const [nextPage, setNextPage] = useState(false);
-    const [currService, setCurrService] = useState(null);
-
     const [data, setData] = useState({
-        totalInvest: 0,
-        totalServices: 0,
-        period: "yearly",
-        orders: defaultOrders,
+        orderCount: 0,
+        orderAmount: 0,
+        orderList: [],
+        period: "monthly",
     });
-    const { totalServices, totalInvest, period, orders } = data;
+    const { orderList, orderCount, orderAmount, period } = data;
+    // console.table("orderList", orderList);
+
+    const handleItem = (action, payload) => {
+        const actions = ["update", "remove"];
+        if (!actions.includes(action))
+            throw new Error(`Invalid action. Only ${actions}`);
+        const isUpdate = action === "update";
+
+        if (isUpdate) updateItem({ ...payload, setData });
+        else removeItem({ itemName: payload, setData });
+    };
+    useBackColor("var(--mainWhite)");
+    useOrderTotal({ orderList, setData });
+    useSetInitialPlanTotal({ period, setData });
 
     const showMainUpperOpts = useDetectScrollSingle(".period-selection");
     const isScrollingUpward = useDetectScrollUp();
 
-    useEffect(() => {
-        let total = 0;
-
-        const defaultQuantity = orders.currPlan.amount - 1; // this amount counts twicein the obj
-        let totalServ = 0;
-        for (const serv in orders) {
-            ++totalServ;
-            total += orders[serv].price;
-        }
-
-        setData({
-            ...data,
-            totalInvest: total,
-            totalServices: defaultQuantity + totalServ,
-        });
-    }, [orders]);
-
     const styles = getStyles();
 
-    const handleNewOrder = (serviceName, options = {}) => {
-        setCurrService(serviceName);
-
-        const {
-            order,
-            orderGroup,
-            orderGroupPrice = 0,
-            removeOrderGroup,
-        } = options;
-
-        const orderPrice = order ? order.price : orderGroupPrice;
-        const newTotal = orders.currPlan.price + orderPrice;
-
-        // for SMS logics
-        const needCurrRemoval = order && order.removeCurr;
-        needCurrRemoval &&
-            setData({
-                ...data,
-                orders: { ...orders, [serviceName]: orders[serviceName] },
-            });
-
-        const handleOrderShape = () => {
-            if (removeOrderGroup) {
-                const newOrder = orders;
-                delete newOrder[removeOrderGroup];
-                return { ...orders, ...newOrder };
-            }
-            return orderGroup
-                ? { ...orders, ...orderGroup }
-                : { ...orders, [serviceName]: order };
-        };
-        const ordersObj = handleOrderShape();
-
-        setData({ ...data, orders: ordersObj });
-    };
-
-    const modalClientsData = {
-        handleNewOrder,
-        period,
-    };
+    // const modalClientsData = {
+    //     handleItem,
+    //     period,
+    // };
 
     const handlePeriod = (newPeriod) => {
         setData({ ...data, period: newPeriod });
     };
-
-    const handleStartInvest = (newAmount, newTotal) => {
-        setData({
-            ...data,
-            orders: {
-                ...defaultOrders,
-                currPlan: { amount: newAmount, price: newTotal },
-            },
-        });
-    };
-
-    useEffect(() => {
-        const { newAmount, newTotal } = getServices("pro", {
-            total: true,
-            plan: "gold",
-            period,
-        });
-
-        handleStartInvest(newAmount, newTotal);
-    }, [period]);
-
-    useBackColor("var(--mainWhite)");
 
     const showPlanSwitchBtns = () => (
         <section className="animated fadeInDown" style={styles.root}>
@@ -170,32 +104,49 @@ export default function GoldPlan({ setCurrPlan }) {
                         showPlanSwitchBtns()
                     )}
                     <MainTitle
-                        planMsg="Maior alcance, melhor preço por app - R$ 0.06. +10.000 apps para conquistar clientes" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
+                        planMsg="Cadastre novos clientes e membros de forma ilimitada" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
                     />
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />
                     </section>
-                    <div style={{ height: 50 }} />
+                    <div style={{ height: 130 }} />
 
-                    <ServicesCard plan="gold" period={period} />
-                    <div style={{ marginBottom: 100 }} />
+                    {period === "yearly" && (
+                        <div className="my-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
+                            <p>
+                                você economiza 20%
+                                <br />
+                                no plano anual
+                            </p>
+                            <p>
+                                de{" "}
+                                <span
+                                    style={{ textDecoration: "line-through" }}
+                                >
+                                    R$ 1.800
+                                </span>
+                                <br />
+                                por R$ 1.500
+                            </p>
+                        </div>
+                    )}
 
-                    <AddClientsToCart
-                        modalData={modalClientsData}
-                        clientOrder={orders[currService]}
-                        currService={currService}
-                        disableCliUser
-                    />
-                    <div style={{ marginBottom: 100 }} />
-
+                    <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
+                        <span className="text-pill">Serviços Extras</span>
+                    </p>
                     <AddSMS
-                        smsOrder={orders.sms}
-                        handleNewOrder={handleNewOrder}
+                        orderList={orderList}
+                        handleItem={handleItem}
+                        top={-80}
                     />
+                    <div style={{ marginBottom: 100 }} />
+
+                    <IntegratedServicesCard />
+                    <div style={{ marginBottom: 100 }} />
 
                     <TotalInvest
-                        totalInvest={totalInvest}
-                        totalServices={totalServices}
+                        orderAmount={orderAmount}
+                        orderCount={orderCount}
                     />
                     <ContinueBtn onClick={() => setNextPage(true)} />
                 </section>
@@ -204,10 +155,55 @@ export default function GoldPlan({ setCurrPlan }) {
                     plan="ouro"
                     period={period}
                     setNextPage={setNextPage}
-                    orders={orders}
-                    orderTotal={totalInvest}
+                    orderList={orderList}
+                    orderTotal={orderAmount}
                 />
             )}
         </section>
     );
 }
+
+// HOOKS
+function useSetInitialPlanTotal({ period, setData }) {
+    useEffect(() => {
+        const { newCount, newAmount } = getServices("pro", {
+            total: true,
+            plan: "gold",
+            period,
+        });
+
+        const handleStartInvest = () => {
+            setData((prev) => {
+                const prevClearedList = prev.orderList.filter(
+                    (o) => o.name !== "currPlan"
+                );
+
+                return {
+                    ...prev,
+                    orderList: [
+                        ...prevClearedList,
+                        {
+                            name: "currPlan",
+                            count: newCount,
+                            amount: newAmount,
+                        },
+                    ],
+                };
+            });
+        };
+
+        handleStartInvest();
+
+        // eslint-disable-next-line
+    }, [period]);
+}
+// END HOOKS
+
+/* ARCHIVES
+<AddClientsToCart
+    modalData={modalClientsData}
+    orderList={orderList}
+    disableCliUser
+/>
+
+*/

@@ -1,98 +1,176 @@
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import ListAltIcon from "@material-ui/icons/ListAlt";
-import LocalMallIcon from "@material-ui/icons/LocalMall";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import AmpStoriesIcon from "@material-ui/icons/AmpStories";
-import PermPhoneMsgIcon from "@material-ui/icons/PermPhoneMsg";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import FindInPageIcon from "@material-ui/icons/FindInPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import { proVersion } from "./proVersion";
 
-const freeVersion = (styles) => [
+const integratedServices = (styles) => [
     {
-        name:
-            "Links Cadastráveis e <br />Convites Personalizados<br />com sua logo e cores",
-        Icon: <MailOutlineIcon style={styles.muStyle} />,
-        price: null,
-        proPage: "",
-        greyedout: false,
-    },
-    {
-        name:
-            "Avaliação de clientes:<br />- métrica de fidelidade;<br />- nota experiência;<br/>- relatos de compra;",
-        Icon: <FindInPageIcon style={styles.muStyle} />,
-        price: null,
-        proPage: "",
-        greyedout: false,
-    },
-    {
-        name: "Sistema de entrega<br />de prêmios para<br />admin e membros",
-        Icon: <ListAltIcon style={styles.muStyle} />,
-        price: null,
-        proPage: "",
-        greyedout: false,
-    },
-    {
-        name: "Jogos/Desafios  <br />ilimitados para clientes",
-        gold: {
-            name: "Jogos/Desafios  <br />ilimitados para clientes",
-        },
-        silver: {
-            name: "Jogos/Desafios  <br />ilimitados para clientes",
-        },
+        name: `
+            <strong>2 Jogos de compra</strong><br />completos com desafios<br />ilimitados para clientes:<br />
+            - Prêmio Alvo;<br />
+            - Desconto Retornado;<br />
+        `,
         Icon: <SportsEsportsIcon style={styles.muStyle} />,
         customIcon: "",
         cardDesc: "",
-        proPage: "",
     },
     {
-        name: "Histórico Automático de <br />compras de clientes",
-        Icon: <LocalMallIcon style={styles.muStyle} />,
+        name: `
+            <strong>Moeda Digital PTS</strong><br />
+            exclusiva de pontos para<br /> a troca de benefícios<br />com
+            gestão mais completa<br />do mercado:<br />
+            - adicionar;<br />
+            - doar (aniversário clientes);<br />
+            - descontar (incluso<br />escaneador código QR);<br />
+            - remover;<br />
+            - expirar moedas;<br />
+            - histórico de transações<br />em todos apps;
+        `,
+        Icon: <FontAwesomeIcon icon="coins" style={styles.muStyle} />,
+        customIcon: "",
+        cardDesc: "",
+    },
+    {
+        name: `
+            <strong>Avaliação de clientes</strong><br />
+            para conhecer a opinião<br />da clientela sobre seu <br />negócio a cada compra:<br />
+            - métrica de fidelidade<br />(baseado no NPS);<br />
+            - nota experiência<br />de compra;<br/>
+            - relatos de compra<br />do cliente;<br />
+            - relatórios e resultado<br />das avaliações para admin;
+        `,
+        Icon: <FindInPageIcon style={styles.muStyle} />,
         price: null,
-        proPage: "",
         greyedout: false,
     },
     {
-        name: "App cliente<br />personalizável completo",
-        Icon: <FontAwesomeIcon icon="magic" style={styles.muStyle} />,
+        name: `
+            <strong>Links e Convites</strong><br />para clientes se registrar<br />e participar do seu clube<br />de compra direto dos<br />seus dispositivos:<br />
+            - Links Cadastráveis com<br />opção de enviar moedas;<br />
+            - Convites Personalizados<br />com sua logo e cores;`,
+        Icon: <MailOutlineIcon style={styles.muStyle} />,
         price: null,
-        proPage: "",
         greyedout: false,
     },
     {
-        name:
-            "Pódio Fidelidade para<br />você conhecer clientes<br/> que compram mais",
-        Icon: <AmpStoriesIcon style={styles.muStyle} />,
+        name: `
+            <strong>Gestão de benefícios</strong><br />para saber em um só lugar:<br />
+            - clientes com benefícios<br />
+            disponíveis para resgate;<br />
+            - confirmar benefícios pelo<br />
+            nome cliente, ou <br />comprovante digital<br />
+            com opção de código QR;<br />
+            - histórico de recebimentos;<br />
+        `,
+        Icon: <ListAltIcon style={styles.muStyle} />,
         price: null,
-        proPage: "",
         greyedout: false,
     },
     {
-        name:
-            "Código QR com sua logo<br />para divulgação com<br />opção para baixar",
-        Icon: <CropFreeIcon style={styles.muStyle} />,
+        name: `
+            <strong>Filtros de compra</strong><br />
+            para conhecer fatos sobre<br />
+            carteira de clientes como<br />
+            maiores valores de compra<br />
+            por clientes, saldo ativo,<br />
+            últimas compras e mais!
+        `,
+        Icon: <FilterListIcon style={styles.muStyle} />,
         price: null,
-        proPage: "",
         greyedout: false,
     },
     {
-        name: "Atendimento com seu <br />negócio via Whatsapp",
-        Icon: <PermPhoneMsgIcon style={styles.muStyle} />,
-        price: null,
-        proPage: "",
-        greyedout: false,
-    },
-    {
-        name:
-            "2 Apps gestão:<br />- 1 admin;<br />- 1 equipe (primeiro grátis);",
+        name: `
+            <strong>2 Tipos de apps gestão:</strong><br />
+            - para admin: você no<br />controle das principais<br />prefências dos apps;<br />
+            - para membros: sua<br />equipe ajuda a cadastrar<br />novos clientes, moedas PTS<br />e benefícios (primeiro<br />app é grátis);
+        `,
         Icon: <ImportantDevicesIcon style={styles.muStyle} />,
         price: null,
-        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: `
+            <strong>App do cliente</strong><br />
+            completo, sem anúncios e<br />
+            personalizado com sua<br />
+            marca com destaques:<br />
+            - jogos de compras:<br />
+            cliente acumula moedas,<br />
+            participa dos jogos
+            <br />que você ativar;<br />
+            - cartão de compra<br />
+            com moedas: seu cliente<br />
+            recebe um a cada compra<br />
+            que é adicionado moedas;<br />
+            - histórico de compras;<br />
+            - galeria de benefícios;<br />
+            - suporte para seu negócio<br />via Whatsapp;<br />
+        `,
+        Icon: <PhoneAndroidIcon style={styles.muStyle} />,
+        price: null,
+    },
+    {
+        name: `<strong>2 Pódios do clube:</strong><br />
+            -compra: conheça quem <br />são os clientes que <br />compram mais;<br />
+            -equipe: membros com<br />mais cadastros de<br />clientes ou moedas`,
+        Icon: <AmpStoriesIcon style={styles.muStyle} />,
+        price: null,
+        greyedout: false,
+    },
+    {
+        name:
+            "<strong>Código QR personalizado</strong><br />com sua logo e cor<br />para divulgação com<br />opção para baixar",
+        Icon: <CropFreeIcon style={styles.muStyle} />,
+        price: null,
         greyedout: false,
     },
 ];
+
+const styles = {
+    muStyle: {
+        transform: "scale(1.5)",
+        marginRight: "10px",
+        color: "var(--themeP)",
+    },
+    muStyleGrey: {
+        transform: "scale(1.5)",
+        marginRight: "10px",
+        color: "grey",
+    },
+};
+
+export default function getServices(version = "integrated", options = {}) {
+    const { total = false, period, plan } = options;
+
+    if (plan === "bronze")
+        return proVersion(styles).filter((serv) => serv.name);
+
+    // get total plan only!
+    if (total && (plan === "gold" || plan === "silver")) {
+        let newCount = 0;
+        const newAmount = proVersion(styles).reduce((acc, next) => {
+            const thisPrice = next[plan].price[period];
+            if (thisPrice) newCount++;
+
+            return acc + thisPrice;
+        }, 0);
+
+        return { newCount, newAmount };
+    }
+
+    if (version === "integrated") return integratedServices(styles);
+    if (version === "pro") return proVersion(styles);
+}
+
+/* ARCHIVES
 
 const offplanVersion = () => [
     {
@@ -146,40 +224,4 @@ const offplanVersion = () => [
     },
 ];
 
-const styles = {
-    muStyle: {
-        transform: "scale(1.5)",
-        marginRight: "10px",
-        color: "var(--themeP)",
-    },
-    muStyleGrey: {
-        transform: "scale(1.5)",
-        marginRight: "10px",
-        color: "grey",
-    },
-};
-
-export default function getServices(version = "gratis", options = {}) {
-    const { total = false, period, plan } = options;
-
-    if (plan === "bronze")
-        return proVersion(styles).filter((serv) => serv.name);
-
-    // get total plan only!
-    if (total && (plan === "gold" || plan === "silver")) {
-        let newAmount = 0;
-        const newTotal = proVersion(styles).reduce((acc, next) => {
-            const thisPrice = next[plan].price[period];
-            if (thisPrice) newAmount++;
-
-            return acc + thisPrice;
-        }, 0);
-
-        return { newAmount, newTotal };
-    }
-
-    if (version === "gratis") return freeVersion(styles);
-    if (version === "pro") return proVersion(styles);
-    // discountPerc: 30%
-    if (version === "offplan") return offplanVersion();
-}
+*/

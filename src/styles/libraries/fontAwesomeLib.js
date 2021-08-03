@@ -63,6 +63,7 @@ import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons/faSortAmount
 import { faSortAmountDownAlt } from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
 import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons/faMapMarkedAlt";
 import { faFileContract } from "@fortawesome/free-solid-svg-icons/faFileContract";
+import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
 // services
 import { faFilter } from "@fortawesome/free-solid-svg-icons/faFilter";
 import { faMagic } from "@fortawesome/free-solid-svg-icons/faMagic";
@@ -163,6 +164,7 @@ library.add(
     faSortAmountDownAlt,
     faMapMarkedAlt,
     faBell,
+    faCoins,
     // home marketing
     faBullhorn,
     faStore,

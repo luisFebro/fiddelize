@@ -5,7 +5,6 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import handleChange from "utils/form/use-state/handleChange";
-import usePro from "hooks/pro/usePro";
 import { useOfflineData } from "hooks/storage/useOfflineListData";
 import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import ButtonFab from "../../buttons/material-ui/ButtonFab";
@@ -24,19 +23,12 @@ const getStyles = () => ({
         transform: "translateX(-80%)",
         zIndex: 14,
     },
-    proBadge: {
-        top: 0,
-        right: 10,
-        borderRadius: "20px",
-        padding: "3px 5px",
-        background: "var(--niceUiYellow)",
-    },
 });
 
 const handleTrigger = (dataArray, options = {}) => {
-    const { selected, isPro } = options;
+    const { selected } = options;
 
-    const reverseBrOnlyOptions = dataArray(isPro).map((rev) => rev.reverseBr);
+    const reverseBrOnlyOptions = dataArray().map((rev) => rev.reverseBr);
     const needSkipReverse = gotArrayThisItem(reverseBrOnlyOptions, selected);
 
     if (needSkipReverse) return false;
@@ -52,7 +44,6 @@ export default function AnimaIconsSelect({
     width,
     needReverseBtn = true,
     zIndex,
-    checkServicePro,
 }) {
     const [panel, setPanel] = useState(false);
     const [data, setData] = useState({
@@ -74,16 +65,10 @@ export default function AnimaIconsSelect({
         isReversed,
     } = data;
 
-    const { isPro } = usePro({
-        feature: checkServicePro,
-        trigger: checkServicePro,
-    });
-
     const styles = getStyles();
 
     const needTriggerOffData = handleTrigger(optionsArray, {
         selected,
-        isPro,
     });
     const { offlineData, loading: loadingOffline } = useOfflineData({
         dataName: offlineKey,
@@ -135,7 +120,7 @@ export default function AnimaIconsSelect({
             thisSelected = selected;
         }
 
-        const foundElem = optionsArray(isPro).find(
+        const foundElem = optionsArray().find(
             (opt) => opt.titleBr === thisSelected
         );
         if (foundElem && alreadyOffline.current) {
@@ -184,13 +169,8 @@ export default function AnimaIconsSelect({
             className={`${panel ? "d-block animated fadeIn" : "d-none"}`}
             id="options"
         >
-            {optionsArray(isPro).map((opt) => (
-                <div
-                    key={opt.title}
-                    className={`option ${
-                        isPro || !opt.isPro ? "" : "disabled-link"
-                    }`}
-                >
+            {optionsArray().map((opt) => (
+                <div key={opt.title} className="option">
                     <input
                         className="s-c top"
                         type="radio"
@@ -207,25 +187,12 @@ export default function AnimaIconsSelect({
                         onChange={handleChange(setData)}
                     />
                     {opt.Icon}
-                    <span
-                        style={{
-                            color: isPro || !opt.isPro ? undefined : "grey",
-                        }}
-                        className="label text-small font-weight-bold"
-                    >
+                    <span className="label text-small font-weight-bold">
                         {opt.titleBr}
                     </span>
                     <span className="opt-val text-small font-weight-bold">
                         {opt.titleBr}
                     </span>
-                    {!isPro && opt.isPro && (
-                        <div
-                            className="position-absolute ml-3 font-weight-bold text-small text-black"
-                            style={styles.proBadge}
-                        >
-                            pro
-                        </div>
-                    )}
                 </div>
             ))}
             <div id="option-bg" />
@@ -316,3 +283,23 @@ export default function AnimaIconsSelect({
         </section>
     );
 }
+
+/* ARCHIVES
+// proBadge: {
+//     top: 0,
+//     right: 10,
+//     borderRadius: "20px",
+//     padding: "3px 5px",
+//     background: "var(--niceUiYellow)",
+// },
+
+{!isPro && opt.isPro && (
+    <div
+        className="position-absolute ml-3 font-weight-bold text-small text-black"
+        style={styles.proBadge}
+    >
+        pro
+    </div>
+)}
+
+*/

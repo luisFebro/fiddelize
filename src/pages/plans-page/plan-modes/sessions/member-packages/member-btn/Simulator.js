@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
-import MuSlider from "../../../../../../components/sliders/MuSlider";
-import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
+import convertToReal from "utils/numbers/convertToReal";
+import MuSlider from "components/sliders/MuSlider";
+import { addDays, formatSlashDMY } from "utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -39,40 +39,28 @@ const getStyles = () => ({
     },
 });
 
-const getMembersData = (packages) => {
+const getMembersData = (packages, isYearly) => {
     // unit, expires, unitSizeDec, unitSizeInc
-    if (packages === 1) return [25, null, "1-1", "1-1"];
-    if (packages === 2) return [23, null, "1", "1-2"];
-    if (packages === 3) return [21, null, "0-9", "1-3"];
-    if (packages === 4) return [19, null, "0-8", "1-4"];
-    if (packages === 5) return [17, null, "0-8", "1-4"];
-    if (packages >= 6 && packages < 50) return [15, null, "0-6", "1-5"];
-    // only applied to yearly. Remember this value is doubled.
-    if (packages >= 50 && packages < 70) return [12, null, "0-6", "1-5"];
-    if (packages >= 70 && packages < 90) return [10, null, "0-6", "1-5"];
-    if (packages >= 90) return [8, null, "0-6", "1-5"];
+    // if (packages === 1) return [10, null, "1-1", "1-1"];
+    if (packages === 2) return [isYearly ? 100 : 10, null, "1", "1-2"];
+    if (packages === 3) return [isYearly ? 80 : 8, null, "0-9", "1-3"];
+    if (packages === 4) return [isYearly ? 67.5 : 6.75, null, "0-8", "1-4"];
+
+    return [isYearly ? 60 : 6, null, "0-8", "1-4"];
 };
 
-export default function Simulator({
-    handleData,
-    period,
-    currPlan,
-    animaDisabled,
-}) {
-    const [packages, setPackages] = useState(1);
+export default function Simulator({ handleData, period, currPlan }) {
+    const [packages, setPackages] = useState(2);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
         usageDays: 30,
         formattedExpiryDate: "",
     });
-    // const [increasedPerc, setIncreasedPerc] = useState(null);
-    // const [discountDiff, setDiscountDiff] = useState(null);
-    const { newQuantity, expiryDate, usageDays, formattedExpiryDate } = data;
+
+    const { newQuantity, usageDays, formattedExpiryDate } = data;
 
     const isYearly = period === "yearly";
-
-    const initialPrice = isYearly ? 50 : 25;
 
     useEffect(() => {
         let thisUsageDays = 30;
@@ -92,13 +80,11 @@ export default function Simulator({
         if (newQuantity && !Number.isNaN(newQuantity)) {
             setPackages(newQuantity);
         } else {
-            setPackages(1);
+            setPackages(2);
         }
     }, [newQuantity]);
 
-    let [unit, expires, unitSizeDec, unitSizeInc] = getMembersData(packages);
-
-    unit = isYearly ? unit * 2 : unit;
+    const [unit, , unitSizeDec] = getMembersData(packages, isYearly);
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -110,10 +96,9 @@ export default function Simulator({
     const onePackage = 1;
     const totalUnits = onePackage * packages;
     const totalFinalMoney = totalUnits * unit;
-    const firstPhasePrice = totalUnits * initialPrice;
 
-    const MAX_UNIT_YEAR = 100;
-    const MAX_UNIT_MONTH = 50;
+    const MAX_UNIT_YEAR = 5;
+    const MAX_UNIT_MONTH = 5;
 
     const totalReal = convertToReal(totalUnits);
     const unitReal = convertToReal(unit, {
@@ -126,9 +111,6 @@ export default function Simulator({
     });
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
     // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
-    const firstPhasePriceReal = convertToReal(firstPhasePrice, {
-        moneySign: true,
-    });
 
     useEffect(() => {
         handleData({
@@ -180,7 +162,7 @@ export default function Simulator({
     const handlePlanName = () => {
         if (currPlan === "ouro") return currPlan.cap();
         if (currPlan === "prata") return currPlan.cap();
-        return "Meu Bronze";
+        return "Bronze";
     };
 
     const showSummary = () => (
@@ -215,35 +197,32 @@ export default function Simulator({
             <MuSlider
                 color="var(--themeP)"
                 max={isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
+                min={2}
                 step={1}
                 value={packages}
                 callback={handlePackages}
                 disabled={!!newQuantity}
             />
-            {packages <=
-                (isYearly ? MAX_UNIT_YEAR * 0.3 : MAX_UNIT_MONTH * 0.2) &&
-                !newQuantity && (
-                    <div
-                        className="position-absolute font-weight-bold text-shadow text-center"
-                        style={styles.delimeterBoardRight}
-                    >
-                        {isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
-                        <br />
-                        {subject}s
-                    </div>
-                )}
+            {packages <= 4 && !newQuantity && (
+                <div
+                    className="position-absolute font-weight-bold text-shadow text-center"
+                    style={styles.delimeterBoardRight}
+                >
+                    {isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
+                    <br />
+                    {subject}s
+                </div>
+            )}
 
-            {packages >=
-                (isYearly ? MAX_UNIT_YEAR * 0.3 : MAX_UNIT_MONTH * 0.2) &&
-                !newQuantity && (
-                    <div
-                        className="position-absolute font-weight-bold text-shadow text-center"
-                        style={styles.delimeterBoardLeft}
-                    >
-                        1<br />
-                        {subject}
-                    </div>
-                )}
+            {packages >= 3 && !newQuantity && (
+                <div
+                    className="position-absolute font-weight-bold text-shadow text-center"
+                    style={styles.delimeterBoardLeft}
+                >
+                    1<br />
+                    {subject}
+                </div>
+            )}
         </section>
     );
 

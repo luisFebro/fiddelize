@@ -1,48 +1,57 @@
 import { useState, useEffect } from "react";
-import convertToReal from "../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
+import DeleteButton from "components/buttons/DeleteButton";
 import AddCustomersBtn from "./customer-packages/customer-btn/AddCustomersBtn";
 import AddMembersBtn from "./member-packages/member-btn/AddMembersBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 
+const defaultData = {
+    addedCustomers: 0,
+    addedMembers: 0,
+    customersPrice: "R$ 0",
+    membersPrice: "R$ 0",
+};
+
 export default function AddClientsToCart({
-    clientOrder = { amount: 0, price: 0 },
+    orderList,
     modalData,
-    currService,
     disableCliUser = false,
 }) {
-    const [data, setData] = useState({
-        addedCustomers: 0,
-        addedMembers: 0,
-        customersPrice: "R$ 0",
-        membersPrice: "R$ 0",
-    });
-
+    const [data, setData] = useState(defaultData);
     const { addedCustomers, customersPrice, addedMembers, membersPrice } = data;
 
+    const { handleItem } = modalData;
+
+    const gotClients = orderList.find((o) => o.name === "Novvos Clientes");
+    const gotMembers = orderList.find((o) => o.name === "Novvos Membros");
+
     useEffect(() => {
-        if (!currService) return;
+        if (!gotMembers && !gotClients) return;
 
-        if (currService === "Novvos Clientes") {
-            setData({
-                ...data,
-                addedCustomers: convertToReal(clientOrder.amount),
-                customersPrice: convertToReal(clientOrder.price, {
+        if (gotClients) {
+            setData((prev) => ({
+                ...prev,
+                addedCustomers: convertToReal(gotClients.count),
+                customersPrice: convertToReal(gotClients.amount, {
                     moneySign: true,
                 }),
-            });
+            }));
         }
 
-        if (currService === "Novvos Membros") {
-            setData({
-                ...data,
-                addedMembers: convertToReal(clientOrder.totalPackage),
-                membersPrice: convertToReal(clientOrder.price, {
+        if (gotMembers) {
+            setData((prev) => ({
+                ...prev,
+                addedMembers: convertToReal(gotMembers.count),
+                membersPrice: convertToReal(gotMembers.amount, {
                     moneySign: true,
                 }),
-            });
+            }));
         }
-    }, [currService]);
+
+        // WARNING: I added orderList here because when removing items, all of them desapeers, except when Update the array
+        // eslint-disable-next-line
+    }, [gotMembers, gotClients]);
 
     const showNovvosClientes = () => (
         <section
@@ -53,7 +62,7 @@ export default function AddClientsToCart({
             }}
         >
             <p className="text-normal font-weight-bold d-block text-center text-purple">
-                Novvos Clientes
+                Novvos Clientes &#174;
             </p>
             <div className="text-title text-purple text-center">
                 <span className="d-inline-block font-size text-em-1-5 text-pill">
@@ -73,10 +82,25 @@ export default function AddClientsToCart({
             <p className="text-center text-subtitle font-weight-bold text-purple">
                 {customersPrice}
             </p>
-            <AddCustomersBtn
-                btnTitle={clientOrder.amount ? "Alterar" : "Adicionar"}
-                modalData={modalData}
-            />
+            <section className="container-center position-relative">
+                <AddCustomersBtn
+                    btnTitle={gotClients ? "Alterar" : "Adicionar"}
+                    modalData={modalData}
+                />
+                {gotClients && (
+                    <div className="ml-1">
+                        <DeleteButton
+                            position="absolute"
+                            bottom={-40}
+                            right={-15}
+                            onClick={() => {
+                                handleItem("remove", "Novvos Clientes");
+                                setData(defaultData);
+                            }}
+                        />
+                    </div>
+                )}
+            </section>
         </section>
     );
 
@@ -90,7 +114,7 @@ export default function AddClientsToCart({
             className={isSmall ? "shadow-elevation" : undefined}
         >
             <p className="text-normal font-weight-bold d-block text-center text-purple">
-                Novvos Membros
+                Novvos Membros &#174;
             </p>
             <div className="text-title text-purple text-center">
                 <span className="d-inline-block font-size text-em-1-5 text-pill">
@@ -110,10 +134,25 @@ export default function AddClientsToCart({
             <p className="text-center text-subtitle font-weight-bold text-purple">
                 {membersPrice}
             </p>
-            <AddMembersBtn
-                btnTitle={clientOrder.totalPackage ? "Alterar" : "Adicionar"}
-                modalData={modalData}
-            />
+            <section className="container-center position-relative">
+                <AddMembersBtn
+                    btnTitle={gotMembers ? "Alterar" : "Adicionar"}
+                    modalData={modalData}
+                />
+                {gotMembers && (
+                    <div className="ml-1">
+                        <DeleteButton
+                            position="absolute"
+                            bottom={-40}
+                            right={-15}
+                            onClick={() => {
+                                handleItem("remove", "Novvos Membros");
+                                setData(defaultData);
+                            }}
+                        />
+                    </div>
+                )}
+            </section>
         </section>
     );
 
@@ -122,7 +161,7 @@ export default function AddClientsToCart({
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 {disableCliUser
                     ? "Invista na equipe"
-                    : "Aumente seu alcance de cadastros e número de apps"}
+                    : "Aumente seu alcance de novos cadastros"}
                 {disableCliUser && (
                     <span className="d-block text-normal text-purple text-center">
                         Membros da sua equipe te ajudam a cadastrar pontos e

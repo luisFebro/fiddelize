@@ -8,18 +8,17 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import EventIcon from "@material-ui/icons/Event";
-import PremiumButton from "components/buttons/premium/PremiumButton";
+import InstructionBtn from "components/buttons/InstructionBtn";
 import AnimaIconsSelect from "components/fields/anima-icons-select/AnimaIconsSelect";
 import FilterStatus from "components/fields/anima-icons-select/FilterStatus";
 
 // do not include btn styling for free options...
-const mainOptions = (isPro) => [
+const mainOptions = () => [
     {
         titleBr: "Ordem Alfabética A-Z",
         title: "alphabeticOrder",
         reverseBr: "Ordem Alfabética Z-A",
         reverse: "alphabeticOrderZA",
-        isPro: false,
         Icon: <SortByAlphaIcon />,
     },
     {
@@ -27,7 +26,6 @@ const mainOptions = (isPro) => [
         title: "highestActiveScores",
         reverseBr: "Menores Pontos Ativos",
         reverse: "lowestActiveScores",
-        isPro: false,
         Icon: <FiberManualRecordIcon />,
     },
     {
@@ -35,7 +33,6 @@ const mainOptions = (isPro) => [
         title: "newCustomers",
         reverseBr: "Clientes Veteranos",
         reverse: "veteranCustomers",
-        isPro: false,
         Icon: <StarsIcon />,
     },
     {
@@ -43,44 +40,37 @@ const mainOptions = (isPro) => [
         title: "birthdayCustomers",
         reverseBr: null,
         reverse: null,
-        isPro: true,
-        Icon: <CakeIcon style={{ color: isPro ? undefined : "grey" }} />,
+        Icon: <CakeIcon />,
     },
     {
         titleBr: "Clientes Fãs (compram mais)",
         title: "buyMoreCustomers",
         reverseBr: "Clientes Compram Menos",
         reverse: "buyLessCustomers",
-        isPro: true,
-        Icon: <LoyaltyIcon style={{ color: isPro ? undefined : "grey" }} />,
+        Icon: <LoyaltyIcon />,
     },
     {
         titleBr: "Maiores Valores por Compra",
         title: "highestSinglePurchases",
         reverseBr: "Menores Valores por Compra",
         reverse: "lowestSinglePurchases",
-        isPro: true,
-        Icon: (
-            <MonetizationOnIcon style={{ color: isPro ? undefined : "grey" }} />
-        ),
+        Icon: <MonetizationOnIcon />,
     },
     {
         titleBr: "Últimas Compras",
         title: "lastPurchases",
         reverseBr: "Primeiras Compras",
         reverse: "firstPurchases",
-        isPro: true,
-        Icon: <LocalMallIcon style={{ color: isPro ? undefined : "grey" }} />,
+        Icon: <LocalMallIcon />,
     },
 ];
 
-const periodOptions = (isPro) => [
+const periodOptions = () => [
     {
         titleBr: "Tudo",
         title: "all",
         reverseBr: null,
         reverse: null,
-        isPro: false,
         Icon: <EventIcon />,
     },
     {
@@ -88,7 +78,6 @@ const periodOptions = (isPro) => [
         title: "day",
         reverseBr: null,
         reverse: null,
-        isPro: false,
         Icon: <EventIcon />,
     },
     {
@@ -96,24 +85,21 @@ const periodOptions = (isPro) => [
         title: "week",
         reverseBr: null,
         reverse: null,
-        isPro: true,
-        Icon: <EventIcon style={{ color: isPro ? undefined : "grey" }} />,
+        Icon: <EventIcon />,
     },
     {
         titleBr: "Mês atual",
         title: "month",
         reverseBr: null,
         reverse: null,
-        isPro: true,
-        Icon: <EventIcon style={{ color: isPro ? undefined : "grey" }} />,
+        Icon: <EventIcon />,
     },
     {
         titleBr: "Ano atual",
         title: "year",
         reverseBr: null,
         reverse: null,
-        isPro: true,
-        Icon: <EventIcon style={{ color: isPro ? undefined : "grey" }} />,
+        Icon: <EventIcon />,
     },
 ];
 
@@ -134,11 +120,12 @@ export default function Filters({
                     <span className="mr-5 d-inline-block text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
                         Organize por:
                     </span>
-                    <PremiumButton
-                        right={20}
-                        service="Orgganize Clientes"
-                        proPage="OrgganizeClients_1"
-                    />
+                    <div className="position-absolute" style={{ right: 20 }}>
+                        <InstructionBtn
+                            mode="modal"
+                            article="OrgganizeClientsFilter"
+                        />
+                    </div>
                 </div>
 
                 <br />
@@ -148,7 +135,6 @@ export default function Filters({
                     defaultSelected="Clientes Novos"
                     defaultSideIcon={defaultMainIcon}
                     offlineKey="selectedMainFilter"
-                    checkServicePro="orgganize_clients"
                 />
                 <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold" />
                 <AnimaIconsSelect
@@ -160,7 +146,6 @@ export default function Filters({
                     width={200}
                     needReverseBtn={false}
                     zIndex={4}
-                    checkServicePro="orgganize_clients"
                 />
                 <section className="my-3">
                     <FilterStatus loading={loading} />

@@ -1,83 +1,24 @@
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-/*
-DEPRACATED
-devGrade - development or difficulty grade from 10 to 20
-resGrade - Resource Comsumption grade from 10 to 20
-More in getProPrice
-
-NEW PRICING SYSTEM:
-O principal serviço é o de Novvos clientes.
-1. MENSAL - Diferença de aumento entre os planos é de R$ 5,00
-2. ANUAL - Diferença de aumento entre os planos é de R$ 10,00
-
-MENSAL
-Ouro = R$ 20
-Prata = R$ 25
-Bronze = R$ 30
-
-ANUAL
-Ouro = R$ 40
-Prata = R$ 50
-Bronze = R$ 60
-
-Quanto maior o número de Novvos Clientes que o cliente-admin investir, menor é o preço dos demais serviços.
- */
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const proVersion = (styles) => [
     {
         gold: {
-            name: "10.000 Apps<br />de Novvos clientes",
+            name: "Apps ilimitados<br />de Novvos clientes",
             price: {
-                yearly: 600,
+                yearly: 1500,
                 monthly: 150,
             },
         },
         silver: {
-            name: "5.000 Apps <br />de Novvos clientes",
+            name: "2.000 Apps <br />de Novvos clientes",
             price: {
-                yearly: 400,
-                monthly: 100, // for 1.000
+                yearly: 1000,
+                monthly: 100,
             },
         },
         Icon: <GroupAddIcon style={styles.muStyle} />,
         proPage: "",
-    },
-    {
-        name: "Orgganize Clientes",
-        price: {
-            yearly: 50,
-            monthly: 25,
-        },
-        silver: {
-            name: "Orgganize Clientes",
-            price: {
-                yearly: 40,
-                monthly: 20,
-            },
-        },
-        gold: {
-            name: "Orgganize Clientes",
-            price: {
-                yearly: 40,
-                monthly: 20,
-            },
-        },
-        Icon: (
-            <FontAwesomeIcon
-                icon="filter"
-                style={{
-                    ...styles.muStyle,
-                    transform: "rotate(30deg) scale(1.5)",
-                }}
-            />
-        ),
-        customIcon:
-            "/img/pro-features/orgganize/admin-clients/organnize-funnel.svg",
-        cardDesc:
-            "Encontre e conheça sua carteira de clientes com filtros feitos sob medida para seu negócio.",
-        proPage: "OrgganizeClients_1",
     },
 ];
 
@@ -132,6 +73,44 @@ const proVersion = (styles) => [
     customIcon: "/img/pro-features/envvio-whatsapp/envvio-whatsapp.svg",
     proPage: "EnvvioWhatsapp_2",
 },
+
+{
+    name: "Orgganize Clientes",
+    price: {
+        yearly: 50,
+        monthly: 25,
+    },
+    silver: {
+        name: "Orgganize Clientes",
+        price: {
+            yearly: 40,
+            monthly: 20,
+        },
+    },
+    gold: {
+        name: "Orgganize Clientes",
+        price: {
+            yearly: 40,
+            monthly: 20,
+        },
+    },
+    Icon: (
+        <FontAwesomeIcon
+            icon="filter"
+            style={{
+                ...styles.muStyle,
+                transform: "rotate(30deg) scale(1.5)",
+            }}
+        />
+    ),
+    customIcon:
+        "/img/pro-features/orgganize/admin-clients/organnize-funnel.svg",
+    cardDesc:
+        "Encontre e conheça sua carteira de clientes com filtros feitos sob medida para seu negócio.",
+    proPage: "OrgganizeClients_1",
+},
+
  */
+
 // eslint-disable-next-line
 export { proVersion };

@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
-import useDelay from "../../../hooks/useDelay";
-import convertToReal from "../../../utils/numbers/convertToReal";
+import useData, { useBizData } from "init";
 import { setRun, useAction } from "global-data/ui";
-import useData from "init";
-import { useBizData } from "init";
+import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
+import useDelay from "hooks/useDelay";
+import convertToReal from "utils/numbers/convertToReal";
 import getOrderTableList from "./helpers/getOrderTableList";
 import OrdersTableContent from "./OrdersTableContent";
 
@@ -15,7 +14,7 @@ const isSmall = window.Helper.isSmallScreen();
 export default function OrdersTable({
     plan,
     period,
-    orders,
+    orderList,
     orderTotal,
     setVar,
     handleCancel,
@@ -30,7 +29,7 @@ export default function OrdersTable({
 
     const { bizLinkName } = useBizData();
 
-    const [totalMoney] = useData("totalMoney_clientAdmin");
+    const [totalMoney] = useData(["totalMoney_clientAdmin"]);
     const loadMoney = totalMoney !== "...";
 
     orderTotal = !orderTotal ? totalMoney : orderTotal;
@@ -39,19 +38,19 @@ export default function OrdersTable({
     if (!loadMoney) setVar({ totalMoney_clientAdmin: orderTotal });
 
     useEffect(() => {
-        const { newList, thisTotalServ } = getOrderTableList(orders, {
+        const { newList, thisTotalServ } = getOrderTableList(orderList, {
             period,
             plan,
         });
 
         setList(newList);
         setTotalServs(thisTotalServ);
-        setVar({ totalServices_clientAdmin: thisTotalServ });
+        setVar({ orderCount_clientAdmin: thisTotalServ });
         handleServicesData({
             servicesTotal: thisTotalServ,
             servicesAmount: rawOrderTotal,
         }); // it is here for cases when orderTotal loads as undefined when user jumps right to checkout page if h/s decides to come back later.
-    }, [orders]);
+    }, [orderList]);
 
     orderTotal = convertToReal(orderTotal, { moneySign: true });
 

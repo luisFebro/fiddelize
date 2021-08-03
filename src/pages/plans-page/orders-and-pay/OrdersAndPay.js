@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import useData from "init";
+import { setVar, removeVar } from "init/var";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
-import useData from "init";
-import { setVar, removeVar } from "init/var";
 import useBackColor from "../../../hooks/useBackColor";
 
 import showToast from "../../../components/toasts";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 
 export default function OrdersAndPay({
-    orders,
+    orderList,
     orderTotal,
     period,
     plan,
@@ -56,14 +56,14 @@ export default function OrdersAndPay({
     ]);
     const loading = data !== "...";
 
-    orders = !orders ? data : orders;
+    orderList = !orderList ? data : orderList;
     plan = !plan ? dataPlan || "bronze" : plan;
     period = !period ? dataPeriod || "yearly" : period;
     orderTotal = !orderTotal ? dataMoney : orderTotal;
 
     useEffect(() => {
         if (!loading) return;
-        if (orders) setVar({ orders_clientAdmin: orders });
+        if (orderList) setVar({ orders_clientAdmin: orderList });
         if (plan) setVar({ ordersPlan_clientAdmin: plan });
         if (period) setVar({ planPeriod_clientAdmin: period });
         if (orderTotal) setVar({ totalMoney_clientAdmin: orderTotal });
@@ -95,7 +95,7 @@ export default function OrdersAndPay({
         const explicitCancel = type === "explicit";
         if (explicitCancel) showToast("Seu pedido atual foi cancelado.");
         removeVar("orders_clientAdmin");
-        removeVar("totalServices_clientAdmin");
+        removeVar("orderCount_clientAdmin");
         removeVar("totalMoney_clientAdmin");
         removeVar("ordersPlan_clientAdmin");
         removeVar("planPeriod_clientAdmin");
@@ -112,7 +112,7 @@ export default function OrdersAndPay({
             {showTitle()}
             {showSubtitle()}
             <OrdersTable
-                orders={orders}
+                orderList={orderList}
                 plan={plan}
                 period={period}
                 orderTotal={orderTotal}
@@ -129,7 +129,7 @@ export default function OrdersAndPay({
                 handleCancel={handleCancel}
                 servicesTotal={servicesTotal}
                 servicesAmount={servicesAmount}
-                ordersStatement={orders}
+                ordersStatement={orderList}
                 renewalDaysLeft={renewalDaysLeft}
                 renewalReference={renewalReference}
                 isSingleRenewal={isSingleRenewal}

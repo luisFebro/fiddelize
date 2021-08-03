@@ -76,9 +76,9 @@ export default function OrdersTableContent({
             <br />- O seu maior plano investido é o que será identificado como
             atual. Você pode investir no <strong>plano ouro</strong>, por
             exemplo, e a qualquer momento investir no{" "}
-            <strong>plano meu bronze</strong> que ainda continuará no plano
-            ouro. Se o seu plano for bronze e atualizar para planos maiores, daí
-            sim você muda de plano atual.
+            <strong>plano bronze</strong> que ainda continuará no plano ouro. Se
+            o seu plano for bronze e atualizar para planos maiores, daí sim você
+            muda de plano atual.
         </Fragment>
     );
 

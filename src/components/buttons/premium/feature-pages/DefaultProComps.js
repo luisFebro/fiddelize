@@ -26,10 +26,7 @@ const getStyles = () => ({
     },
 });
 
-export const ShowTitle = ({
-    title = "Orgganize Clientes",
-    offplan = false,
-}) => {
+export const ShowTitle = ({ title = "", offplan = false }) => {
     const styles = getStyles();
 
     return (
