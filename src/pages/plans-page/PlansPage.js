@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { useBizData } from "init";
-import useData from "init";
+import useData, { useBizData } from "init";
+import usePro from "hooks/pro/usePro";
 import StartPage from "./StartPage";
 import HandlePlan from "./plan-modes/HandlePlan";
 import ReturnBtn from "../dashboard-client-admin/ReturnBtn";
-import usePro from "../../hooks/pro/usePro";
 
 export default function PlansPage() {
     const [currPlan, setCurrPlan] = useState("all");

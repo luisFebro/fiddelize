@@ -6,6 +6,7 @@ import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 import convertToReal from "utils/numbers/convertToReal";
 import animateCSS from "utils/animateCSS";
 import NotificationBadge from "components/badges/NotificationBadge";
+import showToast from "components/toasts";
 import "./_MainComps.scss";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -116,8 +117,15 @@ const TotalInvest = ({ orderAmount, orderCount }) => {
     );
 };
 
-const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
+const PeriodSelection = ({
+    handlePeriod,
+    orderList,
+    plan,
+    containerCenter = false,
+}) => {
     const styles = getStyles();
+
+    const needDisablePeriodSwitcher = handleDisablePeriod({ orderList, plan });
 
     const handlePeriodChange = (status) => {
         const isMonthly = status && status.includes("false");
@@ -145,6 +153,20 @@ const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
                 defaultStatus={false}
                 pillStyle
                 pillBack="var(--mainWhite)"
+                disableToLeft={needDisablePeriodSwitcher}
+                disableToRight={needDisablePeriodSwitcher}
+                disableToLeftCallback={() =>
+                    showToast(
+                        "Favor, remova todos serviços adicionados para trocar de duração do plano",
+                        { type: "warning", dur: 10000 }
+                    )
+                }
+                disableToRightCallback={() =>
+                    showToast(
+                        "Favor, remova todos serviços adicionados para trocar de duração do plano",
+                        { type: "warning", dur: 10000 }
+                    )
+                }
             />
         </section>
     );
@@ -195,3 +217,19 @@ const MinimizedUpperOptions = ({
 );
 
 export { ContinueBtn, TotalInvest, PeriodSelection, MinimizedUpperOptions };
+
+// HELPERS
+function handleDisablePeriod({ orderList, plan }) {
+    const itemsCount = orderList && orderList.length;
+
+    // by default, gold and silver plans are added the default selected plan "currPlan". If any other service is added, it needed to be removed to avoid compute a service from a different period
+    if (plan === "gold" || plan === "silver") {
+        if (itemsCount >= 2) return true;
+        else return false;
+    }
+
+    // bronze, by default, ain't got items.
+    if (itemsCount) return true;
+    return false;
+}
+// END HELPERS

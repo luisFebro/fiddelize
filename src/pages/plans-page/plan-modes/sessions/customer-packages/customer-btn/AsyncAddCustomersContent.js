@@ -64,7 +64,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
             name: "Novvos Clientes",
             count: totalCustomers,
             amount: inv,
-            totalPackage,
         };
 
         if (isFunc) {
@@ -116,14 +115,16 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
                 todos seus clientes é ativada automaticamente para 30 dias após
                 o <strong>término do seu plano</strong> sem renovação. Todos
                 seus clientes são notificados que precisam usar as moedas em até
-                30 dias antes de expirar. Caso renove seu plano, você pode
-                desativar o prazo de expiração caso assim deseje.
+                30 dias antes de expirá-las 100%. Caso renove seu plano, você
+                pode desativar o prazo de expiração caso assim deseje.
             </p>
             <p className="text-small text-left text-purple mt-3">
                 - se um cliente ficar{" "}
-                <strong>inativo por 3 meses e sem saldo em moedas PTS</strong> a
-                contar da última data da compra; neste caso, a conta do cliente
-                nestas condições é <strong>removida automaticamente</strong>.
+                <strong>
+                    inativo por 3 meses e sem saldo em moeda PTS em conta
+                </strong>
+                , contando a partir da última data da compra; neste caso, a
+                conta do cliente é <strong>removida automaticamente</strong>.
             </p>
         </section>
     );
@@ -164,7 +165,8 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
             />
             <p className="mx-3 text-normal text-purple">
                 Seus clientes no próximo nível do marketing de relacionamento
-                com moeda digital para troca de benecífios e jogos de compra.
+                com destaques como <strong>moeda digital</strong> para troca de
+                benecífios, <strong>cartão digital e jogos de compra</strong>.
                 Vão ter mais motivos para voltar a comprar do seu negócio.
                 Invista em seus clientes!
             </p>

@@ -46,20 +46,18 @@ export default function StartPage({
                     você quem manda!
                 </h1>
                 <main className="my-4 mx-3 text-left text-normal font-weight-bold text-white">
-                    Escolha um plano para
-                    <br />a{" "}
+                    Escolha um plano para começar a usar todo potencial dos
+                    serviços artesanalmente criados para dá super poderes para
+                    empreendedores como você conquistar seus clientes no mercado
+                    com a <br />
                     <span style={styles.hightlighedName}>{bizName}</span>
-                    <br />
-                    e voe mais alto
-                    <br />
-                    com seus clientes.
                 </main>
             </div>
         </section>
     );
 
     const showCTAs = () => (
-        <section className="mx-5">
+        <section className="mx-5 mb-5">
             <div className="d-flex justify-content-start">
                 <div className="position-relative">
                     <GoldBtn setCurrPlan={setCurrPlan} />

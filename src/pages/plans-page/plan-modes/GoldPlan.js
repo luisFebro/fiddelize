@@ -16,7 +16,9 @@ import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
 
 // sessions
 import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
+import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
 import AddSMS from "./sessions/AddSMS";
+import { PlanAdvantages, PlanContent } from "./ContentAndAdvantages";
 // import AddClientsToCart from "./sessions/AddClientsToCart";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
@@ -46,7 +48,7 @@ export default function GoldPlan({ setCurrPlan }) {
         period: "monthly",
     });
     const { orderList, orderCount, orderAmount, period } = data;
-    // console.table("orderList", orderList);
+    const isYearly = period === "yearly";
 
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
@@ -65,11 +67,6 @@ export default function GoldPlan({ setCurrPlan }) {
     const isScrollingUpward = useDetectScrollUp();
 
     const styles = getStyles();
-
-    // const modalClientsData = {
-    //     handleItem,
-    //     period,
-    // };
 
     const handlePeriod = (newPeriod) => {
         setData({ ...data, period: newPeriod });
@@ -107,29 +104,17 @@ export default function GoldPlan({ setCurrPlan }) {
                         planMsg="Cadastre novos clientes e membros de forma ilimitada" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
                     />
                     <section className="period-selection">
-                        <PeriodSelection handlePeriod={handlePeriod} />
+                        <PeriodSelection
+                            handlePeriod={handlePeriod}
+                            orderList={orderList}
+                            plan="gold"
+                        />
                     </section>
                     <div style={{ height: 130 }} />
 
-                    {period === "yearly" && (
-                        <div className="my-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
-                            <p>
-                                você economiza 20%
-                                <br />
-                                no plano anual
-                            </p>
-                            <p>
-                                de{" "}
-                                <span
-                                    style={{ textDecoration: "line-through" }}
-                                >
-                                    R$ 1.800
-                                </span>
-                                <br />
-                                por R$ 1.500
-                            </p>
-                        </div>
-                    )}
+                    <PlanContent isYearly={isYearly} plan="gold" />
+
+                    <PlanAdvantages isYearly={isYearly} plan="gold" />
 
                     <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                         <span className="text-pill">Serviços Extras</span>
@@ -139,6 +124,9 @@ export default function GoldPlan({ setCurrPlan }) {
                         handleItem={handleItem}
                         top={-80}
                     />
+                    <div style={{ marginBottom: 100 }} />
+
+                    <ServicesGallery handleItem={null} period={period} />
                     <div style={{ marginBottom: 100 }} />
 
                     <IntegratedServicesCard />

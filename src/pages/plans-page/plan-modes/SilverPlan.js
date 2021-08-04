@@ -15,9 +15,12 @@ import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
 
 // sessions
 import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
-import AddClientsToCart from "./sessions/AddClientsToCart";
 import AddSMS from "./sessions/AddSMS";
 import getServices from "./sessions/services/getServices";
+import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
+import { PlanAdvantages, PlanContent } from "./ContentAndAdvantages";
+// import AddClientsToCart from "./sessions/AddClientsToCart";
+
 import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncOrdersAndPay = Load({
@@ -46,6 +49,8 @@ export default function SilverPlan({ setCurrPlan }) {
     });
     const { orderList, orderAmount, orderCount, period } = data;
 
+    const isYearly = period === "yearly";
+
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
         if (!actions.includes(action))
@@ -63,11 +68,6 @@ export default function SilverPlan({ setCurrPlan }) {
     const isScrollingUpward = useDetectScrollUp();
 
     const styles = getStyles();
-
-    const modalClientsData = {
-        handleItem,
-        period,
-    };
 
     const handlePeriod = (newPeriod) => {
         setData({ ...data, period: newPeriod });
@@ -106,9 +106,17 @@ export default function SilverPlan({ setCurrPlan }) {
                         planMsg="Construa seu clube de compras com cadastro de até 2.000 clientes únicos por mês"
                     />
                     <section className="period-selection">
-                        <PeriodSelection handlePeriod={handlePeriod} />
+                        <PeriodSelection
+                            handlePeriod={handlePeriod}
+                            orderList={orderList}
+                            plan="silver"
+                        />
                     </section>
                     <div style={{ height: 130 }} />
+
+                    <PlanContent isYearly={isYearly} plan="silver" />
+
+                    <PlanAdvantages isYearly={isYearly} plan="silver" />
 
                     {period === "yearly" && (
                         <div className="my-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
@@ -139,6 +147,9 @@ export default function SilverPlan({ setCurrPlan }) {
                         handleItem={handleItem}
                         top={-80}
                     />
+                    <div style={{ marginBottom: 100 }} />
+
+                    <ServicesGallery handleItem={null} period={period} />
                     <div style={{ marginBottom: 100 }} />
 
                     <IntegratedServicesCard />
@@ -200,6 +211,11 @@ function useSetInitialPlanTotal({ period, setData }) {
 // END HOOKS
 
 /* ARCHIVES
+
+const modalClientsData = {
+    handleItem,
+    period,
+};
 
 <AddClientsToCart
     modalData={modalClientsData}

@@ -55,7 +55,9 @@ export default function OrdersTableContent({
             <br />
             <br /> - Porém, quando o tempo de uso termina ou expira, todos os
             créditos restantes <strong>são zerados automaticamente</strong> de
-            forma permanente.
+            forma permanente. Se seu plano é <strong>anual</strong>, você recebe
+            uma nova quantia contratada a cada de{" "}
+            <strong>dia 1º de cada mês</strong> de forma automática.
             <br />
             <br /> - Você é notificado <strong>5 dias</strong> antes de expirar
             algum plano ou serviço.
@@ -98,7 +100,8 @@ export default function OrdersTableContent({
                     color={
                         notesColor === "white" ? "text-white" : "text-purple"
                     }
-                    btnStyle={{ top: -35, right: -60 }}
+                    btnStyle={{ top: -35, right: -80 }}
+                    btnSize="small"
                     notes={notes}
                     rootClassName={notesColor === "purple" ? "mx-3" : undefined}
                     shadowTitle={

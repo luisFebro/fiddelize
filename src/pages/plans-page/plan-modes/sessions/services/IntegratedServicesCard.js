@@ -3,6 +3,7 @@ import Card from "@material-ui/core/Card";
 import parse from "html-react-parser";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getServices from "./getServices";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import convertToReal from "utils/numbers/convertToReal";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -75,13 +76,19 @@ export default function IntegratedServicesCard() {
 
     return (
         <Fragment>
+            <div className="container-center my-5">
+                <FontAwesomeIcon
+                    icon="plus"
+                    style={{ color: "var(--themeP)", fontSize: 35 }}
+                />
+            </div>
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 <span className="d-block mb-3 text-pill">
                     Serviços Integrados
                 </span>
                 <span className="d-block text-normal text-purple text-center">
                     Invista no alcance de clientes e ganhe acesso ilimitado a
-                    todos os principais serviços
+                    todos os serviços integrados da Fiddelize.
                 </span>
             </p>
             <Card

@@ -107,7 +107,6 @@ export default function Simulator({ handleData, period, currPlan }) {
     });
 
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
-    // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
 
     useEffect(() => {
         handleData({

@@ -48,7 +48,6 @@ export default function BronzePlan({ setCurrPlan }) {
         period: "monthly",
     });
     const { orderList, orderAmount, orderCount, period } = data;
-    // console.table("orderList", orderList);
 
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
@@ -116,11 +115,15 @@ export default function BronzePlan({ setCurrPlan }) {
                         customPlanTitle="Meu Plano"
                         plan="Bronze"
                         planMsg={`
-                            Escolha preços e quantidades para um plano do tamanho que precisar!
+                            Monte seu plano escolhendo preços e quantias dos serviços que precisar.
                         `}
                     />
                     <section className="period-selection">
-                        <PeriodSelection handlePeriod={handlePeriod} />
+                        <PeriodSelection
+                            handlePeriod={handlePeriod}
+                            orderList={orderList}
+                            plan="bronze"
+                        />
                     </section>
                     <div style={{ height: 180 }} />
 
@@ -130,6 +133,9 @@ export default function BronzePlan({ setCurrPlan }) {
                     />
                     <div style={{ marginBottom: 100 }} />
 
+                    <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
+                        <span className="text-pill">Serviços Extras</span>
+                    </p>
                     <AddSMS
                         orderList={orderList}
                         handleItem={handleItem}

@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
-import getFirstName from "utils/string/getFirstName";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
 import setProRenewal from "utils/biz/setProRenewal";
@@ -61,7 +60,6 @@ function AsyncAddSMSContent({
             name: "sms",
             count: totalSMS,
             amount: inv,
-            totalPackage,
         };
 
         if (isFunc) {
@@ -84,10 +82,11 @@ function AsyncAddSMSContent({
     };
 
     const showCTA = () => (
-        <section className="my-5 container-center">
+        <section className="mx-3 my-5 container-center">
             <ButtonFab
                 size="large"
                 title="Adicionar"
+                width="100%"
                 onClick={handleCTA}
                 backgroundColor="var(--themeSDark--default)"
                 variant="extended"
@@ -97,22 +96,28 @@ function AsyncAddSMSContent({
     );
 
     const showIllustration = () => (
-        <Img
-            src="/img/illustrations/sms-message.svg"
-            className=""
-            alt="ilustração principal"
-            width={150}
-            height="auto"
-        />
+        <Fragment>
+            <Img
+                src="/img/illustrations/sms-message.svg"
+                className=""
+                alt="ilustração principal"
+                width={150}
+                height="auto"
+            />
+            <p className="mx-3 text-normal text-purple">
+                Tenha SMS como mais um meio eficiente de se comunicar e fisgar a
+                atenção dos clientes com suas campanhas, anúncios e eventos do
+                seu negócio. Pode também ser usado para comunicação entre a
+                equipe ou pessoal em geral com recursos exclusivos como
+                agendamento de envios.
+            </p>
+        </Fragment>
     );
 
     return (
         <section>
             {showTitle()}
             {showIllustration()}
-            <p className="my-3 text-purple text-center text-subtitle">
-                Deslize para mudar a quantidade de pacotes.
-            </p>
             <Simulator handleData={handleData} />
             {showNotes()}
             {showCTA()}

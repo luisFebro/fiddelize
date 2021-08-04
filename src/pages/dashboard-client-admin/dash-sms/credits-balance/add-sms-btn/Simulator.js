@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
-import convertToReal from "../../../../../utils/numbers/convertToReal";
-import MuSlider from "../../../../../components/sliders/MuSlider";
-import handleChange from "../../../../../utils/form/use-state/handleChange";
-import getIncreasedPerc from "../../../../../utils/numbers/getIncreasedPerc";
+import convertToReal from "utils/numbers/convertToReal";
+import MuSlider from "components/sliders/MuSlider";
+import handleChange from "utils/form/use-state/handleChange";
+import getIncreasedPerc from "utils/numbers/getIncreasedPerc";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -68,7 +68,7 @@ export default function Simulator({ handleData }) {
         }
     }, [newQuantity]);
 
-    const [unit, expires, unitSizeDec, unitSizeInc] = getSMSData(packages);
+    const [unit, , unitSizeDec, unitSizeInc] = getSMSData(packages);
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -135,9 +135,14 @@ export default function Simulator({ handleData }) {
     );
 
     const showAutoFinalTotal = () => (
-        <section className="mt-2 mb-5 text-hero text-purple text-center">
-            <span className="d-inline-block text-title">R$</span>
-            {totalFinalMoneyReal}
+        <section className="mt-1 mb-5 container-center text-hero text-purple text-center">
+            <div className="text-pill px-3 py-2">
+                <span className="d-inline-block text-title">R$</span>
+                {totalFinalMoneyReal}
+                <span className="d-block text-small font-weight-bold">
+                    sem mensalidade
+                </span>
+            </div>
         </section>
     );
 
@@ -159,11 +164,11 @@ export default function Simulator({ handleData }) {
         );
 
     const showSummary = () => (
-        <section className="my-5 zoomIn animated">
-            <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
+        <section className="invest-brief my-5 zoomIn animated">
+            <h2 className="text-center text-subtitle font-weight-bold m-0">
                 Resumo de Investimento
             </h2>
-            <div className="text-normal text-left text-purple">
+            <div className="text-normal text-left">
                 ✔ Total de Pacotes:{" "}
                 <span className="text-subtitle font-weight-bold">
                     {packages}
@@ -187,6 +192,16 @@ export default function Simulator({ handleData }) {
                     R$ {totalFinalMoneyReal}
                 </span>
             </div>
+            <style jsx>
+                {`
+                    .invest-brief {
+                        background: var(--themeP);
+                        border-radius: 20px;
+                        color: #fff;
+                        padding: 5px 8px;
+                    }
+                `}
+            </style>
         </section>
     );
 
@@ -197,6 +212,7 @@ export default function Simulator({ handleData }) {
                 value={packages}
                 callback={handlePackages}
                 disabled={!!newQuantity}
+                needSlideInstru
             />
             {packages <= 230 && !newQuantity && (
                 <div

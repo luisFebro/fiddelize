@@ -4,6 +4,7 @@ import GroupAddIcon from "@material-ui/icons/GroupAdd";
 const proVersion = (styles) => [
     {
         gold: {
+            plan: "gold",
             name: "Apps ilimitados<br />de Novvos clientes",
             price: {
                 yearly: 1500,
@@ -11,13 +12,14 @@ const proVersion = (styles) => [
             },
         },
         silver: {
+            plan: "silver",
             name: "2.000 Apps <br />de Novvos clientes",
             price: {
                 yearly: 1000,
                 monthly: 100,
             },
         },
-        Icon: <GroupAddIcon style={styles.muStyle} />,
+        Icon: <GroupAddIcon style={styles && styles.muStyle} />,
         proPage: "",
     },
 ];
