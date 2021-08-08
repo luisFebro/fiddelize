@@ -8,6 +8,7 @@ import FindInPageIcon from "@material-ui/icons/FindInPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import StorageIcon from "@material-ui/icons/Storage";
 import { proVersion } from "./proVersion";
 
 const integratedServices = (styles) => [
@@ -128,6 +129,13 @@ const integratedServices = (styles) => [
     {
         name:
             "<strong>Código QR personalizado</strong><br />com sua logo e cor<br />para divulgação com<br />opção para baixar",
+        Icon: <CropFreeIcon style={styles.muStyle} />,
+        price: null,
+        greyedout: false,
+    },
+    {
+        name:
+            "<strong>Cópia da base de dados</strong><br />Você tem acesso a<br />cópia dos dados de <br />toda sua base de<br />clientela e pode ser baixada<br />a qualquer momento em formato Excel.<br />Dados incluem informações<br />de cadastro do cliente,<br />saldo em PTS, notas<br />de avaliações e quem<br />fez o cadastro.",
         Icon: <CropFreeIcon style={styles.muStyle} />,
         price: null,
         greyedout: false,

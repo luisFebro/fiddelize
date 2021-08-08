@@ -1,7 +1,8 @@
+// IMPORTANT: changes here should be also made in the PLATFORM FOOTER since they are the same.
 import { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useDelay from "../../../hooks/useDelay";
+import useDelay from "hooks/useDelay";
 import AsyncVersion from "../../../_main/user-interfaces/version/AsyncVersion";
 import "./_Footer.scss";
 import { Load } from "../../code-splitting/LoadableComp";
@@ -36,8 +37,8 @@ const Footer = ({ location }) => {
                 <p className="text-small text-voca-cyan">
                     Ajudamos negócios a oferecer benefícios aos seus clientes
                     com <strong>moeda digital</strong> e{" "}
-                    <strong>jogos de compra</strong>. Como? Através da nossa
-                    plataforma de criação de apps web.
+                    <strong>jogos de compra</strong> com nossa plataforma de
+                    criação de apps web.
                     <br />
                     <br />
                     Somos uma martech especializada em{" "}

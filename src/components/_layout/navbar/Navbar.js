@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useBizData } from "init";
@@ -57,8 +57,8 @@ function Navbar({ history, location }) {
                 ["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(
                     locationNow
                 )
-                    ? "disabled-link"
-                    : "nav-link"
+                    ? "disabled-link no-text-decoration"
+                    : "nav-link no-text-decoration"
             }
         >
             {isHome ? (
@@ -176,8 +176,8 @@ function Navbar({ history, location }) {
                 ["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(
                     locationNow
                 )
-                    ? "disabled-link"
-                    : "nav-link"
+                    ? "disabled-link no-text-decoration"
+                    : "nav-link no-text-decoration"
             }`}
         >
             {isHome ? (
