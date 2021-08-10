@@ -168,18 +168,23 @@ function VirtualCard({ history }) {
 
     const handlePathAndData = () => {
         // check card data if set before redirect
+        showToast("Preparando painel para adicionar moedas PTS...", {
+            type: "warning",
+            dur: 10000,
+        });
+
         getVar("paidValue").then((val) => {
             if (!val)
                 return showToast(
                     "Não foi possível processar dados do cartão. Tente entrar novamente",
                     { type: "error", dur: 10000 }
                 );
-            if (isCliAdmin)
-                return history.push(
-                    "/cliente/pontos-fidelidade?client-admin=1"
-                );
 
-            return history.push("/cliente/pontos-fidelidade");
+            if (isCliAdmin)
+                window.location.href =
+                    "/cliente/pontos-fidelidade?client-admin=1";
+
+            window.location.href = "/cliente/pontos-fidelidade";
         });
     };
 

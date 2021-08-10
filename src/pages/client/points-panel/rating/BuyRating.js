@@ -186,7 +186,7 @@ export default function BuyRating({
                     <section className="mt-3">
                         <p
                             style={{ borderRadius: 20 }}
-                            className="text-pill text-white text-shadow text-normal mx-3"
+                            className="text-pill text-white font-italic text-shadow text-normal mx-3"
                         >
                             {buyReport
                                 ? `"${buyReport}"`
