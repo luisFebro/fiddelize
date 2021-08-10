@@ -32,7 +32,7 @@ export default function GamesGalleryBtn({ needClick = true }) {
             <ButtonFab
                 position="relative"
                 onClick={needClick ? handleFullOpen : null}
-                title="jogos de compra"
+                title="abrir jogos disponíveis"
                 iconFontSize="25px"
                 variant="extended"
                 fontWeight="bolder"

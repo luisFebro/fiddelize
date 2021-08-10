@@ -43,7 +43,11 @@ export default function GamesBadge({ userGame }) {
 
     const gamesList = [];
     availableGames.forEach((gameName) => {
-        if (!userGame[gameName]) return null;
+        if (
+            !userGame[gameName] ||
+            (userGame[gameName] && !userGame[gameName].challN)
+        )
+            return null;
 
         return gamesList.push({
             gameName,

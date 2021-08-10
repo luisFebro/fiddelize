@@ -36,7 +36,7 @@ export default function GatewayAndCTAs({
                 <br />
             </span>
             {!isSessionOver && (
-                <section className="container-center mt-4">
+                <section className="container-center mt-2">
                     <RedirectLink
                         className="mr-3"
                         to={`/${bizLinkName}/cliente-admin/painel-de-controle`}

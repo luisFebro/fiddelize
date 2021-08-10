@@ -5,8 +5,10 @@ export default function GamesGalleryContent(props) {
     const { currPoints } = useData();
 
     const showTitle = () => (
-        <div className="mt-3 text-center text-purple mx-3">
-            <h1 className="text-subtitle font-weight-bold">Jogos de Compra</h1>
+        <div className="mt-3 text-left text-purple mx-3">
+            <h1 className="text-center text-subtitle font-weight-bold">
+                Jogos de Compra
+            </h1>
             <h2
                 className="text-normal"
                 style={{

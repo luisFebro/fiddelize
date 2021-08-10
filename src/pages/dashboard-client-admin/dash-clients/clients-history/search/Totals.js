@@ -39,6 +39,20 @@ export default function Totals({
 
     const showCredits = () => <ProCreditsBadge service="Novvos Clientes" />;
 
+    if (generalPTS === undefined) {
+        return (
+            <div className="mb-5 animated fadeInUp ml-3 position-relative">
+                <span className="text-subtitle font-weight-bold">
+                    Totais Gerais:
+                </span>
+                <br />
+                <span className="text-center text-normal text-grey font-weight-bold">
+                    Indisponível
+                </span>
+            </div>
+        );
+    }
+
     return (
         <section>
             <h2 className="text-purple">

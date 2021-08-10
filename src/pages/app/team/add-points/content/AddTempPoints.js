@@ -195,7 +195,7 @@ export default function AddTempPoints({
     return (
         <Fragment>
             <h1
-                className={`animated fadeInUp delay-1s mt-4 mb-3 text-center ${textColor} text-subtitle font-weight-bold`}
+                className={`animated fadeInUp delay-1s mt-4 mb-1 text-center ${textColor} text-subtitle font-weight-bold`}
             >
                 <span className="text-em-1-3 d-block">
                     Cliente:

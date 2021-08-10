@@ -215,9 +215,9 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         <Fragment>
             {!passOk && (
                 <p
-                    className={`${
-                        isSmall ? "text-subtitle" : "text-normal m-0"
-                    }  ${needDark ? "text-black" : "text-white"} text-center`}
+                    className={`${isSmall ? "text-subtitle" : "text-normal"}  ${
+                        needDark ? "text-black" : "text-white"
+                    } text-center m-0`}
                 >
                     Digite sua senha:
                 </p>

@@ -69,7 +69,7 @@ function chooseMsg({
                         <br />
                         Assim logo você chega ao nível ${nextLevel}
                         <br />
-                        alcançando mais ${nextScore} pts`;
+                        alcançando mais ${nextScore} PTS`;
         case 4:
             return `<strong>${setTitle("Dá pra acreditar?")}
                         <br />
@@ -77,7 +77,7 @@ function chooseMsg({
                             currChallenge === 1
                                 ? "primeiro"
                                 : `${currChallenge}.º`
-                        } vale desconto. Apenas mais ${nextScore} pts!</strong>`;
+                        } vale desconto. Apenas mais ${nextScore} PTS!</strong>`;
         case 5:
             return `<strong>${setTitle(`🎉 Parabéns, ${firstName}!`)}
                        <br />

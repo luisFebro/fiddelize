@@ -26,7 +26,7 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
     const showTicket = () => (
         <Fragment>
             <section className="text-center font-weight-bold text-normal animated fadeInUp">
-                A cada <span className="text-title">{targetPoints} pts,</span>
+                A cada <span className="text-title">{targetPoints} PTS,</span>
                 <br />
                 você ganha:
             </section>
