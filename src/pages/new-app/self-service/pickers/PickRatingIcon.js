@@ -6,18 +6,15 @@ import {
     milestoneIconsSorted,
     getIconIndex,
 } from "global-data/milestoneIconsSorted";
+import useScrollUp from "hooks/scroll/useScrollUp";
 
 PickRatingIcon.propTypes = {
     step: PropTypes.number,
-    setNextDisabled: PropTypes.func,
 };
 
-export default function PickRatingIcon({
-    step,
-    setNextDisabled,
-    isTest,
-    isFromDash,
-}) {
+export default function PickRatingIcon({ step, isFromDash }) {
+    useScrollUp();
+
     const selectedMilestoneIcons = isFromDash
         ? milestoneIconsSorted
         : milestoneIcons.filter((iconObj) => iconObj.appPreview === true);

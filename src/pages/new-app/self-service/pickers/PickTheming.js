@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
-import RadiusColorBtn from "../../../../components/buttons/RadiusColorBtn";
-import CheckBoxForm from "../../../../components/CheckBoxForm";
-import { CLIENT_URL } from "../../../../config/clientUrl";
-import ModalFullContent from "../../../../components/modals/ModalFullContent";
+import RadiusColorBtn from "components/buttons/RadiusColorBtn";
+import CheckBoxForm from "components/CheckBoxForm";
+import { CLIENT_URL } from "config/clientUrl";
+import ModalFullContent from "components/modals/ModalFullContent";
 import {
     uiColors,
     translateColorToEng,
     translateColorToPtBr,
-} from "../../../../global-data/uiColors";
-import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
+} from "global-data/uiColors";
+import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
+import { useBizData } from "init";
+import useScrollUp from "hooks/scroll/useScrollUp";
 
 import ShowActionBtns from "./ShowActionBtns";
-import { useBizData } from "init";
 
 PickTheming.propTypes = {
     step: PropTypes.number,
@@ -27,6 +28,8 @@ export default function PickTheming({
     setTheme,
     isFromDash,
 }) {
+    useScrollUp();
+
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
@@ -386,6 +389,7 @@ const ColorPicker = ({
                                                 setTheme({
                                                     ...theme,
                                                     colorP: colorName,
+                                                    colorBack: colorName, // declare both after selecting colorP
                                                 });
                                         } else if (isBackground) {
                                             setData({

@@ -6,12 +6,11 @@ import useData from "init";
 import { removeItems } from "init/lStorage";
 import getVar, { setVars } from "init/var";
 import useScrollUp from "hooks/scroll/useScrollUp";
-import AppPreview from "./AppPreview";
-import AppPickersHandler from "./pickers/AppPickersHandler";
 import "./style.scss";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 const isSmall = window.Helper.isSmallScreen();
+import AppPickersHandler from "./pickers/AppPickersHandler";
 
 removeItems("bizData", ["milestoneIcon"]);
 
@@ -54,6 +53,7 @@ const setLocalData = async ({ type = "theming", colors, iconsData }) => {
 function SelfServicePage({ location, history }) {
     // useCount();// RT = 3
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
+    console.log("logoUrlPreview", logoUrlPreview);
     const [theme, setTheme] = useState({
         colorP: "default",
         colorS: "default",
@@ -86,8 +86,8 @@ function SelfServicePage({ location, history }) {
             <p className="text-title">Novo Clube</p>
             <p className="text-white text-normal mx-3 mb-5">
                 {isSmall
-                    ? "Personalize os apps do clube com o estilo do seu negócio!"
-                    : "Personalize os apps do seu clube"}
+                    ? "Personalize apps do clube com o estilo do seu negócio!"
+                    : "Personalize apps do seu clube"}
             </p>
         </div>
     );
@@ -99,31 +99,23 @@ function SelfServicePage({ location, history }) {
         <div style={{ overflow: "hidden" }}>
             {showSpinner()}
             {showTitle()}
-            <div className="main-self-service">
-                <section className="picker-area mx-3">
-                    <AppPickersHandler
-                        bizLinkName={bizLinkName}
-                        bizName={bizName}
-                        history={history}
-                        clientName={clientName}
-                        setLogoUrlPreview={setLogoUrlPreview}
-                        theme={theme}
-                        setLocalData={setLocalData}
-                        setTheme={setTheme}
-                        targetPoints={targetPoints}
-                        prizeDesc={prizeDesc}
-                    />
-                </section>
-                <AppPreview
-                    clientName={clientName}
-                    logoUrlPreview={logoUrlPreview}
-                    colorP={colorP}
-                    colorS={colorS}
-                    colorBack={colorBack}
-                    currPoints={currPoints}
-                    targetPoints={targetPoints}
-                />
-            </div>
+            <AppPickersHandler
+                bizLinkName={bizLinkName}
+                bizName={bizName}
+                history={history}
+                clientName={clientName}
+                setLogoUrlPreview={setLogoUrlPreview}
+                theme={theme}
+                setLocalData={setLocalData}
+                setTheme={setTheme}
+                targetPoints={targetPoints}
+                prizeDesc={prizeDesc}
+                logoUrlPreview={logoUrlPreview}
+                colorP={colorP}
+                colorS={colorS}
+                colorBack={colorBack}
+                currPoints={currPoints}
+            />
         </div>
     );
 }

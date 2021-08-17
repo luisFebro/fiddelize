@@ -59,35 +59,32 @@ export default function PickLogo({
 
     const goNext = () => setNextDisabled(false);
 
-    const updateThisImg = (body) => {
+    const updateThisImg = async (body) => {
         // body: lastUrl, paramArray, customParam
         const thisBizId = isFromDash ? bizId : undefined;
-        getAPI({
+        const bizLogoLink = await getAPI({
             method: "put",
             url: updateImages(thisBizId),
             fullCatch: true,
             body,
-        })
-            .then((bizLogoLink) => {
-                setTempImgUrl(bizLogoLink);
-                if (isFromDash) {
-                    updateUI(
-                        "bizData",
-                        { "clientAdminData.bizLogo": bizLogoLink },
-                        uify
-                    );
-                    showToast("Formato Atualizado!", { type: "success" });
-                }
-                if (!isFromDash) {
-                    (async () => {
-                        await setLogo({
-                            generatedImg: bizLogoLink,
-                            setLogoUrlPreview,
-                        });
-                    })();
-                }
-            })
-            .catch((err) => showToast(err.data.msg, { type: "error" }));
+        }).catch(
+            (err) => err.data && showToast(err.data.msg, { type: "error" })
+        );
+
+        setTempImgUrl(bizLogoLink);
+        if (isFromDash) {
+            updateUI(
+                "bizData",
+                { "clientAdminData.bizLogo": bizLogoLink },
+                uify
+            );
+            showToast("Formato Atualizado!", { type: "success" });
+        } else {
+            await setLogo({
+                generatedImg: bizLogoLink,
+                setLogoUrlPreview,
+            });
+        }
     };
 
     useEffect(() => {
@@ -95,14 +92,16 @@ export default function PickLogo({
         if (sizeSquare) {
             dataToUpdate = { ...dataToUpdate, paramArray: ["sizeSquare"] };
             showToast("Fazendo alteração no formato da imagem...");
-            updateThisImg(dataToUpdate);
-            setData({ sizeRect: false });
+            updateThisImg(dataToUpdate).then(() =>
+                setData({ sizeRect: false })
+            );
         }
         if (sizeRect) {
             dataToUpdate = { ...dataToUpdate, paramArray: ["sizeRect"] };
             showToast("Fazendo alteração no formato da imagem...");
-            updateThisImg(dataToUpdate);
-            setData({ sizeSquare: false });
+            updateThisImg(dataToUpdate).then(() =>
+                setData({ sizeRect: false })
+            );
         }
     }, [sizeSquare, sizeRect]);
 
@@ -174,8 +173,7 @@ export default function PickLogo({
             body: formData,
             fullCatch: true,
         })
-            .then((res) => {
-                const generatedImg = res.data;
+            .then((generatedImg) => {
                 if (!isFromDash) {
                     (async () => {
                         await setLogo({

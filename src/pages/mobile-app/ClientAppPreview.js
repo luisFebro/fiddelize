@@ -1,10 +1,9 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import getQueryByName from "utils/string/getQueryByName";
 import Img from "components/Img";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import useData from "init";
 import ClientUserAppContent from "./content/ClientUserAppContent";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -13,20 +12,16 @@ function ClientAppPreview({ location }) {
     // useCount("ClientAppPreview.js"); // RT =1 (ok)
 
     const runName = getQueryByName("runName", location.search);
-    console.log("runName", runName);
     const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
-    console.log("logoUrlPreview", logoUrlPreview);
-    const colorP = "red"; //getQueryByName("colorP", location.search);
-    const colorS = "default"; //getQueryByName("colorS", location.search);
-    const colorBack = "red"; //getQueryByName("colorBack", location.search);
+    const colorP = getQueryByName("colorP", location.search);
+    console.log("colorP", colorP);
+    const colorS = getQueryByName("colorS", location.search);
+    console.log("colorS", colorS);
+    const colorBack = getQueryByName("colorBack", location.search);
+    console.log("colorBack", colorBack);
     const targetPoints = getQueryByName("targetPoints", location.search);
-    console.log("targetPoints", targetPoints);
-    const currPoints = getQueryByName("currPoints", location.search);
-    console.log("currPoints", currPoints);
     const game = getQueryByName("game", location.search);
     const clientName = getQueryByName("clientName", location.search);
-    console.log("clientName", clientName);
-    console.log("game", game);
 
     const { newImg: formattedImg, isSquared } = removeImgFormat(logoUrlPreview);
     const logoSrc = logoUrlPreview

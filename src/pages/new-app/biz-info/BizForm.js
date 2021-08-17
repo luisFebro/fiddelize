@@ -37,7 +37,7 @@ const getStyles = () => ({
     },
 });
 
-export default function BizForm() {
+export default function BizForm({ history }) {
     const [data, setData] = useState({
         bizName: "",
         bizLinkName: "",
@@ -167,8 +167,9 @@ export default function BizForm() {
         };
         await setVars(data, "pre_register");
 
-        // need to be reloaded since the other fields are prevented to be opened somehow.
-        window.location.href = `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana`;
+        history.push(
+            `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana`
+        );
     };
 
     const showButtonActions = () => (

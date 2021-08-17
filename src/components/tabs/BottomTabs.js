@@ -8,10 +8,9 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import getVar, { removeVar } from "init/var";
 import getItems from "init/lStorage";
+import useContext from "context";
 import scrollIntoView from "../../utils/document/scrollIntoView";
 import "./_BottomTabs.scss";
-
-const [mainColor] = getItems("bizData", ["themePColor"]);
 
 function TabPanel(props) {
     const { children, value, index, boxPadding, ...other } = props;
@@ -73,8 +72,13 @@ export default function BottomTabs({
     showAppBar = true,
     disableClick,
 }) {
+    const [mainColor] = getItems("bizData", ["themePColor"]);
+    // themeBackColor for club maker front page
+    const { themePColor } = useContext();
+    const tabMainColor = themePColor || mainColor;
+
     const props = {
-        color: mainColor,
+        color: tabMainColor,
     };
 
     const classes = useStyles(props);

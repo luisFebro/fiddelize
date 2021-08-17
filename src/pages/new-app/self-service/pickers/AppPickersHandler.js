@@ -2,18 +2,21 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle,
-} from "../../../../components/buttons/material-ui/ButtonMulti";
+} from "components/buttons/material-ui/ButtonMulti";
 import "../style.scss";
 import useRun from "global-data/ui";
-import getId from "../../../../utils/getId";
+import getId from "utils/getId";
 import { getVars } from "init/var";
 // pickers
 import PickLogo from "./PickLogo";
 import AsyncPickRatingIcon from "./AsyncPickRatingIcon";
 import AsyncPickTheming from "./AsyncPickTheming";
 // end pickers
-// import useCount from '../../../../hooks/useCount';
+import AppPreview from "../AppPreview";
+// import useCount from 'hooks/useCount';
 const id = getId();
+
+const isSmall = window.Helper.isSmallScreen();
 
 export default function AppPickersHandler({
     bizId,
@@ -26,6 +29,11 @@ export default function AppPickersHandler({
     setLocalData,
     prizeDesc,
     targetPoints,
+    logoUrlPreview,
+    colorP,
+    colorS,
+    colorBack,
+    currPoints,
 }) {
     const { runName } = useRun();
     const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
@@ -114,31 +122,62 @@ export default function AppPickersHandler({
     );
 
     return (
-        <div>
-            {showStepIndicatorAndBtnAction()}
-            <PickLogo
-                step={currNumber}
-                setNextDisabled={setNextDisabled}
-                bizId={bizId}
-                bizName={bizName}
-                bizLinkName={bizLinkName}
-                setLogoUrlPreview={setLogoUrlPreview}
+        <section className="main-self-service">
+            <div className="picker-area mx-3">
+                {showStepIndicatorAndBtnAction()}
+                <PickLogo
+                    step={currNumber}
+                    setNextDisabled={setNextDisabled}
+                    bizId={bizId}
+                    bizName={bizName}
+                    bizLinkName={bizLinkName}
+                    setLogoUrlPreview={setLogoUrlPreview}
+                />
+                {currNumber === 2 && (
+                    <AsyncPickTheming
+                        step={currNumber}
+                        setNextDisabled={setNextDisabled}
+                        theme={theme}
+                        setTheme={setTheme}
+                        setLocalData={setLocalData}
+                    />
+                )}
+                {currNumber === 3 && (
+                    <AsyncPickRatingIcon
+                        step={currNumber}
+                        setNextDisabled={setNextDisabled}
+                    />
+                )}
+            </div>
+            <AppPreview
+                clientName={clientName}
+                logoUrlPreview={logoUrlPreview}
+                colorP={colorP}
+                colorS={colorS}
+                colorBack={colorBack}
+                currPoints={currPoints}
+                targetPoints={targetPoints}
+                prizeDesc={prizeDesc}
             />
-            {currNumber === 2 && (
-                <AsyncPickTheming
-                    step={currNumber}
-                    setNextDisabled={setNextDisabled}
-                    theme={theme}
-                    setTheme={setTheme}
-                    setLocalData={setLocalData}
-                />
+            {isSmall && (
+                <div className="container-center">
+                    <ButtonMulti
+                        onClick={() => handleNextStep(currNumber)}
+                        title={`Continuar ${nextTask}`}
+                        disabled={!!nextDisabled}
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeSDark)"
+                        backColorOnHover="var(--themeSDark)"
+                        iconFontAwesome={
+                            <FontAwesomeIcon
+                                icon="angle-right"
+                                style={faStyle}
+                            />
+                        }
+                        textTransform="uppercase"
+                    />
+                </div>
             )}
-            {currNumber === 3 && (
-                <AsyncPickRatingIcon
-                    step={currNumber}
-                    setNextDisabled={setNextDisabled}
-                />
-            )}
-        </div>
+        </section>
     );
 }

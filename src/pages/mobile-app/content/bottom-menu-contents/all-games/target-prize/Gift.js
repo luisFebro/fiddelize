@@ -6,6 +6,7 @@ import useDatesCountdown from "hooks/dates/useDatesCountdown";
 import usePlayAudio from "hooks/media/usePlayAudio";
 import GiftBox from "./gift-box/GiftBox";
 import QrCodeReceitBtn from "../qr-code-receipt/QrCodeReceiptBtn";
+import getQueryByName from "utils/string/getQueryByName";
 
 const getStyles = (props) => ({
     deadlineBoard: {
@@ -26,22 +27,18 @@ const getStyles = (props) => ({
 });
 
 export default function Gift() {
-    const {
-        lastPrizeDate,
-        userId,
-        currPoints,
-        firstName,
-        adminGame,
-        userGame,
-    } = useData();
+    const { lastPrizeDate, userId, adminGame, userGame } = useData();
     const { prizeDeadline = 30 } = adminGame.targetPrize;
     const {
+        firstName,
+        currPoints,
         themeSColor: colorS,
         themePColor: colorP,
         themeBackColor: colorBack,
         targetPointsPreview,
-        prizeDescPreview,
     } = useContext();
+    const prizeDescPreview = getQueryByName("prizeDesc");
+    console.log("prizeDescPreview", prizeDescPreview);
 
     const targetPoints =
         targetPointsPreview ||
@@ -49,7 +46,7 @@ export default function Gift() {
     const prizeDesc =
         prizeDescPreview ||
         (adminGame.targetPrize && adminGame.targetPrize.prizeDesc);
-    const { challN: currChall } = userGame.targetPrize;
+    const { challN: currChall = 1 } = userGame.targetPrize;
 
     const [isGiftOpen, setIsGiftOpen] = useState(false);
 
@@ -123,7 +120,7 @@ export default function Gift() {
     );
 
     const showGift = () => {
-        const displayGiftBox = ({ needSmallBox, opacity }) => (
+        const displayGiftBox = ({ needSmallBox, disableOpenBox, opacity }) => (
             <GiftBox
                 className={`animated ${
                     userBeatedChall
@@ -133,6 +130,7 @@ export default function Gift() {
                 boxPColor={colorP}
                 backColor={colorBack}
                 callback={setIsGiftOpen}
+                disableOpenBox={disableOpenBox}
                 needSmallBox={needSmallBox}
                 prizeDesc={prizeDesc}
                 opacity={opacity}
@@ -141,7 +139,7 @@ export default function Gift() {
 
         const challengeInProgress = () => (
             <section className="pt-5">
-                <div>
+                <div className="enabled-click">
                     <Tooltip
                         needArrow
                         whiteSpace
@@ -151,6 +149,7 @@ export default function Gift() {
                             <div>
                                 {displayGiftBox({
                                     needSmallBox: true,
+                                    disableOpenBox: true,
                                     opacity: 1,
                                 })}
                             </div>
@@ -170,7 +169,10 @@ export default function Gift() {
                     <p className="text-normal">Abra seu prêmio.</p>
                 </p>
                 <section className="pt-5 d-block position-relative">
-                    {displayGiftBox({ needSmallBox: false })}
+                    {displayGiftBox({
+                        needSmallBox: false,
+                        disableOpenBox: false,
+                    })}
                     {showPrizeDeadline()}
                 </section>
             </section>

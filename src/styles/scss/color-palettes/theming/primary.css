@@ -4,7 +4,7 @@
     /*purple 900*/
     --themeP: #4a148c;
     --themePLight: #7c43bd;
-    --themePDark: #12005e;
+    --themePDark: #3a005e;
 
     /*surface (such as cards, sheets, and menus) and background*/
     --themeSurface: #f7f1e3; /*white variant*/
@@ -18,7 +18,7 @@
     /*default*/
     --themeP--default: #4a148c;
     --themePLight--default: #7c43bd;
-    --themePDark--default: #4a148c;
+    --themePDark--default: #3a005e;
     --themeBackground--default: #4a148c;
     /*pink*/
     --themeP--pink: #e84393;
@@ -33,7 +33,7 @@
     /*purple*/
     --themeP--purple: #4a148c;
     --themePLight--purple: #7c43bd;
-    --themePDark--purple: #4a148c; /* prior #12005e */
+    --themePDark--purple: #3a005e;
     --themeBackground--purple: #4a148c;
     /*orange*/
     --themeP--orange: #ffb300;

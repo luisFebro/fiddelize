@@ -30,7 +30,6 @@ export default function ClientUserAppContent({
     gameClubPreview,
     firstNamePreview,
     targetPointsPreview,
-    prizeDescPreview,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
 
@@ -123,6 +122,7 @@ export default function ClientUserAppContent({
     );
 
     const store = useGlobal({
+        firstName,
         txtColor,
         playBeep,
         runName,
@@ -139,7 +139,6 @@ export default function ClientUserAppContent({
         txtColorStyle,
         gameClubPreview,
         needAppForPreview,
-        prizeDescPreview,
         targetPointsPreview,
     });
 

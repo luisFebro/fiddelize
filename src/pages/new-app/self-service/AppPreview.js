@@ -20,13 +20,14 @@ function AppPreview({
     targetPoints,
     currPoints,
     game = "targetPrize",
+    prizeDesc,
 }) {
     const { runName } = useRun();
 
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
     const iframeUrl = React.useCallback(
         () =>
-            `/mobile-app/preview?game=${game}&runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
+            `/mobile-app/preview?game=${game}&prizeDesc=${prizeDesc}&runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
         [
             runName,
             clientName,
@@ -37,6 +38,7 @@ function AppPreview({
             colorS,
             colorP,
             game,
+            prizeDesc,
         ]
     );
 

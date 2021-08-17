@@ -18,6 +18,7 @@ export default function GiftBox({
     prizeDesc,
     className,
     opacity = 1,
+    disableOpenBox = false,
 }) {
     const boxLidColor = pickColor({ boxPColor, backColor }); // lid = tampa;
     const boxBodyColor1 = "var(--themePDark--black)";
@@ -29,11 +30,11 @@ export default function GiftBox({
 
     const showBox = () => (
         <main
-            className={`${className} gift-box--root ${
-                needSmallBox ? "small" : undefined
-            }`}
+            className={`${className} ${
+                disableOpenBox ? "disabled-click" : ""
+            } gift-box--root ${needSmallBox ? "small" : undefined}`}
             style={{
-                background: `linear-gradient(${boxBodyColor1}, ${boxBodyColor2})`,
+                background: `linear-gradient(${boxBodyColor1} 1%, ${boxBodyColor2} 8%)`,
             }}
             onClick={handleClick}
         >

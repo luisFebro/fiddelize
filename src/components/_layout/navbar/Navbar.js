@@ -199,8 +199,8 @@ function Navbar({ history, location }) {
                 style={{
                     backgroundColor:
                         !isApp || locationNow.includes("/painel-de-controle")
-                            ? "var(--themePDark--default)"
-                            : `var(--themePDark--${themePColor})`,
+                            ? "var(--themeP--default)"
+                            : `var(--themeP--${themePColor})`,
                 }}
             >
                 {showLogo()}
