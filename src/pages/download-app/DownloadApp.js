@@ -378,7 +378,9 @@ export default function DownloadApp({ match, location, history }) {
     const showBackColor = () => (
         <section style={{ position: "absolute", top: -20, left: -20 }}>
             <BackButton
-                onClick={() => history.push("/negocio/novo-app/cadastro-admin")}
+                onClick={() =>
+                    history.push("/negocio/novo-clube/cadastro-admin")
+                }
             />
         </section>
     );

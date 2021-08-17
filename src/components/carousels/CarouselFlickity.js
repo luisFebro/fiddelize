@@ -36,13 +36,16 @@ export default function CarouselFlickity({
         "cliente-admin",
         "clientAdminData.games.targetPrize.challList"
     );
-    const challList = !loading
+
+    const handledData = dataChall
         ? dataChall.clientAdminData.games.targetPrize.challList
         : [];
+    const challList = !loading ? handledData : [];
 
     const { adminGame } = useData();
 
-    const { prizeDesc, targetPoints } = adminGame.targetPrize;
+    const prizeDesc = adminGame ? adminGame.targetPrize.prizeDesc : "";
+    const targetPoints = adminGame ? adminGame.targetPrize.targetPoints : 0;
 
     const [carouselElem2, setCarouselElem2] = useState("");
     useEffect(() => {
@@ -116,6 +119,7 @@ export default function CarouselFlickity({
                 milestoneIcon: iconSelected,
                 targetPoints,
                 prizeDesc,
+                prizeDeadline: 30,
             },
         ];
     }
@@ -143,14 +147,7 @@ export default function CarouselFlickity({
             {isFromDash && !setSelectedIcon && (
                 <ShowActionBtns
                     needUpdateBtn={needUpdateBtn}
-                    objToSend={{
-                        "clientAdminData.milestoneIcon": iconSelected,
-                        "clientAdminData.challList": findAndReplaceObjInArray(
-                            challList,
-                            updatedArray,
-                            "id"
-                        ),
-                    }}
+                    objToSend={null}
                     titleBeforeOk="Salvando novo ícone..."
                     titleAfterOk="Ícone salvo."
                 />
@@ -177,3 +174,14 @@ export default function CarouselFlickity({
         </div>
     );
 }
+
+/*
+objToSend={{
+    "clientAdminData.milestoneIcon": iconSelected,
+    "clientAdminData.challList": findAndReplaceObjInArray(
+        challList,
+        updatedArray,
+        "id"
+    ),
+}}
+ */

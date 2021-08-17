@@ -18,7 +18,7 @@ function CtaSection({ history }) {
                             size="large"
                             backgroundColor="var(--themeSDark)"
                             onClick={() => {
-                                history.push("/novo-app/info-negocio");
+                                history.push("/novo-clube/info-negocio");
                                 gaEvent({
                                     label: "CtaSection",
                                     category: "CTA",

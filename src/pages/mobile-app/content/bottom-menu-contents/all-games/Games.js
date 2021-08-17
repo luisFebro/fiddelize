@@ -22,10 +22,15 @@ export const AsyncDiscountBackGame = Load({
 });
 // end games
 
-export default function Games({ isPreviewMode = false }) {
-    const { didUserScroll } = useContext();
-    let { currGame } = useContext();
-    currGame = isPreviewMode ? "discountBack" : currGame;
+export default function Games() {
+    const {
+        didUserScroll,
+        isPreviewMode = false,
+        gameClubPreview,
+        currGame: game,
+    } = useContext();
+    const currGame = handleCurrGame({ isPreviewMode, game, gameClubPreview });
+
     const { userGame } = useData();
     if (!userGame && !isPreviewMode) return <div />;
 
@@ -64,6 +69,12 @@ export default function Games({ isPreviewMode = false }) {
 }
 
 // HELPERS
+function handleCurrGame({ game, isPreviewMode, gameClubPreview }) {
+    if (gameClubPreview) return gameClubPreview;
+    if (isPreviewMode) return "discountBack";
+    return game;
+}
+
 function getGameData(currGame, games) {
     if (currGame === "targetPrize") {
         return {

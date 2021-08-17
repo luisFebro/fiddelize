@@ -4,6 +4,7 @@ import getAPI, { getUserIdByName } from "api";
 import useData, { useBizData } from "init";
 import SearchField, { ROOT } from "components/search/SearchField";
 import { getScannedData } from "hooks/media/useQrScanner";
+import getColor from "styles/txt";
 import AddTempPoints from "./AddTempPoints";
 import SuccessMsg from "./SuccessMsg";
 import PointsScannerBtn from "./points-scanner/PointsScannerBtn";
@@ -45,7 +46,8 @@ function FieldsHandler({
 
     const { field, customerName, customerId, isQrCode } = curr;
 
-    const { bizId, themePColor: colorP, needDark, txtColor } = useBizData();
+    const { bizId, themePColor: colorP, themeBackColor } = useBizData();
+    const { needDark, txtColor } = getColor(themeBackColor);
 
     const { userId: memberId } = useData();
 

@@ -18,8 +18,8 @@ export default function CartRace({ className, accuMoney }) {
     adminGame = adminGame || { discountBack: { targetPoints: 300, perc: 10 } };
     userGame = userGame || { discountBack: { challN: 1 } };
 
-    const { needDark, bizName } = useBizData();
-    const { didUserScroll } = useContext();
+    const { bizName } = useBizData();
+    const { needDark, didUserScroll } = useContext();
 
     const { targetPoints, perc } = adminGame.discountBack;
     const { challN: currChallenge } = userGame.discountBack;

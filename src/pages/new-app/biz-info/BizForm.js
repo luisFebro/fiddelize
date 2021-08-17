@@ -8,11 +8,12 @@ import { handleNextField } from "../../../utils/form/kit";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { setVars } from "init/var";
+import getVar, { setVars } from "init/var";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import showToast from "../../../components/toasts";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
 import { ROOT } from "api/root";
+import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -45,6 +46,8 @@ export default function BizForm() {
     });
     const { bizLinkName, field, bizName, selectedValue } = data;
 
+    useNeedRedirectPage({ history, priorPageId: "doneGamesPanel" });
+
     useEffect(() => {
         if (selectedValue) {
             setData({ ...data, field: selectedValue });
@@ -57,9 +60,9 @@ export default function BizForm() {
     const [fieldError, setFieldError] = useState(null);
     const autocompleteUrl = `${ROOT}/user/pre-register/fields-list?limit=30`;
 
-    const generateThisBizCode = (ultimateBizName) => {
+    const generateThisBizCode = async (ultimateBizName) => {
         if (ultimateBizName) {
-            const finalDashedName = generateBizCodeName(ultimateBizName);
+            const finalDashedName = await generateBizCodeName(ultimateBizName);
             setData({
                 ...data,
                 bizLinkName: finalDashedName,
@@ -142,14 +145,30 @@ export default function BizForm() {
             return showToast("Informe ramo de atividade.", { type: "error" });
         }
 
+        const priorData = await getVar("clientAdminData", "pre_register");
+        const games = priorData && priorData.games;
+
+        // target prize game
+        const targetPoints =
+            games.targetPrize && games.targetPrize.challList[0].targetPoints;
+        const prizeDesc =
+            games.targetPrize && games.targetPrize.challList[0].prizeDesc;
+
+        const newData = {
+            ...priorData,
+            bizName,
+            bizLinkName,
+            bizField: field,
+        };
+
         const data = {
             doneBizInfo: true,
-            clientAdminData: { bizName, bizLinkName, bizField: field },
+            clientAdminData: newData,
         };
         await setVars(data, "pre_register");
 
         // need to be reloaded since the other fields are prevented to be opened somehow.
-        window.location.href = `/${bizLinkName}/novo-app/metas`;
+        window.location.href = `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana`;
     };
 
     const showButtonActions = () => (

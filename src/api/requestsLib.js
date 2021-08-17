@@ -6,6 +6,8 @@ import { ROOT } from "api/root";
 export const removeUser = (userId) => `${ROOT}/user/${userId}`; // DELETE
 export const pushElemToField = () => `${ROOT}/user/field/array/push`; // PUT
 export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
+export const checkFieldGotValue = () =>
+    `${ROOT}/user/field/check-field-got-value`; // POST
 
 // AMURRETO TRADES
 export const readTradesHistory = () =>

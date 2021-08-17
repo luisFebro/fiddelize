@@ -14,6 +14,7 @@ import MoneyIcon from "@material-ui/icons/Money";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import { useBizData } from "init";
+import getColor from "styles/txt";
 import Title from "../Title";
 import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
@@ -63,11 +64,13 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     const {
         themePColor,
         themeSColor,
+        themeBackColor,
         bizLogo,
         bizName,
-        txtColor,
         // bizLinkName,
     } = useBizData();
+
+    const { txtColor } = getColor(themeBackColor);
 
     const [data, setData] = useState({
         role: "nucleo-equipe",
@@ -421,7 +424,9 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 </MuiPickersUtilsProvider>
             </div>
             <section id="field4" className="d-none animated slideInUp fast">
-                <p className="text-left my-2">Para finalizar o cadastro...</p>
+                <p className="my-2 font-site text-em-0-8 text-grey text-left my-2">
+                    Para finalizar seu cadastro...
+                </p>
                 <div className="mt-3">
                     Email
                     <TextField

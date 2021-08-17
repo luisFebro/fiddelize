@@ -14,7 +14,6 @@ export default function GiftBox({
     boxPColor = "default",
     backColor = "default",
     needSmallBox = false,
-    disableClick = false,
     callback,
     prizeDesc,
     className,
@@ -30,9 +29,9 @@ export default function GiftBox({
 
     const showBox = () => (
         <main
-            className={`${className} ${
-                disableClick ? "disabled-link" : ""
-            } gift-box--root ${needSmallBox ? "small" : undefined}`}
+            className={`${className} gift-box--root ${
+                needSmallBox ? "small" : undefined
+            }`}
             style={{
                 background: `linear-gradient(${boxBodyColor1}, ${boxBodyColor2})`,
             }}

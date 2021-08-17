@@ -1,7 +1,7 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
 import { useEffect } from "react";
 import useContext from "context";
-import useData, { useBizData } from "init";
+import useData from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "components/tooltips/Tooltip";
 import animateCSS from "utils/animateCSS";
@@ -10,15 +10,19 @@ import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import usePlayAudio from "hooks/media/usePlayAudio";
 
 export default function RatingIcons() {
-    const { currPoints, adminGame } = useData();
-    const { targetPoints, milestoneIcon } = adminGame.targetPrize;
-    const { runName } = useContext();
-
+    const { currPoints = 100, adminGame } = useData();
     const {
-        needDark,
+        runName,
+        targetPointsPreview,
         themeBackColor: colorBack,
         themeSColor: colorS,
-    } = useBizData();
+        needDark,
+    } = useContext();
+    const targetPoints =
+        targetPointsPreview ||
+        (adminGame.targetPrize && adminGame.targetPrize.targetPoints);
+    const milestoneIcon =
+        adminGame.targetPrize && adminGame.targetPrize.targetPoints;
 
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,

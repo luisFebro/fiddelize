@@ -1,5 +1,4 @@
 // use it only for selecting text's color if the background is not the themeBackColor defined by user like themeSColor which requires to pass that color.
-// you can access the result for this function using simply useBizData()
 export default function getColor(backColor) {
     const backColorsNeedDark = ["yellow", "white"];
     const needDark = backColorsNeedDark.includes(backColor);

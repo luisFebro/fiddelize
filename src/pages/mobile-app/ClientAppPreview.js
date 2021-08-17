@@ -13,12 +13,20 @@ function ClientAppPreview({ location }) {
     // useCount("ClientAppPreview.js"); // RT =1 (ok)
 
     const runName = getQueryByName("runName", location.search);
+    console.log("runName", runName);
     const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
-    const colorP = getQueryByName("colorP", location.search);
-    const colorS = getQueryByName("colorS", location.search);
-    const colorBack = getQueryByName("colorBack", location.search);
+    console.log("logoUrlPreview", logoUrlPreview);
+    const colorP = "red"; //getQueryByName("colorP", location.search);
+    const colorS = "default"; //getQueryByName("colorS", location.search);
+    const colorBack = "red"; //getQueryByName("colorBack", location.search);
     const targetPoints = getQueryByName("targetPoints", location.search);
+    console.log("targetPoints", targetPoints);
     const currPoints = getQueryByName("currPoints", location.search);
+    console.log("currPoints", currPoints);
+    const game = getQueryByName("game", location.search);
+    const clientName = getQueryByName("clientName", location.search);
+    console.log("clientName", clientName);
+    console.log("game", game);
 
     const { newImg: formattedImg, isSquared } = removeImgFormat(logoUrlPreview);
     const logoSrc = logoUrlPreview
@@ -56,15 +64,17 @@ function ClientAppPreview({ location }) {
             {showLogo()}
             <ClientUserAppContent
                 useBizData={useBizData}
-                needAppForPreview
                 runName={runName}
-                colorP={colorP}
-                colorS={colorS}
-                colorBack={colorBack}
                 role={role}
-                firstName={firstName}
-                fullName={fullName}
                 userId={userId}
+                fullName={fullName}
+                colorP={colorP}
+                needAppForPreview
+                colorSPreview={colorS}
+                colorBackPreview={colorBack}
+                gameClubPreview={game}
+                firstNamePreview={clientName || firstName}
+                targetPointsPreview={targetPoints}
             />
         </Fragment>
     );

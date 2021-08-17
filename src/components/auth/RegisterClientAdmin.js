@@ -116,8 +116,11 @@ function RegisterClientAdmin({ logo }) {
         if (isReady) {
             setTimeout(() => {
                 // this timeout is used because the data is not set otherwise. The reason is unknown.
+                const { bizLogo, bizName } = preRegisterCliAdminData;
                 setData((prev) => ({
                     ...prev,
+                    bizImg: bizLogo,
+                    bizName,
                     clientAdminData: {
                         ...prev.clientAdminData,
                         ...preRegisterCliAdminData,
@@ -139,10 +142,6 @@ function RegisterClientAdmin({ logo }) {
     // end detecting field errors
 
     const { bizLogo } = useBizData();
-
-    useEffect(() => {
-        setData({ ...data, bizImg: bizLogo });
-    }, [bizLogo]);
 
     const styles = getStyles();
 
@@ -174,19 +173,9 @@ function RegisterClientAdmin({ logo }) {
             ...data,
         };
 
-        showToast("Registrando... Aguarde um momento.");
-
-        if (!agreementDone) {
-            return showToast(
-                "Clique na caixa para concordar com termos de uso e privacidade",
-                { type: "error" }
-            );
-        }
-
         const res = await doRegister(newUser);
-        showToast("Preparando página de download...");
 
-        if (res.status !== 200) {
+        if (res.status !== 200 && res.data) {
             showToast(res.data.msg || res.data.error, { type: "error" });
             // detect field errors
             const thisModalFields = Object.keys(data);
@@ -197,6 +186,15 @@ function RegisterClientAdmin({ logo }) {
             setFieldError(foundObjError);
             return;
         }
+
+        if (!agreementDone) {
+            return showToast(
+                "Clique na caixa para concordar com termos de uso e privacidade",
+                { type: "error" }
+            );
+        }
+
+        showToast("Preparando página de download...");
 
         const { bizName } = clientAdminData;
         const cliAdminName = getFirstName(name);
@@ -402,7 +400,9 @@ function RegisterClientAdmin({ logo }) {
                 </MuiPickersUtilsProvider>
             </div>
             <section id="field4" className="d-none animated slideInUp fast">
-                <p className="text-left my-2">Para finalizar seu cadastro...</p>
+                <p className="my-2 font-site text-em-0-8 text-grey text-left my-2">
+                    Para finalizar seu cadastro...
+                </p>
                 <div className="mt-3">
                     Email
                     <TextField

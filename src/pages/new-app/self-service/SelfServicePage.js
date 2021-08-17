@@ -1,26 +1,42 @@
 import { useState } from "react";
-import AppPreview from "./AppPreview";
-import AppPickersHandler from "./pickers/AppPickersHandler";
-import getQueryByName from "../../../utils/string/getQueryByName";
-import useDelay from "../../../hooks/useDelay";
-import Spinner from "../../../components/loadingIndicators/Spinner";
+import getQueryByName from "utils/string/getQueryByName";
+import useDelay from "hooks/useDelay";
+import Spinner from "components/loadingIndicators/Spinner";
 import useData from "init";
-import "./style.scss";
 import { removeItems } from "init/lStorage";
 import getVar, { setVars } from "init/var";
-import useScrollUp from "../../../hooks/scroll/useScrollUp";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import AppPreview from "./AppPreview";
+import AppPickersHandler from "./pickers/AppPickersHandler";
+import "./style.scss";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
+
+const isSmall = window.Helper.isSmallScreen();
 
 removeItems("bizData", ["milestoneIcon"]);
 
 const setLocalData = async ({ type = "theming", colors, iconsData }) => {
     const priorAdminData = await getVar("clientAdminData", "pre_register");
+    const priorGame = priorAdminData && priorAdminData.games.targetPrize;
 
     let newObj = { ...priorAdminData, ...colors };
 
     let stepObj = { doneSSTheming: true };
-    if (type !== "theming") {
-        newObj = { ...priorAdminData, ...iconsData };
+    if (type === "icon") {
+        newObj = {
+            ...priorAdminData,
+            games: {
+                targetPrize: {
+                    ...priorGame,
+                    challList: [
+                        {
+                            ...priorGame.challList[0],
+                            milestoneIcon: iconsData.milestoneIcon,
+                        },
+                    ],
+                },
+            },
+        };
         stepObj = { doneSSRatingIcon: true };
     }
 
@@ -29,7 +45,7 @@ const setLocalData = async ({ type = "theming", colors, iconsData }) => {
     return await setVars(
         {
             clientAdminData: newAdminData,
-            stepObj,
+            ...stepObj,
         },
         "pre_register"
     );
@@ -48,7 +64,7 @@ function SelfServicePage({ location, history }) {
     const isPageReady = useDelay(2000);
 
     useScrollUp();
-    useNeedRedirectPage({ history, priorPageId: "doneRewardPlanner" });
+    useNeedRedirectPage({ history, priorPageId: "doneBizInfo" });
 
     const [clientAdminData] = useData(["clientAdminData"], "pre_register");
     const { bizName, bizLinkName } = clientAdminData;
@@ -67,8 +83,12 @@ function SelfServicePage({ location, history }) {
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
-            <p className="text-title">Novo App</p>
-            <p className="text-white text-normal mx-3 mb-5">Hora de criar!</p>
+            <p className="text-title">Novo Clube</p>
+            <p className="text-white text-normal mx-3 mb-5">
+                {isSmall
+                    ? "Personalize os apps do clube com o estilo do seu negócio!"
+                    : "Personalize os apps do seu clube"}
+            </p>
         </div>
     );
 
@@ -81,9 +101,6 @@ function SelfServicePage({ location, history }) {
             {showTitle()}
             <div className="main-self-service">
                 <section className="picker-area mx-3">
-                    <p className="title text-subtitle text-center text-white">
-                        App dos clientes da {!bizName ? "..." : bizName}
-                    </p>
                     <AppPickersHandler
                         bizLinkName={bizLinkName}
                         bizName={bizName}
@@ -114,5 +131,7 @@ function SelfServicePage({ location, history }) {
 export default SelfServicePage;
 
 /*
-
+<p className="title text-subtitle text-center text-white">
+    App dos clientes da {!bizName ? "..." : bizName}
+</p>
  */

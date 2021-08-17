@@ -29,15 +29,15 @@ export const getNewAppPage = async () => {
         "pre_register"
     );
 
-    if (!clientAdminData) return "/novo-app/info-negocio";
+    if (!clientAdminData) return "/novo-clube/info-negocio";
 
     const { bizName } = clientAdminData;
     const { bizLinkName } = clientAdminData;
     const { prizeDesc } = clientAdminData;
     const { targetPoints } = clientAdminData;
 
-    if (doneSSRatingIcon) return `/${bizLinkName}/novo-app/cadastro-admin`;
+    if (doneSSRatingIcon) return `/${bizLinkName}/novo-clube/cadastro-admin`;
     if (doneRewardPlanner)
-        return `/${bizLinkName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana`;
-    if (doneBizInfo) return `/${bizLinkName}/novo-app/metas`;
+        return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana`;
+    if (doneBizInfo) return `/${bizLinkName}/novo-clube/metas`;
 };

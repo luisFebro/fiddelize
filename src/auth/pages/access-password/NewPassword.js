@@ -9,6 +9,7 @@ import PasswordCircleFields from "components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "components/keyboards/NumericKeyboard";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import RedirectLink from "components/RedirectLink";
+import getColor from "styles/txt";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -49,8 +50,8 @@ export default function NewPassword({ location, match, history }) {
         themeBackColor: backColor,
         themePColor: colorP,
         themeSColor: colorS,
-        needDark,
     } = useBizData();
+    const { needDark } = getColor(themeBackColor);
 
     useBackColor(`var(--themeBackground--${backColor})`);
 

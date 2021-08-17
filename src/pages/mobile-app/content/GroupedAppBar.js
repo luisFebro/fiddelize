@@ -1,6 +1,7 @@
 import { withRouter } from "react-router-dom";
 import StarsIcon from "@material-ui/icons/Stars";
-import useData, { useBizData } from "init";
+
+import useData from "init";
 // import HomeIcon from "@material-ui/icons/Home";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
@@ -54,12 +55,14 @@ const AsyncSupportBizContact = LoadableVisible({
         ),
 });
 
-function GroupedAppBar({ history, isPreviewMode }) {
+function GroupedAppBar({ history }) {
     const { firstName, userId, totalGeneralPoints } = useData();
-
-    const { themePColor: colorP, themeBackColor: colorBack } = useBizData();
-
-    const { needAppForCliAdmin, didUserScroll } = useContext();
+    const {
+        needAppForCliAdmin,
+        didUserScroll,
+        themePColor: colorP,
+        themeBackColor: colorBack,
+    } = useContext();
 
     const cliUserBuyData = {
         cliUserFirstName: firstName,
@@ -72,7 +75,7 @@ function GroupedAppBar({ history, isPreviewMode }) {
         {
             tabLabel: "Jogo",
             tabIcon: <SportsEsportsIcon />,
-            tabContentPanel: <Games isPreviewMode={isPreviewMode} />,
+            tabContentPanel: <Games />,
             scrollView: true,
             colorBack,
         },

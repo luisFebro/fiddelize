@@ -389,7 +389,9 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 </MuiPickersUtilsProvider>
             </div>
             <section id="field4" className="d-none animated slideInUp fast">
-                <p className="text-left my-2">Para finalizar o cadastro...</p>
+                <p className="my-2 font-site text-em-0-8 text-grey text-left my-2">
+                    Para finalizar seu cadastro...
+                </p>
                 <div className="mt-3">
                     Email
                     <TextField

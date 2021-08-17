@@ -1,6 +1,6 @@
-import useScrollUp from "../../../hooks/scroll/useScrollUp";
-import RegisterClientAdmin from "../../../components/auth/RegisterClientAdmin";
-import RadiusBtn from "../../../components/buttons/RadiusBtn";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import RegisterClientAdmin from "components/auth/RegisterClientAdmin";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import useData from "init";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
@@ -15,9 +15,9 @@ export default function AdminRegister({ history }) {
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
-            <h1 className="text-title">Novo App</h1>
+            <h1 className="text-title">Novo Clube</h1>
             <p className="text-white text-normal mx-3 mb-5">
-                Antes de baixar seu app, finalize cadastrando sua conta
+                Antes de baixar seu app admin, finalize cadastrando sua conta
             </p>
         </div>
     );

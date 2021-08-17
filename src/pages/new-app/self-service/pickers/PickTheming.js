@@ -188,11 +188,7 @@ export default function PickTheming({
                     </p>
                 </section>
                 <section className="container-center justify-content-around my-3">
-                    <div
-                        className={`flex-column ${
-                            isFromDash ? "" : "animated rubberBand delay-3s"
-                        } mt-3`}
-                    >
+                    <div className={`flex-column mt-3`}>
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">
                             Principal
                         </p>
@@ -213,11 +209,7 @@ export default function PickTheming({
                             </span>
                         </div>
                     </div>
-                    <div
-                        className={`flex-column ${
-                            isFromDash ? "" : "animated rubberBand delay-5s"
-                        } mt-3`}
-                    >
+                    <div className={`flex-column mt-3`}>
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">
                             Secundária
                         </p>

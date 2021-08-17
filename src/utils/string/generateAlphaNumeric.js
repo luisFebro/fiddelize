@@ -17,15 +17,15 @@ export default function generateAlphaNumeric(length = 7, chars = "aA#!@") {
 const getUniqueCodeName = (name) => {
     let finalName;
 
-    // the length of 7 can not change due to consider now the eighth digit as the
-    // person who registered the user.
-    const TOTAL_CONSONANTS = 3;
-    const TOTAL_CODE = 4;
+    // DEPRACATED the length of 7 can not change due to consider now the eighth digit as the
+    // DEPRACATED person who registered the user.
+    const TOTAL_CONSONANTS = 2;
+    const TOTAL_CODE = 5;
 
     const onlyConsonantsFromBizName = getOnlyConsonants(name, TOTAL_CONSONANTS);
     const alphaNumeric = generateAlphaNumeric(TOTAL_CODE, "aA#");
 
-    finalName = `${onlyConsonantsFromBizName}${alphaNumeric}`;
+    finalName = `${alphaNumeric}${onlyConsonantsFromBizName}`;
 
     return finalName;
 };

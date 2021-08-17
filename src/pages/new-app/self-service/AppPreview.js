@@ -19,13 +19,14 @@ function AppPreview({
     colorBack,
     targetPoints,
     currPoints,
+    game = "targetPrize",
 }) {
     const { runName } = useRun();
 
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
     const iframeUrl = React.useCallback(
         () =>
-            `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
+            `/mobile-app/preview?game=${game}&runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
         [
             runName,
             clientName,
@@ -35,6 +36,7 @@ function AppPreview({
             colorBack,
             colorS,
             colorP,
+            game,
         ]
     );
 
@@ -80,9 +82,9 @@ function AppPreview({
 
     const showPhoneTitle = () => (
         <div className="title-for-phone">
-            Resultado App
+            Olha como fica o
             <br />
-            em tempo real.
+            app dos clientes.
         </div>
     );
 
@@ -106,7 +108,7 @@ function AppPreview({
 
     const showWarning = () => (
         <div className="text-small text-purple text-center">
-            * App para fins de visual,
+            * Para fins demonstrativos,
             <br />
             funcionalidades desativadas.
         </div>

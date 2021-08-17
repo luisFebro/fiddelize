@@ -6,19 +6,20 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Tooltip from "components/tooltips/Tooltip";
 import useDelay from "hooks/useDelay";
 import getItems, { setItems } from "init/lStorage";
+import getColor from "styles/txt";
 // import { encrypt } from "utils/security/xCipherFront";
 
 const [ptsInfo] = getItems("onceChecked", ["ptsInfo"]);
 
 export default function AddPointsContent({ closeModal }) {
     const {
-        txtColor,
         bizName,
         bizLogo,
         themeSColor,
         themeBackColor,
         themePColor,
     } = useBizData();
+    const { txtColor } = getColor(themeBackColor);
     const { name, userId } = useData();
 
     const ready = useDelay(4000);

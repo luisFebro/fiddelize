@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useBizData } from "init";
+import useContext from "context";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -13,7 +13,7 @@ const AsyncGamesGalleryContent = Load({
 });
 
 export default function GamesGalleryBtn({ needClick = true }) {
-    const { themeBackColor: colorBack, themeSColor: colorS } = useBizData();
+    const { themeBackColor: colorBack, themeSColor: colorS } = useContext();
 
     const { txtColorStyle } = getColor(colorS);
 

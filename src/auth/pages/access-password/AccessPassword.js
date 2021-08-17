@@ -7,6 +7,7 @@ import isThisApp from "utils/window/isThisApp";
 import useData, { useBizData } from "init";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
+import getColor from "styles/txt";
 import showToast from "components/toasts";
 import getAPI, { checkPassword, createTk } from "api";
 import PasswordCircleFields from "components/fields/PasswordCircleFields";
@@ -52,9 +53,8 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         bizId,
         themeBackColor: backColor,
         themePColor: colorP,
-        txtColorStyle,
-        needDark,
     } = useBizData();
+    const { needDark, txtColorStyle } = getColor(themeBackColor);
 
     const styles = getStyles();
 

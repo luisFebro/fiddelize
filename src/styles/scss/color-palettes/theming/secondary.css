@@ -1,12 +1,12 @@
 :root {
     /*cyan (greenish-blue) a400*/
-    --themeS: #00e5ff;
+    --themeS: #00b2cc; /* PRIOR #00e5ff changed for not having over brightness with a lighter shade as in buttons */
     --themeSLight: #6effff;
     --themeSDark: #00b2cc;
 
     /* THEMING */
     /*default*/
-    --themeS--default: #00e5ff;
+    --themeS--default: #00b2cc; /* PRIOR #00e5ff*/
     --themeSLight--default: #6effff;
     --themeSDark--default: #00b2cc;
     /*pink*/

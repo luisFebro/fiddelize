@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ProtectionMsg from "auth/pages/access-password/ProtectionMsg";
 import AccessSwitcher from "components/auth/password/AccessSwitcher";
+import getColor from "styles/txt";
 import { getVars } from "init/var";
 import { useBizData } from "init";
 
@@ -23,7 +24,8 @@ export default function AccessGateKeeper({
         rememberAccess: true,
     });
     const { twoLastCpfDigits, rememberAccess } = data;
-    const { txtColorStyle } = useBizData();
+    const { themeBackColor } = useBizData();
+    const { txtColorStyle } = getColor(themeBackColor);
 
     useEffect(() => {
         getVars(["twoLastCpfDigits", "rememberAccess"], "user").then(

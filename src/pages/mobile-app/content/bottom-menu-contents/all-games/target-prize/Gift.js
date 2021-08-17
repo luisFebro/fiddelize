@@ -1,5 +1,6 @@
 import { useState } from "react";
-import useData, { useBizData } from "init";
+import useContext from "context";
+import useData from "init";
 import Tooltip from "components/tooltips/Tooltip";
 import useDatesCountdown from "hooks/dates/useDatesCountdown";
 import usePlayAudio from "hooks/media/usePlayAudio";
@@ -33,14 +34,22 @@ export default function Gift() {
         adminGame,
         userGame,
     } = useData();
-    const { targetPoints, prizeDeadline, prizeDesc } = adminGame.targetPrize;
-    const { challN: currChall } = userGame.targetPrize;
-
+    const { prizeDeadline = 30 } = adminGame.targetPrize;
     const {
         themeSColor: colorS,
         themePColor: colorP,
         themeBackColor: colorBack,
-    } = useBizData();
+        targetPointsPreview,
+        prizeDescPreview,
+    } = useContext();
+
+    const targetPoints =
+        targetPointsPreview ||
+        (adminGame.targetPrize && adminGame.targetPrize.targetPoints);
+    const prizeDesc =
+        prizeDescPreview ||
+        (adminGame.targetPrize && adminGame.targetPrize.prizeDesc);
+    const { challN: currChall } = userGame.targetPrize;
 
     const [isGiftOpen, setIsGiftOpen] = useState(false);
 
@@ -114,11 +123,7 @@ export default function Gift() {
     );
 
     const showGift = () => {
-        const displayGiftBox = ({
-            needSmallBox,
-            disableClick = false,
-            opacity,
-        }) => (
+        const displayGiftBox = ({ needSmallBox, opacity }) => (
             <GiftBox
                 className={`animated ${
                     userBeatedChall
@@ -130,7 +135,6 @@ export default function Gift() {
                 callback={setIsGiftOpen}
                 needSmallBox={needSmallBox}
                 prizeDesc={prizeDesc}
-                disableClick={disableClick}
                 opacity={opacity}
             />
         );
@@ -147,7 +151,6 @@ export default function Gift() {
                             <div>
                                 {displayGiftBox({
                                     needSmallBox: true,
-                                    disableClick: true,
                                     opacity: 1,
                                 })}
                             </div>

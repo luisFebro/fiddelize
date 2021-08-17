@@ -6,6 +6,7 @@ import useAuth from "auth/useAuth";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useBackColor from "hooks/useBackColor";
+import getColor from "styles/txt";
 import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
 import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
@@ -47,9 +48,8 @@ export default function TeamApp({
         themeBackColor: backColor,
         themeSColor: sColor,
         themePColor: pColor,
-        needDark,
-        txtColor,
     } = useBizData();
+    const { needDark, txtColor } = getColor(backColor);
 
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 

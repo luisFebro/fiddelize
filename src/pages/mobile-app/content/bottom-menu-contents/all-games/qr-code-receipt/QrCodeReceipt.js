@@ -1,11 +1,13 @@
 import QrCode from "components/QrCode";
 import useData, { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
+import getColor from "styles/txt";
 // import { encrypt } from "utils/security/xCipherFront";
 
 export default function QrCodeReceipt() {
     const { userId, name } = useData();
-    const { bizName, bizLogo, themePColor, txtColor } = useBizData();
+    const { bizName, bizLogo, themePColor, themeBackColor } = useBizData();
+    const { txtColor } = getColor(themeBackColor);
 
     const { newImg, isSquared } = removeImgFormat(bizLogo);
     const imageSettings = {

@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import useContext from "context";
-import useData, { useBizData } from "init";
+import useData from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getRemainder from "utils/numbers/getRemainder";
 import Tooltip from "components/tooltips/Tooltip";
@@ -31,18 +31,20 @@ const getStyles = () => ({
 });
 
 export default function ProgressFragTracker() {
-    const { currPoints, adminGame } = useData();
-
-    const { targetPoints } = adminGame.targetPrize;
-
+    const { currPoints = 100, adminGame } = useData();
     const {
+        playBeep,
+        targetPointsPreview,
+        needAppForPreview,
         themeSColor: colorS,
         themePColor: colorP,
         themeBackColor: colorBack,
         txtColor,
-    } = useBizData();
+    } = useContext();
 
-    const { playBeep, needAppForPreview } = useContext();
+    const targetPoints =
+        targetPointsPreview ||
+        (adminGame.targetPrize && adminGame.targetPrize.targetPoints);
 
     const eachMilestone = targetPoints / 5;
     const currMilestone = getRemainder("tens", currPoints, eachMilestone);

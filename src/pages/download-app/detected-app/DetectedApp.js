@@ -35,7 +35,7 @@ export default function DetectedApp({
                     </h2>
                     <p className="text-normal font-weight-bold text-left">
                         O app de {bizName && bizName.cap()} está na Fiddelize.
-                        Parece que já tem instalado no seu dispositivo.
+                        Parece que já foi baixado no seu dispositivo.
                     </p>
                     <div className="container-center">
                         <img
@@ -46,9 +46,8 @@ export default function DetectedApp({
                         />
                     </div>
                     <p className="mt-3 animated fadeIn text-normal font-weight-bold text-left">
-                        Você pode acessar e adicionar novos apps pelo seu CPF
-                        sem precisar baixar a plataforma da Fiddelize de novo
-                        cadastrando via App Instantâneo.
+                        Instale novos apps usando apenas seu CPF via App
+                        Instantâneo sem precisar baixar de novo a Fiddelize.
                     </p>
                     <div className="container-center-col mt-5">
                         <ButtonFab
@@ -72,7 +71,7 @@ export default function DetectedApp({
                         />
                         <div className="mt-3">
                             <ButtonMulti
-                                title="continuar baixando app"
+                                title="Não achou? continue para baixar"
                                 onClick={() => {
                                     setData((prev) => ({
                                         ...prev,

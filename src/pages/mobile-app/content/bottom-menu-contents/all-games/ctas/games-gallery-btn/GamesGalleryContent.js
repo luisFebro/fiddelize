@@ -1,8 +1,8 @@
-import useData from "init";
+import useContext from "context";
 import GameList from "./games-list/GameList";
 
 export default function GamesGalleryContent(props) {
-    const { currPoints } = useData();
+    const { currPoints } = useContext();
 
     const showTitle = () => (
         <div className="mt-3 text-left text-purple mx-3">

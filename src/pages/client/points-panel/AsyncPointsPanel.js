@@ -16,6 +16,7 @@ import getAPI, { addPoints } from "api";
 import getVar, { setVar, removeVars } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import GamesBadge from "components/biz/GamesBadge";
+import getColor from "styles/txt";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
 import useCheckBeatGames from "./hooks/useCheckBeatGames";
@@ -63,9 +64,8 @@ function AsyncPointsPanel({ history, location }) {
         themeBackColor: colorBack,
         themePColor: colorP,
         themeSColor: colorS,
-        txtColor,
-        txtColorStyle,
     } = useBizData();
+    const { txtColor, txtColorStyle } = getColor(colorBack);
 
     const { currPointsBefore, currPointsNow } = getScoreData({
         currPoints,

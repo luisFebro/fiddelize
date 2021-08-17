@@ -35,15 +35,18 @@ const Footer = ({ location }) => {
             <div className="footer-col first">
                 <h4>Sobre a Fiddelize</h4>
                 <p className="text-small text-voca-cyan">
-                    Ajudamos negócios a oferecer benefícios aos seus clientes
-                    com <strong>moeda digital</strong> e{" "}
-                    <strong>jogos de compra</strong> com nossa plataforma de
-                    criação de apps web.
+                    Ajudamos negócios a oferecer <strong>benefícios</strong>{" "}
+                    para seus clientes com{" "}
+                    <strong>moeda digital e jogos de compra</strong>. Na nossa
+                    plataforma, você monta seu clube e personaliza web apps com
+                    sua marca.
                     <br />
                     <br />
                     Somos uma martech especializada em{" "}
-                    <strong>marketing</strong> de relacionamento,{" "}
-                    <strong>fidelidade e análise</strong> da clientela.
+                    <strong>
+                        marketing de relacionamento e análise de compra
+                    </strong>{" "}
+                    da clientela.
                 </p>
             </div>
         </section>
@@ -128,7 +131,7 @@ const Footer = ({ location }) => {
                 </div>
                 <div className="copyright-slogon">
                     {" "}
-                    <div className="position-relative target-download theme-p-dark text-s text-center pt-3">
+                    <div className="position-relative target-download theme-p-dark text-s text-center pt-3 text-voca-cyan">
                         <span className="d-inline-block mx-3 font-weight-bold text-small">
                             © 2020-{new Date().getFullYear()} Fiddelize
                             <br />

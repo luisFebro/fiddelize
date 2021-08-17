@@ -24,7 +24,9 @@ export default function PickRatingIcon({
     const showCondition = isFromDash ? true : step === 3;
 
     const { adminGame } = useData();
-    const { milestoneIcon } = adminGame.targetPrize;
+    const milestoneIcon = adminGame
+        ? adminGame.targetPrize.milestoneIcon
+        : "star";
 
     const currIconInd = getIconIndex(milestoneIcon);
     // n1

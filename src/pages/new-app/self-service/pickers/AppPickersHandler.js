@@ -85,7 +85,7 @@ export default function AppPickersHandler({
                     iconsData,
                 }).then((res) => {
                     // need to be reloaded since the other fields are prevented to be opened somehow.
-                    window.location.href = `/${bizLinkName}/novo-app/cadastro-admin`;
+                    window.location.href = `/${bizLinkName}/novo-clube/cadastro-admin`;
                 });
                 break;
             default:

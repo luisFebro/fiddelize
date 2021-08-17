@@ -23,8 +23,14 @@ export default function ClientUserAppContent({
     needAppForCliAdmin,
     needAppForPreview,
     runName,
-    colorP = "default",
     totalNotifications,
+    colorP,
+    colorSPreview,
+    colorBackPreview,
+    gameClubPreview,
+    firstNamePreview,
+    targetPointsPreview,
+    prizeDescPreview,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
 
@@ -32,8 +38,14 @@ export default function ClientUserAppContent({
     const didUserScroll = useDidScroll();
     const didBeatGame = useVar("didBeatGame");
 
-    const { currPoints = 100, firstName, role } = useData();
-    const { themeBackColor, txtColor, needDark } = useBizData();
+    const { currGame, currPoints = 100, role } = useData();
+    let { firstName } = useData();
+    let { themeBackColor, themePColor, themeSColor } = useBizData();
+    firstName = firstNamePreview || firstName;
+    themePColor = colorP || themePColor;
+    themeSColor = colorSPreview || themeSColor;
+    themeBackColor = colorBackPreview || themeBackColor;
+    const { needDark, txtColor, txtColorStyle } = getColor(themeBackColor);
 
     const confettiOptions = React.useCallback(
         () => ({ trigger: didBeatGame, showMoreComps }),
@@ -111,12 +123,24 @@ export default function ClientUserAppContent({
     );
 
     const store = useGlobal({
-        needAppForCliAdmin,
-        needAppForPreview,
         txtColor,
         playBeep,
         runName,
         didUserScroll,
+        currGame,
+        currPoints,
+        isPreviewMode: needAppForCliAdmin || needAppForPreview,
+        needAppForCliAdmin,
+        themePColor,
+        themeSColor,
+        themeBackColor,
+        needDark,
+        txtColor,
+        txtColorStyle,
+        gameClubPreview,
+        needAppForPreview,
+        prizeDescPreview,
+        targetPointsPreview,
     });
 
     const showAdminTestMsg = () => (
@@ -155,9 +179,7 @@ export default function ClientUserAppContent({
             >
                 {showGreetingAndNotific()}
                 {showPtsBalance()}
-                <GroupedAppBar
-                    isPreviewMode={needAppForCliAdmin || needAppForPreview}
-                />
+                <GroupedAppBar />
                 {backBtnForCliAdmin()}
                 <NotifPermissionBanner
                     title="Receba notificações sobre seus benefícios!"

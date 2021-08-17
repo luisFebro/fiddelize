@@ -10,8 +10,8 @@ import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
 import showToast from "components/toasts";
-import useAnimateElem from "hooks/scroll/useAnimateElem";
-import getVar, { setVars } from "init/var";
+import { setVars } from "init/var";
+import getId from "utils/getId";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -65,7 +65,7 @@ const styles = {
     },
 };
 
-function GoalForm({ history, bizLinkName, bizName }) {
+function GoalForm({ history, bizName }) {
     const [error, setError] = useState("");
     const [data, setData] = useState({
         targetPoints: undefined,
@@ -73,47 +73,50 @@ function GoalForm({ history, bizLinkName, bizName }) {
     });
     const { targetPoints, prizeDesc } = data;
 
-    useAnimateElem(".goal-form--comp", {
-        animaIn: "bounceInUp",
-        speed: "normal",
-    });
-
     const classes = useStyles();
 
     const saveData = async () => {
-        const score = targetPoints;
-        const prize = prizeDesc;
-
-        if (!score) {
+        if (!targetPoints) {
             setError("targetPoints");
             return showToast("Você precisa inserir o ponto de prêmio", {
                 type: "error",
             });
         }
-        if (!prize) {
+        if (!prizeDesc) {
             setError("prizeDesc");
             return showToast("Você precisa inserir uma descrição do prêmio", {
                 type: "error",
             });
         }
 
-        const priorData = await getVar("clientAdminData", "pre_register");
         const newData = {
-            ...priorData,
-            targetPoints: Number(targetPoints),
-            prizeDesc,
+            games: {
+                targetPrize: {
+                    on: true,
+                    prizeDeadline: 30,
+                    // object data for challList array
+                    challList: [
+                        {
+                            id: getId(),
+                            targetPoints: Number(targetPoints),
+                            prizeDesc,
+                            milestoneIcon: null,
+                        },
+                    ],
+                },
+            },
         };
+
         await setVars(
             {
                 clientAdminData: newData,
-                doneRewardPlanner: true,
+                doneGamesPanel: true,
             },
             "pre_register"
         );
 
-        history.push(
-            `/${bizLinkName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}&nome-cliente=Ana`
-        );
+        // it should reloads here so that data can readable in the next component
+        window.location.href = "/novo-clube/info-negocio";
     };
 
     const showButtonAction = () => (
@@ -133,18 +136,21 @@ function GoalForm({ history, bizLinkName, bizName }) {
     );
 
     return (
-        <div className="goal-form--comp container-center my-5 text-white">
+        <div className="animated bounceInUp container-center my-5 text-white">
             <form
                 className="card-elevation margin-auto-90"
                 onBlur={() => setError("")}
                 style={styles.form}
             >
-                <p className="text-title text-shadow text-nowrap text-center m-1 p-1">
-                    Meta do App
+                <p className="text-title line-height-40 text-shadow text-nowrap text-center m-1 p-1">
+                    Meta do
+                    <br />
+                    Jogo
                 </p>
-                <div className="position-relative margin-auto-90 text-normal font-weight-bold">
+                <div className="mt-3 position-relative margin-auto-90 text-normal font-weight-bold">
                     <p className="text-shadow">
-                        Quanto é o seu ponto de prêmio?
+                        Quantos PTS o cliente precisa atingir para ganhar
+                        prêmio?
                     </p>
                     <div className="position-relative">
                         <TextField
@@ -160,7 +166,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                                 },
                             }}
                             type="number"
-                            helperText="Lembre-se: é o ponto/R$ que o cliente precisa alcançar em compras"
+                            helperText="Lembre-se: 1 PTS vale R$ 1."
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
@@ -184,7 +190,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                             className="position-absolute"
                         >
                             <img
-                                src={`${CLIENT_URL}/img/icons/new-app/reward-planner/points.svg`}
+                                src={`${CLIENT_URL}/img/icons/new-app/points.svg`}
                                 className="svg-elevation"
                                 width={70}
                                 height="auto"
@@ -197,9 +203,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                     id="field2"
                     className="d-none animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold"
                 >
-                    <p className="text-shadow">
-                        Qual é a descrição do prêmio simbólico?
-                    </p>
+                    <p className="text-shadow">Qual é a descrição do prêmio?</p>
                     <div className="position-relative">
                         <TextField
                             multiline
@@ -218,7 +222,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                             }}
                             name="prizeDesc"
                             value={prizeDesc}
-                            helperText="Lembre-se: um serviço, produto, benefício ou desconto."
+                            helperText=""
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
@@ -249,12 +253,10 @@ function GoalForm({ history, bizLinkName, bizName }) {
                         </div>
                     </div>
                 </div>
-                {prizeDesc && (
-                    <p className="animated fadeInUp delay-2s mt-3 text-shadow text-white text-small">
-                        Nota: Se precisar, você pode mudar esses dados depois no
-                        seu painel de controle na sessão de app. 👍
-                    </p>
-                )}
+                <p className="mt-3 text-shadow text-white text-small">
+                    Nota: Se precisar, você pode mudar esses dados depois no seu
+                    painel de controle na sessão de app. 👍
+                </p>
                 {targetPoints && showButtonAction()}
             </form>
         </div>

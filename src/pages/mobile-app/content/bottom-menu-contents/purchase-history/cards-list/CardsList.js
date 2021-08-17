@@ -8,6 +8,7 @@ import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "utils/numbers/convertToReal";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import getColor from "styles/txt";
 import PickOtherCards from "./PickOtherCards";
 
 export default function CardsList({
@@ -24,7 +25,8 @@ export default function CardsList({
     const isAdmin = role === "cliente-admin";
 
     const { targetPoints } = adminGame.targetPrize;
-    const { txtColor, themePColor, themeSColor: sColor } = useBizData();
+    const { themePColor, themeSColor: sColor, themeBackColor } = useBizData();
+    const { txtColor } = getColor(themeBackColor);
 
     const params = {
         targetPoints,

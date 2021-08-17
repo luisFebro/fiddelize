@@ -9,8 +9,12 @@ export default function useAllowedLink({
 }) {
     const [linkCode] = useData(["linkCode"]);
 
+    const userCond = isCliUser && userScore;
+    if (!userCond || isCliAdmin) return true;
+
     const blackList =
         linkCode !== "..." &&
+        linkCode &&
         (linkCode.includes("nucleo") || linkCode.includes("equipe"));
 
     const { data: isAllowed, loading } = useAPI({
@@ -23,9 +27,6 @@ export default function useAllowedLink({
     });
 
     if (loading) return true;
-    const userCond = isCliUser && userScore;
-    const adminCond = isCliAdmin;
-    if (!userCond || adminCond) return true;
 
     return isAllowed;
 }

@@ -12,16 +12,16 @@ import Footer from "components/_layout/footer/Footer";
 import Home from "pages/home/Home";
 import RegulationPage from "pages/RegulationPage";
 import AsyncDownloadApp from "pages/download-app/AsyncDownloadApp";
-import {
-    AsyncBizInfo,
-    AsyncRewardPlanner,
-    AsyncSelfService,
-    AsyncAdminRegister,
-} from "./comp-pages/AsyncNewAppPages";
 import RedirectLink from "pages/RedirectLink";
 import Default from "pages/Default";
 import UnavailableService from "pages/UnavailableService";
 import { Load } from "components/code-splitting/LoadableComp";
+import {
+    AsyncShoppingGamesPanel,
+    AsyncBizInfo,
+    AsyncSelfService,
+    AsyncAdminRegister,
+} from "./comp-pages/AsyncNewAppPages";
 import {
     AsyncLoginPage,
     // cli-admin
@@ -103,22 +103,22 @@ function Website({ location }) {
                 />
                 <Route path="/baixe-app" exact component={AsyncDownloadApp} />
                 <Route
-                    path="/novo-app/info-negocio"
+                    path="/novo-clube/painel-jogos-compra"
+                    exact
+                    component={AsyncShoppingGamesPanel}
+                />
+                <Route
+                    path="/novo-clube/info-negocio"
                     exact
                     component={AsyncBizInfo}
                 />
                 <Route
-                    path="/:bizLinkName/novo-app/metas"
-                    exact
-                    component={AsyncRewardPlanner}
-                />
-                <Route
-                    path="/:bizLinkName/novo-app/self-service"
+                    path="/:bizLinkName/novo-clube/self-service"
                     exact
                     component={AsyncSelfService}
                 />
                 <Route
-                    path="/:bizLinkName/novo-app/cadastro-admin"
+                    path="/:bizLinkName/novo-clube/cadastro-admin"
                     exact
                     component={AsyncAdminRegister}
                 />

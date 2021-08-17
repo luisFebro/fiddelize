@@ -8,6 +8,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import showToast from "components/toasts";
 import { useVar } from "init/var";
 import getFirstName from "utils/string/getFirstName";
+import getColor from "styles/txt";
 
 export default function SuccessMsg({
     needDark = false,
@@ -24,7 +25,8 @@ export default function SuccessMsg({
 
     const lastTempPoints = useVar("lastTempPoints", { dots: true });
 
-    const { bizLogo, txtColorStyle } = useBizData();
+    const { bizLogo, themeBackColor } = useBizData();
+    const { txtColorStyle } = getColor(themeBackColor);
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     const handleFinishedAudio = () => {

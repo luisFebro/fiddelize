@@ -21,6 +21,7 @@ import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
 import Title from "../Title";
+import getColor from "styles/txt";
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
@@ -95,12 +96,13 @@ function ASyncRegisterCliUser({
 
     const {
         themePColor,
-        txtColor,
         themeSColor,
+        themeBackColor,
         bizLogo,
         bizName,
         bizId,
     } = useBizData();
+    const { txtColor } = getColor(themeBackColor);
 
     const [
         staffId,
@@ -415,7 +417,9 @@ function ASyncRegisterCliUser({
                 </MuiPickersUtilsProvider>
             </div>
             <section id="field4" className="d-none animated slideInUp fast">
-                <p className="text-left my-2">Para finalizar o cadastro...</p>
+                <p className="my-2 font-site text-em-0-8 text-grey text-left my-2">
+                    Para finalizar seu cadastro...
+                </p>
                 <div className="mt-3">
                     Email
                     <TextField

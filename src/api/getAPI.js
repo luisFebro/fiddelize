@@ -98,6 +98,8 @@ async function handleProgress(type, { loader = false }) {
 }
 
 async function handleSuccess({ resolve, success, sucMsg, sucDur, fullThen }) {
+    if (success === false || (success && success.data === false))
+        return resolve(false);
     if (!success || !success.data) return resolve(null);
     // can accept both .json({ msg: "ok" }) or .json("ok")
     const gotSucMsg = success.data.msg;
