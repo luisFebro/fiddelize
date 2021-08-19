@@ -19,6 +19,7 @@ export default function BellNotifBtn({
     forceCliUser,
     needClick = true,
     bizId,
+    zIndex,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [needEmptyBadge, setNeedEmptyBadge] = useState(false);
@@ -52,6 +53,7 @@ export default function BellNotifBtn({
                 notifBorderColor={notifBorderColor}
                 notifBackColor={notifBackColor}
                 badgeValue={needEmptyBadge ? 0 : badgeValue}
+                zIndex={zIndex}
             />
             <ModalFullContent
                 contentComp={Comp}

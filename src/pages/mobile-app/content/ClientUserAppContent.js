@@ -1,22 +1,18 @@
 import React, { useRef, useState } from "react";
 import { Provider } from "context";
-import getDayGreetingBr from "utils/getDayGreetingBr";
 import useAuth from "auth/useAuth";
 import getColor from "styles/txt";
-import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
-import "../ellipse.scss";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
 import { useVar } from "init/var";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
 import useData from "init";
+import GreetingAndNotific from "./GreetingAndNotific";
 import useGlobal from "./useGlobal";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import GroupedAppBar from "./GroupedAppBar";
 import PtsBalance from "../balance/PtsBalance";
-
-const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
     useBizData,
@@ -61,50 +57,6 @@ export default function ClientUserAppContent({
     };
     const currPointsRef = useRef(null);
     useAnimateNumber(currPointsRef.current, currPoints, numberOptions);
-
-    const showGreetingAndNotific = () => (
-        <section className="mt-3 position-relative">
-            <section className="position-relative">
-                <div
-                    className="ellipse"
-                    style={{
-                        backgroundColor: `var(--themePLight--${colorP})`,
-                        width: needAppForPreview && "21.8em",
-                    }}
-                />
-                <div>
-                    <AsyncBellNotifBtn
-                        position="absolute"
-                        forceCliUser
-                        needClick={!(needAppForPreview || needAppForCliAdmin)}
-                        top={21}
-                        left={needAppForPreview ? 258 : 270}
-                        notifBorderColor={`var(--themeBackground--${themeBackColor})`}
-                        notifBackColor={
-                            themeBackColor === "red"
-                                ? "var(--themePLight--black)"
-                                : "var(--expenseRed)"
-                        }
-                        badgeValue={totalNotifications}
-                    />
-                </div>
-            </section>
-            <div
-                style={{
-                    position: "absolute",
-                    top: "21px",
-                    lineHeight: ".9em",
-                }}
-                className={`ml-3 mb-2 ${
-                    getColor(colorP).txtColor
-                } text-subtitle text-left`}
-            >
-                {greeting},
-                <br />
-                <span className="text-title">{`${firstName}!`}</span>
-            </div>
-        </section>
-    );
 
     const showPtsBalance = () => (
         <PtsBalance
@@ -176,7 +128,14 @@ export default function ClientUserAppContent({
                     needAppForPreview && "disabledLink"
                 } client-user-app-content`}
             >
-                {showGreetingAndNotific()}
+                <GreetingAndNotific
+                    needAppForPreview={needAppForPreview}
+                    needAppForCliAdmin={needAppForCliAdmin}
+                    totalNotifications={totalNotifications}
+                    firstName={firstName}
+                    themeBackColor={themeBackColor}
+                    colorP={colorP}
+                />
                 {showPtsBalance()}
                 <GroupedAppBar />
                 {backBtnForCliAdmin()}

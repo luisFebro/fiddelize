@@ -1,10 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CLIENT_URL } from "../../../config/clientUrl";
+import { CLIENT_URL } from "config/clientUrl";
 import useRun from "global-data/ui";
-import MobileScreenLoading from "../../../components/loadingIndicators/MobileScreenLoading";
-import "./style.scss";
+import MobileScreenLoading from "components/loadingIndicators/MobileScreenLoading";
 import PropTypes from "prop-types";
+import "./style.scss";
 
 AppPreview.propTypes = {
     clientName: PropTypes.string,
@@ -25,6 +25,7 @@ function AppPreview({
     const { runName } = useRun();
 
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
+    // prefer using localforage to load data from games directly in their components. This will be for targetGame only for now.
     const iframeUrl = React.useCallback(
         () =>
             `/mobile-app/preview?game=${game}&prizeDesc=${prizeDesc}&runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
@@ -83,7 +84,7 @@ function AppPreview({
     );
 
     const showPhoneTitle = () => (
-        <div className="title-for-phone">
+        <div id="titleAppCaseView" className="title-for-phone">
             Olha como fica o
             <br />
             app dos clientes.

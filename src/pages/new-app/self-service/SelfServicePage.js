@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import getQueryByName from "utils/string/getQueryByName";
 import useDelay from "hooks/useDelay";
 import Spinner from "components/loadingIndicators/Spinner";
@@ -53,7 +53,6 @@ const setLocalData = async ({ type = "theming", colors, iconsData }) => {
 function SelfServicePage({ location, history }) {
     // useCount();// RT = 3
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
-    console.log("logoUrlPreview", logoUrlPreview);
     const [theme, setTheme] = useState({
         colorP: "default",
         colorS: "default",
@@ -63,12 +62,25 @@ function SelfServicePage({ location, history }) {
 
     const isPageReady = useDelay(2000);
 
+    useEffect(() => {
+        (async () => {
+            // check for prior data and use them if user reload the page
+            const priorAdminData = await getVar(
+                "clientAdminData",
+                "pre_register"
+            );
+            const priorLogo = priorAdminData && priorAdminData.bizLogo;
+            if (priorLogo) setLogoUrlPreview(priorLogo || "");
+        })();
+    }, []);
+
     useScrollUp();
     useNeedRedirectPage({ history, priorPageId: "doneBizInfo" });
 
     const [clientAdminData] = useData(["clientAdminData"], "pre_register");
     const { bizName, bizLinkName } = clientAdminData;
     // API
+    const selectedGame = getQueryByName("g", location.search);
     const clientName = getQueryByName("nome-cliente", location.search);
     let targetPoints = getQueryByName("ponto-premio", location.search);
     const prizeDesc = getQueryByName("premio-desc", location.search);
@@ -100,6 +112,7 @@ function SelfServicePage({ location, history }) {
             {showSpinner()}
             {showTitle()}
             <AppPickersHandler
+                selectedGame={selectedGame}
                 bizLinkName={bizLinkName}
                 bizName={bizName}
                 history={history}

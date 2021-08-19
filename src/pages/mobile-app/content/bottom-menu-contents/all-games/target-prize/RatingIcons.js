@@ -14,15 +14,17 @@ export default function RatingIcons() {
     const {
         runName,
         targetPointsPreview,
-        themeBackColor: colorBack,
         themeSColor: colorS,
         needDark,
+        // themeBackColor: colorBack,
     } = useContext();
     const targetPoints =
         targetPointsPreview ||
         (adminGame.targetPrize && adminGame.targetPrize.targetPoints);
+
+    // runName update the icon in the club maker website page.
     const milestoneIcon =
-        adminGame.targetPrize && adminGame.targetPrize.targetPoints;
+        adminGame.targetPrize && adminGame.targetPrize.milestoneIcon;
 
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,

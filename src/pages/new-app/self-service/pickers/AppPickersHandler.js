@@ -34,12 +34,13 @@ export default function AppPickersHandler({
     colorS,
     colorBack,
     currPoints,
+    selectedGame,
 }) {
     const { runName } = useRun();
     const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
     const [nextDisabled, setNextDisabled] = useState(true);
+    const isTargetGame = selectedGame === "targetPrize";
 
-    // useCount(); // RT 3 (OK)
     useEffect(() => {
         (async () => {
             const [doneSSLogo, doneSSTheming] = await getVars(
@@ -53,48 +54,51 @@ export default function AppPickersHandler({
 
     const { currNumber, nextTask } = step;
 
-    function handleNextStep(currNumber) {
-        switch (currNumber) {
+    function handleNextStep(currN) {
+        switch (currN) {
             case 1:
                 setStep({ currNumber: 2, nextTask: "(ícones)" });
                 setNextDisabled(true);
                 break;
             case 2:
-                const colors = {
-                    themePColor: theme.colorP,
-                    themeSColor: theme.colorS,
-                    themeBackColor: theme.colorBack
-                        ? theme.colorBack
-                        : theme.colorP,
-                };
+                {
+                    const colors = {
+                        themePColor: theme.colorP,
+                        themeSColor: theme.colorS,
+                        themeBackColor: theme.colorBack
+                            ? theme.colorBack
+                            : theme.colorP,
+                    };
 
-                setLocalData({
-                    type: "theming",
-                    colors,
-                }).then((res) => {
-                    setStep({ currNumber: 3, nextTask: "" });
-                    setNextDisabled(false);
-                });
+                    setLocalData({
+                        type: "theming",
+                        colors,
+                    }).then(() => {
+                        // any other games should be redirect to admin register page.
+                        if (!isTargetGame) {
+                            window.location.href = `/${bizLinkName}/novo-clube/cadastro-admin`;
+                            return null;
+                        }
+
+                        setStep({ currNumber: 3, nextTask: "" });
+                        setNextDisabled(false);
+                    });
+                }
                 break;
+            // ONly applied after clicking, null while in step 3.
             case 3:
-                const iconsData = {
-                    milestoneIcon: runName || "star",
-                    challList: [
-                        {
-                            id,
-                            milestoneIcon: runName,
-                            targetPoints,
-                            prizeDesc: prizeDesc || "Sem Descrição",
-                        },
-                    ],
-                };
-                setLocalData({
-                    type: "icon",
-                    iconsData,
-                }).then((res) => {
-                    // need to be reloaded since the other fields are prevented to be opened somehow.
-                    window.location.href = `/${bizLinkName}/novo-clube/cadastro-admin`;
-                });
+                {
+                    const iconsData = {
+                        milestoneIcon: runName || "star",
+                    };
+                    setLocalData({
+                        type: "icon",
+                        iconsData,
+                    }).then(() => {
+                        // need to be reloaded since the other fields are prevented to be opened somehow.
+                        window.location.href = `/${bizLinkName}/novo-clube/cadastro-admin`;
+                    });
+                }
                 break;
             default:
                 console.log("Something went wrong with handleNextStep");
@@ -104,11 +108,13 @@ export default function AppPickersHandler({
     const showStepIndicatorAndBtnAction = () => (
         <div className="step-indicator-btn">
             <p className="text-title text-white text-center">
-                {step.currNumber}/3
+                {step.currNumber}/{isTargetGame ? "3" : "2"}
             </p>
             <ButtonMulti
                 onClick={() => handleNextStep(currNumber)}
-                title={`Continuar ${nextTask}`}
+                title={`Continuar ${
+                    isTargetGame && nextTask === "ícones" ? nextTask : ""
+                }`}
                 disabled={!!nextDisabled}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
@@ -158,12 +164,17 @@ export default function AppPickersHandler({
                 currPoints={currPoints}
                 targetPoints={targetPoints}
                 prizeDesc={prizeDesc}
+                game={selectedGame}
             />
             {isSmall && (
                 <div className="container-center">
                     <ButtonMulti
                         onClick={() => handleNextStep(currNumber)}
-                        title={`Continuar ${nextTask}`}
+                        title={`Continuar ${
+                            isTargetGame && nextTask === "ícones"
+                                ? nextTask
+                                : ""
+                        }`}
                         disabled={!!nextDisabled}
                         color="var(--mainWhite)"
                         backgroundColor="var(--themeSDark)"
@@ -181,3 +192,19 @@ export default function AppPickersHandler({
         </section>
     );
 }
+
+/* ARCHIVES
+
+const iconsData = {
+    milestoneIcon: runName || "star",
+    challList: [
+        {
+            id,
+            milestoneIcon: runName,
+            targetPoints,
+            prizeDesc: prizeDesc || "Sem Descrição",
+        },
+    ],
+};
+
+ */

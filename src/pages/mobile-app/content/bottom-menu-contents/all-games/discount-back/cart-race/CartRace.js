@@ -9,20 +9,22 @@ import getPercentage from "utils/numbers/getPercentage";
 import animateCart from "./animateCart";
 import pickMsg from "./pickMsg";
 
-export default function CartRace({ className, accuMoney }) {
+export default function CartRace({
+    className,
+    accuMoney,
+    targetPoints,
+    perc,
+    currPoints,
+}) {
     const [msg, setMsg] = useState("");
     const { firstName } = useData();
-    let { currPoints } = useData();
-    currPoints = currPoints || 100;
-    let { adminGame, userGame } = useData();
-    adminGame = adminGame || { discountBack: { targetPoints: 300, perc: 10 } };
+    let { userGame } = useData();
     userGame = userGame || { discountBack: { challN: 1 } };
 
     const { bizName } = useBizData();
     const { needDark, didUserScroll } = useContext();
 
-    const { targetPoints, perc } = adminGame.discountBack;
-    const { challN: currChallenge } = userGame.discountBack;
+    const { challN: currChallenge = 1 } = userGame.discountBack;
 
     useEffect(() => {
         const { eachMilestone, currLevel } = animateCart({

@@ -109,6 +109,7 @@ function GoalForm({ history, bizName }) {
 
         await setVars(
             {
+                game: "targetPrize",
                 clientAdminData: newData,
                 doneGamesPanel: true,
             },

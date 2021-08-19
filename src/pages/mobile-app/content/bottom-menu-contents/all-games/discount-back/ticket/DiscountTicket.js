@@ -97,7 +97,7 @@ export default function DiscountTicket({
         <div className="each-buy-perc--root position-relative animated fadeIn delay-1s container-center">
             <div className="mx-2 each-buy-perc text-white text-pill text-shadow font-site text-em-1-1 text-center">
                 <LocalMallTwoToneIcon className="mr-2" />
-                Amig{sexLetter}, acumule {perc}%
+                Amig{sexLetter || "o"}, acumule {perc}%
                 <br />
                 de desconto a cada nova compra
             </div>

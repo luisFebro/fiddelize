@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import NotificationBadge from "../../../badges/NotificationBadge";
-import usePlayAudio from "../../../../hooks/media/usePlayAudio";
+import usePlayAudio from "hooks/media/usePlayAudio";
 import "./_style.scss";
 
 const playAnima = ({ callback, isInit = null }) => {
@@ -32,6 +32,7 @@ export default function BadaloBell({
     top,
     right,
     left,
+    zIndex,
 }) {
     // const [badgeInvisible, setbadgeInvisible] = useState(false);
 
@@ -79,7 +80,7 @@ export default function BadaloBell({
     return (
         <section
             className="badalo-bell--audio animated fadeIn"
-            style={{ position, top, right, left, cursor: "pointer" }}
+            style={{ zIndex, position, top, right, left, cursor: "pointer" }}
             onClick={handleBadaloClick}
         >
             {notifBody}

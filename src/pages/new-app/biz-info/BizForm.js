@@ -3,16 +3,16 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
-import handleChange from "../../../utils/form/use-state/handleChange";
-import { handleNextField } from "../../../utils/form/kit";
+import handleChange from "utils/form/use-state/handleChange";
+import { handleNextField } from "utils/form/kit";
 import ButtonMulti, {
     faStyle,
-} from "../../../components/buttons/material-ui/ButtonMulti";
-import getVar, { setVars } from "init/var";
-import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
-import showToast from "../../../components/toasts";
-import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
+} from "components/buttons/material-ui/ButtonMulti";
+import { getVars, setVars } from "init/var";
 import { ROOT } from "api/root";
+import showToast from "components/toasts";
+import AutoCompleteSearch from "components/search/AutoCompleteSearch";
+import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -145,31 +145,39 @@ export default function BizForm({ history }) {
             return showToast("Informe ramo de atividade.", { type: "error" });
         }
 
-        const priorData = await getVar("clientAdminData", "pre_register");
-        const games = priorData && priorData.games;
+        const [priorAdminData, selectedGame] = await getVars(
+            ["clientAdminData", "game"],
+            "pre_register"
+        );
+        const games = priorAdminData && priorAdminData.games;
 
-        // target prize game
+        // target prize game only required data for this game since it will be inserted as query string. Other games should be using local forage directly in the component game.
         const targetPoints =
             games.targetPrize && games.targetPrize.challList[0].targetPoints;
         const prizeDesc =
             games.targetPrize && games.targetPrize.challList[0].prizeDesc;
 
         const newData = {
-            ...priorData,
+            ...priorAdminData,
             bizName,
             bizLinkName,
             bizField: field,
         };
 
-        const data = {
+        const finalData = {
             doneBizInfo: true,
             clientAdminData: newData,
         };
-        await setVars(data, "pre_register");
+        await setVars(finalData, "pre_register");
 
-        history.push(
-            `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana`
-        );
+        const gameUrl = handleGameUrl({
+            game: selectedGame,
+            bizLinkName,
+            bizName,
+            targetPoints,
+            prizeDesc,
+        });
+        history.push(gameUrl);
     };
 
     const showButtonActions = () => (
@@ -199,6 +207,20 @@ export default function BizForm({ history }) {
         </Card>
     );
 }
+
+// HELPERS
+function handleGameUrl({
+    game,
+    bizLinkName,
+    bizName,
+    targetPoints,
+    prizeDesc,
+}) {
+    if (game === "targetPrize")
+        return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana&g=${game}`;
+    return `/${bizLinkName}/novo-clube/self-service?nome-cliente=Ana&g=${game}`;
+}
+// END HELPERS
 
 /*
 <TextField

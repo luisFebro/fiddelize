@@ -79,11 +79,13 @@ function chooseMsg({
                                 : `${currChallenge}.º`
                         } vale desconto. Apenas mais ${nextScore} PTS!</strong>`;
         case 5:
-            return `<strong>${setTitle(`🎉 Parabéns, ${firstName}!`)}
+            return `<strong>${setTitle(`🎉 Parabéns, ${firstName || "Ana"}!`)}
                        <br />
                        Você concluiu o desafio n.º ${
                            !currChallenge ? 1 : currChallenge
-                       } e já pode usar o seu vale desconto na ${bizName}`;
+                       } e já pode usar o seu vale desconto${
+                bizName ? ` na ${bizName}` : "."
+            }`;
     }
     return console.log("Something went worng with chooseMsg");
 }

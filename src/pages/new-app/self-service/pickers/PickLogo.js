@@ -14,6 +14,7 @@ import { updateUI, useAction } from "global-data/ui";
 import { deleteImage } from "utils/storage/lForage";
 import { useBizData } from "init";
 import getVar, { setVars } from "init/var";
+import scrollIntoView from "utils/document/scrollIntoView";
 import ShowActionBtns from "./ShowActionBtns";
 
 PickLogo.propTypes = {
@@ -109,7 +110,7 @@ export default function PickLogo({
     const picName = uploadedPic && uploadedPic.name;
     useEffect(() => {
         if (!isFromDash) {
-            gotPic && tempImgUrl && goNext();
+            if (gotPic && tempImgUrl) goNext();
         }
     }, [gotPic, tempImgUrl, isFromDash]);
 
@@ -128,7 +129,7 @@ export default function PickLogo({
         }
     }, [isBoxChecked, isFromDash]);
 
-    const handleMediaChange = (e) => {
+    const handleMediaChange = async (e) => {
         const formData = new FormData();
 
         const { name } = e.target;
@@ -167,50 +168,56 @@ export default function PickLogo({
 
         setEditArea(false);
         // n1
-        getAPI({
+        const dataAdminClub = await getVar("clientAdminData", "pre_register");
+        const clubBizLinkName = dataAdminClub && dataAdminClub.bizLinkName;
+        // n1
+        const generatedImg = await getAPI({
             method: "post",
-            url: uploadImages(bizLinkName),
+            url: uploadImages(clubBizLinkName || bizLinkName),
             body: formData,
             fullCatch: true,
-        })
-            .then((generatedImg) => {
-                if (!isFromDash) {
-                    (async () => {
-                        await setLogo({
-                            generatedImg,
-                            setLogoUrlPreview,
-                        });
-                    })();
-                }
-
-                const commonActions = () => {
-                    setTempImgUrl(generatedImg);
-                    setIsLoadingPic(false);
-                    setEditArea(true);
-                };
-                if (isFromDash) {
-                    deleteImage("logos", "app_biz_logo").then(() => {
-                        showToast("Nova logo salva. Alterando no app...", {
-                            type: "success",
-                        });
-                        setNeedUpdateBtn(true);
-                        commonActions();
-                        updateUI(
-                            "bizData",
-                            { "clientAdminData.bizLogo": generatedImg },
-                            uify
-                        );
-                    });
-                } else {
-                    commonActions();
-                }
-            })
-            .catch(() => {
-                setIsLoadingPic(false);
-                showToast("Algo deu errado. Verifique sua conexão.", {
-                    type: "error",
-                });
+        }).catch(() => {
+            setIsLoadingPic(false);
+            showToast("Algo deu errado. Verifique sua conexão.", {
+                type: "error",
             });
+        });
+
+        if (!isFromDash) {
+            (async () => {
+                await setLogo({
+                    generatedImg,
+                    setLogoUrlPreview,
+                });
+                scrollIntoView("#titleAppCaseView", {
+                    duration: 5000,
+                    offset: 250,
+                });
+            })();
+        }
+
+        const commonActions = () => {
+            setTempImgUrl(generatedImg);
+            setIsLoadingPic(false);
+            setEditArea(true);
+        };
+
+        if (isFromDash) {
+            deleteImage("logos", "app_biz_logo").then(() => {
+                showToast("Nova logo salva. Alterando no app...", {
+                    type: "success",
+                });
+                setNeedUpdateBtn(true);
+                commonActions();
+                updateUI(
+                    "bizData",
+                    { "clientAdminData.bizLogo": generatedImg },
+                    uify
+                );
+            });
+        } else {
+            commonActions();
+        }
     };
 
     const showUploadingBtn = () => (

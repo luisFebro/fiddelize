@@ -1,6 +1,6 @@
-import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
-import convertToReal from "../../../../../utils/numbers/convertToReal";
-import ProCreditsBadge from "../../../../../components/pro/ProCreditsBadge";
+import convertToReal from "utils/numbers/convertToReal";
+import ProCreditsBadge from "components/pro/ProCreditsBadge";
+// import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 
 const getStyles = () => ({
     accumulativeScore: {

@@ -276,8 +276,6 @@ function RegisterClientAdmin({ logo }) {
             onBlur={() => setFieldError(null)}
         >
             <div id="field1" className="mt-3">
-                Empreendedor(a),
-                <br />
                 qual é o seu nome e sobrenome?
                 <TextField
                     required

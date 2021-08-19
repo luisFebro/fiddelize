@@ -52,6 +52,7 @@ export default function CoreOptionsForm({
 
         if (isPlatform) {
             const data = {
+                game: "discountBack",
                 doneGamesPanel: true,
                 clientAdminData: {
                     games: {

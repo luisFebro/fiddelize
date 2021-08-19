@@ -38,7 +38,6 @@ export default function Gift() {
         targetPointsPreview,
     } = useContext();
     const prizeDescPreview = getQueryByName("prizeDesc");
-    console.log("prizeDescPreview", prizeDescPreview);
 
     const targetPoints =
         targetPointsPreview ||

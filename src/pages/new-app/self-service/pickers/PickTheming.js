@@ -13,6 +13,7 @@ import {
 import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import { useBizData } from "init";
 import useScrollUp from "hooks/scroll/useScrollUp";
+import scrollIntoView from "utils/document/scrollIntoView";
 
 import ShowActionBtns from "./ShowActionBtns";
 
@@ -87,9 +88,9 @@ export default function PickTheming({
 
     useEffect(() => {
         if (!isFromDash) {
-            secondaryColorBr && goNext();
+            if (secondaryColorBr || primaryColorBr) goNext();
         }
-    }, [secondaryColorBr, isFromDash]);
+    }, [primaryColorBr, secondaryColorBr, isFromDash]);
 
     useEffect(() => {
         if (
@@ -385,12 +386,20 @@ const ColorPicker = ({
                                                 primaryColorBr: brColorName,
                                                 hexValuePrimary: hexValue,
                                             });
-                                            !isFromDash &&
+                                            if (!isFromDash) {
                                                 setTheme({
                                                     ...theme,
                                                     colorP: colorName,
                                                     colorBack: colorName, // declare both after selecting colorP
                                                 });
+                                                scrollIntoView(
+                                                    "#titleAppCaseView",
+                                                    {
+                                                        duration: 5000,
+                                                        offset: 250,
+                                                    }
+                                                );
+                                            }
                                         } else if (isBackground) {
                                             setData({
                                                 ...data,

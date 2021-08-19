@@ -14,11 +14,8 @@ function ClientAppPreview({ location }) {
     const runName = getQueryByName("runName", location.search);
     const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
     const colorP = getQueryByName("colorP", location.search);
-    console.log("colorP", colorP);
     const colorS = getQueryByName("colorS", location.search);
-    console.log("colorS", colorS);
     const colorBack = getQueryByName("colorBack", location.search);
-    console.log("colorBack", colorBack);
     const targetPoints = getQueryByName("targetPoints", location.search);
     const game = getQueryByName("game", location.search);
     const clientName = getQueryByName("clientName", location.search);

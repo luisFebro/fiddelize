@@ -57,6 +57,9 @@ export default function CardsList({
 
         return (
             <section className="all-points animated fadeInUp delay-3s container-center mb-5">
+                <span className="d-block text-left font-site text-em-1-1 font-weight-bold">
+                    Você já recebeu:
+                </span>
                 <p
                     className={`${txtColor} text-pill text-normal d-inline-block font-weight-bold m-0 ml-2`}
                 >
