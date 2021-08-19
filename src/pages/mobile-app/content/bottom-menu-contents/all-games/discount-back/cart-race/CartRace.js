@@ -120,7 +120,7 @@ function QuantStatus({
         `;
 
         return (
-            <div className="instr-acc-btn position-absolute">
+            <div className="instr-acc-btn position-absolute enabled-click">
                 <InstructionBtn mode="tooltip" text={text} />
                 <style jsx>
                     {`
@@ -139,7 +139,7 @@ function QuantStatus({
         <section className="font-site text-shadow quant-status text-center animated fadeInUp delay-2s my-5 d-flex justify-content-around align-items-center">
             <div>
                 <p className={`m-0 ${isDecimal ? "text-em-2-5" : "text-em-3"}`}>
-                    {completePerc}%
+                    {Number.isNaN(completePerc) ? "..." : completePerc}%
                 </p>
                 <div className="title text-normal">concluído</div>
             </div>

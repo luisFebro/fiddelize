@@ -12,26 +12,26 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import ReactGA from "react-ga";
-import Title from "../Title";
-import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
-import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
-import getDayMonthBr from "../../utils/dates/getDayMonthBr";
-import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
+import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
+import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
+import getDayMonthBr from "utils/dates/getDayMonthBr";
 import { doRegister } from "auth/api";
-import detectErrorField from "../../utils/validation/detectErrorField";
-import handleChange from "../../utils/form/use-state/handleChange";
-import { handleNextField } from "../../utils/form/kit";
-import setValObjWithStr from "../../utils/objects/setValObjWithStr";
-import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
-import getFilterDate from "../../utils/dates/getFilterDate";
-import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
+import detectErrorField from "utils/validation/detectErrorField";
+import handleChange from "utils/form/use-state/handleChange";
+import { handleNextField } from "utils/form/kit";
+import setValObjWithStr from "utils/objects/setValObjWithStr";
+import { dateFnsUtils, ptBRLocale } from "utils/dates/dateFns";
+import getFilterDate from "utils/dates/getFilterDate";
 import useData, { useBizData } from "init";
-import { removeStore } from "init/var";
-import getFirstName from "../../utils/string/getFirstName";
-import CheckBoxForm from "../CheckBoxForm";
-import { CLIENT_URL } from "../../config/clientUrl";
-import sendEmail from "../../hooks/email/sendEmail";
+import getVar, { removeStore } from "init/var";
+import getFirstName from "utils/string/getFirstName";
+import { CLIENT_URL } from "config/clientUrl";
+import sendEmail from "hooks/email/sendEmail";
+import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
+import Title from "../Title";
+import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import showToast from "../toasts";
+// import CheckBoxForm from "../CheckBoxForm";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 
 const filter = getFilterDate();
@@ -88,7 +88,6 @@ function RegisterClientAdmin({ logo }) {
         bizName: "", // for account panel...
         referrer: "",
         showAgreement: false,
-        agreementDone: false,
     });
     const {
         name,
@@ -98,7 +97,6 @@ function RegisterClientAdmin({ logo }) {
         cpf,
         phone,
         showAgreement,
-        agreementDone,
         // birthday,
         // role,
     } = data;
@@ -173,6 +171,7 @@ function RegisterClientAdmin({ logo }) {
             ...data,
         };
 
+        showToast("Registrando sua conta...", { dur: 15000 });
         const res = await doRegister(newUser);
 
         if (res.status !== 200 && res.data) {
@@ -187,14 +186,12 @@ function RegisterClientAdmin({ logo }) {
             return;
         }
 
-        if (!agreementDone) {
-            return showToast(
-                "Clique na caixa para concordar com termos de uso e privacidade",
-                { type: "error" }
-            );
-        }
-
-        showToast("Preparando página de download...");
+        // if (!agreementDone) {
+        //     return showToast(
+        //         "Clique na caixa para concordar com termos de uso e privacidade",
+        //         { type: "error" }
+        //     );
+        // }
 
         const { bizName } = clientAdminData;
         const cliAdminName = getFirstName(name);
@@ -221,10 +218,14 @@ function RegisterClientAdmin({ logo }) {
             payload: emailPayload,
         });
 
-        clearData();
-        window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
+        const dataCliAdmin = await getVar("clientAdminData", "pre_register");
+        const { themeBackColor, themePColor, themeSColor } = dataCliAdmin;
+        window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=${
+            themeBackColor || "default"
+        }&pc=${themePColor || "default"}&sc=${themeSColor || "default"}`;
         // Lesson: this await was preventing a tablet to redirect properly to the next page.
         await removeStore("pre_register");
+        clearData();
     };
 
     const showTitle = () => (
@@ -238,17 +239,10 @@ function RegisterClientAdmin({ logo }) {
         </div>
     );
 
-    const handleAgreementChecked = (currStatus) => {
-        setData({
-            ...data,
-            agreementDone: currStatus,
-        });
-    };
-
     // this should be a tag link because Link erases all data when user returns back
     const agreementTxtElem = (
         <span>
-            concordo com os{" "}
+            Ao se cadastrar, você está de acordo com os nossos{" "}
             <a
                 className="text-link"
                 href={`${CLIENT_URL}/termos-de-uso`}
@@ -257,15 +251,6 @@ function RegisterClientAdmin({ logo }) {
             >
                 termos de uso
             </a>{" "}
-            e{" "}
-            <a
-                className="text-link"
-                href={`${CLIENT_URL}/privacidade`}
-                rel="noopener noreferrer"
-                target="_blank"
-            >
-                privacidade
-            </a>
         </span>
     );
 
@@ -504,14 +489,11 @@ function RegisterClientAdmin({ logo }) {
                 </div>
             </section>
             {showAgreement && (
-                <section className="mt-3">
-                    <CheckBoxForm
-                        text={agreementTxtElem}
-                        setIsBoxChecked={handleAgreementChecked}
-                    />
+                <section className="mt-3 text-small font-weight-bold">
+                    {agreementTxtElem}
                 </section>
             )}
-            <SafeEnvironmentMsg mt={showAgreement ? "mt-0" : ""} />
+            <SafeEnvironmentMsg mt={showAgreement ? "mt-3" : ""} />
         </form>
     );
 

@@ -1,4 +1,5 @@
 import { useState, useRef, Fragment } from "react";
+import useContext from "context";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import CloseButton from "components/buttons/CloseButton";
 import useData, { useBizData } from "init";
@@ -15,7 +16,8 @@ export default function DiscountTicket({
 }) {
     const [openCard, setOpenCard] = useState(false);
 
-    const { bizName, bizLogo, themePColor } = useBizData();
+    const { bizName, bizLogo } = useBizData();
+    const { themePColor, themeSColor } = useContext();
     const { name, sexLetter, userId } = useData();
 
     const mainColor = `var(--themePLight--${themePColor})`;
@@ -36,7 +38,7 @@ export default function DiscountTicket({
             <ButtonFab
                 title="usar valor"
                 onClick={toggleOpen}
-                backgroundColor={`var(--themeSDark--${themePColor})`}
+                backgroundColor={`var(--themeSDark--${themeSColor})`}
                 size="medium"
                 variant="extended"
                 needTxtNoWrap
@@ -68,7 +70,7 @@ export default function DiscountTicket({
                     }
 
                     .unava-card p {
-                        background: black;
+                        background: var(--themePDark--${themePColor});
                     }
                 `}
             </style>

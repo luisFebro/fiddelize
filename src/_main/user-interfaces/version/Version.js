@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.42.0";
+const latestVersion = "4.45.0";
 
-const updateDescription = "new plan pages and logics - pt 3";
+const updateDescription = "new shopping club maker pt4";
 /* HISTORY
+new plan pages and logics
 cli-admin: new customer history
 cli-admin app - buy games session pt 9
 customer birthday and pts

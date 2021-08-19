@@ -5,7 +5,6 @@ import ButtonMulti, {
 } from "components/buttons/material-ui/ButtonMulti";
 import "../style.scss";
 import useRun from "global-data/ui";
-import getId from "utils/getId";
 import { getVars } from "init/var";
 // pickers
 import PickLogo from "./PickLogo";
@@ -13,8 +12,9 @@ import AsyncPickRatingIcon from "./AsyncPickRatingIcon";
 import AsyncPickTheming from "./AsyncPickTheming";
 // end pickers
 import AppPreview from "../AppPreview";
+// import getId from "utils/getId";
 // import useCount from 'hooks/useCount';
-const id = getId();
+// const id = getId();
 
 const isSmall = window.Helper.isSmallScreen();
 

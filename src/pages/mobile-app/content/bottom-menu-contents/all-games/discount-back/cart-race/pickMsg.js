@@ -55,7 +55,7 @@ function chooseMsg({
                         <br />
                         Nível ${nextLevel} tá bem logo alí.
                         <br />
-                        Mais ${nextScore} pontos, ${firstName}.
+                        Mais ${nextScore} pontos, ${firstName || "Ana"}.
                         <br />
                         </strong>`;
         case 2:

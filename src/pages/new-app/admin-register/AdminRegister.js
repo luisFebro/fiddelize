@@ -2,6 +2,7 @@ import useScrollUp from "hooks/scroll/useScrollUp";
 import RegisterClientAdmin from "components/auth/RegisterClientAdmin";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import useData from "init";
+import getVar from "init/var";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 export default function AdminRegister({ history }) {
@@ -27,8 +28,21 @@ export default function AdminRegister({ history }) {
             <p className="mb-2">Já possui uma conta da Fiddelize? </p>
             <RadiusBtn
                 title="Cadastre via App Instantâneo"
-                onClick={() => {
-                    window.location.href = `/baixe-app/admin?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default&isFromSelfServ=1`;
+                onClick={async () => {
+                    const dataCliAdmin = await getVar(
+                        "clientAdminData",
+                        "pre_register"
+                    );
+                    const {
+                        themeBackColor,
+                        themePColor,
+                        themeSColor,
+                    } = dataCliAdmin;
+                    window.location.href = `/baixe-app/admin?negocio=${bizName}&logo=${logo}&admin=1&bc=${
+                        themeBackColor || "default"
+                    }&pc=${themePColor || "default"}&sc=${
+                        themeSColor || "default"
+                    }&isFromSelfServ=1`;
                 }}
             />
         </section>
