@@ -31,7 +31,7 @@ export default function MainAltrabot() {
         url: getTotalResults(),
     });
 
-    const totalNetProfitAmount = Math.abs(data && data.totalNetProfitAmount);
+    const totalNetProfitAmount = Number(data && data.totalNetProfitAmount);
     const totalNetProfitPerc = data && data.totalNetProfitPerc;
     const isPlusProfit = totalNetProfitPerc >= 0;
 
