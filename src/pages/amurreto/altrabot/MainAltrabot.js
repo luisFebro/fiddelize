@@ -58,7 +58,7 @@ export default function MainAltrabot() {
                 Lucro Líquido Total:
             </h2>
             <p className="m-0 mb-1 container-center core-data d-table text-pill">
-                {!isPlusProfit ? "- " : ""}
+                {!totalNetProfitAmount ? "- " : ""}
                 {convertToReal(totalNetProfitAmount, {
                     moneySign: true,
                     needFraction: true,
