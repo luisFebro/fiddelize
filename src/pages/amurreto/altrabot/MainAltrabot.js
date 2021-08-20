@@ -32,8 +32,11 @@ export default function MainAltrabot() {
     });
 
     const totalNetProfitAmount = Number(data && data.totalNetProfitAmount);
+    console.log("totalNetProfitAmount", totalNetProfitAmount);
     const totalNetProfitPerc = data && data.totalNetProfitPerc;
-    const isPlusProfit = totalNetProfitPerc >= 0;
+    const isPlusProfit =
+        totalNetProfitPerc >= 0 &&
+        !totalNetProfitAmount.toString().includes("-");
 
     const showContentSwitcher = () => (
         <section className="my-4">
@@ -58,7 +61,7 @@ export default function MainAltrabot() {
                 Lucro Líquido Total:
             </h2>
             <p className="m-0 mb-1 container-center core-data d-table text-pill">
-                {!totalNetProfitAmount ? "- " : ""}
+                {!isPlusProfit ? "- " : ""}
                 {convertToReal(totalNetProfitAmount, {
                     moneySign: true,
                     needFraction: true,
