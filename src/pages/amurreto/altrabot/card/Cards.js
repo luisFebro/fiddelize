@@ -1,6 +1,6 @@
 import { fromNow } from "utils/dates/dateFns";
 import convertToReal from "utils/numbers/convertToReal";
-import getPercentage from "utils/numbers/getPercentage";
+import getIncreasedPerc from "utils/numbers/getIncreasedPerc";
 import TradeCard from "./accordion/TradeCard";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 
@@ -85,10 +85,12 @@ function MainH({ data, isLiveTrade }) {
         );
     }
 
-    const { finalBalanceAmount, netProfitAmount } = data.results;
-    const netProfitPerc = getPercentage(finalBalanceAmount, netProfitAmount, {
-        toFixed: 2,
-    });
+    const {
+        finalBalanceAmount,
+        netProfitAmount,
+        startQuotePrice,
+    } = data.results;
+    const netProfitPerc = getIncreasedPerc(startQuotePrice, finalBalanceAmount);
     const isPlusProfit = netProfitPerc >= 0;
 
     return (
