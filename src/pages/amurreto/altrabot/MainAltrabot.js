@@ -1,9 +1,10 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
 import useAPI, { getTotalResults } from "api/useAPI";
 import convertToReal from "utils/numbers/convertToReal";
+import getId from "utils/getId";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -23,12 +24,21 @@ const AsyncDoneList = Load({
 
 export default function MainAltrabot() {
     const [content, setContent] = useState("pending"); // done
+    const [trigger, setTrigger] = useState(true);
     const isPending = content === "pending";
+
+    useEffect(() => {
+        // update data every focus time.
+        window.addEventListener("focus", async () => {
+            setTrigger(getId());
+        });
+    }, []);
 
     useBackColor("var(--mainWhite)");
 
     const { data } = useAPI({
         url: getTotalResults(),
+        trigger,
     });
 
     const totalNetProfitAmount = Number(data && data.totalNetProfitAmount);
