@@ -84,6 +84,7 @@ function Website({ location }) {
             {dontNeedLayout && <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
+                <Route path="/:nameAndCode" component={RedirectLink} />
                 <Route path="/de/:associateId" exact component={Home} />
                 <Route
                     path="/acesso/verificacao"
@@ -136,7 +137,6 @@ function Website({ location }) {
                     path="/mobile-app/preview"
                     component={AsyncClientAppPreview}
                 />
-                <Route path="/app/:nameAndCode" component={RedirectLink} />
                 <PrivateRouteClientAdm
                     path="/:bizLinkName/cliente-admin/painel-de-controle"
                     exact
