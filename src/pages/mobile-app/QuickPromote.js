@@ -7,9 +7,7 @@ import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaBu
 export default function QuickPromote({ handleFullClose }) {
     const { bizLogo, bizLinkName, themeSColor: sColor } = useBizData();
 
-    const indLastSlash = bizLinkName.lastIndexOf("-");
-    const onlyBizCode = bizLinkName.slice(indLastSlash + 1);
-    const officialAdminLink = `${CLIENT_URL}/app/${onlyBizCode}`;
+    const officialAdminLink = `https://fiddelize.com/${bizLinkName}`;
 
     const showSharingOpts = () => {
         const sharingData = {

@@ -84,7 +84,6 @@ function Website({ location }) {
             {dontNeedLayout && <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
-                <Route path="/:nameAndCode" component={RedirectLink} />
                 <Route path="/de/:associateId" exact component={Home} />
                 <Route
                     path="/acesso/verificacao"

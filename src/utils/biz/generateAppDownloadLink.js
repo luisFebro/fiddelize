@@ -1,4 +1,3 @@
-import { CLIENT_URL } from "../../config/clientUrl";
 import getFirstName from "../string/getFirstName";
 
 export default function generateAppDownloadLink({
@@ -6,15 +5,13 @@ export default function generateAppDownloadLink({
     name = "",
     bizLinkName,
     payload,
-    linkScore,
-    linkId,
+    linkScore, // linkPts
+    linkId, // staffId
 }) {
     let link;
 
-    const indLastSlash = bizLinkName.lastIndexOf("-");
-    const onlyBizCode = bizLinkName.slice(indLastSlash + 1);
-
     if (!bizLinkName) return console.log("the param bizLinkName is required");
+    const userFirstName = getFirstName(name && name.toLowerCase());
 
     if (payload && payload.appType === "member") {
         const handleJobRole = () => {
@@ -25,17 +22,18 @@ export default function generateAppDownloadLink({
             if (job === "gerência") return "gr";
         };
         const jobRoleCode = handleJobRole();
-        return `${CLIENT_URL}/app/${getFirstName(
-            name.toLowerCase()
-        )}_${onlyBizCode}.equipe-${jobRoleCode}`;
+        return `https://fiddelize.com/${bizLinkName}_${userFirstName}:equipe-${jobRoleCode}`;
     }
 
     if (role === "cliente") {
-        name
-            ? (link = `${CLIENT_URL}/app/${getFirstName(
-                  name.toLowerCase()
-              )}_${onlyBizCode}${linkId}${linkScore ? `:${linkScore}` : ""}`)
-            : (link = `${CLIENT_URL}/app/${onlyBizCode}`);
+        const needDoublePoints = Boolean(linkId || linkScore);
+        const thisStaffId = linkId || "";
+        const thisLinkPts = linkScore || "";
+        if (name)
+            link = `https://fiddelize.com/${bizLinkName}_${userFirstName}${
+                needDoublePoints ? ":" : ""
+            }${thisStaffId}${thisLinkPts}`;
+        else link = `https://fiddelize.com/${bizLinkName}`;
     }
 
     if (role === "cliente-admin") {

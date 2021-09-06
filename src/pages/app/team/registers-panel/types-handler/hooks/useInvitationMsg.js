@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import generateAppDownloadLink from "../../../../../../utils/biz/generateAppDownloadLink";
-import getFirstName from "../../../../../../utils/string/getFirstName";
+import generateAppDownloadLink from "utils/biz/generateAppDownloadLink";
+import getFirstName from "utils/string/getFirstName";
 
 export default function useInvitationMsg({
     name,

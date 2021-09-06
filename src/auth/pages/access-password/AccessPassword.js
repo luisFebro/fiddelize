@@ -54,7 +54,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         themeBackColor: backColor,
         themePColor: colorP,
     } = useBizData();
-    const { needDark, txtColorStyle } = getColor(themeBackColor);
+    const { needDark, txtColorStyle } = getColor(backColor);
 
     const styles = getStyles();
 
