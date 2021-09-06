@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { setVar } from "init/var";
 import getAPI, { getUrlLink } from "api";
 
+// This page was moved to official website fiddelize.com
+
 // linkCode example: alan_yvs493z0
 export default function RedirectLink({ match }) {
     const [error, setError] = useState("");

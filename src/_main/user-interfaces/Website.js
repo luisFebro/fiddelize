@@ -12,10 +12,10 @@ import Footer from "components/_layout/footer/Footer";
 import Home from "pages/home/Home";
 import RegulationPage from "pages/RegulationPage";
 import AsyncDownloadApp from "pages/download-app/AsyncDownloadApp";
-import RedirectLink from "pages/RedirectLink";
 import Default from "pages/Default";
 import UnavailableService from "pages/UnavailableService";
 import { Load } from "components/code-splitting/LoadableComp";
+// import RedirectLink from "pages/RedirectLink";
 import {
     AsyncShoppingGamesPanel,
     AsyncBizInfo,
