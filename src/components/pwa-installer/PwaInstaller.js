@@ -22,9 +22,6 @@ function closeWindow() {
 }
 
 const getStyles = () => ({
-    icon: {
-        animationDelay: "3s",
-    },
     closeBtn: {
         animationDelay: "5s",
         animationIterationCount: 2,
@@ -40,6 +37,7 @@ export default function PwaInstaller({
     run = true,
     setData,
     alwaysOn = false,
+    isBizTeam,
 }) {
     // A2HS = App to HomeScreen
     const [bannerVisible, setBannerVisible] = useState(alwaysOn || false);
@@ -130,6 +128,7 @@ export default function PwaInstaller({
         </div>
     );
 
+    const isIconSquare = !isBizTeam && icon && icon.includes("h_100,w_100");
     return (
         <div>
             {shouldRender ? (
@@ -139,11 +138,26 @@ export default function PwaInstaller({
                         className="add-to-home-content"
                     >
                         {icon ? (
-                            <img
-                                style={styles.icon}
-                                className="add-to-home-icon animated slideInLeft"
-                                src={icon}
-                            />
+                            <span>
+                                <img
+                                    className="add-to-home-icon delay-3s animated slideInLeft"
+                                    src={icon}
+                                />
+                                <style jsx>
+                                    {`
+                                        .add-to-home-icon {
+                                            width: ${isIconSquare
+                                                ? "60px"
+                                                : "80px"};
+                                            height: ${isIconSquare
+                                                ? "65px"
+                                                : "70px"};
+                                            padding: 10px;
+                                            padding-right: 0;
+                                        }
+                                    `}
+                                </style>
+                            </span>
                         ) : null}
                         {showTitle()}
                     </div>

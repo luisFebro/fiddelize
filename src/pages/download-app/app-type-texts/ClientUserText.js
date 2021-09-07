@@ -20,7 +20,7 @@ export default function ClientUserText({
             style={{
                 maxWidth: 800,
                 position: "relative",
-                left: isSmall ? "-125px" : "-239px",
+                left: isSmall ? "-135px" : "-249px",
             }}
         >
             <img

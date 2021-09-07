@@ -1,32 +1,34 @@
-import useData from "init";
-import useAPI, { isLinkAllowed } from "api/useAPI";
+import { useEffect, useState } from "react";
+import getAPI, { isLinkAllowed } from "api";
 
+// when there is a link with PTS, check if the same link is still in the allowedLinks from admin
 export default function useAllowedLink({
     bizId,
     isCliUser,
-    isCliAdmin,
-    userScore,
+    whichRole,
+    encryptedPTS,
+    linkCode,
 }) {
-    const [linkCode] = useData(["linkCode"]);
+    const [status, setStatus] = useState(true);
 
-    const userCond = isCliUser && userScore;
-    if (!userCond || isCliAdmin) return true;
+    useEffect(() => {
+        const isCliUserLinkPTS = isCliUser && encryptedPTS;
+        if (!isCliUserLinkPTS || whichRole !== "cliente") return true;
 
-    const blackList =
-        linkCode !== "..." &&
-        linkCode &&
-        (linkCode.includes("nucleo") || linkCode.includes("equipe"));
+        (async () => {
+            const isAllowed = await getAPI({
+                url: isLinkAllowed(),
+                params: {
+                    linkCode,
+                    bizId,
+                },
+            });
 
-    const { data: isAllowed, loading } = useAPI({
-        url: isLinkAllowed(),
-        params: {
-            linkCode,
-            bizId,
-        },
-        trigger: linkCode !== "..." && !blackList,
-    });
+            if (!isAllowed) setStatus(false);
+        })();
 
-    if (loading) return true;
+        return true;
+    }, [linkCode, bizId, isCliUser, whichRole, encryptedPTS]);
 
-    return isAllowed;
+    return status;
 }

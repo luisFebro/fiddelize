@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.47.1-40";
-
+const latestVersion = "4.48.0";
+// NEXT:
+// register bonus coins -
 const updateDescription =
-    "register bonus coins - new link systems for all user's apps for new site pt2";
+    "new link systems for all user's apps for new site pt3";
 /* HISTORY
 new shopping club maker pt4
 new plan pages and logics

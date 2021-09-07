@@ -2,7 +2,7 @@ import { removeItems } from "init/lStorage";
 import { setVars } from "init/var";
 
 export default function handleRoleStorage({
-    userScore,
+    encryptedPTS,
     whichRole,
     bizId,
     memberId,
@@ -29,7 +29,7 @@ export default function handleRoleStorage({
             memberName,
             memberRole: memberJob ? "cliente-membro" : "cliente-admin",
             memberJob: memberJob || "admin",
-            userScore,
+            encryptedPTS,
         };
     }
 

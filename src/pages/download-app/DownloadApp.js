@@ -111,6 +111,7 @@ export default function DownloadApp({ match, location, history }) {
     const matchName = match.params.userName;
     const userName = matchName && matchName.replace(/\+/g, " ").cap();
     // MAIN VARIABLES
+    // WARNING: do not change the variables order below
     const [
         // mainQueries
         bizName,
@@ -118,10 +119,11 @@ export default function DownloadApp({ match, location, history }) {
         bizLogo,
         backColor,
         pColor,
-        userScore,
+        encryptedPTS,
         memberJob,
         memberName,
-        linkId,
+        linkId, // cli-member or cli-admin register id in db
+        linkCode, // e.g vocariza_ana:abc123
         // roles
         isBizTeam,
         isCliAdmin,
@@ -148,9 +150,11 @@ export default function DownloadApp({ match, location, history }) {
     const isAllowedLink = useAllowedLink({
         bizId,
         isCliUser,
-        isCliAdmin,
-        userScore,
+        whichRole,
+        encryptedPTS,
+        linkCode,
     });
+
     useEffect(() => {
         checkIfElemIsVisible(".target-download", (res) =>
             setData((prev) => ({ ...prev, run: true }))
@@ -182,7 +186,7 @@ export default function DownloadApp({ match, location, history }) {
     // STORAGE
     if (isAllowedLink) {
         handleRoleStorage({
-            userScore,
+            encryptedPTS,
             whichRole,
             bizId,
             memberId: linkId,
@@ -264,7 +268,8 @@ export default function DownloadApp({ match, location, history }) {
             memberJob,
             memberId: linkId,
             memberName,
-            userScore,
+            encryptedPTS,
+            linkCode,
         };
 
         return (
@@ -404,7 +409,8 @@ export default function DownloadApp({ match, location, history }) {
                             isBizTeam,
                             userName,
                         })}
-                        icon={`${CLIENT_URL}/img/official-logo-white.png`}
+                        icon={pickIconForBanner({ isBizTeam, bizLogo })}
+                        isBizTeam={isBizTeam}
                         run={run}
                         setData={setData}
                     />
@@ -436,6 +442,13 @@ export default function DownloadApp({ match, location, history }) {
     );
 }
 
+// HELPERS
+function pickIconForBanner({ isBizTeam, bizLogo }) {
+    if (isBizTeam) return `${CLIENT_URL}/img/official-logo-white.png`;
+
+    return bizLogo;
+}
+
 function handlePwaTitle({ isCliAdmin, isBizTeam, userName }) {
     if (isCliAdmin)
         return `<strong>${
@@ -451,6 +464,7 @@ function handlePwaTitle({ isCliAdmin, isBizTeam, userName }) {
         userName ? userName.cap() : "Ei"
     },<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de compra.`;
 }
+// END HELPERS
 
 /*
 <p>{!isInstalled ? parse("<br /><br />Foi instalado.<br/>Visite sua galeria<br />de Apps") : ""}</p>

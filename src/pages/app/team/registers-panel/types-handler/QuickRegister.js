@@ -94,9 +94,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
 
     const handleScoreToLink = (dbScore, cliFirstName) => {
         if (linkId === "..." || !bizLinkName) return;
-        const indLastSlash = bizLinkName.lastIndexOf("-");
-        let bizCode = bizLinkName.slice(indLastSlash + 1);
-        bizCode = `${bizCode}${linkId}`;
 
         (async () => {
             const scoreToken = await getAPI({
@@ -104,9 +101,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                 url: encryptPointsLink(),
                 needAuth: true,
                 body: {
-                    score: dbScore,
+                    pts: dbScore,
                     cliFirstName,
-                    bizCode,
+                    bizLinkName,
                     bizId,
                     userId, // for auth
                 },

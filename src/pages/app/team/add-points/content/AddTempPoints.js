@@ -104,7 +104,6 @@ export default function AddTempPoints({
     closeModal,
 }) {
     const [points, setPoints] = useState("");
-    const [setFullOpen] = useState(false);
 
     const { userId: staffId, name, role } = useData();
     const [staffJob] = useData(["memberJob"], { dots: false });
@@ -130,7 +129,6 @@ export default function AddTempPoints({
                 customerName && customerName.toLowerCase()
             );
             handleCustomerScore(points, firstCliName);
-            setFullOpen(false);
             closeModal();
             return null;
         }
@@ -195,7 +193,7 @@ export default function AddTempPoints({
     return (
         <Fragment>
             <h1
-                className={`animated fadeInUp delay-1s mt-4 mb-1 text-center ${textColor} text-subtitle font-weight-bold`}
+                className={`animated fadeInUp delay-1s mt-2 mb-1 text-center ${textColor} text-subtitle font-weight-bold`}
             >
                 <span className="text-em-1-3 d-block">
                     Cliente:

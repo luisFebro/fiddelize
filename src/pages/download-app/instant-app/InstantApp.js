@@ -39,9 +39,10 @@ export default function InstantApp({
         memberJob,
         memberName,
         memberId,
-        userScore,
+        encryptedPTS,
         isCliAdmin,
         isCliUser,
+        linkCode,
     } = payload;
 
     const [data, setData] = useState({
@@ -70,17 +71,16 @@ export default function InstantApp({
             role: getMemberJob(memberJob),
             name: memberName,
         },
-        tempPoints: userScore, // for member tasks newClient Record
+        tempPoints: encryptedPTS,
         memberRole: !isCliUser ? undefined : getMemberJob(getMemberJob), // for member tasks newClient Record
-        linkCode: "", // e.g alan_yvs493z0 or pedro_nucleo:fiddelize, etc // this is fetched from url param to check if it is authorized.
+        linkCode: "", // e.g vocariza_ana:123abc
     };
 
     const handleInstantAccount = () => {
         showToast("Criando app instantâneo. Um momento...");
         (async () => {
             if (isCliUser) {
-                const thisLinkCode = await getVar("linkCode", "user");
-                body = { ...body, linkCode: thisLinkCode };
+                body = { ...body, linkCode: linkCode };
             }
 
             if (isCliAdmin) {

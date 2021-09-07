@@ -111,7 +111,7 @@ function ASyncRegisterCliUser({
         memberRoleAlt,
         memberJob,
         memberName,
-        userScore,
+        encryptedPTS, // e.g Xx05h507075 the actual value is decrypted in back
         lastRegisterBizId,
         linkCode,
     ] = useData([
@@ -121,7 +121,7 @@ function ASyncRegisterCliUser({
         "role",
         "memberJob",
         "memberName",
-        "userScore",
+        "encryptedPTS",
         "lastRegisterBizId",
         "linkCode",
     ]);
@@ -142,7 +142,7 @@ function ASyncRegisterCliUser({
                         role: memberRole || memberRoleAlt,
                         name: memberName || appMemberName,
                     },
-                    tempPoints: userScore,
+                    tempPoints: encryptedPTS,
                     memberRole: memberRole || memberRoleAlt, // if not found memberRole, it means it is a complete register before sending link invitation.
                     clientUserData: {
                         ...data.clientUserData,
@@ -152,7 +152,15 @@ function ASyncRegisterCliUser({
                 }));
             }, 4000);
         }
-    }, [isReady, bizLogo, bizName, memberRole, memberId, memberJob, userScore]);
+    }, [
+        isReady,
+        bizLogo,
+        bizName,
+        memberRole,
+        memberId,
+        memberJob,
+        encryptedPTS,
+    ]);
 
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,

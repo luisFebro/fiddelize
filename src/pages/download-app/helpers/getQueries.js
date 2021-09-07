@@ -14,12 +14,13 @@ export default function getQueries({ location }) {
         "negocio",
         "id",
         "logo",
-        "bc",
-        "pc",
-        "sc",
-        "mj",
-        "mn",
-        "li",
+        "bc", // backColor
+        "pc", // primaryColor
+        "ep", // encrypted PTS
+        "sj", // staff Job
+        "sn", // staff name
+        "si", // staff id in DB
+        "lc", // link code - only for cli-user
     ];
 
     const mainQueries = mainData.map((q) => getQueryByName(q, location.search));
@@ -43,6 +44,7 @@ export default function getQueries({ location }) {
         isClientUser,
         // isPanel,
     ] = roleQueries;
+
     const isValidRoleType =
         isBizTeam || isCliAdmin || isTeamMember || isClientUser;
 
