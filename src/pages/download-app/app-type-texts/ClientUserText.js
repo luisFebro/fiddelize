@@ -91,9 +91,9 @@ export default function ClientUserText({
                     para te oferecer uma{" "}
                     <strong>nova experiência em compras.</strong>
                     <br />
-                    <br />
-                    Você está prestes a entrar no jogo de compras com desafios e
-                    benefícios.
+                    <br />A cada compra, você ganha moedas digitais chamada PTS
+                    (pronúncia: pítis) e troca por benefícios ao atingir metas
+                    em jogos de compra.
                 </p>
 
                 {showAppShowCase()}
