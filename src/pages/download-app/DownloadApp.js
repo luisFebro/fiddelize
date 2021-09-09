@@ -146,14 +146,13 @@ export default function DownloadApp({ match, location, history }) {
     // END STYLES
 
     // HOOKS
-    const isAllowedLink = true;
-    // const isAllowedLink = useAllowedLink({
-    //     bizId,
-    //     isCliUser,
-    //     whichRole,
-    //     encryptedPTS,
-    //     linkCode,
-    // });
+    const isAllowedLink = useAllowedLink({
+        bizId,
+        isCliUser,
+        whichRole,
+        encryptedPTS,
+        linkCode,
+    });
 
     // STORAGE
     const dataRoleStorage = {
