@@ -176,7 +176,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
             );
         }
 
-        showToast("Registrando... Aguarde um momento.");
+        showToast("Registrando sua conta...", { dur: 15000 });
 
         doRegister(newUser).then((res) => {
             if (res.status !== 200) {

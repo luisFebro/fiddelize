@@ -171,6 +171,8 @@ export default function DownloadApp({ match, location, history }) {
         pColor,
         sColor,
         bizLogo,
+        bizId,
+        bizName,
         backColor,
         isAllowedLink,
         dataRoleStorage,
@@ -437,6 +439,8 @@ function useDataStorage({
     sColor,
     bizLogo,
     backColor,
+    bizId,
+    bizName,
     isAllowedLink,
     dataRoleStorage,
 }) {
@@ -452,6 +456,8 @@ function useDataStorage({
 
     const appStyling = useMemo(
         () => ({
+            bizId,
+            bizName,
             bizLogo,
             themePColor: pColor || themePColor,
             themeSColor: sColor || themeSColor,

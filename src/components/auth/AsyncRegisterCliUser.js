@@ -125,6 +125,7 @@ function ASyncRegisterCliUser({
         "lastRegisterBizId",
         "linkCode",
     ]);
+
     const { name: appMemberName } = useData();
 
     const isReady = bizLogo && bizName && memberId !== "...";
@@ -213,7 +214,8 @@ function ASyncRegisterCliUser({
             ...data,
         };
 
-        showToast("Registrando... Aguarde um momento.", { dur: 4000 });
+        showToast("Registrando sua conta...", { dur: 15000 });
+
         const ok = await doRegister(newUser).catch((res) => {
             if (res.status !== 200) {
                 showToast(res.data.msg || res.data.error, { type: "error" });
@@ -225,6 +227,7 @@ function ASyncRegisterCliUser({
                 );
                 setFieldError(foundObjError);
             }
+            return null;
         });
         if (!ok) return null;
 

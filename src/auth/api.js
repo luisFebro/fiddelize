@@ -40,24 +40,15 @@ export default async function loadInit(uify) {
 }
 
 // objToSend: { name, email, password, registeredBy = email }
-export const doRegister = async (objToSend) => {
-    const data = await getAPI({
+export const doRegister = async (objToSend) =>
+    await getAPI({
         method: "post",
         url: register(),
         body: objToSend,
         timeout: 30000,
         loader: true,
         fullCatch: true,
-    }).catch((err) => {
-        console.log("err", err);
-        if (!err) return null;
-        return err;
     });
-
-    if (!data) return null;
-
-    return data;
-};
 
 export const doLogin = async (uify, objToSend) => {
     const data = await getAPI({

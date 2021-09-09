@@ -174,8 +174,6 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             ...data,
         };
 
-        showToast("Registrando... Aguarde um momento.");
-
         if (!primaryAgent) {
             showToast(
                 "O ID do app não foi encontrado. Tente reinstalar o app na página de convite.",
@@ -189,6 +187,8 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 { type: "error" }
             );
         }
+
+        showToast("Registrando sua conta...", { dur: 15000 });
 
         doRegister(newUser).then((res) => {
             if (res.status !== 200) {
