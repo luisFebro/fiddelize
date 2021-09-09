@@ -60,7 +60,8 @@ export function removeItems(collectionName, namesArray) {
         throw new Error("Requires an array data format");
 
     const currData = getCurrCollectionData(collectionName);
-    if (!currData) throw new Error(`Not possible to remove item(s)`);
+    if (!currData)
+        return console.log(`lStorage.js: Not possible to remove item(s)`);
 
     namesArray.forEach((key) => {
         if (!currData[key])
@@ -68,6 +69,7 @@ export function removeItems(collectionName, namesArray) {
                 `WARNING: the key ${key.toUpperCase()} is not available in the ${collectionName.toUpperCase()}'s collection`
             );
         delete currData[key];
+        return null;
     });
 
     if ("localStorage" in window)

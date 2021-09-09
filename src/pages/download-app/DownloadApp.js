@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import { setItems } from "init/lStorage";
 import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import PwaInstaller from "components/pwa-installer/PwaInstaller";
@@ -88,7 +88,6 @@ export default function DownloadApp({ match, location, history }) {
         downloadAvailable: false, // LESSON: false is default
         analysis: true,
         showNotInstalledInstru: false,
-        needSelfServiceData: false,
         // for test only
         testMode: false,
         appinstalled: "none",
@@ -101,7 +100,6 @@ export default function DownloadApp({ match, location, history }) {
         downloadAvailable,
         analysis,
         showNotInstalledInstru,
-        needSelfServiceData,
         testMode,
         appinstalled,
         relatedInstalledApps,
@@ -119,6 +117,7 @@ export default function DownloadApp({ match, location, history }) {
         bizLogo,
         backColor,
         pColor,
+        sColor,
         encryptedPTS,
         memberJob,
         memberName,
@@ -147,13 +146,36 @@ export default function DownloadApp({ match, location, history }) {
     // END STYLES
 
     // HOOKS
-    const isAllowedLink = useAllowedLink({
-        bizId,
-        isCliUser,
-        whichRole,
+    const isAllowedLink = true;
+    // const isAllowedLink = useAllowedLink({
+    //     bizId,
+    //     isCliUser,
+    //     whichRole,
+    //     encryptedPTS,
+    //     linkCode,
+    // });
+
+    // STORAGE
+    const dataRoleStorage = {
         encryptedPTS,
+        whichRole,
+        bizId,
+        memberId: linkId,
+        memberJob,
+        memberName,
+        primaryAgent,
         linkCode,
+    };
+
+    useDataStorage({
+        pColor,
+        sColor,
+        bizLogo,
+        backColor,
+        isAllowedLink,
+        dataRoleStorage,
     });
+    // END STORAGE
 
     useEffect(() => {
         checkIfElemIsVisible(".target-download", (res) =>
@@ -182,40 +204,6 @@ export default function DownloadApp({ match, location, history }) {
         })`
     );
     // END HOOKS
-
-    // STORAGE
-    if (isAllowedLink) {
-        handleRoleStorage({
-            encryptedPTS,
-            whichRole,
-            bizId,
-            memberId: linkId,
-            memberJob,
-            memberName,
-            primaryAgent,
-            linkCode,
-        });
-    }
-    // admin app config
-    const { themePColor, themeSColor, themeBackColor } = useBizData();
-
-    useEffect(() => {
-        if (whichRole !== "cliente-admin") return;
-
-        setData((prev) => ({ ...prev, needSelfServiceData: true }));
-    }, [bizId, whichRole]);
-
-    if (needSelfServiceData) {
-        const newBizData = {
-            bizLogo,
-            themePColor,
-            themeSColor,
-            themeBackColor,
-        };
-        setItems("bizData", newBizData);
-    }
-    // end admin app config
-    // END STORAGE
 
     const showSpinner = () =>
         !isPageReady && <Spinner marginY={600} size="large" logo="white" />;
@@ -442,6 +430,43 @@ export default function DownloadApp({ match, location, history }) {
         </section>
     );
 }
+
+// HOOKS
+function useDataStorage({
+    pColor,
+    sColor,
+    bizLogo,
+    backColor,
+    isAllowedLink,
+    dataRoleStorage,
+}) {
+    // fundamental data each role
+    useEffect(() => {
+        if (isAllowedLink) handleRoleStorage(dataRoleStorage);
+        return null;
+    }, [isAllowedLink, dataRoleStorage]);
+    // end fundamental data each role
+
+    // set app styling
+    const { themePColor, themeSColor, themeBackColor } = useBizData();
+
+    const appStyling = useMemo(
+        () => ({
+            bizLogo,
+            themePColor: pColor || themePColor,
+            themeSColor: sColor || themeSColor,
+            themeBackColor: backColor || themeBackColor,
+            // eslint-disable-next-line
+        }),
+        [pColor, themePColor, bizLogo]
+    );
+
+    useEffect(() => {
+        setItems("bizData", appStyling);
+    }, [appStyling]);
+    // end set app styling
+}
+// HOOKS
 
 // HELPERS
 function pickIconForBanner({ isBizTeam, bizLogo }) {

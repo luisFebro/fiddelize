@@ -9,13 +9,13 @@ const getWhichRole = (queries) => {
 };
 
 export default function getQueries({ location }) {
-    // bc - back color | pc - primary color | sc - secondary color | mj - memberJob | mn - memberName | li - linkId
     const mainData = [
         "negocio",
         "id",
         "logo",
         "bc", // backColor
-        "pc", // primaryColor
+        "c1", // primaryColor
+        "c2", // secondaryColor
         "ep", // encrypted PTS
         "sj", // staff Job
         "sn", // staff name

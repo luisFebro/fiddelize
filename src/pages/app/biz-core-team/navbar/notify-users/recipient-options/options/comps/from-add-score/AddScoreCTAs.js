@@ -19,7 +19,7 @@ export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
             <strong style={{ textDecoration: "underline" }}>
                 {score} pontos
             </strong>{" "}
-            serão adicionados no app do cliente assim que ele(a) concluir o
+            serão adicionados na conta do cliente assim que ele(a) concluir o
             cadastro com o link gerado abaixo.
         </p>
     );

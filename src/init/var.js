@@ -101,8 +101,7 @@ export const setVars = async (dataObj, options = {}) => {
         );
     });
 
-    await Promise.all(promises);
-    return `all variables in ${storeName}'s store was set`;
+    return await Promise.all(promises);
 };
 
 // e.g ["elem1", "elem2"]
