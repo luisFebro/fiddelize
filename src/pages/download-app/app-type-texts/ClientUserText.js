@@ -89,13 +89,11 @@ export default function ClientUserText({
                 </p>
                 <p>
                     para te oferecer uma{" "}
-                    <strong>
-                        nova experiência em compras e valorizar sua fidelidade.
-                    </strong>
+                    <strong>nova experiência em compras.</strong>
                     <br />
                     <br />
                     Você está prestes a entrar no jogo de compras com desafios e
-                    prêmios reais.
+                    benefícios.
                 </p>
 
                 {showAppShowCase()}
@@ -103,20 +101,7 @@ export default function ClientUserText({
                 <p className="download-app--txt" style={styles.margin}>
                     Você vai acompanhar seus pontos de compra, progresso de
                     desafios, ter histórico compras automático, ter acesso
-                    offline, avaliar sua experiência e mais.
-                </p>
-                <p
-                    className="download-app--txt text-hero"
-                    style={styles.margin}
-                >
-                    E o melhor...
-                    <br />
-                    <span
-                        className="mt-3 d-block text-title"
-                        style={{ lineHeight: "45px" }}
-                    >
-                        ganhe prêmios a cada desafio concluído!
-                    </span>
+                    offline, avaliar sua experiência e mais!
                 </p>
                 <p className="download-app--txt" style={styles.margin}>
                     Baixe o seu app logo a baixo.

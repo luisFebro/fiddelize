@@ -113,7 +113,7 @@ function ASyncRegisterCliUser({
         memberName,
         encryptedPTS, // e.g Xx05h507075 the actual value is decrypted in back
         lastRegisterBizId,
-        linkCode,
+        linkCode, // e.g cheries-beauty_febro:lw06K707a
     ] = useData([
         "userId",
         "memberId",

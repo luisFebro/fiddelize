@@ -193,6 +193,7 @@ export default function DownloadApp({ match, location, history }) {
             memberJob,
             memberName,
             primaryAgent,
+            linkCode,
         });
     }
     // admin app config

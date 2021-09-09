@@ -8,7 +8,7 @@ export default function setStorageRegisterDone() {
             "memberRole",
             "memberJob",
             "memberName",
-            "userScore",
+            "encryptedPTS",
             "linkCode",
             "primaryAgent",
         ],

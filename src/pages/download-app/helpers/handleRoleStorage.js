@@ -9,6 +9,7 @@ export default function handleRoleStorage({
     memberJob,
     memberName,
     primaryAgent,
+    linkCode,
 }) {
     const isBizTeam = whichRole === "nucleo-equipe";
     const isCliAdmin = whichRole === "cliente-admin";
@@ -30,6 +31,7 @@ export default function handleRoleStorage({
             memberRole: memberJob ? "cliente-membro" : "cliente-admin",
             memberJob: memberJob || "admin",
             encryptedPTS,
+            linkCode,
         };
     }
 
