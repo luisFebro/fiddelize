@@ -83,7 +83,8 @@ function useSetGameData({ adminGame, setGameData }) {
         })();
 
         const gameDataFromUser =
-            adminGame && adminGame.discountBack && adminGame.discountBack.perc;
+            adminGame && adminGame.discountBack && adminGame.discountBack;
+
         if (gameDataFromUser)
             setGameData({
                 perc: gameDataFromUser.perc,
