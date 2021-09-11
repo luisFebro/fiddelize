@@ -34,7 +34,7 @@ export const gameBrNameStore = {
 //     },
 // };
 
-export default function GamesBadge({ userGame }) {
+export default function GamesBadge({ userGame = {} }) {
     const { adminGame } = useData();
     const { themePColor } = useBizData();
 
@@ -43,15 +43,11 @@ export default function GamesBadge({ userGame }) {
 
     const gamesList = [];
     availableGames.forEach((gameName) => {
-        if (
-            !userGame[gameName] ||
-            (userGame[gameName] && !userGame[gameName].challN)
-        )
-            return null;
+        const challN = userGame[gameName] ? userGame[gameName].challN : 1;
 
         return gamesList.push({
             gameName,
-            challN: userGame[gameName].challN,
+            challN,
             icon: gameIconsStore[gameName],
         });
     });

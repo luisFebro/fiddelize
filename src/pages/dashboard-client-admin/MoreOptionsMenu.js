@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 import disconnect from "auth/disconnect";
 import isThisApp from "utils/window/isThisApp";
 import ButtonMenu from "components/buttons/material-ui/button-menu/ButtonMenu";
@@ -40,8 +40,7 @@ const modalStore = {
 export default function MoreOptionsMenu({ location, history }) {
     const [currModal, setCurrModal] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
-    const { role, name } = useData();
-    const { bizId, bizLinkName, bizName, bizPlan } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const handleFullOpen = (modalName) => {
         setCurrModal(modalName);
@@ -57,10 +56,7 @@ export default function MoreOptionsMenu({ location, history }) {
         {
             icon: <FontAwesomeIcon icon="share-alt" style={menuIconStyle} />,
             text: "compartilhar apps",
-            callback: () =>
-                history.push(
-                    `/${bizLinkName}/compartilhar-app?negocio=${bizName}&id=${bizId}&role=${role}&adminName=${name}`
-                ),
+            callback: () => history.push(`/${bizLinkName}/compartilhar-app`),
         },
         {
             icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,

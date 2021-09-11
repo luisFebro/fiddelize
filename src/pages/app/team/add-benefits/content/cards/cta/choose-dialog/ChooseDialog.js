@@ -68,8 +68,8 @@ export default function ChooseDialog(props) {
                             min-height: 100px;
                         }
 
-                        .choose-options-area .card svg {
-                            font-size: 85px;
+                        .choose-options-area .card .icon-wrapper svg {
+                            font-size: 80px !important;
                             color: #ff0;
                             padding: 5px;
                         }

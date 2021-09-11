@@ -1,8 +1,9 @@
 import MuSelectTable from "components/tables/MuSelectTable";
 import convertToReal from "utils/numbers/convertToReal";
-import getPercentage from "utils/numbers/getPercentage";
+import getIncreasedPerc from "utils/numbers/getIncreasedPerc";
 import repeat from "utils/arrays/repeat";
 import { calendar } from "utils/dates/dateFns";
+import getPercentage from "utils/numbers/getPercentage";
 // import getAPI, { decode } from "api";
 // import useData from "init";
 
@@ -51,10 +52,11 @@ function PanelHiddenContent({ data = {}, isLiveTrade }) {
         finalGrossBalanceAmount,
         netProfitAmount,
         grossProfitAmount,
+        startQuotePrice,
     } = data.results;
-    const netProfitPerc = getPercentage(finalBalanceAmount, netProfitAmount, {
-        toFixed: 2,
-    });
+
+    // netProfitPerc takes initial investiment and subtract with final balance which discounts the fees in both buy/sell prices.
+    const netProfitPerc = getIncreasedPerc(startQuotePrice, finalBalanceAmount);
     const isPlusProfit = netProfitPerc > 0;
 
     const totalFeePerc = getPercentage(finalBalanceAmount, totalFeeAmount, {

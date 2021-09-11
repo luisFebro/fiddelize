@@ -35,7 +35,7 @@ export default function DiscountBenefit(props) {
 
     const benefitData = allBenefitGames.find((g) => g.game === gameName);
     const benefitId = benefitData && benefitData.id;
-    const { benefitDesc, currChall, targetPoints } = benefitData;
+    const { benefitDesc, currChall = 1, targetPoints } = benefitData;
 
     const name = getFirstName(customerName, { addSurname: true });
 

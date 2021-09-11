@@ -4,27 +4,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
-import { useBizData } from "init";
-import getQueryByName from "utils/string/getQueryByName";
+// import getQueryByName from "utils/string/getQueryByName";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
 import { CLIENT_URL } from "config/clientUrl";
 import handleChange from "utils/form/use-state/handleChange";
 import { handleEnterPress } from "utils/event/isKeyPressed";
-import addSpacingPlusToQuery from "utils/string/addSpacingPlusToQuery";
 import scrollIntoView from "utils/document/scrollIntoView";
 import getFirstName from "utils/string/getFirstName";
 import ShareSocialMediaButtons from "components/buttons/ShareSocialMediaButtons";
 import { handleFocus } from "utils/form/handleFocus";
 import copyText from "utils/document/copyText";
 import RadiusBtn from "components/buttons/RadiusBtn";
-import useData from "init";
+import { useBizData } from "init";
 import downloadImg from "utils/media/download-img/downloadImg";
 import QrCode from "components/QrCode";
 import "../app/team/registers-panel/types-handler/qr-code-invitation-btn/_QrInvitationModal.scss";
-
-const addSpace = (str) => addSpacingPlusToQuery(str);
 
 const isSmall = window.Helper.isSmallScreen();
 const fluidTextAlign = `${isSmall ? "ml-2 text-left" : "text-center"}`;
@@ -76,35 +72,27 @@ const handleFgColor = (fgColor) => {
     return `var(--themeBackground--${fgColor})`;
 };
 
-export default function AppSharer({ location, match }) {
-    const [showLink, setShowLink] = useState(false);
+export default function AppSharer() {
     const [data, setData] = useState({
         clientName: "",
         openSharingAreaTo: "",
         generatedLink: "",
     });
-    const { clientName, openSharingAreaTo, generatedLink } = data;
+    const { clientName } = data;
+    const role = "cliente-admin";
 
     const styles = getStyles();
-    const {
-        bizLinkName: thisBizCode,
-        bizName: businessName,
-        bizLogo,
-        themePColor: pColor,
-    } = useBizData();
-    const { name: cliName } = useData();
-    const { bizId: thisBizId } = useBizData();
+    const { bizLinkName, bizLogo, themePColor: pColor } = useBizData();
 
-    const role = getQueryByName("role", location.search) || "cliente-admin";
-    const bizLinkName = match.params.bizLinkName || thisBizCode;
-    const bizName = getQueryByName("negocio", location.search) || businessName;
-    const cliAdminName =
-        getQueryByName("adminName", location.search) || cliName;
-    const bizId = getQueryByName("id", location.search) || thisBizId;
+    const officialAdminLink = `https://fiddelize.com/${bizLinkName}:admin`;
 
-    const indLastSlash = bizLinkName.lastIndexOf("-");
-    const onlyBizCode = bizLinkName.slice(indLastSlash + 1);
-    const officialAdminLink = `${CLIENT_URL}/app/${onlyBizCode}`;
+    const sharingDataForAdmin = {
+        titleShare: "",
+        pageImg: "",
+        pageTitle: "Link para baixar app admin",
+        pageDescription: officialAdminLink,
+        pageURL: officialAdminLink,
+    };
 
     const handleQrDownload = async () => {
         await downloadImg({
@@ -116,11 +104,7 @@ export default function AppSharer({ location, match }) {
     const showBackBtn = () => (
         <div className="position-absolute" style={{ right: 10, top: -10 }}>
             <Link
-                to={
-                    role !== "cliente-admin"
-                        ? "/mobile-app"
-                        : `/${bizLinkName}/cliente-admin/painel-de-controle`
-                }
+                to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                 className="text-decoration-none"
             >
                 <ButtonMulti
@@ -140,49 +124,19 @@ export default function AppSharer({ location, match }) {
         </header>
     );
 
-    const handleGeneratedLink = (targetBr) => {
-        let link;
-        if (targetBr === "cliente-admin") {
-            link = `${CLIENT_URL}/baixe-app/${getFirstName(
-                cliAdminName
-            )}?negocio=${
-                bizName && addSpace(bizName.cap())
-            }&id=${bizId}&admin=1&painel=1`;
-            setData({
-                ...data,
-                generatedLink: link,
-                openSharingAreaTo: "cliente-admin",
-            });
-        } else {
-            clientName
-                ? (link = `${CLIENT_URL}/app/${getFirstName(
-                      clientName.toLowerCase()
-                  )}_${onlyBizCode}`)
-                : (link = officialAdminLink);
+    const handleGeneratedLink = () => {
+        let link = `https://fiddelize.com/${bizLinkName}`;
+        const firstCliUserName = getFirstName(clientName.toLowerCase());
+        if (clientName)
+            link = `https://fiddelize.com/${bizLinkName}_${firstCliUserName}`;
 
-            setData({
-                ...data,
-                clientName: clientName.cap(),
-                openSharingAreaTo: "cliente-usuário",
-                generatedLink: link,
-            });
-        }
+        setData({
+            ...data,
+            clientName: clientName.cap(),
+            openSharingAreaTo: "cliente-usuário",
+            generatedLink: link,
+        });
     };
-
-    // const showBlob = () => (
-    //     <div
-    //         className="position-absolute animated slideIn"
-    //         style={{ left: "-200px", top: "-200px" }}
-    //     >
-    //         <img
-    //             style={{ zIndex: -1000 }}
-    //             width={300}
-    //             height={300}
-    //             src={`${CLIENT_URL}/img/shapes/blob-sharing-page.svg`}
-    //             alt="blob página de compartilhar"
-    //         />
-    //     </div>
-    // );
 
     const showButtonAction = (targetBr) => (
         <div className="container-center mt-4">
@@ -205,36 +159,83 @@ export default function AppSharer({ location, match }) {
         </div>
     );
 
+    const showCopyBtn = () => {
+        const handleCopy = () => {
+            copyText(officialAdminLink, {
+                msg: "Link para baixar o app copiado!",
+            });
+        };
+
+        return (
+            <div
+                className="container-center position-relative"
+                style={{ top: "30px", zIndex: 100 }}
+            >
+                <RadiusBtn size="small" title="copiar" onClick={handleCopy} />
+            </div>
+        );
+    };
+
     const showCliAdminArea = () => (
-        <section className="my-5">
+        <section className="mt-5">
+            <ImportantDevicesIcon
+                style={{
+                    fontSize: "70px",
+                    color: "var(--mainWhite)",
+                    filter: "drop-shadow(.5px .5px 1.5px black)",
+                }}
+            />
             <div className="text-subtitle text-white text-center">
                 Use seu App Admin
                 <br />
                 em outros aparelhos
             </div>
-            <section className="container-center mt-4 mx-2 position-relative">
-                <div
-                    className="shadow-elevation margin-auto-90"
-                    style={styles.form}
-                >
-                    <ImportantDevicesIcon
-                        style={{
-                            fontSize: "70px",
-                            color: "var(--mainWhite)",
-                            filter: "drop-shadow(.5px .5px 1.5px black)",
-                        }}
-                    />
-                    {showButtonAction("cliente-admin")}
-                </div>
+            <section className="mt-3 text-white position-relative">
+                <h2 className="text-normal font-weight-bold link-admin text-pill">
+                    {officialAdminLink}
+                    <style jsx>
+                        {`
+                            .link-admin {
+                                background-color: var(--mainWhite);
+                                color: var(--themeP);
+                            }
+                        `}
+                    </style>
+                </h2>
+                {showCopyBtn()}
             </section>
-            {showSharingBtns("cliente-admin")}
+            <section className="container-center mx-2">
+                <Card
+                    style={{
+                        maxWidth: 350,
+                        width: "100%",
+                        backgroundColor: "var(--mainWhite)",
+                    }}
+                    className="align-self-center p-4 card-elevation"
+                >
+                    <ShareSocialMediaButtons
+                        config={{ size: 50, radius: 50 }}
+                        data={sharingDataForAdmin}
+                    />
+                </Card>
+            </section>
+            <p className="mt-3 text-center font-weight-bold text-small text-left">
+                Acesse o link no dispositivo
+                <br />
+                que você quer baixar.
+            </p>
         </section>
     );
+
+    const dataSharingBtns = {
+        setData,
+        ...data,
+    };
 
     const showCliUserArea = () => (
         <section className="my-5">
             <p className="text-subtitle text-white text-center">
-                Divulgue para <br /> seus clientes.
+                Divulgue para <br /> seus clientes de forma personalizada.
             </p>
             <section className="container-center mx-2 mt-4">
                 <form
@@ -293,126 +294,9 @@ export default function AppSharer({ location, match }) {
                     {showButtonAction()}
                 </form>
             </section>
-            {showSharingBtns("cliente-usuário")}
+            <ShowSharingBtns {...dataSharingBtns} />
         </section>
     );
-
-    const showSharingBtns = (targetBr) => {
-        const sharingData = {
-            titleShare: "",
-            pageImg: "i.imgur.com/9GjtAiW",
-            pageTitle: "Convite para participar do clube de fiddelidade",
-            pageDescription: officialAdminLink,
-            pageURL: officialAdminLink,
-        };
-        const displayLink = () => (
-            <section className="user-select-text">
-                <div className="container-center justify-content-around my-3">
-                    <RadiusBtn
-                        title={showLink ? "esconder link" : "ver link"}
-                        backgroundColor="var(--mainDark)"
-                        size="small"
-                        onClick={() => setShowLink(!showLink)}
-                    />
-                    <RadiusBtn
-                        title="copiar link"
-                        backgroundColor="var(--mainDark)"
-                        size="small"
-                        onClick={() => copyText(generatedLink)}
-                    />
-                </div>
-                {showLink ? (
-                    <section>
-                        <div className="animated zoomIn faster">
-                            <TextField
-                                id="linkArea"
-                                type="text"
-                                InputProps={{
-                                    style: styles.fieldLink,
-                                }}
-                                name="generatedLink"
-                                value={generatedLink}
-                                variant="outlined"
-                                autoComplete="off"
-                                multiline
-                                rows={4}
-                                fullWidth
-                            />
-                        </div>
-                        {targetBr === "cliente-admin" && (
-                            <p className="mt-3 font-weight-bold text-purple text-small text-left">
-                                Abra o link no dispositivo
-                                <br />
-                                que você quer baixar.
-                            </p>
-                        )}
-                    </section>
-                ) : null}
-            </section>
-        );
-
-        return (
-            openSharingAreaTo === targetBr && (
-                <section className="my-5">
-                    <p
-                        id={targetBr}
-                        className="my-4 animated zoomIn text-center text-white text-title"
-                    >
-                        Novo Link gerado e pronto!
-                    </p>
-                    <section className="container-center mx-2">
-                        <Card
-                            style={{
-                                maxWidth: 350,
-                                width: "100%",
-                                backgroundColor: "var(--mainWhite)",
-                            }}
-                            className="align-self-center animated zoomIn delay-2s fast card-elevation p-4"
-                        >
-                            <p className="text-center text-normal font-weight-bold">
-                                {targetBr === "cliente-admin"
-                                    ? "Enviar app via:"
-                                    : "Escolha meio de divulgação:"}
-                            </p>
-                            <ShareSocialMediaButtons
-                                config={{ size: 50, radius: 50 }}
-                                data={sharingData}
-                            />
-                            {displayLink()}
-                        </Card>
-                    </section>
-                    {targetBr !== "cliente-admin" && (
-                        <div className="mt-4 container-center">
-                            <RadiusBtn
-                                title="gerar novo link"
-                                backgroundColor="var(--themeSDark)"
-                                className="my-2"
-                                onClick={() => {
-                                    setData({
-                                        ...data,
-                                        openSharingAreaTo: "",
-                                        clientName: "",
-                                    });
-                                    handleFocus("form1");
-                                }}
-                            />
-                        </div>
-                    )}
-                    {targetBr !== "cliente-admin" && (
-                        <div className="mt-5 text-center text-normal font-weight-bold">
-                            {clientName && (
-                                <span>
-                                    O link gerado possui uma página
-                                    personalizada feita para{" "}
-                                    {clientName && clientName.cap()}
-                                </span>
-                            )}
-                        </div>
-                    )}
-                </section>
-            )
-        );
-    };
 
     const imageSquare = bizLogo && bizLogo.includes("h_100,w_100");
     const imageSettings = {
@@ -466,6 +350,114 @@ export default function AppSharer({ location, match }) {
     );
 }
 
+// HELPERS
+function ShowSharingBtns({
+    targetBr = "cliente-usuário",
+    openSharingAreaTo,
+    generatedLink,
+    setData,
+}) {
+    const [showLink, setShowLink] = useState(false);
+
+    const styles = getStyles();
+
+    const sharingData = {
+        titleShare: "",
+        pageImg: "",
+        pageTitle: "Convite para participar do clube de compras",
+        pageDescription: generatedLink,
+        pageURL: generatedLink,
+    };
+    const displayLink = () => (
+        <section className="user-select-text">
+            <div className="container-center justify-content-around my-3">
+                <RadiusBtn
+                    title={showLink ? "esconder link" : "ver link"}
+                    backgroundColor="var(--mainDark)"
+                    size="small"
+                    onClick={() => setShowLink(!showLink)}
+                />
+                <RadiusBtn
+                    title="copiar link"
+                    backgroundColor="var(--mainDark)"
+                    size="small"
+                    onClick={() => copyText(generatedLink)}
+                />
+            </div>
+            {showLink ? (
+                <section>
+                    <div className="animated zoomIn faster">
+                        <TextField
+                            id="linkArea"
+                            type="text"
+                            InputProps={{
+                                style: styles.fieldLink,
+                            }}
+                            name="generatedLink"
+                            value={generatedLink}
+                            variant="outlined"
+                            autoComplete="off"
+                            multiline
+                            rows={4}
+                            fullWidth
+                        />
+                    </div>
+                </section>
+            ) : null}
+        </section>
+    );
+
+    return (
+        openSharingAreaTo === targetBr && (
+            <section className="my-5">
+                <p
+                    id={targetBr}
+                    className="my-4 animated zoomIn text-center text-white text-title"
+                >
+                    Novo Link gerado e pronto!
+                </p>
+                <section className="container-center mx-2">
+                    <Card
+                        style={{
+                            maxWidth: 350,
+                            width: "100%",
+                            backgroundColor: "var(--mainWhite)",
+                        }}
+                        className="align-self-center animated slideInUp card-elevation p-4"
+                    >
+                        <p className="text-center text-normal font-weight-bold">
+                            Escolha meio de divulgação:
+                        </p>
+                        <ShareSocialMediaButtons
+                            config={{ size: 50, radius: 50 }}
+                            data={sharingData}
+                        />
+                        {displayLink()}
+                    </Card>
+                </section>
+                {targetBr !== "cliente-admin" && (
+                    <div className="mt-4 container-center">
+                        <RadiusBtn
+                            title="gerar novo link"
+                            backgroundColor="var(--themeSDark)"
+                            className="my-2"
+                            onClick={() => {
+                                setData((prev) => ({
+                                    ...prev,
+                                    openSharingAreaTo: "",
+                                    clientName: "",
+                                }));
+                                handleFocus("form1");
+                            }}
+                        />
+                    </div>
+                )}
+            </section>
+        )
+    );
+}
+// END HELPERS
+
 /* ARCHIVES
 // const pickTargetBr = (currRole, target) => {
 //     const cliAdmin = "cliente-admin";
@@ -485,4 +477,17 @@ export default function AppSharer({ location, match }) {
 //     }
 //         return cliUser;
 // }
+
+{targetBr !== "cliente-admin" && (
+    <div className="mt-5 text-center text-normal font-weight-bold">
+        {clientName && (
+            <span>
+                O link gerado é para o convite
+                personalizada feita para{" "}
+                {clientName && clientName.cap()}
+            </span>
+        )}
+    </div>
+)}
+
 */

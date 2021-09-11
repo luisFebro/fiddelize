@@ -35,6 +35,8 @@ export default function BuyReviewList({ lastDateChecked, isBizAdmin = false }) {
 
     useAdminChecked(trigger, bizId, isBizAdmin);
 
+    // getXpReviewList is from cli-admin to biz fiddelize reviews
+    // getBuyReviewsList is from cli-users to cli-admin
     const {
         list: reviewsList,
         loading,

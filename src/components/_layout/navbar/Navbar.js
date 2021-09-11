@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useBizData } from "init";
@@ -14,11 +14,6 @@ const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
-    const [url] = useState({
-        logoBiz: "",
-        logoFid: "",
-    });
-
     const isAuth = useAuth();
     const { bizLogo, themePColor } = useBizData();
 
@@ -54,7 +49,7 @@ function Navbar({ history, location }) {
         <Link
             to="/acesso/verificacao"
             className={
-                ["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(
+                ["/cliente/pontos-de-compra", "/acesso/verificacao"].includes(
                     locationNow
                 )
                     ? "disabled-link no-text-decoration"
@@ -114,7 +109,7 @@ function Navbar({ history, location }) {
                     display: [
                         "/baixe-app/",
                         "/regulamento",
-                        "/cliente/pontos-fidelidade",
+                        "/cliente/pontos-de-compra",
                         "/compartilhar-app",
                     ].some((link) => locationNow.includes(link))
                         ? "none"
@@ -138,19 +133,23 @@ function Navbar({ history, location }) {
             needClientLogo && bizLogo
         );
 
+        // to avoid fiddelize logo to show off when loading img. somehow the default img is loaded first
+        const bizLogoChecked = thisbizLogo.includes("official-logo-name")
+            ? "/img/error.png"
+            : thisbizLogo;
         // const webCond = locationNow !== "/" && isAdminDash && imgFormatRaw;
         // const appCond = isApp && imgFormatRaw;
 
         const handleLogoClick = () => {
-            if (isClientAdmin && locationNow.includes("pontos-fidelidade"))
+            if (isClientAdmin && locationNow.includes("pontos-de-compra"))
                 return "/mobile-app?client-admin=1";
             return isApp ? "/mobile-app" : "/";
         };
 
         const logoSrc =
-            locationNow === "/" || !needClientLogo
-                ? fiddelizeLogo
-                : thisbizLogo;
+            locationNow !== "/" || needClientLogo
+                ? bizLogoChecked
+                : fiddelizeLogo;
 
         return (
             <Link to={handleLogoClick()}>
@@ -160,7 +159,7 @@ function Navbar({ history, location }) {
                         top: needClientLogo ? 0 : "8px",
                         left: isSmall ? "10px" : "20px",
                     }}
-                    src={logoSrc}
+                    src={logoSrc || "/img/error.png"}
                     alt="Logomarca Principal"
                     width={!needClientLogo ? 160 : width}
                     height={!needClientLogo ? 70 : 90}
@@ -173,7 +172,7 @@ function Navbar({ history, location }) {
         <Link
             to="/acesso/verificacao"
             className={`access-link-mobile ${
-                ["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(
+                ["/cliente/pontos-de-compra", "/acesso/verificacao"].includes(
                     locationNow
                 )
                     ? "disabled-link no-text-decoration"

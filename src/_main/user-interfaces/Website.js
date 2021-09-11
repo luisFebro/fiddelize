@@ -91,7 +91,7 @@ function Website({ location }) {
                     component={AsyncLoginPage}
                 />
                 <Route
-                    path="/cliente/pontos-fidelidade"
+                    path="/cliente/pontos-de-compra"
                     exact
                     component={AsyncPointsPanel}
                 />

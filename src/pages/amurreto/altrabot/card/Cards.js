@@ -90,6 +90,8 @@ function MainH({ data, isLiveTrade }) {
         netProfitAmount,
         startQuotePrice,
     } = data.results;
+
+    // netProfitPerc takes initial investiment and subtract with final balance which discounts the fees in both buy/sell prices.
     const netProfitPerc = getIncreasedPerc(startQuotePrice, finalBalanceAmount);
     const isPlusProfit = netProfitPerc >= 0;
 

@@ -19,7 +19,7 @@ const handleFgColor = (fgColor) => {
 const handleTitle = (isAdmin) => {
     if (isAdmin) {
         return parse(
-            "<span>Divulgue seu<br />link oficial para clientes</span>"
+            "<span>Divulgue seu<br />clube de compras<br />para clientes</span>"
         );
     }
 

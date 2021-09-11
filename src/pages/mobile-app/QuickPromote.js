@@ -1,6 +1,6 @@
 import { useBizData } from "init";
 import QrInvitationModal from "../app/team/registers-panel/types-handler/qr-code-invitation-btn/QrInvitationModal";
-import { CLIENT_URL } from "../../config/clientUrl";
+import { Link } from "react-router-dom";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
 import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaButtons";
 
@@ -20,7 +20,7 @@ export default function QuickPromote({ handleFullClose }) {
 
         return (
             <div
-                className="position-relative container-center mb-5"
+                className="position-relative container-center"
                 style={{
                     top: -20,
                 }}
@@ -42,6 +42,15 @@ export default function QuickPromote({ handleFullClose }) {
                 qrValue={officialAdminLink}
             />
             {showSharingOpts()}
+            <div className="text-center">
+                <Link
+                    to={`/${bizLinkName}/compartilhar-app`}
+                    className="text-link text-white font-site text-em-1"
+                >
+                    Mais opções
+                </Link>
+            </div>
+            <div style={{ marginBottom: 100 }} />
             <div
                 className="position-relative container-center my-3"
                 style={{

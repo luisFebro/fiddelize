@@ -182,9 +182,9 @@ function VirtualCard({ history }) {
 
             if (isCliAdmin)
                 window.location.href =
-                    "/cliente/pontos-fidelidade?client-admin=1";
+                    "/cliente/pontos-de-compra?client-admin=1";
 
-            window.location.href = "/cliente/pontos-fidelidade";
+            window.location.href = "/cliente/pontos-de-compra";
         });
     };
 

@@ -90,7 +90,7 @@ function Mobile({ location }) {
                 />
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
                 <Route
-                    path="/cliente/pontos-fidelidade"
+                    path="/cliente/pontos-de-compra"
                     exact
                     component={AsyncPointsPanel}
                 />
