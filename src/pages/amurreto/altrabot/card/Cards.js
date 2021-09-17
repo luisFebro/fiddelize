@@ -1,6 +1,5 @@
 import { fromNow } from "utils/dates/dateFns";
 import convertToReal from "utils/numbers/convertToReal";
-import getIncreasedPerc from "utils/numbers/getIncreasedPerc";
 import TradeCard from "./accordion/TradeCard";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 
@@ -85,14 +84,8 @@ function MainH({ data, isLiveTrade }) {
         );
     }
 
-    const {
-        finalBalanceAmount,
-        netProfitAmount,
-        startQuotePrice,
-    } = data.results;
+    const { finalBalanceAmount, netProfitAmount, netProfitPerc } = data.results;
 
-    // netProfitPerc takes initial investiment and subtract with final balance which discounts the fees in both buy/sell prices.
-    const netProfitPerc = getIncreasedPerc(startQuotePrice, finalBalanceAmount);
     const isPlusProfit = netProfitPerc >= 0;
 
     return (

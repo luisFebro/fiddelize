@@ -1,9 +1,7 @@
 import MuSelectTable from "components/tables/MuSelectTable";
 import convertToReal from "utils/numbers/convertToReal";
-import getIncreasedPerc from "utils/numbers/getIncreasedPerc";
 import repeat from "utils/arrays/repeat";
 import { calendar } from "utils/dates/dateFns";
-import getPercentage from "utils/numbers/getPercentage";
 // import getAPI, { decode } from "api";
 // import useData from "init";
 
@@ -40,6 +38,7 @@ function PanelHiddenContent({ data = {}, isLiveTrade }) {
         status,
         statusExchange,
         totalFeeAmount,
+        totalFeePerc,
         buyTableList,
         sellTableList,
     } = data;
@@ -51,24 +50,25 @@ function PanelHiddenContent({ data = {}, isLiveTrade }) {
         finalBalanceAmount,
         finalGrossBalanceAmount,
         netProfitAmount,
-        grossProfitAmount,
-        startQuotePrice,
+        netProfitPerc,
     } = data.results;
 
+    const grossProfitAmount = totalFeeAmount + netProfitPerc;
+
     // netProfitPerc takes initial investiment and subtract with final balance which discounts the fees in both buy/sell prices.
-    const netProfitPerc = getIncreasedPerc(startQuotePrice, finalBalanceAmount);
     const isPlusProfit = netProfitPerc > 0;
 
-    const totalFeePerc = getPercentage(finalBalanceAmount, totalFeeAmount, {
-        toFixed: 2,
-    });
+    const startQuotePrice = buyTableList.quoteAndTransPerc.amount.reduce(
+        (curr, next) => curr + next,
+        0
+    );
 
     return (
         <section className="position-relative font-site text-em-1 enabledLink panel-hidden-content--root">
             <p className="text-center mb-4 text-normal font-weight-bold text-shadow">
                 SALDO
             </p>
-            <p className="m-0 mb-4 font-weight-bold text-shadow">
+            <p className="d-none m-0 mb-4 font-weight-bold text-shadow">
                 • Posição Capital:{" "}
                 {capitalPosition && capitalPosition.totalPerc}%
             </p>
@@ -77,14 +77,10 @@ function PanelHiddenContent({ data = {}, isLiveTrade }) {
                     • Inicial:
                     <span className="d-block font-weight-bold">
                         {capitalPosition &&
-                            convertToReal(
-                                treatedBuyTableList[0] &&
-                                    treatedBuyTableList[0].quoteAmount,
-                                {
-                                    moneySign: true,
-                                    needFraction: true,
-                                }
-                            )}
+                            convertToReal(startQuotePrice, {
+                                moneySign: true,
+                                needFraction: true,
+                            })}
                     </span>
                 </p>
                 <p className="mb-4 font-weight-bold text-shadow">
