@@ -397,6 +397,7 @@ export default function DownloadApp({ match, location, history }) {
                         title={handlePwaTitle({
                             isCliAdmin,
                             isBizTeam,
+                            isCliMember,
                             userName,
                         })}
                         icon={pickIconForBanner({ isBizTeam, bizLogo })}
@@ -480,11 +481,16 @@ function pickIconForBanner({ isBizTeam, bizLogo }) {
     return bizLogo;
 }
 
-function handlePwaTitle({ isCliAdmin, isBizTeam, userName }) {
+function handlePwaTitle({ isCliAdmin, isCliMember, isBizTeam, userName }) {
     if (isCliAdmin)
         return `<strong>${
             userName && userName.cap()
         },<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`;
+
+    if (isCliMember)
+        return `<strong>${
+            userName ? userName.cap() : "Ei"
+        },<br />baixe o app<br />no botão ao lado.`;
 
     if (isBizTeam)
         return `<strong>${
