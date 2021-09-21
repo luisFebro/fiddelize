@@ -92,7 +92,8 @@ export default function HiddenBizDataAndBackup({ userData }) {
         const dataToSend = {
             "clientAdminData.bizName": bizName,
             "clientAdminData.bizWhatsapp": bizWhatsapp,
-            "clientAdminData.bizLinkName": bizLinkName,
+            "clientAdminData.bizLinkName":
+                bizLinkName && bizLinkName.toLowerCase(),
             // "clientAdminData.bizAddress": bizAddress,
             // "clientAdminData.bizCep": bizCep,
         };
@@ -182,7 +183,9 @@ export default function HiddenBizDataAndBackup({ userData }) {
                         error={error === "bizLinkName"}
                         value={bizLinkName && bizLinkName.toLowerCase()}
                         className="text-shadow font-weight-bold"
-                        helperText={`fiddelize.com/${bizLinkName}`}
+                        helperText={`fiddelize.com/${
+                            bizLinkName && bizLinkName.toLowerCase()
+                        }`}
                         FormHelperTextProps={{ style: styles.helperFromField }}
                     />
                 </div>
