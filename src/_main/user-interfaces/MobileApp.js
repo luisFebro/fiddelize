@@ -9,6 +9,7 @@ import ClientMobileApp from "pages/mobile-app/ClientMobileApp";
 import RegulationPage from "pages/RegulationPage";
 import Default from "pages/Default";
 import UnavailableService from "pages/UnavailableService";
+import AsyncDownloadApp from "pages/download-app/AsyncDownloadApp";
 import {
     AsyncLoginPage,
     // cli-admin
@@ -52,17 +53,18 @@ const AsyncNavBar = Load({
         ),
 });
 
+// some phones browsers are detecting as it is a mobile
 // This is the msg to be displayed for desktop users when popping up the
 // new screen right after the download.
-const InstallMsg = () => (
-    <div className="text-center mt-5">
-        <p className="text-white text-title">Seu App está sendo instalado!</p>
-        <p className="text-white text-subtitle mx-2">
-            Feche essa janela e abra o app direto da sua área de desktop assim
-            que aparecer a mensagem de confirmação.
-        </p>
-    </div>
-);
+// const InstallMsg = () => (
+//     <div className="text-center mt-5">
+//         <p className="text-white text-title">Seu App está sendo instalado!</p>
+//         <p className="text-white text-subtitle mx-2">
+//             Feche essa janela e abra o app direto da sua área de desktop assim
+//             que aparecer a mensagem de confirmação.
+//         </p>
+//     </div>
+// );
 
 function Mobile({ location }) {
     const locationNow = location.pathname;
@@ -105,11 +107,11 @@ function Mobile({ location }) {
                     exact
                     component={AsyncAppSharer}
                 />
-                <Route path="/baixe-app" exact component={InstallMsg} />
+                <Route path="/baixe-app" exact component={AsyncDownloadApp} />
                 <Route
                     path="/baixe-app/:userName"
                     exact
-                    component={InstallMsg}
+                    component={AsyncDownloadApp}
                 />
                 <Route path="/planos" exact component={AsyncPlansPage} />
                 <PrivateRouteClientAdm
