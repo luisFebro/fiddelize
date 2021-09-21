@@ -142,7 +142,7 @@ async function handleError({
         return reject(null);
     }
 
-    console.log(`getAPI error: ${finalMsg}`);
+    console.log(`getAPI error: ${JSON.stringify(finalMsg)}`);
     return reject(finalMsg);
 }
 // END HELPERS

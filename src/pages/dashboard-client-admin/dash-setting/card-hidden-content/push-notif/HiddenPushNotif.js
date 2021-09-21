@@ -121,8 +121,6 @@ export default function HiddenPushNotif() {
                     1) Desativando as notificações, você entende que não será
                     notificado quando:
                 </p>
-                - Um cliente ganhar um desafio;
-                <br />
                 - Relatório de compras dos clientes;
                 <br />
                 - Status de investimentos;

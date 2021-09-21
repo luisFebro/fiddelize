@@ -170,12 +170,16 @@ export const markAllAsSeen = (userId) =>
 export const readNotifications = (userId) =>
     `${ROOT}/notification/read/${userId}`; // GET
 
-// ACCOUNT, DOWNLOAD AND URLS
+// ACCOUNT, DOWNLOAD
 export const createInstantApp = () => `${ROOT}/user/instant-app`; // POST
 export const readAppList = () => `${ROOT}/user/acc/app-list`; // GET
 export const setDefaultAccess = () => `${ROOT}/user/acc/set-default-access`; // POST
+
+// URLS
 export const getUrlLink = (code) =>
     `${ROOT}/user/redirect/url-link?code=${code}`; // GET
+export const validateBizLinkName = () =>
+    `${ROOT}/user/link/validate/biz-link-name`; // POST
 
 // MISCELLANEOUS
 export const countField = (userId, role = "cliente") =>

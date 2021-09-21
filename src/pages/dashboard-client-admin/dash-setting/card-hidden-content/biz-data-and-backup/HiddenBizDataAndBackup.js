@@ -4,15 +4,16 @@ import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import ButtonMulti, {
     faStyle,
-} from "../../../../../components/buttons/material-ui/ButtonMulti";
-import handleChange from "../../../../../utils/form/use-state/handleChange";
-// import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
+} from "components/buttons/material-ui/ButtonMulti";
+import handleChange from "utils/form/use-state/handleChange";
+// import DateWithIcon from 'components/date-time/DateWithIcon';
 import { updateUser, readUser } from "api/frequent";
-import showToast from "../../../../../components/toasts";
+import showToast from "components/toasts";
+import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
+import isKeyPressed from "utils/event/isKeyPressed";
+import validatePhone from "utils/validation/validatePhone";
+import getAPI, { validateBizLinkName } from "api";
 import BackUpToExcel from "./BackUpToExcel";
-import autoPhoneMask from "../../../../../utils/validation/masks/autoPhoneMask";
-import isKeyPressed from "../../../../../utils/event/isKeyPressed";
-import validatePhone from "../../../../../utils/validation/validatePhone";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -24,24 +25,26 @@ export default function HiddenBizDataAndBackup({ userData }) {
     const [data, setData] = useState({
         bizName: "",
         bizWhatsapp: "",
-        bizCep: "",
-        bizAddress: "",
+        bizLinkName: "",
+        // bizCep: "",
+        // bizAddress: "",
     });
     const [error, setError] = useState("");
 
-    const { bizName, bizWhatsapp, bizCep, bizAddress } = data;
+    const { bizName, bizWhatsapp, bizLinkName, bizCep, bizAddress } = data;
     const bizWhatsappValue = autoPhoneMask(bizWhatsapp);
 
     useEffect(() => {
         const select =
-            "clientAdminData.bizName clientAdminData.bizWhatsapp clientAdminData.bizCep clientAdminData.bizAddress";
+            "clientAdminData.bizName clientAdminData.bizLinkName clientAdminData.bizWhatsapp clientAdminData.bizCep clientAdminData.bizAddress";
         readUser(userData.userId, "cliente-admin", select).then((res) => {
             const cliData = res.clientAdminData;
             setData({
                 bizName: cliData.bizName,
                 bizWhatsapp: cliData.bizWhatsapp,
-                bizCep: cliData.bizCep,
-                bizAddress: cliData.bizAddress,
+                bizLinkName: cliData.bizLinkName,
+                // bizCep: cliData.bizCep,
+                // bizAddress: cliData.bizAddress,
             });
         });
     }, []);
@@ -60,29 +63,46 @@ export default function HiddenBizDataAndBackup({ userData }) {
             font: "normal 1em Poppins, sans-serif",
         },
         helperFromField: {
-            color: "grey",
+            color: "var(--mainWhite)",
+            fontWeight: "bolder",
             fontFamily: "Poppins, sans-serif",
             fontSize: isSmall ? ".8em" : ".6em",
         },
     };
 
-    const sendDataBackend = () => {
+    const sendDataBackend = async () => {
         if (!validatePhone(bizWhatsapp)) {
             showToast("Formato telefone inválido.", { type: "error" });
             return setError("phone");
         }
 
+        const validationBizLink = await getAPI({
+            method: "POST",
+            body: {
+                bizLinkName,
+                adminId: userData.userId,
+            },
+            url: validateBizLinkName(),
+        }).catch((err) => {
+            showToast(err, { type: "error" });
+            return setError("bizLinkName");
+        });
+        if (!validationBizLink) return null;
+
         const dataToSend = {
             "clientAdminData.bizName": bizName,
             "clientAdminData.bizWhatsapp": bizWhatsapp,
-            "clientAdminData.bizCep": bizCep,
-            "clientAdminData.bizAddress": bizAddress,
+            "clientAdminData.bizLinkName": bizLinkName,
+            // "clientAdminData.bizAddress": bizAddress,
+            // "clientAdminData.bizCep": bizCep,
         };
-        updateUser(userData._id, "cliente-admin", dataToSend)
+        updateUser(userData.userId, "cliente-admin", dataToSend)
             .then(() =>
                 showToast("Dados comerciais atualizados!", { type: "success" })
             )
             .catch((err) => showToast(err.response, { type: "error" }));
+
+        return null;
     };
 
     const showButtonAction = () => (
@@ -151,32 +171,50 @@ export default function HiddenBizDataAndBackup({ userData }) {
                     />
                 </div>
                 <div className="mt-4 margin-auto-95 text-normal">
-                    <p className="text-shadow">Endereço Comercial</p>
-                    <TextField
-                        InputProps={{ style: styles.fieldForm }}
-                        variant="outlined"
-                        onChange={handleChange(setData, data)}
-                        autoComplete="off"
-                        name="bizAddress"
-                        value={bizAddress}
-                        // helperText="Usado para divulgar"
-                        // FormHelperTextProps={{ style: styles.helperFromField }}
-                        type="text"
-                        fullWidth
-                    />
-                </div>
-                <div className="mt-4 margin-auto-95 text-normal">
-                    <p className="text-shadow">CEP</p>
+                    <p className="text-shadow">Nome link divulgação</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
                         autoComplete="off"
                         fullWidth
-                        name="bizCep"
-                        value={bizCep}
+                        name="bizLinkName"
+                        error={error === "bizLinkName"}
+                        value={bizLinkName && bizLinkName.toLowerCase()}
+                        className="text-shadow font-weight-bold"
+                        helperText={`fiddelize.com/${bizLinkName}`}
+                        FormHelperTextProps={{ style: styles.helperFromField }}
                     />
                 </div>
+                <section className="d-none">
+                    <div className="mt-4 margin-auto-95 text-normal">
+                        <p className="text-shadow">Endereço Comercial</p>
+                        <TextField
+                            InputProps={{ style: styles.fieldForm }}
+                            variant="outlined"
+                            onChange={handleChange(setData, data)}
+                            autoComplete="off"
+                            name="bizAddress"
+                            value={bizAddress}
+                            // helperText="Usado para divulgar"
+                            // FormHelperTextProps={{ style: styles.helperFromField }}
+                            type="text"
+                            fullWidth
+                        />
+                    </div>
+                    <div className="mt-4 margin-auto-95 text-normal">
+                        <p className="text-shadow">CEP</p>
+                        <TextField
+                            InputProps={{ style: styles.fieldForm }}
+                            variant="outlined"
+                            onChange={handleChange(setData, data)}
+                            autoComplete="off"
+                            fullWidth
+                            name="bizCep"
+                            value={bizCep}
+                        />
+                    </div>
+                </section>
                 {showButtonAction()}
             </form>
         </div>
