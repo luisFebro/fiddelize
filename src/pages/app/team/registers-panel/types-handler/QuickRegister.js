@@ -82,7 +82,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
 
     const [linkId] = useData(["linkId"]);
 
-    const { bizId, bizName, bizLinkName } = useBizData();
+    const { bizId, bizName, bizLinkName, registerBonusCoins } = useBizData();
+    const gotBonusCoins = registerBonusCoins > 0;
+
     const { userId, name: userName } = useData();
 
     const smsBalance = useCheckBalance();
@@ -319,6 +321,31 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                         </p>
                     )}
                 </main>
+                {!isNewMember && name && (
+                    <section className="my-5 animated fadeInUp">
+                        <p
+                            className={`text-center text-normal font-weight-bold ${
+                                gotBonusCoins ? "text-purple" : "text-grey"
+                            }`}
+                        >
+                            Moedas Bônus de Cadastro
+                        </p>
+                        <div className="container-center">
+                            <p
+                                className="d-table text-subtitle text-pill text-shadow"
+                                style={{
+                                    backgroundColor: gotBonusCoins
+                                        ? "var(--themeP)"
+                                        : "grey",
+                                }}
+                            >
+                                {gotBonusCoins
+                                    ? `+ ${registerBonusCoins} PTS Extras`
+                                    : "Desativado"}
+                            </p>
+                        </div>
+                    </section>
+                )}
                 {isNewMember && name && (
                     <p className="font-weight-bold mx-3 my-3 text-small text-purple">
                         <strong className="font-weight-bold text-normal text-purple">

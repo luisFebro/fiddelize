@@ -98,9 +98,14 @@ export default function HiddenBizDataAndBackup({ userData }) {
             // "clientAdminData.bizCep": bizCep,
         };
         updateUser(userData.userId, "cliente-admin", dataToSend)
-            .then(() =>
-                showToast("Dados comerciais atualizados!", { type: "success" })
-            )
+            .then(() => {
+                showToast("Dados comerciais atualizados! Reiniciando app...", {
+                    type: "success",
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            })
             .catch((err) => showToast(err.response, { type: "error" }));
 
         return null;

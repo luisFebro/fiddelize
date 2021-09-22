@@ -63,7 +63,13 @@ export default function pickCardType(cardType, options = {}) {
     };
 
     const typeList = {
-        welcome: <AsyncWelcome {...defaultProps} bizLogo={bizLogo} />,
+        welcome: (
+            <AsyncWelcome
+                {...defaultProps}
+                bizLogo={bizLogo}
+                content={content}
+            />
+        ),
         challenge: (
             <AsyncCliUserConfirmedChall
                 {...defaultProps}

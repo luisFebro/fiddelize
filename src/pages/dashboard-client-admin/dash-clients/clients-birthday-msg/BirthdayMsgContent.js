@@ -1,9 +1,9 @@
 import { useState, useEffect, Fragment } from "react";
-import TextField from "@material-ui/core/TextField";
-import { useReadUser, updateUser } from "api/frequent";
 import useData, { useBizData } from "init";
+import TextField from "@material-ui/core/TextField";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import showToast from "components/toasts";
+import { useReadUser, updateUser } from "api/frequent";
 import handleChange from "utils/form/use-state/handleChange";
 import { convertBrToDollar } from "utils/numbers/convertDotComma";
 import moneyMaskBr from "utils/validation/masks/moneyMaskBr";
@@ -82,7 +82,7 @@ export default function BirthdayMsgContent() {
             ? birthdayMsg
             : convertBrToDollar(maskedBirthdayPTS);
 
-        // LESSON: if there is semicollon before a self-called async method like below, then it will throw an Object-not-a-function error.Object-not-a-function;
+        // LESSON: if there ain´t semicollon before a self-called async method like below, then it will throw an Object-not-a-function error.Object-not-a-function;
         // So, to avoid this issue, insert a semicollon demantorily right at the end of prior command line
 
         (async () => {
@@ -237,6 +237,7 @@ export default function BirthdayMsgContent() {
 
     const showEditPTS = () => (
         <section className="my-5 text-normal text-center text-purple">
+            <p className="m-0 text-center">Quantia Moeda:</p>
             <TextField
                 placeholder="0,00"
                 InputProps={{

@@ -1,8 +1,8 @@
 import { useBizData } from "init";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ShareSocialMediaButtons from "components/buttons/ShareSocialMediaButtons";
 import QrInvitationModal from "../app/team/registers-panel/types-handler/qr-code-invitation-btn/QrInvitationModal";
 import { Link } from "react-router-dom";
-import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
-import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaButtons";
 
 export default function QuickPromote({ handleFullClose }) {
     const { bizLogo, bizLinkName, themeSColor: sColor } = useBizData();

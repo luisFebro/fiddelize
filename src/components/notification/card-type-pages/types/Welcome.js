@@ -13,8 +13,18 @@ import {
 
 export default React.memo(Welcome);
 
-function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
+function Welcome({
+    brief,
+    role,
+    mainImg,
+    bizLogo,
+    bizName,
+    userName,
+    content,
+}) {
     useCount("Welcome"); // RT =
+
+    const { registerBonusCoins } = content;
 
     const showCliAdminContent = () =>
         role === "cliente-admin" && (
@@ -128,6 +138,16 @@ function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
                     <strong>✔ E mais novidades</strong> que interessam para sua
                     interação com o app.
                 </p>
+                {registerBonusCoins && (
+                    <p>
+                        E você já começou ganhando com{" "}
+                        <strong>
+                            {registerBonusCoins} PTS de bônus por cadastro
+                        </strong>{" "}
+                        que são suas novas moedas digitais para troca de
+                        benefícios na {bizName}. Boas Compras!
+                    </p>
+                )}
                 <hr className="lazer d-none" />
             </section>
         );

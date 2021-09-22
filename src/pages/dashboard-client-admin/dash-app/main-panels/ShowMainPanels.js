@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
 import AppDesign from "../design/AppDesign";
 import MainBuyGames from "../buy-games/MainBuyGames";
+import DigitalCoins from "../digital-coins/DigitalCoins";
 
 const faStyle = {
     fontSize: "40px",
@@ -23,6 +24,12 @@ export default function ShowMainPanels() {
             name: "Jogos<br />de Compra",
             leftIcon: <FontAwesomeIcon icon="gamepad" />,
             hiddenContent: <MainBuyGames />,
+        },
+        {
+            id: 2,
+            name: "Moedas<br />Digitais",
+            leftIcon: <FontAwesomeIcon icon="coins" />,
+            hiddenContent: <DigitalCoins />,
         },
     ];
 
@@ -46,11 +53,13 @@ export default function ShowMainPanels() {
     }));
 
     return (
-        <ConfigExpansiblePanel
-            actions={actions}
-            backgroundColor="var(--themePLight)"
-            color="white"
-            needToggleButton={false}
-        />
+        <section style={{ marginBottom: 150 }}>
+            <ConfigExpansiblePanel
+                actions={actions}
+                backgroundColor="var(--themePLight)"
+                color="white"
+                needToggleButton={false}
+            />
+        </section>
     );
 }
