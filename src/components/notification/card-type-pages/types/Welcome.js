@@ -138,7 +138,7 @@ function Welcome({
                     <strong>✔ E mais novidades</strong> que interessam para sua
                     interação com o app.
                 </p>
-                {registerBonusCoins && (
+                {Boolean(Number(registerBonusCoins)) && (
                     <p>
                         E você já começou ganhando com{" "}
                         <strong>
