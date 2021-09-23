@@ -317,10 +317,7 @@ export default function DownloadApp({ match, location, history }) {
                 Tente por aqui:
             </p>
             <div className="my-3">
-                <a
-                    href="/mobile-app?abrir=1&banner=1"
-                    className="no-text-decoration"
-                >
+                <a href="/app?banner=1" className="no-text-decoration">
                     <ButtonFab
                         title="Acessar App"
                         color={

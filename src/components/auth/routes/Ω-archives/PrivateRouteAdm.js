@@ -17,7 +17,7 @@
 //         return (
 //             <Redirect
 //                 to={{
-//                     pathname: isThisApp() ? "/mobile-app" : "/",
+//                     pathname: isThisApp() ? "/app" : "/",
 //                     state: { from: props.location }
 //                 }}
 //             />

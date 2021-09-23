@@ -134,7 +134,7 @@ export default function DetectedApp({
                 Pronto! conta criada e já disponível.
             </h2>
             <div className="container-center-col mt-5">
-                <a href="/mobile-app?abrir=1" className="no-text-decoration">
+                <a href="/app" className="no-text-decoration">
                     <ButtonFab
                         title="Acessar App"
                         color={

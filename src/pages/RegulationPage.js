@@ -73,10 +73,10 @@ export default function RegulationPage({ location }) {
 
     const handlePath = () => {
         if (needAppForCliAdmin) {
-            return "/mobile-app?client-admin=1";
+            return "/app?client-admin=1";
         }
 
-        return isApp ? "/mobile-app" : "/";
+        return isApp ? "/app" : "/";
     };
 
     const showBackBtnAndTimeStamp = () => (

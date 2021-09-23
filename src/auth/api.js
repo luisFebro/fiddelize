@@ -27,7 +27,7 @@ export default async function loadInit(uify) {
             // This is making website crazily disconnect even in the homepage
             // thre is now the checkValidSession that can handle this disconnection
             // const areLoginPages =
-            //     window.location.href.indexOf("mobile-app") >= 0 ||
+            //     window.location.href.indexOf("app") >= 0 ||
             //     window.location.href.pathname === "/";
 
             // if (!areLoginPages) disconnect();

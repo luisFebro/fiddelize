@@ -14,7 +14,7 @@ export default function AsyncTestModeContent() {
     const styles = getStyles();
 
     const showClientCard = () => (
-        <Link className="no-text-decoration" to="/mobile-app?client-admin=1">
+        <Link className="no-text-decoration" to="/app?client-admin=1">
             <section className="shadow-babadoo" style={styles.rootCard}>
                 <Img
                     className="mx-5 mt-5 mb-3"

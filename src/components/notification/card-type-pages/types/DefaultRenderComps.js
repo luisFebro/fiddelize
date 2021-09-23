@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import { Link } from "react-router-dom";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
 import { setRun, useAction } from "global-data/ui";
-import useData from "init";
 import Img from "../../../Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
 import removeImgFormat from "../../../../utils/biz/removeImgFormat";
@@ -95,8 +94,8 @@ export const ShowActionBtn = ({
         if (role === "cliente")
             window.location.href =
                 loggedUserRole === "cliente-admin"
-                    ? "/mobile-app?client-admin=1"
-                    : "/mobile-app";
+                    ? "/app?client-admin=1"
+                    : "/app";
         if (role === "cliente-admin") setRun("runName", "goDash", uify);
         setLoading(false);
     };

@@ -67,7 +67,7 @@ const AsyncQrCodeScanner = Load({
 
 function Website({ location }) {
     const locationNow = location.pathname;
-    const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
+    const dontNeedLayout = !locationNow.includes("/app/preview");
 
     const { uify } = useGlobalContext();
 
@@ -132,10 +132,7 @@ function Website({ location }) {
                     exact
                     component={AsyncAppSharer}
                 />
-                <Route
-                    path="/mobile-app/preview"
-                    component={AsyncClientAppPreview}
-                />
+                <Route path="/app/preview" component={AsyncClientAppPreview} />
                 <PrivateRouteClientAdm
                     path="/:bizLinkName/cliente-admin/painel-de-controle"
                     exact

@@ -228,7 +228,7 @@ export default function useAPIList({
     }, [trigger, reload, skip, reachedChunksLimit, updateFirstChunkOnly]);
 
     const handleReloadBtn = () => {
-        if (isOffline) window.location.href = "/mobile-app";
+        if (isOffline) window.location.href = "/app";
         setReload((reload) => !reload);
     };
 

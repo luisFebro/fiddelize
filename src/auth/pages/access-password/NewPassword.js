@@ -12,7 +12,7 @@ import RedirectLink from "components/RedirectLink";
 import getColor from "styles/txt";
 
 const isApp = isThisApp();
-const whichPath = isApp ? "/mobile-app" : "/";
+const whichPath = isApp ? "/app" : "/";
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -72,9 +72,7 @@ export default function NewPassword({ location, match, history }) {
                     type: "error",
                 });
                 setTimeout(() => {
-                    const destiny = isApp
-                        ? "/mobile-app"
-                        : "/acesso/verificacao";
+                    const destiny = isApp ? "/app" : "/acesso/verificacao";
                     history.push(destiny);
                 }, 3000);
             }

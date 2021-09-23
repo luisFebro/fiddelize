@@ -38,9 +38,7 @@ export default function CliUserConfirmedChall({
         setLoading(true);
 
         window.location.href =
-            role === "cliente-admin"
-                ? "/mobile-app?client-admin=1"
-                : "/mobile-app";
+            role === "cliente-admin" ? "/app?client-admin=1" : "/app";
 
         setLoading(false);
     };

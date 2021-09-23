@@ -7,7 +7,7 @@ export default async function checkValidSession() {
         // console.log(window.location.href);
         const isLoggedIn = await getVar("success", "user");
         const arePublicPages =
-            window.location.href.indexOf("mobile-app") >= 0 ||
+            window.location.href.indexOf("app") >= 0 ||
             window.location.href.pathname === "/" ||
             window.location.href.indexOf("senha-de-acesso") >= 0 ||
             window.location.href.pathname === "/acesso/verificacao";

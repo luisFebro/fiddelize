@@ -10,10 +10,10 @@ const handleDestiny = ({ role, bizLinkName }) => {
     if (role === "cliente-membro") return "/t/app/equipe";
     if (role === "cliente-admin")
         return isApp
-            ? "/mobile-app"
+            ? "/app"
             : `${bizLinkName}/cliente-admin/painel-de-controle?abrir=1`;
 
-    return "/mobile-app";
+    return "/app";
 };
 
 const handleRedirect = ({ role, destiny, history }) => {

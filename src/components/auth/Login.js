@@ -234,8 +234,8 @@ async function removeInstantAppAndRegisterData() {
 }
 
 async function handleCliUserPath(history) {
-    if (isApp) return history.push("/mobile-app");
-    window.location.href = "/mobile-app?abrir=1";
+    if (isApp) return history.push("/app");
+    window.location.href = "/app";
 
     return false;
 }

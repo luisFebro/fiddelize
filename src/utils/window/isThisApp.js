@@ -1,43 +1,47 @@
-// use mobile-app?abrir=1 to test mobile version in the dev desktop
+import { CLIENT_URL } from "config/clientUrl";
+// use fiddelize.com.br/app to test mobile version in the dev desktop
 // to switch back to website version go to home.
 
 export default function isThisApp() {
-    const isInWebAppiOS = window.navigator.userAgent.toLowerCase();
-    // console.log("isInWebAppiOS", isInWebAppiOS) = mozilla/5.0 (windows nt 6.1) applewebkit/537.36 (khtml, like gecko) chrome/79.0.3945.130 safari/537.36
-    const resIos = /iphone|ipad|ipod/.test(isInWebAppiOS);
+    // const isInWebAppiOS = window.navigator.userAgent.toLowerCase();
+    // // console.log("isInWebAppiOS", isInWebAppiOS) = mozilla/5.0 (windows nt 6.1) applewebkit/537.36 (khtml, like gecko) chrome/79.0.3945.130 safari/537.36
+    // const resIos = /iphone|ipad|ipod/.test(isInWebAppiOS);
 
-    const isAppFromFirefox = window.fullScreen;
-    const isAppFromSafariOrChrome = window.navigator.standalone;
-    const isAppFromChrome = window.matchMedia("(display-mode: standalone)")
-        .matches;
-    const isAndroidStockBrowserOrElse = checkIfStockBrowser(); // samsung
+    // const isAppFromFirefox = window.fullScreen;
+    // const isAppFromSafariOrChrome = window.navigator.standalone;
+    // const isAppFromChrome = window.matchMedia("(display-mode: standalone)")
+    //     .matches;
+    // const isAndroidStockBrowserOrElse = checkEnforceMobile(); // samsung
 
-    const checkBrowsers =
-        resIos ||
-        isAppFromChrome ||
-        isAppFromFirefox ||
-        isAppFromSafariOrChrome ||
-        isAndroidStockBrowserOrElse;
+    const checkBrowsers = checkEnforceMobile();
+    // resIos ||
+    // isAppFromChrome ||
+    // isAppFromFirefox ||
+    // isAppFromSafariOrChrome ||
+    // isAndroidStockBrowserOrElse;
 
     return checkBrowsers;
 }
 
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser
-function checkIfStockBrowser() {
+function checkEnforceMobile() {
     if (!(window.sessionStorage || false)) return false; // Session storage not supported
-    // LESSON: mobile-app?abrir=1 only works on production with localHostWebsiteMode and localHostAppMode as false.
-    const condition =
-        window.location.href.indexOf("?abrir=1") >= 0 ||
-        window.location.href.indexOf("?abrir=sim") >= 0;
 
-    if (condition) {
-        window.sessionStorage.setItem("isPWA", "1");
-    }
+    const mobileUrl = `${CLIENT_URL}/app`;
+    // window.location.href takes the whole url with params like site.com/app/ana
+    const isMobileApp =
+        window.location.href.includes(mobileUrl) ||
+        Boolean(window.location.href.indexOf("abrir=1")); // force website urls into mobile mode like /cliente-admin/painel-de-controle?abrir=1
+    if (isMobileApp) window.sessionStorage.setItem("isPWA", "1");
 
-    const isHomeSite = window.location.pathname === "/";
-    if (isHomeSite) {
-        window.sessionStorage.removeItem("isPWA");
-    }
+    // home now redirect to fiddelize.com but properly removes the isPWA mode
+    const isHomeUrl =
+        window.location.href === CLIENT_URL ||
+        window.location.href === `${CLIENT_URL}/`;
+    const isDownloadPage = window.location.href.includes("/baixe-app");
+
+    const isNotApp = isHomeUrl || isDownloadPage;
+    if (isNotApp) window.sessionStorage.removeItem("isPWA");
 
     return window.sessionStorage.getItem("isPWA") === "1";
 }

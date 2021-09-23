@@ -23,7 +23,7 @@ export const AsyncBlocked = Load({
 });
 
 const isApp = isThisApp();
-const whichPath = isApp ? "/mobile-app" : "/";
+const whichPath = isApp ? "/app" : "/";
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({

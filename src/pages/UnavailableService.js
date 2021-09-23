@@ -2,8 +2,7 @@ import ButtonMulti from "../components/buttons/material-ui/ButtonMulti";
 import isThisApp from "../utils/window/isThisApp";
 
 const isApp = isThisApp();
-const handleHomeRedirect = () =>
-    (window.location.href = isApp ? "/mobile-app" : "/");
+const handleHomeRedirect = () => (window.location.href = isApp ? "/app" : "/");
 
 export default function UnavailableService() {
     return (

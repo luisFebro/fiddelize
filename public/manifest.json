@@ -2,10 +2,10 @@
     "name": "Fiddelize",
     "short_name": "Fiddelize",
     "description": "Conquiste clientes no próximo nível",
-    "start_url": "/mobile-app?abrir=1",
+    "start_url": "/app",
     "display": "standalone",
     "scope": ".",
-    "categories": ["business", "relationship", "customers"],
+    "categories": ["moeda digital", "clube de compras", "pontos de compra", "jogos de compra", "marketing de relacionamento"],
     "theme_color": "#000000",
     "background_color": "#000000",
     "icons": [

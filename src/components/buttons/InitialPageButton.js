@@ -7,7 +7,7 @@ export default function InitialPageButton() {
     return (
         <div className="my-5">
             <Link
-                to={isThisApp() ? "/mobile-app" : "/"}
+                to={isThisApp() ? "/app" : "/"}
                 className="text-decoration-none"
             >
                 <ButtonMulti

@@ -12,7 +12,7 @@ function HomeButton({ location }) {
 
     const handleLink = () => {
         if (isThisApp()) {
-            return isClientAdmin ? "/mobile-app?client-admin=1" : "/mobile-app";
+            return isClientAdmin ? "/app?client-admin=1" : "/app";
         }
         return "/acesso/verificacao";
     };

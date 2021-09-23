@@ -28,7 +28,7 @@ export default function PrivateRouteClientAdm({
     const isAuthUser = useAuth();
     const [role, loading] = useData(["role"]);
 
-    const whichPath = isApp ? "/mobile-app" : "/";
+    const whichPath = isApp ? "/app" : "/";
     const alertAndRedirect = (props) => (
         // THIS SHOWS EVEN IF THE USER IS ADMIN > showToast(dispatch, 'Oops! Você não tem acesso a essa sessão', 'error', 5000);
         <Redirect

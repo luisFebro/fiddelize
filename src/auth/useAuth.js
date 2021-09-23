@@ -22,7 +22,7 @@ export default function useAuth(options = {}) {
         if (!isAuthUser && history) {
             (async () => {
                 await disconnect({ needRedirect: false });
-                history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
+                history.push(isApp ? "/app" : "/acesso/verificacao");
             })();
         }
 

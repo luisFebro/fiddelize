@@ -212,7 +212,7 @@ function VirtualCard({ history }) {
     );
 
     const handleReturnBtn = () => {
-        const path = isCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app";
+        const path = isCliAdmin ? "/app?client-admin=1" : "/app";
         history.push(path);
     };
 

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { useBizData } from "init";
-import Img from "../../../../../../../../components/Img";
-import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import isThisApp from "../../../../../../../../utils/window/isThisApp";
-import useScrollUp from "../../../../../../../../hooks/scroll/useScrollUp";
+import Img from "components/Img";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import isThisApp from "utils/window/isThisApp";
+import useScrollUp from "hooks/scroll/useScrollUp";
 
 const isApp = isThisApp();
 
@@ -24,7 +24,7 @@ function SuccessFulCcPay({ history, setMainData }) {
 
     const handleFinish = () => {
         const path = isApp
-            ? "/mobile-app"
+            ? "/app"
             : `/${bizLinkName}/cliente-admin/painel-de-controle`;
         history.push(path);
     };

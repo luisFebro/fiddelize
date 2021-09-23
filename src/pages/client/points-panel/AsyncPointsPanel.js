@@ -76,7 +76,7 @@ function AsyncPointsPanel({ history, location }) {
         currPoints: currPointsNow,
     });
 
-    const path = isApp ? "/mobile-app" : "/acesso/verificacao";
+    const path = isApp ? "/app" : "/acesso/verificacao";
     const isCliAdminApp = location.search.includes("client-admin=1");
     const whichRole = isCliAdminApp ? "cliente-admin" : "cliente";
     // END MAIN VARIABLES

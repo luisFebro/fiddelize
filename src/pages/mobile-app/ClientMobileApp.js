@@ -131,7 +131,7 @@ function ClientMobileApp({ location, history }) {
     // # query
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
-    const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
+    const isUrlAdmin = searchQuery.indexOf("admin=1") !== -1;
     const needPWA = searchQuery.includes("banner=1"); // used for trying to show the download banner again if the first attempt has failed
     // # roles
     const isStaff = role === "cliente-membro" || role === "cliente-admin";

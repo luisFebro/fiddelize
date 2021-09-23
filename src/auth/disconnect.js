@@ -35,8 +35,8 @@ export default async function disconnect(options = {}) {
     if (role) setItems("currUser", { role });
     // end
 
-    if (history) return isApp ? history.push("/mobile-app") : history.push("/");
-    const destiny = isApp ? "/mobile-app" : "/acesso/verificacao";
+    if (history) return isApp ? history.push("/app") : history.push("/");
+    const destiny = isApp ? "/app" : "/acesso/verificacao";
 
     window.location.href = destiny;
     return null;

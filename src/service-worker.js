@@ -189,7 +189,7 @@ self.addEventListener("notificationclick", (event) => {
 
     const isNormalNotifClick = !clickedActionBtn;
     if (isNormalNotifClick) {
-        const promise = focusOrOpenWindow("/mobile-app?abrir=1");
+        const promise = focusOrOpenWindow("/app");
         event.waitUntil(promise);
         return;
     }
@@ -422,7 +422,7 @@ only possible for pages on your origin. This is because we can only see what pag
 https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns
  */
 async function focusOrOpenWindow(url) {
-    const urlToOpen = new URL(url, self.location.origin).href; // http://localhost:3000/mobile-app?abrir=1
+    const urlToOpen = new URL(url, self.location.origin).href; // http://localhost:3000/app
 
     const windowClients = await self.clients.matchAll({
         type: "window",

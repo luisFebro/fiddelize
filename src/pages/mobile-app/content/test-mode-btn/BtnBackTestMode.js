@@ -25,7 +25,7 @@ function BtnBackTestMode({
     const handleChangeApp = () => {
         const appPath = isCliUser
             ? "/t/app/equipe?modo-prev=1"
-            : "/mobile-app?client-admin=1";
+            : "/app?client-admin=1";
         history.push(appPath);
     };
 

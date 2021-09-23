@@ -18,7 +18,7 @@ const handleCliAdmin = ({ uify, history, bizLinkName }) => {
 };
 
 const handleCliUser = ({ history }) => {
-    history.push("/mobile-app");
+    history.push("/app");
 };
 
 export default async function handleOpenApp({

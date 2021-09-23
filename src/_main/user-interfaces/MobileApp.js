@@ -9,7 +9,6 @@ import ClientMobileApp from "pages/mobile-app/ClientMobileApp";
 import RegulationPage from "pages/RegulationPage";
 import Default from "pages/Default";
 import UnavailableService from "pages/UnavailableService";
-import AsyncDownloadApp from "pages/download-app/AsyncDownloadApp";
 import {
     AsyncLoginPage,
     // cli-admin
@@ -53,19 +52,6 @@ const AsyncNavBar = Load({
         ),
 });
 
-// some phones browsers are detecting as it is a mobile
-// This is the msg to be displayed for desktop users when popping up the
-// new screen right after the download.
-// const InstallMsg = () => (
-//     <div className="text-center mt-5">
-//         <p className="text-white text-title">Seu App está sendo instalado!</p>
-//         <p className="text-white text-subtitle mx-2">
-//             Feche essa janela e abra o app direto da sua área de desktop assim
-//             que aparecer a mensagem de confirmação.
-//         </p>
-//     </div>
-// );
-
 function Mobile({ location }) {
     const locationNow = location.pathname;
 
@@ -81,7 +67,7 @@ function Mobile({ location }) {
 
     return (
         <Fragment>
-            {!["/mobile-app", "/acesso/verificacao"].includes(locationNow) ? (
+            {!["/app", "/acesso/verificacao"].includes(locationNow) ? (
                 <AsyncNavBar />
             ) : null}
             <Switch>
@@ -90,7 +76,7 @@ function Mobile({ location }) {
                     exact
                     component={AsyncLoginPage}
                 />
-                <Route path="/mobile-app" exact component={ClientMobileApp} />
+                <Route path="/app" exact component={ClientMobileApp} />
                 <Route
                     path="/cliente/pontos-de-compra"
                     exact
@@ -106,12 +92,6 @@ function Mobile({ location }) {
                     path="/:bizLinkName/compartilhar-app"
                     exact
                     component={AsyncAppSharer}
-                />
-                <Route path="/baixe-app" exact component={AsyncDownloadApp} />
-                <Route
-                    path="/baixe-app/:userName"
-                    exact
-                    component={AsyncDownloadApp}
                 />
                 <Route path="/planos" exact component={AsyncPlansPage} />
                 <PrivateRouteClientAdm
@@ -224,4 +204,25 @@ export default withRouter(Mobile);
 import ChangePassword from 'pages/client/ChangePassword';
 import InsertNewPassword from 'pages/client/InsertNewPassword';
 import ConfirmAccount from 'pages/client/ConfirmAccount';
+
+ // This is the msg to be displayed for desktop users when popping up the
+ // new screen right after the download.
+ // some phones browsers are detecting as it is a mobile
+ // baixe-app is now demantory from website interface and not mixing up with mobile version.
+ const InstallMsg = () => (
+     <div className="text-center mt-5">
+         <p className="text-white text-title">Seu App está sendo instalado!</p>
+         <p className="text-white text-subtitle mx-2">
+             Feche essa janela e abra o app direto da sua área de desktop assim
+             que aparecer a mensagem de confirmação.
+         </p>
+     </div>
+ );
+
+<Route path="/baixe-app" exact component={InstallMsg} />
+<Route
+    path="/baixe-app/:userName"
+    exact
+    component={InstallMsg}
+/>
  */

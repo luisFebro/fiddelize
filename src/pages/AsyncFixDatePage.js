@@ -3,8 +3,7 @@ import isThisApp from "../utils/window/isThisApp";
 import useBackColor from "../hooks/useBackColor";
 
 const isApp = isThisApp();
-const handleRedirect = () =>
-    (window.location.href = isApp ? "/mobile-app" : "/");
+const handleRedirect = () => (window.location.href = isApp ? "/app" : "/");
 
 export default function AsyncFixDatePage() {
     useBackColor("var(--mainWhite)");

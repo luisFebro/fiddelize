@@ -28,7 +28,7 @@ function AppPreview({
     // prefer using localforage to load data from games directly in their components. This will be for targetGame only for now.
     const iframeUrl = React.useCallback(
         () =>
-            `/mobile-app/preview?game=${game}&prizeDesc=${prizeDesc}&runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
+            `/app/preview?game=${game}&prizeDesc=${prizeDesc}&runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
         [
             runName,
             clientName,

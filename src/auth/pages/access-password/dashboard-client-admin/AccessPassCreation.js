@@ -109,7 +109,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                             })();
                         } else {
                             showToast("Tudo pronto!", { dur: 4000 });
-                            history.push("/mobile-app");
+                            history.push("/app");
                         }
                     }, 2900);
                 }
