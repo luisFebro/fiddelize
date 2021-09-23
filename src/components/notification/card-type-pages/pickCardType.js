@@ -1,4 +1,5 @@
 import LoadableVisible from "../../code-splitting/LoadableVisible";
+import { useBizData } from "init";
 // CARD TYPES
 const AsyncCliUserConfirmedChall = LoadableVisible({
     loader: () =>
@@ -47,8 +48,8 @@ export default function pickCardType(cardType, options = {}) {
         brief,
         circularImg: mainImg,
         bizLogo,
-        bizName,
         userName,
+        bizName,
         senderId,
         updatedBy,
         handleFullClose,

@@ -1,5 +1,6 @@
 import React from "react";
-import useCount from "../../../../hooks/useCount";
+import extractStrData from "utils/string/extractStrData";
+// import useCount from "../../../../hooks/useCount";
 import {
     textStyle,
     ShowTitle,
@@ -22,9 +23,9 @@ function Welcome({
     userName,
     content,
 }) {
-    useCount("Welcome"); // RT =
+    // useCount("Welcome"); // RT =
 
-    const { registerBonusCoins } = content;
+    const { registerBonusCoins } = extractStrData(content);
 
     const showCliAdminContent = () =>
         role === "cliente-admin" && (
@@ -142,10 +143,10 @@ function Welcome({
                     <p>
                         E você já começou ganhando com{" "}
                         <strong>
-                            {registerBonusCoins} PTS de bônus por cadastro
+                            {registerBonusCoins} PTS bônus de cadastro
                         </strong>{" "}
                         que são suas novas moedas digitais para troca de
-                        benefícios na {bizName}. Boas Compras!
+                        benefícios. Boas Compras!
                     </p>
                 )}
                 <hr className="lazer d-none" />

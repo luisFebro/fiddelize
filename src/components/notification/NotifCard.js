@@ -104,6 +104,7 @@ function NotifCard(props) {
         role,
         brief,
         circularImg,
+        bizName,
     };
 
     const showActionBtn = () => <CardActionBtn {...ctaProps} />;
