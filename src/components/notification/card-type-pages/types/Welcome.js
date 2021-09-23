@@ -124,16 +124,9 @@ function Welcome({
                     <strong>{userName},</strong> você receberá novidades como:
                 </h2>
                 <p>
-                    <strong>✔ Confirmação de desafio concluído.</strong> Quando
-                    você atingir a meta de um desafio e um{" "}
-                    <strong>
-                        colaborador da {bizName} confirmar seu desafio
-                    </strong>
-                    , você é avisado.
-                </p>
-                <p>
-                    <strong>✔ Datas importantes.</strong> Por exemplo, o prazo
-                    para você resgatar seu prêmio na {bizName}.
+                    <strong>✔ Confirmação de jogo de compra concluído.</strong>{" "}
+                    Quando você atingir a meta, você é avisado sobre o benefício
+                    e prazo de resgate se houver.
                 </p>
                 <p>
                     <strong>✔ E mais novidades</strong> que interessam para sua
@@ -146,7 +139,8 @@ function Welcome({
                             {registerBonusCoins} PTS bônus de cadastro
                         </strong>{" "}
                         que são suas novas moedas digitais para troca de
-                        benefícios. Boas Compras!
+                        benefícios {bizName ? `na ${bizName}` : ""}. Boas
+                        Compras!
                     </p>
                 )}
                 <hr className="lazer d-none" />
