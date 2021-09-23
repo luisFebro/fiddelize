@@ -158,6 +158,7 @@ export default function DownloadApp({ match, location, history }) {
         memberName,
         primaryAgent,
         linkCode,
+        bizName,
     };
 
     useDataStorage({

@@ -119,6 +119,8 @@ function ClientMobileApp({ location, history }) {
         "needAppRegister",
     ]);
 
+    const [bizName] = useData(["bizName"], "user");
+
     const {
         bizId,
         bizLinkName,
@@ -366,7 +368,7 @@ function ClientMobileApp({ location, history }) {
                 </section>
             )}
 
-            {needPWA && <AsyncDownloadAppGuide />}
+            {needPWA && <AsyncDownloadAppGuide bizName={bizName} />}
 
             {isAuthUser && (
                 <section>

@@ -5,6 +5,7 @@ export default function handleRoleStorage({
     encryptedPTS,
     whichRole,
     bizId,
+    bizName,
     memberId,
     memberJob,
     memberName,
@@ -24,6 +25,7 @@ export default function handleRoleStorage({
 
     if (isCliUser) {
         userPayload = {
+            bizName, // for download app guide
             role: whichRole,
             lastRegisterBizId: bizId,
             memberId,
