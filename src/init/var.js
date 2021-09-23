@@ -85,7 +85,7 @@ export const setVars = async (dataObj, options = {}) => {
     // https://stackoverflow.com/questions/43807515/eslint-doesnt-allow-for-in
     Object.keys(dataObj).forEach((key) => {
         const value = dataObj[key];
-        if (!value) {
+        if (value === undefined || value === null) {
             promises.push(null);
             return;
         }

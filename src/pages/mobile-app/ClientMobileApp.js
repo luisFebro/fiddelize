@@ -12,12 +12,13 @@ import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
+import { useVar } from "init/var";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
 import AsyncVersion from "../../_main/user-interfaces/version/AsyncVersion";
 // import ClientUserAppContent from "./content/ClientUserAppContent";
-//
+
 const AsyncGatewayAndCTAs = Load({
     loading: false,
     loader: () =>
@@ -47,6 +48,14 @@ const AsyncPWA = Load({
     loader: () =>
         import(
             "../../components/pwa-installer/PwaInstaller" /* webpackChunkName: "pwa-comp-lazy" */
+        ),
+});
+
+const AsyncDownloadAppGuide = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "./DownloadAppGuide" /* webpackChunkName: "download-app-guide-comp-lazy" */
         ),
 });
 
@@ -81,6 +90,9 @@ function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
     useScrollUp();
+
+    // used for trying to show the download banner again if the first attempt in the download page has failed
+    const needPWA = useVar("needPWA", { store: "user", dots: false });
 
     const [
         role,
@@ -132,7 +144,6 @@ function ClientMobileApp({ location, history }) {
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
     const isUrlAdmin = searchQuery.indexOf("admin=1") !== -1;
-    const needPWA = searchQuery.includes("banner=1"); // used for trying to show the download banner again if the first attempt has failed
     // # roles
     const isStaff = role === "cliente-membro" || role === "cliente-admin";
     const isBizTeam = role === "nucleo-equipe";
@@ -238,7 +249,7 @@ function ClientMobileApp({ location, history }) {
                 width={200}
                 height={300}
                 comp={
-                    <div className="position-relative" style={{ top: -120 }}>
+                    <div className="position-relative" style={{ top: -80 }}>
                         {isCliUser && (
                             <AsyncRegisterCliUser
                                 needAlreadyRegisterBtn
@@ -355,6 +366,8 @@ function ClientMobileApp({ location, history }) {
                 </section>
             )}
 
+            {needPWA && <AsyncDownloadAppGuide />}
+
             {isAuthUser && (
                 <section>
                     {isCliUser && (
@@ -394,7 +407,7 @@ function ClientMobileApp({ location, history }) {
             {!isAuthUser && versionReady && <AsyncVersion />}
             {needPWA && (
                 <AsyncPWA
-                    title="Baixe aqui nosso app"
+                    title="Baixe aqui o app e tenha acesso rápido aos seus pontos"
                     icon="/img/official-logo-white.png"
                     alwaysOn
                 />

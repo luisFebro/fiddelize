@@ -1,7 +1,7 @@
 import React from "react";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import extractStrData from "../../../../utils/string/extractStrData";
-// import useCount from "../../../../hooks/useCount";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import extractStrData from "utils/string/extractStrData";
+// import useCount from "hooks/useCount";
 import {
     // textStyle,
     ShowTitle,

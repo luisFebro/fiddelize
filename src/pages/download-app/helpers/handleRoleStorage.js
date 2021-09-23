@@ -53,9 +53,9 @@ export default function handleRoleStorage({
     }
 
     (async () => {
-        await setVars(userPayload, "user");
         await setVars(
             {
+                ...userPayload,
                 rememberAccess: false,
                 success: false,
                 verifPass: false,

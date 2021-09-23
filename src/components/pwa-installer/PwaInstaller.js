@@ -2,10 +2,10 @@ import "./style.css";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
-import isThisApp from "../../utils/window/isThisApp";
+import isThisApp from "utils/window/isThisApp";
+import useAnimateElem from "hooks/scroll/useAnimateElem";
+import showToast from "components/toasts";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
-import useAnimateElem from "../../hooks/scroll/useAnimateElem";
-import showToast from "../../components/toasts";
 
 const isApp = isThisApp();
 
@@ -52,7 +52,7 @@ export default function PwaInstaller({
         displayBannerOnDev || alwaysOn || (run && bannerVisible && !isApp);
 
     useEffect(() => {
-        if (bannerVisible) {
+        if (bannerVisible && setData) {
             setData((prev) => ({
                 ...prev,
                 downloadAvailable: true,
@@ -70,10 +70,11 @@ export default function PwaInstaller({
             deferredPrompt = e;
             setBannerVisible(true);
 
-            setData((prev) => ({
-                ...prev,
-                beforeinstallprompt: `e:${JSON.stringify(e)}`,
-            }));
+            if (setData)
+                setData((prev) => ({
+                    ...prev,
+                    beforeinstallprompt: `e:${JSON.stringify(e)}`,
+                }));
         });
     }, []);
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, Fragment } from "react";
 import { setItems } from "init/lStorage";
+import { setVar } from "init/var";
 import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import PwaInstaller from "components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "config/clientUrl";
@@ -12,6 +13,7 @@ import getColor from "styles/txt";
 import { Load } from "components/code-splitting/LoadableComp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import BackButton from "components/buttons/BackButton";
+import runLinkTagOnClick from "utils/tags/runLinkTagOnClick";
 import getQueries from "./helpers/getQueries";
 import handleRoleStorage from "./helpers/handleRoleStorage";
 import useAllowedLink from "./hooks/useAllowedLink";
@@ -25,12 +27,6 @@ export const AsyncDetectedApp = Load({
         ),
 });
 
-export const AsyncNotInstalledInstru = Load({
-    loader: () =>
-        import(
-            "./NotInstalledInstru" /* webpackChunkName: "not-installed-instru-comp-lazy" */
-        ),
-});
 // CONTENTS
 export const AsyncBizTeamText = Load({
     loader: () =>
@@ -87,7 +83,6 @@ export default function DownloadApp({ match, location, history }) {
         run: false,
         downloadAvailable: false, // LESSON: false is default
         analysis: true,
-        showNotInstalledInstru: false,
         // for test only
         testMode: false,
         appinstalled: "none",
@@ -99,7 +94,6 @@ export default function DownloadApp({ match, location, history }) {
         run,
         downloadAvailable,
         analysis,
-        showNotInstalledInstru,
         testMode,
         appinstalled,
         relatedInstalledApps,
@@ -300,70 +294,56 @@ export default function DownloadApp({ match, location, history }) {
             return <AsyncBizTeamText {...props} primaryAgent={primaryAgent} />;
     };
 
-    const handleNotInstalled = () => {
-        setData({
-            ...data,
-            showNotInstalledInstru: true,
-        });
-    };
-
-    const showTroubleShooting = () => (
-        <section className="container-center-col" style={{ marginBottom: 150 }}>
-            <h2 className="text-subtitle text-center text-white">
-                Soluções comuns para baixar app
-            </h2>
-            <p>
-                Se a placa/banner para baixar o app não apareceu nesta página.
-                Tente por aqui:
-            </p>
+    const showWebModeBtn = () => (
+        <section
+            className="mx-3 web-mode-download-btn container-center-col"
+            style={{ marginBottom: 150 }}
+        >
             <div className="my-3">
-                <a href="/app?banner=1" className="no-text-decoration">
-                    <ButtonFab
-                        title="Acessar App"
-                        color={
-                            txtPColor && txtPColor.includes("text-white")
-                                ? "#fff"
-                                : "#000"
-                        }
-                        backgroundColor={`var(--themeSDark--${
-                            pColor || "default"
-                        })`}
-                        onClick={null}
-                        position="relative"
-                        variant="extended"
-                        size="medium"
-                        needBtnShadow
-                        shadowColor="white"
-                    />
-                </a>
+                <img
+                    className="shadow-babadoo"
+                    height="100%"
+                    width={250}
+                    src="/img/demos/pwa/download-board.png"
+                    alt="placa para baixar app web"
+                />
             </div>
-            <Fragment>
-                <p className="text-center my-3">ou</p>
-                <p className="mb-3">
-                    O app web ainda não apareceu na sua tela inicial?
-                </p>
-                {!showNotInstalledInstru ? (
-                    <ButtonFab
-                        title="Ver Instruções"
-                        color={
-                            txtPColor && txtPColor.includes("text-white")
-                                ? "#fff"
-                                : "#000"
-                        }
-                        backgroundColor={`var(--themeSDark--${
-                            pColor || "default"
-                        })`}
-                        onClick={handleNotInstalled}
-                        position="relative"
-                        variant="extended"
-                        size="medium"
-                        needBtnShadow
-                        shadowColor="white"
-                    />
-                ) : (
-                    <AsyncNotInstalledInstru />
-                )}
-            </Fragment>
+            <p className="text-purple mx-3 my-4" style={{ textShadow: "none" }}>
+                A placa para baixar o app <strong>não apareceu</strong> na sua
+                tela ou precisa de <strong>ajuda</strong>?
+            </p>
+            <div className="mb-3">
+                <ButtonFab
+                    title="Tente modo web"
+                    color={
+                        txtPColor && txtPColor.includes("text-white")
+                            ? "#fff"
+                            : "#000"
+                    }
+                    backgroundColor={`var(--themeSDark--${
+                        pColor || "default"
+                    })`}
+                    onClick={() => {
+                        setVar({ needPWA: true }, "user").then(() => {
+                            runLinkTagOnClick("/app", { target: "_self" });
+                        });
+                    }}
+                    position="relative"
+                    variant="extended"
+                    width="100%"
+                    size="large"
+                    needBtnShadow
+                    shadowColor="white"
+                />
+            </div>
+            <style jsx>
+                {`
+                    .web-mode-download-btn {
+                        background-color: var(--mainWhite);
+                        border-radius: 15px;
+                    }
+                `}
+            </style>
         </section>
     );
 
@@ -385,9 +365,9 @@ export default function DownloadApp({ match, location, history }) {
                 errorMsg()
             ) : (
                 <Fragment>
-                    <section className={`mx-3 text-normal ${txtColor}`}>
+                    <section className={`text-normal ${txtColor}`}>
                         {handleAppTypeText()}
-                        {downloadAvailable && showTroubleShooting()}
+                        {downloadAvailable && showWebModeBtn()}
                         {!downloadAvailable && showAlreadyDownloadedApp()}
                     </section>
                     <PwaInstaller

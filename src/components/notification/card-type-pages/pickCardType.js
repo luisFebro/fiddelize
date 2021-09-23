@@ -1,5 +1,4 @@
 import LoadableVisible from "../../code-splitting/LoadableVisible";
-import { useBizData } from "init";
 // CARD TYPES
 const AsyncCliUserConfirmedChall = LoadableVisible({
     loader: () =>

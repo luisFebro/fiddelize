@@ -79,11 +79,9 @@ function Login({
                         size="small"
                         title="aqui"
                         onClick={handleLoginAndRegister}
-                        backgroundColor={
-                            `var(--themeSDark--${isBizTeam}`
-                                ? "default"
-                                : `${themeSColor})`
-                        }
+                        backgroundColor={`var(--themeSDark--${
+                            isBizTeam ? "default" : `${themeSColor}`
+                        })`}
                     />
                 </div>
             </p>
