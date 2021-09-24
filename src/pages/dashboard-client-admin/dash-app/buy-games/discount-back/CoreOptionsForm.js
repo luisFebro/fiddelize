@@ -170,9 +170,6 @@ export default function CoreOptionsForm({
                         <br />
                         <br />
                         Seu cliente recebe sempre o mesmo valor de vale desconto. Se as compras acumuladas excederem a meta de resgate, o restante fica para a próxima meta de resgate.
-                        <br />
-                        <br />
-                        No app dos seus clientes, o valor de PTS acumulado é convertido automaticamente no valor acumulado do vale desconto para assim o cliente acompanhar seu progresso até alcançar 100% do valor.
                     `}
                     mode="tooltip"
                     animated={false}

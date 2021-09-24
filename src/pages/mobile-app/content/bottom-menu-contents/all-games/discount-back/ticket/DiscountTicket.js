@@ -13,6 +13,7 @@ export default function DiscountTicket({
     didBeatGame = false,
     perc,
     ticketAmount,
+    targetPoints,
 }) {
     const [openCard, setOpenCard] = useState(false);
 
@@ -101,7 +102,8 @@ export default function DiscountTicket({
                 <LocalMallTwoToneIcon className="mr-2" />
                 Amig{sexLetter || "o"}, acumule {perc}%
                 <br />
-                de desconto a cada nova compra
+                de desconto a cada nova compra e resgate seu vale ao atingir a
+                meta de {targetPoints} PTS. Boas Compras!
             </div>
             <style jsx>
                 {`

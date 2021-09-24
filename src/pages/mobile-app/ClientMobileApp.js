@@ -368,7 +368,9 @@ function ClientMobileApp({ location, history }) {
                 </section>
             )}
 
-            {needPWA && <AsyncDownloadAppGuide bizName={bizName} />}
+            {needPWA && conditionRegister && (
+                <AsyncDownloadAppGuide bizName={bizName} />
+            )}
 
             {isAuthUser && (
                 <section>
@@ -409,7 +411,7 @@ function ClientMobileApp({ location, history }) {
             {!isAuthUser && versionReady && <AsyncVersion />}
             {needPWA && (
                 <AsyncPWA
-                    title="Baixe aqui o app e tenha acesso rápido aos seus pontos"
+                    title="Baixe aqui o seu app"
                     icon="/img/official-logo-white.png"
                     alwaysOn
                 />

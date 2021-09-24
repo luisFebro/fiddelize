@@ -26,9 +26,6 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
     const didBeatGame = targetPoints !== "..." && currPoints >= targetPoints;
     const ticketAmount =
         targetPoints !== "..." ? getAccuMoney(targetPoints, perc) : 0;
-    const accuMoney = didBeatGame
-        ? ticketAmount
-        : getAccuMoney(currPoints, perc);
 
     const showTicket = () => (
         <Fragment>
@@ -38,6 +35,7 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
                 você ganha:
             </section>
             <AsyncDiscountTicket
+                targetPoints={targetPoints}
                 ticketAmount={ticketAmount}
                 didBeatGame={didBeatGame}
                 perc={perc}
@@ -50,7 +48,6 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
             {didUserScroll && showTicket()}
             <CartRace
                 className="mt-5 animated fadeInUp faster"
-                accuMoney={accuMoney}
                 targetPoints={targetPoints}
                 perc={perc}
                 currPoints={currPoints}
@@ -101,3 +98,11 @@ function getAccuMoney(amount, perc) {
     return (perc / 100) * amount;
 }
 // END HELPERS
+
+/*
+
+const accuMoney = didBeatGame
+    ? ticketAmount
+    : getAccuMoney(currPoints, perc);
+
+ */

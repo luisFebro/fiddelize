@@ -4,14 +4,13 @@ import useData, { useBizData } from "init";
 import parse from "html-react-parser";
 import convertToReal from "utils/numbers/convertToReal";
 import useContext from "context";
-import InstructionBtn from "components/buttons/InstructionBtn";
 import getPercentage from "utils/numbers/getPercentage";
 import animateCart from "./animateCart";
 import pickMsg from "./pickMsg";
+// import InstructionBtn from "components/buttons/InstructionBtn";
 
 export default function CartRace({
     className,
-    accuMoney,
     targetPoints,
     perc,
     currPoints,
@@ -53,13 +52,7 @@ export default function CartRace({
                 <LineRoad needDark={needDark} />
                 {msg && didUserScroll && (
                     <Fragment>
-                        <QuantStatus
-                            accuMoney={accuMoney}
-                            completePerc={completePerc}
-                            targetPoints={targetPoints}
-                            currPoints={currPoints}
-                            perc={perc}
-                        />
+                        <QuantStatus completePerc={completePerc} />
                         <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 $ text-small text-center text-purple text-shadow">
                             {parse(msg)}
                         </p>
@@ -100,59 +93,19 @@ export default function CartRace({
 }
 
 function QuantStatus({
-    accuMoney,
-    currPoints,
     completePerc,
-    targetPoints,
-    perc,
+    // currPoints,
+    // targetPoints,
+    // perc,
 }) {
-    const showInstruBtn = () => {
-        const text = `
-            O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual de ${currPoints} PTS.
-            <br /><br />
-            Você acumula <span class="font-weight-bold">${perc}% de desconto a cada compra</span>.
-            <br /><br />
-            Você pode usar seu vale desconto assim que bater a <strong>meta resgate de ${targetPoints} PTS</strong>.
-            <br /><br />
-            Lembre-se que 1 PTS vale R$ 1.
-            <br />
-            Obrigada por comprar com a gente!
-        `;
-
-        return (
-            <div className="instr-acc-btn position-absolute enabled-click">
-                <InstructionBtn mode="tooltip" text={text} />
-                <style jsx>
-                    {`
-                        .instr-acc-btn {
-                            top: -25px;
-                            right: -25px;
-                        }
-                    `}
-                </style>
-            </div>
-        );
-    };
-
-    const isDecimal = completePerc && completePerc.toString().includes(".");
+    // const isDecimal = completePerc && completePerc.toString().includes(".");
     return (
         <section className="font-site text-shadow quant-status text-center animated fadeInUp delay-2s my-5 d-flex justify-content-around align-items-center">
             <div>
-                <p className={`m-0 ${isDecimal ? "text-em-2-5" : "text-em-3"}`}>
+                <p className="m-0 text-em-4">
                     {Number.isNaN(completePerc) ? "..." : completePerc}%
                 </p>
                 <div className="title text-normal">concluído</div>
-            </div>
-            <div className="position-relative">
-                <p
-                    className={`m-0 ${
-                        accuMoney <= 1000 ? "text-em-3" : "text-em-2"
-                    }`}
-                >
-                    {convertToReal(accuMoney, { moneySign: true })}
-                </p>
-                <div className="title text-normal">acumulado</div>
-                {showInstruBtn()}
             </div>
             <style jsx>
                 {`
@@ -441,3 +394,47 @@ function moveDownLeftFinal(xPos) {
     `;
 }
 // END CSS
+
+/* ARCHIVES
+
+<div className="position-relative">
+    <p
+        className={`m-0 ${
+            accuMoney <= 1000 ? "text-em-3" : "text-em-2"
+        }`}
+    >
+        {convertToReal(accuMoney, { moneySign: true })}
+    </p>
+    <div className="title text-normal">acumulado</div>
+    {showInstruBtn()}
+</div>
+
+const showInstruBtn = () => {
+    const text = `
+        O valor de R$ ${accuMoney} foi convertido automaticamente do seu saldo em pontos atual de ${currPoints} PTS.
+        <br /><br />
+        Você acumula <span class="font-weight-bold">${perc}% de desconto a cada compra</span>.
+        <br /><br />
+        Você pode usar seu vale desconto assim que bater a <strong>meta resgate de ${targetPoints} PTS</strong>.
+        <br /><br />
+        Lembre-se que 1 PTS vale R$ 1.
+        <br />
+        Obrigada por comprar com a gente!
+    `;
+
+    return (
+        <div className="instr-acc-btn position-absolute enabled-click">
+            <InstructionBtn mode="tooltip" text={text} />
+            <style jsx>
+                {`
+                    .instr-acc-btn {
+                        top: -25px;
+                        right: -25px;
+                    }
+                `}
+            </style>
+        </div>
+    );
+};
+
+ */
