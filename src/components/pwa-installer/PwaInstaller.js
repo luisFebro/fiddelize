@@ -82,12 +82,15 @@ export default function PwaInstaller({
     }, []);
 
     const handlePwaInstall = async () => {
-        await setVar({ needPWA: false }, "user");
+        showToast("Preparando app...", { dur: 10000 });
 
         if (deferredPrompt) {
-            // Show the prompt
-            setBannerVisible(false);
-            deferredPrompt.prompt();
+            // Show the prompt and config
+            await Promise.all([
+                setVar({ needPWA: false }, "user"),
+                setBannerVisible(false),
+                deferredPrompt.prompt(),
+            ]);
             // Wait for the user to respond to the prompts
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === "accepted") {
