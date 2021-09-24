@@ -5,6 +5,7 @@ import loadInit from "auth/api";
 import PrivateRouteClientAdm from "components/auth/routes/PrivateRouteClientAdm";
 import { Load } from "components/code-splitting/LoadableComp";
 // PAGES
+import Home from "pages/home/Home";
 import ClientMobileApp from "pages/mobile-app/ClientMobileApp";
 import RegulationPage from "pages/RegulationPage";
 import Default from "pages/Default";
@@ -71,6 +72,7 @@ function Mobile({ location }) {
                 <AsyncNavBar />
             ) : null}
             <Switch>
+                <Route path="/" exact component={Home} />
                 <Route
                     path="/acesso/verificacao"
                     exact

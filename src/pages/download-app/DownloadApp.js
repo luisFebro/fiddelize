@@ -298,7 +298,7 @@ export default function DownloadApp({ match, location, history }) {
     const showWebModeBtn = () => (
         <section
             className="mx-3 web-mode-download-btn container-center-col"
-            style={{ marginBottom: 150 }}
+            style={{ marginBottom: 250 }}
         >
             <div className="my-3">
                 <img

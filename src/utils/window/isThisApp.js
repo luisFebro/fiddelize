@@ -38,9 +38,13 @@ function checkEnforceMobile() {
     const isHomeUrl =
         window.location.href === CLIENT_URL ||
         window.location.href === `${CLIENT_URL}/`;
-    const isDownloadPage = window.location.href.includes("/baixe-app");
 
-    const isNotApp = isHomeUrl || isDownloadPage;
+    const websitePages = ["/baixe-app", "/privacidade"];
+    const isWebsitePage = websitePages.some((pg) =>
+        window.location.href.includes(pg)
+    );
+
+    const isNotApp = isHomeUrl || isWebsitePage;
     if (isNotApp) window.sessionStorage.removeItem("isPWA");
 
     return window.sessionStorage.getItem("isPWA") === "1";

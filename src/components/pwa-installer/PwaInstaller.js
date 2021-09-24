@@ -1,5 +1,6 @@
 import "./style.css";
 import { useState, useEffect } from "react";
+import { setVar } from "init/var";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import isThisApp from "utils/window/isThisApp";
@@ -40,7 +41,7 @@ export default function PwaInstaller({
     isBizTeam,
 }) {
     // A2HS = App to HomeScreen
-    const [bannerVisible, setBannerVisible] = useState(alwaysOn || false);
+    const [bannerVisible, setBannerVisible] = useState(false);
     useAnimateElem(".pwa-installer--text", {
         animaIn: "fadeInUp",
         speed: "slow",
@@ -58,7 +59,9 @@ export default function PwaInstaller({
                 downloadAvailable: true,
             }));
         }
-    }, [bannerVisible]);
+
+        if (alwaysOn) setBannerVisible(true);
+    }, [bannerVisible, alwaysOn]);
 
     useEffect(() => {
         // This event requires the page to reload in order to set correctly...
@@ -78,7 +81,9 @@ export default function PwaInstaller({
         });
     }, []);
 
-    const handlePwaInstall = () => {
+    const handlePwaInstall = async () => {
+        await setVar({ needPWA: false });
+
         if (deferredPrompt) {
             // Show the prompt
             setBannerVisible(false);
