@@ -463,7 +463,7 @@ function handlePwaTitle({ isCliAdmin, isCliMember, isBizTeam, userName }) {
     if (isCliAdmin)
         return `<strong>${
             userName && userName.cap()
-        },<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`;
+        },<br />baixe o app aqui</strong><br />e acesse rápido seu painel de controle.`;
 
     if (isCliMember)
         return `<strong>${
@@ -477,7 +477,7 @@ function handlePwaTitle({ isCliAdmin, isCliMember, isBizTeam, userName }) {
 
     return `<strong>${
         userName ? userName.cap() : "Ei"
-    },<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de compra.`;
+    },<br />baixe nosso app aqui</strong>`;
 }
 // END HELPERS
 

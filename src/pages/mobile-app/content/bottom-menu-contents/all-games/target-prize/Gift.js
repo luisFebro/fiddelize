@@ -84,7 +84,7 @@ export default function Gift() {
         >
             <div className="position-relative">
                 <div style={styles.deadlineBoard}>
-                    {!finalDeadline && !didPrizeExpired && (
+                    {!finalDeadline && ( // && !didPrizeExpired
                         <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
                             30 dias
                         </p>
@@ -136,8 +136,39 @@ export default function Gift() {
             />
         );
 
+        const exceptionColor = colorP === "white" || colorP === "yellow";
         const challengeInProgress = () => (
-            <section className="pt-5">
+            <section
+                className="position-relative"
+                style={{
+                    top: -50,
+                }}
+            >
+                <p
+                    className="position-relative animated fadeInUp delay-2s py-5 text-title text-shadow text-subtitle font-weight-bold"
+                    style={{
+                        top: -30,
+                        bottom: 50,
+                    }}
+                >
+                    alcance{" "}
+                    <span className="text-title">{targetPoints} PTS</span>
+                    <br />
+                    e ganhe prêmio:
+                    <br />
+                    <div className="container-center">
+                        <span
+                            className="d-table text-pill"
+                            style={{
+                                backgroundColor: `var(--themeP${
+                                    exceptionColor ? "Dark" : ""
+                                }--${colorP})`,
+                            }}
+                        >
+                            {prizeDesc}
+                        </span>
+                    </div>
+                </p>
                 <div className="enabled-click">
                     <Tooltip
                         needArrow

@@ -82,7 +82,7 @@ export default function PwaInstaller({
     }, []);
 
     const handlePwaInstall = async () => {
-        await setVar({ needPWA: false });
+        await setVar({ needPWA: false }, "user");
 
         if (deferredPrompt) {
             // Show the prompt
