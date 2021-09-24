@@ -83,7 +83,7 @@ function Website({ location }) {
         <Fragment>
             {dontNeedLayout && <Navbar />}
             <Switch>
-                <Route path="/" component={Home} />
+                <Route path="/" exact component={Home} />
                 <Route path="/de/:associateId" exact component={Home} />
                 <Route
                     path="/acesso/verificacao"
