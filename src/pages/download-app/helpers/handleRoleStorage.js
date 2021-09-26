@@ -61,6 +61,7 @@ export default function handleRoleStorage({
                 rememberAccess: false,
                 success: false,
                 verifPass: false,
+                token: false,
                 needAppRegister: true,
             },
             "user"

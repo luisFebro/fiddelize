@@ -46,6 +46,7 @@ export default function ModalYesNo({
                             onClick={() => {
                                 actionFunc();
                                 setIsYesBtnDisabled(true);
+                                setFullOpen(false);
                             }}
                             iconFontAwesome={
                                 <FontAwesomeIcon icon="times" style={faStyle} />

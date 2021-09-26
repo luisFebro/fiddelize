@@ -43,7 +43,7 @@ export default async function disconnect(options = {}) {
 }
 
 async function removeCollAsync() {
-    const run = (resolve, reject) => {
+    const run = (resolve) => {
         removeCollection("currUser");
         resolve("ok");
     };

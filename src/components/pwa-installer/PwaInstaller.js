@@ -82,7 +82,7 @@ export default function PwaInstaller({
     }, []);
 
     const handlePwaInstall = async () => {
-        showToast("Preparando app...", { dur: 10000 });
+        showToast("Iniciando...", { dur: 2500 });
 
         if (deferredPrompt) {
             // Show the prompt and config

@@ -31,6 +31,7 @@ export default function RegisterBonusCoins() {
     const [editPTS, setEditPTS] = useState(false);
     const [isOn, setOn] = useState(false);
     const [PTS, setPTS] = useState("0");
+    const [showMoreTxt, setShowMoreTxt] = useState(false);
 
     const noPTS = PTS === "0.00" || PTS === "0" || !PTS;
 
@@ -54,8 +55,8 @@ export default function RegisterBonusCoins() {
         const registerData =
             data.clientAdminData && data.clientAdminData.registerBonusCoins;
 
-        const pts = registerData && registerData.amount;
         if (registerData) {
+            const pts = registerData.amount;
             setOn(!noPTS || pts);
             setPTS(Number(pts).toFixed(2).toString());
         }
@@ -149,14 +150,25 @@ export default function RegisterBonusCoins() {
                 Moeda Bônus de Cadastro
             </h2>
             <p className="text-normal text-grey">
-                Todos os seus clientes recebem automaticamente certa quantia em
-                moeda PTS ao se cadastrarem no seu clube de compras. Serve como{" "}
-                <strong>estímulo adicional</strong> para clientes começar a
-                participar. Valores comuns estão de 5 PTS a 30 PTS (real tem
-                mesmo valor que PTS), você define o valor de acordo com sua
-                estratégia comercial.
+                Ofereça PTS extras como <strong>estímulo adicional</strong> para
+                clientes começarem a participar do seu clube de compras.{" "}
+                <span
+                    role="button"
+                    className={`text-link ${showMoreTxt ? "d-none" : ""}`}
+                    onClick={() => setShowMoreTxt(true)}
+                >
+                    saiba mais
+                </span>
             </p>
-            <section>
+            {showMoreTxt && (
+                <p className="text-normal text-grey">
+                    Todos os seus clientes recebem automaticamente certa quantia
+                    em moeda PTS ao se cadastrarem. Valores comuns estão de 5
+                    PTS a 30 PTS (real tem mesmo valor que PTS), você define o
+                    valor de acordo com sua estratégia comercial.
+                </p>
+            )}
+            <section className="py-5">
                 <p className="m-0 text-normal text-center">
                     Ativado?{" "}
                     <span className="text-pill">{isOn ? "SIM" : "NÃO"}</span>

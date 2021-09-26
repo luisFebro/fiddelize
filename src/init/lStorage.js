@@ -83,7 +83,7 @@ export function removeCollection(collectionName) {
             `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
         );
     if (!collectionName)
-        throw new Error("missing collection name as the first argument");
+        console.log("missing collection name as the first argument");
 
     const collectionData = getCurrCollectionData(collectionName);
     const isValidCollection = Boolean(collectionData);
@@ -92,10 +92,8 @@ export function removeCollection(collectionName) {
             `ERROR: the collection ${collectionName.toUpperCase()} does not exist or already removed`
         );
 
-    if ("localStorage" in window) {
-        localStorage.removeItem(collectionName);
-    }
-    return null;
+    if ("localStorage" in window) localStorage.removeItem(collectionName);
+    return true;
 }
 
 // HELPERS

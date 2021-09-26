@@ -22,6 +22,7 @@ export const useReadUser = (userId, role, select, options = {}) => {
     const { trigger = true } = options;
 
     const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -44,10 +45,11 @@ export const useReadUser = (userId, role, select, options = {}) => {
             .catch((err) => {
                 console.log(err);
                 setLoading(false);
+                setError(err);
             });
     }, [userId, role, select, trigger]);
 
-    return { data, loading };
+    return { data, loading, error };
 };
 
 export const updateUser = async (userId, role, body) => {

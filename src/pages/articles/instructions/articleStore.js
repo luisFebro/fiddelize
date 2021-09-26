@@ -16,6 +16,15 @@ const AsyncDiscountBack = Load({
 });
 // END BUY GAMES
 
+// FEATURES
+const AsyncOrgganizeClientsFilter = Load({
+    loader: () =>
+        import(
+            "./OrgganizeClientsFilter.js" /* webpackChunkName: "instru-article-page-lazy" */
+        ),
+});
+// END FEATURES
+
 const AsyncChallengeModes = Load({
     loader: () =>
         import(
@@ -30,16 +39,15 @@ const AsyncWhySMS = Load({
         ),
 });
 
-// FEATURES
-const AsyncOrgganizeClientsFilter = Load({
+const AsyncExpiringCoinsDeadline = Load({
     loader: () =>
         import(
-            "./OrgganizeClientsFilter.js" /* webpackChunkName: "instru-article-page-lazy" */
+            "./ExpiringCoinsDeadline" /* webpackChunkName: "instru-article-page-lazy" */
         ),
 });
-// END FEATURES
 
 const articleStore = {
+    ExpiringCoinsDeadline: <AsyncExpiringCoinsDeadline />,
     DiscountBack: <AsyncDiscountBack />,
     TargetPrize: <AsyncChallengeModes />,
     OrgganizeClientsFilter: <AsyncOrgganizeClientsFilter />,

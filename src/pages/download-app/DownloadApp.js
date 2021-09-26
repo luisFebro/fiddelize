@@ -14,6 +14,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import BackButton from "components/buttons/BackButton";
 import runLinkTagOnClick from "utils/tags/runLinkTagOnClick";
+import showToast from "components/toasts";
 import getQueries from "./helpers/getQueries";
 import handleRoleStorage from "./helpers/handleRoleStorage";
 import useAllowedLink from "./hooks/useAllowedLink";
@@ -324,10 +325,14 @@ export default function DownloadApp({ match, location, history }) {
                     backgroundColor={`var(--themeSDark--${
                         pColor || "default"
                     })`}
-                    onClick={() => {
-                        setVar({ needPWA: true }, "user").then(() => {
-                            runLinkTagOnClick("/app", { target: "_self" });
-                        });
+                    onClick={async () => {
+                        await Promise.all([
+                            showToast("Iniciando e redirecionando...", {
+                                dur: 10000,
+                            }),
+                            setVar({ needPWA: true }, "user"),
+                        ]);
+                        runLinkTagOnClick("/app", { target: "_self" });
                     }}
                     position="relative"
                     variant="extended"

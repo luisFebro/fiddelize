@@ -1,3 +1,4 @@
+// prefer this component over Select from selects/Select
 import { useState, useEffect } from "react";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -12,7 +13,7 @@ valuesArray={[
 
  */
 
-// warning: if inside a modal, verify the zIndex in case of not appearing the popup menu;
+// warning: if inside a modal, verify the zIndex in case of not appearing the popup menu. set needIndex={false} to ModalFullContent if this is the case...;
 export default function SelectField({
     title = "",
     valuesArray,
