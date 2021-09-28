@@ -60,14 +60,12 @@ const getLocalHour = (date) =>
 // targetDate is inclusive. it will only be expired after the targetDate has passed.
 const isScheduledDate = (targetDate, options = {}) => {
     const { isDashed = false } = options; // dashed Date = 2020-12-30 format
-    if (!targetDate) return;
+    if (!targetDate) return null;
 
     const today = getPureParsedDate(new Date(), { minHour: true });
     const scheduled = getPureParsedDate(targetDate, { isDashed });
-    if (today < scheduled) {
-        return true;
-    }
 
+    if (today < scheduled) return true;
     return false;
 };
 

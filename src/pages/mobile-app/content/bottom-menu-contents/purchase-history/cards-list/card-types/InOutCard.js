@@ -13,7 +13,21 @@ export default function InOutCard({ historyData }) {
     const { cardType, desc, value, createdAt = new Date() } = historyData;
 
     const isCardIn = cardType === "in";
-    const mainTitle = `Pontos ${isCardIn ? "Extras" : "Removidos"}`;
+    const isExpired = cardType === "expired";
+
+    const getTitle = () => {
+        if (isExpired) return "Pontos Expirados";
+        return `Pontos ${isCardIn ? "Extras" : "Removidos"}`;
+    };
+
+    const getCardColor = (style = false) => {
+        if (isExpired) return "var(--themeP)";
+        const inColor = style ? "var(--incomeGreen)" : "rgb(255, 255, 0)";
+
+        return isCardIn ? inColor : "var(--expenseRed)";
+    };
+
+    const mainTitle = getTitle();
 
     const showPoints = () => (
         <Fragment>
@@ -37,9 +51,7 @@ export default function InOutCard({ historyData }) {
                         background: ${isCardIn
                             ? "var(--mainDark)"
                             : "var(--mainWhite)"} !important;
-                        color: ${isCardIn
-                            ? "rgb(255, 255, 0)"
-                            : "var(--expenseRed)"} !important;
+                        color: ${getCardColor()} !important;
                         border-radius: 25px;
                         text-shadow: none;
                     }
@@ -86,9 +98,9 @@ export default function InOutCard({ historyData }) {
                     `}
                 </style>
             </main>
-            <p className="m-0 my-2 text-left font-site text-em-1-1">
+            <p className="m-0 my-2 text-left font-site">
                 Motivo:{" "}
-                <span className="d-inline-block text-normal font-weight-bold">
+                <span className="d-inline-block text-em-1 font-weight-bold">
                     {desc}
                 </span>
             </p>
@@ -102,9 +114,7 @@ export default function InOutCard({ historyData }) {
             <Card
                 key={historyData.desc}
                 style={{
-                    background: isCardIn
-                        ? "var(--incomeGreen)"
-                        : "var(--expenseRed)",
+                    background: getCardColor(true),
                 }}
             >
                 {displayMainContent()}

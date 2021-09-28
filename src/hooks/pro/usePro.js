@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
 import useAPI, { getProData } from "api/useAPI";
 import getVar from "init/var";
-import getDatesCountdown from "../dates/getDatesCountdown";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 
 const setAllData = (thisData, setData, bizPlan) =>
     setData((prevData) => ({

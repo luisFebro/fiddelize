@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 import PropTypes from "prop-types";
 import useRun from "global-data/ui";
 import TextField from "@material-ui/core/TextField";
@@ -9,7 +10,6 @@ import copyTextToClipboard from "../../../../../../../utils/document/copyTextToC
 
 import showToast from "../../../../../../../components/toasts";
 import { setVar } from "init/var";
-import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 import extractStrData from "../../../../../../../utils/string/extractStrData";
 

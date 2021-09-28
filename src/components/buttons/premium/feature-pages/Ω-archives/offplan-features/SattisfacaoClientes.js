@@ -70,12 +70,6 @@ export default function SattisfacaoClientes({ data }) {
             </p>
             <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={styles.check} />
-                Se receber alguma avaliação negativa, você é notificado em tempo
-                real sobre o problema. Assim você pode transformar clientes
-                insatisfeitos em fãs!
-            </p>
-            <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={styles.check} />
                 Os clientes vão poder avaliar a cada compra. A última avaliação
                 de cada cliente é que será usada.
             </p>

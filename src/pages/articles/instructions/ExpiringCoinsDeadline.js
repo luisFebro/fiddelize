@@ -18,114 +18,118 @@ const Body = ({ picClass, rootPath }) => {
     return (
         <article style={{ position: "relative" }} className={textStyle}>
             <p>
-                Desconto retornado é um jogo de compra adaptado e otimizado do{" "}
-                <span className="font-italic">cashback</span> que é uma forma de
-                oferecer desconto pela frequência das compras.
-            </p>
-            <p>
-                É uma tática de marketing de relacionamento que nasceu e ficou
-                popular nos Estados Unidos e na Europa. Já no Brasil, vem
-                ganhando força principalmente com milhas e apps com programas de
-                fidelidade em sites de e-commerce.
-            </p>
-            <p>
-                A tática pode ser usado na prática e encontrada em abordagens de
-                marketing como: &quot;
-                <span className="font-italic">
-                    a cada R$ 100 em compras, ganhe 5% de desconto
-                </span>
-                &quot;. Usamos essa abordagem como base para simplificar a ideia
-                do jogo por ser popular no marketing.
+                Por padrão, as moedas digitais{" "}
+                <strong>não possuem prazo de expiração</strong>. Mas caso
+                precise dar um senso de mais urgência para os clientes usarem
+                mais rápido suas moedas, você pode estabelecer um prazo de
+                expiração.
             </p>
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-1.png`}
                 reference=""
-                subtitle="app do cliente: vale desconto digital e meta resgate em PTS"
+                subtitle="Funcionalidade desativada. Clique e confirme o prazo para ativar."
             />
             <p>
-                O <strong>objetivo</strong> do desconto retornado é que os
-                clientes fiquem interessados em retornar a comprar porque
-                receberão desconto ao acumular um determinado percentual a cada
-                compra que poderão usar como desconto em suas próximas compras.
+                Ativando a expiração, seus clientes usam as moedas digitais e
+                podem resgatar benefícios do seu negócio até certo prazo. Você
+                escolhe entre <strong>1 a 6 meses</strong> e pode cancelar a
+                expiração a qualquer momento caso precise.
+            </p>
+
+            <h3 className="mt-5 mb-2 font-site text-purple">
+                Dois tipos de expiração
+            </h3>
+            <h4 className="font-weight-bold">1) Ativado pelo admin</h4>
+            <p>
+                Você, como admin dos apps do seu clube de compras, é o único que
+                pode ativar a funcionalidade de expiração.
             </p>
             <p>
-                Na Fiddelize, colocamos o jogo no próximo nível por empoderar
-                empreendedores com uma <strong>moeda digital</strong> exclusiva
-                para troca de benefícios e permitir controle abrangente do jogo.
-                Além de oferecer funcionalidades exclusivas para os clientes com
-                direito a <strong>comprovante</strong> com código QR
-                personalizado, <strong>cartão de compra</strong> e{" "}
-                <strong>vale desconto digital</strong>.
+                Durante seu plano ativado e com a expiração ativada, seus
+                clientes ganham o <strong>mesmo prazo de uso</strong>.
+            </p>
+            <p>
+                No caso de <strong>novos clientes</strong>, recebem um prazo
+                customizado de expiração que inicia na{" "}
+                <strong>data de cadastro</strong> até mais o número de dias que
+                foi estipulado para expirar as moedas.
+            </p>
+            <p>
+                Já no caso dos demais clientes que{" "}
+                <strong>já foram cadastrados</strong>, o prazo começa a contar
+                no dia que a <strong>funcionalidade for ativada</strong>.
+            </p>
+            <p>
+                Assim, a expiração se aplica a todos os clientes. Eles recebem o
+                mesmo prazo para usarem suas moedas sem prejudicar novos
+                clientes que se cadastrarem próximo da data de expiração, por
+                exemplo.
             </p>
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-2.png`}
                 reference=""
-                subtitle="app cliente: comprovante digital com código QR"
+                subtitle="demo funcionalidade ativa por 5 meses"
             />
-            <h3 className="my-3 font-site text-purple">
-                Como funciona o sistema de pontos?
-            </h3>
+            <h4 className="mt-4 font-weight-bold">2) Tipo mês de manutenção</h4>
             <p>
-                Assim como os demais jogos da Fiddelize, seus clientes recebem{" "}
-                <strong>moedas digitais a cada compra</strong> chamadas de PTS
-                (pronúncia: pítis) que sempre tem o mesmo valor que o real para
-                manter a simplicidade e clareza na conversão.
+                Após seu plano expirar e caso não haja renovação, seus clientes
+                continuam a usar suas moedas PTS <strong>por mais 1 mês</strong>{" "}
+                em todos os planos pagos. Isso para garantir a melhor
+                experiência aos seus clientes oferecendo um espaço de tempo
+                suficiente para usar seus saldos.
             </p>
             <p>
-                No jogo de compra desconto retorno, a quantidade de moeda PTS do
-                cliente é automaticamente convertida para gerar o vale desconto
-                baseado em um percentual acumulativo definido pelo seu negócio
-                indo nas opções do jogo.
+                Com isso em mente, a plataforma inicia automaticamente o{" "}
+                <strong>prazo de 30 dias</strong> para expirar as moedas não
+                usadas da sua clientela. A Fiddelize deixa seus clientes
+                avisados e cientes durante todo período de expiração.
             </p>
-            <p>
-                A moeda PTS foi fundamentada em várias camadas de segurança
-                incluindo{" "}
-                <strong>
-                    criptografia com AES256, chaves de sessão, proteção de rotas
-                    e sistema de autorização
-                </strong>{" "}
-                para que a moeda possa ser usada exclusivamente em seu negócio e
-                que cada transação seja totalmente transparente tanto para sua
-                equipe e clientes, facilitando assim a identificação de
-                eventuais erros como envio de pontos para cliente errado ou
-                envio de quantidade errada da moeda.
-            </p>
-            <h3 className="my-3 font-site text-purple">
-                Jogo no app do cliente
-            </h3>
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-3.png`}
                 reference=""
-                subtitle="app cliente: carrinho interativo e dados do progresso do cliente"
+                subtitle="app clientes - aviso sobre expiração"
             />
             <p>
-                Além do vale desconto digital personalizado como sua marca e
-                cores e comprovantes com código QR, seus clientes acompanham
-                seus processos e sabem quanto já acumularam até bater a meta e
-                resgatar o vale desconto, tendo um carrinho de compra que indica
-                quanto falta para conquistar o vale desconto.
+                A única restrição durante o mês de manutenção é de não poder
+                adicionar novos clientes até a renovação do plano. Assim, novos
+                clientes não serão adicionados durante o período, mas os
+                clientes que já foram cadastrados pode continuar usando e
+                recebendo suas moedas digitais e benefícios normalmente.
             </p>
             <ShowPicture
                 imgContainerClass={picClass}
                 dataSrc={`${rootPath}/pic-4.png`}
                 reference=""
-                subtitle="app cliente: cada nível do jogo, uma frase informando progresso."
+                subtitle="app clientes - registro de pontos expirados"
             />
             <p>
-                Tudo com um dose de motivação para continuar jogando e comprando
-                do seu negócio.
+                Terminando o mês de manutenção sem renovação do plano, é
+                bloqueado a funcionalidade de{" "}
+                <strong>cadastrar novos clientes</strong> e também a de{" "}
+                <strong>cadastrar pontos</strong> em ambos apps de equipe -
+                admin e dos membros.
             </p>
-            <h3 className="my-3 font-site text-purple">Público Alvo</h3>
             <p>
-                Pode ser implementado por negócios de diferentes portes,
-                principalmente para empreendedores com estabelecimentos físicos
-                interessados na força do marketing combinada com tecnologia e
-                que estão procurando diferenciais como a possibilidade em
-                oferecer uma moeda digital para troca de benefícios para
-                clientes.
+                Porém, os apps dos seus clientes são sempre grátis e sem nenhuma
+                restrição de funcionalidades.
+            </p>
+            <h3 className="mt-5 mb-2 font-site text-purple">
+                Renovação da expiração
+            </h3>
+            <p>
+                <strong>Não há renovação</strong> da expiração e{" "}
+                <strong>precisa ser reativada</strong> caso precise novamente.
+                Uma vez que as moedas não usadas dos seus clientes são
+                expiradas, a funcionalidade de expiração é desativada
+                automaticamente.
+            </p>
+            <p>
+                No tipo de expiração via mês de manutenção, a expiração é
+                desativada também assim que o admin renova ou atualize seu
+                plano, desbloqueando o cadastro de novos clientes.
             </p>
         </article>
     );

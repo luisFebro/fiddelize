@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
-import convertToReal from "../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
 import useAPI, { readCredits, needTrigger } from "api/useAPI";
 import { useBizData } from "init";
 import useRun from "global-data/ui";
-import usePro from "../../../../hooks/pro/usePro";
+import usePro from "hooks/pro/usePro";
+import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({

@@ -117,6 +117,8 @@ export default function AddTempPoints({
     const styles = getStyles();
 
     const handleReturn = () => {
+        if (clientScoreOnly) return closeModal();
+
         setCurr((prev) => ({
             ...prev,
             field: "name",

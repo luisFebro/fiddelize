@@ -5,10 +5,10 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 import DisplayExpiryCounter from "./DisplayExpiryCounter";
 

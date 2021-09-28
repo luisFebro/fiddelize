@@ -20,7 +20,6 @@ export default function CardsList({
     const [skip, setSkip] = useState(0);
     const [showMore, setShowMore] = useState(false);
 
-    const gotUserPoints = Boolean(totalGeneralPoints);
     const { role, adminGame } = useData();
     const isAdmin = role === "cliente-admin";
 
@@ -40,6 +39,7 @@ export default function CardsList({
         loading,
         ShowLoadingSkeleton,
         error,
+        gotData,
         ShowError,
         // content,
     } = useAPIList({
@@ -311,9 +311,7 @@ export default function CardsList({
 
     return (
         <section>
-            {!gotUserPoints
-                ? showNoBuyIllustration(firstName)
-                : showUserCards()}
+            {!gotData ? showNoBuyIllustration(firstName) : showUserCards()}
         </section>
     );
 }

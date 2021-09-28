@@ -1,4 +1,13 @@
+import { Load } from "components/code-splitting/LoadableComp";
 import AddPointsBtn from "./add-points-btn/AddPointsBtn";
+
+export const AsyncExpiringCoinsBadge = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "./ExpiringCoinsBadge" /* webpackChunkName: "expiring-coins-badge-lazy" */
+        ),
+});
 
 export default function PtsBalance({ showMoreComps, currPointsRef, txtColor }) {
     return (
@@ -19,24 +28,35 @@ export default function PtsBalance({ showMoreComps, currPointsRef, txtColor }) {
                     ...
                 </p>
                 {showMoreComps ? (
-                    <span className={`animated fadeIn ml-2 ${txtColor}`}>
-                        <img
-                            className="pts-coin"
-                            width={50}
-                            height={50}
-                            src="/img/app-pts-coin.svg"
-                            alt="moeda digital pts para benefícios"
-                        />
-                        <style jsx>
-                            {`
-                                .pts-coin {
-                                    filter: drop-shadow(
-                                        0.001em 0.001em 0.18em grey
-                                    );
-                                }
-                            `}
-                        </style>
-                    </span>
+                    <section className="position-relative">
+                        <span className={`animated fadeIn ml-2 ${txtColor}`}>
+                            <img
+                                className="pts-coin"
+                                width={50}
+                                height={50}
+                                src="/img/app-pts-coin.svg"
+                                alt="moeda digital pts para benefícios"
+                            />
+                            <style jsx>
+                                {`
+                                    .pts-coin {
+                                        filter: drop-shadow(
+                                            0.001em 0.001em 0.18em grey
+                                        );
+                                    }
+                                `}
+                            </style>
+                        </span>
+                        <div
+                            className="animated fadeIn delay-2s position-absolute"
+                            style={{
+                                bottom: -5,
+                                right: -75,
+                            }}
+                        >
+                            <AsyncExpiringCoinsBadge />
+                        </div>
+                    </section>
                 ) : (
                     <span className={`ml-2 ${txtColor}`}>Pontos</span>
                 )}

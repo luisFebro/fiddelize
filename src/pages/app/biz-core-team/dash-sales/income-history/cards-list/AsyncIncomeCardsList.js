@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 import IncomeCard from "./card/accordion/IncomeCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../../utils/dates/dateFns";
@@ -9,7 +10,6 @@ import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import useData from "init";
 import extractStrData from "../../../../../../utils/string/extractStrData";
-import getDatesCountdown from "../../../../../../hooks/dates/getDatesCountdown";
 
 const isSmall = window.Helper.isSmallScreen();
 

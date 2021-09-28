@@ -5,9 +5,8 @@ import removeImgFormat from "utils/biz/removeImgFormat";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Tooltip from "components/tooltips/Tooltip";
 import useDelay from "hooks/useDelay";
-import getItems, { setItems } from "init/lStorage";
 import getColor from "styles/txt";
-// import { encrypt } from "utils/security/xCipherFront";
+import getItems, { setItems } from "init/lStorage";
 
 const [ptsInfo] = getItems("onceChecked", ["ptsInfo"]);
 

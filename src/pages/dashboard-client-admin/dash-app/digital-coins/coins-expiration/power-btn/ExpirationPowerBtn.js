@@ -5,6 +5,7 @@ import { useReadUser, updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import parse from "html-react-parser";
 import useData from "init";
+import { fromNow, addDays } from "utils/dates/dateFns";
 
 const AsyncModalYesNo = Load({
     loader: () =>
@@ -25,10 +26,11 @@ export default function ExpirationPowerBtn() {
         on: false,
         daysCount: 0,
         isMaintenanceMonth: false, // if cli-user doesn't continue pay, the expiration is auto activate for 1 month of maintenance
+        activationDate: new Date(),
     });
     const [openModalDeactivate, setOpenModalDeactivate] = useState(false);
     const [openModalActivate, setOpenModalActivate] = useState(false);
-    const { on, daysCount, isMaintenanceMonth } = data;
+    const { on, daysCount, activationDate, isMaintenanceMonth } = data;
 
     const { userId } = useData();
 
@@ -53,7 +55,7 @@ export default function ExpirationPowerBtn() {
                 ...prev,
                 on: expiringCoinsDeadline.on,
                 daysCount: expiringCoinsDeadline.daysCount,
-                activationDate: expiringCoinsDeadline.daysCount,
+                activationDate: expiringCoinsDeadline.activationDate,
                 isMaintenanceMonth: expiringCoinsDeadline.isMaintenanceMonth,
             }));
         }
@@ -71,13 +73,15 @@ export default function ExpirationPowerBtn() {
         const role = "cliente-admin";
         const body = {
             "clientAdminData.expiringCoinsDeadline.on": !isDeactivated,
-            "clientAdminData.expiringCoinsDeadline.daysCount": isDeactivated
-                ? 0
-                : activationData.pickedDaysCount,
             "clientAdminData.expiringCoinsDeadline.activationDate": isDeactivated
                 ? null
                 : new Date(),
-            // "clientAdminData.expiringCoinsDeadline.isMaintenanceMonth", // this variable is system only modified
+            "clientAdminData.expiringCoinsDeadline.expirationDate": isDeactivated
+                ? null
+                : addDays(new Date(), activationData.pickedDaysCount),
+            "clientAdminData.expiringCoinsDeadline.daysCount": isDeactivated
+                ? 0
+                : activationData.pickedDaysCount,
         };
 
         await updateUser(userId, role, body).catch((err) => {
@@ -121,6 +125,9 @@ export default function ExpirationPowerBtn() {
                     <div className="animated fadeInUp">
                         <p className="mx-4 font-site text-em-1 font-weight-bold text-grey text-left">
                             {pickDetailTxt({ daysCount, isMaintenanceMonth })}
+                            <br />
+                            <br />
+                            Expiração foi ativada: {fromNow(activationDate)}
                         </p>
                     </div>
                 )}

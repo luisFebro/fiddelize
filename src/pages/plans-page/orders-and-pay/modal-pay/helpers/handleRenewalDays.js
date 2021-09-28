@@ -1,5 +1,5 @@
 import getVar from "init/var";
-import getDatesCountdown from "../../../../../hooks/dates/getDatesCountdown";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 
 const checkUltimateRenewal = ({ ordersStatement, bizPlanList }) => {
     if ((bizPlanList && !bizPlanList.length) || !ordersStatement)

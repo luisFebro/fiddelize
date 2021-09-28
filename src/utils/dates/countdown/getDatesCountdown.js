@@ -1,5 +1,5 @@
-import { addDays } from "../../utils/dates/dateFns";
-import getDiffDays from "../../utils/dates/getDiffDays";
+import { addDays } from "utils/dates/dateFns";
+import getDiffDays from "utils/dates/getDiffDays";
 
 export default function getDatesCountdown(endDate, options = {}) {
     if (!endDate) return 0;

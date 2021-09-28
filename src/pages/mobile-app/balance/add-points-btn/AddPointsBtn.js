@@ -4,7 +4,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import getColor from "styles/txt";
+// import getColor from "styles/txt";
 
 const AsyncAddPoints = Load({
     loader: () =>

@@ -26,6 +26,7 @@ export default function CoinsExpiration() {
                     <div className="pl-3 position-relative">
                         <InstructionBtn
                             mode="modal"
+                            zIndex={0}
                             article="ExpiringCoinsDeadline"
                         />
                     </div>

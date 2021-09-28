@@ -110,11 +110,12 @@ function MainContent({
                     Para <strong>novos clientes</strong>, o prazo para uso das
                     moedas começa a contar a partir da data de cadastro. Para os{" "}
                     <strong>demais clientes</strong> já cadastrados, a partir da
-                    data de ativação desta funcionalidade.
+                    data de ativação desta funcionalidade. Todos os clientes
+                    recebem o mesmo prazo de uso.
                 </p>
-                <p className="mt-5 text-grey font-site text-em-1-1">
+                <p className="text-grey font-site text-em-1-1">
                     Ao ativar, todos seus clientes ficam cientes do prazo toda
-                    vez que acessarem o app e recebem uma notificação.
+                    vez que acessarem o app e também recebem uma notificação.
                 </p>
                 {showActionBtns()}
             </form>

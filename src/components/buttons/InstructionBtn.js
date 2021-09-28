@@ -14,6 +14,7 @@ export default function InstructionBtn({
     article,
     animated = false,
     tooltipProps,
+    zIndex = 100, // even if value is 0, this will be the value.
     // blurEffect = false,
 }) {
     const [needOpen, setNeedOpen] = useState(false);
@@ -66,7 +67,7 @@ export default function InstructionBtn({
         <section
             style={{
                 position: "relative",
-                zIndex: 100,
+                zIndex,
             }}
         >
             {mode === "none" && (

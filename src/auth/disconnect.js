@@ -23,7 +23,9 @@ export default async function disconnect(options = {}) {
         "user"
     );
 
-    await Promise.all([removeStore("user"), removeCollAsync()]);
+    await Promise.all([removeStore("user"), removeCollAsync()]).catch((err) =>
+        console.log(`ERROR DISCONNECT promise.all: ${err}`)
+    );
 
     // post essential data set
     const isCliAdmin = role === "cliente-admin";
@@ -31,7 +33,7 @@ export default async function disconnect(options = {}) {
         await setVars(
             { rememberAccess, userId, name, twoLastCpfDigits },
             "user"
-        );
+        ).catch((err) => `ERROR disconnect setVars ${err}`);
     if (role) setItems("currUser", { role });
     // end
 

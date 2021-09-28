@@ -167,7 +167,8 @@ export default function AsyncCardsList() {
                     }
                 >
                     {displayTotalSMS({ isCardIn, data })}
-                    {data.cardType === "out" && (
+                    {(data.cardType === "out" ||
+                        data.cardType === "expired") && (
                         <p
                             className="m-0 mt-3 text-normal text-shadow font-weight-bold"
                             style={{ lineHeight: "19px" }}

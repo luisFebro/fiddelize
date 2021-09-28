@@ -23,7 +23,7 @@ export const AsyncDiscountBackCard = Load({
 
 export default function PickOtherCards({ historyData, colorP }) {
     const { gameType, cardType } = historyData;
-    if (cardType === "in" || cardType === "out")
+    if (cardType === "in" || cardType === "out" || cardType === "expired")
         return <AsyncInOutCard historyData={historyData} colorP={colorP} />;
     if (cardType === "benefit" && gameType === "targetPrize")
         return (

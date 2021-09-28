@@ -1,5 +1,5 @@
 import { setVars } from "init/var";
-import getDatesCountdown from "../../hooks/dates/getDatesCountdown";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 
 export default async function setProRenewal({
     expiryDate,
