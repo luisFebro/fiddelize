@@ -102,7 +102,9 @@ export const uploadImages = (fileName) =>
     `${ROOT}/user/image/upload?fileName=${fileName}`; // POST
 export const updateImages = (userId) =>
     `${ROOT}/user/image/update?id=${userId}`; // PUT
-
+// coins/poins
+export const setExpiringCoinsToBase = () =>
+    `${ROOT}/user/cli-admin/expiring-coins/base`; // POST
 // TEAM/CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;

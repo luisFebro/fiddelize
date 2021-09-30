@@ -4,7 +4,8 @@ import { Load } from "components/code-splitting/LoadableComp";
 import { useReadUser, updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import parse from "html-react-parser";
-import useData from "init";
+import useData, { useBizData } from "init";
+import getAPI, { setExpiringCoinsToBase } from "api";
 import { fromNow, addDays } from "utils/dates/dateFns";
 
 const AsyncModalYesNo = Load({
@@ -33,6 +34,7 @@ export default function ExpirationPowerBtn() {
     const { on, daysCount, activationDate, isMaintenanceMonth } = data;
 
     const { userId } = useData();
+    const { bizName, bizLogo } = useBizData();
 
     const { data: dataUser, loading, error } = useReadUser(
         userId,
@@ -84,10 +86,35 @@ export default function ExpirationPowerBtn() {
                 : activationData.pickedDaysCount,
         };
 
-        await updateUser(userId, role, body).catch((err) => {
-            showToast("Ocorreu um erro ao atualizar", { type: "error" });
-            console.log(`ERROR: ${err}`);
-        });
+        const adminData = !isDeactivated
+            ? {
+                  bizName,
+                  bizLogo,
+                  expirationDate: addDays(
+                      new Date(),
+                      activationData.pickedDaysCount
+                  ),
+                  daysCount: activationData.pickedDaysCount,
+              }
+            : undefined;
+
+        await Promise.all([
+            updateUser(userId, role, body).catch((err) => {
+                showToast("Ocorreu um erro ao atualizar", { type: "error" });
+                console.log(`ERROR: ${err}`);
+            }),
+            // send notifs and emails to all customers base
+            getAPI({
+                method: "POST",
+                url: setExpiringCoinsToBase(),
+                body: {
+                    userId,
+                    toggle: !isDeactivated,
+                    adminData,
+                },
+                errMsg: true,
+            }),
+        ]);
 
         if (!isDeactivated)
             return showToast(

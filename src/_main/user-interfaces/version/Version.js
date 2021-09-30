@@ -3,10 +3,11 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.52.50";
+const latestVersion = "4.53.0";
 // NEXT:
 // register bonus coins -
-const updateDescription = "expiring coins deadline";
+const updateDescription =
+    "expiring coins deadline - frontend, backend, cron-jobs and notifs";
 /* HISTORY
 register bonus coins
 new link systems for all user's apps for new site pt3
