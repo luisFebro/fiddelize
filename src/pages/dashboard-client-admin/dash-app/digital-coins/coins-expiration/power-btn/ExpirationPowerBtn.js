@@ -73,14 +73,27 @@ export default function ExpirationPowerBtn() {
         // DB HANDLING
         const isDeactivated = Boolean(!activationData);
         const role = "cliente-admin";
+
+        const expirationDate = addDays(
+            new Date(),
+            activationData.pickedDaysCount
+        );
+        const nearExpDate = addDays(new Date(expirationDate), -5);
+
         const body = {
             "clientAdminData.expiringCoinsDeadline.on": !isDeactivated,
+            // this will only be deactivated if cli-user manually do it, or in the cron-job algo when detecting no customers are available after the regular exp date defined by cli-admin
+            // a new pending clients panel will pop up when the func is auto deactivated when the cli-admin deadline is up and this variable is true, indicating that although expired to prior registerd cli-users, thre are still customized expiring date for new clients
+            "clientAdminData.expiringCoinsDeadline.gotPendingNewClients": !isDeactivated,
             "clientAdminData.expiringCoinsDeadline.activationDate": isDeactivated
                 ? null
                 : new Date(),
+            "clientAdminData.expiringCoinsDeadline.nearExpDate": isDeactivated
+                ? null
+                : nearExpDate,
             "clientAdminData.expiringCoinsDeadline.expirationDate": isDeactivated
                 ? null
-                : addDays(new Date(), activationData.pickedDaysCount),
+                : expirationDate,
             "clientAdminData.expiringCoinsDeadline.daysCount": isDeactivated
                 ? 0
                 : activationData.pickedDaysCount,
@@ -98,6 +111,7 @@ export default function ExpirationPowerBtn() {
               }
             : undefined;
 
+        showToast(!isDeactivated ? "Ativando expiração..." : "Desativando...");
         await Promise.all([
             updateUser(userId, role, body).catch((err) => {
                 showToast("Ocorreu um erro ao atualizar", { type: "error" });

@@ -17,15 +17,16 @@ export default function ExpiringCoinsBadge() {
     const [open, setOpen] = useState(false);
     const { currPoints, firstName } = useData();
 
-    const {
-        expiringCoinsOn,
-        expiringCoinsDate: expiringDateAdmin,
-    } = useBizData();
+    let { expiringCoinsOn } = useBizData();
+    const { expiringCoinsDate: expiringDateAdmin } = useBizData();
     const { expiringCoinsDate: expiringCoinsDateUser } = useData();
-    // if there is a user register expiratiionDate, then it means the customer was registered after the activation of this func, then having a different (most recent) date and thusly having priority over adim starting date
+    // if there is a user register expirationDate, then it means the customer was registered after the activation of this func, then having a different (most recent) date and thusly having priority over adim starting date
     const daysLeftExpireCoins = getDatesCountdown(
         expiringCoinsDateUser || expiringDateAdmin
     );
+
+    // the expiringCoinsOn is also active if there is still a custom expiration date because the expiration is independent and will still running if cli-user doesn't deactivate and it was the system instead.
+    expiringCoinsOn = Boolean(expiringCoinsOn || expiringCoinsDateUser);
 
     useEffect(() => {
         let runTimeout;
