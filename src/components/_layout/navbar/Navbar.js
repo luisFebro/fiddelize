@@ -147,7 +147,7 @@ function Navbar({ history, location }) {
         };
 
         const logoSrc =
-            locationNow !== "/" || needClientLogo
+            locationNow !== "/" && needClientLogo
                 ? bizLogoChecked
                 : fiddelizeLogo;
 

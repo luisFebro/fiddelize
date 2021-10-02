@@ -17,7 +17,7 @@ const AsyncMembers = Load({
 });
 
 export default function OptionHandler() {
-    const [option, setOption] = useState("tasks");
+    const [option, setOption] = useState("members");
     const isTask = option === "tasks";
 
     const toggleOption = (optionName) => {

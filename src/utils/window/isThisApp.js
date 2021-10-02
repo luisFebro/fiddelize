@@ -39,7 +39,7 @@ function checkEnforceMobile() {
         window.location.href === CLIENT_URL ||
         window.location.href === `${CLIENT_URL}/`;
 
-    const websitePages = ["/baixe-app", "/privacidade"];
+    const websitePages = ["/baixe-app", "/privacidade", "/novo-clube"];
     const isWebsitePage = websitePages.some((pg) =>
         window.location.href.includes(pg)
     );

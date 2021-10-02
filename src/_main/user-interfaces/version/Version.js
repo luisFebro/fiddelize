@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.54.10";
+const latestVersion = "4.54.15";
 // NEXT:
 // register bonus coins -
 const updateDescription =
