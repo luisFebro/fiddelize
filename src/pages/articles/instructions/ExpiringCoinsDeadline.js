@@ -131,6 +131,19 @@ const Body = ({ picClass, rootPath }) => {
                 desativada também assim que o admin renova ou atualize seu
                 plano, desbloqueando o cadastro de novos clientes.
             </p>
+            <h3 className="mt-5 mb-2 font-site text-purple">
+                Notificações e Avisos
+            </h3>
+            <p>
+                Além do prazo ficar de modo transparente e claro para os
+                clientes quando entram no app, a Fiddelize cuida de enviar
+                avisos em momentos chaves.
+            </p>
+            <p>
+                Os clientes recebem email personalizado com sua logo e/ou
+                notificações no app quando a funcionalidade é ativada, quando
+                tiver faltando 5 dias para expirar e no dia da expiração.
+            </p>
         </article>
     );
 };

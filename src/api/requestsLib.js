@@ -105,6 +105,10 @@ export const updateImages = (userId) =>
 // coins/poins
 export const setExpiringCoinsToBase = () =>
     `${ROOT}/user/cli-admin/expiring-coins/base`; // POST
+
+export const getExpiringTotalsAndDates = (adminId) =>
+    `${ROOT}/user/cli-admin/expiring-coins/totals-dates?adminId=${adminId}`; // GET
+
 // TEAM/CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;
 export const readTeamTaskList = () => `${ROOT}/user/team/tasks/list`;
