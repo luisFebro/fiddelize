@@ -1,6 +1,5 @@
 import "./style.css";
 import { useState, useEffect } from "react";
-import { setVar } from "init/var";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import isThisApp from "utils/window/isThisApp";
@@ -87,7 +86,6 @@ export default function PwaInstaller({
         if (deferredPrompt) {
             // Show the prompt and config
             await Promise.all([
-                setVar({ needPWA: false }, "user"),
                 setBannerVisible(false),
                 deferredPrompt.prompt(),
             ]);

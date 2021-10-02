@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, Fragment } from "react";
 import { setItems } from "init/lStorage";
-import { setVar } from "init/var";
 import ScrollArrow from "components/animations/scroll-arrow/ScrollArrow";
 import PwaInstaller from "components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "config/clientUrl";
@@ -330,9 +329,8 @@ export default function DownloadApp({ match, location, history }) {
                             showToast("Iniciando e redirecionando...", {
                                 dur: 10000,
                             }),
-                            setVar({ needPWA: true }, "user"),
                         ]);
-                        runLinkTagOnClick("/app", { target: "_self" });
+                        runLinkTagOnClick("/app?placa=1", { target: "_self" });
                     }}
                     position="relative"
                     variant="extended"

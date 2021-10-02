@@ -12,7 +12,6 @@ import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
-import { useVar } from "init/var";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
@@ -91,9 +90,6 @@ function ClientMobileApp({ location, history }) {
 
     useScrollUp();
 
-    // used for trying to show the download banner again if the first attempt in the download page has failed
-    const needPWA = useVar("needPWA", { store: "user", dots: false });
-
     const [
         role,
         userId,
@@ -144,6 +140,8 @@ function ClientMobileApp({ location, history }) {
     // MAIN VARIABLES
     // # query
     const searchQuery = location.search;
+    // used for trying to show the download banner again if the first attempt in the download page has failed
+    const isPwaBoard = searchQuery.includes("placa=1");
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
     const isUrlAdmin = searchQuery.indexOf("admin=1") !== -1;
     // # roles
@@ -368,7 +366,7 @@ function ClientMobileApp({ location, history }) {
                 </section>
             )}
 
-            {needPWA && conditionRegister && (
+            {isPwaBoard && conditionRegister && (
                 <AsyncDownloadAppGuide bizName={bizName} />
             )}
 
@@ -409,7 +407,7 @@ function ClientMobileApp({ location, history }) {
                 </section>
             )}
             {!isAuthUser && versionReady && <AsyncVersion />}
-            {needPWA && (
+            {isPwaBoard && (
                 <AsyncPWA
                     title="Baixe aqui o seu app"
                     icon="/img/official-logo-white.png"

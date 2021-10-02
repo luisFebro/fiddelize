@@ -4,7 +4,6 @@ export default function setStorageRegisterDone() {
     removeVars(
         [
             "memberId",
-            "needPWA",
             "needAppRegister",
             "memberRole",
             "memberJob",

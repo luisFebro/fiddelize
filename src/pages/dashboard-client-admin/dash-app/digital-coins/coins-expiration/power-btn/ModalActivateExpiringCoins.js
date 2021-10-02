@@ -3,6 +3,7 @@ import ModalFullContent from "components/modals/ModalFullContent";
 import SelectField from "components/fields/SelectField";
 import showToast from "components/toasts";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
+import useData from "init";
 
 export default function ModalActivateExpiringCoins(props) {
     const { fullOpen, setFullOpen } = props;
@@ -22,6 +23,9 @@ function MainContent({
     setFullOpen,
     // fullOpen,
 }) {
+    const { userId } = useData();
+    const isCoreAdmin = userId === "5e8b0bfc8c616719b01abc9c";
+
     const [data, setData] = useState({
         pickedDaysCount: null,
         pickedExecution: "once",
@@ -37,7 +41,7 @@ function MainContent({
 
     const showDaysCountField = () => {
         const defaultVal = "Selecione prazo:";
-        const valuesArray = [
+        const defaultValues = [
             { val: 30, showVal: "30 dias (1 mês)" },
             { val: 60, showVal: "60 dias (2 meses)" },
             { val: 90, showVal: "90 dias (3 meses)" },
@@ -45,6 +49,9 @@ function MainContent({
             { val: 150, showVal: "150 dias (5 meses)" },
             { val: 180, showVal: "180 dias (6 meses)" },
         ];
+        const valuesArray = isCoreAdmin
+            ? [{ val: 1, showVal: "1 dia" }, ...defaultValues]
+            : [...defaultValues];
 
         const handleSelectValue = (val) => {
             if (!val || val === defaultVal) return;

@@ -312,6 +312,7 @@ export default function ExpirationPowerBtn() {
 // HELPERS
 function pickDeadlineTxt(daysCount) {
     if (!daysCount) return "";
+    if (daysCount === 1) return "1 dia";
     if (daysCount === 30) return "30 dias (1 mês)";
     if (daysCount === 60) return "60 dias (2 meses)";
     if (daysCount === 90) return "90 dias (3 meses)";
