@@ -37,7 +37,7 @@ export default function ExpiringCoinsBadge() {
                 setTimeout(() => {
                     setOpen(false);
                 }, 10000);
-            }, 3000);
+            }, 15000);
         };
 
         if (!alreadyExpCoinsOn) {
@@ -90,7 +90,7 @@ export default function ExpiringCoinsBadge() {
     );
 
     const expiringMsg = expiringCoinsOn
-        ? `${firstName}, seu saldo de ${currPoints} PTS expira em ${daysLeftExpireCoins} dias. Aproveite para acumular e trocar por benefícios durante o período. Boas compras!`
+        ? `${firstName}, seu saldo de ${currPoints} PTS expira em ${daysLeftExpireCoins} dias. Aproveite para acumular moedas PTS e trocar por benefícios durante o período. Boas compras!`
         : `Ei ${firstName}, suas moedas digitais não tem prazo para expirar. Acumule moedas e ganhe benefícios!`;
 
     return (

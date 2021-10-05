@@ -6,11 +6,16 @@ export default async function checkValidSession() {
     window.addEventListener("focus", async () => {
         // console.log(window.location.href);
         const isLoggedIn = await getVar("success", "user");
+        const websitePages = ["/baixe-app", "/privacidade", "/novo-clube"];
+        const isWebsitePage = websitePages.some((pg) =>
+            window.location.href.includes(pg)
+        );
         const arePublicPages =
             window.location.href.indexOf("app") >= 0 ||
             window.location.href.pathname === "/" ||
             window.location.href.indexOf("senha-de-acesso") >= 0 ||
-            window.location.href.pathname === "/acesso/verificacao";
+            window.location.href.pathname === "/acesso/verificacao" ||
+            isWebsitePage;
 
         if (arePublicPages || !isLoggedIn) return;
 

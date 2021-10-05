@@ -1,6 +1,6 @@
 import isThisApp from "utils/window/isThisApp";
 import { removeCollection, setItems } from "init/lStorage";
-import { getVars, setVars, removeStore } from "init/var";
+import { getVars, setVars } from "init/var";
 import showToast from "components/toasts";
 import showProgress from "components/loadingIndicators/progress";
 
@@ -23,9 +23,20 @@ export default async function disconnect(options = {}) {
         "user"
     );
 
-    await Promise.all([removeStore("user"), removeCollAsync()]).catch((err) =>
-        console.log(`ERROR DISCONNECT promise.all: ${err}`)
-    );
+    await Promise.all([
+        setVars(
+            {
+                success: false,
+                token: false,
+                appId: false,
+                verifPass: false,
+                birthday: false,
+                email: false,
+            },
+            "user"
+        ),
+        removeLocalCollectionAsync(),
+    ]);
 
     // post essential data set
     const isCliAdmin = role === "cliente-admin";
@@ -44,7 +55,7 @@ export default async function disconnect(options = {}) {
     return null;
 }
 
-async function removeCollAsync() {
+async function removeLocalCollectionAsync() {
     const run = (resolve) => {
         removeCollection("currUser");
         resolve("ok");

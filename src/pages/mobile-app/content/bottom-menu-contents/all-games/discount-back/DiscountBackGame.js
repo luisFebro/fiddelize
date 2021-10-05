@@ -47,7 +47,7 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
         <section className="text-white text-shadow">
             {didUserScroll && showTicket()}
             <CartRace
-                className="mt-5 animated fadeInUp faster"
+                className="animated fadeInUp faster"
                 targetPoints={targetPoints}
                 perc={perc}
                 currPoints={currPoints}

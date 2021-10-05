@@ -56,10 +56,11 @@ const getStyles = () => ({
     },
 });
 
-function ASyncRegisterCliUser({
+function AsyncRegisterCliUser({
     isStaff = false,
     callback,
     setLoginOrRegister,
+    setSuccessfulRegister,
     needAlreadyRegisterBtn = false,
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
@@ -250,12 +251,15 @@ function ASyncRegisterCliUser({
             callback(payload);
         } else {
             setLoginOrRegister("login");
+            setSuccessfulRegister(true);
             showToast(
                 `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
                 { type: "success", dur: 10000 }
             );
             // sendEmail(res.data.authUserId);
         }
+
+        return true;
     };
 
     const showLoginForm = () => (
@@ -269,7 +273,7 @@ function ASyncRegisterCliUser({
             <div className="pl-2">
                 <RadiusBtn
                     size="small"
-                    title="Faça login"
+                    title="Acessar"
                     onClick={() => {
                         // setStorageRegisterDone runs when there is a success login. If not successful login, back to registration form
                         setLoginOrRegister("login");
@@ -570,7 +574,7 @@ function ASyncRegisterCliUser({
     );
 }
 
-export default React.memo(ASyncRegisterCliUser);
+export default React.memo(AsyncRegisterCliUser);
 
 /* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>

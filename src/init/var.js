@@ -123,13 +123,17 @@ export const removeVars = async (strArray, options = {}) => {
     return await Promise.all(promises);
 };
 
+// removeStore is the culprit of a tremendous delay and actually preventing log out.
+// maybe because we have to insert new variables afterwards... removeStore("pre_register") is working fine for now...
 export const removeStore = async (store) => {
     const storeName = handleStoreName(store);
 
-    return await localforage.dropInstance({
+    await localforage.dropInstance({
         name: `fiddelize-${storeName}`,
         // storeName: storeName, // if this is specified, only the store inside collection is removed.
     });
+
+    return "done";
 };
 
 // HELPERS

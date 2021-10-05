@@ -97,7 +97,7 @@ async function handlePermission({ permission, userId, role }) {
 
     if (!isGranted) return;
 
-    showToast("Registrando...");
+    showToast("Registrando...", { dur: 10000 });
 
     const data = await subscribeUser({
         userId,

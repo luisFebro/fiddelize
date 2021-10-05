@@ -3,7 +3,7 @@ import { ROOT } from "api/root";
  URLs ONLY
 */
 // GENERAL DATA
-export const removeUser = (userId) => `${ROOT}/user/${userId}`; // DELETE
+export const removeUser = () => `${ROOT}/user/remove`; // DELETE
 export const pushElemToField = () => `${ROOT}/user/field/array/push`; // PUT
 export const getUserIdByName = () => `${ROOT}/user/id-by-name`; // GET
 export const checkFieldGotValue = () =>

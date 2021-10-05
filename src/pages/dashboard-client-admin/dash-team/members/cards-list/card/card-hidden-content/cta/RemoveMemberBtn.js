@@ -30,9 +30,15 @@ export default function RemoveMemberBtn({ modalData }) {
         setTimeout(() => {
             getAPI({
                 method: "delete",
-                url: removeUser(_id),
-                params: { userId: bizId, thisRole: "cliente-membro" },
+                url: removeUser(),
+                body: {
+                    role: "cliente-membro",
+                    userId: bizId,
+                    cliIds: _id,
+                    bizId,
+                },
                 fullCatch: true,
+                // params: { userId: bizId, thisRole: "cliente-membro" },
             })
                 .then(() => {
                     showToast(

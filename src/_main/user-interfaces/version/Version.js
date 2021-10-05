@@ -3,12 +3,12 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.54.15";
+const latestVersion = "4.55.0";
 // NEXT:
 // register bonus coins -
-const updateDescription =
-    "expiring coins deadline - frontend, backend, cron-jobs and notifs";
+const updateDescription = "new version of notification";
 /* HISTORY
+expiring coins deadline - frontend, backend, cron-jobs and notifs
 register bonus coins
 new link systems for all user's apps for new site pt3
 new shopping club maker pt4

@@ -99,7 +99,7 @@ function registerValidSW(swUrl, config) {
                                 () =>
                                     isToastActivated &&
                                     loadToast(
-                                        "Basta reiniciar seu app para atualizar.",
+                                        "Basta fechar e reiniciar seu app para atualizar.",
                                         4000
                                     ),
                                 1900

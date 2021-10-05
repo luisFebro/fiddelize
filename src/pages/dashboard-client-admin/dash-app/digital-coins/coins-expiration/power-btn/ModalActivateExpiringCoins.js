@@ -50,7 +50,7 @@ function MainContent({
             { val: 180, showVal: "180 dias (6 meses)" },
         ];
         const valuesArray = isCoreAdmin
-            ? [{ val: 1, showVal: "1 dia" }, ...defaultValues]
+            ? [{ val: 2, showVal: "2 dias" }, ...defaultValues]
             : [...defaultValues];
 
         const handleSelectValue = (val) => {

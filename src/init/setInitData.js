@@ -50,8 +50,8 @@ const getDataByRole = (role, initData) => {
 
     const cliMember = {
         rememberAccess: true,
-        linkId: initData.linkIdk,
-        memberJob: initData.memberJob,
+        linkId: initData.linkId || initData.currUser.linkId,
+        memberJob: initData.memberJob || initData.currUser.memberJob,
     };
 
     const cliUser = {

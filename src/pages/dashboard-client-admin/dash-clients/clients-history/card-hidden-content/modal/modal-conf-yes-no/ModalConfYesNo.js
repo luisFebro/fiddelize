@@ -36,13 +36,19 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
         setTimeout(() => {
             getAPI({
                 method: "delete",
-                url: removeUser(itemData._id),
-                params: { userId: bizId, thisRole: "cliente" },
+                url: removeUser(),
+                body: {
+                    role: "cliente",
+                    userId: bizId,
+                    cliIds: itemData._id,
+                    bizId,
+                },
                 fullCatch: true,
+                // params: { userId: bizId, thisRole: "cliente" },
             })
                 .then(() => {
                     showToast(
-                        `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
+                        `Cliente ${itemData.name.cap()} foi excluído do seu clube de compras.`,
                         { type: "success" }
                     );
                     setRun("runName", `RecordedClientsList_${getId()}`, uify);
@@ -50,6 +56,8 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 })
                 .catch((err) => showToast(err.data.msg, { type: "error" }));
         }, 5900);
+
+        return null;
     };
 
     const showActionBtns = () => (

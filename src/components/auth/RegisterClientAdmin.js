@@ -165,26 +165,28 @@ function RegisterClientAdmin({ logo }) {
         setFieldError(null);
     };
 
-    const registerThisUser = async (e) => {
+    const registerThisUser = async () => {
         clientAdminData.bizWhatsapp = phone;
         const newUser = {
             ...data,
         };
 
         showToast("Registrando sua conta...", { dur: 15000 });
-        const res = await doRegister(newUser);
+        const ok = await doRegister(newUser).catch((res) => {
+            if (res.status !== 200 && res.data) {
+                showToast(res.data.msg || res.data.error, { type: "error" });
+                // detect field errors
+                const thisModalFields = Object.keys(data);
+                const foundObjError = detectErrorField(
+                    res.data.msg,
+                    thisModalFields
+                );
+                setFieldError(foundObjError);
+            }
+            return null;
+        });
 
-        if (res.status !== 200 && res.data) {
-            showToast(res.data.msg || res.data.error, { type: "error" });
-            // detect field errors
-            const thisModalFields = Object.keys(data);
-            const foundObjError = detectErrorField(
-                res.data.msg,
-                thisModalFields
-            );
-            setFieldError(foundObjError);
-            return;
-        }
+        if (!ok) return null;
 
         // if (!agreementDone) {
         //     return showToast(
@@ -226,6 +228,8 @@ function RegisterClientAdmin({ logo }) {
         // Lesson: this await was preventing a tablet to redirect properly to the next page.
         await removeStore("pre_register");
         clearData();
+
+        return true;
     };
 
     const showTitle = () => (

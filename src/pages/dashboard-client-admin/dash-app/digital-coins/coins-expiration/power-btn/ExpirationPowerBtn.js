@@ -52,6 +52,8 @@ export default function ExpirationPowerBtn() {
     } = data;
 
     const { userId } = useData();
+    const isCoreAdmin = userId === "5e8b0bfc8c616719b01abc9c";
+
     const { bizName, bizLogo } = useBizData();
 
     useEffect(() => {
@@ -114,7 +116,7 @@ export default function ExpirationPowerBtn() {
             ? addDays(new Date(), activationData.pickedDaysCount)
             : null;
         const nearExpDate = !isDeactivated
-            ? addDays(new Date(expirationDate), -5)
+            ? addDays(new Date(expirationDate), isCoreAdmin ? -2 : -5)
             : null;
 
         const body = {
@@ -312,7 +314,7 @@ export default function ExpirationPowerBtn() {
 // HELPERS
 function pickDeadlineTxt(daysCount) {
     if (!daysCount) return "";
-    if (daysCount === 1) return "1 dia";
+    if (daysCount === 1) return "2 dias";
     if (daysCount === 30) return "30 dias (1 mês)";
     if (daysCount === 60) return "60 dias (2 meses)";
     if (daysCount === 90) return "90 dias (3 meses)";

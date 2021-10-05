@@ -10,29 +10,30 @@ import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
-import Title from "../Title";
-import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
-import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
-import getDayMonthBr from "../../utils/dates/getDayMonthBr";
-import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-import RadiusBtn from "../buttons/RadiusBtn";
+import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
+import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
+import getDayMonthBr from "utils/dates/getDayMonthBr";
 import { doRegister } from "auth/api";
 // Helpers
-import detectErrorField from "../../utils/validation/detectErrorField";
-import handleChange from "../../utils/form/use-state/handleChange";
+import detectErrorField from "utils/validation/detectErrorField";
+import handleChange from "utils/form/use-state/handleChange";
 import useData, { useBizData } from "init";
-import getDateCode from "../../utils/dates/getDateCode";
+import getDateCode from "utils/dates/getDateCode";
 // Material UI
 // import { makeStyles } from '@material-ui/core/styles';
 import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
-import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
+import { dateFnsUtils, ptBRLocale } from "utils/dates/dateFns";
 import ReactGA from "react-ga";
-import { handleNextField } from "../../utils/form/kit";
-import getFilterDate from "../../utils/dates/getFilterDate";
-import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
+import { handleNextField } from "utils/form/kit";
+import getFilterDate from "utils/dates/getFilterDate";
+import getColor from "styles/txt";
+import Title from "../Title";
+import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
+import RadiusBtn from "../buttons/RadiusBtn";
+import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import showToast from "../toasts";
+import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 
 const filter = getFilterDate();
 
@@ -56,17 +57,25 @@ const getStyles = () => ({
     },
 });
 
-function Register({ isStaff = false, callback, setLoginOrRegister }) {
+function AsyncRegisterCliMember({
+    isStaff = false,
+    callback,
+    setLoginOrRegister,
+    setSuccessfulRegister,
+}) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
     const {
         themePColor,
         themeSColor,
+        themeBackColor,
         bizLogo,
         bizName,
         bizLinkName,
     } = useBizData();
+
+    const { txtColor } = getColor(themeBackColor);
 
     const [data, setData] = useState({
         role: "cliente-membro",
@@ -162,7 +171,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
         handleNextField(null, null, { clearFields: true });
     };
 
-    const registerThisUser = (e) => {
+    const registerThisUser = async () => {
         setActionBtnDisabled(true);
 
         const newUser = {
@@ -178,7 +187,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
 
         showToast("Registrando sua conta...", { dur: 15000 });
 
-        doRegister(newUser).then((res) => {
+        const ok = await doRegister(newUser).catch((res) => {
             if (res.status !== 200) {
                 showToast(res.data.msg || res.data.error, { type: "error" });
                 // detect field errors
@@ -190,33 +199,37 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 setFieldError(foundObjError);
                 return;
             }
-
-            setStorageRegisterDone();
-
-            ReactGA.event({
-                category: "cliMemberUser",
-                action: "Created an account",
-                label: "form",
-                nonInteraction: true,
-                transport: "beacon",
-            });
-
-            if (!isStaff) removeCollection("onceChecked");
-
-            clearData();
-
-            if (isStaff) {
-                const payload = { name, phone, email };
-                callback(payload);
-            } else {
-                setLoginOrRegister("login");
-                showToast(
-                    `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
-                    { type: "success", dur: 10000 }
-                );
-                // sendEmail(res.data.authUserId);
-            }
         });
+        if (!ok) return null;
+
+        setStorageRegisterDone();
+
+        ReactGA.event({
+            category: "cliMemberUser",
+            action: "Created an account",
+            label: "form",
+            nonInteraction: true,
+            transport: "beacon",
+        });
+
+        if (!isStaff) removeCollection("onceChecked");
+
+        clearData();
+
+        if (isStaff) {
+            const payload = { name, phone, email };
+            callback(payload);
+        } else {
+            setLoginOrRegister("login");
+            setSuccessfulRegister(true);
+            showToast(
+                `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
+                { type: "success", dur: 10000 }
+            );
+            // sendEmail(res.data.authUserId);
+        }
+
+        return true;
     };
 
     const showLoginForm = () => (
@@ -531,7 +544,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
     );
 }
 
-export default React.memo(Register);
+export default React.memo(AsyncRegisterCliMember);
 
 /* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>

@@ -108,6 +108,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     bizLinkName,
                     bizId,
                     userId, // for auth
+                    linkId,
                 },
             });
             if (!scoreToken) return null;

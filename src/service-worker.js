@@ -20,9 +20,10 @@ import {
     StaleWhileRevalidate,
 } from "workbox-strategies";
 import { BackgroundSyncPlugin } from "workbox-background-sync";
-// import isThisApp from "./utils/window/isThisApp";
-
-// const isApp = isThisApp();
+import {
+    subscribePush,
+    renewSubscription,
+} from "components/pwa-push-notification/scriptsUtils";
 
 // CORE
 // The clientsClaim() method in workbox-core automatically adds an activate event listener to your service worker, and inside of it, calls self.clients.claim(). Calling self.clients.claim() before the current service worker activates will lead to a runtime exception, and workbox-core's wrapper helps ensure that you call it at the right time. - https://developers.google.com/web/tools/workbox/modules/workbox-core
@@ -159,6 +160,10 @@ registerRoute(
     "POST"
 );
 
+self.addEventListener("activate", (event) => {
+    event.waitUntil(self.clients.claim());
+});
+
 // EVENTS
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
@@ -174,7 +179,7 @@ self.addEventListener("push", async (event) => {
     const payload = event.data.json();
     const notifPromise = showNotification(payload);
 
-    event.waitUntil(notifPromise);
+    event.waitUntil(Promise.resolve(notifPromise));
 });
 
 // The common practice for a notification click is for it to close and perform some other logic (i.e. open a window or make some API call to the application)
@@ -218,72 +223,17 @@ self.addEventListener("notificationclose", (event) => {
     // event.waitUntil(promiseChain);
 });
 
-// detect subscription was refreshed by the browser, revoked or lost.
-// async function saveSub(newSubscription) {
-//     await setVar({ "subscription-renewal": newSubscription });
-// }
-
-// function getUrlAPI() {
-//     return process.env.NODE_ENV === "production"
-//         ? "https://fiddelize.herokuapp.com/api"
-//         : "http://localhost:5000/api";
-// }
-
-// subscription renewal - reference: https://pushpad.xyz/service-worker.js | https://medium.com/@madridserginho/how-to-handle-webpush-api-pushsubscriptionchange-event-in-modern-browsers-6e47840d756f
-// async function handleSubscriptionRenewal({ event }) {
-// const newSubscription = await self.registration.pushManager.getSubscription();
-// console.log("newSubscription", newSubscription);
-// const oldSubscription = await getVar('subscription-renewal');
-// console.log("oldSubscription", oldSubscription);
-
-// if(newSubscription.endpoint !== oldSubscription.endpoint) {
-// await saveSub(newSubscription);
-// const req = new Request(`${getUrlAPI()}/push-notification/push-subscription-change`, {
-// method: 'POST',
-// headers: { 'Content-Type': 'application/json' },
-// body: JSON.stringify(
-//     { oldSubscription, newSubscription })
-// });
-
-// await self.fetch(req);
-// }
-// }
 self.addEventListener("pushsubscriptionchange", (event) => {
-    console.log("pushsubscriptionchange", event);
+    const oldEndpoint = event.oldSubscription ? event.oldSubscription : null;
+
     event.waitUntil(
-        fetch(
-            `https://fiddelize.herokuapp.com/api/push-notification/subscription-renewal`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    old_endpoint: event.oldSubscription
-                        ? event.oldSubscription.endpoint
-                        : null,
-                    new_endpoint: event.newSubscription
-                        ? event.newSubscription.endpoint
-                        : null,
-                    new_p256dh: event.newSubscription
-                        ? event.newSubscription.toJSON().keys.p256dh
-                        : null,
-                    new_auth: event.newSubscription
-                        ? event.newSubscription.toJSON().keys.auth
-                        : null,
-                }),
-            }
-        )
+        Promise.resolve(
+            event.newSubscription
+                ? event.newSubscription
+                : subscribePush(self.registration)
+        ).then((newSub) => renewSubscription({ oldEndpoint, newSub }))
     );
 });
-
-// Listen messages from browser and wait for the first subscription to save it for
-// future expirations.
-// self.addEventListener('message', (event) => {
-//   if(event.data.action === 'REQUEST_SUBSCRIPTION') {
-//      event.waitUntil(saveSub(event.data.subscription));
-//   }
-// });
-// end subscription renewal
-// end notifications
 // END EVENTS
 
 // HELPERS
@@ -526,3 +476,11 @@ registerRoute(
   })
 );
  */
+
+/* ARCHIVES
+// resource: https://github.com/MicrosoftEdge/pushnotifications-demo/blob/master/src/service-worker.js
+skipWaiting() means that your new service worker is likely controlling pages that were loaded with an older version. This means some of your page’s fetches will have been handled by your old service worker, but your new service worker will be handling subsequent fetches. If this might break things, don’t use skipWaiting() https://techglimpse.com/service-workers-installation-and-activation-pwa-essentials/
+self.addEventListener('install', () => {
+     self.skipWaiting();
+});
+*/

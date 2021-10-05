@@ -87,6 +87,8 @@ const isApp = isThisApp();
 
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
+    // the needAppRegister is only updated after reloading, and the register button should not appear right after a successful register. This cond will solve that without having to reload the variable
+    const [successfulRegister, setSuccessfulRegister] = useState(false);
 
     useScrollUp();
 
@@ -222,7 +224,9 @@ function ClientMobileApp({ location, history }) {
                     >
                         <AsyncLogin
                             setLoginOrRegister={setLoginOrRegister}
-                            needAppRegister={needAppRegister}
+                            needAppRegister={
+                                successfulRegister ? false : needAppRegister
+                            }
                             isBizTeam={isBizTeam}
                             rootClassname=""
                         />
@@ -253,16 +257,19 @@ function ClientMobileApp({ location, history }) {
                         {isCliUser && (
                             <AsyncRegisterCliUser
                                 needAlreadyRegisterBtn
+                                setSuccessfulRegister={setSuccessfulRegister}
                                 setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                         {isCliMember && (
                             <AsyncRegisterCliMember
+                                setSuccessfulRegister={setSuccessfulRegister}
                                 setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                         {isBizTeam && (
                             <AsyncRegisterBizTeam
+                                setSuccessfulRegister={setSuccessfulRegister}
                                 setLoginOrRegister={setLoginOrRegister}
                             />
                         )}

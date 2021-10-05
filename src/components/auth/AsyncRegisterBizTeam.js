@@ -16,22 +16,21 @@ import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import useData, { useBizData } from "init";
 import getColor from "styles/txt";
 import { doRegister } from "auth/api";
+import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
+import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
+import getDayMonthBr from "utils/dates/getDayMonthBr";
+import detectErrorField from "utils/validation/detectErrorField";
+import handleChange from "utils/form/use-state/handleChange";
+import getDateCode from "utils/dates/getDateCode";
+import { dateFnsUtils, ptBRLocale } from "utils/dates/dateFns";
+import { handleNextField } from "utils/form/kit";
+import getFilterDate from "utils/dates/getFilterDate";
+import { CLIENT_URL } from "config/clientUrl";
 import Title from "../Title";
-import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
-import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
-import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
-import detectErrorField from "../../utils/validation/detectErrorField";
-import handleChange from "../../utils/form/use-state/handleChange";
-import getDateCode from "../../utils/dates/getDateCode";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
-import { handleNextField } from "../../utils/form/kit";
-import getFilterDate from "../../utils/dates/getFilterDate";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
-import CheckBoxForm from "../CheckBoxForm";
-import { CLIENT_URL } from "../../config/clientUrl";
 import showToast from "../toasts";
 
 const filter = getFilterDate();
@@ -56,7 +55,11 @@ const getStyles = () => ({
     },
 });
 
-function Register({ isStaff = false, setLoginOrRegister }) {
+function AsyncRegisterBizTeam({
+    isStaff = false,
+    setLoginOrRegister,
+    setSuccessfulRegister,
+}) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
@@ -87,7 +90,6 @@ function Register({ isStaff = false, setLoginOrRegister }) {
         bizImg: "/img/official-logo-name.png", // for account panel...
         bizName: "fiddelize", // for account panel...
         showAgreement: false,
-        agreementDone: false,
     });
 
     const styles = getStyles();
@@ -98,15 +100,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    const {
-        name,
-        email,
-        gender,
-        cpf,
-        phone,
-        showAgreement,
-        agreementDone,
-    } = data;
+    const { name, email, gender, cpf, phone, showAgreement } = data;
     const cpfValue = autoCpfMaskBr(cpf);
     const phoneValue = autoPhoneMask(phone);
 
@@ -167,7 +161,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
         handleNextField(null, null, { clearFields: true });
     };
 
-    const registerThisUser = (e) => {
+    const registerThisUser = async () => {
         setActionBtnDisabled(true);
 
         const newUser = {
@@ -181,16 +175,9 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             );
         }
 
-        if (!agreementDone) {
-            return showToast(
-                "Clique na caixa para concordar com termos de uso e privacidade",
-                { type: "error" }
-            );
-        }
-
         showToast("Registrando sua conta...", { dur: 15000 });
 
-        doRegister(newUser).then((res) => {
+        const ok = await doRegister(newUser).catch((res) => {
             if (res.status !== 200) {
                 showToast(res.data.msg || res.data.error, { type: "error" });
                 // detect field errors
@@ -202,27 +189,31 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 setFieldError(foundObjError);
                 return;
             }
-
-            setStorageRegisterDone();
-
-            ReactGA.event({
-                category: "bizTeam",
-                action: "Created an account",
-                label: "form",
-                nonInteraction: true,
-                transport: "beacon",
-            });
-
-            removeCollection("onceChecked");
-            clearData();
-
-            setLoginOrRegister("login");
-            showToast(
-                `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
-                { type: "success", dur: 10000 }
-            );
-            // sendEmail(res.data.authUserId);
         });
+
+        if (!ok) return null;
+
+        setStorageRegisterDone();
+
+        ReactGA.event({
+            category: "bizTeam",
+            action: "Created an account",
+            label: "form",
+            nonInteraction: true,
+            transport: "beacon",
+        });
+
+        removeCollection("onceChecked");
+        clearData();
+
+        setLoginOrRegister("login");
+        setSuccessfulRegister(true);
+        showToast(
+            `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
+            { type: "success", dur: 10000 }
+        );
+        // sendEmail(res.data.authUserId);
+        return true;
     };
 
     const showLoginForm = () => (
@@ -259,17 +250,10 @@ function Register({ isStaff = false, setLoginOrRegister }) {
         </div>
     );
 
-    const handleAgreementChecked = (currStatus) => {
-        setData({
-            ...data,
-            agreementDone: currStatus,
-        });
-    };
-
     // this should be a tag link because Link erases all data when user returns back
     const agreementTxtElem = (
         <span>
-            concordo com os{" "}
+            Ao se cadastrar, você está de acordo com os nossos{" "}
             <a
                 className="text-link"
                 href={`${CLIENT_URL}/termos-de-uso`}
@@ -278,15 +262,6 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             >
                 termos de uso
             </a>{" "}
-            e{" "}
-            <a
-                className="text-link"
-                href={`${CLIENT_URL}/privacidade`}
-                rel="noopener noreferrer"
-                target="_blank"
-            >
-                privacidade
-            </a>
         </span>
     );
 
@@ -529,11 +504,8 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 </div>
             </section>
             {showAgreement && (
-                <section className="mt-3">
-                    <CheckBoxForm
-                        text={agreementTxtElem}
-                        setIsBoxChecked={handleAgreementChecked}
-                    />
+                <section className="mt-3 text-small font-weight-bold">
+                    {agreementTxtElem}
                 </section>
             )}
             <SafeEnvironmentMsg mt={showAgreement ? "mt-0" : ""} />
@@ -573,7 +545,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     );
 }
 
-export default React.memo(Register);
+export default React.memo(AsyncRegisterBizTeam);
 
 /* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>

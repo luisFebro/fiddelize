@@ -9,6 +9,7 @@ export default function generateAppDownloadLink({
     linkId, // staffId
 }) {
     let link;
+    console.log("linkId", linkId);
 
     if (!bizLinkName) return console.log("the param bizLinkName is required");
     const userFirstName = getFirstName(name && name.toLowerCase());
@@ -32,7 +33,7 @@ export default function generateAppDownloadLink({
         if (name)
             link = `https://fiddelize.com/${bizLinkName}_${userFirstName}${
                 needDoublePoints ? ":" : ""
-            }${thisStaffId}${thisLinkPts}`;
+            }${thisStaffId}${thisLinkPts ? "." : ""}${thisLinkPts}`;
         else link = `https://fiddelize.com/${bizLinkName}`;
     }
 

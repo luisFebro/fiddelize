@@ -1,4 +1,5 @@
 import getAPI, { subscribePushNotif } from "api";
+import showToast from "components/toasts";
 // import { setVar } from "init/var";
 
 const convertedVapidKey = urlBase64ToUint8Array(
@@ -13,7 +14,9 @@ export default async function subscribeUser({ role, userId }) {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
         // Service Worker isn't supported on this browser, disable or hide UI.
         // Push isn't supported on this browser, disable or hide UI.
-        throw new Error("Navegador sem suporte a notificações.");
+        return showToast("Navegador sem suporte a notificações.", {
+            type: "error",
+        });
     }
 
     // Lesson: if no response from here, it means there's no service worker installed in the browser.
