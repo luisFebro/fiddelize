@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAPI, { readFiddelizeCosts } from "api/useAPI";
+import convertToReal from "utils/numbers/convertToReal";
+import getPercentage from "utils/numbers/getPercentage";
+import getMonthNowBr from "utils/dates/getMonthNowBr";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import useData from "init";
 import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
 import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
-import getPercentage from "../../../../../../utils/numbers/getPercentage";
-import getMonthNowBr from "../../../../../../utils/dates/getMonthNowBr";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import CashflowBtn from "./cash-flow/CashflowBtn";
 
 export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
     const [revenueMode, setRevenueMode] = useState("netProfit"); //or allTimeRevenue
     const revenueAmount = mainData && mainData.revenueAmount;
+    const { countCliUsers } = useData();
 
     const allTimeRevenueAmount = mainData && mainData.allTimeRevenueAmount;
     const allTimeNetProfitAmount = mainData && mainData.allTimeNetProfitAmount;

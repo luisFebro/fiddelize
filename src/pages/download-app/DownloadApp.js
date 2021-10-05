@@ -164,12 +164,13 @@ export default function DownloadApp({ match, location, history }) {
     useDataStorage({
         pColor,
         sColor,
+        backColor,
         bizLogo,
         bizId,
         bizName,
-        backColor,
         isAllowedLink,
         dataRoleStorage,
+        whichRole,
     });
     // END STORAGE
 
@@ -424,6 +425,7 @@ function useDataStorage({
     bizName,
     isAllowedLink,
     dataRoleStorage,
+    whichRole,
 }) {
     // fundamental data each role
     useEffect(() => {
@@ -437,20 +439,22 @@ function useDataStorage({
 
     const appStyling = useMemo(
         () => ({
-            bizId,
+            bizId, // for cli-admins, it is null, but no sideeffects since admin has already registed and only need to log in
             bizName,
             bizLogo,
             themePColor: pColor || themePColor,
             themeSColor: sColor || themeSColor,
             themeBackColor: backColor || themeBackColor,
-            // eslint-disable-next-line
         }),
+        // eslint-disable-next-line
         [pColor, themePColor, bizLogo]
     );
 
     useEffect(() => {
+        console.log("whichRole", whichRole);
         setItems("bizData", appStyling);
-    }, [appStyling]);
+        setItems("currUser", { role: whichRole });
+    }, [appStyling, whichRole]);
     // end set app styling
 }
 // HOOKS

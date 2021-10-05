@@ -62,7 +62,7 @@ export default function handleRoleStorage({
                 success: false,
                 verifPass: false,
                 token: false,
-                needAppRegister: true,
+                needAppRegister: !isCliAdmin, // cli-admin has already registered in the app creation flow and thus only requires direct access to login
             },
             "user"
         );

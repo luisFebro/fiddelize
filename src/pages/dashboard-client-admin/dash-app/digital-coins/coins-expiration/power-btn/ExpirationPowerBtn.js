@@ -30,7 +30,7 @@ export default function ExpirationPowerBtn() {
         daysCount: 0,
         isMaintenanceMonth: false, // if cli-user doesn't continue pay, the expiration is auto activate for 1 month of maintenance
         activationDate: null,
-        gotPendingNewClients: true,
+        gotPendingNewClients: false,
         isPendingMode: false,
         pendingModeData: {
             pendingNewClientsCount: 0,

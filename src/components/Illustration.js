@@ -1,9 +1,9 @@
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
-import truncateWords from "../utils/string/truncateWords";
-import { ButtonContainerPressedEffectDark as Dark } from "./buttons/Ω-archives/Default";
+import truncateWords from "utils/string/truncateWords";
 import Spinner from "./loadingIndicators/Spinner";
+// import { ButtonContainerPressedEffectDark as Dark } from "./buttons/Ω-archives/Default";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -59,16 +59,16 @@ export default function Illustration({
         truncatedLimit,
     } = txtImgConfig;
 
-    const showActionButton = (actionButton) => {
-        const { btnName, txt, to } = actionButton;
-        return (
-            btnName === "dark" && (
-                <div className="container-center">
-                    <Dark className="mt-5">{txt}</Dark>
-                </div>
-            )
-        );
-    };
+    // const showActionButton = (actionButton) => {
+    //     const { btnName, txt, to } = actionButton;
+    //     return (
+    //         btnName === "dark" && (
+    //             <div className="container-center">
+    //                 <Dark className="mt-5">{txt}</Dark>
+    //             </div>
+    //         )
+    //     );
+    // };
 
     return (
         <Fragment>
@@ -147,7 +147,7 @@ export default function Illustration({
                     `}
                 </style>
             </section>
-            {showActionButton(actionButton)}
+            {/*{showActionButton(actionButton)}*/}
         </Fragment>
     );
 }

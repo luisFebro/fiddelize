@@ -10,9 +10,9 @@ import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Button from "@material-ui/core/Button";
+import setValObjWithStr from "utils/objects/setValObjWithStr";
+import generateAlphaNumeric from "utils/string/generateAlphaNumeric";
 import RadiusBtn from "../../buttons/RadiusBtn";
-import generateAlphaNumeric from "../../../utils/string/generateAlphaNumeric";
-import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
 // end material ui
 
 ToggleVisibilityPassword.propTypes = {

@@ -88,15 +88,17 @@ export default function AsyncCardsList() {
     });
 
     // scoreAdded or registeredClient - task's desc will be handled in the backend .
-    const displayMember = (memberName) => (
+    const displayMember = (memberName, job) => (
         <section className="d-flex">
             <span
                 className="position-relative  d-inline-block text-subtitle font-weight-bold text-shadow"
                 style={{ lineHeight: "25px", top: 5 }}
             >
-                {getFirstName(memberName && memberName.cap(), {
-                    addSurname: true,
-                })}
+                {job === "admin"
+                    ? "Você"
+                    : getFirstName(memberName && memberName.cap(), {
+                          addSurname: true,
+                      })}
             </span>
         </section>
     );
@@ -105,7 +107,7 @@ export default function AsyncCardsList() {
         const actions = list.map((data) => {
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayMember(data.name)}
+                    {displayMember(data.name, data.job)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}

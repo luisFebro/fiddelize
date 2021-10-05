@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 import getAPI, { getMainReviewData } from "api";
-import Title from "../../../../components/Title";
+import useData, { useBizData } from "init";
+import Title from "components/Title";
+import getVar, { setVar } from "init/var";
+import { getTextStatus } from "components/charts/speedometer-gauge/helpers";
 import NpsReportBtn from "./nps/nps-report/NpsReportBtn";
 import XpGradeReportBtn from "./xp-score/xp-report/XpGradeReportBtn";
 import BuyReviewsBtn from "./buy-reviews/BuyReviewsBtn";
 import colorsHandler from "./helpers/colorsHandler";
-import { getTextStatus } from "../../../../components/charts/speedometer-gauge/helpers";
-import useData from "init";
 import { getGradeText, getColorGrade } from "./xp-score/helpers";
 import "./_ClientsReviews.scss";
-import getVar, { setVar } from "init/var";
 
 export default function ClientsReviews() {
     const [dataScore, setDataScore] = useState({
         xpScoreDiff: 0,
         lastXpStatus: "",
     });
+
+    const { countCliUsers } = useBizData();
+
     const { xpScoreDiff, lastXpStatus } = dataScore;
     const { mainData, loading } = useMainReviewData();
     const {
@@ -50,10 +53,12 @@ export default function ClientsReviews() {
 
     const { colorNPS, backNPS } = colorsHandler({
         nps,
-        xpScore,
+        countCliUsers,
+        // xpScore,
     });
 
-    const dataStatus = getTextStatus(nps, true);
+    const dataStatus =
+        countCliUsers === 0 ? { title: "SEM" } : getTextStatus(nps, true);
 
     const plural = nps !== 1 || nps !== -1 || nps !== 0;
     const colorNPSDiff = npsScoreDiff > 0 ? "text-sys-green" : "text-red";

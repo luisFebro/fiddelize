@@ -125,12 +125,10 @@ export async function signInUserData(cpfValue, options = {}) {
 
     const {
         bizLinkName,
-        verificationPass,
         needCliUserWelcomeNotif,
         needAccountPanel,
-        // nucleo-equipe data
-        pswd, // only verification to redirect to password page
-        publicKey, // only verification to redirect to password page
+        pswd, // nucleo-equipe and cli-admin
+        publicKey, // nucleo-equipe - only verification to redirect to password page
     } = initData;
 
     const { role, name, userId } = currUser;
@@ -157,7 +155,7 @@ export async function signInUserData(cpfValue, options = {}) {
     if (role === "cliente-admin") {
         let whichRoute;
 
-        if (!verificationPass) {
+        if (!pswd) {
             await sendWelcomeNotif({
                 userId,
                 role: "cliente-admin",

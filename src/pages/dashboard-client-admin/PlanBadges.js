@@ -22,7 +22,8 @@ function PlanBadges({ history }) {
 
     const showUpdateBtn = () => (
         <NotificationBadge
-            badgeValue={totalServs || 0}
+            animationName=" "
+            badgeValue={totalServs === "..." || !totalServs ? 0 : totalServes}
             badgeInvisible={false}
             backgroundColor="var(--mainRed)"
             borderColor="var(--mainWhite)"

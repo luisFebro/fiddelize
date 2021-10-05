@@ -224,7 +224,7 @@ function RegisterClientAdmin({ logo }) {
         const { themeBackColor, themePColor, themeSColor } = dataCliAdmin;
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=${
             themeBackColor || "default"
-        }&pc=${themePColor || "default"}&sc=${themeSColor || "default"}`;
+        }&c1=${themePColor || "default"}&c2=${themeSColor || "default"}`;
         // Lesson: this await was preventing a tablet to redirect properly to the next page.
         await removeStore("pre_register");
         clearData();

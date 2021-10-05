@@ -151,7 +151,7 @@ export default function ShowPasswordForm({
                 <div className="animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold">
                     <p className="text-shadow">
                         {isFromCliAdminDash
-                            ? "Altere aqui sua senha sempre que precisar"
+                            ? "Senha de acesso ao APP MEMBROS para sua equipe"
                             : "Insira aqui sua senha de verificação"}
                     </p>
                     <div className="position-relative">

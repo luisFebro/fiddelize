@@ -9,7 +9,13 @@ import showToast from "components/toasts";
 
 export default withRouter(AccessPassCreation);
 
-function AccessPassCreation({ isBizTeam, userName, userId, history }) {
+function AccessPassCreation({
+    isBizTeam,
+    userName,
+    cliMembersPass,
+    userId,
+    history,
+}) {
     const [display, setDisplay] = useState("");
 
     const [data, setData] = useState({
@@ -72,11 +78,12 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                     newPswd2,
                     userId,
                     role: isBizTeam ? "nucleo-equipe" : "cliente-admin",
+                    cliMembersPass,
                 };
 
                 if (newPswdCond) showToast("Criando...");
                 // LESSON: do not destruct await with catch. otherwise when catch returns will throw an error of data's undefined.
-                const finalRes = await getAPI({
+                const msg = await getAPI({
                     method: "post",
                     url: createPassword(),
                     body,
@@ -88,15 +95,13 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                         { type: "error" }
                     );
                 });
-
-                if (!finalRes) return;
+                if (!msg) return;
 
                 if (currPswd === 1) {
                     restartFields();
                     setData((prev) => ({ ...prev, currPswd: 2 }));
                 }
 
-                const { msg } = finalRes;
                 if (msg === "pass created") {
                     showToast("Senha criada!", { type: "success" });
                     setTimeout(() => {
@@ -108,7 +113,9 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                                 );
                             })();
                         } else {
-                            showToast("Tudo pronto!", { dur: 4000 });
+                            showToast("Tudo pronto. Faça seu acesso!", {
+                                dur: 6000,
+                            });
                             history.push("/app");
                         }
                     }, 2900);

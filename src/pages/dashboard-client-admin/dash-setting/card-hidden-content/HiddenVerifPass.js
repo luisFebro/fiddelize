@@ -14,7 +14,7 @@ export default function HiddenVerifPass({ userData }) {
             <Link to="/nova-senha/mudar" className="no-text-decoration">
                 <ButtonFab
                     size="large"
-                    title="Mudar senha de acesso"
+                    title="Mudar senha do seu app"
                     onClick={null}
                     backgroundColor="var(--themeSDark--default)"
                     variant="extended"

@@ -348,16 +348,22 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     </section>
                 )}
                 {isNewMember && name && (
-                    <p className="font-weight-bold mx-3 my-3 text-small text-purple">
+                    <p className="font-weight-bold mx-3 mb-3 mt-5 text-small text-purple">
                         <strong className="font-weight-bold text-normal text-purple">
                             Notas:
                         </strong>
                         <br />
-                        - Sua senha de verificação compras é a mesma para os
-                        membros acessar o app.
+                        - A primeira senha para acesso ao app dos membros foi
+                        gerada e registrada no seu cadastro.
                         <br />
-                        <br />- Você pode trocar a qualquer momento em ajustes >
-                        senhas > senha de verificação
+                        <br />
+                        - A senha é uma camada extra de segurança para
+                        certificar que somente membros autorizados possam
+                        cadastrar moedas, clientes, etc.
+                        <br />
+                        <br />- Você pode trocar a qualquer momento no seu
+                        painel de controle indo na aba ajustes > senhas > senha
+                        app membros.
                     </p>
                 )}
             </section>

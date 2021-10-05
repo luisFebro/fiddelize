@@ -3,10 +3,10 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.55.0";
+const latestVersion = "4.55.50";
 // NEXT:
 // register bonus coins -
-const updateDescription = "new version of notification";
+const updateDescription = "cli-admin tweaks || new version of notification";
 /* HISTORY
 expiring coins deadline - frontend, backend, cron-jobs and notifs
 register bonus coins

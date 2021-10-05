@@ -177,7 +177,7 @@ export default function BizForm({ history }) {
             targetPoints,
             prizeDesc,
         });
-        history.push(gameUrl);
+        return history.push(gameUrl);
     };
 
     const showButtonActions = () => (

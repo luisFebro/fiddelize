@@ -1,15 +1,15 @@
 import { Fragment, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import SearchFilter from "components/search/SearchFilter";
+import { calendar, isScheduledDate } from "utils/dates/dateFns";
+import useData, { useBizData } from "init";
+import getFirstName from "utils/string/getFirstName";
+import useRun from "global-data/ui";
+import Img from "components/Img";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import scrollIntoView from "utils/document/scrollIntoView";
 import SmsCard from "./card/accordion/SmsCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
-// import SearchFilter from "../../../../../components/search/SearchFilter";
-import { calendar, isScheduledDate } from "../../../../../utils/dates/dateFns";
-import useData, { useBizData } from "init";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import useRun from "global-data/ui";
-import Img from "../../../../../components/Img";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import scrollIntoView from "../../../../../utils/document/scrollIntoView";
 
 import useAPIList, { readSMSMainHistory, getTrigger } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
@@ -87,7 +87,7 @@ export default function AsyncCardsList() {
     } = useAPIList({
         url: readSMSMainHistory(bizId),
         skip,
-        trigger,
+        trigger: trigger || true,
         listName: "smsCardsList",
     });
     const detectedCard = useElemDetection({

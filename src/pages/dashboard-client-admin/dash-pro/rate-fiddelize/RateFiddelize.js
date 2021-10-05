@@ -38,8 +38,8 @@ export default function RateFiddelize() {
 
             setDataDB((prev) => ({
                 ...prev,
-                nps: reviewData.nps,
-                xpReport: reviewData.xpReport,
+                nps: reviewData && reviewData.nps,
+                xpReport: reviewData && reviewData.xpReport,
             }));
         })();
     }, [userId, loadingData]);

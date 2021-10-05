@@ -6,7 +6,12 @@ export default async function checkValidSession() {
     window.addEventListener("focus", async () => {
         // console.log(window.location.href);
         const isLoggedIn = await getVar("success", "user");
-        const websitePages = ["/baixe-app", "/privacidade", "/novo-clube"];
+        const websitePages = [
+            "/baixe-app",
+            "/privacidade",
+            "/novo-clube",
+            "/app/preview",
+        ];
         const isWebsitePage = websitePages.some((pg) =>
             window.location.href.includes(pg)
         );

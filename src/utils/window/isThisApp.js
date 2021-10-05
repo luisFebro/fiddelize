@@ -29,9 +29,10 @@ function checkEnforceMobile() {
 
     const mobileUrl = `${CLIENT_URL}/app`;
     // window.location.href takes the whole url with params like site.com/app/ana
+
     const isMobileApp =
         window.location.href.includes(mobileUrl) ||
-        Boolean(window.location.href.indexOf("abrir=1")); // force website urls into mobile mode like /cliente-admin/painel-de-controle?abrir=1
+        Boolean(window.location.href.indexOf("abrir=1") > 0); // force website urls into mobile mode like /cliente-admin/painel-de-controle?abrir=1
     if (isMobileApp) window.sessionStorage.setItem("isPWA", "1");
 
     // home now redirect to fiddelize.com but properly removes the isPWA mode
@@ -39,11 +40,17 @@ function checkEnforceMobile() {
         window.location.href === CLIENT_URL ||
         window.location.href === `${CLIENT_URL}/`;
 
-    const websitePages = ["/baixe-app", "/privacidade", "/novo-clube"];
+    const websitePages = [
+        "/baixe-app",
+        "/privacidade",
+        "/novo-clube",
+        "/app/preview",
+    ]; // /app/preview is the preview for building app in website
     const isWebsitePage = websitePages.some((pg) =>
         window.location.href.includes(pg)
     );
 
+    // this home/website is required because some links are not exclusively from mobile or website. So, only a few conditions need to trigger so the system can still use it as app or website like when accessing fiddelize.com.br/app and jump to admin dashboard. If dashboard doesn't have a mobile link, it will be regarded wrongly as website and vice-versa
     const isNotApp = isHomeUrl || isWebsitePage;
     if (isNotApp) window.sessionStorage.removeItem("isPWA");
 
@@ -73,6 +80,9 @@ https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-st
  */
 
 /* ARCHIVES
+
+console.log("isWebsitePage", isWebsitePage);
+
 // change here only if it is the website to be developed in localhost
 let localHostWebsiteMode = true;
 localHostWebsiteMode = false;//IS_PROD ? false : localHostWebsiteMode; // do not change this line.
