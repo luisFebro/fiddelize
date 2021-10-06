@@ -3,7 +3,9 @@ import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
 import { gameIconsStore, gameBrNameStore } from "components/biz/GamesBadge";
 import getQueryByName from "utils/string/getQueryByName";
-import { removeStore } from "init/var";
+import { useAction } from "global-data/ui";
+import { setDefaultData } from "init/setInitData";
+// import { removeStore } from "init/var";
 
 export const AsyncTargetPrizePanel = Load({
     loader: () =>
@@ -23,7 +25,11 @@ export default function ShoppingGamesPanel({ history }) {
     const selectedGame = getQueryByName("g");
 
     useScrollUp();
-    useRemovePriorData();
+
+    const uify = useAction();
+    useEffect(() => {
+        if (uify) setDefaultData(uify);
+    }, [uify]);
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
@@ -69,8 +75,9 @@ export default function ShoppingGamesPanel({ history }) {
     );
 }
 
+/* ARCHIVES
+
 // HOOKS
-// prevent prior data conflict with the flow. For instance, the bizForm aciton button didn't work because there was prior data indicating that step has already taken
 function useRemovePriorData() {
     useEffect(() => {
         (async () => {
@@ -82,8 +89,6 @@ function useRemovePriorData() {
     }, []);
 }
 // END HOOKS
-
-/* ARCHIVES
 
 useAnimateElem(".intro-page--txt", { animaIn: "fadeInUp", speed: "slow" });
 useAnimateElem(".intro-page--txt-hero", {

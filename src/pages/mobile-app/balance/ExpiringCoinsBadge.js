@@ -15,7 +15,7 @@ const [alreadyExpCoinsOn, alreadyExpCoinsOff] = getItems("onceChecked", [
 
 export default function ExpiringCoinsBadge() {
     const [open, setOpen] = useState(false);
-    const { currPoints, firstName } = useData();
+    const { currPoints, firstName = "cliente" } = useData();
 
     let { expiringCoinsOn } = useBizData();
     const { expiringCoinsDate: expiringDateAdmin } = useBizData();

@@ -45,6 +45,7 @@ function checkEnforceMobile() {
         "/privacidade",
         "/novo-clube",
         "/app/preview",
+        "/qr",
     ]; // /app/preview is the preview for building app in website
     const isWebsitePage = websitePages.some((pg) =>
         window.location.href.includes(pg)

@@ -42,7 +42,7 @@ function Navbar({ history, location }) {
         locationNow.includes("painel-de-apps") ||
         locationNow.includes("playground") ||
         locationNow.includes("status-de-servicos") ||
-        locationNow.includes("codigo") ||
+        locationNow.includes("qr") ||
         locationNow.includes("altrabot");
 
     const showAccessBtn = () => (

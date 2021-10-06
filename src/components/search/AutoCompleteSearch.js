@@ -298,7 +298,7 @@ export default function AutoCompleteSearch({
                         id: inputId,
                         type: "search",
                         style: {
-                            fontSize: "1em",
+                            fontSize: "1.5em",
                             color: themeColor,
                             paddingRight: "10px",
                         },

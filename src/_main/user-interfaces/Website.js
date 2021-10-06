@@ -61,7 +61,7 @@ import {
 const AsyncQrCodeScanner = Load({
     loader: () =>
         import(
-            "pages/others/QrCodeScanner" /* webpackChunkName: "free-qr-code-lazy" */
+            "pages/scanners/QrCodeScanner" /* webpackChunkName: "free-qr-code-lazy" */
         ),
 });
 
@@ -226,7 +226,7 @@ function Website({ location }) {
                     exact
                     component={AsyncPlayground}
                 />
-                <Route path="/codigo/qr" exact component={AsyncQrCodeScanner} />
+                <Route path="/qr" exact component={AsyncQrCodeScanner} />
                 <Route
                     path="/amurreto/altrabot"
                     exact

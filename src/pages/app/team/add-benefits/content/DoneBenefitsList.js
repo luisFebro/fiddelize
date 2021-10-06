@@ -117,7 +117,7 @@ export default function DoneBenefitsList() {
 
     return (
         <section className="text-purple mx-3">
-            {!needEmptyIllustra && filter === "all" && showCustomerSearch()}
+            {!needEmptyIllustra && showCustomerSearch()}
             {Boolean(benefitsCount) && (
                 <h2 className="my-3 text-normal font-weight-bold text-center">
                     <span className="text-subtitle font-weight-bold">

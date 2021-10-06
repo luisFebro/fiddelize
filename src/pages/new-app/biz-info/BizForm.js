@@ -54,21 +54,21 @@ export default function BizForm({ history }) {
         }
     }, [selectedValue]);
 
+    const generateThisBizCode = async (ultimateBizName) => {
+        if (ultimateBizName) {
+            const finalDashedName = await generateBizCodeName(ultimateBizName);
+            setData((prev) => ({
+                ...prev,
+                bizLinkName: finalDashedName,
+            }));
+        }
+    };
+
     const styles = getStyles();
 
     // error options: bizName or field
     const [fieldError, setFieldError] = useState(null);
     const autocompleteUrl = `${ROOT}/user/pre-register/fields-list?limit=30`;
-
-    const generateThisBizCode = async (ultimateBizName) => {
-        if (ultimateBizName) {
-            const finalDashedName = await generateBizCodeName(ultimateBizName);
-            setData({
-                ...data,
-                bizLinkName: finalDashedName,
-            });
-        }
-    };
 
     const showForm = () => (
         <form
@@ -87,11 +87,14 @@ export default function BizForm({ history }) {
                     name="bizName"
                     value={bizName}
                     onKeyPress={(e) => {
+                        const ultimateBizName =
+                            e.target.value && e.target.value.cap();
                         handleNextField(e, "field1");
                         setData({
                             ...data,
-                            bizName: e.target.value && e.target.value.cap(),
+                            bizName: ultimateBizName,
                         });
+                        generateThisBizCode(ultimateBizName);
                     }}
                     onBlur={(e) => {
                         handleNextField(e, "field1", { event: "onBlur" });
@@ -177,7 +180,10 @@ export default function BizForm({ history }) {
             targetPoints,
             prizeDesc,
         });
-        return history.push(gameUrl);
+
+        history.push(gameUrl);
+
+        return null;
     };
 
     const showButtonActions = () => (

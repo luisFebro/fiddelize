@@ -10,9 +10,9 @@ import scrollIntoView from "utils/document/scrollIntoView";
 export default function QrCodeScanner() {
     const [newQr, setNewQr] = useState("");
     const [history, setHistory] = useState([]);
-    const [stop, setStop] = useState(false);
+    // const [stop, setStop] = useState(false);
 
-    useQrScanner({ stopTrigger: stop });
+    useQrScanner({ stopTrigger: false });
 
     const timer = useUpdater();
 
@@ -28,7 +28,7 @@ export default function QrCodeScanner() {
         setHistory((prev) => [...new Set([...prev, newScannedText])]);
 
         return handleNewScannedTxt(newScannedText, setNewQr);
-        setStop(true);
+        // setStop(true);
         // eslint-disable-next-line
     }, [timer]);
 

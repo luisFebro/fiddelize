@@ -97,7 +97,7 @@ async function setLstorageData(initData) {
 // END LOCALSTORAGE
 
 // HELPERS
-async function setDefaultData(uify) {
+export async function setDefaultData(uify) {
     const defaultBizData = {
         themePColor: "default",
         themeSColor: "default",

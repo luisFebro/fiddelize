@@ -451,7 +451,6 @@ function useDataStorage({
     );
 
     useEffect(() => {
-        console.log("whichRole", whichRole);
         setItems("bizData", appStyling);
         setItems("currUser", { role: whichRole });
     }, [appStyling, whichRole]);

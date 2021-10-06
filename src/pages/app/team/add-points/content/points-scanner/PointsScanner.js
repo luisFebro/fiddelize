@@ -5,6 +5,7 @@ import useQrScanner from "hooks/media/useQrScanner";
 import showToast from "components/toasts";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 import getVar, { setVar } from "init/var";
+import CameraQrScannerGuide from "../../../CameraQrScannerGuide";
 // import { decrypt } from "utils/security/xCipherFront";
 
 export default function PointsScanner({ closeModal, callback }) {
@@ -77,6 +78,9 @@ export default function PointsScanner({ closeModal, callback }) {
                     `}
                 </style>
             </main>
+            <div style={{ margin: "50px 0 150px" }}>
+                <CameraQrScannerGuide />
+            </div>
         </section>
     );
 }
