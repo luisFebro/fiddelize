@@ -6,7 +6,7 @@ import showToast from "components/toasts";
 import parse from "html-react-parser";
 import useData, { useBizData } from "init";
 import getAPI, { setExpiringCoinsToBase, getExpiringTotalsAndDates } from "api";
-import { fromNow, addDays } from "utils/dates/dateFns";
+import { fromNow, addDays, setUTCDateTime } from "utils/dates/dateFns";
 import getDayMonthBr from "utils/dates/getDayMonthBr";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
@@ -129,10 +129,10 @@ export default function ExpirationPowerBtn() {
                 : new Date(),
             "clientAdminData.expiringCoinsDeadline.nearExpDate": isDeactivated
                 ? null
-                : nearExpDate,
+                : setUTCDateTime({ date: nearExpDate }),
             "clientAdminData.expiringCoinsDeadline.expirationDate": isDeactivated
                 ? null
-                : expirationDate,
+                : setUTCDateTime({ date: expirationDate }),
             "clientAdminData.expiringCoinsDeadline.daysCount": isDeactivated
                 ? 0
                 : activationData.pickedDaysCount,

@@ -12,6 +12,7 @@ import startOfWeek from "date-fns/startOfWeek";
 import endOfMonth from "date-fns/endOfMonth";
 import endOfWeek from "date-fns/endOfWeek";
 import isAfter from "date-fns/isAfter";
+import set from "date-fns/set";
 import { getPureParsedDate } from "./helpers/dateFnsHelpers";
 import getDayMonthBr from "./getDayMonthBr"; // 20 de Junho de 2020 is better than 20º de junho, 2020...
 
@@ -76,6 +77,14 @@ const endMonth = endOfMonth(new Date());
 
 const formatSlashDMY = (newDate = new Date()) => format(newDate, "dd/MM/yyyy");
 
+// n1 - especially useful for expiration date
+const setUTCDateTime = (options = {}) => {
+    // 4 hour is the most late offset so that we can UTC dates from midnight of the date. If in SP when the UTC offset is 3, it will be triggered 1am and so on... 4 hour offset is only valid in the backend because this date will be handled in a foreign server and UTC is 0, no diff.
+    // In frontend, this should be 0 hour as default and it will be converted auto to UTC hour timezone+
+    const { date = new Date(), hours = 4, minutes = 0, seconds = 0 } = options;
+    return set(date, { hours, minutes, seconds });
+};
+
 export {
     dateFnsUtils,
     ptBRLocale,
@@ -92,6 +101,7 @@ export {
     startWeek,
     isAfter, // Is the first date after the second one?
     endMonth,
+    setUTCDateTime,
 };
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time
@@ -109,3 +119,11 @@ export {
 
 //     return newDate;
 // }
+
+/* COMMENTS
+n1:
+// some dates should have hour modified so that some cron-jobs can be triggered in the exact date, for instance.
+// if a date is recorded with a later hour and a cron-job is triggered by 6am earlier, this means the date will only be triggered next day.
+// if desired date is the recorded date, we want this instead a plus day.
+// https://www.ursahealth.com/new-insights/dates-and-timezones-in-javascript
+*/
