@@ -27,11 +27,10 @@ export default function isThisApp() {
 function checkEnforceMobile() {
     if (!(window.sessionStorage || false)) return false; // Session storage not supported
 
-    const mobileUrl = `${CLIENT_URL}/app`;
     // window.location.href takes the whole url with params like site.com/app/ana
-
+    // window.location.pathname only reads the params without domain host.
     const isMobileApp =
-        window.location.href.includes(mobileUrl) ||
+        window.location.pathname === "/app" ||
         Boolean(window.location.href.indexOf("abrir=1") > 0); // force website urls into mobile mode like /cliente-admin/painel-de-controle?abrir=1
     if (isMobileApp) window.sessionStorage.setItem("isPWA", "1");
 

@@ -5,7 +5,7 @@ import { gameIconsStore, gameBrNameStore } from "components/biz/GamesBadge";
 import getQueryByName from "utils/string/getQueryByName";
 import { useAction } from "global-data/ui";
 import { setDefaultData } from "init/setInitData";
-// import { removeStore } from "init/var";
+import { removeStore } from "init/var";
 
 export const AsyncTargetPrizePanel = Load({
     loader: () =>
@@ -27,9 +27,7 @@ export default function ShoppingGamesPanel({ history }) {
     useScrollUp();
 
     const uify = useAction();
-    useEffect(() => {
-        if (uify) setDefaultData(uify);
-    }, [uify]);
+    useSetDefaultData(uify);
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
@@ -75,21 +73,22 @@ export default function ShoppingGamesPanel({ history }) {
     );
 }
 
-/* ARCHIVES
-
 // HOOKS
-function useRemovePriorData() {
+function useSetDefaultData(uify) {
     useEffect(() => {
+        if (uify) setDefaultData(uify);
+
         (async () => {
             await Promise.all([
                 removeStore("pre_register"),
                 removeStore("user"),
             ]);
         })();
-    }, []);
+    }, [uify]);
 }
 // END HOOKS
 
+/* ARCHIVES
 useAnimateElem(".intro-page--txt", { animaIn: "fadeInUp", speed: "slow" });
 useAnimateElem(".intro-page--txt-hero", {
     animaIn: "bounceInUp",

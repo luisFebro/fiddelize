@@ -132,6 +132,7 @@ export default function BizForm({ history }) {
                     noOptionsText="Nada encontrado"
                     maxHistory={7}
                     inputId="value2"
+                    txtFont="1em"
                 />
             </div>
         </form>

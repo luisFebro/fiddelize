@@ -74,7 +74,7 @@ export default function AutoCompleteSearch({
     timeout = 5000,
     fieldBack = "#fff",
     themeColor = "var(--themeP)",
-    txtFont = "1em",
+    txtFont = "1.5em",
     clearOnEscape = true,
     clearOnBlur = true,
     selectOnFocus = true,
@@ -298,7 +298,7 @@ export default function AutoCompleteSearch({
                         id: inputId,
                         type: "search",
                         style: {
-                            fontSize: "1.5em",
+                            fontSize: txtFont,
                             color: themeColor,
                             paddingRight: "10px",
                         },
