@@ -1,9 +1,13 @@
 import { getUniqueCodeName } from "utils/string/generateAlphaNumeric";
 import addDashesToString from "utils/string/addDashesToString";
-import getAPI, { checkFieldGotValue } from "api";
+import getAPI from "api";
+
+// somehow the link was failing in a critical request. So this is hardcoded right to prod url.
+const checkFieldGotValue =
+    "https://fiddelize.herokuapp.com/api/user/field/check-field-got-value";
 
 export default async function generateBizCodeName(bizName) {
-    if (!bizName) return;
+    if (!bizName) return null;
 
     const dashedBizName = addDashesToString(`${bizName}`);
 
@@ -15,9 +19,12 @@ export default async function generateBizCodeName(bizName) {
 
     const hasNameAlready = await getAPI({
         method: "post",
-        url: checkFieldGotValue(),
+        url: checkFieldGotValue,
         body,
+        needAuth: false,
+        timeoutMsgOn: false,
     });
+
     if (!hasNameAlready) return dashedBizName;
 
     const bizCode = getUniqueCodeName(bizName);
@@ -32,8 +39,9 @@ export default async function generateBizCodeName(bizName) {
 
     const checkedNameWithCode = await getAPI({
         method: "post",
-        url: checkFieldGotValue(),
+        url: checkFieldGotValue,
         body: bodyWithCode,
+        timeoutMsgOn: false,
     });
 
     if (!checkedNameWithCode) return bizNameWithCode;

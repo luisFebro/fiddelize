@@ -55,6 +55,7 @@ export default function ClientUserAppContent({
         trigger: triggerNumberAnima,
         callback: setShowMoreComps,
     };
+
     const currPointsRef = useRef(null);
     useAnimateNumber(currPointsRef.current, currPoints, numberOptions);
 
@@ -87,7 +88,6 @@ export default function ClientUserAppContent({
         themeSColor,
         themeBackColor,
         needDark,
-        txtColor,
         txtColorStyle,
         gameClubPreview,
         needAppForPreview,

@@ -59,6 +59,9 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
 
 // HOOKS
 function useSetGameData({ adminGame, setGameData }) {
+    const gameDataFromUser =
+        adminGame && adminGame.discountBack && adminGame.discountBack;
+
     useEffect(() => {
         (async () => {
             const cliDataFromClubMaker = await getVar(
@@ -79,9 +82,6 @@ function useSetGameData({ adminGame, setGameData }) {
             return null;
         })();
 
-        const gameDataFromUser =
-            adminGame && adminGame.discountBack && adminGame.discountBack;
-
         if (gameDataFromUser)
             setGameData({
                 perc: gameDataFromUser.perc,
@@ -89,7 +89,7 @@ function useSetGameData({ adminGame, setGameData }) {
             });
 
         // eslint-disable-next-line
-    }, [adminGame]);
+    }, []);
 }
 // END HOOKS
 

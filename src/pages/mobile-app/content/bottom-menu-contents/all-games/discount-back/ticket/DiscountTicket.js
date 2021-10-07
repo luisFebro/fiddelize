@@ -100,7 +100,7 @@ export default function DiscountTicket({
         <div className="each-buy-perc--root position-relative animated fadeIn delay-1s container-center">
             <div className="mx-2 each-buy-perc text-white text-pill text-shadow font-site text-em-1-1 text-center">
                 <LocalMallTwoToneIcon className="mr-2" />
-                Acumule {perc}% a cada compra.
+                Acumule {!perc ? "..." : perc}% a cada compra.
             </div>
             <style jsx>
                 {`
@@ -146,7 +146,10 @@ export default function DiscountTicket({
                             <span className="discount-title text-em-2 position-relative">
                                 Vale Desconto
                                 <span className="value position-relative d-block text-em-1-8">
-                                    R$ {ticketAmount}
+                                    R${" "}
+                                    {Number.isNaN(ticketAmount)
+                                        ? "..."
+                                        : ticketAmount}
                                 </span>
                             </span>
                         </div>

@@ -59,6 +59,7 @@ function GroupedAppBar({ history }) {
     const { firstName, userId, totalGeneralPoints } = useData();
     const {
         needAppForCliAdmin,
+        isPreviewMode,
         didUserScroll,
         themePColor: colorP,
         themeBackColor: colorBack,
@@ -128,10 +129,11 @@ function GroupedAppBar({ history }) {
         },
     ];
 
+    // isPreviewMode is false because we have a touching issue. The demo app is frozen right after the bottom tabs pops up.
     return (
         <BottomTabs
             data={data}
-            showAppBar={didUserScroll}
+            showAppBar={isPreviewMode ? false : didUserScroll}
             disableClick={needAppForCliAdmin}
         />
     );

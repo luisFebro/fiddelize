@@ -12,6 +12,7 @@ import { getVars, setVars } from "init/var";
 import { ROOT } from "api/root";
 import showToast from "components/toasts";
 import AutoCompleteSearch from "components/search/AutoCompleteSearch";
+import isKeyPressed from "utils/event/isKeyPressed";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
@@ -45,13 +46,13 @@ export default function BizForm({ history }) {
         selectedValue: "", // field in the autoselect
     });
     const { bizLinkName, field, bizName, selectedValue } = data;
+    console.log("bizLinkName", bizLinkName);
 
     useNeedRedirectPage({ history, priorPageId: "doneGamesPanel" });
 
     useEffect(() => {
-        if (selectedValue) {
-            setData({ ...data, field: selectedValue });
-        }
+        if (selectedValue)
+            setData((prev) => ({ ...prev, field: selectedValue }));
     }, [selectedValue]);
 
     const generateThisBizCode = async (ultimateBizName) => {
@@ -94,7 +95,8 @@ export default function BizForm({ history }) {
                             ...data,
                             bizName: ultimateBizName,
                         });
-                        generateThisBizCode(ultimateBizName);
+                        if (isKeyPressed(e, "Enter"))
+                            generateThisBizCode(ultimateBizName);
                     }}
                     onBlur={(e) => {
                         handleNextField(e, "field1", { event: "onBlur" });
@@ -181,6 +183,7 @@ export default function BizForm({ history }) {
             targetPoints,
             prizeDesc,
         });
+        console.log("gameUrl", gameUrl);
 
         history.push(gameUrl);
 
