@@ -15,6 +15,22 @@ export function renewSubscription(subData) {
     return publishSubscription(subData);
 }
 
+export function treatSubData(currSub) {
+    if (!currSub) return false;
+
+    const { endpoint, expirationTime } = currSub;
+    const { p256dh, auth } = currSub.toJSON().keys;
+
+    return {
+        endpoint,
+        expirationTime,
+        keys: {
+            p256dh,
+            auth,
+        },
+    };
+}
+
 // HELPERS
 function getPublicKey() {
     return fetch(
@@ -28,7 +44,7 @@ function publishSubscription({ oldEndpoint, newSub }) {
     return fetch(
         "https://fiddelize.herokuapp.com/api/push-notification/renewal",
         {
-            method: "post",
+            method: "POST",
             headers: {
                 "Content-type": "application/json",
             },

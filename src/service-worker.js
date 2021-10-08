@@ -23,6 +23,7 @@ import { BackgroundSyncPlugin } from "workbox-background-sync";
 import {
     subscribePush,
     renewSubscription,
+    treatSubData,
 } from "components/pwa-push-notification/scriptsUtils";
 
 // CORE
@@ -224,12 +225,14 @@ self.addEventListener("notificationclose", (event) => {
 });
 
 self.addEventListener("pushsubscriptionchange", (event) => {
-    const oldEndpoint = event.oldSubscription ? event.oldSubscription : null;
+    const oldEndpoint = event.oldSubscription
+        ? event.oldSubscription.endpoint
+        : null;
 
     event.waitUntil(
         Promise.resolve(
             event.newSubscription
-                ? event.newSubscription
+                ? treatSubData(event.newSubscription)
                 : subscribePush(self.registration)
         ).then((newSub) => renewSubscription({ oldEndpoint, newSub }))
     );

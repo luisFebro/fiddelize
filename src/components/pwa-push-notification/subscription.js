@@ -1,12 +1,13 @@
 import getAPI, { subscribePushNotif } from "api";
 import showToast from "components/toasts";
-// import { setVar } from "init/var";
+import getVar, { setVar } from "init/var";
+import { renewSubscription, treatSubData } from "./scriptsUtils";
 
 const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY
 );
 
-const isEvenSmall = window.Helper.isSmallScreen(450);
+const isEvenSmall = window.Helper && window.Helper.isSmallScreen(450);
 const deviceType = isEvenSmall ? "mobile" : "desktop";
 
 export default async function subscribeUser({ role, userId }) {
@@ -29,17 +30,12 @@ export default async function subscribeUser({ role, userId }) {
 
     const params = { role, userId, deviceType };
 
-    await sendSubscription(newSubscription, params);
+    await Promise.all([
+        sendSubscription(newSubscription, params),
+        setVar({ lastPushSub: JSON.stringify(newSubscription) }),
+    ]);
     return "ok";
 }
-
-// HELPERS
-// async function sendAndStoreSubscribe(subscription, params = {}) {
-//     return await Promise.all([
-//         setVar({ "subscription-renewal": JSON.stringify(subscription) }),
-//         sendSubscription(subscription, params)
-//     ]);
-// }
 
 async function sendSubscription(subscription, params = {}) {
     // n1
@@ -51,6 +47,35 @@ async function sendSubscription(subscription, params = {}) {
     });
 }
 
+export async function updateExpiredPushSub() {
+    const registration = await navigator.serviceWorker.ready;
+    if (!registration) return Promise.reject("SW not available");
+
+    const currSubData = await registration.pushManager.getSubscription();
+    const currSub = treatSubData(currSubData);
+
+    const oldSub = JSON.parse(await getVar("lastPushSub"));
+    if (!oldSub || !currSub)
+        return Promise.reject("user is not subscribed to push");
+
+    const oldEndpoint = oldSub.endpoint;
+    const isSamePushSub = currSub.endpoint === oldEndpoint;
+    if (isSamePushSub) return Promise.reject("valid sub still on");
+
+    const newSub = await registration.pushManager.subscribe({
+        applicationServerKey: convertedVapidKey, // n2
+        userVisibleOnly: true,
+    });
+
+    await Promise.all([
+        renewSubscription({ oldEndpoint, newSub }).catch(console.log),
+        setVar({ lastPushSub: JSON.stringify(newSub) }),
+    ]);
+
+    return "new push sub was renewed";
+}
+
+// HELPERS
 function urlBase64ToUint8Array(base64String) {
     if (!base64String) {
         console.log(

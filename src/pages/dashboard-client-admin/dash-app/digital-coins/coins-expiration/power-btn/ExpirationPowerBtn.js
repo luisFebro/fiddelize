@@ -116,7 +116,7 @@ export default function ExpirationPowerBtn() {
             ? addDays(new Date(), activationData.pickedDaysCount)
             : null;
         const nearExpDate = !isDeactivated
-            ? addDays(new Date(expirationDate), isCoreAdmin ? -2 : -5)
+            ? addDays(new Date(expirationDate), isCoreAdmin ? -1 : -5)
             : null;
 
         const body = {
