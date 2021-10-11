@@ -119,7 +119,6 @@ export default function CarouselFlickity({
                 milestoneIcon: iconSelected,
                 targetPoints,
                 prizeDesc,
-                prizeDeadline: 30,
             },
         ];
     }

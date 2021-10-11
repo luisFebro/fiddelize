@@ -40,7 +40,9 @@ function getPublicKey() {
         .then((data) => urlB64ToUint8Array(data.key));
 }
 
-function publishSubscription({ oldEndpoint, newSub }) {
+function publishSubscription({ oldEndpoint, newSub, isBrowser = false }) {
+    const renewalOrigin = isBrowser ? "browser" : "serviceWorker";
+
     return fetch(
         "https://fiddelize.herokuapp.com/api/push-notification/renewal",
         {
@@ -48,7 +50,7 @@ function publishSubscription({ oldEndpoint, newSub }) {
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({ oldEndpoint, newSub }),
+            body: JSON.stringify({ oldEndpoint, newSub, renewalOrigin }),
         }
     );
 }

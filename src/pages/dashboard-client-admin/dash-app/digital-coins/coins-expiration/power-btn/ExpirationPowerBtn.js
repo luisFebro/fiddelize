@@ -64,7 +64,11 @@ export default function ExpirationPowerBtn() {
 
             setData((prev) => ({
                 ...prev,
-                isPendingMode: !on && gotPendingNewClients,
+                isPendingMode:
+                    !on &&
+                    gotPendingNewClients &&
+                    thisPendingModeData &&
+                    thisPendingModeData.lastClientExpDate,
                 pendingModeData: thisPendingModeData,
             }));
         })();

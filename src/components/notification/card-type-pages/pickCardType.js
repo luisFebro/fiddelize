@@ -74,6 +74,7 @@ export default function pickCardType(cardType, options = {}) {
             <AsyncCliUserConfirmedChall
                 {...defaultProps}
                 bizLogo={bizLogo}
+                bizName={bizName}
                 cardId={cardId}
                 senderId={senderId}
                 subtype={subtype}

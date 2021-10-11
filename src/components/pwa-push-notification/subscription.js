@@ -47,6 +47,7 @@ async function sendSubscription(subscription, params = {}) {
     });
 }
 
+// this method make sure push sub is valid and remove any expiration
 export async function updateExpiredPushSub() {
     const registration = await navigator.serviceWorker.ready;
     if (!registration) return Promise.reject("SW not available");
@@ -55,12 +56,41 @@ export async function updateExpiredPushSub() {
     const currSub = treatSubData(currSubData);
 
     const oldSub = JSON.parse(await getVar("lastPushSub"));
+    const oldEndpoint = oldSub && oldSub.endpoint;
+    // chrome by default is null, but others can have a timer
+    const MILI_5_DAYS = 432000000;
+    const gotExpTimerAndWithin5days =
+        currSub.expirationTime &&
+        Date.now() > currSub.expirationTime - MILI_5_DAYS;
+    if (gotExpTimerAndWithin5days)
+        return await handleNewRenewal({
+            currSubData,
+            registration,
+            oldEndpoint,
+        });
+
+    // in case the user clear cache, or prior users with active sub or just make sure users got a local register to compare with curr one.
+    const isSubNotLocalRegister = currSub && !oldSub;
+
+    if (isSubNotLocalRegister)
+        return setVar({ lastPushSub: JSON.stringify(currSub) });
     if (!oldSub || !currSub)
         return Promise.reject("user is not subscribed to push");
 
-    const oldEndpoint = oldSub.endpoint;
     const isSamePushSub = currSub.endpoint === oldEndpoint;
     if (isSamePushSub) return Promise.reject("valid sub still on");
+
+    await handleNewRenewal({ currSubData, registration, oldEndpoint }).catch(
+        console.log
+    );
+
+    return "done renewal";
+}
+
+async function handleNewRenewal({ currSubData, registration, oldEndpoint }) {
+    // returns true if successfully unsubscribe user
+    // if we do not unsubscribe, the newSub will be generated the same prior sub data
+    if (currSubData) await currSubData.unsubscribe();
 
     const newSub = await registration.pushManager.subscribe({
         applicationServerKey: convertedVapidKey, // n2
@@ -68,7 +98,9 @@ export async function updateExpiredPushSub() {
     });
 
     await Promise.all([
-        renewSubscription({ oldEndpoint, newSub }).catch(console.log),
+        renewSubscription({ oldEndpoint, newSub, isBrowser: true }).catch(
+            console.log
+        ),
         setVar({ lastPushSub: JSON.stringify(newSub) }),
     ]);
 

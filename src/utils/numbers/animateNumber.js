@@ -30,7 +30,7 @@ export default function animateNumber(ref, start, end, duration, next) {
     let current = start;
     const increment = end > start ? 1 : -1;
     const stepTime = Math.abs(Math.floor(duration / range));
-    var timer = setInterval(() => {
+    const timer = setInterval(() => {
         current += increment;
         obj.innerHTML = current;
         if (current >= end) {

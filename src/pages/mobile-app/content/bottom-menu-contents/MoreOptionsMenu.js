@@ -13,7 +13,7 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
     },
     {
         icon: "file-contract",
-        title: "regulamento",
+        title: "regras",
         onClick: () => {
             if (needAppForPreview) return;
             if (needAppForCliAdmin) history.push("/regulamento?client-admin=1");

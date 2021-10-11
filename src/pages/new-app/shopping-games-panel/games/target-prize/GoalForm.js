@@ -93,7 +93,6 @@ function GoalForm({ history, bizName }) {
             games: {
                 targetPrize: {
                     on: true,
-                    prizeDeadline: 30,
                     // object data for challList array
                     challList: [
                         {

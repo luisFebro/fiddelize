@@ -122,9 +122,9 @@ const Body = ({ picClass, rootPath }) => {
             <p>
                 <strong>Não há renovação</strong> da expiração e{" "}
                 <strong>precisa ser reativada</strong> caso precise novamente.
-                Uma vez que as moedas não usadas dos seus clientes são
-                expiradas, a funcionalidade de expiração é desativada
-                automaticamente.
+                Uma vez que as moedas não usadas dos seus clientes são expiradas
+                incluindo moedas recebidas e não aplicadas pelo cliente, a
+                funcionalidade de expiração é desativada automaticamente.
             </p>
             <p>
                 No tipo de expiração via mês de manutenção, a expiração é
@@ -144,6 +144,31 @@ const Body = ({ picClass, rootPath }) => {
                 notificações no app quando a funcionalidade é ativada, quando
                 tiver faltando 5 dias para expirar e no dia da expiração.
             </p>
+            <h3 className="mt-5 mb-2 font-site text-purple">
+                Exceção a expiração
+            </h3>
+            <p>
+                A única exceção que a Fiddelize não vai expirar o saldo do
+                cliente ao esgotar o prazo é quando for detectado que o cliente
+                conseguiu{" "}
+                <strong>
+                    bater alguma meta antes do prazo de expiração e o benefício
+                    ainda não foi resgatado.
+                </strong>
+            </p>
+            <p>
+                Neste caso, a Fiddelize passa a contar o{" "}
+                <strong>prazo de expiração dos benefícios</strong> estipulado em
+                ajustes gerais, caso você tenha ativado. Ao expirar este prazo,
+                o saldo em moeda PTS do cliente é também expirado
+                automaticamente.
+            </p>
+            <ShowPicture
+                imgContainerClass={picClass}
+                dataSrc={`${rootPath}/pic-5.png`}
+                reference=""
+                subtitle="O cliente acompanha o prazo do benefício ao bater a meta em todos os jogos de compra e também nas regras do clube de compra no app do cliente"
+            />
         </article>
     );
 };

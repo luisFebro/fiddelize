@@ -6,7 +6,8 @@ import "../_PrizeCard.scss";
 import convertToReal from "utils/numbers/convertToReal";
 
 export default function TargetPrizeCard({ historyData, colorP }) {
-    const { value, desc, challN, isBenefitExpired } = historyData;
+    const { value, desc, challN } = historyData;
+    // from version 4.50 and onwards, expired cards are no longer recorded in the buy register since it doesn't affect coins. But it will be sent a card notification instead when expired
 
     const showDiscountedPoints = () => (
         <Fragment>
@@ -51,29 +52,13 @@ export default function TargetPrizeCard({ historyData, colorP }) {
                     STATUS
                 </p>
                 <div className="received-status text-small">
-                    <p className="font-weight-bold">
-                        {isBenefitExpired ? "Expirado" : "Recebido:"}
-                    </p>
-                    {!isBenefitExpired && (
-                        <div className="icon animated rubberBand delay-2s repeat-2">
-                            <FontAwesomeIcon
-                                icon="check-circle"
-                                style={{ color: "green", fontSize: "20px" }}
-                            />
-                        </div>
-                    )}
-
-                    {isBenefitExpired && (
-                        <div className="icon">
-                            <FontAwesomeIcon
-                                icon="times-circle"
-                                style={{
-                                    color: "var(--expenseRed)",
-                                    fontSize: "20px",
-                                }}
-                            />
-                        </div>
-                    )}
+                    <p className="font-weight-bold">Recebido:</p>
+                    <div className="icon animated rubberBand delay-2s repeat-2">
+                        <FontAwesomeIcon
+                            icon="check-circle"
+                            style={{ color: "green", fontSize: "20px" }}
+                        />
+                    </div>
                 </div>
             </div>
         </section>
@@ -133,3 +118,19 @@ export default function TargetPrizeCard({ historyData, colorP }) {
         </section>
     );
 }
+
+/* ARCHIVES
+
+{isBenefitExpired && (
+    <div className="icon">
+        <FontAwesomeIcon
+            icon="times-circle"
+            style={{
+                color: "var(--expenseRed)",
+                fontSize: "20px",
+            }}
+        />
+    </div>
+)}
+
+*/

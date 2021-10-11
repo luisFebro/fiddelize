@@ -26,7 +26,8 @@ export default function RegulationPage({ location }) {
     const { firstName: cliFirstName, userGame, adminGame } = useData();
 
     const currChall = userGame.targetPrize.challN;
-    const { targetPoints, prizeDesc, prizeDeadline } = adminGame.targetPrize;
+    const { targetPoints, prizeDesc } = adminGame.targetPrize;
+    const { benefitsExpDays } = adminGame.gameTweaks;
 
     let { bizName, themePColor, themeSColor, themeBackColor } = useBizData();
 
@@ -38,7 +39,7 @@ export default function RegulationPage({ location }) {
         "nome-empresa": bizName || " ",
         "nome-cliente": cliFirstName || " ",
         "nome-premio": prizeDesc || " ",
-        "prazo-premio": `${prizeDeadline} dias`,
+        "prazo-premio": `${benefitsExpDays} dias`,
         "ponto-premio": `${targetPoints} pontos`,
         "ponto-nivel": `${levelScore} pontos`,
         "desafio-atual": `${currChall}`,
@@ -66,8 +67,7 @@ export default function RegulationPage({ location }) {
             style={{ top: "20px" }}
             className="position-relative text-center text-white text-title my-4"
         >
-            REGULAMENTO DO PROGRAMA DE PONTOS -{" "}
-            <span>{new Date().getFullYear()}</span>
+            REGRAS DO CLUBE DE COMPRAS - <span>{new Date().getFullYear()}</span>
         </p>
     );
 

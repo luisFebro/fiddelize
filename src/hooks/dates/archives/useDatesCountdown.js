@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { addDays } from "../../utils/dates/dateFns";
-import getDiffDays from "../../utils/dates/getDiffDays";
+import { addDays } from "utils/dates/dateFns";
+import getDiffDays from "utils/dates/getDiffDays";
 
 export default function useDatesCountdown({
     date,

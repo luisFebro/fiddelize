@@ -2,33 +2,14 @@ import { useState } from "react";
 import useContext from "context";
 import useData from "init";
 import Tooltip from "components/tooltips/Tooltip";
-import useDatesCountdown from "hooks/dates/useDatesCountdown";
 import usePlayAudio from "hooks/media/usePlayAudio";
+import getQueryByName from "utils/string/getQueryByName";
 import GiftBox from "./gift-box/GiftBox";
 import QrCodeReceitBtn from "../qr-code-receipt/QrCodeReceiptBtn";
-import getQueryByName from "utils/string/getQueryByName";
-
-const getStyles = (props) => ({
-    deadlineBoard: {
-        borderRadius: "30px",
-        backgroundColor: props.didPrizeExpired
-            ? "var(--expenseRed)"
-            : `var(--themeSDark--${props.colorS})`,
-        border: "3px solid white",
-    },
-    timerIcon: {
-        top: "-25px",
-        left: "-25px",
-    },
-    deadlineTitle: {
-        top: "-25px",
-        left: "15px",
-    },
-});
+import ExpiringBenefitBadge from "../_comps/ExpiringBenefitBadge";
 
 export default function Gift() {
-    const { lastPrizeDate, userId, adminGame, userGame } = useData();
-    const { prizeDeadline = 30 } = adminGame.targetPrize;
+    const { adminGame, userGame } = useData();
     const {
         firstName,
         currPoints,
@@ -53,67 +34,25 @@ export default function Gift() {
 
     const userBeatedChall = currPoints >= targetPoints;
 
-    const finalDeadline = useDatesCountdown({
-        deadline: prizeDeadline,
-        userId,
-        date: lastPrizeDate,
-    });
-    const didPrizeExpired = finalDeadline === 0;
-
-    const styles = getStyles({
-        didPrizeExpired,
-        colorS,
-    });
-
     const tooltipTxt = `
         <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
         • ${firstName}, você ganha <strong>${prizeDesc}</strong> ao concluir este desafio.
         <br />
     `;
 
-    const plural = finalDeadline > 1 ? "s" : "";
     const showPrizeDeadline = () => (
         <section
             className="position-absolute animated zoomIn delay-2s"
             style={{
                 zIndex: 1000,
                 bottom: "5%",
-                left: "66%",
+                left: "55%",
                 display: isGiftOpen ? "block" : "none",
             }}
         >
             <div className="position-relative">
-                <div style={styles.deadlineBoard}>
-                    {!finalDeadline && ( // && !didPrizeExpired
-                        <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
-                            30 dias
-                        </p>
-                    )}
-
-                    {Boolean(finalDeadline) && (
-                        <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
-                            {didPrizeExpired
-                                ? "expirou"
-                                : `${finalDeadline} dia${plural}`}
-                        </p>
-                    )}
-                </div>
                 <QrCodeReceitBtn type="receiptText" />
-                <p
-                    className="text-small text-center font-weight-bold position-absolute text-nowrap"
-                    style={styles.deadlineTitle}
-                >
-                    Prazo Resgate
-                </p>
-                <div className="position-absolute" style={styles.timerIcon}>
-                    <img
-                        className="shadow-elevation-white"
-                        src="/img/icons/timer.svg"
-                        alt="relógio"
-                        width={45}
-                        height={45}
-                    />
-                </div>
+                <ExpiringBenefitBadge />
             </div>
         </section>
     );

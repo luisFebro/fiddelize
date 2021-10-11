@@ -171,7 +171,7 @@
 //     //     setData({ regulationText: newText })
 //     // };
 
-//     const showPrizeDeadlineArea = () =>
+//     const showPrizeDefsfdsfdadlineArea = () =>
 //         showDeadline && (
 //             <section className="container-center animated zoomIn">
 //                 <div className="relative mb-3">
@@ -238,7 +238,7 @@
 //                     />
 //                 </div>
 //             )}
-//             {showPrizeDeadlineArea()}
+//             {showPrizffsaeDeadlineArea()}
 //             <TextField
 //                 multiline
 //                 rows={15}

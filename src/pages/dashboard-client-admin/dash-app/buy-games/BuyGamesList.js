@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import useData from "init";
 import { useReadUser } from "api/frequent";
 import BuyGamesCard from "./buy-games-card/BuyGamesCard";
+import GeneralTweaksBtn from "./_general-tweaks/GeneralTweaksBtn";
 
 export default function BuyGamesList({ setComp }) {
     const [triggerList, setTriggerList] = useState("");
@@ -42,6 +43,20 @@ export default function BuyGamesList({ setComp }) {
 
     return (
         <section className="hidden-content--root text-normal">
+            <div className="my-5 container-center">
+                <GeneralTweaksBtn />
+            </div>
+            <h2 className="my-5 font-weight-bold text-subtitle text-center text-purple">
+                Galeria de Jogos
+                <br />
+                <p
+                    className="text-grey text-normal text-sm-left text-center"
+                    style={{ fontWeight: "normal" }}
+                >
+                    você ativa um ou mais jogos e pode oferecer diferentes
+                    benefícios aos clientes
+                </p>
+            </h2>
             <section className="container">
                 <div className="row">
                     {allGamesList.map((thisData) => (

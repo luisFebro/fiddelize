@@ -23,6 +23,7 @@ export default function PendingCard({ data }) {
         const allData = d.data;
         if (allData.length)
             allData.forEach((thisD) => {
+                if (thisD.isBenefitExpired) return null;
                 allBenefitGames.push(thisD);
                 cardCreatedAt = d.createdAt;
                 recordId = d.recordId;

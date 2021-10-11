@@ -311,7 +311,9 @@ export default function CardsList({
 
     return (
         <section>
-            {!gotData ? showNoBuyIllustration(firstName) : showUserCards()}
+            {gotData || loading
+                ? showUserCards()
+                : showNoBuyIllustration(firstName)}
         </section>
     );
 }

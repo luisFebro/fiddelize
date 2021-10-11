@@ -64,10 +64,10 @@ export default function ExpiringCoinsBadge() {
                 badgeInvisible
                 backgroundColor="var(--mainRed)"
                 borderColor="var(--mainWhite)"
-                top={-1}
-                right={5}
+                top={7}
+                right={-7}
                 fontSize="15px"
-                padding="12px"
+                padding="13px"
                 animationName=""
             >
                 <ButtonFab

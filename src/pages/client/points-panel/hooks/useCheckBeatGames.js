@@ -31,8 +31,6 @@ export default function useCheckBeatGames({ currPoints }) {
 function checkForBeatGames({ currPoints }) {
     const beatGameList = [];
 
-    // need a condition to check if the games already alerted and added
-
     const didBeatTargetPrizeGame = checkGame("targetPrize", {
         list: beatGameList,
         currPoints,
@@ -60,6 +58,7 @@ function checkGame(gameName, { list, currPoints }) {
     const isGameAvailable = () => availableGames.includes(gameName);
     const isPendingBenefit = () => pendingBenefits.includes(gameName);
 
+    // here goes the cond to check if the game has already checked and set beating data
     const didBeatGame =
         currPoints >= targetPoints && isGameAvailable() && !isPendingBenefit();
     if (!didBeatGame) return false;

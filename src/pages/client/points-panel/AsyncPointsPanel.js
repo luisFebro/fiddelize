@@ -17,6 +17,7 @@ import getVar, { setVar, removeVars } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import GamesBadge from "components/biz/GamesBadge";
 import getColor from "styles/txt";
+import { addDays, setUTCDateTime } from "utils/dates/dateFns";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
 import useCheckBeatGames from "./hooks/useCheckBeatGames";
@@ -58,7 +59,11 @@ function AsyncPointsPanel({ history, location }) {
         userId: cliUserId, // cliUserId is essencial here to read cli-users data
         currPoints,
         userGame,
+        adminGame = {},
     } = useData();
+
+    const benefitsExpDays =
+        adminGame.gameTweaks && adminGame.gameTweaks.benefitsExpDays;
 
     const {
         themeBackColor: colorBack,
@@ -157,6 +162,17 @@ function AsyncPointsPanel({ history, location }) {
             if (!paidValue || alreadySetPoints) return null;
             await setVar({ alreadySetTempPoints: true });
 
+            const expDate =
+                didBeatGame && benefitsExpDays
+                    ? addDays(new Date(), benefitsExpDays)
+                    : null;
+
+            const benefitsData = {
+                expired: false,
+                expDaysCount: expDate ? benefitsExpDays : null,
+                expDate: expDate ? setUTCDateTime({ date: expDate }) : null,
+            };
+
             const bodyPoints = {
                 userId: cliUserId, // for auth
                 newPoints: paidValue,
@@ -164,6 +180,7 @@ function AsyncPointsPanel({ history, location }) {
                 // data to set the card so that we can track and set benefits card
                 didBeatGame,
                 beatGameList: didBeatGame ? beatGameList : undefined,
+                benefitsData: didBeatGame ? benefitsData : undefined,
             };
 
             await getAPI({

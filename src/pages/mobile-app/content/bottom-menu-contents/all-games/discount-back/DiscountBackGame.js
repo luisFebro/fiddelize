@@ -59,18 +59,20 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
 
 // HOOKS
 function useSetGameData({ adminGame, setGameData }) {
-    const gameDataFromUser =
-        adminGame && adminGame.discountBack && adminGame.discountBack;
+    const gameDataFromUser = adminGame && adminGame.discountBack;
 
     useEffect(() => {
         (async () => {
+            const isAppZone = window.location.href.includes("/app");
+
             const cliDataFromClubMaker = await getVar(
                 "clientAdminData",
                 "pre_register"
             );
             const discountBackClubMaker =
                 cliDataFromClubMaker && cliDataFromClubMaker.games.discountBack;
-            if (discountBackClubMaker) {
+
+            if (discountBackClubMaker && !isAppZone) {
                 const thisPerc = discountBackClubMaker.perc;
                 const thisTargetPoints = discountBackClubMaker.targetPoints;
                 return setGameData({

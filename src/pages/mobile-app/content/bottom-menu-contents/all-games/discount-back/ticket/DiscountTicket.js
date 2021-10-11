@@ -7,13 +7,14 @@ import QrCode from "components/QrCode";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import QrCodeReceiptBtn from "../../qr-code-receipt/QrCodeReceiptBtn";
+import ExpiringBenefitBadge from "../../_comps/ExpiringBenefitBadge";
 // import { encrypt } from "utils/security/xCipherFront";
 
 export default function DiscountTicket({
     didBeatGame = false,
     perc,
     ticketAmount,
-    targetPoints,
+    // targetPoints,
 }) {
     const [openCard, setOpenCard] = useState(false);
 
@@ -154,6 +155,17 @@ export default function DiscountTicket({
                             </span>
                         </div>
                         {didBeatGame ? condOpenCard : showOffBadge()}
+                        {openCard && (
+                            <div
+                                className="animated fadeInUp delay-2s position-absolute"
+                                style={{
+                                    right: 35,
+                                    bottom: 10,
+                                }}
+                            >
+                                <ExpiringBenefitBadge />
+                            </div>
+                        )}
                     </div>
                     <div className="tix tix-2 shadow-babadoo-filter position-relative">
                         <div className="tix-inner text-shadow">

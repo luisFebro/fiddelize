@@ -73,7 +73,7 @@ export default function GreetingAndNotific({
             >
                 {greeting},
                 <br />
-                <span className="text-title">{`${firstName}!`}</span>
+                <span className="text-title">{`${firstName || "..."}!`}</span>
             </div>
         </section>
     );
