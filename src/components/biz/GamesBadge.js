@@ -43,7 +43,10 @@ export default function GamesBadge({ userGame = {} }) {
 
     const gamesList = [];
     availableGames.forEach((gameName) => {
-        const challN = userGame[gameName] ? userGame[gameName].challN : 1;
+        const challN =
+            userGame[gameName] && userGame[gameName].challN
+                ? userGame[gameName].challN
+                : 1;
 
         return gamesList.push({
             gameName,

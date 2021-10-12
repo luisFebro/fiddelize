@@ -2,8 +2,9 @@ import { useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import ZoomOutMapIcon from "@material-ui/icons/ZoomOutMap";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import QrCodeReceipt from "./QrCodeReceipt";
+import showToast from "components/toasts";
 // import { Load } from "../../../../components/code-splitting/LoadableComp";
 
 // const Async = Load({
@@ -19,6 +20,7 @@ export default function QrCodeReceiptBtn({
     left,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
+    const { gotOverflowedBenefits = false } = useData();
     const { themePColor, themeSColor } = useBizData();
 
     const handleFullOpen = () => {
@@ -35,7 +37,15 @@ export default function QrCodeReceiptBtn({
                 <ButtonFab
                     size="small"
                     iconMu={<ZoomOutMapIcon />}
-                    onClick={handleFullOpen}
+                    onClick={
+                        gotOverflowedBenefits
+                            ? () =>
+                                  showToast(
+                                      "O benefício que você ganhou atual ainda não foi registrado e não disponível para resgate. Para isso, você precisa de mais um cartão virtual com PTS de qualquer valor e aplicar as moedas. Obrigada!",
+                                      { dur: 10000 }
+                                  )
+                            : handleFullOpen
+                    }
                     backgroundColor={`var(--themeSDark--${themeSColor})`}
                     top={-30}
                     left={-20}

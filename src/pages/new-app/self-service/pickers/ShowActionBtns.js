@@ -11,6 +11,8 @@ import { useAction } from "global-data/ui";
 import isThisApp from "utils/window/isThisApp";
 import TestModeBtn from "../../../dashboard-client-admin/modal-test-mode/TestModeBtn";
 
+const isApp = isThisApp();
+
 ShowActionBtns.propTypes = {
     objToSend: PropTypes.object,
     needUpdateBtn: PropTypes.string,
@@ -38,17 +40,20 @@ export default function ShowActionBtns({
         }
     }, [showUpdateBtn, needUpdateBtn]);
 
-    const handleUpdateIcon = () => {
-        showToast(titleBeforeOk);
-        updateUser(bizId, "cliente-admin", objToSend, { uify }).catch((err) =>
-            showToast(err, { type: "error" })
-        );
+    const handleUpdateIcon = async () => {
+        // showToast(titleBeforeOk);
+        await updateUser(bizId, "cliente-admin", objToSend, {
+            uify,
+        }).catch((err) => showToast(err, { type: "error" }));
+
+        showToast(titleAfterOk, { type: "success" });
+        setShowAppBtn(true);
     };
 
     const conditionToShowResultBtn = !objToSend ? needUpdateBtn : showAppBtn;
     const showResultBtn = () =>
         conditionToShowResultBtn &&
-        isThisApp() && (
+        isApp && (
             <div className="animated zoomIn">
                 <TestModeBtn />
             </div>

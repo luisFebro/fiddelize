@@ -47,7 +47,7 @@ export default function CliUserConfirmedChall({
             {beatGamesDataTreated.map((elem) => (
                 <section key={elem.game} className="mt-5 text-normal">
                     <h2 className="text-subtitle font-weight-bold">
-                        {gameBrNameStore[elem.game]} N.º {elem.currChall}
+                        {gameBrNameStore[elem.game]} N.º {elem.currChall || 1}
                     </h2>
                     ✔ Meta alcançada:
                     <h2 className="text-normal font-weight-bold">

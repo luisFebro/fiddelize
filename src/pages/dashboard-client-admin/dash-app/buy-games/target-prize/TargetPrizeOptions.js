@@ -24,7 +24,7 @@ export default function TargetPrizeOptions({
     });
 
     const GAME = "targetPrize";
-    const { on, benefitsExpDays, challList, updatedOnce } = optionData;
+    const { on, challList, updatedOnce } = optionData;
     // use it to make sure got all important data before activate with the switch
     // const allDataReady = true;
 

@@ -6,6 +6,7 @@ import useData, { useBizData } from "init";
 import QrCode from "components/QrCode";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import removeImgFormat from "utils/biz/removeImgFormat";
+import showToast from "components/toasts";
 import QrCodeReceiptBtn from "../../qr-code-receipt/QrCodeReceiptBtn";
 import ExpiringBenefitBadge from "../../_comps/ExpiringBenefitBadge";
 // import { encrypt } from "utils/security/xCipherFront";
@@ -20,7 +21,7 @@ export default function DiscountTicket({
 
     const { bizName, bizLogo } = useBizData();
     const { themePColor, themeSColor } = useContext();
-    const { name, sexLetter, userId } = useData();
+    const { name, gotOverflowedBenefits, sexLetter, userId } = useData();
 
     const mainColor = `var(--themePLight--${themePColor})`;
     const pColor = `var(--themePDark--${themePColor})`;
@@ -39,7 +40,15 @@ export default function DiscountTicket({
         <div className="animated wobble delay-3s repeat-2 discount-tix-btn position-absolute">
             <ButtonFab
                 title="usar valor"
-                onClick={toggleOpen}
+                onClick={
+                    gotOverflowedBenefits
+                        ? () =>
+                              showToast(
+                                  "O benefício que você ganhou atual ainda não foi registrado e não disponível para resgate. Para isso, você precisa de mais um cartão virtual com PTS de qualquer valor e aplicar as moedas. Obrigada!",
+                                  { dur: 10000 }
+                              )
+                        : toggleOpen
+                }
                 backgroundColor={`var(--themeSDark--${themeSColor})`}
                 size="medium"
                 variant="extended"

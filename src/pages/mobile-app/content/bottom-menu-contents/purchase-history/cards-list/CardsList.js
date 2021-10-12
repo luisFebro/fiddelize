@@ -140,10 +140,11 @@ export default function CardsList({
     function RecordCard({ historyData }) {
         const { desc, registerKey, isLastRecordCard, createdAt } = historyData;
 
-        const showDesc = () => (
+        const showDesc = (isLastR) => (
             <section className="desc text-left">
                 <div className="inner-container">
                     <span className="d-inline-block mt-1 font-weight-bold text-normal">
+                        {isLastR ? "Última " : ""}
                         {desc}
                     </span>
                     {showMore ? (
@@ -224,7 +225,7 @@ export default function CardsList({
             <section className="position-relative">
                 <Card className="record-card--root mt-2">
                     <section className="record-card-body text-white font-weight-bold text-normal text-center text-purple">
-                        {showDesc()}
+                        {showDesc(isLastRecordCard)}
                         {showScore()}
                     </section>
                 </Card>

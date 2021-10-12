@@ -27,13 +27,22 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
     const ticketAmount =
         targetPoints !== "..." ? getAccuMoney(targetPoints, perc) : 0;
 
+    const mainTxt = didBeatGame ? (
+        <section className="text-center font-weight-bold text-normal animated fadeInUp">
+            Você bateu <span className="text-title">{targetPoints} PTS,</span>
+            <br />e ganhou:
+        </section>
+    ) : (
+        <section className="text-center font-weight-bold text-normal animated fadeInUp">
+            A cada <span className="text-title">{targetPoints} PTS,</span>
+            <br />
+            você ganha:
+        </section>
+    );
+
     const showTicket = () => (
         <Fragment>
-            <section className="text-center font-weight-bold text-normal animated fadeInUp">
-                A cada <span className="text-title">{targetPoints} PTS,</span>
-                <br />
-                você ganha:
-            </section>
+            {mainTxt}
             <AsyncDiscountTicket
                 targetPoints={targetPoints}
                 ticketAmount={ticketAmount}

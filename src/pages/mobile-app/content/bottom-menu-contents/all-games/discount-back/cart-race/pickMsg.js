@@ -85,7 +85,7 @@ function chooseMsg({
                        <br />
                        Você concluiu o desafio n.º ${
                            !currChallenge ? 1 : currChallenge
-                       } e já pode usar o seu vale desconto${
+                       } e ganhou vale desconto${
                 bizName ? ` na ${bizName}` : "."
             }`;
     }

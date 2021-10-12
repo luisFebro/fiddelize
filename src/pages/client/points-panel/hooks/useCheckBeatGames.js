@@ -70,7 +70,7 @@ function checkGame(gameName, { list, currPoints }) {
         game: gameName,
         targetPoints,
         benefitDesc: handleBenefitDesc(gameName),
-        currChall: challN,
+        currChall: challN || 1,
         received: false,
     });
 
