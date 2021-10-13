@@ -10,6 +10,7 @@ import getVar, { removeVar } from "init/var";
 import getItems from "init/lStorage";
 import useContext from "context";
 import scrollIntoView from "../../utils/document/scrollIntoView";
+import useDetectScrollSingle from "hooks/scroll/useDetectScrollSingle";
 import "./_BottomTabs.scss";
 
 function TabPanel(props) {
@@ -77,6 +78,8 @@ export default function BottomTabs({
     const { themePColor } = useContext();
     const tabMainColor = themePColor || mainColor;
 
+    const isAppTopDetected = useDetectScrollSingle("#topAppContent");
+
     const props = {
         color: tabMainColor,
     };
@@ -103,8 +106,11 @@ export default function BottomTabs({
 
         // handle click actions
         const allowedScrollViewList = data.map((tab) => tab.scrollView);
+        // scrollIntoView cause friction if user is in the bottom and there is a delay to reach the target spot to set the view. The fluid transaction should occur only when detecting the app is upper part in the screen
         if (allowedScrollViewList[newValue])
-            scrollIntoView("#bottomTabContentView", { duration: 3000 });
+            scrollIntoView("#bottomTabContentView", {
+                duration: isAppTopDetected ? 2000 : 0,
+            });
         else {
             const { onClick } = data[newValue];
             if (typeof onClick === "function") onClick();

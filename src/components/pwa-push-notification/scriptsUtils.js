@@ -42,6 +42,7 @@ function getPublicKey() {
 
 function publishSubscription({ oldEndpoint, newSub, isBrowser = false }) {
     const renewalOrigin = isBrowser ? "browser" : "serviceWorker";
+    // for deviceType, the backend will detect if it is desktop or mobile according to the oldsub key
 
     return fetch(
         "https://fiddelize.herokuapp.com/api/push-notification/renewal",

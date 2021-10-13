@@ -77,8 +77,8 @@ export async function updateExpiredPushSub() {
     if (!oldSub || !currSub)
         return Promise.reject("user is not subscribed to push");
 
-    const isSamePushSub = currSub.endpoint === oldEndpoint;
-    if (isSamePushSub) return Promise.reject("valid sub still on");
+    // const isSamePushSub = currSub.endpoint === oldEndpoint;
+    // if (isSamePushSub) return Promise.reject("valid sub still on");
 
     await handleNewRenewal({ currSubData, registration, oldEndpoint }).catch(
         console.log

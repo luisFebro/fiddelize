@@ -38,14 +38,15 @@ export default function App() {
             ReactGA.pageview(window.location.pathname + window.location.search);
         };
 
-        const checkExpPushSub = async () => {
-            return await updateExpiredPushSub()
+        const checkExpPushSub = async () =>
+            await updateExpiredPushSub()
                 .then(console.log)
                 .catch((err) => console.log(`push sub rejected: ${err}`));
-        };
 
-        if (IS_PROD) deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
-        deferJsOnload(checkExpPushSub, "func", { delay: 7000 });
+        if (IS_PROD) {
+            deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
+            deferJsOnload(checkExpPushSub, "func", { delay: 7000 });
+        }
 
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",

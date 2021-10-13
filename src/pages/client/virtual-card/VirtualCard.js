@@ -12,6 +12,7 @@ import getRandomArray from "utils/arrays/getRandomArray";
 import Img from "components/Img";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import showToast from "components/toasts";
+import getId from "utils/getId";
 
 export default withRouter(VirtualCard);
 
@@ -72,15 +73,11 @@ function VirtualCard({ history }) {
         showNoCardMsg: false,
         audioPrerender: false,
     });
+    const [trigger, setTrigger] = useState(true);
+
     const { score, createdAt, loading, showNoCardMsg, audioPrerender } = data;
-    const [name, userId, role, sexLetter] = useData([
-        "name",
-        "userId",
-        "role",
-        "sexLetter",
-    ]);
+    const [name, userId, sexLetter] = useData(["name", "userId", "sexLetter"]);
     const isShe = sexLetter === "a";
-    const isCliAdmin = role === "cliente-admin";
 
     useEffect(() => {
         const runPrerender = async () => {
@@ -102,7 +99,7 @@ function VirtualCard({ history }) {
 
     const [failureMsg] = useData(["text_cli-user_virtual-card"], {
         store: "audios",
-        trigger: !loading && audioPrerender,
+        trigger: !loading && audioPrerender && trigger,
     });
 
     const showTitle = () => (
@@ -129,19 +126,24 @@ function VirtualCard({ history }) {
         trigger: !loading && audioPrerender,
     });
 
-    const { themeSColor: sColor } = useBizData();
+    // ..make sure to refetch in case user go back to this page after points panel
+    useEffect(() => {
+        setTrigger(getId());
+    }, []);
 
-    const { data: cardsData, error } = useAPI({
+    const { themeSColor: sColor } = useBizData();
+    const { data: cardsData, loading: loadingAPI, error } = useAPI({
         url: readLastTempPoints(userId),
         needAuth: true,
-        params: { isAdmin: isCliAdmin },
-        trigger: userId !== "...",
+        trigger: userId !== "..." && trigger,
     });
 
     const loadingAll = name === "..." || loading;
     const cond3dCard = !loadingAll && !error && !showNoCardMsg;
 
     useEffect(() => {
+        if (loadingAPI) return;
+
         if (cardsData === false) {
             setData((prev) => ({
                 ...prev,
@@ -164,7 +166,7 @@ function VirtualCard({ history }) {
                 })),
             ]);
         }
-    }, [cardsData]);
+    }, [cardsData, loadingAPI]);
 
     const handlePathAndData = () => {
         // check card data if set before redirect
@@ -179,10 +181,6 @@ function VirtualCard({ history }) {
                     "Não foi possível processar dados do cartão. Tente entrar novamente",
                     { type: "error", dur: 10000 }
                 );
-
-            if (isCliAdmin)
-                window.location.href =
-                    "/cliente/pontos-de-compra?client-admin=1";
 
             window.location.href = "/cliente/pontos-de-compra";
         });
@@ -212,8 +210,7 @@ function VirtualCard({ history }) {
     );
 
     const handleReturnBtn = () => {
-        const path = isCliAdmin ? "/app?client-admin=1" : "/app";
-        history.push(path);
+        history.push("/app");
     };
 
     const showIllustra = () => (

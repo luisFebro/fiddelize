@@ -312,6 +312,7 @@ function ClientMobileApp({ location, history }) {
     const isFiddelizeLogo = instantBizImg === "/img/official-logo-name.png";
     return (
         <div style={{ overflowX: "hidden" }}>
+            <div id="topAppContent" />
             <span className="text-right text-white for-version-test" />
             {isInstantApp && !isAuthUser ? (
                 <section className="container-center mx-3 text-normal">

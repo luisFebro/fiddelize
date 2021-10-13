@@ -3,7 +3,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.59.20";
+const latestVersion = "4.59.50";
 // NEXT:
 // register bonus coins -
 const updateDescription = "cli-admin tweaks || general improvements";
