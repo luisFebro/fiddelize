@@ -34,7 +34,25 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "challenge": {
-            const { beatGamesData } = extractStrData(content);
+            const {
+                beatGamesData,
+                expDaysCount,
+                expBalance,
+                expStartDate,
+                expDate,
+            } = extractStrData(content);
+
+            if (subtype === "expirationEnd") {
+                title = "Expirações efetuadas";
+                brief = `Benefícios disponíveis desde o dia §${formatDMY(
+                    new Date(expStartDate)
+                )}§ expiraram hoje ${formatDMY(
+                    new Date(expDate)
+                )} (${expDaysCount} dias de prazo). Seu saldo de §${expBalance} PTS§ também expirou para reiniciar corretamente os jogos.`;
+                circularImg =
+                    "/img/icons/trophies/fiddelize-trophy-expiration.svg";
+                break;
+            }
 
             const beatGamesDataTreated = JSON.parse(beatGamesData);
             const gameData = beatGamesDataTreated.map(
@@ -50,6 +68,7 @@ export default function getCardTypeData(cardType, options = {}) {
             };
             const action =
                 plural === "s" ? `escolhidos para resgate` : "resgatado";
+
             title = `Benefício${plural} Disponíve${
                 plural === "s" ? "is" : "l"
             }`;
@@ -80,7 +99,6 @@ export default function getCardTypeData(cardType, options = {}) {
                 brief = `Boas vindas do Clube Pro da Fiddelize! Os serviços Pro contratados já estão disponíveis. O seu pagamento foi aprovado hoje - ${
                     approvalDate && formatDMY(new Date(approvalDate))
                 }.`;
-                circularImg = "/img/icons/notif/crown.svg";
                 circularImg = "/img/icons/notif/crown.svg";
             }
             if (subtype === "proPay") {

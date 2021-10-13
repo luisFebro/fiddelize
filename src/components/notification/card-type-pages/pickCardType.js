@@ -1,9 +1,9 @@
 import LoadableVisible from "../../code-splitting/LoadableVisible";
 // CARD TYPES
-const AsyncCliUserConfirmedChall = LoadableVisible({
+const AsyncBenefits = LoadableVisible({
     loader: () =>
         import(
-            "./types/CliUserConfirmedChall" /* webpackChunkName: "cli-user-conf-challenge-picked-notif-page-lazy" */
+            "./types/Benefits" /* webpackChunkName: "cli-user-benefits-notif-page-lazy" */
         ),
 });
 const AsyncBirthdayGreeting = LoadableVisible({
@@ -71,7 +71,7 @@ export default function pickCardType(cardType, options = {}) {
             />
         ),
         challenge: (
-            <AsyncCliUserConfirmedChall
+            <AsyncBenefits
                 {...defaultProps}
                 bizLogo={bizLogo}
                 bizName={bizName}

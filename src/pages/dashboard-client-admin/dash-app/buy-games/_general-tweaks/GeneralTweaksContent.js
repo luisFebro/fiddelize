@@ -12,6 +12,7 @@ export default function GeneralTweaksContent() {
     const { benefitsExpDays } = data;
 
     const { userId } = useData();
+    const isDev = userId === "5e8b0bfc8c616719b01abc9c";
 
     useEffect(() => {
         (async () => {
@@ -31,7 +32,7 @@ export default function GeneralTweaksContent() {
 
     const handleBenefitsDeadline = async () => {
         const isDisabled = benefitsExpDays === 0;
-        if (!isDisabled && benefitsExpDays < 10)
+        if (!isDev && !isDisabled && benefitsExpDays < 10)
             return showToast(
                 "Prazo mínimo é partir de 10 dias. Digite zero para desativar",
                 { type: "error", dur: "8000" }

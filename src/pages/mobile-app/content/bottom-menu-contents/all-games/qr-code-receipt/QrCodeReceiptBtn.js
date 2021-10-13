@@ -42,7 +42,7 @@ export default function QrCodeReceiptBtn({
                             ? () =>
                                   showToast(
                                       "O benefício que você ganhou atual ainda não foi registrado e não disponível para resgate. Para isso, você precisa de mais um cartão virtual com PTS de qualquer valor e aplicar as moedas. Obrigada!",
-                                      { dur: 10000 }
+                                      { dur: 20000 }
                                   )
                             : handleFullOpen
                     }
