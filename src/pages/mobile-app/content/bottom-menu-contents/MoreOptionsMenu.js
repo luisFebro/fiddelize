@@ -2,8 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import useContext from "context";
 import disconnect from "auth/disconnect";
+import { useBizData } from "init";
 
-const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
+const allMenuList = ({
+    needAppForPreview,
+    needAppForCliAdmin,
+    history,
+    bizLinkName,
+}) => [
     {
         icon: "sync-alt",
         title: "trocar app",
@@ -16,8 +22,9 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
         title: "regras",
         onClick: () => {
             if (needAppForPreview) return;
-            if (needAppForCliAdmin) history.push("/regulamento?client-admin=1");
-            else history.push("/regulamento");
+            const coreUrl = `/${bizLinkName}/regras?app=1`;
+            if (needAppForCliAdmin) history.push(`${coreUrl}&client-admin=1`);
+            else history.push(coreUrl);
         },
     },
     {
@@ -39,11 +46,13 @@ export default function MoreOptionsMenu({ history }) {
         needAppForPreview,
         themeBackColor: colorBack,
     } = useContext();
+    const { bizLinkName } = useBizData();
 
     const payload = {
         history,
         needAppForCliAdmin,
         needAppForPreview,
+        bizLinkName,
         // colorS,
     };
 

@@ -243,7 +243,7 @@ function ClientMobileApp({ location, history }) {
                 style={{ marginBottom: 100 }}
             >
                 {isCliUser && // in near updates - rewards or discounts according to which games cli-admin has chosen
-                    "Acumule pontos. Supere Metas. Ganhe benefícios no jogo de compras feito para você!"}
+                    "Acumule pontos. Supere Metas. Ganhe benefícios em jogos de compra feito para você!"}
                 {isCliMember &&
                     "Adicione pontos e clientes para o clube de compras em segundos."}
                 {isBizTeam &&

@@ -108,7 +108,7 @@ function Navbar({ history, location }) {
                 style={{
                     display: [
                         "/baixe-app/",
-                        "/regulamento",
+                        "/regras",
                         "/cliente/pontos-de-compra",
                         "/compartilhar-app",
                     ].some((link) => locationNow.includes(link))
@@ -128,7 +128,7 @@ function Navbar({ history, location }) {
         // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
         const needClientLogo =
             (isAdminDash && bizLogo) || (isAuth && bizLogo && isApp); // isApp &&
-        const fiddelizeLogo = "/img/official-logo-name.png";
+        const fiddelizeLogo = "/img/error.png"; // /img/official-logo-name.png
         const { newImg: thisbizLogo, width, height } = removeImgFormat(
             needClientLogo && bizLogo
         );

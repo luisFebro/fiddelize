@@ -14,24 +14,25 @@ import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ReactGA from "react-ga";
 import useData, { useBizData } from "init";
+import getColor from "styles/txt";
 import { doRegister } from "auth/api";
-import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
-import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
-import getDayMonthBr from "../../utils/dates/getDayMonthBr";
+import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
+import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
+import getDayMonthBr from "utils/dates/getDayMonthBr";
+import { CLIENT_URL } from "config/clientUrl";
+// Helpers
+import detectErrorField from "utils/validation/detectErrorField";
+import handleChange from "utils/form/use-state/handleChange";
+import setValObjWithStr from "utils/objects/setValObjWithStr";
+import getDateCode from "utils/dates/getDateCode";
+import { dateFnsUtils, ptBRLocale } from "utils/dates/dateFns";
+import { handleNextField } from "utils/form/kit";
+import getFilterDate from "utils/dates/getFilterDate";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
+import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
+import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 import RadiusBtn from "../buttons/RadiusBtn";
 import Title from "../Title";
-import getColor from "styles/txt";
-// Helpers
-import detectErrorField from "../../utils/validation/detectErrorField";
-import handleChange from "../../utils/form/use-state/handleChange";
-import setValObjWithStr from "../../utils/objects/setValObjWithStr";
-import getDateCode from "../../utils/dates/getDateCode";
-import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
-import { handleNextField } from "../../utils/form/kit";
-import getFilterDate from "../../utils/dates/getFilterDate";
-import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 import showToast from "../toasts";
 
 const filter = getFilterDate();
@@ -81,6 +82,7 @@ function AsyncRegisterCliUser({
         tempPoints: "", // for member tasks newClient Record
         memberRole: "", // for member tasks newClient Record
         linkCode: "",
+        showAgreement: false,
     });
 
     const styles = getStyles();
@@ -91,7 +93,7 @@ function AsyncRegisterCliUser({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    const { name, email, gender, cpf, phone } = data;
+    const { name, email, gender, cpf, phone, showAgreement } = data;
     const cpfValue = autoCpfMaskBr(cpf);
     const phoneValue = autoPhoneMask(phone);
 
@@ -115,6 +117,7 @@ function AsyncRegisterCliUser({
         encryptedPTS, // e.g Xx05h507075 the actual value is decrypted in back
         lastRegisterBizId,
         linkCode, // e.g cheries-beauty_febro:lw06K707a
+        bizLinkName,
     ] = useData([
         "userId",
         "memberId",
@@ -125,6 +128,7 @@ function AsyncRegisterCliUser({
         "encryptedPTS",
         "lastRegisterBizId",
         "linkCode",
+        "bizLinkName",
     ]);
 
     const { name: appMemberName } = useData();
@@ -296,6 +300,21 @@ function AsyncRegisterCliUser({
         </div>
     );
 
+    // this should be a tag link because Link erases all data when user returns back
+    const agreementTxtElem = (
+        <span>
+            Ao se cadastrar, você concorda com as{" "}
+            <a
+                className="text-link"
+                href={`${CLIENT_URL}/${bizLinkName}/regras`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                regras do clube de compras
+            </a>{" "}
+        </span>
+    );
+
     const showForm = () => (
         <form
             style={{ margin: "auto", width: "90%" }}
@@ -414,6 +433,7 @@ function AsyncRegisterCliUser({
                         value={selectedDate}
                         onChange={(e) => {
                             handleDateChange(e);
+                            setData({ ...data, showAgreement: true });
                             handleNextField(e, "field3", {
                                 event: "onChange",
                                 ignoreValue: true,
@@ -537,7 +557,12 @@ function AsyncRegisterCliUser({
                     </Select>
                 </div>
             </section>
-            <SafeEnvironmentMsg />
+            {showAgreement && (
+                <section className="mt-4 text-small font-weight-bold">
+                    {bizLinkName !== "..." && agreementTxtElem}
+                </section>
+            )}
+            <SafeEnvironmentMsg mt={showAgreement ? "mt-3" : ""} />
         </form>
     );
 

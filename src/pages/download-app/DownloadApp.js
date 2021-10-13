@@ -117,6 +117,7 @@ export default function DownloadApp({ match, location, history }) {
         memberName,
         linkId, // cli-member or cli-admin register id in db
         linkCode, // e.g vocariza_ana:abc123
+        bizLinkName,
         // roles
         isBizTeam,
         isCliAdmin,
@@ -158,6 +159,7 @@ export default function DownloadApp({ match, location, history }) {
         memberName,
         primaryAgent,
         linkCode,
+        bizLinkName,
         bizName,
     };
 

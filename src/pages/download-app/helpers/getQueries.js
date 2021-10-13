@@ -21,6 +21,7 @@ export default function getQueries({ location }) {
         "sn", // staff name
         "si", // staff id in DB
         "lc", // link code - only for cli-user
+        "bln", // biz link name - only for cli-user buy club rules link
     ];
 
     const mainQueries = mainData.map((q) => getQueryByName(q, location.search));

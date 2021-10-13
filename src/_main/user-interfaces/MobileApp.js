@@ -84,7 +84,11 @@ function Mobile({ location }) {
                     exact
                     component={AsyncPointsPanel}
                 />
-                <Route path="/regulamento/" exact component={RegulationPage} />
+                <Route
+                    path="/:bizLinkName/regras"
+                    exact
+                    component={RegulationPage}
+                />
                 <Route
                     path="/:bizLinkName/nova-senha-verificacao"
                     exact

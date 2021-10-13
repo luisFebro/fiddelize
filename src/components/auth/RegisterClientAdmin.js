@@ -493,7 +493,7 @@ function RegisterClientAdmin({ logo }) {
                 </div>
             </section>
             {showAgreement && (
-                <section className="mt-3 text-small font-weight-bold">
+                <section className="mt-4 text-small font-weight-bold">
                     {agreementTxtElem}
                 </section>
             )}

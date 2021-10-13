@@ -9,7 +9,8 @@ const loadToast = async (txt, time = 3500) => {
     return showToast(txt, { dur: time });
 };
 
-let isToastActivated = false; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
+// disable toasts for minor updates and set as true for big func updates when they are finished.
+let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 isToastActivated = isToastActivated && isApp;
 const activateLocalhostWorker = false; // default false
 

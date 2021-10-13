@@ -18,7 +18,7 @@
 
 //     const showActionBtn = () => (
 //         <div className="d-flex justify-content-end mr-2">
-//             <Link to="/regulamento">
+//             <Link to="/:bizLinkName/regras">
 //                 <ButtonMulti
 //                     onClick={updateRegText}
 //                     color="var(--mainWhite)"

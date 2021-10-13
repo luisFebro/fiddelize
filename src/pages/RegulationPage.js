@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,19 +9,23 @@ import ButtonMulti, {
 } from "../components/buttons/material-ui/ButtonMulti";
 import isThisApp from "../utils/window/isThisApp";
 import replaceVariablesInTxt from "../utils/string/replaceVariablesInTxt";
-import DateWithIcon from "../components/date-time/DateWithIcon";
-import getQueryByName from "../utils/string/getQueryByName";
-import regulationText, {
-    updatedAt,
-} from "./dashboard-client-admin/regulationText";
+import getRegulationText from "./dashboard-client-admin/getRegulationText";
 import useBackColor from "../hooks/useBackColor";
 import useScrollUp from "../hooks/scroll/useScrollUp";
+// import DateWithIcon from "../components/date-time/DateWithIcon";
 
 const isApp = isThisApp();
 
-export default function RegulationPage({ location }) {
+export default function RegulationPage({ location, match }) {
     const needAppForCliAdmin = location.search.includes("client-admin=1");
-    const bizLinkName = getQueryByName("bizLinkName", location.search);
+    const isFromApp = location.search.includes("app=1");
+    const { bizLinkName } = match.params;
+
+    useEffect(() => {
+        if (!bizLinkName || isFromApp) return;
+        console.log("bizLinkName", bizLinkName);
+        (async () => {})();
+    }, [bizLinkName, isFromApp]);
 
     useScrollUp();
     const { firstName: cliFirstName, userGame, adminGame } = useData();
@@ -45,6 +50,10 @@ export default function RegulationPage({ location }) {
         "desafio-atual": `${currChall}`,
     };
 
+    const regulationData = {
+        benefitsExpDays,
+    };
+
     const showText = () => (
         <main>
             <Paper style={{ backgroundColor: "var(--mainWhite)" }}>
@@ -53,9 +62,13 @@ export default function RegulationPage({ location }) {
                         className="text-normal"
                         style={{ whiteSpace: "pre-line" }}
                     >
-                        {replaceVariablesInTxt(regulationText, variablesObj, {
-                            needBold: true,
-                        })}
+                        {replaceVariablesInTxt(
+                            getRegulationText(regulationData),
+                            variablesObj,
+                            {
+                                needBold: true,
+                            }
+                        )}
                     </pre>
                 </div>
             </Paper>
@@ -92,13 +105,6 @@ export default function RegulationPage({ location }) {
                     shadowColor={themeBackColor === "black" ? "white" : "black"}
                 />
             </Link>
-            <DateWithIcon
-                style={{ color: getColor(themeBackColor).txtColorStyle }}
-                date={updatedAt}
-                msgIfNotValidDate="Nenhuma alteração."
-                marginTop={0}
-                needTxtShadow
-            />
         </div>
     );
 
@@ -111,13 +117,13 @@ export default function RegulationPage({ location }) {
     );
 }
 
-/*
-useEffect(() => {
-    if(!defaultColor) { // Not changing back to default color in dashboard....
-        document.body.style.setProperty('background', `var(--themeBackground--${themeBackColor})`, 'important')
-    } else {
-        document.body.style.setProperty('background', `var(--themeBackground--default)`, 'important')
-        setDefaultColor(true);
-    }
-}, [themeBackColor, defaultColor]);
- */
+/* ARCHIVES
+<DateWithIcon
+    style={{ color: getColor(themeBackColor).txtColorStyle }}
+    date={updatedAt}
+    msgIfNotValidDate="Nenhuma alteração."
+    marginTop={0}
+    needTxtShadow
+/>
+
+*/

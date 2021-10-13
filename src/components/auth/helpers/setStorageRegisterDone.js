@@ -10,6 +10,7 @@ export default function setStorageRegisterDone() {
             "memberName",
             "encryptedPTS",
             "linkCode",
+            "bizLinkName",
             "primaryAgent",
         ],
         "user"
