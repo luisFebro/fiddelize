@@ -3,6 +3,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import useContext from "context";
 import disconnect from "auth/disconnect";
 import { useBizData } from "init";
+import AsyncVersion from "_main/user-interfaces/version/AsyncVersion";
 
 const allMenuList = ({
     needAppForPreview,
@@ -84,13 +85,16 @@ export default function MoreOptionsMenu({ history }) {
     ));
 
     return (
-        <section className={`mx-3 text-normal ${txtColor}`}>
+        <section className={`mx-3 position-relative text-normal ${txtColor}`}>
             <h2 className="py-4 animated fadeIn text-subtitle font-weight-bold text-center">
                 Mais opções
             </h2>
             <section className="animated fadeInUp container mb-5">
                 <div className="row justify-content-around">{menuList}</div>
             </section>
+            <div style={{ margin: "100px 0 40px" }}>
+                <AsyncVersion />
+            </div>
         </section>
     );
 }

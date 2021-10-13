@@ -12,11 +12,3 @@ const AsyncVersion = LoadableComp({
 });
 
 export default AsyncVersion;
-
-/* ARCHIVES
-const AsyncAppVersion = LoadableComp({
-    loader: () => import('./AppVersion' /* webpackChunkName: "app-version-lazy" ),
-    loading: () => <div className="text-white text-shadow text-small">Carregando...</div>
-})
-
-*/
