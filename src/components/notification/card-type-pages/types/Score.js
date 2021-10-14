@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
+import resetAddPtsData from "pages/client/points-panel/helpers/resetAddPtsData";
+
 // import extractStrData from "../../../../utils/string/extractStrData";
 // import useCount from '../../../../hooks/useCount';
 import {
@@ -27,7 +29,9 @@ function Score({
     // const contentData = content && extractStrData(content);
 
     const handleCTA = () => {
-        history.push("/cartao-virtual");
+        resetAddPtsData().then(() => {
+            history.push("/cartao-virtual");
+        });
     };
 
     const showMainIllustration = () => (

@@ -13,11 +13,12 @@ import useData, { useBizData } from "init";
 import { prerenderAudio } from "hooks/media/usePlayAudio";
 import { updateUser, readUser } from "api/frequent";
 import getAPI, { addPoints } from "api";
-import getVar, { setVar, removeVars } from "init/var";
+import getVar, { setVar } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import GamesBadge from "components/biz/GamesBadge";
 import getColor from "styles/txt";
 import { addDays, setUTCDateTime } from "utils/dates/dateFns";
+import resetAddPtsData from "pages/client/points-panel/helpers/resetAddPtsData";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
 import useCheckBeatGames from "./hooks/useCheckBeatGames";
@@ -26,7 +27,7 @@ import useCheckBeatGames from "./hooks/useCheckBeatGames";
 const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
 
-function AsyncPointsPanel({ history, location }) {
+function AsyncPointsPanel({ location }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const [finishedWork, setFinishedWork] = useState(false);
     const [hideCurrScore, setHideCurrScore] = useState(false); // with updating, the currPoints double when click on finish button. Then ofuscate it with "...".
@@ -46,18 +47,18 @@ function AsyncPointsPanel({ history, location }) {
         });
     };
 
-    // eslint-disable-next-line
-    let [paidValue, staff, cardDataLoading] = useData(["paidValue", "staff"], {
-        store: "global_vars",
-        dots: false,
-    });
-    // paidValue = getIntOrFloat(paidValue);
-
+    // currPoints should be a fixed value to avoid being an added-with-curr value after reloading this page
+    const [paidValue, currPoints, staff, ptsId, cardDataLoading] = useData(
+        ["paidValue", "currPoints", "staff", "ptsId"],
+        {
+            store: "global_vars",
+            dots: false,
+        }
+    );
     // MAIN VARIABLES
     const {
         firstName,
         userId: cliUserId, // cliUserId is essencial here to read cli-users data
-        currPoints,
         userGame,
         adminGame = {},
     } = useData();
@@ -102,17 +103,6 @@ function AsyncPointsPanel({ history, location }) {
     useBackColor(`var(--themeBackground--${colorBack})`);
 
     useEffect(() => {
-        if (cardDataLoading) return;
-        getVar("alreadySetTempPoints").then((alreadySetScore) => {
-            // avoid user to restart page and end up adding more scores
-            if (alreadySetScore) setVar({ alreadySetTempPoints: false });
-            if (!paidValue || alreadySetScore) history.push(path);
-        });
-
-        // eslint-disable-next-line
-    }, [cardDataLoading, paidValue]);
-
-    useEffect(() => {
         (async () => {
             // make sure to switch to the xp assess even if user faces a network issue.
             // this is stored when user clicked in the finish button in the prior buy.
@@ -146,7 +136,8 @@ function AsyncPointsPanel({ history, location }) {
     // END USE HOOKS
 
     useEffect(() => {
-        if (beatGamesLoading || cardDataLoading || !paidValue || finishedWork)
+        if (beatGamesLoading || cardDataLoading)
+            // || !paidValue || finishedWork
             return;
 
         animateNumber(
@@ -158,10 +149,6 @@ function AsyncPointsPanel({ history, location }) {
         );
 
         (async () => {
-            const alreadySetPoints = await getVar("alreadySetTempPoints");
-            if (!paidValue || alreadySetPoints) return null;
-            await setVar({ alreadySetTempPoints: true });
-
             const expDate =
                 didBeatGame && benefitsExpDays
                     ? addDays(new Date(), benefitsExpDays)
@@ -176,6 +163,7 @@ function AsyncPointsPanel({ history, location }) {
             const bodyPoints = {
                 userId: cliUserId, // for auth
                 newPoints: paidValue,
+                ptsId,
                 staff,
                 // data to set the card so that we can track and set benefits card
                 didBeatGame,
@@ -183,12 +171,15 @@ function AsyncPointsPanel({ history, location }) {
                 benefitsData: didBeatGame ? benefitsData : undefined,
             };
 
-            await getAPI({
+            const resAddPts = await getAPI({
                 method: "post",
                 needAuth: true,
                 url: addPoints(),
                 body: bodyPoints,
-            });
+                errMsg: true,
+            }).catch(() => setFinishedWork(true));
+
+            if (!resAddPts) return null;
 
             showToast(
                 `${paidValue} PTS foram adicionados na sua carteira de pontos`,
@@ -196,12 +187,10 @@ function AsyncPointsPanel({ history, location }) {
             );
 
             setFinishedWork(true);
-            // remove this var so the it can be null and redirect user
-            return await removeVars(["paidValue", "staff"]);
         })();
 
         // eslint-disable-next-line
-    }, [finishedWork, paidValue, cardDataLoading, beatGamesLoading]);
+    }, [paidValue, cardDataLoading, beatGamesLoading]);
 
     const showHeader = () => (
         <div className="position-relative">
@@ -305,7 +294,11 @@ function AsyncPointsPanel({ history, location }) {
                         className="shape-elevation"
                         style={styles.crownIcon}
                     />
-                    <p className="text-hero text-center">Volte sempre!</p>
+                    <p className="text-hero text-center">
+                        Volte
+                        <br />
+                        sempre!
+                    </p>
                 </section>
             </div>
         </div>
@@ -355,8 +348,7 @@ function AsyncPointsPanel({ history, location }) {
         await updateUser(cliUserId, whichRole, body);
 
         if (isApp) {
-            await setVar({ alreadySetTempPoints: false });
-
+            await resetAddPtsData();
             window.location.href = path;
         } else {
             window.location.href = "/acesso/verificacao";
@@ -365,7 +357,7 @@ function AsyncPointsPanel({ history, location }) {
     };
 
     const showHomeBtn = () => {
-        const title = finishedWork ? "Salvar e Finalizar" : "Processando...";
+        const title = finishedWork ? "Finalizar" : "Processando...";
         const backColorOnHover = `var(--themeSLight--${colorS})`;
         const backgroundColor = `var(--themeSDark--${colorS})`;
         return (
@@ -411,7 +403,15 @@ function AsyncPointsPanel({ history, location }) {
 
 export default withRouter(AsyncPointsPanel);
 
-/*
+/* ARCHIVES
+
+useEffect(() => {
+    if (cardDataLoading) return;
+    // alreadySetTempPoints is no longer required because duplicate check is handled directly in the backend
+    if (!paidValue || !ptsId) history.push(path);
+
+    // eslint-disable-next-line
+}, [cardDataLoading, paidValue, ptsId]);
 
 const newHighestScore =
     parseFloat(paidValue) >= parseFloat(lasftCurrPoints)

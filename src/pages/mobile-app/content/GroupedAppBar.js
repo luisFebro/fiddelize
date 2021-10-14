@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useContext from "context";
 import BottomTabs from "components/tabs/BottomTabs";
 import LoadableVisible from "components/code-splitting/LoadableComp";
+import resetAddPtsData from "pages/client/points-panel/helpers/resetAddPtsData";
 // Contents
 import Games from "./bottom-menu-contents/all-games/Games";
 
@@ -103,8 +104,10 @@ function GroupedAppBar({ history }) {
             tabContentPanel: undefined,
             scrollView: false,
             onClick: () => {
-                if (needAppForCliAdmin) return;
-                history.push("/cartao-virtual");
+                resetAddPtsData().then(() => {
+                    if (needAppForCliAdmin) return;
+                    history.push("/cartao-virtual");
+                });
             },
         },
         {

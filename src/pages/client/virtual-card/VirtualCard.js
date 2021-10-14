@@ -12,7 +12,6 @@ import getRandomArray from "utils/arrays/getRandomArray";
 import Img from "components/Img";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import showToast from "components/toasts";
-import getId from "utils/getId";
 
 export default withRouter(VirtualCard);
 
@@ -73,9 +72,9 @@ function VirtualCard({ history }) {
         showNoCardMsg: false,
         audioPrerender: false,
     });
-    const [trigger, setTrigger] = useState(true);
 
     const { score, createdAt, loading, showNoCardMsg, audioPrerender } = data;
+    const { currPoints } = useData();
     const [name, userId, sexLetter] = useData(["name", "userId", "sexLetter"]);
     const isShe = sexLetter === "a";
 
@@ -99,7 +98,7 @@ function VirtualCard({ history }) {
 
     const [failureMsg] = useData(["text_cli-user_virtual-card"], {
         store: "audios",
-        trigger: !loading && audioPrerender && trigger,
+        trigger: !loading && audioPrerender,
     });
 
     const showTitle = () => (
@@ -126,24 +125,17 @@ function VirtualCard({ history }) {
         trigger: !loading && audioPrerender,
     });
 
-    // ..make sure to refetch in case user go back to this page after points panel
-    useEffect(() => {
-        setTrigger(getId());
-    }, []);
-
     const { themeSColor: sColor } = useBizData();
-    const { data: cardsData, loading: loadingAPI, error } = useAPI({
+    const { data: cardsData, error } = useAPI({
         url: readLastTempPoints(userId),
         needAuth: true,
-        trigger: userId !== "..." && trigger,
+        trigger: userId !== "...",
     });
 
     const loadingAll = name === "..." || loading;
     const cond3dCard = !loadingAll && !error && !showNoCardMsg;
 
     useEffect(() => {
-        if (loadingAPI) return;
-
         if (cardsData === false) {
             setData((prev) => ({
                 ...prev,
@@ -154,9 +146,16 @@ function VirtualCard({ history }) {
 
         if (cardsData && cardsData.tempPoints) {
             Promise.all([
-                setVars({
-                    paidValue: cardsData.tempPoints,
-                    staff: cardsData.staff,
+                getVar("currPoints").then((thisCurrPts) => {
+                    // if found currPoints in this page, it means the user came back after panel PTS and hence the data has already been set and no need set again to avoid added-curr-points increase
+                    if (thisCurrPts) return;
+
+                    setVars({
+                        ptsId: cardsData.ptsId,
+                        paidValue: cardsData.tempPoints,
+                        staff: cardsData.staff,
+                        currPoints,
+                    });
                 }),
                 setData((prev) => ({
                     ...prev,
@@ -166,7 +165,7 @@ function VirtualCard({ history }) {
                 })),
             ]);
         }
-    }, [cardsData, loadingAPI]);
+    }, [cardsData]);
 
     const handlePathAndData = () => {
         // check card data if set before redirect
