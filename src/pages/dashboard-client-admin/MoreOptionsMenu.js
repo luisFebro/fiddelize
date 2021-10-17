@@ -65,7 +65,7 @@ export default function MoreOptionsMenu({ location, history }) {
         },
         {
             icon: <FontAwesomeIcon icon="mobile-alt" style={menuIconStyle} />,
-            text: "outros apps",
+            text: "demo",
             callback: () => handleFullOpen("testModal"),
         },
         {
@@ -97,6 +97,11 @@ export default function MoreOptionsMenu({ location, history }) {
                     <ModalFullContent
                         contentComp={modalStore[currModal]}
                         fullOpen={fullOpen}
+                        backgroundColor={
+                            currModal === "contactModal"
+                                ? "var(--themeP)"
+                                : undefined
+                        }
                         setFullOpen={handleFullClose}
                     />
                 )}

@@ -2,7 +2,7 @@
 export default function removeImgFormat(imgUrl) {
     if (!imgUrl)
         return {
-            newImg: "/img/official-logo-name.png",
+            newImg: "/img/error.png", // official-logo-name.png
             width: 190,
             height: 85,
         }; // for adjusting to fiddelize default logo.

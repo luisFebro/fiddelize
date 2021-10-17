@@ -190,3 +190,4 @@ export const validateBizLinkName = () =>
 // MISCELLANEOUS
 export const countField = (userId, role = "cliente") =>
     `${ROOT}/user/count/field/${userId}?thisRole=${role}`; // PUT
+export const getBuyClubRulesData = () => `${ROOT}/general/buy-club-rules-data`;

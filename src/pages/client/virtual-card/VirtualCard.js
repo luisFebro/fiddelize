@@ -197,7 +197,7 @@ function VirtualCard({ history }) {
             <div className="animated fadeIn delay-3s mt-5">
                 <ButtonFab
                     disabled={false}
-                    title="Aplicar pontos"
+                    title="Aplicar moedas"
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={handlePathAndData}
                     position="relative"

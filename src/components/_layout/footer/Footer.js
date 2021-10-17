@@ -4,9 +4,9 @@ import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useDelay from "hooks/useDelay";
 import AsyncVersion from "_main/user-interfaces/version/AsyncVersion";
+import ModalFullContent from "components/modals/ModalFullContent";
 import "./_Footer.scss";
 import { Load } from "../../code-splitting/LoadableComp";
-import ModalFullContent from "../../modals/ModalFullContent";
 
 const AsyncFiddelizeContact = Load({
     loader: () =>
@@ -151,6 +151,7 @@ const Footer = ({ location }) => {
                         contentComp={<AsyncFiddelizeContact />}
                         fullOpen={fullOpen}
                         setFullOpen={handleFullClose}
+                        backgroundColor="var(--themeP)"
                     />
                 )}
             </footer>

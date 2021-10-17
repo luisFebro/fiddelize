@@ -59,6 +59,13 @@
     max-width: 100%;
 }
 
+@media only screen and (min-width: 500px) {
+    .img-center {
+        max-width: 500px;
+    }
+}
+
+
 .no-border {
     border: 0px solid transparent !important;
 }

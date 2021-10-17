@@ -12,7 +12,7 @@ WhatsappBtn.propTypes = {
 export default function WhatsappBtn({
     title = "Iniciar chat",
     elsePhone,
-    supportName,
+    backgroundColor,
     isDisabled,
     icon = "comment",
 }) {
@@ -40,8 +40,12 @@ export default function WhatsappBtn({
                 onClick={null}
                 disabled={isDisabled}
                 color="var(--mainWhite)"
-                backgroundColor={`var(--themeSDark--${themeSColor})`}
-                backColorOnHover={`var(--themeSDark--${themeSColor})`}
+                backgroundColor={
+                    backgroundColor || `var(--themeSDark--${themeSColor})`
+                }
+                backColorOnHover={
+                    backgroundColor || `var(--themeSDark--${themeSColor})`
+                }
                 iconFontAwesome={
                     <FontAwesomeIcon icon={icon} style={faStyle} />
                 }

@@ -50,6 +50,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt"; // de
 import { faTrophy } from "@fortawesome/free-solid-svg-icons/faTrophy";
 import { faGift } from "@fortawesome/free-solid-svg-icons/faGift";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
+import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 import { faHandHolding } from "@fortawesome/free-solid-svg-icons/faHandHolding";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons/faThumbsUp";
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
@@ -152,6 +153,7 @@ library.add(
     faTrophy,
     faGift,
     faUser,
+    faUsers,
     faHandHolding,
     faThumbsUp,
     faSearch,

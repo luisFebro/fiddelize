@@ -1,9 +1,17 @@
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LoadableVisible from "components/code-splitting/LoadableVisible";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
 import AppDesign from "../design/AppDesign";
 import MainBuyGames from "../buy-games/MainBuyGames";
 import DigitalCoins from "../digital-coins/DigitalCoins";
+
+const AsyncBuyClubRules = LoadableVisible({
+    loader: () =>
+        import(
+            "../buy-club-rules/BuyClubRules" /* webpackChunkName: "buy-club-rules-page-lazy" */
+        ),
+});
 
 const faStyle = {
     fontSize: "40px",
@@ -30,6 +38,12 @@ export default function ShowMainPanels() {
             name: "Moedas<br />Digitais",
             leftIcon: <FontAwesomeIcon icon="coins" />,
             hiddenContent: <DigitalCoins />,
+        },
+        {
+            id: 3,
+            name: "Regras<br />do Clube",
+            leftIcon: <FontAwesomeIcon icon="users" />,
+            hiddenContent: <AsyncBuyClubRules />,
         },
     ];
 
