@@ -1,6 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import useData, { useBizData } from "init";
+import { useVar } from "init/var";
+import showToast from "components/toasts";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullScreen from "./ModalFullScreen";
 
 ModalBtn.propTypes = {
@@ -8,6 +11,7 @@ ModalBtn.propTypes = {
     setSelectedValue: PropTypes.func,
 };
 
+// Comp exclusive to "VER PERFIL"
 export default function ModalBtn({
     modalData,
     button,
@@ -16,6 +20,13 @@ export default function ModalBtn({
     run,
 }) {
     const [open, setOpen] = useState(false);
+
+    const dataPolls = useVar("polls");
+    const xp = dataPolls ? dataPolls.xp : 0;
+    const nps = dataPolls ? dataPolls.nps : 0;
+    const { countCliUsers } = useBizData();
+
+    const isBtnBlock = countCliUsers < 100 || !nps || nps < 0 || !xp || xp < 6;
 
     const {
         title,
@@ -49,7 +60,15 @@ export default function ModalBtn({
                 iconMarginLeft={iconMarginLeft}
                 shadowColor={shadowColor}
                 backgroundColor={backgroundColor}
-                onClick={onOpen}
+                onClick={
+                    isBtnBlock
+                        ? () =>
+                              showToast(
+                                  "Para ter acesso aos dados cadastrais dos clientes, você precisa ter os critérios mínimos de segurança indo em ajustes > dados projetos.",
+                                  { dur: 15000 }
+                              )
+                        : onOpen
+                }
                 position={position}
                 variant={variant}
                 size={size}

@@ -1,11 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import useData, { useBizData } from "init";
+import { useVar } from "init/var";
 import showToast from "components/toasts";
 import getAPI, { readAllDbData } from "api";
 import Img from "components/Img";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import CheckBoxForm from "components/CheckBoxForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import ButtonDropdown from "components/buttons/material-ui/ButtonDropdown";
 
 const dbData = {
@@ -22,6 +24,8 @@ export default function BackUpToExcel() {
         selectedButton: "SELECIONE BOTÃO",
         isLoading: false,
         securityAlertOn: false, // use agreed with security text
+        minSec: true,
+        criteria: {},
     });
     const {
         securityAlertOn,
@@ -30,12 +34,18 @@ export default function BackUpToExcel() {
         dbModelName,
         brDbName,
         isLoading,
+        minSec,
+        criteria,
     } = data;
 
     const isArrayReady = dbDataList.length !== 0;
 
     const [adminId] = useData(["userId"]);
-    const { bizLinkName } = useBizData();
+    const { countCliUsers, bizLinkName } = useBizData();
+
+    const dataPolls = useVar("polls");
+    const xp = dataPolls ? dataPolls.xp : 0;
+    const nps = dataPolls ? dataPolls.nps : 0;
 
     const switchLoading = (status) => {
         setData((prev) => ({
@@ -48,6 +58,8 @@ export default function BackUpToExcel() {
         const params = {
             modelName: dbModelName,
             thisRole: "cliente-admin",
+            xp,
+            nps,
         };
 
         switchLoading(true);
@@ -57,8 +69,15 @@ export default function BackUpToExcel() {
             fullCatch: true,
         }).catch((err) => {
             switchLoading(false);
+            if (err.status === 400 && err.data && err.data.status === false) {
+                return setData((prev) => ({
+                    ...prev,
+                    minSec: false,
+                    criteria: err.data,
+                }));
+            }
             if (err.status === 404) {
-                showToast(err.data.error, { type: "error" });
+                return showToast(err.data.error, { type: "error" });
             }
             if (err.status !== 200) {
                 showToast("Ocorreu um erro ao carregar dados de clientes", {
@@ -72,7 +91,7 @@ export default function BackUpToExcel() {
             ...data,
             dbDataList: allDbData,
         });
-        switchLoading(false);
+        // switchLoading(false);
     };
 
     useEffect(() => {
@@ -139,8 +158,11 @@ export default function BackUpToExcel() {
     const showActionBtn = () => (
         <Fragment>
             <ButtonFab
+                disabled={!minSec}
                 title={isLoading ? "Solicitando..." : "Solicitar Cópia"}
-                backgroundColor="var(--themeSDark--default)"
+                backgroundColor={
+                    !minSec ? "grey" : "var(--themeSDark--default)"
+                }
                 onClick={() => onSelectedValue("users")}
                 position="relative"
                 variant="extended"
@@ -155,6 +177,45 @@ export default function BackUpToExcel() {
             securityAlertOn: status,
         });
     };
+
+    const showMinSecurityInstru = () => (
+        <Fragment>
+            <section className="my-5 font-site text-em-1 text-grey mx-3">
+                <h2
+                    className="mb-4 text-shadow text-pill text-white text-center text-normal font-weight-bold"
+                    style={{
+                        backgroundColor: "grey",
+                        borderRadius: "0px",
+                    }}
+                >
+                    Critério mínimo de segurança para baixar
+                </h2>
+                <p className="m-0">
+                    - base mínima de <strong>100 clientes cadastrados</strong>.
+                </p>
+                <p>
+                    Atual: {countCliUsers} clientes{" "}
+                    {getStatusIcon(criteria.isBaseBlock ? "block" : "ok")}
+                </p>
+                <p className="m-0">
+                    -nota de métrica de fidelidade NPS{" "}
+                    <strong>positiva.</strong>
+                </p>
+                <p>
+                    Atual: {nps} pontos{" "}
+                    {getStatusIcon(criteria.isNpsBlock ? "block" : "ok")}
+                </p>
+                <p className="m-0">
+                    - nota de experiência de compra dos clientes no mínimo de{" "}
+                    <strong>6 pontos</strong>
+                </p>
+                <p>
+                    Atual: {xp} pontos{" "}
+                    {getStatusIcon(criteria.isXpBlock ? "block" : "ok")}
+                </p>
+            </section>
+        </Fragment>
+    );
 
     const showAgreementAndBtn = () => (
         <Fragment>
@@ -228,13 +289,33 @@ export default function BackUpToExcel() {
                 alt="ícone excel"
             />
             <p className="text-center text-normal font-weight-bold">
-                Se precisar, faça aqui a cópia de dados mais recente dos seus
-                clientes
+                Baixe dados de toda sua base de clientes
             </p>
+            {!minSec && showMinSecurityInstru()}
             {isArrayReady ? showAgreementAndBtn() : showActionBtn()}
         </div>
     );
 }
+
+// HELPERS
+function getStatusIcon(type) {
+    const types = ["ok", "block"];
+    if (!types.includes(type)) throw new Error("type not allowed");
+    const isOk = type === "ok";
+
+    return (
+        <FontAwesomeIcon
+            icon={isOk ? "check-circle" : "times-circle"}
+            style={{
+                fontSize: 25,
+                color: isOk ? "green" : "var(--expenseRed)",
+            }}
+            className="ml-2 animated Rubberband delay-2s"
+        />
+    );
+}
+
+// END HELPERS
 
 /* ARCHIVES
 

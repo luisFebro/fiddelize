@@ -24,7 +24,9 @@ export default function getRegulationText({
     }* atualmente:
 
         ${gameList.map(
-            (game) => `<span class="text-pill">💎 *${game.nameBr}*</span>
+            (
+                game
+            ) => `<span class="font-site text-em-0-9 text-pill">💎 *${game.nameBr}*</span>
 
             ${game.benefitDesc}.
             <hr class="mt-3 mb-4 lazer-purple" />`

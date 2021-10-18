@@ -47,6 +47,7 @@ function MainH({ data }) {
             if (task === "newBenefit") return `+ Benefício`;
             if (task === "in") return `+ ${points} PTS extra`;
             if (task === "out") return `- ${points} PTS`;
+            if (task === "expired") return `- ${points} PTS expirados`;
             return null;
         };
 

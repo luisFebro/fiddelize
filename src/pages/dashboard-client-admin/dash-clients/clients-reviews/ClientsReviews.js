@@ -263,6 +263,11 @@ function useMainReviewData() {
             });
             if (!thisMainData) return null;
 
+            // for min security in backend customer base
+            await setVar({
+                polls: { xp: thisMainData.xpScore, nps: thisMainData.nps },
+            });
+
             return setData((prev) => ({
                 ...prev,
                 loading: false,
