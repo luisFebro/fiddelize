@@ -3,7 +3,7 @@ const IS_PROD = process.env.NODE_ENV === "production";
 
 // set staging in api/root.js (frontend) when required to test in staging production when devoloping a new feature.
 // IMPORTANT: this should be set to false when merging to master.
-const IS_STAGING = true;
+const IS_STAGING = false;
 
 const prodLink = IS_STAGING
     ? "https://fiddelize-test.herokuapp.com/api"
