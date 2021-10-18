@@ -5,7 +5,7 @@ import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.61.50FUCK";
+const latestVersion = "4.61.51";
 // NEXT:
 // register bonus coins -
 const updateDescription = "buy club rules 2.0";
