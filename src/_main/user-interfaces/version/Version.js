@@ -1,7 +1,7 @@
 import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
-// TESTING STAGING PHASE
+// TESTING STAGING PHASE MODIFIED
 
 const isSmall = window.Helper.isSmallScreen();
 
