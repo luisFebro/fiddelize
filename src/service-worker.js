@@ -165,6 +165,12 @@ self.addEventListener("activate", (event) => {
     event.waitUntil(self.clients.claim());
 });
 
+// resource: https://github.com/MicrosoftEdge/pushnotifications-demo/blob/master/src/service-worker.js
+// skipWaiting() means that your new service worker is likely controlling pages that were loaded with an older version. This means some of your page’s fetches will have been handled by your old service worker, but your new service worker will be handling subsequent fetches. If this might break things, don’t use skipWaiting() https://techglimpse.com/service-workers-installation-and-activation-pwa-essentials/
+self.addEventListener("install", () => {
+    self.skipWaiting();
+});
+
 // EVENTS
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
@@ -479,11 +485,3 @@ registerRoute(
   })
 );
  */
-
-/* ARCHIVES
-// resource: https://github.com/MicrosoftEdge/pushnotifications-demo/blob/master/src/service-worker.js
-skipWaiting() means that your new service worker is likely controlling pages that were loaded with an older version. This means some of your page’s fetches will have been handled by your old service worker, but your new service worker will be handling subsequent fetches. If this might break things, don’t use skipWaiting() https://techglimpse.com/service-workers-installation-and-activation-pwa-essentials/
-self.addEventListener('install', () => {
-     self.skipWaiting();
-});
-*/
