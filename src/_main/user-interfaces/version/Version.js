@@ -1,8 +1,10 @@
 import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
+// STARTING OFF OFFICIALLY WITH PAYMENT 2.0
+
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "4.61.85";
+const latestVersion = "4.61.90";
 // NEXT:
 // register bonus coins -
 const updateDescription = "buy club rules 2.0";
