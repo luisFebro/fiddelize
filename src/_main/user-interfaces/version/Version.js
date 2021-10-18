@@ -2,8 +2,8 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-
-const latestVersion = "4.61.75";
+alert("testing this shit in staging phase!!!!!");
+const latestVersion = "4.61.80";
 // NEXT:
 // register bonus coins -
 const updateDescription = "buy club rules 2.0";
