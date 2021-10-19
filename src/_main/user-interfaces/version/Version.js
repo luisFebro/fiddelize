@@ -1,6 +1,8 @@
 import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
+// 0.50
+
 const isSmall = window.Helper.isSmallScreen();
 const latestVersion = "4.61.90";
 // NEXT:
