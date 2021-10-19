@@ -57,7 +57,7 @@ export default function StartPage({
     );
 
     const showCTAs = () => (
-        <section className="mx-5 mb-5">
+        <section className="mt-5 mx-5 mb-5">
             <div className="d-flex justify-content-start">
                 <div className="position-relative">
                     <GoldBtn setCurrPlan={setCurrPlan} />

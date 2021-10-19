@@ -29,7 +29,7 @@ export default function AsyncPixDetails({ itemAmount }) {
                     borderRadius: "30px",
                 }}
             >
-                Chave:
+                Chave Pix:
                 <br />
                 <span className="text-center text-normal font-weight-bold">
                     {pixKey}

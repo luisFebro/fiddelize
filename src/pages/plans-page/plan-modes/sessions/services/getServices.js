@@ -1,5 +1,4 @@
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
-import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import AmpStoriesIcon from "@material-ui/icons/AmpStories";
@@ -8,8 +7,9 @@ import FindInPageIcon from "@material-ui/icons/FindInPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import StorageIcon from "@material-ui/icons/Storage";
 import { proVersion } from "./proVersion";
+// import StorageIcon from "@material-ui/icons/Storage";
+// import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 
 const integratedServices = (styles) => [
     {
@@ -84,16 +84,6 @@ const integratedServices = (styles) => [
             últimas compras e mais!
         `,
         Icon: <FilterListIcon style={styles.muStyle} />,
-        price: null,
-        greyedout: false,
-    },
-    {
-        name: `
-            <strong>2 Tipos de apps gestão:</strong><br />
-            - para admin: você no<br />controle das principais<br />prefências dos apps;<br />
-            - para membros: sua<br />equipe ajuda a cadastrar<br />novos clientes, moedas PTS<br />e benefícios (primeiro<br />app é grátis);
-        `,
-        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
         price: null,
         greyedout: false,
     },
@@ -179,6 +169,18 @@ export default function getServices(version = "integrated", options = {}) {
 }
 
 /* ARCHIVES
+
+{
+    name: `
+        <strong>2 Tipos de apps gestão:</strong><br />
+        - para admin: você no<br />controle das principais<br />prefências dos apps;<br />
+        - para membros: sua<br />equipe ajuda a cadastrar<br />novos clientes, moedas PTS<br />e benefícios;
+    `,
+    Icon: <ImportantDevicesIcon style={styles.muStyle} />,
+    price: null,
+    greyedout: false,
+},
+
 
 const offplanVersion = () => [
     {

@@ -25,7 +25,7 @@ export default function Pix({ location }) {
     const showPixData = () => (
         <section className="container-center-col text-center">
             <section className="text-normal">
-                Chave:
+                Chave Pix:
                 <br />
                 <span className="text-subtitle font-weight-bold">{pixKey}</span>
                 <div className="container-center">

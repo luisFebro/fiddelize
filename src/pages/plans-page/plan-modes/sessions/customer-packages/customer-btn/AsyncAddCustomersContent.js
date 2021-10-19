@@ -111,20 +111,12 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
                 objetivo da Fiddelize é entregar a melhor esperiência!
             </p>
             <p className="text-small text-left text-purple mt-3">
-                - Note, porém, que a <strong>expiração das moedas</strong> de
-                todos seus clientes é ativada automaticamente para 30 dias após
-                o <strong>término do seu plano</strong> sem renovação. Todos
+                - Note, porém, que após o <strong>término do seu plano</strong>,
+                o mês de manutenção é iniciado e o prazo de expiração das moedas
+                de seus clientes é ativada automaticamente para 30 dias. Todos
                 seus clientes são notificados que precisam usar as moedas em até
-                30 dias antes de expirá-las 100%. Caso renove seu plano, você
-                pode desativar o prazo de expiração caso assim deseje.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - se um cliente ficar{" "}
-                <strong>
-                    inativo por 3 meses e sem saldo em moeda PTS em conta
-                </strong>
-                , contando a partir da última data da compra; neste caso, a
-                conta do cliente é <strong>removida automaticamente</strong>.
+                30 dias antes de expirá-las 100%. Na renovação seu plano, o mês
+                de manutenção é finalizado e o prazo desativado.
             </p>
         </section>
     );
@@ -193,3 +185,16 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         </section>
     );
 }
+
+/* ARCHIVED
+
+<p className="text-small text-left text-purple mt-3">
+    - se um cliente ficar{" "}
+    <strong>
+        inativo por 3 meses e sem saldo em moeda PTS em conta
+    </strong>
+    , contando a partir da última data da compra; neste caso, a
+    conta do cliente é <strong>removida automaticamente</strong>.
+</p>
+
+*/
