@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import extractStrData from "../../../../utils/string/extractStrData";
+import extractStrData from "utils/string/extractStrData";
+import setProRenewal from "utils/biz/setProRenewal";
+import { formatDMY } from "utils/dates/dateFns";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
-import setProRenewal from "../../../../utils/biz/setProRenewal";
 import RedirectLink from "../../../RedirectLink";
-// import useCount from '../../../../hooks/useCount';
 import {
     textStyle,
     ShowTitle,
@@ -12,6 +12,7 @@ import {
     ShowBrief,
     ShowActionBtn,
 } from "./DefaultRenderComps";
+// import useCount from 'hooks/useCount';
 
 function ProPay({
     history,
@@ -25,6 +26,7 @@ function ProPay({
     subtype,
     content,
 }) {
+    const isFreeTrialEnd = subtype === "freeTrialEnd";
     const isProPayOnly = subtype === "proPay";
     const isWelcomeProPay = subtype === "welcomeProPay";
     const isExpiredDate = subtype === "proExpiredDate";
@@ -32,10 +34,17 @@ function ProPay({
     const needOrderBtn = isExpiredDate || isNearExpiryDate;
 
     const contentData = content && extractStrData(content);
-    const needDataExpiration = !contentData.approvalDate;
+    // free trial data
+    const maintenanceMonthExpDate =
+        contentData && contentData.maintenanceMonthExpDate;
+    // end free trial data
+    const needDataExpiration = contentData && !contentData.approvalDate;
 
-    const ref = needDataExpiration && contentData.ref;
-    const orders = needDataExpiration && JSON.parse(contentData.orders);
+    const ref = needDataExpiration && contentData && contentData.ref;
+    const orders =
+        needDataExpiration &&
+        contentData.orders &&
+        JSON.parse(contentData.orders);
     const planBr = needDataExpiration && contentData.planBr;
     // const planDays = needDataExpiration && contentData.planDays;
     const expiryDate = needDataExpiration && contentData.expiryDate;
@@ -78,6 +87,8 @@ function ProPay({
     const handleTitle = () => {
         if (isNearExpiryDate) return "Lembrete de Vencimento";
         if (isExpiredDate) return "Plano Expirado";
+        if (isFreeTrialEnd) return "15 dias de teste terminaram";
+
         return isProPayOnly ? "Pagamento Aprovado" : "Club Pro";
     };
 
@@ -106,6 +117,43 @@ function ProPay({
             <ShowTitle text={handleTitle()} />
             {showMainIllustration()}
             <ShowBrief brief={brief} />
+            {isFreeTrialEnd && (
+                <Fragment>
+                    <p className={`${textStyle}`}>
+                        Para assegurar uma melhor experiência para seus
+                        clientes, todos sua base de clientes ganharam mais{" "}
+                        <i>1 mês de manuntenção</i> até dia{" "}
+                        <b>{formatDMY(maintenanceMonthExpDate)}</b>. Isso
+                        significa que você, sua equipe e clientes continuam
+                        usando os serviços da Fiddelize normalmente, de forma
+                        gratuita.
+                    </p>
+                    <p className={`${textStyle}`}>
+                        A única restrição é que a funcionalidade de{" "}
+                        <b>
+                            cadastrar novos clientes foi desativada
+                            temporarimente
+                        </b>{" "}
+                        até que invista em um de nossos <b>planos pro</b>.
+                    </p>
+                    <p className={`${textStyle}`}>
+                        <strong>Importante:</strong> O prazo de expiração de
+                        todas as moedas dos clientes foi ativado e expiram no
+                        final do mês de manuntenção. O prazo é desativado
+                        automaticamente na ativação de um plano pro. Saiba mais
+                        indo em app > moedas digitais > expiração de moedas.
+                    </p>
+                    <p className={`${textStyle}`}>
+                        Os clientes receberam notificações e o prazo fica
+                        visível quando eles entram no app.
+                    </p>
+                    <p className={`${textStyle}`}>
+                        Para atualizar seu plano, bastar acessar seu app admin e
+                        clicar em atualizar ao lado do seu plano ao entrar no
+                        seu painel de controle.
+                    </p>
+                </Fragment>
+            )}
             {isExpiredDate && (
                 <p className={`${textStyle} font-weight-bold`}>
                     ID: {ref}

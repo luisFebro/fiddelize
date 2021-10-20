@@ -13,6 +13,7 @@ export default function getCardTypeData(cardType, options = {}) {
         role,
         userFirstName: getFirstName(userName),
         bizName,
+        genderLetter,
     });
 
     const handledBirthdayGreeting = (birthdayMsg) => {
@@ -94,6 +95,12 @@ export default function getCardTypeData(cardType, options = {}) {
                 planBr,
             } = extractStrData(content);
 
+            if (subtype === "freeTrialEnd") {
+                title = "15 dias de testes";
+                brief = `Seus 15 dias de testes terminaram, mas seus clientes cadastrados ganharam mais 1 mês para aproveitar seu clube.`;
+                circularImg = "/img/icons/notif/calendar-15-free-trial.svg";
+            }
+
             if (subtype === "welcomeProPay") {
                 title = "Clube Pro";
                 brief = `Boas vindas do Clube Pro da Fiddelize! Os serviços Pro contratados já estão disponíveis. O seu pagamento foi aprovado hoje - ${
@@ -171,9 +178,13 @@ export default function getCardTypeData(cardType, options = {}) {
 }
 
 // HELPERS
-function handleWelcome({ role, userFirstName, bizName }) {
+function handleWelcome({ role, userFirstName, bizName, genderLetter }) {
+    const isHe = genderLetter === "o";
+
     if (role === "cliente-admin")
-        return `${userFirstName}, veja como a Fiddelize vai te deixar por dentro dos pontos de compra dos seus clientes`;
+        return `${userFirstName}, boas-vindas ao seu primeiro dia do seu clube de compras onde você é ${
+            isHe ? "o super-herói" : "a super-heroína"
+        } na missão de conquistar mais compras de seus clientes.`;
     if (role === "cliente-membro")
         return `${userFirstName}, agora você está dentro! Um app prático para seu trabalho.`;
     if (role === "cliente")
