@@ -123,10 +123,10 @@ function ProPay({
                         Para assegurar uma melhor experiência para seus
                         clientes, todos sua base de clientes ganharam mais{" "}
                         <i>1 mês de manuntenção</i> até dia{" "}
-                        <b>{formatDMY(maintenanceMonthExpDate)}</b>. Isso
-                        significa que você, sua equipe e clientes continuam
-                        usando os serviços da Fiddelize normalmente, de forma
-                        gratuita.
+                        <b>{formatDMY(maintenanceMonthExpDate)}</b> e já está
+                        ativado. Isso significa que você, sua equipe e clientes
+                        continuam usando os serviços da Fiddelize normalmente,
+                        de forma gratuita.
                     </p>
                     <p className={`${textStyle}`}>
                         A única restrição é que a funcionalidade de{" "}
@@ -137,15 +137,20 @@ function ProPay({
                         até que invista em um de nossos <b>planos pro</b>.
                     </p>
                     <p className={`${textStyle}`}>
-                        <strong>Importante:</strong> O prazo de expiração de
-                        todas as moedas dos clientes foi ativado e expiram no
-                        final do mês de manuntenção. O prazo é desativado
-                        automaticamente na ativação de um plano pro. Saiba mais
+                        <strong>Importante:</strong>
+                        <br />
+                        <strong>Durante o mês de manuntenção:</strong> O prazo
+                        de expiração de todas as moedas dos clientes é ativado.
+                        Os clientes recebem notificações e o prazo fica visível
+                        quando eles entram no app.
+                        <br />
+                        <br />
+                        <strong>Ao final do mês de manuntenção:</strong>
+                        <br />
+                        - Todas as moedas da sua base de clientes são expiradas
+                        e funcionalidade de expiração desativada. Saiba mais
                         indo em app > moedas digitais > expiração de moedas.
-                    </p>
-                    <p className={`${textStyle}`}>
-                        Os clientes receberam notificações e o prazo fica
-                        visível quando eles entram no app.
+                        <br />- Apps de membros têm acesso bloqueado;
                     </p>
                     <p className={`${textStyle}`}>
                         Para atualizar seu plano, bastar acessar seu app admin e
