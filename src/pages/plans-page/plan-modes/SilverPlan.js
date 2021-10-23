@@ -118,26 +118,6 @@ export default function SilverPlan({ setCurrPlan }) {
 
                     <PlanAdvantages isYearly={isYearly} plan="silver" />
 
-                    {period === "yearly" && (
-                        <div className="my-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
-                            <p>
-                                você economiza 20%
-                                <br />
-                                no plano anual
-                            </p>
-                            <p>
-                                de{" "}
-                                <span
-                                    style={{ textDecoration: "line-through" }}
-                                >
-                                    R$ 1.200
-                                </span>
-                                <br />
-                                por R$ 1.000
-                            </p>
-                        </div>
-                    )}
-
                     <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                         <span className="text-pill">Serviços Extras</span>
                     </p>
@@ -223,5 +203,25 @@ const modalClientsData = {
     disableCliUser
 />
 <div style={{ marginBottom: 100 }} />
+
+{period === "yearly" && (
+    <div className="my-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
+        <p>
+            você economiza 20%
+            <br />
+            no plano anual
+        </p>
+        <p>
+            de{" "}
+            <span
+                style={{ textDecoration: "line-through" }}
+            >
+                R$ 1.200
+            </span>
+            <br />
+            por R$ 1.000
+        </p>
+    </div>
+)}
 
 */

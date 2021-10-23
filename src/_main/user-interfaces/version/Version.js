@@ -4,11 +4,12 @@ import Img from "components/Img";
 // 0.50
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "4.61.90";
+const latestVersion = "4.64.0";
 // NEXT:
 // register bonus coins -
-const updateDescription = "buy club rules 2.0";
+const updateDescription = "payment. plans and cron-jobs";
 /* HISTORY
+buy club rules 2.0
 cli-admin tweaks || general improvements
 expiring coins deadline - frontend, backend, cron-jobs and notifs
 register bonus coins

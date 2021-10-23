@@ -11,7 +11,7 @@ const newCustomersText = `
     Invista em seus clientes!
     <br />
     <br />
-    No plano prata e no período anual, os créditos são renovados todo dia 1 de cada mês.
+    No plano prata e no período anual, os créditos são renovados todo mês no mesmo dia que seu investimento foi aprovado.
 `;
 
 const newMembersText = `

@@ -85,7 +85,9 @@ export default function PayArea({
 
                 const desc = `Plano ${plan} ${handlePeriod()} com ${
                     servicesTotal || ""
-                } serviço${servicesTotal > 1 ? "s" : ""} no valor total de: `;
+                } serviço${
+                    servicesTotal > 1 ? "s" : ""
+                } no valor total de: R$ ${servicesAmount}`;
                 // if(servicesTotal > planServiceTotal) {
                 //     const leftover = serviceTotal - planServiceTotal;
                 //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `

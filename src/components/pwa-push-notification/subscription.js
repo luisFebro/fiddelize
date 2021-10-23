@@ -1,14 +1,17 @@
 import getAPI, { subscribePushNotif } from "api";
 import showToast from "components/toasts";
 import getVar, { setVar } from "init/var";
+import isSmallScreen from "utils/isSmallScreen";
+import isThisApp from "utils/window/isThisApp";
 import { renewSubscription, treatSubData } from "./scriptsUtils";
 
 const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY
 );
 
-const isEvenSmall = window.Helper && window.Helper.isSmallScreen(450);
-const deviceType = isEvenSmall ? "mobile" : "desktop";
+const isApp = isThisApp();
+const isEvenSmall = isSmallScreen(450);
+const deviceType = isApp || isEvenSmall ? "mobile" : "desktop";
 
 export default async function subscribeUser({ role, userId }) {
     // n1
@@ -23,17 +26,17 @@ export default async function subscribeUser({ role, userId }) {
     // Lesson: if no response from here, it means there's no service worker installed in the browser.
     const registration = await navigator.serviceWorker.ready;
 
-    const newSubscription = await registration.pushManager.subscribe({
-        applicationServerKey: convertedVapidKey, // n2
-        userVisibleOnly: true,
-    });
+    // const newSubscription = await registration.pushManager.subscribe({
+    //     applicationServerKey: convertedVapidKey, // n2
+    //     userVisibleOnly: true,
+    // });
 
-    const params = { role, userId, deviceType };
+    // const params = { role, userId, deviceType };
 
-    await Promise.all([
-        sendSubscription(newSubscription, params),
-        setVar({ lastPushSub: JSON.stringify(newSubscription) }),
-    ]);
+    // await Promise.all([
+    //     sendSubscription(newSubscription, params),
+    //     setVar({ lastPushSub: JSON.stringify(newSubscription) }),
+    // ]);
     return "ok";
 }
 
