@@ -26,17 +26,17 @@ export default async function subscribeUser({ role, userId }) {
     // Lesson: if no response from here, it means there's no service worker installed in the browser.
     const registration = await navigator.serviceWorker.ready;
 
-    // const newSubscription = await registration.pushManager.subscribe({
-    //     applicationServerKey: convertedVapidKey, // n2
-    //     userVisibleOnly: true,
-    // });
+    const newSubscription = await registration.pushManager.subscribe({
+        applicationServerKey: convertedVapidKey, // n2
+        userVisibleOnly: true,
+    });
 
-    // const params = { role, userId, deviceType };
+    const params = { role, userId, deviceType };
 
-    // await Promise.all([
-    //     sendSubscription(newSubscription, params),
-    //     setVar({ lastPushSub: JSON.stringify(newSubscription) }),
-    // ]);
+    await Promise.all([
+        sendSubscription(newSubscription, params),
+        setVar({ lastPushSub: JSON.stringify(newSubscription) }),
+    ]);
     return "ok";
 }
 
