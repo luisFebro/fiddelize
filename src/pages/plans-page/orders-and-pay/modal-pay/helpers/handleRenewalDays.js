@@ -1,7 +1,7 @@
 import getVar from "init/var";
 import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 
-const checkUltimateRenewal = ({ ordersStatement, bizPlanList }) => {
+const checkUltimateRenewal = ({ ordersStatement, bizPlanList = [] }) => {
     if ((bizPlanList && !bizPlanList.length) || !ordersStatement)
         return { res: false };
 

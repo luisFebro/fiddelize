@@ -114,7 +114,7 @@ export default function AsyncPix({ modalData }) {
                     borderRadius: "30px",
                 }}
             >
-                Chave:
+                Chave Pix:
                 <br />
                 <span className="text-subtitle font-weight-bold">{pixKey}</span>
                 <div className="container-center" id="parentPixKey">
@@ -184,28 +184,31 @@ export default function AsyncPix({ modalData }) {
     );
 
     const showImportantNotes = () => (
-        <section className="text-purple mx-3" style={{ marginTop: 80 }}>
+        <section
+            className="font-site text-em-1 text-purple mx-3"
+            style={{ marginTop: 80 }}
+        >
             <h2 className="text-normal font-weight-bold">Notas Importantes:</h2>
-            <p className="text-small">
+            <p>
                 - O Pix deve ter <strong>o mesmo CPF do seu cadastro</strong>,
                 pois o sistema da Fiddelize identifica sua conta através da
                 parte do CPF visível do pix (6 dígitos) e o seu primeiro nome
                 junto com a ID desta transição para atualizar seus novos
                 serviços.
             </p>
-            <p className="text-small">
+            <p>
                 - Caso não seja possível atualizar os serviços e você já tenha
                 transferido, o{" "}
-                <strong>valor é reembolsado integralmente no mesmo dia</strong>{" "}
+                <strong>valor é reembolsado integralmente até 24 horas</strong>{" "}
                 e a transação é cancelada.
             </p>
-            <p className="text-small">
+            <p>
                 - O projeto da Fiddelize é ainda mantido como{" "}
                 <strong>pessoa física</strong>, sem cadastro como pessoa
                 jurídica. Você é um dos primeiros clientes investindo no nosso
                 projeto, agradecemos seu apoio, {firstUserName}!
             </p>
-            <p className="text-small">
+            <p>
                 - Apesar da natureza do pagamento ser instantâneo, os serviços
                 contratados são ativados no período entre{" "}
                 <strong>5 minutos até 12 horas</strong> - todos os dias.

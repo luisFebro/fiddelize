@@ -129,15 +129,13 @@ function Navbar({ history, location }) {
         // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
         const needClientLogo =
             (isAdminDash && bizLogo) || (isAuth && bizLogo && isApp); // isApp &&
-        const fiddelizeLogo = "/img/error.png"; // /img/official-logo-name.png
+        const fiddelizeLogo = isApp
+            ? "/img/error.png"
+            : "/img/official-logo-name.png"; // display logo on website
         const { newImg: thisbizLogo, width, height } = removeImgFormat(
             needClientLogo && bizLogo
         );
 
-        // to avoid fiddelize logo to show off when loading img. somehow the default img is loaded first
-        const bizLogoChecked = thisbizLogo.includes("official-logo-name")
-            ? "/img/error.png"
-            : thisbizLogo;
         // const webCond = locationNow !== "/" && isAdminDash && imgFormatRaw;
         // const appCond = isApp && imgFormatRaw;
 
@@ -148,9 +146,7 @@ function Navbar({ history, location }) {
         };
 
         const logoSrc =
-            locationNow !== "/" && needClientLogo
-                ? bizLogoChecked
-                : fiddelizeLogo;
+            locationNow !== "/" && needClientLogo ? thisbizLogo : fiddelizeLogo;
 
         return (
             <Link to={handleLogoClick()}>

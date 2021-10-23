@@ -55,7 +55,7 @@ export default async function goFinishCheckout(props) {
         itemAmount1: testValue || itemAmount,
         itemDescription1: `${itemDescription
             .replace(/ç/gi, "c")
-            .replace("null", "pro")}R$ ${itemAmount}`,
+            .replace("null", "pro")}`,
         filter,
         ordersStatement,
         // renewal

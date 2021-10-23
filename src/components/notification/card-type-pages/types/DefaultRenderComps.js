@@ -31,7 +31,7 @@ export const ShowIllustration = ({ role, mainImg, bizLogo }) => {
                 width={150}
                 height="auto"
             />
-            {role && (
+            {role !== "cliente-admin" && (
                 <div
                     className="position-absolute"
                     style={{
