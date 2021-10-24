@@ -57,39 +57,6 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         </div>
     );
 
-    const notes = (
-        <section className="my-3 text-left mx-3">
-            <p className="text-small text-left text-purple mt-3">
-                - Os créditos são <strong>liberados automaticamente</strong>{" "}
-                após a aprovação do pagamento.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Os apps dos membros são
-                <strong> temporariamente desativados</strong> após a expiração
-                do plano caso não haja renovação.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Renove o tempo de uso do serviço facilmente indo no seu painel
-                na <strong>aba PRO</strong>.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Você é notificado <strong>5 dias</strong> antes do prazo
-                expirar.
-            </p>
-        </section>
-    );
-
-    const showNotes = () => (
-        <NotesSwitcher
-            color="text-purple"
-            btnStyle={{ top: -35, right: -80 }}
-            btnSize="small"
-            notes={notes}
-            rootClassName="mx-3"
-            shadowTitle={undefined}
-        />
-    );
-
     const handleCTA = () => {
         const isFunc = typeof handleItem === "function";
 
@@ -146,7 +113,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
             <p className="mx-3 text-normal text-purple">
                 Membros da sua equipe te ajudam a cadastrar moedas e clientes,
                 ver históricos e avaliações, confirmar benefícios, recebimentos
-                e mais. Invista em novos cadastros!
+                e mais.
             </p>
         </Fragment>
     );
@@ -171,3 +138,41 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         </section>
     );
 }
+
+/* ARCHIVES
+
+const notes = (
+    <section className="font-site text-em-1-2 my-3 text-left mx-3 text-purple">
+        {period === "yearly" && (
+            <Fragment>
+                <p>
+                    No plano anual, os créditos do serviço Novvos Membros são fixos e não se renovam como acontece para o serviço de Novvos Clientes. Isso significa que você mantém a mesma quantia de membros conectados ao longo do plano.
+                </p>
+                <p>
+                    Caso precise adicionar mais créditos, basta investir em mais créditos no plano Bronze, mesmo que tenha o plano prata ou ouro. Seu plano atual é atualizado com a nova quantia. Porém, o ciclo do plano permanece o mesmo.
+                </p>
+            </Fragment>
+        )}
+        <p className="text-left mt-3">
+            - Renove o tempo de uso do serviço facilmente indo no seu painel
+            na <strong>aba PRO</strong>.
+        </p>
+        <p className="text-left mt-3">
+            - Você é notificado <strong>5 dias</strong> antes do prazo
+            expirar.
+        </p>
+    </section>
+);
+
+const showNotes = () => (
+    <NotesSwitcher
+        color="text-purple"
+        btnStyle={{ top: -35, right: -80 }}
+        btnSize="small"
+        notes={notes}
+        rootClassName="mx-3"
+        shadowTitle={undefined}
+    />
+);
+
+ */

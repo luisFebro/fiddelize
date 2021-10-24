@@ -41,18 +41,6 @@ function AsyncAddSMSContent({
         </div>
     );
 
-    const showNotes = () => (
-        <section className="my-3 text-left mx-3">
-            <p className="text-purple text-left text-subtitle font-weight-bold m-0">
-                Notas <FontAwesomeIcon icon="info-circle" />
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Os créditos são <strong>liberados automaticamente</strong>{" "}
-                após a aprovação do pagamento.
-            </p>
-        </section>
-    );
-
     const handleCTA = () => {
         const isFunc = typeof handleItem === "function";
 
@@ -119,8 +107,23 @@ function AsyncAddSMSContent({
             {showTitle()}
             {showIllustration()}
             <Simulator handleData={handleData} />
-            {showNotes()}
             {showCTA()}
         </section>
     );
 }
+
+/*
+
+const showNotes = () => (
+    <section className="my-3 text-left mx-3">
+        <p className="text-purple text-left text-subtitle font-weight-bold m-0">
+            Notas <FontAwesomeIcon icon="info-circle" />
+        </p>
+        <p className="text-small text-left text-purple mt-3">
+            - Os créditos são <strong>liberados automaticamente</strong>{" "}
+            após a aprovação do pagamento.
+        </p>
+    </section>
+);
+
+ */

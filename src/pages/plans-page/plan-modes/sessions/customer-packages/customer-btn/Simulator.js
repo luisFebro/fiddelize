@@ -9,7 +9,7 @@ const getStyles = () => ({
         top: isSmall ? "50px" : "70px",
         left: "10px",
     },
-    totalCustomers: {
+    totalUnits: {
         fontWeight: "normal",
     },
     delimeterBoardLeft: {
@@ -41,6 +41,14 @@ const getStyles = () => ({
 
 const countMarks = [
     {
+        value: 300,
+        label: "",
+    },
+    {
+        value: 400,
+        label: "",
+    },
+    {
         value: 500,
         label: "",
     },
@@ -53,27 +61,24 @@ const countMarks = [
         label: "",
     },
     {
-        value: 800,
-        label: "",
-    },
-    {
         value: 1000,
         label: "",
     },
 ];
 
 const getCustomersData = (packages, isYearly) => {
-    // unit, expires, unitSizeDec, unitSizeInc
-    if (packages === 500) return [isYearly ? 0.6 : 0.06, null, "1-1", "1-1"];
-    if (packages === 600) return [isYearly ? 0.59 : 0.059, null, "1", "1-2"];
-    if (packages === 700) return [isYearly ? 0.57 : 0.057, null, "0-9", "1-3"];
-    if (packages === 800) return [isYearly ? 0.56 : 0.056, null, "0-8", "1-4"];
+    // unit, expires, unitSizeDec
+    if (packages === 300) return [isYearly ? 1 : 0.1, null, "1-2"];
+    if (packages === 400) return [isYearly ? 0.87 : 0.087, null, "1-1"];
+    if (packages === 500) return [isYearly ? 0.8 : 0.08, null, "1"];
+    if (packages === 600) return [isYearly ? 0.75 : 0.075, null, "0-9"];
+    if (packages === 700) return [isYearly ? 0.71 : 0.071, null, "0-9"];
 
-    return [isYearly ? 0.5 : 0.05, null, "0-8", "1-4"];
+    return [isYearly ? 0.6 : 0.06, null, "0-8"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {
-    const [packages, setPackages] = useState(500);
+    const [packages, setPackages] = useState(300);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
@@ -103,7 +108,7 @@ export default function Simulator({ handleData, period, currPlan }) {
         if (newQuantity && !Number.isNaN(newQuantity)) {
             setPackages(newQuantity);
         } else {
-            setPackages(500);
+            setPackages(300);
         }
     }, [newQuantity]);
 
@@ -124,7 +129,7 @@ export default function Simulator({ handleData, period, currPlan }) {
     const MAX_UNIT_MONTH = 1000;
 
     const totalReal = convertToReal(totalUnits);
-    const unitReal = unit.toFixed(3);
+    const unitReal = isYearly ? getYearlyUnit(unit) : unit.toFixed(2);
 
     const totalFinalMoneyReal = Math.round(Number(totalFinalMoney));
     // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
@@ -137,13 +142,25 @@ export default function Simulator({ handleData, period, currPlan }) {
         });
     }, [packages]);
 
+    const showYearlyPlanNote = () => {
+        if (!isYearly) return <span />;
+
+        return (
+            <section className="text-normal">
+                Você tem alcance de até {convertToReal(totalUnits * 12)}{" "}
+                cadastros de novos clientes ao longo de 1 ano, sendo{" "}
+                {totalUnits} creditados a cada mês.
+            </section>
+        );
+    };
+
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
             <span
                 className="d-inline-block ml-2 text-title text-purple"
                 style={styles.totalUnits}
             >
-                <span className="text-em-1-2 font-site text-nowrap">
+                <span className="font-weight-bold text-em-1-2 font-site text-nowrap">
                     + {totalReal}
                     <span className="d-block line-height-35">
                         Novo{packages === 1 ? "" : "s"}
@@ -155,9 +172,9 @@ export default function Simulator({ handleData, period, currPlan }) {
                 </span>
                 <div
                     className={`mt-2 text-grey position-relative d-block text-em-${
-                        isYearly ? "1-3" : unitSizeDec
+                        isYearly ? "1-2" : unitSizeDec
                     } font-site ${
-                        unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
+                        unit === 0.71 || unit === 0.06 ? "font-weight-bold" : ""
                     }`}
                     style={{
                         lineHeight: "15px",
@@ -166,7 +183,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                     }}
                 >
                     <span className="text-title"> X </span>
-                    {unitReal}
+                    R$ {unitReal}
                     <span
                         className="position-relative d-block text-small font-weight-bold"
                         style={{
@@ -174,10 +191,11 @@ export default function Simulator({ handleData, period, currPlan }) {
                             right: -50,
                         }}
                     >
-                        cada
+                        {isYearly ? "cada no mês" : "cada"}
                     </span>
                 </div>
             </span>
+            {showYearlyPlanNote()}
         </section>
     );
 
@@ -241,7 +259,7 @@ export default function Simulator({ handleData, period, currPlan }) {
             <MuSlider
                 color="var(--themeP)"
                 max={isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
-                min={500}
+                min={300}
                 marks={countMarks}
                 step={null}
                 value={packages}
@@ -265,7 +283,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}
                 >
-                    500
+                    300
                     <br />
                     {subject}s
                 </div>
@@ -281,4 +299,9 @@ export default function Simulator({ handleData, period, currPlan }) {
             {showSummary()}
         </section>
     );
+}
+
+function getYearlyUnit(totalUnitAmount = 0) {
+    const monthlyInv = totalUnitAmount / 12;
+    return monthlyInv && (monthlyInv / 30).toFixed(5);
 }

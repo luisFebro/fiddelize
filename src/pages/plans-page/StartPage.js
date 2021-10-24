@@ -45,38 +45,94 @@ export default function StartPage({
                     <br />
                     você quem manda!
                 </h1>
-                <main className="my-4 mx-3 text-left text-normal font-weight-bold text-white">
-                    Escolha um plano para começar a usar todo potencial dos
-                    serviços artesanalmente criados para dá super poderes para
-                    empreendedores como você conquistar seus clientes no mercado
-                    com a <br />
-                    <span style={styles.hightlighedName}>{bizName}</span>
+                <main className="my-4 mx-3 text-left text-normal text-white">
+                    Comece a usar todo potencial dos serviços artesanalmente
+                    criados para te dar super poderes tecnológicos para você
+                    conquistar mais clientes no próximo nível.
                 </main>
             </div>
         </section>
     );
 
     const showCTAs = () => (
-        <section className="mt-5 mx-5 mb-5">
+        <section className="mx-5 mb-5">
+            <h2
+                className="text-pill text-center text-white text-subtitle"
+                style={{
+                    backgroundColor: "var(--themePDark)",
+                    margin: "50px 0 70px",
+                }}
+            >
+                Selecione plano
+            </h2>
             <div className="d-flex justify-content-start">
                 <div className="position-relative">
                     <GoldBtn setCurrPlan={setCurrPlan} />
+                    <section
+                        className="position-absolute"
+                        style={{
+                            top: -50,
+                            right: 15,
+                        }}
+                    >
+                        <div className="position-relative">
+                            <img
+                                src="/img/icons/curve-arrow-left.svg"
+                                width={40}
+                                height={40}
+                                alt="seta"
+                                style={{
+                                    ...styles.arrow,
+                                    transform: "rotate(90deg) scaleX(-1)",
+                                }}
+                            />
+                            <p
+                                className="position-absolute text-normal text-white"
+                                style={styles.arrowTitle}
+                            >
+                                Sem limites
+                            </p>
+                        </div>
+                    </section>
                 </div>
             </div>
             <div
                 className="position-relative d-flex justify-content-end"
-                style={{ top: -25 }}
+                style={{ top: 10 }}
             >
                 <div className="position-relative">
                     <SilverBtn setCurrPlan={setCurrPlan} />
+                    <section
+                        className="position-absolute"
+                        style={{ top: -55, right: 55 }}
+                    >
+                        <div className="position-relative">
+                            <img
+                                src="/img/icons/curve-arrow-left.svg"
+                                width={40}
+                                height={40}
+                                alt="seta"
+                                style={{
+                                    ...styles.arrow,
+                                    transform: "rotate(70deg) scaleX(-1)",
+                                }}
+                            />
+                            <p
+                                className="position-absolute text-normal text-white"
+                                style={styles.arrowTitle}
+                            >
+                                Mais clientes
+                            </p>
+                        </div>
+                    </section>
                 </div>
             </div>
-            <div className="ml-5 d-flex justify-content-start">
+            <div className="mt-5 ml-5 d-flex justify-content-start">
                 <div className="position-relative">
                     <BronzeBtn setCurrPlan={setCurrPlan} />
                     <section
                         className="position-absolute"
-                        style={{ top: 10, right: -50 }}
+                        style={{ top: 20, right: -50 }}
                     >
                         <div className="position-relative">
                             <img

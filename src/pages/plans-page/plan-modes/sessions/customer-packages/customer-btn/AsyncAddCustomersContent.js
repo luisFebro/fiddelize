@@ -86,52 +86,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         }
     };
 
-    const notes = (
-        <section className="my-3 text-left mx-3">
-            <p className="text-small text-left text-purple mt-3">
-                - Os créditos são <strong>liberados automaticamente</strong>{" "}
-                após a aprovação do pagamento.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Caso ainda possua créditos válidos anteriores, o sistema da
-                Fiddelize <strong>acumula esses créditos com os atuais</strong>.
-                O <strong>tempo de validade</strong> é acumulado da mesma forma
-                também.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Quando expira seu tempo de uso, os seus{" "}
-                <strong>créditos restantes são zerados</strong>. Você é
-                notificado <strong>5 dias</strong> antes do prazo expirar.
-                Renovando o serviço, você extende o tempo de uso dos créditos.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Uma vez cadastrado, seus clientes usam o{" "}
-                <strong>app sem restrições e sem anúncios</strong> com app
-                personalizado com sua marca, mesmo quando seu plano expirar. O
-                objetivo da Fiddelize é entregar a melhor esperiência!
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Note, porém, que após o <strong>término do seu plano</strong>,
-                o mês de manutenção é iniciado e o prazo de expiração das moedas
-                de seus clientes é ativada automaticamente para 30 dias. Todos
-                seus clientes são notificados que precisam usar as moedas em até
-                30 dias antes de expirá-las 100%. Na renovação seu plano, o mês
-                de manutenção é finalizado e o prazo desativado.
-            </p>
-        </section>
-    );
-
-    const showNotes = () => (
-        <NotesSwitcher
-            color="text-purple"
-            btnStyle={{ top: -35, right: -80 }}
-            btnSize="small"
-            notes={notes}
-            rootClassName="mx-3"
-            shadowTitle={undefined}
-        />
-    );
-
     const showCTA = () => (
         <section className="mx-3 my-5 container-center">
             <ButtonFab
@@ -187,6 +141,53 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 }
 
 /* ARCHIVED
+const notes = (
+    <section className="text-purple font-site text-em-1-2 my-3 text-left mx-3">
+        <p className="text-left text-purple mt-3">
+            - Uma vez cadastrado, seus clientes usam o{" "}
+            <strong>app sem restrições ou anúncios</strong> com app
+            personalizado com sua marca, mesmo quando seu plano expirar.
+        </p>
+        <p className="text-left mt-3">
+            - Note, porém, que após o <strong>término do seu plano</strong>,
+            o mês de manutenção é iniciado e o prazo de expiração das moedas
+            de seus clientes é ativada automaticamente. Todos
+            seus clientes são notificados que precisam usar as moedas em até
+            30 dias antes de expirá-las 100%. Renovando seu plano, o mês de manutenção é desativado.
+        </p>
+    </section>
+);
+
+const showNotes = () => (
+    <NotesSwitcher
+        color="text-purple"
+        btnStyle={{ top: -35, right: -80 }}
+        btnSize="small"
+        notes={notes}
+        rootClassName="mx-3"
+        shadowTitle={undefined}
+    />
+);
+
+{period === "yearly" && (
+    <p className="text-left mt-3">
+        No plano anual, os créditos do serviço Novvos clientes são creditados mensalmente na mesma quantia contratada e no mesmo dia da renovação/ativação do plano.
+    </p>
+)}
+
+<p className="text-small text-left text-purple mt-3">
+    - Caso ainda possua créditos válidos anteriores, o sistema da
+    Fiddelize <strong>acumula esses créditos com os atuais</strong>.
+    O <strong>tempo de validade</strong> é acumulado da mesma forma
+    também.
+</p>
+<p className="text-small text-left text-purple mt-3">
+    - Quando expira seu tempo de uso, os seus{" "}
+    <strong>créditos restantes são zerados</strong>. Você é
+    notificado <strong>5 dias</strong> antes do prazo expirar.
+    Renovando o serviço, você extende o tempo de uso dos créditos.
+</p>
+
 
 <p className="text-small text-left text-purple mt-3">
     - se um cliente ficar{" "}

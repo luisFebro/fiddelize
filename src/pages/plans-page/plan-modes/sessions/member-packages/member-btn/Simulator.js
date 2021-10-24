@@ -41,16 +41,16 @@ const getStyles = () => ({
 
 const getMembersData = (packages, isYearly) => {
     // unit, expires, unitSizeDec, unitSizeInc
-    // if (packages === 1) return [10, null, "1-1", "1-1"];
-    if (packages === 2) return [isYearly ? 100 : 10, null, "1", "1-2"];
-    if (packages === 3) return [isYearly ? 80 : 8, null, "0-9", "1-3"];
-    if (packages === 4) return [isYearly ? 67.5 : 6.75, null, "0-8", "1-4"];
+    if (packages === 1) return [isYearly ? 100 : 10, null, "1", "1-2"];
+    if (packages === 2) return [isYearly ? 80 : 8, null, "1", "1-2"];
+    if (packages === 3) return [isYearly ? 70 : 7, null, "0-9", "1-3"];
+    if (packages === 4) return [isYearly ? 65 : 6.5, null, "0-8", "1-4"];
 
     return [isYearly ? 60 : 6, null, "0-8", "1-4"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {
-    const [packages, setPackages] = useState(2);
+    const [packages, setPackages] = useState(1);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
@@ -80,7 +80,7 @@ export default function Simulator({ handleData, period, currPlan }) {
         if (newQuantity && !Number.isNaN(newQuantity)) {
             setPackages(newQuantity);
         } else {
-            setPackages(2);
+            setPackages(1);
         }
     }, [newQuantity]);
 
@@ -101,10 +101,7 @@ export default function Simulator({ handleData, period, currPlan }) {
     const MAX_UNIT_MONTH = 5;
 
     const totalReal = convertToReal(totalUnits);
-    const unitReal = convertToReal(unit, {
-        moneySign: true,
-        needFraction: true,
-    });
+    const unitReal = isYearly ? getYearlyUnit(unit) : unit.toFixed(2);
 
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
 
@@ -116,13 +113,28 @@ export default function Simulator({ handleData, period, currPlan }) {
         });
     }, [packages]);
 
+    const showYearlyPlanNote = () => {
+        if (!isYearly) return <span />;
+
+        return (
+            <section className="mt-2 mb-4 text-normal text-purple">
+                Você tem alcance de até:
+                <br />
+                <span className="text-pill">
+                    {totalUnits} membro{totalUnits > 1 ? "s" : ""}
+                </span>{" "}
+                ao longo de 1 ano.
+            </section>
+        );
+    };
+
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
             <span
                 className="d-inline-block ml-2 text-title text-purple"
                 style={styles.totalUnits}
             >
-                <span className="text-em-1-2 font-site text-nowrap">
+                <span className="font-weight-bold text-em-1-2 font-site text-nowrap">
                     + {totalReal}
                     <span className="d-block line-height-35">
                         Novo{packages === 1 ? "" : "s"}
@@ -145,7 +157,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                     }}
                 >
                     <span className="text-title"> X </span>
-                    {unitReal}
+                    R$ {unitReal}
                     <span
                         className="position-relative d-block text-small font-weight-bold"
                         style={{
@@ -153,10 +165,11 @@ export default function Simulator({ handleData, period, currPlan }) {
                             right: -50,
                         }}
                     >
-                        cada
+                        {isYearly ? "cada no mês" : "cada"}
                     </span>
                 </div>
             </span>
+            {showYearlyPlanNote()}
         </section>
     );
 
@@ -220,7 +233,7 @@ export default function Simulator({ handleData, period, currPlan }) {
             <MuSlider
                 color="var(--themeP)"
                 max={isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
-                min={2}
+                min={1}
                 step={1}
                 value={packages}
                 callback={handlePackages}
@@ -259,6 +272,13 @@ export default function Simulator({ handleData, period, currPlan }) {
         </section>
     );
 }
+
+// HELPERS
+function getYearlyUnit(totalUnitAmount = 0) {
+    const monthlyInv = totalUnitAmount / 12;
+    return monthlyInv && (monthlyInv / 30).toFixed(2);
+}
+// END HELPERS
 
 /* ARCHIVES
     useEffect(() => {

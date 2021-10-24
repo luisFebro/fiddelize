@@ -70,11 +70,20 @@ export default function AsyncPayContent({ modalData }) {
         </div>
     );
 
+    const showFiddelizePayBackChallenge = () => (
+        <div className="mx-3 my-3 text-purple text-center text-normal">
+            Satisfação com serviços da Fiddelize em{" "}
+            <span className="text-pill">30 dias</span> ou seu{" "}
+            <strong>dinheiro retornado</strong>.
+        </div>
+    );
+
     return (
         <section>
             {showTitle()}
             {showSubtitle()}
             <PayCategories modalData={methodsModalData} />
+            {showFiddelizePayBackChallenge()}
             <ShowPayWatermarks />
         </section>
     );
