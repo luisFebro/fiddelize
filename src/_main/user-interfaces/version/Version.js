@@ -1,10 +1,8 @@
 import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
-// 0.50
-
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "4.64.0";
+const latestVersion = "4.64.70";
 // NEXT:
 // register bonus coins -
 const updateDescription = "payment. plans and cron-jobs";

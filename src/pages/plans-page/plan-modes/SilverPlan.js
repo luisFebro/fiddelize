@@ -103,7 +103,9 @@ export default function SilverPlan({ setCurrPlan }) {
                     )}
                     <MainTitle
                         plan="Prata"
-                        planMsg="Construa seu clube de compras com cadastro de até 2.000 clientes únicos por mês"
+                        planMsg={`Construa seu clube de compras com cadastro de até ${
+                            isYearly ? "24.000" : "2.000"
+                        } clientes únicos ao ${isYearly ? "ano" : "mês"}`}
                     />
                     <section className="period-selection">
                         <PeriodSelection

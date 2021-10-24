@@ -3,16 +3,16 @@ import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
 import setProRenewal from "utils/biz/setProRenewal";
-import NotesSwitcher from "components/buttons/NotesSwitcher";
 import { PeriodSelection } from "../../../comps/MainComps";
 import Simulator from "./Simulator";
+// import NotesSwitcher from "components/buttons/NotesSwitcher";
 
 export default withRouter(AsyncAddCustomersContent);
 
 function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
-    let {
+    let { period } = modalData;
+    const {
         handleItem,
-        period,
         // creditsBadge
         isCreditsBadge,
         currPlan,
@@ -22,12 +22,12 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 
     const [data, setData] = useState({
         totalPackage: 0,
-        totalCustomers: 0,
+        totalCount: 0,
         inv: 0,
         innerPeriod: "monthly",
         // SKU: "",
     });
-    const { inv, totalPackage, totalCustomers, innerPeriod } = data;
+    const { inv, totalCount, innerPeriod } = data;
 
     period = period || innerPeriod;
 
@@ -62,8 +62,8 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 
         const item = {
             name: "Novvos Clientes",
-            count: totalCustomers,
-            amount: inv,
+            count: Number(totalCount),
+            amount: Number(inv),
         };
 
         if (isFunc) {
@@ -134,7 +134,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
                 currPlan={currPlan}
                 animaDisabled
             />
-            {showNotes()}
             {showCTA()}
         </section>
     );

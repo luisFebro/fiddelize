@@ -40,13 +40,13 @@ const getStyles = () => ({
 });
 
 const getMembersData = (packages, isYearly) => {
-    // unit, expires, unitSizeDec, unitSizeInc
-    if (packages === 1) return [isYearly ? 100 : 10, null, "1", "1-2"];
-    if (packages === 2) return [isYearly ? 80 : 8, null, "1", "1-2"];
-    if (packages === 3) return [isYearly ? 70 : 7, null, "0-9", "1-3"];
-    if (packages === 4) return [isYearly ? 65 : 6.5, null, "0-8", "1-4"];
+    // unit, expires, unitSizeDec
+    if (packages === 1) return [isYearly ? 50 : 5, null, "1"];
+    if (packages === 2) return [isYearly ? 50 : 5, null, "1"];
+    if (packages === 3) return [isYearly ? 50 : 5, null, "1"];
+    if (packages === 4) return [isYearly ? 50 : 5, null, "1"];
 
-    return [isYearly ? 60 : 6, null, "0-8", "1-4"];
+    return [isYearly ? 50 : 5, null, "1"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {
@@ -64,17 +64,17 @@ export default function Simulator({ handleData, period, currPlan }) {
 
     useEffect(() => {
         let thisUsageDays = 30;
-        if (period === "yearly") thisUsageDays = 365;
+        if (isYearly) thisUsageDays = 365;
         const thisExpiryDate = addDays(new Date(), thisUsageDays);
         const thisFormattedDate = formatSlashDMY(thisExpiryDate);
 
-        setData({
-            ...data,
+        setData((prev) => ({
+            ...prev,
             expiryDate: thisExpiryDate,
             formattedExpiryDate: thisFormattedDate,
             usageDays: thisUsageDays,
-        });
-    }, [period]);
+        }));
+    }, [isYearly]);
 
     useEffect(() => {
         if (newQuantity && !Number.isNaN(newQuantity)) {
@@ -112,21 +112,6 @@ export default function Simulator({ handleData, period, currPlan }) {
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
     }, [packages]);
-
-    const showYearlyPlanNote = () => {
-        if (!isYearly) return <span />;
-
-        return (
-            <section className="mt-2 mb-4 text-normal text-purple">
-                Você tem alcance de até:
-                <br />
-                <span className="text-pill">
-                    {totalUnits} membro{totalUnits > 1 ? "s" : ""}
-                </span>{" "}
-                ao longo de 1 ano.
-            </section>
-        );
-    };
 
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
@@ -169,7 +154,6 @@ export default function Simulator({ handleData, period, currPlan }) {
                     </span>
                 </div>
             </span>
-            {showYearlyPlanNote()}
         </section>
     );
 
@@ -276,11 +260,30 @@ export default function Simulator({ handleData, period, currPlan }) {
 // HELPERS
 function getYearlyUnit(totalUnitAmount = 0) {
     const monthlyInv = totalUnitAmount / 12;
-    return monthlyInv && (monthlyInv / 30).toFixed(2);
+    return monthlyInv && monthlyInv.toFixed(2);
 }
 // END HELPERS
 
 /* ARCHIVES
+The reason the yearly plan credited by month system was discontinued was because increase expiration and renovation complexity with multiple dates.
+We are out of time to handle complex system.
+Also,customers will have some potential issues with renovation if they run out of credits.
+
+const showYearlyPlanNote = () => {
+    if (!isYearly) return <span />;
+
+    return (
+        <section className="mt-2 mb-4 text-normal text-purple">
+            Você tem alcance de até:
+            <br />
+            <span className="text-pill">
+                {totalUnits} membro{totalUnits > 1 ? "s" : ""}
+            </span>{" "}
+            ao longo de 1 ano.
+        </section>
+    );
+};
+
     useEffect(() => {
         if (unit !== 0.14) {
             const diff = firstPhasePrice - totalFinalMoney;

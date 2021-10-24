@@ -9,18 +9,12 @@ const newCustomersText = `
     com destaques como <strong>moeda digital</strong> para troca de benecífios, <strong>cartão digital e jogos de compra</strong>.
     Vão ter mais motivos para voltar a comprar do seu negócio.
     Invista em seus clientes!
-    <br />
-    <br />
-    No plano prata e no período anual, os créditos são renovados todo mês no mesmo dia que seu investimento foi aprovado.
 `;
 
 const newMembersText = `
     Membros da sua equipe te ajudam a cadastrar moedas e
     clientes, ver históricos e avaliações, confirmar
     benefícios, recebimentos e mais!
-    <br />
-    <br />
-    No plano prata e no período anual, a quantidade de créditos é única e assim não é renovada mensalmente.
 `;
 
 export function PlanContent({ isYearly, plan }) {
@@ -44,7 +38,7 @@ export function PlanContent({ isYearly, plan }) {
                             "Ilimitado"
                         ) : (
                             <span className="text-pill">
-                                +{convertToReal(2000)}
+                                +{convertToReal(isYearly ? 24000 : 2000)}
                             </span>
                         )}
                     </strong>

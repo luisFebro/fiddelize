@@ -54,7 +54,7 @@ export default function MuSlider({
     const classes = useStyles({ color, labelSize, width });
 
     useEffect(() => {
-        if (value === 1000) {
+        if (value >= 1000) {
             setLabelSize("10px");
         } else {
             setLabelSize(null);

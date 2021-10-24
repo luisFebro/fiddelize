@@ -2,17 +2,17 @@ import { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
-import NotesSwitcher from "components/buttons/NotesSwitcher";
 import setProRenewal from "utils/biz/setProRenewal";
 import { PeriodSelection } from "../../../comps/MainComps";
 import Simulator from "./Simulator";
+// import NotesSwitcher from "components/buttons/NotesSwitcher";
 
 export default withRouter(AsyncAddMembersContent);
 
 function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
-    let {
+    let { period } = modalData;
+    const {
         handleItem,
-        period,
         // creditsBadge
         isCreditsBadge,
         currPlan,
@@ -63,8 +63,8 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         // totalPackage is the count since there is no package
         const item = {
             name: "Novvos Membros",
-            count: totalPackage,
-            amount: inv,
+            count: Number(totalPackage),
+            amount: Number(inv),
         };
 
         if (isFunc) {
@@ -133,7 +133,6 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
                 currPlan={currPlan}
                 animaDisabled
             />
-            {showNotes()}
             {showCTA()}
         </section>
     );
