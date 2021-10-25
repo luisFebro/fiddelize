@@ -1,8 +1,8 @@
 // import ServicesGalleryCard from "./ServicesGalleryCard";
-// import getServices from "../getServices";
+// import getSersfdvices from "../gedsatServices";
 
 export default function ServicesGallery({ handleItem, period }) {
-    // const list = getServices("pro", { plan: "bronze" }).map((service) => {
+    // const list = getServfdsfdsices("pro", { plan: "bronze" }).map((service) => {
     //     const serviceData = {
     //         serviceName: service.name,
     //         servicePrice: service.price[period],

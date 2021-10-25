@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import pricing from "utils/biz/pricing";
+import convertToReal from "utils/numbers/convertToReal";
 import { GoldBtn, BronzeBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -12,15 +14,10 @@ import {
 } from "./comps/MainComps";
 import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
 import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
-
-// sessions
 import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
 import AddSMS from "./sessions/AddSMS";
-import getServices from "./sessions/services/getServices";
 import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
 import { PlanAdvantages, PlanContent } from "./ContentAndAdvantages";
-// import AddClientsToCart from "./sessions/AddClientsToCart";
-
 import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncOrdersAndPay = Load({
@@ -49,6 +46,9 @@ export default function SilverPlan({ setCurrPlan }) {
     });
     const { orderList, orderAmount, orderCount, period } = data;
 
+    const clientCredits = convertToReal(
+        pricing.silver["Novvos Clientes"].credit[period]
+    );
     const isYearly = period === "yearly";
 
     const handleItem = (action, payload) => {
@@ -103,9 +103,9 @@ export default function SilverPlan({ setCurrPlan }) {
                     )}
                     <MainTitle
                         plan="Prata"
-                        planMsg={`Construa seu clube de compras com cadastro de até ${
-                            isYearly ? "24.000" : "2.000"
-                        } clientes únicos ao ${isYearly ? "ano" : "mês"}`}
+                        planMsg={`Construa seu clube de compras com cadastro de até ${clientCredits} clientes únicos ao ${
+                            isYearly ? "ano" : "mês"
+                        }`}
                     />
                     <section className="period-selection">
                         <PeriodSelection
@@ -159,11 +159,8 @@ export default function SilverPlan({ setCurrPlan }) {
 // HOOKS
 function useSetInitialPlanTotal({ period, setData }) {
     useEffect(() => {
-        const { newCount, newAmount } = getServices("pro", {
-            total: true,
-            plan: "silver",
-            period,
-        });
+        const newCount = pricing.silver["Novvos Clientes"].credit[period];
+        const newAmount = pricing.silver.price[period];
 
         const handleStartInvest = () => {
             setData((prev) => {

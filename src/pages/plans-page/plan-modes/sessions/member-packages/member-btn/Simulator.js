@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import MuSlider from "components/sliders/MuSlider";
 import { addDays, formatSlashDMY } from "utils/dates/dateFns";
+import pricing from "utils/biz/pricing";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -41,12 +42,16 @@ const getStyles = () => ({
 
 const getMembersData = (packages, isYearly) => {
     // unit, expires, unitSizeDec
-    if (packages === 1) return [isYearly ? 50 : 5, null, "1"];
-    if (packages === 2) return [isYearly ? 50 : 5, null, "1"];
-    if (packages === 3) return [isYearly ? 50 : 5, null, "1"];
-    if (packages === 4) return [isYearly ? 50 : 5, null, "1"];
+    const period = isYearly ? "yearly" : "monthly";
+    const unit = pricing.bronze["Novvos Membros"].prices.units[period][0];
+    const credit = pricing.bronze["Novvos Membros"].credits[period];
 
-    return [isYearly ? 50 : 5, null, "1"];
+    if (packages === credit[0]) return [unit, null, "1"];
+    if (packages === credit[1]) return [unit, null, "1"];
+    if (packages === credit[2]) return [unit, null, "1"];
+    if (packages === credit[3]) return [unit, null, "1"];
+
+    return [unit, null, "1"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {

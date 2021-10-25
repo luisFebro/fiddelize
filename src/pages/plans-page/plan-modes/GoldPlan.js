@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import pricing from "utils/biz/pricing";
 import { SilverBtn, BronzeBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -9,7 +10,6 @@ import {
     PeriodSelection,
 } from "./comps/MainComps";
 import useBackColor from "../../../hooks/useBackColor";
-import getServices from "./sessions/services/getServices";
 import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
 import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
 import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
@@ -154,11 +154,8 @@ export default function GoldPlan({ setCurrPlan }) {
 // HOOKS
 function useSetInitialPlanTotal({ period, setData }) {
     useEffect(() => {
-        const { newCount, newAmount } = getServices("pro", {
-            total: true,
-            plan: "gold",
-            period,
-        });
+        const newCount = pricing.gold.credit[period];
+        const newAmount = pricing.gold.price[period];
 
         const handleStartInvest = () => {
             setData((prev) => {

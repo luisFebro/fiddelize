@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import MuSlider from "components/sliders/MuSlider";
 import { addDays, formatSlashDMY } from "utils/dates/dateFns";
+import pricing from "utils/biz/pricing";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -39,49 +40,46 @@ const getStyles = () => ({
     },
 });
 
-const countUnitList = (isYearly) => [
-    !isYearly ? 300 : 300 * 12,
-    !isYearly ? 400 : 400 * 12,
-    !isYearly ? 600 : 600 * 12,
-    !isYearly ? 800 : 800 * 12,
-    !isYearly ? 1000 : 1000 * 12,
-];
+const getCreditList = (isYearly) => {
+    const period = isYearly ? "yearly" : "monthly";
+    const credits = pricing.bronze["Novvos Clientes"].credits[period];
+    return credits;
+};
 
 const countMarks = (isYearly) => [
     {
-        value: countUnitList(isYearly)[0],
+        value: getCreditList(isYearly)[0],
         label: "",
     },
     {
-        value: countUnitList(isYearly)[1],
+        value: getCreditList(isYearly)[1],
         label: "",
     },
     {
-        value: countUnitList(isYearly)[2],
+        value: getCreditList(isYearly)[2],
         label: "",
     },
     {
-        value: countUnitList(isYearly)[3],
+        value: getCreditList(isYearly)[3],
         label: "",
     },
     {
-        value: countUnitList(isYearly)[4],
+        value: getCreditList(isYearly)[4],
         label: "",
     },
 ];
 
 const getCustomersData = (count, isYearly) => {
+    const period = isYearly ? "yearly" : "monthly";
+    const unit = pricing.bronze["Novvos Clientes"].prices.units[period];
+    const credit = getCreditList(isYearly);
     // unit, expires, unitSizeDec
-    if (count === countUnitList(isYearly)[0])
-        return [isYearly ? 1 : 0.1, null, "1-2"];
-    if (count === countUnitList(isYearly)[1])
-        return [isYearly ? 0.87 : 0.087, null, "1-1"];
-    if (count === countUnitList(isYearly)[2])
-        return [isYearly ? 0.66 : 0.066, null, "1"];
-    if (count === countUnitList(isYearly)[3])
-        return [isYearly ? 0.56 : 0.056, null, "0-9"];
+    if (count === credit[0]) return [unit[0], null, "1-2"];
+    if (count === credit[1]) return [unit[1], null, "1-1"];
+    if (count === credit[2]) return [unit[2], null, "1"];
+    if (count === credit[3]) return [unit[3], null, "0-9"];
 
-    return [isYearly ? 0.5 : 0.05, null, "0-8"];
+    return [unit[4], null, "0-8"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {
@@ -115,7 +113,7 @@ export default function Simulator({ handleData, period, currPlan }) {
         if (newQuantity && !Number.isNaN(newQuantity)) {
             setCount(newQuantity);
         } else {
-            setCount(countUnitList(isYearly)[0]);
+            setCount(getCreditList(isYearly)[0]);
         }
     }, [newQuantity, isYearly]);
 
@@ -130,14 +128,12 @@ export default function Simulator({ handleData, period, currPlan }) {
     const subject = "cliente";
     const onePackage = 1;
     const totalUnits = onePackage * count;
-    const totalFinalMoney = isYearly
-        ? (totalUnits * unit) / 12
-        : totalUnits * unit;
+    const totalFinalMoney = totalUnits * unit;
 
-    const MIN_UNIT_YEAR = countUnitList(true)[0];
-    const MAX_UNIT_YEAR = countUnitList(true).slice(-1)[0];
-    const MAX_UNIT_MONTH = countUnitList(false).slice(-1)[0];
-    const MIN_UNIT_MONTH = countUnitList(false)[0];
+    const MAX_UNIT_YEAR = getCreditList(true).slice(-1)[0];
+    const MAX_UNIT_MONTH = getCreditList(false).slice(-1)[0];
+    const MIN_UNIT_YEAR = getCreditList(true)[0];
+    const MIN_UNIT_MONTH = getCreditList(false)[0];
 
     const unitReal = isYearly ? getYearlyUnit(unit) : unit.toFixed(2);
 

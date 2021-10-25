@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import convertToReal from "utils/numbers/convertToReal.js";
 import getPercentage from "utils/numbers/getPercentage.js";
-import { proVersion } from "./sessions/services/proVersion";
+import pricing from "utils/biz/pricing";
 
 const newCustomersText = `
     Seus clientes no próximo nível do marketing de relacionamento
@@ -35,7 +35,7 @@ export function PlanContent({ isYearly, plan }) {
                     <br />
                     <strong className="d-inline-block">
                         {plan === "gold" ? (
-                            "Ilimitado"
+                            <span className="text-pill">Sem Limites</span>
                         ) : (
                             <span className="text-pill">
                                 +{convertToReal(isYearly ? 24000 : 2000)}
@@ -55,7 +55,7 @@ export function PlanContent({ isYearly, plan }) {
                     <br />
                     <strong className="d-inline-block">
                         {plan === "gold" ? (
-                            "Ilimitado"
+                            <span className="text-pill">Sem Limites</span>
                         ) : (
                             <span className="text-pill">
                                 +{convertToReal(10)}
@@ -75,8 +75,7 @@ export function PlanContent({ isYearly, plan }) {
 }
 
 export function PlanAdvantages({ isYearly, plan }) {
-    const planData = proVersion().find((pro) => pro[plan].plan === plan);
-    const planPrice = planData[plan].price[isYearly ? "yearly" : "monthly"];
+    const planPrice = pricing[plan].price[isYearly ? "yearly" : "monthly"];
     const incAmount = getPercentage(planPrice, 20, { mode: "value" });
     const priceWithoutDiscount = convertToReal(planPrice + incAmount);
 

@@ -119,7 +119,7 @@ const TotalInvest = ({ orderAmount, orderCount }) => {
 
 const PeriodSelection = ({
     handlePeriod,
-    orderList,
+    orderList = [],
     plan,
     containerCenter = false,
 }) => {
