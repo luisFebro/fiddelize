@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
 import pricing from "utils/biz/pricing";
 import convertToReal from "utils/numbers/convertToReal";
 import { GoldBtn, BronzeBtn } from "../ProBtns";
@@ -136,6 +137,8 @@ export default function SilverPlan({ setCurrPlan }) {
 
                     <IntegratedServicesCard />
                     <div style={{ marginBottom: 100 }} />
+
+                    <PricingTableBtn setCurrPlan={setCurrPlan} />
 
                     <TotalInvest
                         orderAmount={orderAmount}

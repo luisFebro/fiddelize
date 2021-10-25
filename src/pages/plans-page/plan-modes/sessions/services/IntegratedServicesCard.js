@@ -27,7 +27,7 @@ export default function IntegratedServicesCard() {
 
     const showIntegratedServices = () => {
         const FreeServicesList = integratedData.map((serv, ind) => {
-            const showCards = ind <= 3;
+            const showCards = ind <= 2;
             if (!showCards && !moreFeatures) return null;
 
             return (

@@ -1,5 +1,6 @@
+import removeImgFormat from "utils/biz/removeImgFormat";
+import PricingTable from "components/pricing-table/PricingTable";
 import { GoldBtn, SilverBtn, BronzeBtn } from "./ProBtns";
-import removeImgFormat from "../../utils/biz/removeImgFormat";
 
 const getStyles = () => ({
     hightlighedName: {
@@ -54,16 +55,22 @@ export default function StartPage({
         </section>
     );
 
-    const showCTAs = () => (
+    const showSelectionPlanBts = () => (
         <section className="mx-5 mb-5">
             <h2
-                className="text-pill text-center text-white text-subtitle"
+                className="container-center"
                 style={{
-                    backgroundColor: "var(--themePDark)",
-                    margin: "50px 0 70px",
+                    margin: "50px 0 80px",
                 }}
             >
-                Selecione plano
+                <p
+                    className="m-0 text-pill text-center text-white text-subtitle"
+                    style={{
+                        backgroundColor: "var(--themePDark)",
+                    }}
+                >
+                    Selecione plano
+                </p>
             </h2>
             <div className="d-flex justify-content-start">
                 <div className="position-relative">
@@ -159,7 +166,17 @@ export default function StartPage({
         currPlan === "all" && (
             <section>
                 {showStartMsg()}
-                {showCTAs()}
+                <PricingTable setCurrPlan={setCurrPlan} />
+                {showSelectionPlanBts()}
+                <p
+                    className="m-0 font-italic text-center text-normal mx-3 text-white"
+                    style={{
+                        padding: "100px 0",
+                    }}
+                >
+                    Agradecemos seu interesse em investir na sua clientela com
+                    os serviços da Fiddelize!
+                </p>
             </section>
         )
     );

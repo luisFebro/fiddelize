@@ -68,4 +68,21 @@ const getMinPrice = (period) => ({
     bronze: pricing.bronze["Novvos Clientes"].prices[period][0],
 });
 
-export { getMinPrice };
+const getMaxCredit = (period) => ({
+    // gold is limitless
+    // note that for silver is credit because it is a single number, differently from credits being an array with multiple numbers.
+    silver: {
+        "Novvos Clientes": pricing.silver["Novvos Clientes"].credit[period],
+        "Novvos Membros": pricing.silver["Novvos Membros"].credit[period],
+    },
+    bronze: {
+        "Novvos Clientes": pricing.bronze["Novvos Clientes"].credits[
+            period
+        ].slice(-1)[0],
+        "Novvos Membros": pricing.bronze["Novvos Membros"].credits[
+            period
+        ].slice(-1)[0],
+    },
+});
+
+export { getMinPrice, getMaxCredit };

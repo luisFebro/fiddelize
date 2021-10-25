@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -150,6 +151,8 @@ export default function BronzePlan({ setCurrPlan }) {
 
                     <IntegratedServicesCard />
                     <div style={{ marginBottom: 100 }} />
+
+                    <PricingTableBtn setCurrPlan={setCurrPlan} />
 
                     <TotalInvest
                         orderAmount={orderAmount}

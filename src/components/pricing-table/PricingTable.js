@@ -2,15 +2,37 @@
 import { Fragment, useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { PeriodSelection } from "pages/plans-page/plan-modes/comps/MainComps";
-import { getMinPrice } from "utils/biz/pricing";
+import { getMinPrice, getMaxCredit } from "utils/biz/pricing";
 import convertToReal from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function PricingTable() {
+export default function PricingTable({ setCurrPlan, marginTop }) {
     const [planDur, setPlanDur] = useState("monthly");
     const isYearly = planDur === "yearly";
     const currPlanBr = isYearly ? "ano" : "mês";
+
+    // pricing
     const minPriceData = getMinPrice(planDur);
+    const goldPricing = convertToReal(minPriceData.gold);
+    const silverPricing = convertToReal(minPriceData.silver);
+    const bronzePricing = convertToReal(minPriceData.bronze);
+    // end pricing
+
+    // credits
+    const maxCreditData = getMaxCredit(planDur);
+    const silverMaxClientCredits = convertToReal(
+        maxCreditData.silver["Novvos Clientes"]
+    );
+    const silverMaxMemberCredits = convertToReal(
+        maxCreditData.silver["Novvos Membros"]
+    );
+    const bronzeMaxClientCredits = convertToReal(
+        maxCreditData.bronze["Novvos Clientes"]
+    );
+    const bronzeMaxMemberCredits = convertToReal(
+        maxCreditData.bronze["Novvos Membros"]
+    );
+    // end credits
 
     const handlePlanDuration = (res) => {
         setPlanDur(res);
@@ -20,10 +42,10 @@ export default function PricingTable() {
         <Fragment>
             <li>{getStatusIcon("on")} Todos serviços integrados</li>
             <li>
-                {getStatusIcon("on")} Gestão completa moedas digitais e
+                {getStatusIcon("on")} Gestão completa da moeda digital PTS e
                 benefícios
             </li>
-            <li>{getStatusIcon("on")} 2 Jogos de compras</li>
+            <li>{getStatusIcon("on")} 2 Jogos de compra</li>
         </Fragment>
     );
 
@@ -36,7 +58,22 @@ export default function PricingTable() {
 
     return (
         <Fragment>
-            <div className="my-5 container-center">
+            <h1
+                style={{
+                    marginTop,
+                }}
+                className="container-center"
+            >
+                <p
+                    className="m-0 text-pill my-3 text-center text-white text-subtitle"
+                    style={{
+                        backgroundColor: "var(--themePDark)",
+                    }}
+                >
+                    Compare planos pro
+                </p>
+            </h1>
+            <div className="mb-5 container-center">
                 <PeriodSelection handlePeriod={handlePlanDuration} />
             </div>
             <div className="pricing-table">
@@ -49,12 +86,15 @@ export default function PricingTable() {
                             }}
                         >
                             <div className="ptable-title">
-                                <h2 className="text-subtitle">Ouro</h2>
+                                <h2 className="container-center text-subtitle">
+                                    Ouro
+                                    {getCrownIcon()}
+                                </h2>
                             </div>
                             <div className="ptable-price">
                                 <h2>
                                     <small>R$</small>
-                                    {convertToReal(minPriceData.gold)}
+                                    {goldPricing}
                                     <span>/{currPlanBr}</span>
                                 </h2>
                             </div>
@@ -80,9 +120,9 @@ export default function PricingTable() {
                                         ao {currPlanBr}
                                     </li>
                                     <li>
-                                        {getStatusIcon("on")}{" "}
+                                        {getStatusIcon(isYearly ? "on" : "off")}{" "}
                                         <span className="font-site text-em-1 text-pill">
-                                            +1 mês extra
+                                            {isYearly ? "+1" : "sem"} mês extra
                                         </span>{" "}
                                         de uso
                                     </li>
@@ -96,7 +136,7 @@ export default function PricingTable() {
                                     title="Ver plano"
                                     position="relative"
                                     backgroundColor="#bfac07"
-                                    onClick={null}
+                                    onClick={() => setCurrPlan("gold")}
                                     variant="extended"
                                     size="large"
                                 />
@@ -114,12 +154,15 @@ export default function PricingTable() {
                             }}
                         >
                             <div className="ptable-title">
-                                <h2 className="text-subtitle">Prata</h2>
+                                <h2 className="text-subtitle">
+                                    Prata
+                                    {getCrownIcon()}
+                                </h2>
                             </div>
                             <div className="ptable-price">
                                 <h2>
                                     <small>R$</small>
-                                    {convertToReal(minPriceData.silver)}
+                                    {silverPricing}
                                     <span>/{currPlanBr}</span>
                                 </h2>
                             </div>
@@ -131,7 +174,7 @@ export default function PricingTable() {
                                     <li>
                                         {getStatusIcon("on")}{" "}
                                         <span className="font-site text-em-1 text-pill">
-                                            até 2.000
+                                            até {silverMaxClientCredits}
                                         </span>{" "}
                                         cadastros de <strong>clientes</strong>{" "}
                                         ao {currPlanBr}
@@ -139,10 +182,9 @@ export default function PricingTable() {
                                     <li>
                                         {getStatusIcon("on")}{" "}
                                         <span className="font-site text-em-1 text-pill">
-                                            até 10
+                                            até {silverMaxMemberCredits}
                                         </span>{" "}
-                                        cadastros de{" "}
-                                        <strong>membros da equipe</strong> ao{" "}
+                                        cadastros de <strong>membros</strong> ao{" "}
                                         {currPlanBr}
                                     </li>
                                     <li>
@@ -162,7 +204,7 @@ export default function PricingTable() {
                                     title="Ver plano"
                                     position="relative"
                                     backgroundColor="rgb(118 111 111)"
-                                    onClick={null}
+                                    onClick={() => setCurrPlan("silver")}
                                     variant="extended"
                                     size="large"
                                 />
@@ -180,13 +222,16 @@ export default function PricingTable() {
                             }}
                         >
                             <div className="ptable-title">
-                                <h2 className="text-subtitle">Bronze</h2>
+                                <h2 className="text-subtitle">
+                                    Bronze
+                                    {getCrownIcon()}
+                                </h2>
                             </div>
                             <div className="ptable-price">
                                 <span className="from">a partir de:</span>
                                 <h2>
                                     <small>R$</small>
-                                    {convertToReal(minPriceData.bronze)}
+                                    {bronzePricing}
                                     <span>/{currPlanBr}</span>
                                 </h2>
                             </div>
@@ -198,7 +243,7 @@ export default function PricingTable() {
                                     <li>
                                         {getStatusIcon("on")}{" "}
                                         <span className="font-site text-em-1 text-pill">
-                                            até 1.000
+                                            até {bronzeMaxClientCredits}
                                         </span>{" "}
                                         cadastros de <strong>clientes</strong>{" "}
                                         ao {currPlanBr}
@@ -206,10 +251,9 @@ export default function PricingTable() {
                                     <li>
                                         {getStatusIcon("on")}{" "}
                                         <span className="font-site text-em-1 text-pill">
-                                            até 5
+                                            até {bronzeMaxMemberCredits}
                                         </span>{" "}
-                                        cadastros de{" "}
-                                        <strong>membros da equipe</strong> ao{" "}
+                                        cadastros de <strong>membros</strong> ao{" "}
                                         {currPlanBr}
                                     </li>
                                     <li>
@@ -229,7 +273,7 @@ export default function PricingTable() {
                                     title="Ver plano"
                                     position="relative"
                                     backgroundColor="#a17f73"
-                                    onClick={null}
+                                    onClick={() => setCurrPlan("bronze")}
                                     variant="extended"
                                     size="large"
                                 />
@@ -298,10 +342,6 @@ export default function PricingTable() {
 
                     .pricing-table .ptable-single {
                         background: var(--mainWhite);
-                    }
-
-                    .pricing-table .ptable-single:hover {
-                        box-shadow: 0 0 10px #999999;
                     }
 
                     .pricing-table .ptable-header {
@@ -442,6 +482,27 @@ function getStatusIcon(type) {
             }}
             className="ml-2 animated Rubberband delay-2s"
         />
+    );
+}
+
+function getCrownIcon() {
+    return (
+        <Fragment>
+            <FontAwesomeIcon icon="crown" className="pricing-table-crown" />
+            <style jsx>
+                {`
+                    .pricing-table-crown {
+                        position: relative;
+                        top: -15px;
+                        right: 10px;
+                        transform: rotate(40deg);
+                        color: #fff;
+                        font-size: 23px;
+                        filter: drop-shadow(0.5px 0.5px 1.5px black);
+                    }
+                `}
+            </style>
+        </Fragment>
     );
 }
 // END HELPERS

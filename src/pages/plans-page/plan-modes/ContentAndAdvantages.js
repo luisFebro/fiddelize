@@ -27,7 +27,7 @@ export function PlanContent({ isYearly, plan }) {
                 </span>
                 {isYearly ? "Anual" : "Mensal"}
             </p>
-            <div className="mx-3 mb-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
+            <div className="mx-3 mb-5 animated fadeInUp text-center text-purple text-normal">
                 <p className="text-left">
                     - <strong>Novvos Clientes &#174;</strong>
                     <br />
@@ -79,12 +79,14 @@ export function PlanAdvantages({ isYearly, plan }) {
     const incAmount = getPercentage(planPrice, 20, { mode: "value" });
     const priceWithoutDiscount = convertToReal(planPrice + incAmount);
 
+    // IMPORTANT: monthly gold plans do not haveextra free month (beyond maintenance month) because if a client pays a whole monthly plan in a year, the next will be free. That's why only yearly is more managable
+
     return (
         <Fragment>
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 <span className="text-pill">Vantagens do Plano</span>
             </p>
-            <div className="mx-3 mb-5 text-center text-purple text-normal font-weight-bold">
+            <div className="mx-3 mb-5 text-center text-purple text-normal">
                 {isYearly && (
                     <Fragment>
                         <p className="text-left">
