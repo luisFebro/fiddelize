@@ -162,25 +162,24 @@ export default function SilverPlan({ setCurrPlan }) {
 // HOOKS
 function useSetInitialPlanTotal({ period, setData }) {
     useEffect(() => {
-        const newCount = pricing.silver["Novvos Clientes"].credit[period];
-        const newAmount = pricing.silver.price[period];
+        const allFullPlanServices = ["Novvos Clientes", "Novvos Membros"];
+        const fullPlanList = allFullPlanServices.map((serviceName) => ({
+            type: "fullPlan",
+            expirable: true,
+            name: serviceName,
+            count: pricing.silver[serviceName].credit[period],
+            amount: pricing.silver[serviceName].price[period],
+        }));
 
         const handleStartInvest = () => {
             setData((prev) => {
-                const prevClearedList = prev.orderList.filter(
-                    (o) => o.name !== "currPlan"
+                const extraItemList = prev.orderList.filter(
+                    (o) => o.type !== "fullPlan"
                 );
 
                 return {
                     ...prev,
-                    orderList: [
-                        ...prevClearedList,
-                        {
-                            name: "currPlan",
-                            count: newCount,
-                            amount: newAmount,
-                        },
-                    ],
+                    orderList: [...extraItemList, ...fullPlanList],
                 };
             });
         };

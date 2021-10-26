@@ -10,7 +10,7 @@ const handleRenewalClick = ({ panel, history }) => {
     const { reference } = panel;
     async function setAllVars(panel) {
         const readyVar = await Promise.all([
-            setVar({ orders_clientAdmin: panel.data.ordersStatement }),
+            setVar({ orders_clientAdmin: panel.data.itemList }),
             setVar({
                 totalMoney_clientAdmin: panel.data.investAmount,
             }),
@@ -46,7 +46,7 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
     const styles = getStyles();
 
     const {
-        ordersStatement,
+        itemList,
         transactionStatus,
         reference,
         payDueDate,
@@ -162,8 +162,8 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         />
     );
 
-    const keys = ordersStatement && Object.keys(ordersStatement);
-    const isUnlimitedService = ordersStatement && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
+    const keys = itemList && Object.keys(itemList);
+    const isUnlimitedService = itemList && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
 
     return (
         <Fragment>

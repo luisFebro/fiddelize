@@ -1,11 +1,11 @@
 import getVar from "init/var";
 import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 
-const checkUltimateRenewal = ({ ordersStatement, bizPlanList = [] }) => {
-    if ((bizPlanList && !bizPlanList.length) || !ordersStatement)
+const checkUltimateRenewal = ({ itemList, bizPlanList = [] }) => {
+    if ((bizPlanList && !bizPlanList.length) || !itemList)
         return { res: false };
 
-    const lastOrderServices = ordersStatement && Object.keys(ordersStatement); // only services e.g ["Novvos Clientes, P. Clientes"]
+    const lastOrderServices = itemList && Object.keys(itemList); // only services e.g ["Novvos Clientes, P. Clientes"]
 
     let res = false;
     let ultimateDaysLeft;
@@ -34,7 +34,7 @@ const handleDaysLeft = ({ renewalDaysLeft, ultimateDaysLeft }) => {
 };
 
 export default function handleRenewalDays({
-    ordersStatement,
+    itemList,
     setRenewalData,
     renewalDaysLeft,
     renewalReference,
@@ -48,7 +48,7 @@ export default function handleRenewalDays({
         const {
             res: isUltimateRenewal,
             ultimateDaysLeft,
-        } = checkUltimateRenewal({ ordersStatement, bizPlanList });
+        } = checkUltimateRenewal({ itemList, bizPlanList });
 
         const res = {
             newRenewalDaysLeft:

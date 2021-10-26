@@ -8,7 +8,7 @@ import useData, { useBizData } from "init";
 export default function AsyncPayContent({ modalData }) {
     const {
         reference,
-        ordersStatement,
+        itemList,
         isSingleRenewal,
         renewalDaysLeft,
         renewalReference,
@@ -24,7 +24,7 @@ export default function AsyncPayContent({ modalData }) {
     useEffect(() => {
         handleRenewalDays({
             setRenewalData,
-            ordersStatement,
+            itemList,
             renewalDaysLeft,
             renewalReference,
             isSingleRenewal,
@@ -35,7 +35,7 @@ export default function AsyncPayContent({ modalData }) {
         renewalReference,
         renewalDaysLeft,
         isSingleRenewal,
-        ordersStatement,
+        itemList,
     ]);
 
     const { bizId } = useBizData();

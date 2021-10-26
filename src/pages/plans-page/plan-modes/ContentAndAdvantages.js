@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import convertToReal from "utils/numbers/convertToReal.js";
 import getPercentage from "utils/numbers/getPercentage.js";
-import pricing from "utils/biz/pricing";
+import { getMinPrice } from "utils/biz/pricing";
 
 const newCustomersText = `
     Seus clientes no próximo nível do marketing de relacionamento
@@ -75,7 +75,7 @@ export function PlanContent({ isYearly, plan }) {
 }
 
 export function PlanAdvantages({ isYearly, plan }) {
-    const planPrice = pricing[plan].price[isYearly ? "yearly" : "monthly"];
+    const planPrice = getMinPrice(isYearly ? "yearly" : "monthly")[plan];
     const incAmount = getPercentage(planPrice, 20, { mode: "value" });
     const priceWithoutDiscount = convertToReal(planPrice + incAmount);
 

@@ -1,15 +1,16 @@
+import { getMaxCredit } from "utils/biz/pricing";
 import convertToReal from "utils/numbers/convertToReal";
 // Handle object into object and return custom data for table:
 // const thisModel = { currPlan: {count: 4, amount: 350}}
 
-const handleServiceName = ({ serv, plan, period, count }) => {
+const handleServiceName = ({ type, serv, plan, period, count }) => {
     const plural = count > 1 ? "s" : "";
 
-    if (serv === "currPlan")
-        return `Plano ${plan || "profissional"} ${handlePeriod({
+    if (type === "fullPlan")
+        return `Plano ${plan || "pro"} ${handlePeriod({
             plan,
             period,
-        })}${handleDesc({ plan })}`;
+        })}${handleDesc({ plan, serv, period })}`;
 
     if (serv === "sms")
         return `${convertToReal(count)} créditos de SMS - sem mensalidade`;
@@ -35,7 +36,7 @@ export default function getOrderTableList(orderList, options = {}) {
     const { plan, period } = options;
 
     const newList = orderList.map((item) => {
-        const { count, name } = item;
+        const { type, count, name } = item;
         let { amount } = item;
         amount = convertToReal(amount, {
             moneySign: true,
@@ -45,6 +46,7 @@ export default function getOrderTableList(orderList, options = {}) {
         const serviceElem = (
             <span className="d-inline-block" style={{ width: 250 }}>
                 {handleServiceName({
+                    type,
                     serv: name,
                     plan,
                     period,
@@ -67,10 +69,25 @@ export default function getOrderTableList(orderList, options = {}) {
 }
 
 // HELPERS
-function handleDesc({ plan }) {
-    if (plan === "ouro") return " com cadastro ilimitado de clientes e membros";
+function handleDesc({ plan, serv, period }) {
+    const isCliCredits = serv === "Novvos Clientes";
+    if (plan === "ouro")
+        return ` com cadastro ilimitado de ${
+            isCliCredits ? "clientes" : "membros"
+        }`;
+
+    const maxCliCredits = convertToReal(
+        getMaxCredit(period).silver["Novvos Clientes"]
+    );
+    const maxMemberCredits = convertToReal(
+        getMaxCredit(period).silver["Novvos Membros"]
+    );
     if (plan === "prata")
-        return " com cadastro de até 2.000 clientes e 10 membros";
+        return ` com cadastro de até ${
+            isCliCredits
+                ? `${maxCliCredits} clientes`
+                : `${maxMemberCredits} membros`
+        }`;
 
     return "";
 }

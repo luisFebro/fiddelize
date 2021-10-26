@@ -1,26 +1,42 @@
 const pricing = {
     gold: {
-        price: {
-            yearly: 1500,
-            monthly: 150,
+        "Novvos Clientes": {
+            price: {
+                yearly: 750, // since it is limitless for 2 services, the price is equal to match the whole price
+                monthly: 75,
+            },
+            credit: {
+                yearly: 888, // 888 means limitless
+                monthly: 888,
+            },
         },
-        credit: {
-            yearly: 888, // 888 means limitless
-            monthly: 888,
+        "Novvos Membros": {
+            price: {
+                yearly: 750,
+                monthly: 75,
+            },
+            credit: {
+                yearly: 888,
+                monthly: 888,
+            },
         },
     },
     silver: {
-        price: {
-            yearly: 1000,
-            monthly: 100,
-        },
         "Novvos Clientes": {
+            price: {
+                yearly: 950,
+                monthly: 50,
+            },
             credit: {
                 yearly: 24000,
                 monthly: 2000,
             },
         },
         "Novvos Membros": {
+            price: {
+                yearly: 50, // 10 * 5
+                monthly: 50,
+            },
             credit: {
                 yearly: 10,
                 monthly: 10,
@@ -28,7 +44,6 @@ const pricing = {
         },
     },
     bronze: {
-        price: {},
         "Novvos Clientes": {
             prices: {
                 yearly: [300, 350, 396, 448, 500],
@@ -63,8 +78,12 @@ const pricing = {
 export default pricing;
 
 const getMinPrice = (period) => ({
-    gold: pricing.gold.price[period],
-    silver: pricing.silver.price[period],
+    gold:
+        pricing.gold["Novvos Clientes"].price[period] +
+        pricing.gold["Novvos Membros"].price[period],
+    silver:
+        pricing.silver["Novvos Clientes"].price[period] +
+        pricing.silver["Novvos Membros"].price[period],
     bronze: pricing.bronze["Novvos Clientes"].prices[period][0],
 });
 

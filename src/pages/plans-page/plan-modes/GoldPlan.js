@@ -155,25 +155,24 @@ export default function GoldPlan({ setCurrPlan }) {
 // HOOKS
 function useSetInitialPlanTotal({ period, setData }) {
     useEffect(() => {
-        const newCount = pricing.gold.credit[period];
-        const newAmount = pricing.gold.price[period];
+        const allFullPlanServices = ["Novvos Clientes", "Novvos Membros"];
+        const fullPlanList = allFullPlanServices.map((serviceName) => ({
+            type: "fullPlan",
+            expirable: true,
+            name: serviceName,
+            count: pricing.gold[serviceName].credit[period],
+            amount: pricing.gold[serviceName].price[period],
+        }));
 
         const handleStartInvest = () => {
             setData((prev) => {
-                const prevClearedList = prev.orderList.filter(
-                    (o) => o.name !== "currPlan"
+                const extraItemList = prev.orderList.filter(
+                    (o) => o.type !== "fullPlan"
                 );
 
                 return {
                     ...prev,
-                    orderList: [
-                        ...prevClearedList,
-                        {
-                            name: "currPlan",
-                            count: newCount,
-                            amount: newAmount,
-                        },
-                    ],
+                    orderList: [...extraItemList, ...fullPlanList],
                 };
             });
         };

@@ -45,7 +45,7 @@ export default function App() {
 
         if (IS_PROD) {
             deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
-            deferJsOnload(checkExpPushSub, "func", { delay: 7000 });
+            deferJsOnload(checkExpPushSub, "func", { delay: 3000 });
         }
 
         deferJsOnload(

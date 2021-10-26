@@ -91,11 +91,11 @@ export default function AsyncCardsList() {
         if (per === "M") return 30;
     };
 
-    const displayPlanType = (planCode, period, ordersStatement) => {
+    const displayPlanType = (planCode, period, itemList) => {
         const plan = handlePlanCode(planCode);
 
-        const keys = ordersStatement && Object.keys(ordersStatement);
-        const isUnlimitedService = ordersStatement && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
+        const keys = itemList && Object.keys(itemList);
+        const isUnlimitedService = itemList && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
 
         const generatedPeriod = isUnlimitedService
             ? "Ilimitado"
@@ -137,7 +137,7 @@ export default function AsyncCardsList() {
             const {
                 reference,
                 paymentMethod, // boleto, crédito, débito.
-                ordersStatement,
+                itemList,
             } = data;
 
             const referenceArray = reference && reference.split("-");
@@ -149,7 +149,7 @@ export default function AsyncCardsList() {
 
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayPlanType(planCode, period, ordersStatement)}
+                    {displayPlanType(planCode, period, itemList)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}

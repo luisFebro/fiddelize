@@ -129,7 +129,7 @@ export default function OrdersAndPay({
                 handleCancel={handleCancel}
                 servicesTotal={servicesTotal}
                 servicesAmount={servicesAmount}
-                ordersStatement={orderList}
+                itemList={orderList}
                 renewalDaysLeft={renewalDaysLeft}
                 renewalReference={renewalReference}
                 isSingleRenewal={isSingleRenewal}

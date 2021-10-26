@@ -37,7 +37,7 @@ export default function useManageProServices() {
     const planBr = expiryData && expiryData.nextPlan;
     const totalServ = expiryData && expiryData.nextTotalServ;
     const totalMoney = expiryData && expiryData.nextInvestAmount;
-    const orders = expiryData && JSON.stringify(expiryData.nextOrdersStatement);
+    const orders = expiryData && JSON.stringify(expiryData.nextItemList);
     const ref = expiryData && expiryData.nextReference;
     const nextExpiryDate = proData && proData.nextExpiryDate;
     const period = getPeriod(ref);

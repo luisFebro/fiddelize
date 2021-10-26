@@ -219,7 +219,7 @@ function PanelHiddenContent({ history, data }) {
         const daysLeft = getDatesCountdown(data.planDueDate);
 
         const {
-            ordersStatement: orders,
+            itemList: orders,
             investAmount,
             reference,
             renewal,

@@ -22,7 +22,7 @@ export default async function goFinishCheckout(props) {
         reference,
         itemDescription,
         itemAmount,
-        ordersStatement,
+        itemList,
         renewalCurrDays,
         isSingleRenewal,
         firstDueDate,
@@ -57,7 +57,7 @@ export default async function goFinishCheckout(props) {
             .replace(/ç/gi, "c")
             .replace("null", "pro")}`,
         filter,
-        ordersStatement,
+        itemList,
         // renewal
         renewalCurrDays,
         isSingleRenewal,
@@ -96,7 +96,7 @@ export default async function goFinishCheckout(props) {
             senderCPF,
             filter,
             itemAmount1: testValue || itemAmount,
-            ordersStatement,
+            itemList,
             // renewal
             renewalCurrDays,
             isSingleRenewal,
@@ -120,7 +120,7 @@ export default async function goFinishCheckout(props) {
 /* ARCHIVES
 trigger: renewalReady &&
          senderCPF &&
-         ordersStatement &&
+         itemList &&
          senderHash &&
          selectedMethod &&
          userName !== "...",

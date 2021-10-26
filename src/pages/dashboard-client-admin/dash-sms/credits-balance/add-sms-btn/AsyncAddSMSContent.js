@@ -45,6 +45,7 @@ function AsyncAddSMSContent({
         const isFunc = typeof handleItem === "function";
 
         const item = {
+            type: "selected",
             name: "sms",
             count: totalSMS,
             amount: inv,
