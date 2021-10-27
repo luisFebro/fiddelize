@@ -2,8 +2,8 @@ const pricing = {
     gold: {
         "Novvos Clientes": {
             price: {
-                yearly: 750, // since it is limitless for 2 services, the price is equal to match the whole price
-                monthly: 75,
+                yearly: 1400,
+                monthly: 120, // we have to give a price for each service even limitless. In this gold plan case, it is 100 yearly, 30 monthly
             },
             credit: {
                 yearly: 888, // 888 means limitless
@@ -12,8 +12,8 @@ const pricing = {
         },
         "Novvos Membros": {
             price: {
-                yearly: 750,
-                monthly: 75,
+                yearly: 100,
+                monthly: 30,
             },
             credit: {
                 yearly: 888,
