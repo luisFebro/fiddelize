@@ -6,8 +6,8 @@ const pricing = {
                 monthly: 120, // we have to give a price for each service even limitless. In this gold plan case, it is 100 yearly, 30 monthly
             },
             credit: {
-                yearly: 888, // 888 means limitless
-                monthly: 888,
+                yearly: Infinity,
+                monthly: Infinity,
             },
         },
         "Novvos Membros": {
@@ -16,8 +16,8 @@ const pricing = {
                 monthly: 30,
             },
             credit: {
-                yearly: 888,
-                monthly: 888,
+                yearly: Infinity,
+                monthly: Infinity,
             },
         },
     },
