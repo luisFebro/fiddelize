@@ -62,6 +62,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
 
         // totalPackage is the count since there is no package
         const item = {
+            expirable: true,
             name: "Novvos Membros",
             count: Number(totalPackage),
             amount: Number(inv),

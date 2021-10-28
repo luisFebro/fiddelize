@@ -164,7 +164,7 @@ function useSetInitialPlanTotal({ period, setData }) {
     useEffect(() => {
         const allFullPlanServices = ["Novvos Clientes", "Novvos Membros"];
         const fullPlanList = allFullPlanServices.map((serviceName) => ({
-            type: "fullPlan",
+            range: "fullPlan",
             expirable: true,
             name: serviceName,
             count: pricing.silver[serviceName].credit[period],

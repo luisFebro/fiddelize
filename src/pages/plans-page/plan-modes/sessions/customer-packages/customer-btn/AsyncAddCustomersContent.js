@@ -61,6 +61,7 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         const isFunc = typeof handleItem === "function";
 
         const item = {
+            expirable: true,
             name: "Novvos Clientes",
             count: Number(totalCount),
             amount: Number(inv),
