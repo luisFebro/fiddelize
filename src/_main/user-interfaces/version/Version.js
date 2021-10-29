@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "4.65.90";
+const latestVersion = "4.65.97";
 // NEXT:
 // register bonus coins -
 const updateDescription = "pro plans 2.0 - payments, plans and cron-jobs";

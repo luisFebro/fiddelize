@@ -50,6 +50,9 @@ function ProPay({
     const expiryDate = needDataExpiration && contentData.expiryDate;
     const period = needDataExpiration && contentData.period;
     const totalMoney = needDataExpiration && contentData.totalMoney;
+    // proPay and welcomeProPay
+    const isExtraFreeMonth =
+        contentData && contentData.isExtraFreeMonth === "true";
 
     const handleOrderPageClick = () => {
         setProRenewal({
@@ -178,9 +181,19 @@ function ProPay({
                 </p>
             )}
             {(isWelcomeProPay || isProPayOnly) && (
-                <p className={`${textStyle} mt-y font-weight-bold`}>
-                    Agradecemos a sua preferência!
-                </p>
+                <Fragment>
+                    {isExtraFreeMonth && (
+                        <p className={`${textStyle} font-weight-bold`}>
+                            Seu <span className="text-pill">1 mês extra</span>{" "}
+                            já foi adicionado ao seu plano anual. Lembrando que
+                            você tem mais 1 mês de manuntenção que é ativado
+                            automaticamente na expiração do plano.
+                        </p>
+                    )}
+                    <p className={`${textStyle} mt-5 font-weight-bold`}>
+                        Agradecemos a sua preferência!
+                    </p>
+                </Fragment>
             )}
             <ShowActionBtn
                 role={role}
