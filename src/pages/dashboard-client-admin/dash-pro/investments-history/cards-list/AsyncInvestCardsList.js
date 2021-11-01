@@ -8,7 +8,7 @@ import { useBizData } from "init";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
-import useAPIList, { readTransactionHistory } from "api/useAPIList";
+import useAPIList, { readUserOrderHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 
@@ -62,7 +62,7 @@ export default function AsyncCardsList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readTransactionHistory(),
+        url: readUserOrderHistory(),
         skip,
         params,
         listName: "investCardsList",

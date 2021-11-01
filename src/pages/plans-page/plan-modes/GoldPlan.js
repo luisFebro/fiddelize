@@ -67,10 +67,6 @@ export default function GoldPlan({ setCurrPlan }) {
 
     const styles = getStyles();
 
-    const handlePeriod = (newPeriod) => {
-        setData({ ...data, period: newPeriod });
-    };
-
     const showPlanSwitchBtns = () => (
         <section className="animated fadeInDown" style={styles.root}>
             <div className="d-flex justify-content-end">
@@ -104,8 +100,8 @@ export default function GoldPlan({ setCurrPlan }) {
                     />
                     <section className="period-selection">
                         <PeriodSelection
-                            handlePeriod={handlePeriod}
                             orderList={orderList}
+                            setData={setData}
                             plan="gold"
                         />
                     </section>

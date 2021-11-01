@@ -70,10 +70,6 @@ export default function SilverPlan({ setCurrPlan }) {
 
     const styles = getStyles();
 
-    const handlePeriod = (newPeriod) => {
-        setData({ ...data, period: newPeriod });
-    };
-
     const showPlanSwitchBtns = () => (
         <section className="animated fadeInDown" style={styles.root}>
             <div className="d-flex justify-content-end">
@@ -110,7 +106,7 @@ export default function SilverPlan({ setCurrPlan }) {
                     />
                     <section className="period-selection">
                         <PeriodSelection
-                            handlePeriod={handlePeriod}
+                            setData={setData}
                             orderList={orderList}
                             plan="silver"
                         />

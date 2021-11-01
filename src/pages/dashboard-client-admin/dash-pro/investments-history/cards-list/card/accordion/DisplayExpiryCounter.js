@@ -1,38 +1,28 @@
+// NEED UPDATE HERE
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EventIcon from "@material-ui/icons/Event";
 import { withRouter } from "react-router-dom";
-import { setVar } from "init/var";
-import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
-import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
+import { isScheduledDate } from "utils/dates/dateFns";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import setProRenewal from "utils/biz/setProRenewal";
 
 const handleRenewalClick = ({ panel, history }) => {
-    const { reference } = panel;
-    async function setAllVars(panel) {
-        const readyVar = await Promise.all([
-            setVar({ orders_clientAdmin: panel.data.itemList }),
-            setVar({
-                totalMoney_clientAdmin: panel.data.investAmount,
-            }),
-            setVar({
-                planPeriod_clientAdmin:
-                    panel.data.chosenPeriod === "Anual" ? "yearly" : "monthly",
-            }),
-            setVar({
-                ordersPlan_clientAdmin: panel.data.chosenPlan,
-            }),
-            setVar({
-                renewalDaysLeft_clientAdmin: 0,
-            }),
-            setVar({
-                renewalRef_clientAdmin: reference,
-            }),
-        ]);
+    async function setAllVars() {
+        const { reference, data } = panel;
 
-        history.push("/pedidos/admin");
+        await setProRenewal({
+            ref: reference,
+            itemList: data.itemList,
+            investAmount: data.investAmount,
+            planBr: data.chosenPlan,
+            period: data.chosenPeriod === "Anual" ? "yearly" : "monthly",
+        });
+
+        return history.push("/pedidos/admin");
     }
 
-    setAllVars(panel);
+    setAllVars();
 };
 
 const getStyles = () => ({

@@ -85,13 +85,14 @@ export const activateAutoService = () => `${ROOT}/sms/automatic/activate`; // PO
 // pay
 export const startCheckout = () => `${ROOT}/pay/transparent-checkout/start`; // POST
 export const finishCheckout = () => `${ROOT}/pay/transparent-checkout/finish`; // POST
-export const readTransactionHistory = () => `${ROOT}/pay/transactions/history`; // GET
 export const checkOneClickInvest = (userId) =>
     `${ROOT}/pay/cc/check/one-click-invest?userId=${userId}`; // GET
 export const removeOneClickInvest = (userId) =>
     `${ROOT}/pay/cc/remove/one-click-invest?userId=${userId}`; // PUT
 
 // pro
+// readUserOrderHistory
+export const readUserOrderHistory = () => `${ROOT}/pro/orders/history`; // GET
 export const getProData = (userId) =>
     `${ROOT}/pro/pro-member-data?userId=${userId}`; // POST
 export const removeServices = (userId) =>

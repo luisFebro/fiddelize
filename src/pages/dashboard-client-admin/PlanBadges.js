@@ -13,17 +13,14 @@ function PlanBadges({ history }) {
 
     const isFree = bizPlan === "gratis";
 
-    const [data, totalServs, loading] = useData([
-        "orders_clientAdmin",
-        "orderCount_clientAdmin",
-    ]);
+    const [itemsCount, loading] = useData(["pendingOrder_itemsCount"]);
 
-    const destiny = data ? "/pedidos/admin" : "/planos?cliente-admin=1";
+    const destiny = itemsCount ? "/pedidos/admin" : "/planos?cliente-admin=1";
 
     const showUpdateBtn = () => (
         <NotificationBadge
             animationName=" "
-            badgeValue={totalServs === "..." || !totalServs ? 0 : totalServes}
+            badgeValue={itemsCount === "..." || !itemsCount ? 0 : totalServes}
             badgeInvisible={false}
             backgroundColor="var(--mainRed)"
             borderColor="var(--mainWhite)"
@@ -49,15 +46,15 @@ function PlanBadges({ history }) {
         </NotificationBadge>
     );
 
+    const needShowNotif = itemsCount > 0 && !isFree;
     const displayProOrdersBtn = () =>
-        data &&
-        !isFree && (
+        needShowNotif && (
             <section
                 className="position-absolute"
                 style={{ top: -10, right: -90 }}
             >
                 <NotificationBadge
-                    badgeValue={totalServs || 0}
+                    badgeValue={itemsCount || 0}
                     badgeInvisible={false}
                     backgroundColor="var(--mainRed)"
                     borderColor="var(--mainWhite)"

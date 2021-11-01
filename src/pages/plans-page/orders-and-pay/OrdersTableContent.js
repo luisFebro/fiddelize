@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
-import MuSelectTable from "../../../components/tables/MuSelectTable";
+import MuSelectTable from "components/tables/MuSelectTable";
+import NotesSwitcher from "components/buttons/NotesSwitcher";
 import getOrderTableList from "./helpers/getOrderTableList";
-import NotesSwitcher from "../../../components/buttons/NotesSwitcher";
 
 const headCells = [
     { id: "quantity", numeric: false, disablePadding: false, label: "Qtde." },
@@ -27,15 +27,13 @@ export default function OrdersTableContent({
     const [list, setList] = useState([]);
 
     useEffect(() => {
-        if (needGenerateList) {
-            const { newList, thisTotalServ } = getOrderTableList(orders, {
-                period,
-                plan,
-            });
-            setList(newList);
-        } else {
-            setList(listData);
-        }
+        if (!needGenerateList) return setList(listData);
+
+        const newList = getOrderTableList(orders, {
+            period,
+            plan,
+        });
+        setList(newList);
     }, [listData, needGenerateList]);
 
     const notes = (
@@ -55,17 +53,10 @@ export default function OrdersTableContent({
             <br />
             <br /> - Porém, quando o tempo de uso termina ou expira, todos os
             créditos restantes <strong>são zerados automaticamente</strong> de
-            forma permanente. Se seu plano é <strong>anual</strong>, você recebe
-            uma nova quantia contratada a cada de{" "}
-            <strong>dia 1º de cada mês</strong> de forma automática.
+            forma permanente.
             <br />
             <br /> - Você é notificado <strong>5 dias</strong> antes de expirar
             algum plano ou serviço.
-            <br />
-            <br />- Você pode renovar seu plano mesmo durante sua ativação. O
-            sistema da Fiddelize analisa se você já tem o serviço a ser renovado
-            e atualiza o plano considerando o tempo de uso anterior restante
-            somado com o atual.
             <br />
             <br />- Você consegue renovar um plano mensal para anual ou
             vice-versa quantas vezes precisar.
@@ -74,13 +65,6 @@ export default function OrdersTableContent({
             <strong>diferentes planos</strong> tanto mensais ou anuais. Cada
             transação de plano possui seu próprio tempo de uso que você
             acompanha no seu histórico de investimentos.
-            <br />
-            <br />- O seu maior plano investido é o que será identificado como
-            atual. Você pode investir no <strong>plano ouro</strong>, por
-            exemplo, e a qualquer momento investir no{" "}
-            <strong>plano bronze</strong> que ainda continuará no plano ouro. Se
-            o seu plano for bronze e atualizar para planos maiores, daí sim você
-            muda de plano atual.
         </Fragment>
     );
 
@@ -112,3 +96,15 @@ export default function OrdersTableContent({
         </Fragment>
     );
 }
+
+/*
+
+<br />
+<br />- O seu maior plano investido é o que será identificado como
+atual. Você pode investir no <strong>plano ouro</strong>, por
+exemplo, e a qualquer momento investir no{" "}
+<strong>plano bronze</strong> que ainda continuará no plano ouro. Se
+o seu plano for bronze e atualizar para planos maiores, daí sim você
+muda de plano atual.
+
+ */

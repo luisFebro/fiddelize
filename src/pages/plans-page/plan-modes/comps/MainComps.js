@@ -118,7 +118,7 @@ const TotalInvest = ({ orderAmount, orderCount }) => {
 };
 
 const PeriodSelection = ({
-    handlePeriod,
+    setData,
     orderList = [],
     plan,
     containerCenter = false,
@@ -129,7 +129,14 @@ const PeriodSelection = ({
 
     const handlePeriodChange = (status) => {
         const isMonthly = status && status.includes("false");
-        handlePeriod(isMonthly ? "monthly" : "yearly");
+        // reset previous period services.
+        setData((prev) => ({
+            ...prev,
+            orderCount: 0,
+            orderAmount: 0,
+            orderList: [],
+            period: isMonthly ? "monthly" : "yearly",
+        }));
     };
 
     return (

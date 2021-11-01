@@ -1,11 +1,10 @@
-//
 import generateAlphaNumeric from "./generateAlphaNumeric";
 import removeDiacritics from "./removeDiacritics";
 // SKU (Stock Keeping Unit - Unidade de Manuntenção de Estoque)
 
 // code exemple: GO-Q3-1F3C2DEW (plano-quantidade-id)
-const getPlan = (plan) => {
-    if (typeof plan !== "string") return;
+const getPlanBr = (plan) => {
+    if (typeof plan !== "string") return null;
 
     if (plan.toLowerCase() === "ouro") return "OU";
     if (plan.toLowerCase() === "prata") return "PR";
@@ -14,20 +13,22 @@ const getPlan = (plan) => {
     return "BR";
 };
 
-const getPeriod = (per) => {
+const getPeriodBr = (per) => {
     if (per === "yearly") return "A";
     if (per === "monthly") return "M";
+
+    return "";
 };
 
 const getQuantity = (total) => `Q${total}`;
 
 const getServiceSKU = (options = {}) => {
-    const { plan = "gold", total = 0, period } = options;
+    const { planBr, total = 0, period } = options;
 
     const SKU = [
-        getPlan(plan),
+        getPlanBr(planBr),
         getQuantity(total),
-        getPeriod(period),
+        getPeriodBr(period),
         generateAlphaNumeric(7, "A#"),
     ];
     return SKU.join("-");

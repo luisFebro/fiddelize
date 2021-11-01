@@ -1,5 +1,5 @@
 import getAPI, { finishCheckout } from "api";
-import getFilterDate from "../../../../../utils/dates/getFilterDate";
+import getFilterDate from "utils/dates/getFilterDate";
 
 const filter = getFilterDate();
 
@@ -23,11 +23,7 @@ export default async function goFinishCheckout(props) {
         itemDescription,
         itemAmount,
         itemList,
-        renewalCurrDays,
-        isSingleRenewal,
         firstDueDate,
-        renewalDaysLeft,
-        renewalReference,
         referrer,
     } = modalData;
 
@@ -43,7 +39,7 @@ export default async function goFinishCheckout(props) {
     let body = {
         paymentMethod: selectedMethod,
         senderHash,
-        reference,
+        reference, // from v4.70 onwards, the renewal is completely created in the backend by identify the same reference.
         itemId: reference,
         senderName: userName,
         senderEmail: sandboxMode
@@ -58,11 +54,6 @@ export default async function goFinishCheckout(props) {
             .replace("null", "pro")}`,
         filter,
         itemList,
-        // renewal
-        renewalCurrDays,
-        isSingleRenewal,
-        renewalDaysLeft,
-        renewalReference,
         // bank debit
         bankName: isBankDebit ? props.bankName : undefined,
         // boleto
@@ -97,11 +88,6 @@ export default async function goFinishCheckout(props) {
             filter,
             itemAmount1: testValue || itemAmount,
             itemList,
-            // renewal
-            renewalCurrDays,
-            isSingleRenewal,
-            renewalDaysLeft,
-            renewalReference,
             // split
             referrer,
         };
@@ -116,21 +102,3 @@ export default async function goFinishCheckout(props) {
         timeout: 60000,
     });
 }
-
-/* ARCHIVES
-trigger: renewalReady &&
-         senderCPF &&
-         itemList &&
-         senderHash &&
-         selectedMethod &&
-         userName !== "...",
-
-const handleItemAmount = () => {
-    return itemAmount;
-    const isInstallment = Number(props.installmentQuantity) > 1;
-    if(isCreditCard && isInstallment) {
-        return ;
-    }
-
-}
- */

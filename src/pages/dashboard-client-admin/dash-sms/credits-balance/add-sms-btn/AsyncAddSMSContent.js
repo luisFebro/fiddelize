@@ -20,11 +20,10 @@ function AsyncAddSMSContent({
     // end fromSession
 
     const [data, setData] = useState({
-        totalPackage: 0,
         totalSMS: 0,
         inv: 0,
     });
-    const { inv, totalSMS, totalPackage } = data;
+    const { inv, totalSMS } = data;
 
     const handleData = (newData) => {
         setData({
@@ -58,11 +57,9 @@ function AsyncAddSMSContent({
 
         if (isFromSession) {
             setProRenewal({
-                expiryDate: "2050-11-26T16:51:32.848Z", // a very late hard-coded date cuz it does not expires.
-                orderList: [{ sms: item }],
+                itemList: [item],
                 period: "yearly",
                 planBr: currPlan,
-                ref: undefined,
                 investAmount: inv,
             }).then(() => {
                 history.push("/pedidos/admin");

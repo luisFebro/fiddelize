@@ -32,7 +32,7 @@ const getElem = (elem) => (
     </span>
 );
 
-export default function getOrderTableList(orderList, options = {}) {
+export default function getOrderTableList(orderList = [], options = {}) {
     const { plan, period } = options;
 
     const newList = orderList.map((item) => {
@@ -62,10 +62,7 @@ export default function getOrderTableList(orderList, options = {}) {
         };
     });
 
-    return {
-        newList,
-        thisTotalServ: orderList && orderList.length,
-    };
+    return newList || [];
 }
 
 // HELPERS

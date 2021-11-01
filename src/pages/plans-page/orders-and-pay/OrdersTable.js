@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 import { setRun, useAction } from "global-data/ui";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import useDelay from "hooks/useDelay";
@@ -14,45 +14,27 @@ const isSmall = window.Helper.isSmallScreen();
 export default function OrdersTable({
     plan,
     period,
-    orderList,
-    orderTotal,
-    setVar,
+    itemList,
+    itemsCount,
+    investAmount,
     handleCancel,
-    handleServicesData,
     notesColor,
 }) {
     const [list, setList] = useState([]);
-    const [totalServs, setTotalServs] = useState(0);
     const loading = false;
 
     const uify = useAction();
 
     const { bizLinkName } = useBizData();
 
-    const [totalMoney] = useData(["totalMoney_clientAdmin"]);
-    const loadMoney = totalMoney !== "...";
-
-    orderTotal = !orderTotal ? totalMoney : orderTotal;
-    const rawOrderTotal = orderTotal; // because it receives R$ and becames string in the first run
-
-    if (!loadMoney) setVar({ totalMoney_clientAdmin: orderTotal });
-
     useEffect(() => {
-        const { newList, thisTotalServ } = getOrderTableList(orderList, {
+        const newList = getOrderTableList(itemList, {
             period,
             plan,
         });
 
         setList(newList);
-        setTotalServs(thisTotalServ);
-        setVar({ orderCount_clientAdmin: thisTotalServ });
-        handleServicesData({
-            servicesTotal: thisTotalServ,
-            servicesAmount: rawOrderTotal,
-        }); // it is here for cases when orderTotal loads as undefined when user jumps right to checkout page if h/s decides to come back later.
-    }, [orderList]);
-
-    orderTotal = convertToReal(orderTotal, { moneySign: true });
+    }, [itemList]);
 
     const vanishMsgReady = useDelay(6000);
 
@@ -81,9 +63,9 @@ export default function OrdersTable({
                 notesColor={notesColor}
             />
             <p className="mt-3 mr-3 d-flex justify-content-end text-normal text-purple">
-                {totalServs} serviço{totalServs > 1 ? "s" : ""} por:{" "}
+                {itemsCount} serviço{itemsCount > 1 ? "s" : ""} por:{" "}
                 <span className="d-inline-block ml-3 font-weight-bold">
-                    {orderTotal}
+                    R$ {convertToReal(investAmount)}
                 </span>
             </p>
             <div className="text-right text-normal text-purple">

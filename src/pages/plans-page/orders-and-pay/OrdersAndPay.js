@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import useData from "init";
-import { setVar, removeVar } from "init/var";
+import { getVars, removeVar } from "init/var";
+import useBackColor from "hooks/useBackColor";
+import showToast from "components/toasts";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import setProRenewal, { removeProRenewal } from "utils/biz/setProRenewal";
+import { getServiceSKU } from "utils/string/getSKUCode";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
-import useBackColor from "../../../hooks/useBackColor";
-
-import showToast from "../../../components/toasts";
-import useScrollUp from "../../../hooks/scroll/useScrollUp";
 
 export default function OrdersAndPay({
     orderList,
@@ -16,66 +16,77 @@ export default function OrdersAndPay({
     plan,
     setNextPage,
 }) {
-    const [dataSer, setDataSer] = useState({
-        servicesAmount: null,
-        servicesTotal: null,
-        renewalDaysLeft: null,
-        renewalReference: null,
+    const [data, setData] = useState({
+        reference: "",
+        itemList: [],
+        itemsCount: 0,
+        investAmount: 0,
     });
-    const {
-        servicesAmount,
-        servicesTotal,
-        renewalDaysLeft,
-        renewalReference,
-    } = dataSer;
-
-    const handleServicesData = (payload) => {
-        setDataSer({ ...dataSer, ...payload });
-    };
-
-    useBackColor("var(--mainWhite)");
+    const { itemList, itemsCount, investAmount } = data;
 
     useScrollUp();
-
-    const [
-        data,
-        dataPlan,
-        dataPeriod,
-        dataMoney,
-        daysLeftData,
-        refData,
-        isSingleRenewal,
-    ] = useData([
-        "orders_clientAdmin",
-        "ordersPlan_clientAdmin",
-        "planPeriod_clientAdmin",
-        "totalMoney_clientAdmin",
-        "renewalDaysLeft_clientAdmin",
-        "renewalRef_clientAdmin",
-        "isSingleRenewal_clientAdmin",
-    ]);
-    const loading = data !== "...";
-
-    orderList = !orderList ? data : orderList;
-    plan = !plan ? dataPlan || "bronze" : plan;
-    period = !period ? dataPeriod || "yearly" : period;
-    orderTotal = !orderTotal ? dataMoney : orderTotal;
+    useBackColor("var(--mainWhite)");
 
     useEffect(() => {
-        if (!loading) return;
-        if (orderList) setVar({ orders_clientAdmin: orderList });
-        if (plan) setVar({ ordersPlan_clientAdmin: plan });
-        if (period) setVar({ planPeriod_clientAdmin: period });
-        if (orderTotal) setVar({ totalMoney_clientAdmin: orderTotal });
+        (async () => {
+            const isFromPlanStore = Boolean(plan);
+            if (isFromPlanStore) {
+                // set data from planStore to be restored if user decided to return later
+                const itemsCount2 = orderList ? orderList.length : 0;
 
-        if (daysLeftData)
-            setDataSer({ ...dataSer, renewalDaysLeft: daysLeftData });
-        if (refData)
-            setDataSer({
-                ...dataSer,
-                renewalReference: refData || undefined,
+                return await Promise.all([
+                    setProRenewal({
+                        itemList: orderList,
+                        investAmount: orderTotal,
+                        planBr: plan,
+                        period,
+                    }),
+                    setData({
+                        reference: setRef(itemsCount2, planBr, period),
+                        planBr: plan,
+                        period,
+                        itemsCount: orderList ? orderList.length : 0,
+                        investAmount: orderTotal,
+                    }),
+                ]);
+            }
+
+            // eslint-disable-next-line
+            const [
+                pendingOrder_itemList,
+                pendingOrder_planBr,
+                pendingOrder_period,
+                pendingOrder_investAmount,
+                pendingOrder_reference,
+            ] = await getVars([
+                "pendingOrder_itemList",
+                "pendingOrder_planBr",
+                "pendingOrder_period",
+                "pendingOrder_investAmount",
+            ]);
+
+            const itemsCount2 = pendingOrder_itemList
+                ? pendingOrder_itemList.length
+                : 0;
+
+            // when passing a reference here, it means renewal of service executed in the backend.
+            // it doesn't require when comes from the planstore since the reference can be diff and created with setRef
+            setData({
+                reference:
+                    pendingOrder_reference ||
+                    setRef(
+                        itemsCount2,
+                        pendingOrder_planBr,
+                        pendingOrder_period
+                    ),
+                itemList: pendingOrder_itemList,
+                itemsCount: itemsCount2,
+                investAmount: pendingOrder_investAmount,
+                period: pendingOrder_period,
+                planBr: pendingOrder_planBr,
             });
-    }, [loading, daysLeftData, refData]);
+        })();
+    }, [plan, orderList, orderTotal, period]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -91,17 +102,10 @@ export default function OrdersAndPay({
         </p>
     );
 
-    const handleCancel = (type) => {
+    const handleCancel = async (type) => {
         const explicitCancel = type === "explicit";
         if (explicitCancel) showToast("Seu pedido atual foi cancelado.");
-        removeVar("orders_clientAdmin");
-        removeVar("orderCount_clientAdmin");
-        removeVar("totalMoney_clientAdmin");
-        removeVar("ordersPlan_clientAdmin");
-        removeVar("planPeriod_clientAdmin");
-        removeVar("renewalDaysLeft_clientAdmin");
-        removeVar("renewalRef_clientAdmin");
-        removeVar("isSingleRenewal_clientAdmin");
+        await removeProRenewal();
     };
 
     return (
@@ -112,28 +116,34 @@ export default function OrdersAndPay({
             {showTitle()}
             {showSubtitle()}
             <OrdersTable
-                orderList={orderList}
+                investAmount={investAmount}
+                itemList={orderList}
+                itemsCount={itemsCount}
                 plan={plan}
                 period={period}
-                orderTotal={orderTotal}
-                setVar={setVar}
                 removeVar={removeVar}
                 setNextPage={setNextPage}
                 handleCancel={handleCancel}
-                handleServicesData={handleServicesData}
                 notesColor="purple"
             />
             <PayArea
                 plan={plan}
                 period={period}
                 handleCancel={handleCancel}
-                servicesTotal={servicesTotal}
-                servicesAmount={servicesAmount}
+                investAmount={investAmount}
                 itemList={orderList}
-                renewalDaysLeft={renewalDaysLeft}
-                renewalReference={renewalReference}
-                isSingleRenewal={isSingleRenewal}
+                itemsCount={itemsCount}
             />
         </section>
     );
 }
+
+// HELPERS
+function setRef(itemsCount, planBr, period) {
+    return getServiceSKU({
+        total: itemsCount,
+        planBr,
+        period,
+    });
+}
+// END HELPERS

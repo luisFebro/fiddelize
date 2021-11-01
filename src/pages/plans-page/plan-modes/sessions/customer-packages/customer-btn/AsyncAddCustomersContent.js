@@ -16,7 +16,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         // creditsBadge
         isCreditsBadge,
         currPlan,
-        expiryDate,
         // end creditsBadge
     } = modalData;
 
@@ -61,6 +60,7 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         const isFunc = typeof handleItem === "function";
 
         const item = {
+            range: "selected",
             expirable: true,
             name: "Novvos Clientes",
             count: Number(totalCount),
@@ -74,13 +74,11 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 
         if (isCreditsBadge) {
             setProRenewal({
-                expiryDate,
-                orderList: [{ "Novvos Clientes": item }],
+                ref: undefined,
+                itemList: [item],
                 period: innerPeriod,
                 planBr: currPlan,
-                ref: undefined,
                 investAmount: inv,
-                isSingleRenewal: true,
             }).then(() => {
                 history.push("/pedidos/admin");
             });

@@ -67,10 +67,6 @@ export default function BronzePlan({ setCurrPlan }) {
 
     const styles = getStyles();
 
-    const handlePeriod = (newPeriod) => {
-        setData({ ...data, period: newPeriod });
-    };
-
     useBackColor("var(--mainWhite)");
 
     const showPlanSwitchBtns = () => (
@@ -123,7 +119,7 @@ export default function BronzePlan({ setCurrPlan }) {
                     />
                     <section className="period-selection">
                         <PeriodSelection
-                            handlePeriod={handlePeriod}
+                            setData={setData}
                             orderList={orderList}
                             plan="bronze"
                         />

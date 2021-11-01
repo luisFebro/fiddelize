@@ -1,26 +1,28 @@
-import { setVars } from "init/var";
-import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
+import { setVars, removeVars } from "init/var";
 
 export default async function setProRenewal({
-    expiryDate,
-    orderList,
+    ref,
+    itemList,
     investAmount,
     planBr,
-    ref,
     period,
-    isSingleRenewal = false, // update a single service
-    // planDays,
 }) {
-    const daysLeft = getDatesCountdown(expiryDate);
-
     return await setVars({
-        orders_clientAdmin: orderList,
-        staff: cardsData.staff,
-        totalMoney_clientAdmin: investAmount,
-        planPeriod_clientAdmin: period, // "yearly" : "monthly"
-        ordersPlan_clientAdmin: planBr,
-        renewalDaysLeft_clientAdmin: daysLeft || 0,
-        renewalRef_clientAdmin: ref,
-        isSingleRenewal_clientAdmin: isSingleRenewal,
+        pendingOrder_reference: ref,
+        pendingOrder_itemList: itemList,
+        pendingOrder_investAmount: investAmount,
+        pendingOrder_period: period,
+        pendingOrder_planBr: planBr,
+        pendingOrder_itemsCount: itemList ? itemList.length : 0,
     });
+}
+
+export async function removeProRenewal() {
+    return await removeVars([
+        "pendingOrder_reference",
+        "pendingOrder_itemList",
+        "pendingOrder_investAmount",
+        "pendingOrder_period",
+        "pendingOrder_planBr",
+    ]);
 }

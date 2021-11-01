@@ -16,7 +16,6 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         // creditsBadge
         isCreditsBadge,
         currPlan,
-        expiryDate,
         // end creditsBadge
     } = modalData;
 
@@ -62,6 +61,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
 
         // totalPackage is the count since there is no package
         const item = {
+            range: "selected",
             expirable: true,
             name: "Novvos Membros",
             count: Number(totalPackage),
@@ -75,13 +75,10 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
 
         if (isCreditsBadge) {
             setProRenewal({
-                expiryDate,
-                orderList: [{ "Novvos Membros": item }],
+                itemList: [item],
                 period: innerPeriod,
                 planBr: currPlan,
-                ref: undefined,
                 investAmount: inv,
-                isSingleRenewal: true,
             }).then(() => {
                 history.push("/pedidos/admin");
             });
