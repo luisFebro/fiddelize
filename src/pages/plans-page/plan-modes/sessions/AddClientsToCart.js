@@ -52,65 +52,13 @@ export default function AddClientsToCart({
         // eslint-disable-next-line
     }, [gotMembers, gotClients]);
 
-    const showNovvosClientes = () => (
+    const showNovvosMembros = () => (
         <section
             style={{
                 borderRadius: "20px",
                 padding: "10px",
                 backgroundColor: "#ded6f2",
             }}
-        >
-            <p className="text-normal font-weight-bold d-block text-center text-purple">
-                Novvos Clientes &#174;
-            </p>
-            <div className="text-title text-purple text-center">
-                <span className="d-inline-block font-size text-em-1-5 text-pill">
-                    {addedCustomers}
-                </span>
-                <p
-                    className="text-subtitle ml-2 font-weight-bold text-purple text-center"
-                    style={{ lineHeight: "20px" }}
-                >
-                    <span className="text-normal font-weight-bold">
-                        apps de
-                    </span>
-                    <br />
-                    clientes
-                </p>
-            </div>
-            <p className="text-center text-subtitle font-weight-bold text-purple">
-                {customersPrice}
-            </p>
-            <section className="container-center position-relative">
-                <AddCustomersBtn
-                    btnTitle={gotClients ? "Alterar" : "Adicionar"}
-                    modalData={modalData}
-                />
-                {gotClients && (
-                    <div className="ml-1">
-                        <DeleteButton
-                            position="absolute"
-                            bottom={-40}
-                            right={-15}
-                            onClick={() => {
-                                handleItem("remove", "Novvos Clientes");
-                                setData(defaultData);
-                            }}
-                        />
-                    </div>
-                )}
-            </section>
-        </section>
-    );
-
-    const showNovvosMembros = () => (
-        <section
-            style={{
-                borderRadius: "20px",
-                padding: "10px",
-                backgroundColor: "#e4d1f0",
-            }}
-            className={isSmall ? "shadow-elevation" : undefined}
         >
             <p className="text-normal font-weight-bold d-block text-center text-purple">
                 Novvos Membros &#174;
@@ -155,6 +103,58 @@ export default function AddClientsToCart({
         </section>
     );
 
+    const showNovvosClientes = () => (
+        <section
+            style={{
+                borderRadius: "20px",
+                padding: "10px",
+                backgroundColor: "#e4d1f0",
+            }}
+            className={isSmall ? "shadow-elevation" : undefined}
+        >
+            <p className="text-normal font-weight-bold d-block text-center text-purple">
+                Novvos Clientes &#174;
+            </p>
+            <div className="text-title text-purple text-center">
+                <span className="d-inline-block font-size text-em-1-5 text-pill">
+                    {addedCustomers}
+                </span>
+                <p
+                    className="text-subtitle ml-2 font-weight-bold text-purple text-center"
+                    style={{ lineHeight: "20px" }}
+                >
+                    <span className="text-normal font-weight-bold">
+                        apps de
+                    </span>
+                    <br />
+                    clientes
+                </p>
+            </div>
+            <p className="text-center text-subtitle font-weight-bold text-purple">
+                {customersPrice}
+            </p>
+            <section className="container-center position-relative">
+                <AddCustomersBtn
+                    btnTitle={gotClients ? "Alterar" : "Adicionar"}
+                    modalData={modalData}
+                />
+                {gotClients && (
+                    <div className="ml-1">
+                        <DeleteButton
+                            position="absolute"
+                            bottom={-40}
+                            right={-15}
+                            onClick={() => {
+                                handleItem("remove", "Novvos Clientes");
+                                setData(defaultData);
+                            }}
+                        />
+                    </div>
+                )}
+            </section>
+        </section>
+    );
+
     return (
         <section className="position-relative">
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
@@ -170,8 +170,8 @@ export default function AddClientsToCart({
                 )}
             </p>
             <section className="d-flex justify-content-around">
-                {!disableCliUser && showNovvosClientes()}
                 {showNovvosMembros()}
+                {!disableCliUser && showNovvosClientes()}
             </section>
         </section>
     );

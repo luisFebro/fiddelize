@@ -145,7 +145,7 @@ const PeriodSelection = ({
             style={!containerCenter ? styles.rootPeriod : undefined}
         >
             <p
-                className="position-relative mb-2 font-site text-em-1 text-white"
+                className="position-relative mb-2 font-site text-small font-weight-bold text-white"
                 style={{
                     left: 15,
                 }}

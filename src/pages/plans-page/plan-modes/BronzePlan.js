@@ -114,7 +114,7 @@ export default function BronzePlan({ setCurrPlan }) {
                         customPlanTitle="Meu Plano"
                         plan="Bronze"
                         planMsg={`
-                            Monte seu plano escolhendo preços e quantias dos serviços que precisar.
+                            Escolha preços e quantias dos serviços que precisar.
                         `}
                     />
                     <section className="period-selection">
