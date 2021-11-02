@@ -19,7 +19,7 @@ export default function OrdersTableContent({
     listData,
     loading,
     orders,
-    plan,
+    planBr,
     period,
 }) {
     const [list, setList] = useState([]);
@@ -29,7 +29,7 @@ export default function OrdersTableContent({
 
         const newList = getOrderTableList(orders, {
             period,
-            plan,
+            plan: planBr,
         });
         setList(newList);
     }, [listData, needGenerateList]);
