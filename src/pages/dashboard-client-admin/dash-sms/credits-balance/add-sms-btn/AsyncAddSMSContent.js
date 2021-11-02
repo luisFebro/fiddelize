@@ -45,6 +45,7 @@ function AsyncAddSMSContent({
 
         const item = {
             range: "selected",
+            expirable: false,
             name: "sms",
             count: totalSMS,
             amount: inv,
@@ -58,7 +59,7 @@ function AsyncAddSMSContent({
         if (isFromSession) {
             setProRenewal({
                 itemList: [item],
-                period: "yearly",
+                period: "infinite",
                 planBr: currPlan,
                 investAmount: inv,
             }).then(() => {

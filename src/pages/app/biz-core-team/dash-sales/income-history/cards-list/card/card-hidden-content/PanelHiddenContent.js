@@ -58,10 +58,8 @@ function PanelHiddenContent({ data }) {
                         needGenerateList
                         orders={orders}
                         loading={!orders}
-                        plan={thisPlan}
+                        planBr={thisPlan}
                         period={thisPeriod}
-                        notesColor="white"
-                        showNotes={false}
                     />
                 </Fragment>
             )

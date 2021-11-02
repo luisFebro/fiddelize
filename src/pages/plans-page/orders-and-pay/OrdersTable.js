@@ -12,13 +12,12 @@ import OrdersTableContent from "./OrdersTableContent";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function OrdersTable({
-    plan,
+    planBr,
     period,
     itemList,
     itemsCount,
     investAmount,
     handleCancel,
-    notesColor,
 }) {
     const [list, setList] = useState([]);
     const loading = false;
@@ -30,18 +29,20 @@ export default function OrdersTable({
     useEffect(() => {
         const newList = getOrderTableList(itemList, {
             period,
-            plan,
+            plan: planBr,
         });
 
         setList(newList);
-    }, [itemList]);
+
+        // eslint-disable-next-line
+    }, [period, planBr]);
 
     const vanishMsgReady = useDelay(6000);
 
     return (
         <section>
             <p className="mt-3 mx-3 text-subtitle font-weight-bold text-purple">
-                Plano {plan} {period === "yearly" ? "anual" : "mensal"}
+                Plano {planBr} {period === "yearly" ? "anual" : "mensal"}
             </p>
             {isSmall && (
                 <p
@@ -57,12 +58,8 @@ export default function OrdersTable({
                     />
                 </p>
             )}
-            <OrdersTableContent
-                listData={list}
-                loading={loading}
-                notesColor={notesColor}
-            />
-            <p className="mt-3 mr-3 d-flex justify-content-end text-normal text-purple">
+            <OrdersTableContent listData={list} loading={loading} />
+            <p className="m-0 mt-3 mr-3 d-flex justify-content-end text-normal text-purple">
                 {itemsCount} serviço{itemsCount > 1 ? "s" : ""} por:{" "}
                 <span className="d-inline-block ml-3 font-weight-bold">
                     R$ {convertToReal(investAmount)}

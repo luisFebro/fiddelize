@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import MuSelectTable from "components/tables/MuSelectTable";
-import NotesSwitcher from "components/buttons/NotesSwitcher";
 import getOrderTableList from "./helpers/getOrderTableList";
+// import NotesSwitcher from "components/buttons/NotesSwitcher";
 
 const headCells = [
     { id: "quantity", numeric: false, disablePadding: false, label: "Qtde." },
@@ -21,8 +21,6 @@ export default function OrdersTableContent({
     orders,
     plan,
     period,
-    notesColor,
-    showNotes = true,
 }) {
     const [list, setList] = useState([]);
 
@@ -36,38 +34,6 @@ export default function OrdersTableContent({
         setList(newList);
     }, [listData, needGenerateList]);
 
-    const notes = (
-        <Fragment>
-            - Os pacotes de SMS não tem validade, não expiram.
-            <br />
-            <br />- Você dá acesso sem restrição aos seus clientes que{" "}
-            <strong>já foram cadastrados</strong>. Eles continuam usando o app
-            mesmo quando o prazo de seu plano terminar. Você precisa renovar seu
-            plano para novos clintes.
-            <br />
-            <br />
-            <br />- Os créditos disponíveis em cada serviço{" "}
-            <strong>são acumulativos apenas durante o tempo de uso</strong>.
-            Assim, quando um plano é renovado antes de expirar, você não perde
-            os créditos não usados e ganha um novo tempo de uso.
-            <br />
-            <br /> - Porém, quando o tempo de uso termina ou expira, todos os
-            créditos restantes <strong>são zerados automaticamente</strong> de
-            forma permanente.
-            <br />
-            <br /> - Você é notificado <strong>5 dias</strong> antes de expirar
-            algum plano ou serviço.
-            <br />
-            <br />- Você consegue renovar um plano mensal para anual ou
-            vice-versa quantas vezes precisar.
-            <br />
-            <br />- Você pode fazer investimentos em{" "}
-            <strong>diferentes planos</strong> tanto mensais ou anuais. Cada
-            transação de plano possui seu próprio tempo de uso que você
-            acompanha no seu histórico de investimentos.
-        </Fragment>
-    );
-
     return (
         <Fragment>
             <MuSelectTable
@@ -79,23 +45,58 @@ export default function OrdersTableContent({
                 marginBottom=" "
                 enumeration=" "
             />
-            {showNotes && (
-                <NotesSwitcher
-                    color={
-                        notesColor === "white" ? "text-white" : "text-purple"
-                    }
-                    btnStyle={{ top: -35, right: -80 }}
-                    btnSize="small"
-                    notes={notes}
-                    rootClassName={notesColor === "purple" ? "mx-3" : undefined}
-                    shadowTitle={
-                        notesColor === "white" ? "text-shadow" : undefined
-                    }
-                />
-            )}
         </Fragment>
     );
 }
+
+/* ARCHIVES
+Some of these notes can be written in some Q&A
+const notes = (
+    <Fragment>
+        - Os pacotes de SMS não tem validade, não expiram.
+        <br />
+        <br />- Você dá acesso sem restrição aos seus clientes que{" "}
+        <strong>já foram cadastrados</strong>. Eles continuam usando o app
+        mesmo quando o prazo de seu plano terminar. Você precisa renovar seu
+        plano para novos clintes.
+        <br />
+        <br />
+        <br />- Os créditos disponíveis em cada serviço{" "}
+        <strong>são acumulativos apenas durante o tempo de uso</strong>.
+        Assim, quando um plano é renovado antes de expirar, você não perde
+        os créditos não usados e ganha um novo tempo de uso.
+        <br />
+        <br /> - Porém, quando o tempo de uso termina ou expira, todos os
+        créditos restantes <strong>são zerados automaticamente</strong> de
+        forma permanente.
+        <br />
+        <br /> - Você é notificado <strong>5 dias</strong> antes de expirar
+        algum plano ou serviço.
+        <br />
+        <br />- Você consegue renovar um plano mensal para anual ou
+        vice-versa quantas vezes precisar.
+        <br />
+        <br />- Você pode fazer investimentos em{" "}
+        <strong>diferentes planos</strong> tanto mensais ou anuais. Cada
+        transação de plano possui seu próprio tempo de uso que você
+        acompanha no seu histórico de investimentos.
+    </Fragment>
+);
+
+<NotesSwitcher
+    color={
+        notesColor === "white" ? "text-white" : "text-purple"
+    }
+    btnStyle={{ top: -35, right: -80 }}
+    btnSize="small"
+    notes={notes}
+    rootClassName={notesColor === "purple" ? "mx-3" : undefined}
+    shadowTitle={
+        notesColor === "white" ? "text-shadow" : undefined
+    }
+/>
+
+ */
 
 /*
 

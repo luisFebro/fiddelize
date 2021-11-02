@@ -141,7 +141,7 @@ export default function AsyncCardsList() {
             } = data;
 
             const referenceArray = reference && reference.split("-");
-            const [planCode, qtt, period] = referenceArray;
+            const [planCode, , period] = referenceArray;
 
             const chosenPlan = handlePlanCode(planCode);
             const chosenPeriod = handlePeriod(period);

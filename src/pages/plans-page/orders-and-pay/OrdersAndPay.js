@@ -21,8 +21,17 @@ export default function OrdersAndPay({
         itemList: [],
         itemsCount: 0,
         investAmount: 0,
+        planBr: "",
+        periodEn: "",
     });
-    const { itemList, itemsCount, investAmount } = data;
+    const {
+        reference,
+        itemList,
+        itemsCount,
+        investAmount,
+        planBr,
+        periodEn,
+    } = data;
 
     useScrollUp();
     useBackColor("var(--mainWhite)");
@@ -42,50 +51,51 @@ export default function OrdersAndPay({
                         period,
                     }),
                     setData({
-                        reference: setRef(itemsCount2, planBr, period),
-                        planBr: plan,
-                        period,
+                        reference: setRef(
+                            itemsCount2,
+                            planBr,
+                            period,
+                            orderList
+                        ),
+                        itemList: orderList,
                         itemsCount: orderList ? orderList.length : 0,
                         investAmount: orderTotal,
+                        planBr: plan,
+                        periodEn: period,
                     }),
                 ]);
             }
 
-            // eslint-disable-next-line
             const [
-                pendingOrder_itemList,
-                pendingOrder_planBr,
-                pendingOrder_period,
-                pendingOrder_investAmount,
-                pendingOrder_reference,
+                pendingOrderItemList,
+                pendingOrderItemsCount,
+                pendingOrderInvestAmount,
+                pendingOrderPlanBr,
+                pendingOrderPeriod,
             ] = await getVars([
-                "pendingOrder_itemList",
-                "pendingOrder_planBr",
-                "pendingOrder_period",
-                "pendingOrder_investAmount",
+                "pendingOrderItemList",
+                "pendingOrderItemsCount",
+                "pendingOrderInvestAmount",
+                "pendingOrderPlanBr",
+                "pendingOrderPeriod",
             ]);
 
-            const itemsCount2 = pendingOrder_itemList
-                ? pendingOrder_itemList.length
-                : 0;
-
-            // when passing a reference here, it means renewal of service executed in the backend.
-            // it doesn't require when comes from the planstore since the reference can be diff and created with setRef
-            setData({
-                reference:
-                    pendingOrder_reference ||
-                    setRef(
-                        itemsCount2,
-                        pendingOrder_planBr,
-                        pendingOrder_period
-                    ),
-                itemList: pendingOrder_itemList,
-                itemsCount: itemsCount2,
-                investAmount: pendingOrder_investAmount,
-                period: pendingOrder_period,
-                planBr: pendingOrder_planBr,
+            return setData({
+                reference: setRef(
+                    pendingOrderItemsCount,
+                    pendingOrderPlanBr,
+                    pendingOrderPeriod,
+                    pendingOrderItemList
+                ),
+                itemList: pendingOrderItemList,
+                itemsCount: pendingOrderItemsCount,
+                investAmount: pendingOrderInvestAmount,
+                planBr: pendingOrderPlanBr,
+                periodEn: pendingOrderPeriod,
             });
         })();
+
+        // eslint-disable-next-line
     }, [plan, orderList, orderTotal, period]);
 
     const showTitle = () => (
@@ -117,21 +127,21 @@ export default function OrdersAndPay({
             {showSubtitle()}
             <OrdersTable
                 investAmount={investAmount}
-                itemList={orderList}
+                itemList={itemList}
                 itemsCount={itemsCount}
-                plan={plan}
-                period={period}
+                planBr={planBr}
+                period={periodEn}
                 removeVar={removeVar}
                 setNextPage={setNextPage}
                 handleCancel={handleCancel}
-                notesColor="purple"
             />
             <PayArea
-                plan={plan}
-                period={period}
+                reference={reference}
+                planBr={planBr}
+                period={periodEn}
                 handleCancel={handleCancel}
                 investAmount={investAmount}
-                itemList={orderList}
+                itemList={itemList}
                 itemsCount={itemsCount}
             />
         </section>
@@ -139,11 +149,12 @@ export default function OrdersAndPay({
 }
 
 // HELPERS
-function setRef(itemsCount, planBr, period) {
+function setRef(itemsCount, planBr, period, itemList) {
     return getServiceSKU({
         total: itemsCount,
         planBr,
         period,
+        itemList,
     });
 }
 // END HELPERS

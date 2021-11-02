@@ -14,8 +14,9 @@ const getPeriod = (ref) => {
     if (!ref) return false;
     const [, , per] = ref.split("-");
     if (per === "A") return "yearly";
+    if (per === "M") return "monthly";
 
-    return "monthly";
+    return "infinite"; // monthly, yearly, infinity duration. This latter is for services like SMS and upcoming ones like buy games
 };
 
 export default function useManageProServices() {

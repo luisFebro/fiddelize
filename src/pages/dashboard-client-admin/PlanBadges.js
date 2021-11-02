@@ -2,34 +2,32 @@ import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useData, { useBizData } from "init";
-import NotificationBadge from "components/badges/NotificationBadge";
 import RadiusBtn from "components/buttons/RadiusBtn";
+import { Load } from "components/code-splitting/LoadableComp";
 
 export default withRouter(PlanBadges);
+
+export const AsyncNotificationBadge = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "components/badges/NotificationBadge" /* webpackChunkName: "pending-order-notif-badge-lazy" */
+        ),
+});
 
 function PlanBadges({ history }) {
     // this export is required because this overrides the title in mobile testing...
     const { bizPlan } = useBizData();
 
+    const [itemsCount, loading] = useData(["pendingOrderItemsCount"], "global");
+    const gotPendingOrder = !loading && itemsCount > 0;
     const isFree = bizPlan === "gratis";
-
-    const [itemsCount, loading] = useData(["pendingOrder_itemsCount"]);
 
     const destiny = itemsCount ? "/pedidos/admin" : "/planos?cliente-admin=1";
 
-    const showUpdateBtn = () => (
-        <NotificationBadge
-            animationName=" "
-            badgeValue={itemsCount === "..." || !itemsCount ? 0 : totalServes}
-            badgeInvisible={false}
-            backgroundColor="var(--mainRed)"
-            borderColor="var(--mainWhite)"
-            top={-1}
-            right={30}
-            fontSize="15px"
-            padding="10px"
-        >
-            <div className="upgrade-btn position-relative">
+    const showFreeUpdateBtn = () => {
+        const updateFreeButton = (
+            <Fragment>
                 <RadiusBtn
                     title="atualizar"
                     onClick={() => history.push(destiny)}
@@ -42,38 +40,63 @@ function PlanBadges({ history }) {
                 <div className="crown-icon position-absolute">
                     <FontAwesomeIcon icon="crown" />
                 </div>
-            </div>
-        </NotificationBadge>
-    );
-
-    const needShowNotif = itemsCount > 0 && !isFree;
-    const displayProOrdersBtn = () =>
-        needShowNotif && (
-            <section
-                className="position-absolute"
-                style={{ top: -10, right: -90 }}
-            >
-                <NotificationBadge
-                    badgeValue={itemsCount || 0}
-                    badgeInvisible={false}
-                    backgroundColor="var(--mainRed)"
-                    borderColor="var(--mainWhite)"
-                    top={-1}
-                    right={15}
-                    fontSize="15px"
-                    padding="10px"
-                >
-                    <RadiusBtn
-                        title="pedidos"
-                        onClick={() => history.push(destiny)}
-                        backgroundColor="var(--themeSDark)"
-                        padding="5px 10px"
-                        fontSize="18px"
-                        color="var(--mainWhite)"
-                    />
-                </NotificationBadge>
-            </section>
+            </Fragment>
         );
+
+        if (!gotPendingOrder) {
+            return (
+                <div className="animated fadeInUp upgrade-btn position-relative">
+                    {updateFreeButton}
+                </div>
+            );
+        }
+
+        return (
+            <AsyncNotificationBadge
+                animationName=" "
+                badgeValue={itemsCount || 0}
+                badgeInvisible={false}
+                backgroundColor="var(--mainRed)"
+                borderColor="var(--mainWhite)"
+                top={-1}
+                right={30}
+                fontSize="15px"
+                padding="10px"
+            >
+                <div className="upgrade-btn position-relative">
+                    {updateFreeButton}
+                </div>
+            </AsyncNotificationBadge>
+        );
+    };
+
+    const displayPendingOrderBtn = () => (
+        <section
+            className="animated fadeInUp position-absolute"
+            style={{ top: -10, right: -80 }}
+        >
+            <AsyncNotificationBadge
+                animationName=" "
+                badgeValue={itemsCount || 0}
+                badgeInvisible={false}
+                backgroundColor="var(--mainRed)"
+                borderColor="var(--mainWhite)"
+                top={-1}
+                right={15}
+                fontSize="15px"
+                padding="10px"
+            >
+                <RadiusBtn
+                    title="pedido"
+                    onClick={() => history.push(destiny)}
+                    backgroundColor="var(--themeSDark)"
+                    padding="5px 10px"
+                    fontSize="18px"
+                    color="var(--mainWhite)"
+                />
+            </AsyncNotificationBadge>
+        </section>
+    );
 
     const showPlanTitle = () => (
         <section className={`${bizPlan} position-relative`}>
@@ -84,19 +107,19 @@ function PlanBadges({ history }) {
                 {!isFree && "plano "}
                 {bizPlan}
             </span>
-            {!loading && displayProOrdersBtn()}
+            {gotPendingOrder && !isFree && displayPendingOrderBtn()}
         </section>
     );
 
     return (
         <section className="plan-badge--root text-small text-white animated fadeIn">
-            {bizPlan !== "gratis" && (
+            {!isFree && (
                 <div className={`${bizPlan}-icon position-relative`}>
                     <FontAwesomeIcon icon="crown" />
                 </div>
             )}
             {showPlanTitle()}
-            {bizPlan === "gratis" && <Fragment>{showUpdateBtn()}</Fragment>}
+            {isFree && <Fragment>{showFreeUpdateBtn()}</Fragment>}
         </section>
     );
 }

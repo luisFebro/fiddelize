@@ -74,7 +74,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 
         if (isCreditsBadge) {
             setProRenewal({
-                ref: undefined,
                 itemList: [item],
                 period: innerPeriod,
                 planBr: currPlan,

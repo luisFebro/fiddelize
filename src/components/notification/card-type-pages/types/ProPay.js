@@ -14,18 +14,7 @@ import {
 } from "./DefaultRenderComps";
 // import useCount from 'hooks/useCount';
 
-function ProPay({
-    history,
-    brief,
-    role,
-    mainImg,
-    bizLogo,
-    bizName,
-    userName,
-    isWelcome = false,
-    subtype,
-    content,
-}) {
+function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
     const isFreeTrialEnd = subtype === "freeTrialEnd";
     const isProPayOnly = subtype === "proPay";
     const isWelcomeProPay = subtype === "welcomeProPay";
@@ -60,9 +49,8 @@ function ProPay({
             expiryDate,
             orders,
             planBr,
-            ref,
             period,
-        }).then((res) => {
+        }).then(() => {
             history.push("/pedidos/admin");
         });
     };

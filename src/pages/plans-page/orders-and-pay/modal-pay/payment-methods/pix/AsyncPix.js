@@ -33,19 +33,17 @@ export default function AsyncPix({ modalData }) {
             });
             if (!responseData) return;
 
-            setAlreadyPix(true);
-            handleCancel(); // remove current orders
+            await setAlreadyPix(true);
+            await handleCancel(); // remove current orders
         };
 
-        if (confirmedPix) {
-            runPix();
-        }
+        if (confirmedPix) runPix();
     }, [confirmedPix, alreadyPix, handleCancel, modalData]);
 
     const emailPayload = {
         payMethod: "pix",
         amount: modalData.itemAmount,
-        cliName: modalData.userName,
+        cliName: modalData.name,
         servDesc: modalData.itemDescription,
         reference: modalData.reference,
         bizName: modalData.bizName,
@@ -203,10 +201,12 @@ export default function AsyncPix({ modalData }) {
                 e a transação é cancelada.
             </p>
             <p>
-                - O projeto da Fiddelize é ainda mantido como{" "}
-                <strong>pessoa física</strong>, sem cadastro como pessoa
-                jurídica. Você é um dos primeiros clientes investindo no nosso
-                projeto, agradecemos seu apoio, {firstUserName}!
+                - A Fiddelize está trabalhando para integrar o sistema de
+                pagamento com <strong>emissão de nota fiscal</strong>. Também
+                estamos no processo de transição de pessoa física para{" "}
+                <strong>pessoa jurídica</strong> para atender todas exigências
+                do mercado. {firstUserName}, agradecemos seu apoio na jornada em
+                ajudar pessoas como você a conquistar mais clientes!
             </p>
             <p>
                 - Apesar da natureza do pagamento ser instantâneo, os serviços

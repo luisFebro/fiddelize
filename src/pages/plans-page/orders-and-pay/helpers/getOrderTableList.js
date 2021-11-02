@@ -13,7 +13,9 @@ const handleServiceName = ({ type, serv, plan, period, count }) => {
         })}${handleDesc({ plan, serv, period })}`;
 
     if (serv === "sms")
-        return `${convertToReal(count)} créditos de SMS - sem mensalidade`;
+        return `${convertToReal(
+            count
+        )} créditos de SMS - sem prazo de expiração`;
 
     if (serv === "Novvos Clientes")
         return `Novvos Clientes com +${convertToReal(

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { readUser } from "api/frequent";
 import { Link } from "react-router-dom";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
@@ -25,7 +25,7 @@ const AsyncPayMethods = Load({
 export default function PayArea({
     handleCancel,
     reference,
-    plan,
+    planBr,
     period = "yearly",
     investAmount,
     itemsCount,
@@ -78,15 +78,11 @@ export default function PayArea({
                 let thisCPF = res.cpf;
                 if (thisCPF === "111.111.111-00") thisCPF = "319.683.234-14"; // for testing only
 
-                const desc = `Plano ${plan} ${handlePeriod()} com ${
+                const desc = `Plano ${planBr} ${handlePeriod()} com ${
                     itemsCount || ""
                 } serviço${
                     itemsCount > 1 ? "s" : ""
                 } no valor total de: R$ ${investAmount}`;
-                // if(itemsCount > planServiceTotal) {
-                //     const leftover = serviceTotal - planServiceTotal;
-                //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `
-                // }
                 const thisSenderCPF = getOnlyNumbersFromStr(thisCPF);
                 const thisSenderAreaCode = convertPhoneStrToInt(phone, {
                     dddOnly: true,
@@ -114,9 +110,10 @@ export default function PayArea({
                 }));
             }
         );
-    }, [plan, itemsCount, phone, investAmount, alreadyReadUser]);
+    }, [planBr, itemsCount, phone, investAmount, alreadyReadUser]);
 
     const modalData = {
+        userId,
         name,
         firstName,
         senderCPF,
@@ -136,39 +133,39 @@ export default function PayArea({
         referrer,
     };
 
-    const showCTAs = () =>
-        !loading &&
-        startedPagseguro && (
-            <section className="container-center-col">
-                <Link
-                    to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
-                    onClick={() => setRun("runName", "goDash", uify)}
-                >
-                    <ButtonMulti
-                        title="VOLTAR MAIS TARDE"
-                        onClick={null}
-                        variant="link"
-                        color="var(--themeP)"
-                        underline
-                        margin="0 16px 50px"
-                        zIndex={-1}
-                    />
-                </Link>
-            </section>
-        );
+    const showComeBackLaterBtn = () => (
+        <section className="container-center-col">
+            <Link
+                to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
+                onClick={() => setRun("runName", "goDash", uify)}
+            >
+                <ButtonMulti
+                    title="VOLTAR MAIS TARDE"
+                    onClick={null}
+                    variant="link"
+                    color="var(--themeP)"
+                    underline
+                    margin="0 16px 50px"
+                    zIndex={-1}
+                />
+            </Link>
+        </section>
+    );
 
     return (
         <section className="my-5">
-            {!loading && startedPagseguro && !error && (
-                <AsyncPayMethods modalData={modalData} />
+            {!loading && startedPagseguro && (
+                <Fragment>
+                    {!error && <AsyncPayMethods modalData={modalData} />}
+                    {showComeBackLaterBtn()}
+                </Fragment>
             )}
-            {showCTAs()}
             {loading && (
                 <p
                     className="font-weight-bold text-subtitle text-purple text-center"
                     style={{ margin: "100px 0" }}
                 >
-                    Preparando tudo...
+                    Preparando provedores...
                 </p>
             )}
             {error && <ShowError />}

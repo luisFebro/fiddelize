@@ -3,6 +3,7 @@ import localforage from "localforage";
 import isObj from "utils/isObj";
 
 const allowedStores = [
+    "global",
     "global_vars",
     "user",
     "audios",
@@ -12,11 +13,14 @@ const allowedStores = [
     "pre_register",
 ];
 
-const variablesStore = (storeName = "global_vars") =>
-    localforage.createInstance({
+const variablesStore = (storeName = "global_vars") => {
+    if (storeName === "global") storeName = "global_vars";
+
+    return localforage.createInstance({
         name: `fiddelize-${storeName}`,
         storeName,
     });
+};
 
 export default function getVar(key, options = {}) {
     const storeName = handleStoreName(options);

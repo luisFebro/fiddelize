@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import pricing from "utils/biz/pricing";
 import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
+import useBackColor from "hooks/useBackColor";
+import useDetectScrollSingle from "hooks/scroll/useDetectScrollSingle";
+import { Load } from "components/code-splitting/LoadableComp";
+import useDetectScrollUp from "hooks/scroll/useDetectScrollUp";
+import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
 import { SilverBtn, BronzeBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -10,11 +15,6 @@ import {
     TotalInvest,
     PeriodSelection,
 } from "./comps/MainComps";
-import useBackColor from "hooks/useBackColor";
-import useDetectScrollSingle from "hooks/scroll/useDetectScrollSingle";
-import { Load } from "components/code-splitting/LoadableComp";
-import useDetectScrollUp from "hooks/scroll/useDetectScrollUp";
-import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
 
 // sessions
 import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";

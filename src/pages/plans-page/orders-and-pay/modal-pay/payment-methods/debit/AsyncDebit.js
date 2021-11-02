@@ -1,9 +1,9 @@
 import { useState } from "react";
+import useSendEmail from "hooks/email/useSendEmail";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 // comps
 import BankList from "./bank-list/BankList"; // const isSmall = window.Helper.isSmallScreen();
 import LinkBankDebit from "./LinkBankDebit";
-import useSendEmail from "../../../../../../hooks/email/useSendEmail";
 
 /* IMPORTANT NOTES
 only works in the production mode. sandbox gives error.
@@ -31,7 +31,7 @@ export default function AsyncDebit({ modalData }) {
     const emailPayload = {
         payMethod: "débito bancário",
         amount: modalData.itemAmount,
-        cliName: modalData.userName,
+        cliName: modalData.name,
         servDesc: modalData.itemDescription,
         reference: modalData.reference,
         bizName: modalData.bizName,

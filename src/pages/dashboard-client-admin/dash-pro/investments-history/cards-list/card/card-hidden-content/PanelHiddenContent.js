@@ -51,18 +51,6 @@ function PanelHiddenContent({ history, data }) {
 
     const styles = getStyles();
 
-    const displayCopyBtn = () => (
-        <section className="d-flex justify-content-end my-3">
-            <ButtonFab
-                size="medium"
-                title="Copiar"
-                onClick={handleCopy}
-                backgroundColor="var(--themeSDark--default)"
-                variant="extended"
-            />
-        </section>
-    );
-
     const handleCopy = () => {
         setCopy(true);
         showToast("Linha Copiada! Use no App do seu banco favorito.", {
@@ -233,33 +221,38 @@ function PanelHiddenContent({ history, data }) {
                     period={thisPeriod}
                     notesColor="white"
                 />
-                {isRenewable && (
-                    <section className="my-5 container-center">
-                        <ButtonFab
-                            size="medium"
-                            title={
-                                loadingOrderPage
-                                    ? "Carregando..."
-                                    : "Renovar Plano"
-                            }
-                            onClick={() => {
-                                setLoadingOrderPage(true);
-                                setProRenewal({
-                                    ref: reference,
-                                    itemList: orders,
-                                    investAmount,
-                                    planBr: thisPlan,
-                                    period: thisPeriod,
-                                }).then(() => {
-                                    setLoadingOrderPage(false);
-                                    history.push("/pedidos/admin");
-                                });
-                            }}
-                            backgroundColor="var(--themeSDark--default)"
-                            variant="extended"
-                        />
-                    </section>
-                )}
+                <section className="my-5 container-center">
+                    <ButtonFab
+                        size="medium"
+                        title={
+                            loadingOrderPage
+                                ? "Carregando..."
+                                : "Renovar Pedido"
+                        }
+                        onClick={() => {
+                            if (!isRenewable)
+                                return showToast(
+                                    "Pedido precisa está pago para renovar."
+                                );
+                            setLoadingOrderPage(true);
+                            setProRenewal({
+                                itemList: orders,
+                                investAmount,
+                                planBr: thisPlan,
+                                period: thisPeriod,
+                            }).then(() => {
+                                setLoadingOrderPage(false);
+                                history.push("/pedidos/admin");
+                            });
+                        }}
+                        backgroundColor={
+                            isRenewable
+                                ? "var(--themeSDark--default)"
+                                : "var(--themeSDark--white)"
+                        }
+                        variant="extended"
+                    />
+                </section>
             </Fragment>
         );
     };
@@ -285,6 +278,19 @@ function getPlanCodeBr(code) {
 export default withRouter(PanelHiddenContent);
 
 /* ARCHIVES
+const displayCopyBtn = () => (
+    <section className="d-flex justify-content-end my-3">
+        <ButtonFab
+            size="medium"
+            title="Copiar"
+            onClick={handleCopy}
+            backgroundColor="var(--themeSDark--default)"
+            variant="extended"
+        />
+    </section>
+);
+
+
 <TextField
     multiline
     rows={8}

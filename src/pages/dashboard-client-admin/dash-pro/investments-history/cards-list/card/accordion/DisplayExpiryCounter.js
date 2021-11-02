@@ -9,10 +9,9 @@ import setProRenewal from "utils/biz/setProRenewal";
 
 const handleRenewalClick = ({ panel, history }) => {
     async function setAllVars() {
-        const { reference, data } = panel;
+        const { data } = panel;
 
         await setProRenewal({
-            ref: reference,
             itemList: data.itemList,
             investAmount: data.investAmount,
             planBr: data.chosenPlan,
@@ -91,7 +90,7 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         <section
             className="position-absolute text-normal text-shadow font-weight-bold"
             style={{
-                right: 50,
+                right: 45,
                 top: 70,
                 color: "var(--lightGrey)",
             }}

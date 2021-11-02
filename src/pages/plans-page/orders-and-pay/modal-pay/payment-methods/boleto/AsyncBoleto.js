@@ -88,14 +88,14 @@ export default function AsyncBoleto({ modalData = {} }) {
 
             if (!responseData) return;
 
-            setData((prev) => ({
+            await setData((prev) => ({
                 ...prev,
                 ...responseData,
                 dueDate: getSlashDayMonthYear(responseData.dueDate),
                 loading: false,
             }));
 
-            handleCancel(); // remove current orders
+            await handleCancel(); // remove current orders
         })();
     }, []);
 

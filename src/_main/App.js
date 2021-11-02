@@ -8,7 +8,6 @@ import useOffline from "hooks/useOffline";
 import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
-import { updateExpiredPushSub } from "components/pwa-push-notification/subscription";
 import checkValidSession from "auth/checkValidSession";
 import useGlobalApp from "./useGlobalApp.js";
 import "utils/globalHelpers";
@@ -38,15 +37,12 @@ export default function App() {
             ReactGA.pageview(window.location.pathname + window.location.search);
         };
 
-        const checkExpPushSub = async () =>
-            await updateExpiredPushSub()
-                .then(console.log)
-                .catch((err) => console.log(`push sub rejected: ${err}`));
+        // const checkExpPushSub = async () =>
+        //     await updateExpiredPushSub()
+        //         .then(console.log)
+        //         .catch((err) => console.log(`push sub rejected: ${err}`));
 
-        if (IS_PROD) {
-            deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
-            deferJsOnload(checkExpPushSub, "func", { delay: 3000 });
-        }
+        if (IS_PROD) deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
 
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
