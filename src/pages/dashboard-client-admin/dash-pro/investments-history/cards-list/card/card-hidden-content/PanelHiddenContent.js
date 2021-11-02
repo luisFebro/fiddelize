@@ -217,9 +217,8 @@ function PanelHiddenContent({ history, data }) {
                     needGenerateList
                     orders={orders}
                     loading={!orders}
-                    plan={thisPlan}
+                    planBr={thisPlan}
                     period={thisPeriod}
-                    notesColor="white"
                 />
                 <section className="my-5 container-center">
                     <ButtonFab
