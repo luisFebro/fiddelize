@@ -1,3 +1,4 @@
+// TEST1
 const IS_PROD = process.env.NODE_ENV === "production";
 // ROOT DOMAIN
 
