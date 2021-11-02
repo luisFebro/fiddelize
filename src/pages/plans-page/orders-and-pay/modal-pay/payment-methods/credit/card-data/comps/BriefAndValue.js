@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import SwitchBtn from "../../../../../../../../components/buttons/material-ui/SwitchBtn";
-import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
-import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
+import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
+import convertToReal from "utils/numbers/convertToReal";
+import { encryptCreditCard } from "utils/security/creditCard";
+import handleChange from "utils/form/use-state/handleChange";
 import { treatBoolStatus } from "api/trigger";
-import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import showToast from "components/toasts";
+import getAPI, { removeOneClickInvest } from "api";
 import createCardToken, { getValidationData } from "../helpers/createCardToken";
-import showToast from "../../../../../../../../components/toasts";
 import getSenderHash from "../../../../../helpers/pagseguro/getSenderHash";
-import { encryptCreditCard } from "../../../../../../../../utils/security/creditCard";
 import goFinishCheckout from "../../../../../helpers/pagseguro/goFinishCheckout";
 import getInstallments, {
     MAX_INSTALLMENT_NO_INTEREST,
 } from "../helpers/getInstallments";
-import getAPI, { removeOneClickInvest } from "api";
 
 const getEncryptedCC = async (mainData) => {
     const { month: expirationMonth, year: expirationYear } = getValidationData(
@@ -316,8 +316,8 @@ export default function BriefAndValue({
             return;
         }
         await setData({ ...data, loadingInvest: false });
-        setCurrComp("successfulCCPay");
-        handleCancel(); // remove current orders
+        await setCurrComp("successfulCCPay");
+        await handleCancel(); // remove current orders
     };
 
     const showFinalInvestBtn = () => (

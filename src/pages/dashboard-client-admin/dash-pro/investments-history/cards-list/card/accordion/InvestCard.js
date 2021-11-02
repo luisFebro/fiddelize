@@ -6,11 +6,11 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { isScheduledDate } from "utils/dates/dateFns";
+import DisplayExpiryCounter from "./DisplayExpiryCounter";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
-import DisplayExpiryCounter from "./DisplayExpiryCounter";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -194,7 +194,7 @@ export default function InvestCard({
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const { planDueDate, renewal } = panel.data;
+        const { planDueDate } = panel.data;
         const daysLeft = !planDueDate ? null : getDatesCountdown(planDueDate);
 
         const props = {

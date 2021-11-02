@@ -57,12 +57,7 @@ export default function AsyncBoleto({ modalData = {} }) {
     });
     const { paymentLink, barcode, dueDate, loading, error } = data;
 
-    const {
-        itemDescription,
-        itemAmount,
-        userFirstName,
-        handleCancel,
-    } = modalData;
+    const { itemDescription, itemAmount, firstName, handleCancel } = modalData;
 
     const styles = getStyles();
 
@@ -93,21 +88,21 @@ export default function AsyncBoleto({ modalData = {} }) {
 
             if (!responseData) return;
 
-            setData((prev) => ({
+            await setData((prev) => ({
                 ...prev,
                 ...responseData,
                 dueDate: getSlashDayMonthYear(responseData.dueDate),
                 loading: false,
             }));
 
-            handleCancel(); // remove current orders
+            await handleCancel(); // remove current orders
         })();
     }, []);
 
     const emailPayload = {
         payMethod: "boleto",
         amount: modalData.itemAmount,
-        cliName: modalData.userName,
+        cliName: modalData.name,
         servDesc: modalData.itemDescription,
         reference: modalData.reference,
         bizName: modalData.bizName,
@@ -239,7 +234,7 @@ export default function AsyncBoleto({ modalData = {} }) {
             className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left"
         >
             <span className="text-em-1-5">Boleto Automático</span>
-            <br />É pra já, {userFirstName}!
+            <br />É pra já, {firstName}!
             <br />
             Seu Boleto está sendo feito agora! Um momento, carregando...
         </section>

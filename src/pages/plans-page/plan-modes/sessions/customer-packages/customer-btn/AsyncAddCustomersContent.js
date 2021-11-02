@@ -3,31 +3,30 @@ import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
 import setProRenewal from "utils/biz/setProRenewal";
-import NotesSwitcher from "components/buttons/NotesSwitcher";
 import { PeriodSelection } from "../../../comps/MainComps";
 import Simulator from "./Simulator";
+// import NotesSwitcher from "components/buttons/NotesSwitcher";
 
 export default withRouter(AsyncAddCustomersContent);
 
 function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
-    let {
+    let { period } = modalData;
+    const {
         handleItem,
-        period,
         // creditsBadge
         isCreditsBadge,
         currPlan,
-        expiryDate,
         // end creditsBadge
     } = modalData;
 
     const [data, setData] = useState({
         totalPackage: 0,
-        totalCustomers: 0,
+        totalCount: 0,
         inv: 0,
         innerPeriod: "monthly",
         // SKU: "",
     });
-    const { inv, totalPackage, totalCustomers, innerPeriod } = data;
+    const { inv, totalCount, innerPeriod } = data;
 
     period = period || innerPeriod;
 
@@ -61,9 +60,11 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         const isFunc = typeof handleItem === "function";
 
         const item = {
+            range: "selected",
+            expirable: true,
             name: "Novvos Clientes",
-            count: totalCustomers,
-            amount: inv,
+            count: Number(totalCount),
+            amount: Number(inv),
         };
 
         if (isFunc) {
@@ -73,64 +74,15 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 
         if (isCreditsBadge) {
             setProRenewal({
-                expiryDate,
-                orderList: [{ "Novvos Clientes": item }],
+                itemList: [item],
                 period: innerPeriod,
                 planBr: currPlan,
-                ref: undefined,
                 investAmount: inv,
-                isSingleRenewal: true,
             }).then(() => {
                 history.push("/pedidos/admin");
             });
         }
     };
-
-    const notes = (
-        <section className="my-3 text-left mx-3">
-            <p className="text-small text-left text-purple mt-3">
-                - Os créditos são <strong>liberados automaticamente</strong>{" "}
-                após a aprovação do pagamento.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Caso ainda possua créditos válidos anteriores, o sistema da
-                Fiddelize <strong>acumula esses créditos com os atuais</strong>.
-                O <strong>tempo de validade</strong> é acumulado da mesma forma
-                também.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Quando expira seu tempo de uso, os seus{" "}
-                <strong>créditos restantes são zerados</strong>. Você é
-                notificado <strong>5 dias</strong> antes do prazo expirar.
-                Renovando o serviço, você extende o tempo de uso dos créditos.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Uma vez cadastrado, seus clientes usam o{" "}
-                <strong>app sem restrições e sem anúncios</strong> com app
-                personalizado com sua marca, mesmo quando seu plano expirar. O
-                objetivo da Fiddelize é entregar a melhor esperiência!
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Note, porém, que após o <strong>término do seu plano</strong>,
-                o mês de manutenção é iniciado e o prazo de expiração das moedas
-                de seus clientes é ativada automaticamente para 30 dias. Todos
-                seus clientes são notificados que precisam usar as moedas em até
-                30 dias antes de expirá-las 100%. Na renovação seu plano, o mês
-                de manutenção é finalizado e o prazo desativado.
-            </p>
-        </section>
-    );
-
-    const showNotes = () => (
-        <NotesSwitcher
-            color="text-purple"
-            btnStyle={{ top: -35, right: -80 }}
-            btnSize="small"
-            notes={notes}
-            rootClassName="mx-3"
-            shadowTitle={undefined}
-        />
-    );
 
     const showCTA = () => (
         <section className="mx-3 my-5 container-center">
@@ -180,13 +132,59 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
                 currPlan={currPlan}
                 animaDisabled
             />
-            {showNotes()}
             {showCTA()}
         </section>
     );
 }
 
 /* ARCHIVED
+const notes = (
+    <section className="text-purple font-site text-em-1-2 my-3 text-left mx-3">
+        <p className="text-left text-purple mt-3">
+            - Uma vez cadastrado, seus clientes usam o{" "}
+            <strong>app sem restrições ou anúncios</strong> com app
+            personalizado com sua marca, mesmo quando seu plano expirar.
+        </p>
+        <p className="text-left mt-3">
+            - Note, porém, que após o <strong>término do seu plano</strong>,
+            o mês de manutenção é iniciado e o prazo de expiração das moedas
+            de seus clientes é ativada automaticamente. Todos
+            seus clientes são notificados que precisam usar as moedas em até
+            30 dias antes de expirá-las 100%. Renovando seu plano, o mês de manutenção é desativado.
+        </p>
+    </section>
+);
+
+const showNotes = () => (
+    <NotesSwitcher
+        color="text-purple"
+        btnStyle={{ top: -35, right: -80 }}
+        btnSize="small"
+        notes={notes}
+        rootClassName="mx-3"
+        shadowTitle={undefined}
+    />
+);
+
+{period === "yearly" && (
+    <p className="text-left mt-3">
+        No plano anual, os créditos do serviço Novvos clientes são creditados mensalmente na mesma quantia contratada e no mesmo dia da renovação/ativação do plano.
+    </p>
+)}
+
+<p className="text-small text-left text-purple mt-3">
+    - Caso ainda possua créditos válidos anteriores, o sistema da
+    Fiddelize <strong>acumula esses créditos com os atuais</strong>.
+    O <strong>tempo de validade</strong> é acumulado da mesma forma
+    também.
+</p>
+<p className="text-small text-left text-purple mt-3">
+    - Quando expira seu tempo de uso, os seus{" "}
+    <strong>créditos restantes são zerados</strong>. Você é
+    notificado <strong>5 dias</strong> antes do prazo expirar.
+    Renovando o serviço, você extende o tempo de uso dos créditos.
+</p>
+
 
 <p className="text-small text-left text-purple mt-3">
     - se um cliente ficar{" "}

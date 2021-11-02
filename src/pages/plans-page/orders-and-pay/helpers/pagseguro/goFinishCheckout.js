@@ -1,5 +1,5 @@
 import getAPI, { finishCheckout } from "api";
-import getFilterDate from "../../../../../utils/dates/getFilterDate";
+import getFilterDate from "utils/dates/getFilterDate";
 
 const filter = getFilterDate();
 
@@ -22,12 +22,8 @@ export default async function goFinishCheckout(props) {
         reference,
         itemDescription,
         itemAmount,
-        ordersStatement,
-        renewalCurrDays,
-        isSingleRenewal,
+        itemList,
         firstDueDate,
-        renewalDaysLeft,
-        renewalReference,
         referrer,
     } = modalData;
 
@@ -43,7 +39,7 @@ export default async function goFinishCheckout(props) {
     let body = {
         paymentMethod: selectedMethod,
         senderHash,
-        reference,
+        reference, // from v4.70 onwards, the renewal is completely created in the backend by identify the same reference.
         itemId: reference,
         senderName: userName,
         senderEmail: sandboxMode
@@ -57,12 +53,7 @@ export default async function goFinishCheckout(props) {
             .replace(/ç/gi, "c")
             .replace("null", "pro")}`,
         filter,
-        ordersStatement,
-        // renewal
-        renewalCurrDays,
-        isSingleRenewal,
-        renewalDaysLeft,
-        renewalReference,
+        itemList,
         // bank debit
         bankName: isBankDebit ? props.bankName : undefined,
         // boleto
@@ -96,12 +87,7 @@ export default async function goFinishCheckout(props) {
             senderCPF,
             filter,
             itemAmount1: testValue || itemAmount,
-            ordersStatement,
-            // renewal
-            renewalCurrDays,
-            isSingleRenewal,
-            renewalDaysLeft,
-            renewalReference,
+            itemList,
             // split
             referrer,
         };
@@ -116,21 +102,3 @@ export default async function goFinishCheckout(props) {
         timeout: 60000,
     });
 }
-
-/* ARCHIVES
-trigger: renewalReady &&
-         senderCPF &&
-         ordersStatement &&
-         senderHash &&
-         selectedMethod &&
-         userName !== "...",
-
-const handleItemAmount = () => {
-    return itemAmount;
-    const isInstallment = Number(props.installmentQuantity) > 1;
-    if(isCreditCard && isInstallment) {
-        return ;
-    }
-
-}
- */

@@ -1,8 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
-import FlipCreditCard from "../../../../../../../components/cards/flip-credit-card/FlipCreditCard";
-import handleChange from "../../../../../../../utils/form/use-state/handleChange";
-import cardNumberMask from "../../../../../../../utils/validation/masks/cardNumberMask";
-import cardExpiresMask from "../../../../../../../utils/validation/masks/cardExpiresMask";
+import FlipCreditCard from "components/cards/flip-credit-card/FlipCreditCard";
+import handleChange from "utils/form/use-state/handleChange";
+import cardNumberMask from "utils/validation/masks/cardNumberMask";
+import cardExpiresMask from "utils/validation/masks/cardExpiresMask";
 import useBrand from "./hooks/useBrand";
 // comps
 import CardNumber from "./comps/CardNumber";
@@ -50,8 +50,8 @@ export default function CardData({
         isOneClickRemoved: false, // when user click on "excluir" btn
         hideCard: false, // for successful transacion only
     });
-    let {
-        cardNumber,
+
+    const {
         maxCardNumberLength,
         cardFullName,
         cardBrand,
@@ -64,6 +64,7 @@ export default function CardData({
         isOneClickRemoved,
         hideCard,
     } = data;
+    let { cardNumber } = data;
 
     const isOneClickInvest = !isOneClickRemoved && Boolean(oneClickInvest);
     useEffect(() => {

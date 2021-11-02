@@ -1,38 +1,27 @@
+// NEED UPDATE HERE
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EventIcon from "@material-ui/icons/Event";
 import { withRouter } from "react-router-dom";
-import { setVar } from "init/var";
-import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
-import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
+import { isScheduledDate } from "utils/dates/dateFns";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import setProRenewal from "utils/biz/setProRenewal";
 
 const handleRenewalClick = ({ panel, history }) => {
-    const { reference } = panel;
-    async function setAllVars(panel) {
-        const readyVar = await Promise.all([
-            setVar({ orders_clientAdmin: panel.data.ordersStatement }),
-            setVar({
-                totalMoney_clientAdmin: panel.data.investAmount,
-            }),
-            setVar({
-                planPeriod_clientAdmin:
-                    panel.data.chosenPeriod === "Anual" ? "yearly" : "monthly",
-            }),
-            setVar({
-                ordersPlan_clientAdmin: panel.data.chosenPlan,
-            }),
-            setVar({
-                renewalDaysLeft_clientAdmin: 0,
-            }),
-            setVar({
-                renewalRef_clientAdmin: reference,
-            }),
-        ]);
+    async function setAllVars() {
+        const { data } = panel;
 
-        history.push("/pedidos/admin");
+        await setProRenewal({
+            itemList: data.itemList,
+            investAmount: data.investAmount,
+            planBr: data.chosenPlan,
+            period: data.chosenPeriod === "Anual" ? "yearly" : "monthly",
+        });
+
+        return history.push("/pedidos/admin");
     }
 
-    setAllVars(panel);
+    setAllVars();
 };
 
 const getStyles = () => ({
@@ -46,7 +35,7 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
     const styles = getStyles();
 
     const {
-        ordersStatement,
+        itemList,
         transactionStatus,
         reference,
         payDueDate,
@@ -101,7 +90,7 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         <section
             className="position-absolute text-normal text-shadow font-weight-bold"
             style={{
-                right: 50,
+                right: 45,
                 top: 70,
                 color: "var(--lightGrey)",
             }}
@@ -162,8 +151,8 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         />
     );
 
-    const keys = ordersStatement && Object.keys(ordersStatement);
-    const isUnlimitedService = ordersStatement && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
+    const keys = itemList && Object.keys(itemList);
+    const isUnlimitedService = itemList && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
 
     return (
         <Fragment>

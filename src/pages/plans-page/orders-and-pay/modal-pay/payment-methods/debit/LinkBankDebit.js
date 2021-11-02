@@ -1,8 +1,8 @@
 import { useEffect, useState, Fragment } from "react";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import RedirectLink from "components/RedirectLink";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
 import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import RedirectLink from "../../../../../../components/RedirectLink";
 
 export default function LinkBankDebit({ selectedBank, modalData }) {
     const [data, setData] = useState({
@@ -42,14 +42,14 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                 }));
             }
 
-            setData((prev) => ({
+            await setData((prev) => ({
                 ...prev,
                 paymentLink: payLink,
                 loading: false,
                 error: false,
             }));
 
-            handleCancel(); // remove current orders
+            await handleCancel(); // remove current orders
         })();
     }, [selectedBank]);
 

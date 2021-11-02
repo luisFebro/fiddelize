@@ -49,7 +49,6 @@ export default function AddClientsToCart({
             }));
         }
 
-        // WARNING: I added orderList here because when removing items, all of them desapeers, except when Update the array
         // eslint-disable-next-line
     }, [gotMembers, gotClients]);
 

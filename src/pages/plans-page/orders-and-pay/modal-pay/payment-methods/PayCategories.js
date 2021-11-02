@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import CarouselCard from "../../../../../components/carousels/CarouselCard";
+import CarouselCard from "components/carousels/CarouselCard";
 import PayMethodsBtn from "./PayMethodsBtn";
 
 const thisData = [

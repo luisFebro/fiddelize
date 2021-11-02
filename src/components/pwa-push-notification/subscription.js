@@ -51,6 +51,8 @@ async function sendSubscription(subscription, params = {}) {
 }
 
 // this method make sure push sub is valid and remove any expiration
+// unfortunately, this method if the user suddently switch and interrupt the method can change the sub and not save the reference disabling notifications
+// For now, it is okay not update since browsers tend not having expiring date, but for future attempts: a) try to update in a very steady page where the user probably won't make any blantly switch pages; b) or insert that in notificaton settings directly.
 export async function updateExpiredPushSub() {
     const registration = await navigator.serviceWorker.ready;
     if (!registration) return Promise.reject("SW not available");

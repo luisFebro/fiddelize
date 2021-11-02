@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { ShowPayWatermarks } from "../../comps/GlobalComps";
-import CardData from "./card-data/CardData";
 import useAPI, { checkOneClickInvest } from "api/useAPI";
-import { decryptCreditCard } from "../../../../../../utils/security/creditCard";
+import { decryptCreditCard } from "utils/security/creditCard";
+import useSendEmail from "hooks/email/useSendEmail";
+import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import "./_AsyncCredit.scss";
-import useSendEmail from "../../../../../../hooks/email/useSendEmail";
+import CardData from "./card-data/CardData";
 
 export default function AsyncCredit({ modalData }) {
     const [watermark, setWatermark] = useState(true);
@@ -32,7 +32,7 @@ export default function AsyncCredit({ modalData }) {
     const emailPayload = {
         payMethod: "cartão de crédito",
         amount: modalData.itemAmount,
-        cliName: modalData.userName,
+        cliName: modalData.name,
         servDesc: modalData.itemDescription,
         reference: modalData.reference,
         bizName: modalData.bizName,

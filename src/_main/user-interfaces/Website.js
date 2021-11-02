@@ -28,6 +28,7 @@ import {
     AsyncDashboardClientAdmin,
     AsyncOrdersAndPay,
     AsyncAppSharer,
+    AsyncPlansPage,
     // end cli-admin
     AsyncAccessPassword,
     AsyncNewPassword,
@@ -137,6 +138,7 @@ function Website({ location }) {
                     component={AsyncAppSharer}
                 />
                 <Route path="/app/preview" component={AsyncClientAppPreview} />
+                <Route path="/planos" exact component={AsyncPlansPage} />
                 <PrivateRouteClientAdm
                     path="/:bizLinkName/cliente-admin/painel-de-controle"
                     exact

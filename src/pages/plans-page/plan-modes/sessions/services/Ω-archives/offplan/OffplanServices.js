@@ -62,7 +62,7 @@
 //     const selectedServices = useRef(new Map()).current;
 //     useEffect(() => {
 //         if (!selectedServices.has(currService) && isChecked) {
-//             // const targetService = getServices("offplan").find(
+//             // const targetService = getSdsadsaervices("offplan").find(
 //                 (serv) => serv.title === currService
 //             );
 

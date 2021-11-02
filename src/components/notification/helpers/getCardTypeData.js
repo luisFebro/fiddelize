@@ -103,7 +103,7 @@ export default function getCardTypeData(cardType, options = {}) {
 
             if (subtype === "welcomeProPay") {
                 title = "Clube Pro";
-                brief = `Boas vindas do Clube Pro da Fiddelize! Os serviços Pro contratados já estão disponíveis. O seu pagamento foi aprovado hoje - ${
+                brief = `Bem-vind${genderLetter} ao Clube Pro da Fiddelize! Os serviços Pro contratados já estão disponíveis. O seu pagamento foi aprovado hoje - ${
                     approvalDate && formatDMY(new Date(approvalDate))
                 }.`;
                 circularImg = "/img/icons/notif/crown.svg";

@@ -1,26 +1,23 @@
 import { Fragment, useState } from "react";
-import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 import PropTypes from "prop-types";
-import useRun from "global-data/ui";
 import TextField from "@material-ui/core/TextField";
 import { withRouter } from "react-router-dom";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
-import copyTextToClipboard from "../../../../../../../utils/document/copyTextToClipboard";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import LoadableVisible from "components/code-splitting/LoadableVisible";
+import copyTextToClipboard from "utils/document/copyTextToClipboard";
+import setProRenewal from "utils/biz/setProRenewal";
+import showToast from "components/toasts";
+import { isScheduledDate } from "utils/dates/dateFns";
+import extractStrData from "utils/string/extractStrData";
 
-import showToast from "../../../../../../../components/toasts";
-import { setVar } from "init/var";
-import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
-import extractStrData from "../../../../../../../utils/string/extractStrData";
-
-const AsyncOrdersTableContent = Load({
+const AsyncOrdersTableContent = LoadableVisible({
     loader: () =>
         import(
-            "../../../../../../../pages/plans-page/orders-and-pay/OrdersTableContent" /* webpackChunkName: "orders-table-content-comp-lazy" */
+            "pages/plans-page/orders-and-pay/OrdersTableContent" /* webpackChunkName: "orders-table-content-comp-lazy" */
         ),
 });
 
-const AsyncPixDetails = Load({
+const AsyncPixDetails = LoadableVisible({
     loader: () =>
         import(
             "./pix-details-pay/AsyncPixDetails" /* webpackChunkName: "pix-details-pay-comp-lazy" */
@@ -48,25 +45,11 @@ function PanelHiddenContent({ history, data }) {
     const [copy, setCopy] = useState(false);
     const [loadingOrderPage, setLoadingOrderPage] = useState(false);
 
-    const { runArray } = useRun();
-
     const isDuePay =
         !isScheduledDate(data.payDueDate, { isDashed: true }) &&
         data.transactionStatus !== "pago"; // for boleto
 
     const styles = getStyles();
-
-    const displayCopyBtn = () => (
-        <section className="d-flex justify-content-end my-3">
-            <ButtonFab
-                size="medium"
-                title="Copiar"
-                onClick={handleCopy}
-                backgroundColor="var(--themeSDark--default)"
-                variant="extended"
-            />
-        </section>
-    );
 
     const handleCopy = () => {
         setCopy(true);
@@ -180,7 +163,7 @@ function PanelHiddenContent({ history, data }) {
         <AsyncPixDetails itemAmount={data.investAmount} />
     );
 
-    const showPayDetails = (data) => {
+    const showPayDetails = () => {
         const payMethod = data.paymentMethod;
 
         const isBoleto = payMethod === "boleto";
@@ -207,19 +190,9 @@ function PanelHiddenContent({ history, data }) {
         );
     };
 
-    const showInvestExtract = (data) => {
-        const isOpen = runArray.includes(data._id); // only when the card is open is loaded.
-
-        const handlePlanCode = (code) => {
-            if (code === "OU") return "ouro";
-            if (code === "PR") return "prata";
-            if (code === "BR") return "bronze";
-        };
-
-        const daysLeft = getDatesCountdown(data.planDueDate);
-
+    const showInvestExtract = () => {
         const {
-            ordersStatement: orders,
+            itemList: orders,
             investAmount,
             reference,
             renewal,
@@ -230,85 +203,94 @@ function PanelHiddenContent({ history, data }) {
             transactionStatus !== "pendente" &&
             (renewal && renewal.priorRef) !== reference;
         const referenceArray = reference && reference.split("-");
-        const [planCode, qtt, period] = referenceArray;
+        const [planCode, , period] = referenceArray;
 
-        const thisPlan = handlePlanCode(planCode);
+        const thisPlan = getPlanCodeBr(planCode);
         const thisPeriod = period === "A" ? "yearly" : "monthly";
 
         return (
-            isOpen && (
-                <Fragment>
-                    <h2 className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
-                        Extrato
-                    </h2>
-                    <AsyncOrdersTableContent
-                        needGenerateList
-                        orders={orders}
-                        loading={!orders}
-                        plan={thisPlan}
-                        period={thisPeriod}
-                        notesColor="white"
+            <Fragment>
+                <h2 className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
+                    Extrato
+                </h2>
+                <AsyncOrdersTableContent
+                    needGenerateList
+                    orders={orders}
+                    loading={!orders}
+                    plan={thisPlan}
+                    period={thisPeriod}
+                    notesColor="white"
+                />
+                <section className="my-5 container-center">
+                    <ButtonFab
+                        size="medium"
+                        title={
+                            loadingOrderPage
+                                ? "Carregando..."
+                                : "Renovar Pedido"
+                        }
+                        onClick={() => {
+                            if (!isRenewable)
+                                return showToast(
+                                    "Pedido precisa está pago para renovar."
+                                );
+                            setLoadingOrderPage(true);
+                            setProRenewal({
+                                itemList: orders,
+                                investAmount,
+                                planBr: thisPlan,
+                                period: thisPeriod,
+                            }).then(() => {
+                                setLoadingOrderPage(false);
+                                history.push("/pedidos/admin");
+                            });
+                        }}
+                        backgroundColor={
+                            isRenewable
+                                ? "var(--themeSDark--default)"
+                                : "var(--themeSDark--white)"
+                        }
+                        variant="extended"
                     />
-                    {isRenewable && (
-                        <section className="my-5 container-center">
-                            <ButtonFab
-                                size="medium"
-                                title={
-                                    loadingOrderPage
-                                        ? "Carregando..."
-                                        : "Renovar Plano"
-                                }
-                                onClick={() => {
-                                    setLoadingOrderPage(true);
-                                    async function setAllVars() {
-                                        const readyVar = await Promise.all([
-                                            setVar({
-                                                orders_clientAdmin: orders,
-                                            }),
-                                            setVar({
-                                                totalMoney_clientAdmin: investAmount,
-                                            }),
-                                            setVar({
-                                                planPeriod_clientAdmin: thisPeriod,
-                                            }),
-                                            setVar({
-                                                ordersPlan_clientAdmin: thisPlan,
-                                            }),
-                                            setVar({
-                                                renewalDaysLeft_clientAdmin: daysLeft,
-                                            }),
-                                            setVar({
-                                                renewalRef_clientAdmin: reference,
-                                            }),
-                                        ]);
-
-                                        setLoadingOrderPage(false);
-                                        history.push("/pedidos/admin");
-                                    }
-
-                                    setAllVars();
-                                }}
-                                backgroundColor="var(--themeSDark--default)"
-                                variant="extended"
-                            />
-                        </section>
-                    )}
-                </Fragment>
-            )
+                </section>
+            </Fragment>
         );
     };
 
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
-            {showPayDetails(data)}
-            {showInvestExtract(data)}
+            {showPayDetails()}
+            {showInvestExtract()}
         </section>
     );
 }
 
+// HELPERS
+function getPlanCodeBr(code) {
+    if (code === "OU") return "ouro";
+    if (code === "PR") return "prata";
+    if (code === "BR") return "bronze";
+
+    return "";
+}
+// END HELPERS
+
 export default withRouter(PanelHiddenContent);
 
 /* ARCHIVES
+const displayCopyBtn = () => (
+    <section className="d-flex justify-content-end my-3">
+        <ButtonFab
+            size="medium"
+            title="Copiar"
+            onClick={handleCopy}
+            backgroundColor="var(--themeSDark--default)"
+            variant="extended"
+        />
+    </section>
+);
+
+
 <TextField
     multiline
     rows={8}

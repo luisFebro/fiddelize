@@ -1,13 +1,11 @@
 import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
-// 0.50
-
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "4.64.0";
+const latestVersion = "4.70.0";
 // NEXT:
 // register bonus coins -
-const updateDescription = "payment. plans and cron-jobs";
+const updateDescription = "pro plans 2.0 - payments, plans and cron-jobs";
 /* HISTORY
 buy club rules 2.0
 cli-admin tweaks || general improvements

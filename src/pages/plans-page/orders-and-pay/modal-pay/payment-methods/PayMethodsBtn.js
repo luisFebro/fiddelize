@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import ModalFullContent from "../../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../../components/code-splitting/LoadableComp";
-import gaEvent from "../../../../../utils/analytics/gaEvent";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
+import gaEvent from "utils/analytics/gaEvent";
 
 const AsyncBoleto = Load({
     loading: true,
@@ -37,13 +37,15 @@ const AsyncPix = Load({
 });
 
 const pickPayMethod = (payMethod, modalData) => {
+    if (payMethod === "Pix") return <AsyncPix modalData={modalData} />;
     if (payMethod === "Cartão de Crédito")
         return <AsyncCredit modalData={modalData} />;
-    if (payMethod === "Pix") return <AsyncPix modalData={modalData} />;
     if (payMethod === "Boleto Automático")
         return <AsyncBoleto modalData={modalData} />;
     if (payMethod === "Débito Bancário")
         return <AsyncDebit modalData={modalData} />;
+
+    return null;
 };
 
 export default function PayMethodsBtn({
@@ -63,7 +65,7 @@ export default function PayMethodsBtn({
             category: "Payment Methods",
             action: method,
         });
-        isProUser && handleCancel(); // remove curr order.
+        if (isProUser) handleCancel(); // remove curr order.
     };
 
     const handleFullClose = () => {

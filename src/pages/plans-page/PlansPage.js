@@ -14,7 +14,7 @@ export default function PlansPage() {
     }, [isPro]);
 
     const { bizName, bizLogo } = useBizData();
-    let { firstName: adminName } = useData();
+    const { firstName: adminName } = useData();
 
     const startPageProps = {
         bizLogo,

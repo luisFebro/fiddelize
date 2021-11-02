@@ -8,7 +8,7 @@ import { useBizData } from "init";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
-import useAPIList, { readTransactionHistory } from "api/useAPIList";
+import useAPIList, { readUserOrderHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 
@@ -62,7 +62,7 @@ export default function AsyncCardsList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readTransactionHistory(),
+        url: readUserOrderHistory(),
         skip,
         params,
         listName: "investCardsList",
@@ -91,11 +91,11 @@ export default function AsyncCardsList() {
         if (per === "M") return 30;
     };
 
-    const displayPlanType = (planCode, period, ordersStatement) => {
+    const displayPlanType = (planCode, period, itemList) => {
         const plan = handlePlanCode(planCode);
 
-        const keys = ordersStatement && Object.keys(ordersStatement);
-        const isUnlimitedService = ordersStatement && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
+        const keys = itemList && Object.keys(itemList);
+        const isUnlimitedService = itemList && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
 
         const generatedPeriod = isUnlimitedService
             ? "Ilimitado"
@@ -137,11 +137,11 @@ export default function AsyncCardsList() {
             const {
                 reference,
                 paymentMethod, // boleto, crédito, débito.
-                ordersStatement,
+                itemList,
             } = data;
 
             const referenceArray = reference && reference.split("-");
-            const [planCode, qtt, period] = referenceArray;
+            const [planCode, , period] = referenceArray;
 
             const chosenPlan = handlePlanCode(planCode);
             const chosenPeriod = handlePeriod(period);
@@ -149,7 +149,7 @@ export default function AsyncCardsList() {
 
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayPlanType(planCode, period, ordersStatement)}
+                    {displayPlanType(planCode, period, itemList)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}

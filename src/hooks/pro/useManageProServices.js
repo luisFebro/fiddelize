@@ -14,8 +14,9 @@ const getPeriod = (ref) => {
     if (!ref) return false;
     const [, , per] = ref.split("-");
     if (per === "A") return "yearly";
+    if (per === "M") return "monthly";
 
-    return "monthly";
+    return "infinite"; // monthly, yearly, infinity duration. This latter is for services like SMS and upcoming ones like buy games
 };
 
 export default function useManageProServices() {
@@ -37,7 +38,7 @@ export default function useManageProServices() {
     const planBr = expiryData && expiryData.nextPlan;
     const totalServ = expiryData && expiryData.nextTotalServ;
     const totalMoney = expiryData && expiryData.nextInvestAmount;
-    const orders = expiryData && JSON.stringify(expiryData.nextOrdersStatement);
+    const orders = expiryData && JSON.stringify(expiryData.nextItemList);
     const ref = expiryData && expiryData.nextReference;
     const nextExpiryDate = proData && proData.nextExpiryDate;
     const period = getPeriod(ref);

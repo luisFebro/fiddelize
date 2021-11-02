@@ -118,8 +118,8 @@ const TotalInvest = ({ orderAmount, orderCount }) => {
 };
 
 const PeriodSelection = ({
-    handlePeriod,
-    orderList,
+    setData,
+    orderList = [],
     plan,
     containerCenter = false,
 }) => {
@@ -129,7 +129,14 @@ const PeriodSelection = ({
 
     const handlePeriodChange = (status) => {
         const isMonthly = status && status.includes("false");
-        handlePeriod(isMonthly ? "monthly" : "yearly");
+        // reset previous period services.
+        setData((prev) => ({
+            ...prev,
+            orderCount: 0,
+            orderAmount: 0,
+            orderList: [],
+            period: isMonthly ? "monthly" : "yearly",
+        }));
     };
 
     return (
@@ -222,10 +229,12 @@ export { ContinueBtn, TotalInvest, PeriodSelection, MinimizedUpperOptions };
 function handleDisablePeriod({ orderList, plan }) {
     const itemsCount = orderList && orderList.length;
 
-    // by default, gold and silver plans are added the default selected plan "currPlan". If any other service is added, it needed to be removed to avoid compute a service from a different period
+    // by default, Novvos Clientes and Novvos Membros from gold and silver plans are added the default. If any other service is added, it needed to be removed to avoid compute a service from a different period (month or year)
     if (plan === "gold" || plan === "silver") {
-        if (itemsCount >= 2) return true;
-        else return false;
+        const TOTAL_FULL_PLAN_SERVICES = 2;
+        if (itemsCount > TOTAL_FULL_PLAN_SERVICES) return true;
+
+        return false;
     }
 
     // bronze, by default, ain't got items.

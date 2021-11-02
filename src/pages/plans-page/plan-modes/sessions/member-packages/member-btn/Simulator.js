@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import MuSlider from "components/sliders/MuSlider";
 import { addDays, formatSlashDMY } from "utils/dates/dateFns";
+import pricing from "utils/biz/pricing";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -40,17 +41,21 @@ const getStyles = () => ({
 });
 
 const getMembersData = (packages, isYearly) => {
-    // unit, expires, unitSizeDec, unitSizeInc
-    // if (packages === 1) return [10, null, "1-1", "1-1"];
-    if (packages === 2) return [isYearly ? 100 : 10, null, "1", "1-2"];
-    if (packages === 3) return [isYearly ? 80 : 8, null, "0-9", "1-3"];
-    if (packages === 4) return [isYearly ? 67.5 : 6.75, null, "0-8", "1-4"];
+    // unit, expires, unitSizeDec
+    const period = isYearly ? "yearly" : "monthly";
+    const unit = pricing.bronze["Novvos Membros"].prices.units[period][0];
+    const credit = pricing.bronze["Novvos Membros"].credits[period];
 
-    return [isYearly ? 60 : 6, null, "0-8", "1-4"];
+    if (packages === credit[0]) return [unit, null, "1"];
+    if (packages === credit[1]) return [unit, null, "1"];
+    if (packages === credit[2]) return [unit, null, "1"];
+    if (packages === credit[3]) return [unit, null, "1"];
+
+    return [unit, null, "1"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {
-    const [packages, setPackages] = useState(2);
+    const [packages, setPackages] = useState(1);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
@@ -64,23 +69,23 @@ export default function Simulator({ handleData, period, currPlan }) {
 
     useEffect(() => {
         let thisUsageDays = 30;
-        if (period === "yearly") thisUsageDays = 365;
+        if (isYearly) thisUsageDays = 365;
         const thisExpiryDate = addDays(new Date(), thisUsageDays);
         const thisFormattedDate = formatSlashDMY(thisExpiryDate);
 
-        setData({
-            ...data,
+        setData((prev) => ({
+            ...prev,
             expiryDate: thisExpiryDate,
             formattedExpiryDate: thisFormattedDate,
             usageDays: thisUsageDays,
-        });
-    }, [period]);
+        }));
+    }, [isYearly]);
 
     useEffect(() => {
         if (newQuantity && !Number.isNaN(newQuantity)) {
             setPackages(newQuantity);
         } else {
-            setPackages(2);
+            setPackages(1);
         }
     }, [newQuantity]);
 
@@ -101,10 +106,7 @@ export default function Simulator({ handleData, period, currPlan }) {
     const MAX_UNIT_MONTH = 5;
 
     const totalReal = convertToReal(totalUnits);
-    const unitReal = convertToReal(unit, {
-        moneySign: true,
-        needFraction: true,
-    });
+    const unitReal = isYearly ? getYearlyUnit(unit) : unit.toFixed(2);
 
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
 
@@ -122,7 +124,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                 className="d-inline-block ml-2 text-title text-purple"
                 style={styles.totalUnits}
             >
-                <span className="text-em-1-2 font-site text-nowrap">
+                <span className="font-weight-bold text-em-1-2 font-site text-nowrap">
                     + {totalReal}
                     <span className="d-block line-height-35">
                         Novo{packages === 1 ? "" : "s"}
@@ -145,7 +147,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                     }}
                 >
                     <span className="text-title"> X </span>
-                    {unitReal}
+                    R$ {unitReal}
                     <span
                         className="position-relative d-block text-small font-weight-bold"
                         style={{
@@ -153,7 +155,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                             right: -50,
                         }}
                     >
-                        cada
+                        {isYearly ? "cada no mês" : "cada"}
                     </span>
                 </div>
             </span>
@@ -220,7 +222,7 @@ export default function Simulator({ handleData, period, currPlan }) {
             <MuSlider
                 color="var(--themeP)"
                 max={isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
-                min={2}
+                min={1}
                 step={1}
                 value={packages}
                 callback={handlePackages}
@@ -260,7 +262,33 @@ export default function Simulator({ handleData, period, currPlan }) {
     );
 }
 
+// HELPERS
+function getYearlyUnit(totalUnitAmount = 0) {
+    const monthlyInv = totalUnitAmount / 12;
+    return monthlyInv && monthlyInv.toFixed(2);
+}
+// END HELPERS
+
 /* ARCHIVES
+The reason the yearly plan credited by month system was discontinued was because increase expiration and renovation complexity with multiple dates.
+We are out of time to handle complex system.
+Also,customers will have some potential issues with renovation if they run out of credits.
+
+const showYearlyPlanNote = () => {
+    if (!isYearly) return <span />;
+
+    return (
+        <section className="mt-2 mb-4 text-normal text-purple">
+            Você tem alcance de até:
+            <br />
+            <span className="text-pill">
+                {totalUnits} membro{totalUnits > 1 ? "s" : ""}
+            </span>{" "}
+            ao longo de 1 ano.
+        </section>
+    );
+};
+
     useEffect(() => {
         if (unit !== 0.14) {
             const diff = firstPhasePrice - totalFinalMoney;

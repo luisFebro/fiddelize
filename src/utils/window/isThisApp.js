@@ -40,6 +40,7 @@ function checkEnforceMobile() {
         window.location.href === `${CLIENT_URL}/`;
 
     const websitePages = [
+        "/acesso/verificacao",
         "/baixe-app",
         "/privacidade",
         "/novo-clube",

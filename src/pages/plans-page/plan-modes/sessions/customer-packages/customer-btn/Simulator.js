@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import MuSlider from "components/sliders/MuSlider";
 import { addDays, formatSlashDMY } from "utils/dates/dateFns";
+import pricing from "utils/biz/pricing";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -9,7 +10,7 @@ const getStyles = () => ({
         top: isSmall ? "50px" : "70px",
         left: "10px",
     },
-    totalCustomers: {
+    totalUnits: {
         fontWeight: "normal",
     },
     delimeterBoardLeft: {
@@ -39,41 +40,50 @@ const getStyles = () => ({
     },
 });
 
-const countMarks = [
+const getCreditList = (isYearly) => {
+    const period = isYearly ? "yearly" : "monthly";
+    const credits = pricing.bronze["Novvos Clientes"].credits[period];
+    return credits;
+};
+
+const countMarks = (isYearly) => [
     {
-        value: 500,
+        value: getCreditList(isYearly)[0],
         label: "",
     },
     {
-        value: 600,
+        value: getCreditList(isYearly)[1],
         label: "",
     },
     {
-        value: 700,
+        value: getCreditList(isYearly)[2],
         label: "",
     },
     {
-        value: 800,
+        value: getCreditList(isYearly)[3],
         label: "",
     },
     {
-        value: 1000,
+        value: getCreditList(isYearly)[4],
         label: "",
     },
 ];
 
-const getCustomersData = (packages, isYearly) => {
-    // unit, expires, unitSizeDec, unitSizeInc
-    if (packages === 500) return [isYearly ? 0.6 : 0.06, null, "1-1", "1-1"];
-    if (packages === 600) return [isYearly ? 0.59 : 0.059, null, "1", "1-2"];
-    if (packages === 700) return [isYearly ? 0.57 : 0.057, null, "0-9", "1-3"];
-    if (packages === 800) return [isYearly ? 0.56 : 0.056, null, "0-8", "1-4"];
+const getCustomersData = (count, isYearly) => {
+    const period = isYearly ? "yearly" : "monthly";
+    const unit = pricing.bronze["Novvos Clientes"].prices.units[period];
+    const credit = getCreditList(isYearly);
+    // unit, expires, unitSizeDec
+    if (count === credit[0]) return [unit[0], null, "1-2"];
+    if (count === credit[1]) return [unit[1], null, "1-1"];
+    if (count === credit[2]) return [unit[2], null, "1"];
+    if (count === credit[3]) return [unit[3], null, "0-9"];
 
-    return [isYearly ? 0.5 : 0.05, null, "0-8", "1-4"];
+    return [unit[4], null, "0-8"];
 };
 
 export default function Simulator({ handleData, period, currPlan }) {
-    const [packages, setPackages] = useState(500);
+    const [count, setCount] = useState(0);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
@@ -87,55 +97,56 @@ export default function Simulator({ handleData, period, currPlan }) {
 
     useEffect(() => {
         let thisUsageDays = 30;
-        if (period === "yearly") thisUsageDays = 365;
+        if (isYearly) thisUsageDays = 365;
         const thisExpiryDate = addDays(new Date(), thisUsageDays);
         const thisFormattedDate = formatSlashDMY(thisExpiryDate);
 
-        setData({
-            ...data,
+        setData((prev) => ({
+            ...prev,
             expiryDate: thisExpiryDate,
             formattedExpiryDate: thisFormattedDate,
             usageDays: thisUsageDays,
-        });
-    }, [period]);
+        }));
+    }, [isYearly]);
 
     useEffect(() => {
         if (newQuantity && !Number.isNaN(newQuantity)) {
-            setPackages(newQuantity);
+            setCount(newQuantity);
         } else {
-            setPackages(500);
+            setCount(getCreditList(isYearly)[0]);
         }
-    }, [newQuantity]);
+    }, [newQuantity, isYearly]);
 
-    const [unit, , unitSizeDec] = getCustomersData(packages, isYearly);
+    const [unit, , unitSizeDec] = getCustomersData(count, isYearly);
 
     const handlePackages = (newValue) => {
-        setPackages(newValue);
+        setCount(newValue);
     };
 
     const styles = getStyles();
 
     const subject = "cliente";
     const onePackage = 1;
-    const totalUnits = onePackage * packages;
+    const totalUnits = onePackage * count;
     const totalFinalMoney = totalUnits * unit;
 
-    const MAX_UNIT_YEAR = 1000;
-    const MAX_UNIT_MONTH = 1000;
+    const MAX_UNIT_YEAR = getCreditList(true).slice(-1)[0];
+    const MAX_UNIT_MONTH = getCreditList(false).slice(-1)[0];
+    const MIN_UNIT_YEAR = getCreditList(true)[0];
+    const MIN_UNIT_MONTH = getCreditList(false)[0];
 
-    const totalReal = convertToReal(totalUnits);
-    const unitReal = unit.toFixed(3);
+    const unitReal = isYearly ? getYearlyUnit(unit) : unit.toFixed(2);
 
     const totalFinalMoneyReal = Math.round(Number(totalFinalMoney));
     // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
 
     useEffect(() => {
         handleData({
-            totalPackage: packages,
-            totalCustomers: totalUnits,
+            totalPackage: count,
+            totalCount: totalUnits,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
-    }, [packages]);
+    }, [count, totalUnits]);
 
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
@@ -143,22 +154,18 @@ export default function Simulator({ handleData, period, currPlan }) {
                 className="d-inline-block ml-2 text-title text-purple"
                 style={styles.totalUnits}
             >
-                <span className="text-em-1-2 font-site text-nowrap">
-                    + {totalReal}
+                <span className="font-weight-bold text-em-1-2 font-site text-nowrap">
+                    + {convertToReal(totalUnits)}
                     <span className="d-block line-height-35">
-                        Novo{packages === 1 ? "" : "s"}
+                        Novo{count === 1 ? "" : "s"}
                         <span className="d-block m-0">
                             {subject}
-                            {packages === 1 ? "" : "s"}
+                            {count === 1 ? "" : "s"}
                         </span>
                     </span>
                 </span>
                 <div
-                    className={`mt-2 text-grey position-relative d-block text-em-${
-                        isYearly ? "1-3" : unitSizeDec
-                    } font-site ${
-                        unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
-                    }`}
+                    className={`mt-2 text-grey position-relative d-block text-em-${unitSizeDec} font-site`}
                     style={{
                         lineHeight: "15px",
                         top: -10,
@@ -166,7 +173,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                     }}
                 >
                     <span className="text-title"> X </span>
-                    {unitReal}
+                    R$ {unitReal}
                     <span
                         className="position-relative d-block text-small font-weight-bold"
                         style={{
@@ -208,9 +215,7 @@ export default function Simulator({ handleData, period, currPlan }) {
                 ✔ Plano: {handlePlanName()}{" "}
                 {period === "yearly" ? "Anual" : "Mensal"}
                 <br />✔ Total de {subject}s:{" "}
-                <span className="text-subtitle font-weight-bold">
-                    {packages}
-                </span>
+                <span className="text-subtitle font-weight-bold">{count}</span>
                 <br />✔ Validade:{" "}
                 <span className="text-normal font-weight-bold">
                     {usageDays} dias{" "}
@@ -241,15 +246,15 @@ export default function Simulator({ handleData, period, currPlan }) {
             <MuSlider
                 color="var(--themeP)"
                 max={isYearly ? MAX_UNIT_YEAR : MAX_UNIT_MONTH}
-                min={500}
-                marks={countMarks}
+                min={isYearly ? MIN_UNIT_YEAR : MIN_UNIT_MONTH}
+                marks={countMarks(isYearly)}
                 step={null}
-                value={packages}
+                value={count}
                 callback={handlePackages}
                 disabled={!!newQuantity}
                 needSlideInstru
             />
-            {packages <= 860 && !newQuantity && (
+            {count <= (!isYearly ? 860 : 8600) && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardRight}
@@ -260,12 +265,12 @@ export default function Simulator({ handleData, period, currPlan }) {
                 </div>
             )}
 
-            {packages >= 600 && !newQuantity && (
+            {count >= (!isYearly ? 600 : 6000) && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}
                 >
-                    500
+                    {isYearly ? MIN_UNIT_YEAR : MIN_UNIT_MONTH}
                     <br />
                     {subject}s
                 </div>
@@ -282,3 +287,31 @@ export default function Simulator({ handleData, period, currPlan }) {
         </section>
     );
 }
+
+// HELPERS
+function getYearlyUnit(totalUnitAmount = 0) {
+    const monthlyInv = totalUnitAmount / 12;
+    return monthlyInv && monthlyInv.toFixed(3);
+}
+// END HELPERS
+
+/* ARCHIVES
+The reason the yearly plan credited by month system was discontinued was because increase expiration and renovation complexity with multiple dates.
+We are out of time to handle complex system.
+Also,customers will have some potential issues with renovation if they run out of credits.
+
+Plans
+
+const showYearlyPlanNote = () => {
+    if (!isYearly) return <span />;
+
+    return (
+        <section className="text-normal">
+            Você tem alcance de até {convertToReal(totalUnits * 12)}{" "}
+            cadastros de novos clientes ao longo de 1 ano, sendo{" "}
+            {totalUnits} creditados a cada mês.
+        </section>
+    );
+};
+
+ */

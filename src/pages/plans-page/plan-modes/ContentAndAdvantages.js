@@ -2,25 +2,19 @@ import { Fragment } from "react";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import convertToReal from "utils/numbers/convertToReal.js";
 import getPercentage from "utils/numbers/getPercentage.js";
-import { proVersion } from "./sessions/services/proVersion";
+import { getMinPrice } from "utils/biz/pricing";
 
 const newCustomersText = `
     Seus clientes no próximo nível do marketing de relacionamento
     com destaques como <strong>moeda digital</strong> para troca de benecífios, <strong>cartão digital e jogos de compra</strong>.
     Vão ter mais motivos para voltar a comprar do seu negócio.
     Invista em seus clientes!
-    <br />
-    <br />
-    No plano prata e no período anual, os créditos são renovados todo mês no mesmo dia que seu investimento foi aprovado.
 `;
 
 const newMembersText = `
     Membros da sua equipe te ajudam a cadastrar moedas e
     clientes, ver históricos e avaliações, confirmar
     benefícios, recebimentos e mais!
-    <br />
-    <br />
-    No plano prata e no período anual, a quantidade de créditos é única e assim não é renovada mensalmente.
 `;
 
 export function PlanContent({ isYearly, plan }) {
@@ -33,7 +27,7 @@ export function PlanContent({ isYearly, plan }) {
                 </span>
                 {isYearly ? "Anual" : "Mensal"}
             </p>
-            <div className="mx-3 mb-5 animated fadeInUp text-center text-purple text-normal font-weight-bold">
+            <div className="mx-3 mb-5 animated fadeInUp text-center text-purple text-normal">
                 <p className="text-left">
                     - <strong>Novvos Clientes &#174;</strong>
                     <br />
@@ -41,10 +35,10 @@ export function PlanContent({ isYearly, plan }) {
                     <br />
                     <strong className="d-inline-block">
                         {plan === "gold" ? (
-                            "Ilimitado"
+                            <span className="text-pill">Sem Limites</span>
                         ) : (
                             <span className="text-pill">
-                                +{convertToReal(2000)}
+                                +{convertToReal(isYearly ? 24000 : 2000)}
                             </span>
                         )}
                     </strong>
@@ -61,7 +55,7 @@ export function PlanContent({ isYearly, plan }) {
                     <br />
                     <strong className="d-inline-block">
                         {plan === "gold" ? (
-                            "Ilimitado"
+                            <span className="text-pill">Sem Limites</span>
                         ) : (
                             <span className="text-pill">
                                 +{convertToReal(10)}
@@ -81,17 +75,18 @@ export function PlanContent({ isYearly, plan }) {
 }
 
 export function PlanAdvantages({ isYearly, plan }) {
-    const planData = proVersion().find((pro) => pro[plan].plan === plan);
-    const planPrice = planData[plan].price[isYearly ? "yearly" : "monthly"];
+    const planPrice = getMinPrice(isYearly ? "yearly" : "monthly")[plan];
     const incAmount = getPercentage(planPrice, 20, { mode: "value" });
     const priceWithoutDiscount = convertToReal(planPrice + incAmount);
+
+    // IMPORTANT: monthly gold plans do not haveextra free month (beyond maintenance month) because if a client pays a whole monthly plan in a year, the next will be free. That's why only yearly is more managable
 
     return (
         <Fragment>
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 <span className="text-pill">Vantagens do Plano</span>
             </p>
-            <div className="mx-3 mb-5 text-center text-purple text-normal font-weight-bold">
+            <div className="mx-3 mb-5 text-center text-purple text-normal">
                 {isYearly && (
                     <Fragment>
                         <p className="text-left">

@@ -1,11 +1,10 @@
-//
 import generateAlphaNumeric from "./generateAlphaNumeric";
 import removeDiacritics from "./removeDiacritics";
 // SKU (Stock Keeping Unit - Unidade de Manuntenção de Estoque)
 
 // code exemple: GO-Q3-1F3C2DEW (plano-quantidade-id)
-const getPlan = (plan) => {
-    if (typeof plan !== "string") return;
+const getPlanBr = (plan) => {
+    if (typeof plan !== "string") return null;
 
     if (plan.toLowerCase() === "ouro") return "OU";
     if (plan.toLowerCase() === "prata") return "PR";
@@ -14,20 +13,29 @@ const getPlan = (plan) => {
     return "BR";
 };
 
-const getPeriod = (per) => {
+const getPeriodBr = (per, options = {}) => {
+    const { itemList, total } = options;
+
+    // like when the user buy ONLY a service with no expiration like SMS. In this case, it should not add any date to the service
+    const isInfinite =
+        per === "infinite" || itemList.every((i) => i.expirable === false);
+
+    if (isInfinite) return "I"; // monthly, yearly, infinity duration. This latter is for services like SMS and upcoming ones like buy games
     if (per === "yearly") return "A";
     if (per === "monthly") return "M";
+
+    return "";
 };
 
 const getQuantity = (total) => `Q${total}`;
 
 const getServiceSKU = (options = {}) => {
-    const { plan = "gold", total = 0, period } = options;
+    const { planBr, total = 0, period, itemList = [] } = options;
 
     const SKU = [
-        getPlan(plan),
+        getPlanBr(planBr),
         getQuantity(total),
-        getPeriod(period),
+        getPeriodBr(period, { itemList, total }),
         generateAlphaNumeric(7, "A#"),
     ];
     return SKU.join("-");

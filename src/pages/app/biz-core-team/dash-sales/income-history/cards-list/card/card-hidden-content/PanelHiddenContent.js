@@ -41,7 +41,7 @@ function PanelHiddenContent({ data }) {
             if (code === "BR") return "bronze";
         };
 
-        const { ordersStatement: orders, reference } = data;
+        const { itemList: orders, reference } = data;
         const referenceArray = reference && reference.split("-");
         const [planCode, , period] = referenceArray;
 
@@ -58,10 +58,8 @@ function PanelHiddenContent({ data }) {
                         needGenerateList
                         orders={orders}
                         loading={!orders}
-                        plan={thisPlan}
+                        planBr={thisPlan}
                         period={thisPeriod}
-                        notesColor="white"
-                        showNotes={false}
                     />
                 </Fragment>
             )

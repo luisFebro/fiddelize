@@ -20,11 +20,10 @@ function AsyncAddSMSContent({
     // end fromSession
 
     const [data, setData] = useState({
-        totalPackage: 0,
         totalSMS: 0,
         inv: 0,
     });
-    const { inv, totalSMS, totalPackage } = data;
+    const { inv, totalSMS } = data;
 
     const handleData = (newData) => {
         setData({
@@ -41,22 +40,12 @@ function AsyncAddSMSContent({
         </div>
     );
 
-    const showNotes = () => (
-        <section className="my-3 text-left mx-3">
-            <p className="text-purple text-left text-subtitle font-weight-bold m-0">
-                Notas <FontAwesomeIcon icon="info-circle" />
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Os créditos são <strong>liberados automaticamente</strong>{" "}
-                após a aprovação do pagamento.
-            </p>
-        </section>
-    );
-
     const handleCTA = () => {
         const isFunc = typeof handleItem === "function";
 
         const item = {
+            range: "selected",
+            expirable: false,
             name: "sms",
             count: totalSMS,
             amount: inv,
@@ -69,11 +58,9 @@ function AsyncAddSMSContent({
 
         if (isFromSession) {
             setProRenewal({
-                expiryDate: "2050-11-26T16:51:32.848Z", // a very late hard-coded date cuz it does not expires.
-                orderList: [{ sms: item }],
-                period: "yearly",
+                itemList: [item],
+                period: "infinite",
                 planBr: currPlan,
-                ref: undefined,
                 investAmount: inv,
             }).then(() => {
                 history.push("/pedidos/admin");
@@ -119,8 +106,23 @@ function AsyncAddSMSContent({
             {showTitle()}
             {showIllustration()}
             <Simulator handleData={handleData} />
-            {showNotes()}
             {showCTA()}
         </section>
     );
 }
+
+/*
+
+const showNotes = () => (
+    <section className="my-3 text-left mx-3">
+        <p className="text-purple text-left text-subtitle font-weight-bold m-0">
+            Notas <FontAwesomeIcon icon="info-circle" />
+        </p>
+        <p className="text-small text-left text-purple mt-3">
+            - Os créditos são <strong>liberados automaticamente</strong>{" "}
+            após a aprovação do pagamento.
+        </p>
+    </section>
+);
+
+ */

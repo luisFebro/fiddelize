@@ -2,9 +2,8 @@ import { Fragment, useState } from "react";
 import Card from "@material-ui/core/Card";
 import parse from "html-react-parser";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import getServices from "./getServices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import convertToReal from "utils/numbers/convertToReal";
+import integratedData from "./integratedServicesData";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -27,8 +26,8 @@ export default function IntegratedServicesCard() {
     const styles = getStyles();
 
     const showIntegratedServices = () => {
-        const FreeServicesList = getServices("integrated").map((serv, ind) => {
-            const showCards = ind <= 3;
+        const FreeServicesList = integratedData.map((serv, ind) => {
+            const showCards = ind <= 2;
             if (!showCards && !moreFeatures) return null;
 
             return (
@@ -124,7 +123,6 @@ const showDiscount = () => (
         </Fragment>
     );
 
-const ServicesList = getServices("pro").map((serv) => {
 const rawValue = serv[plan].price[period];
 
 const serviceValue = convertToReal(rawValue, { moneySign: true });
