@@ -1,11 +1,12 @@
 // NEED UPDATE HERE
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import EventIcon from "@material-ui/icons/Event";
 import { withRouter } from "react-router-dom";
 import { isScheduledDate } from "utils/dates/dateFns";
+import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import setProRenewal from "utils/biz/setProRenewal";
+// import EventIcon from "@material-ui/icons/Event";
 
 const handleRenewalClick = ({ panel, history }) => {
     async function setAllVars() {
@@ -25,64 +26,45 @@ const handleRenewalClick = ({ panel, history }) => {
 };
 
 const getStyles = () => ({
-    expiryCounter: {
+    activated: {
         right: 55,
         top: 70,
     },
 });
 
-function DisplayExpiryCounter({ history, panel, daysLeft }) {
+function DisplayExpiryCounter({ history, panel }) {
     const styles = getStyles();
 
     const {
         itemList,
         transactionStatus,
-        reference,
         payDueDate,
-        renewal,
         paymentMethod,
+        planExpiringDate,
     } = panel.data;
 
-    const isBoleto = paymentMethod === "boleto";
+    const daysLeft = !planExpiringDate
+        ? null
+        : getDatesCountdown(planExpiringDate);
 
-    const isRenewable =
-        (renewal && renewal.priorRef) !== reference &&
-        transactionStatus !== "pendente";
-    const isDuePay =
-        !isScheduledDate(payDueDate, { isDashed: true }) &&
-        transactionStatus !== "pago"; // for boleto
     const isPaid =
         transactionStatus === "pago" || transactionStatus === "disponível";
-    const isOldCard = renewal && renewal.isOldCard;
 
     const showActive = () => (
         <section
             className="enabledLink position-absolute"
-            style={styles.expiryCounter}
+            style={styles.activated}
         >
-            <EventIcon
-                className="shadow-elevation-black"
-                style={{ transform: "scale(1.2)", color: "#fff" }}
-            />
             <FontAwesomeIcon
                 icon="bolt"
                 style={{
                     color: "var(--incomeGreen)",
-                    fontSize: "20px",
+                    fontSize: "25px",
                 }}
             />
-            <span className="text-small text-shadow font-weight-bold d-inline-block ml-1">
-                expira em:
+            <span className="text-normal text-shadow font-weight-bold d-inline-block ml-1">
+                ativo
             </span>
-            <p
-                className="position-relative text-normal text-white text-shadow font-weight-bold"
-                style={{
-                    left: 30,
-                    top: -5,
-                }}
-            >
-                {daysLeft || 0} dias
-            </p>
         </section>
     );
 
@@ -90,8 +72,8 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         <section
             className="position-absolute text-normal text-shadow font-weight-bold"
             style={{
-                right: 45,
-                top: 70,
+                right: 30,
+                top: 90,
                 color: "var(--lightGrey)",
             }}
         >
@@ -99,7 +81,7 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
                 icon="bolt"
                 style={{
                     color: "var(--lightGrey)",
-                    fontSize: "20px",
+                    fontSize: "25px",
                 }}
             />{" "}
             desativado
@@ -108,14 +90,14 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
 
     const showExpiredBoleto = () => (
         <section
-            className="d-flex position-absolute"
+            className="position-absolute"
             style={{
-                right: 75,
-                top: 95,
+                right: 45,
+                top: 75,
             }}
         >
             <p
-                className="mr-1 text-small text-shadow font-weight-bold"
+                className="font-site text-em-1 text-shadow font-weight-bold"
                 style={{
                     color: "var(--lightGrey)",
                 }}
@@ -125,11 +107,12 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
             <RadiusBtn
                 className="enabledLink"
                 position="absolute"
-                right={-50}
+                top={25}
+                right={-10}
                 title="novo"
                 variant="extended"
                 onClick={() => handleRenewalClick({ panel, history })}
-                size="extra-small"
+                size="small"
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
             />
@@ -145,34 +128,57 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
             title="Renovar"
             variant="extended"
             onClick={() => handleRenewalClick({ panel, history })}
-            size="extra-small"
+            size="small"
             color="var(--mainWhite)"
             backgroundColor="var(--themeSDark)"
         />
     );
 
-    const keys = itemList && Object.keys(itemList);
-    const isUnlimitedService = itemList && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
+    const isUnlimitedOrder =
+        itemList && itemList.every((i) => i.expirable === false);
+    const isActive = (isPaid && isUnlimitedOrder) || (isPaid && daysLeft);
+    const isDisabled = !isPaid && transactionStatus !== "pago";
+
+    const needRenewalBtn = daysLeft >= 0 && isPaid;
+
+    const isBoleto = paymentMethod === "boleto";
+    const isRenewable = transactionStatus !== "pendente";
+    const isBoletoPayExpired =
+        !isScheduledDate(payDueDate, { isDashed: true }) && !isPaid;
+    const isBoletoExpired = isBoleto && isBoletoPayExpired && isRenewable;
+
+    const isExpired = !isUnlimitedOrder && daysLeft <= 0;
+    if (isExpired) return <div />;
+
+    if (isActive) {
+        return (
+            <Fragment>
+                {showActive()}
+                {needRenewalBtn && showRenewalBtn()}
+            </Fragment>
+        );
+    }
 
     return (
         <Fragment>
-            {isPaid && daysLeft && !isUnlimitedService
-                ? showActive()
-                : !isUnlimitedService && (
-                      <Fragment>
-                          {showDisabled()}
-                          {isBoleto &&
-                              isDuePay &&
-                              isRenewable &&
-                              showExpiredBoleto()}
-                          {daysLeft >= 0 &&
-                              isPaid &&
-                              !isOldCard &&
-                              showRenewalBtn()}
-                      </Fragment>
-                  )}
+            {isBoletoExpired && showExpiredBoleto()}
+            {isDisabled && showDisabled()}
         </Fragment>
     );
 }
 
 export default withRouter(DisplayExpiryCounter);
+
+/*
+
+<p
+    className="position-relative text-normal text-white text-shadow font-weight-bold"
+    style={{
+        left: 30,
+        top: -5,
+    }}
+>
+    {daysLeft || 0} dias
+</p>
+
+ */

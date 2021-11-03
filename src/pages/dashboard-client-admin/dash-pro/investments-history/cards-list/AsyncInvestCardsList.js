@@ -75,38 +75,11 @@ export default function AsyncCardsList() {
         isOffline,
     });
 
-    const handlePlanCode = (code) => {
-        if (code === "OU") return "ouro";
-        if (code === "PR") return "prata";
-        if (code === "BR") return "bronze";
-    };
-
-    const handlePeriod = (per) => {
-        if (per === "A") return "Anual";
-        if (per === "M") return "Mensal";
-    };
-
-    const handlePeriodDays = (per) => {
-        if (per === "A") return 365;
-        if (per === "M") return 30;
-    };
-
-    const displayPlanType = (planCode, period, itemList) => {
+    const displayPlanType = (planCode, period) => {
         const plan = handlePlanCode(planCode);
 
-        const keys = itemList && Object.keys(itemList);
-        const isUnlimitedService = itemList && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
-
-        const generatedPeriod = isUnlimitedService
-            ? "Ilimitado"
-            : handlePeriod(period);
+        const generatedPeriod = handlePeriod(period);
         const planDesc = `P. ${plan && plan.cap()} ${generatedPeriod}`;
-
-        const handleColor = (plan) => {
-            if (plan === "ouro") return "yellow";
-            if (plan === "prata") return "white";
-            if (plan === "bronze") return "#edbead";
-        };
 
         return (
             <section className="d-flex">
@@ -116,10 +89,7 @@ export default function AsyncCardsList() {
                     style={{
                         ...styles.icon,
                         color: handleColor(plan),
-                        filter:
-                            plan === "bronze"
-                                ? "drop-shadow(black 0.001em 0.001em 0.5em)"
-                                : "drop-shadow(0.001em 0.001em 0.15em grey)",
+                        filter: handleFilter({ plan, generatedPeriod }),
                     }}
                 />
                 <span
@@ -137,7 +107,6 @@ export default function AsyncCardsList() {
             const {
                 reference,
                 paymentMethod, // boleto, crédito, débito.
-                itemList,
             } = data;
 
             const referenceArray = reference && reference.split("-");
@@ -149,7 +118,7 @@ export default function AsyncCardsList() {
 
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayPlanType(planCode, period, itemList)}
+                    {displayPlanType(planCode, period)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}
@@ -229,14 +198,38 @@ export default function AsyncCardsList() {
     );
 }
 
-/*
-const showSearchBar = () => (
-    <section className="d-none container-center my-4">
-        <span className="position-relative">
-        </span>
-    </section>
-);
- */
+// HELPERS
+function handlePlanCode(code) {
+    if (code === "OU") return "ouro";
+    if (code === "PR") return "prata";
+    if (code === "BR") return "bronze";
+    return "extra";
+}
+
+function handlePeriod(per) {
+    if (per === "A") return "Anual";
+    if (per === "M") return "Mensal";
+    if (per === "I") return "Extra";
+}
+
+function handlePeriodDays(per) {
+    if (per === "A") return 365;
+    if (per === "M") return 30;
+    return 0;
+}
+
+function handleColor(plan) {
+    if (plan === "ouro") return "yellow";
+    if (plan === "prata") return "white";
+    if (plan === "bronze") return "#edbead";
+}
+
+function handleFilter({ plan, generatedPeriod }) {
+    if (plan === "bronze") return "drop-shadow(black 0.001em 0.001em 0.5em)";
+
+    return "drop-shadow(0.001em 0.001em 0.15em grey)";
+}
+// END HELPERS
 
 /* COMMENTS
 n1: <span> does not work with alignments and lineheight, only <p> elemnets...

@@ -4,29 +4,14 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
-import PropTypes from "prop-types";
-import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import { isScheduledDate } from "utils/dates/dateFns";
 import DisplayExpiryCounter from "./DisplayExpiryCounter";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
+// import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
+// import { isScheduledDate } from "utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
-
-InvestCard.propTypes = {
-    actions: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            mainHeading: PropTypes.object, // parser
-            secondaryHeading: PropTypes.object, // parser
-            hiddenContent: PropTypes.any,
-        })
-    ).isRequired,
-    backgroundColor: PropTypes.string,
-    color: PropTypes.string,
-    needToggleButton: PropTypes.bool,
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,42 +40,13 @@ const getStyles = ({ color, backgroundColor }) => ({
     },
 });
 
-const handleTransactionStatus = ({ panel, daysLeft }) => {
-    const {
-        paymentMethod,
-        transactionStatus,
-        payDueDate,
-        renewal,
-        reference,
-    } = panel.data;
-    const isBoleto = paymentMethod === "boleto";
-
-    if (isBoleto) {
-        const isDuePay =
-            !isScheduledDate(payDueDate, { isDashed: true }) &&
-            transactionStatus !== "pago"; // for boleto
-        if (isDuePay || (daysLeft === 0 && transactionStatus !== "pendente"))
-            return "EXPIRADO";
-    }
+const handleTransactionStatus = ({ panel }) => {
+    const { transactionStatus } = panel.data;
 
     const isPaid =
         transactionStatus === "pago" || transactionStatus === "disponível";
-    const isPriorCardRenewal = renewal && renewal.priorRef === reference;
-    const isCurrCardRenewal = renewal && renewal.currRef === reference;
-
     if (!transactionStatus) return "PENDENTE";
-    if (isPaid && !isPriorCardRenewal) return "PAGO";
-
-    if (renewal && (isPaid || transactionStatus === "pendente")) {
-        if (isPriorCardRenewal && renewal.isPaid) {
-            return "RENOVADO";
-        }
-        return "PENDENTE/RENOVAÇÃO";
-
-        if (isPaid && renewal.isPaid && isCurrCardRenewal) {
-            return "PAGO/RENOVADO";
-        }
-    }
+    if (isPaid) return "PAGO";
 
     return transactionStatus && transactionStatus.toUpperCase();
 };
@@ -107,24 +63,13 @@ export default function InvestCard({
         backgroundColor: "var(--themePLight)",
     });
 
-    // const dispatch = useStoreDispatch();
-
-    const displayStatusBadge = (panel, daysLeft) => {
-        const transactionStatus = handleTransactionStatus({ panel, daysLeft });
+    const displayStatusBadge = (panel) => {
+        const transactionStatus = handleTransactionStatus({ panel });
 
         const handleBack = () => {
             if (transactionStatus === "PENDENTE") return "grey";
-            if (
-                transactionStatus === "PAGO" ||
-                transactionStatus === "PAGO/RENOVADO"
-            )
-                return "var(--incomeGreen)";
-            if (transactionStatus === "RENOVADO") return "var(--niceUiYellow)";
-            if (
-                transactionStatus === "CANCELADO" ||
-                transactionStatus === "EXPIRADO"
-            )
-                return "var(--expenseRed)";
+            if (transactionStatus === "PAGO") return "var(--incomeGreen)";
+            if (transactionStatus === "CANCELADO") return "var(--expenseRed)";
             return "var(--mainDark)";
         };
 
@@ -146,7 +91,7 @@ export default function InvestCard({
         );
     };
 
-    const showPanel = (panel, daysLeft) => (
+    const showPanel = (panel) => (
         <section>
             <AccordionSummary
                 expandIcon={
@@ -173,8 +118,8 @@ export default function InvestCard({
                     </Fragment>
                 )}
             </AccordionSummary>
-            {displayStatusBadge(panel, daysLeft)}
-            <DisplayExpiryCounter panel={panel} daysLeft={daysLeft} />
+            {displayStatusBadge(panel)}
+            <DisplayExpiryCounter panel={panel} />
         </section>
     );
 
@@ -182,21 +127,18 @@ export default function InvestCard({
         <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
     );
 
-    const showAccordion = ({ panel, daysLeft }) => (
+    const showAccordion = ({ panel }) => (
         <Accordion
             TransitionProps={{ unmountOnExit: true }}
             className="disabledLink"
             style={styles.accordion}
         >
-            {showPanel(panel, daysLeft)}
+            {showPanel(panel)}
             {showHiddenPanel(panel)}
         </Accordion>
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const { planDueDate } = panel.data;
-        const daysLeft = !planDueDate ? null : getDatesCountdown(planDueDate);
-
         const props = {
             key: ind,
             className: "position-relative mx-3 mb-5",
@@ -204,12 +146,29 @@ export default function InvestCard({
 
         return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? (
             <div {...props} ref={detectedCard}>
-                {showAccordion({ panel, daysLeft })}
+                {showAccordion({ panel })}
             </div>
         ) : (
-            <div {...props}>{showAccordion({ panel, daysLeft })}</div>
+            <div {...props}>{showAccordion({ panel })}</div>
         );
     });
 
     return <div className={classes.root}>{ActionsMap}</div>;
 }
+
+/* ARCHIVES
+
+const isBoleto = paymentMethod === "boleto";
+
+const { planExpiringDate } = panel.data;
+const daysLeft = !planExpiringDate ? null : getDatesCountdown(planExpiringDate);
+
+if (isBoleto) {
+    const isDuePay =
+        !isScheduledDate(payDueDate, { isDashed: true }) &&
+        transactionStatus !== "pago"; // for boleto
+    if (isDuePay || (daysLeft === 0 && transactionStatus !== "pendente"))
+        return "EXPIRADO";
+}
+
+ */
