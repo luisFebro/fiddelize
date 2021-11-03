@@ -47,8 +47,11 @@ function DisplayExpiryCounter({ history, panel }) {
         ? null
         : getDatesCountdown(planExpiringDate);
 
+    // even expirado is considered now as paid since we have the billing cycle modal to display that
     const isPaid =
-        transactionStatus === "pago" || transactionStatus === "disponível";
+        transactionStatus === "pago" ||
+        transactionStatus === "disponível" ||
+        transactionStatus === "expirado";
 
     const showActive = () => (
         <section
