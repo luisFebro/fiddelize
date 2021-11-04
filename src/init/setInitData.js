@@ -44,7 +44,6 @@ const getDataByRole = (role, initData) => {
         rememberAccess: true,
         linkId: 0,
         twoLastCpfDigits: initData.twoLastCpfDigits,
-        verifPass: initData.verificationPass,
         memberJob: initData.memberJob,
     };
 

@@ -49,8 +49,10 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
             })
                 .then(() => {
                     showToast(
-                        `Cliente ${itemData.name.cap()} foi excluído do seu clube de compras.`,
-                        { type: "success" }
+                        `Cliente ${itemData.name.cap()} foi excluído do seu clube de compras${
+                            isPro ? " e 1 crédito foi restaurado" : "."
+                        }`,
+                        { type: "success", dur: isPro ? 10000 : 7000 }
                     );
                     setRun("runName", `RecordedClientsList_${getId()}`, uify);
                     onClose();

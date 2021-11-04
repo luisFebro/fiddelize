@@ -29,7 +29,6 @@ export default async function disconnect(options = {}) {
                 success: false,
                 token: false,
                 appId: false,
-                verifPass: false,
                 birthday: false,
                 email: false,
             },

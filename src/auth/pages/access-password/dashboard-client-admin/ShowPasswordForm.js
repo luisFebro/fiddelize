@@ -12,7 +12,6 @@ import getAPI, { readVerificationPass } from "api";
 import setValObjWithStr from "utils/objects/setValObjWithStr";
 import { useBizData } from "init";
 import useAnimateElem from "hooks/scroll/useAnimateElem";
-import { setVar } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -97,18 +96,13 @@ export default function ShowPasswordForm({
 
         showToast("Ok, registrando...");
         updateUser(bizId, "cliente-admin", dataToSend)
-            .then(() =>
-                setVar(
-                    { verifPass: clientAdminData.verificationPass },
-                    "user"
-                ).then(() => {
-                    if (isFromCliAdminDash) {
-                        showToast("Senha foi alterada!", { type: "success" });
-                    } else {
-                        btnAction(true);
-                    }
-                })
-            )
+            .then(() => {
+                if (isFromCliAdminDash) {
+                    showToast("Senha foi alterada!", { type: "success" });
+                } else {
+                    btnAction(true);
+                }
+            })
             .catch((err) => showToast(err.response, { type: "error" }));
     };
 

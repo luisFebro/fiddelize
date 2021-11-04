@@ -28,10 +28,11 @@ export default function RemoveMemberBtn({ modalData }) {
     const handleRemoval = (itemData) => {
         showToast("Processando...");
         setTimeout(() => showToast(`Excluindo membro ${name}...`), 2900);
-        setTimeout(() => {
-            getAPI({
+        setTimeout(async () => {
+            const deleteRes = await getAPI({
                 method: "delete",
                 url: removeUser(),
+                errMsg: "Ocorreu um erro ao remover membro. Tente novamente.",
                 body: {
                     role: "cliente-membro",
                     userId: bizId,
@@ -39,28 +40,24 @@ export default function RemoveMemberBtn({ modalData }) {
                     bizId,
                     isPro,
                 },
-                fullCatch: true,
-                // params: { userId: bizId, thisRole: "cliente-membro" },
-            })
-                .then(() => {
-                    showToast(
-                        `Membro ${name} foi excluído dos seus registros!`,
-                        { type: "success" }
-                    );
-                    setRun("runName", "teamMemberList", uify);
-                })
-                .catch((err) => {
-                    // if (res.status !== 200)
-                    showToast("Membro excluído com sucesso.", {
-                        type: "error",
-                    });
-                });
+            });
+
+            if (!deleteRes) return null;
+
+            showToast(
+                `Membro ${name && name.cap()} foi excluído da sua equipe${
+                    isPro ? " e 1 crédito foi restaurado" : "."
+                }`,
+                { type: "success", dur: isPro ? 10000 : 7000 }
+            );
+
+            setRun("runName", "teamMemberList", uify);
         }, 5900);
     };
 
     const handleSubtitle = () => {
         const target = "membro";
-        const defaultChunk = `Confirmado a exclusão de:<br /><strong>${name}</strong> ?`;
+        const defaultChunk = `Confirmado a exclusão de: <strong>${name}</strong> ?`;
         let custom = `<br /><strong>1 crédito</strong> do ${target} removido será adicionado de volta ao seu saldo em créditos`;
         if (!isPro)
             custom =

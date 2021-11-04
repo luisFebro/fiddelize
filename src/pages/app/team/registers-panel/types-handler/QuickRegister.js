@@ -76,10 +76,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
 
     const styles = getStyles();
 
-    const [verifPass] = useData(["verifPass"], {
-        trigger: isNewMember,
-    });
-
     const [linkId] = useData(["linkId"]);
 
     const { bizId, bizName, bizLinkName, registerBonusCoins } = useBizData();
@@ -144,7 +140,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         linkScore,
         isNewMember,
         bizName,
-        verifPass,
         payload,
         bizLinkName,
         linkId,
@@ -348,22 +343,24 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     </section>
                 )}
                 {isNewMember && name && (
-                    <p className="font-weight-bold mx-3 mb-3 mt-5 text-small text-purple">
+                    <p className="font-weight-bold mx-3 mb-3 mt-5 font-site text-em-1 text-purple">
                         <strong className="font-weight-bold text-normal text-purple">
                             Notas:
                         </strong>
+                        <br />- O app dos membros{" "}
+                        <span className="text-underline">
+                            solicita uma senha
+                        </span>{" "}
+                        para certificar que somente membros autorizados possam
+                        cadastrar moedas e clientes com uma camada adicional de
+                        segurança.
                         <br />
-                        - A primeira senha para acesso ao app dos membros foi
-                        gerada e registrada no seu cadastro.
-                        <br />
-                        <br />
-                        - A senha é uma camada extra de segurança para
-                        certificar que somente membros autorizados possam
-                        cadastrar moedas, clientes, etc.
-                        <br />
-                        <br />- Você pode trocar a qualquer momento no seu
-                        painel de controle indo na aba ajustes > senhas > senha
-                        app membros.
+                        <br />- Você pode{" "}
+                        <strong className="text-underline">
+                            consultar e trocar
+                        </strong>{" "}
+                        a qualquer momento no seu painel de controle indo na aba
+                        ajustes > senhas > senha app membros.
                     </p>
                 )}
             </section>

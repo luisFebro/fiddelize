@@ -7,7 +7,6 @@ export default function useInvitationMsg({
     linkScore,
     isNewMember,
     bizName,
-    verifPass,
     payload,
     bizLinkName,
     linkId,
@@ -32,7 +31,7 @@ export default function useInvitationMsg({
             if (isNewMember) {
                 return `Segue o app do clube de compras para membros da ${
                     bizName && bizName.toUpperCase()
-                }. Acesse: ${downloadLink.current} | Senha: ${verifPass}`;
+                }. Acesse: ${downloadLink.current}`;
             }
             return `${getFirstName(
                 name.toUpperCase()
