@@ -14,7 +14,8 @@ export default function RemoveMemberBtn({ modalData }) {
 
     const { name, _id } = modalData;
 
-    const { bizId } = useBizData();
+    const { bizId, bizPlanData } = useBizData();
+    const isPro = bizPlanData && bizPlanData.isPro;
 
     const onOpen = () => {
         setFullOpen(true);
@@ -36,6 +37,7 @@ export default function RemoveMemberBtn({ modalData }) {
                     userId: bizId,
                     cliIds: _id,
                     bizId,
+                    isPro,
                 },
                 fullCatch: true,
                 // params: { userId: bizId, thisRole: "cliente-membro" },
@@ -56,6 +58,17 @@ export default function RemoveMemberBtn({ modalData }) {
         }, 5900);
     };
 
+    const handleSubtitle = () => {
+        const target = "membro";
+        const defaultChunk = `Confirmado a exclusão de:<br /><strong>${name}</strong> ?`;
+        let custom = `<br /><strong>1 crédito</strong> do ${target} removido será adicionado de volta ao seu saldo em créditos`;
+        if (!isPro)
+            custom =
+                "Na versão grátis, créditos não são restaurados. Atualize para um <strong>plano pro</strong> para restaurar créditos";
+
+        return `Créditos Restauráveis: ${custom}<br /><br />${defaultChunk}`;
+    };
+
     return (
         <section>
             <ButtonFab
@@ -68,8 +81,8 @@ export default function RemoveMemberBtn({ modalData }) {
                 variant="extended"
             />
             <ModalConfYesNo
-                title="Confirmação<br />de Exclusão de Membro"
-                subTitle={`Nota: o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${name}</strong> ?`}
+                title="Exclusão de Membro"
+                subTitle={handleSubtitle()}
                 setFullOpen={setFullOpen}
                 fullOpen={fullOpen}
                 actionFunc={handleRemoval}

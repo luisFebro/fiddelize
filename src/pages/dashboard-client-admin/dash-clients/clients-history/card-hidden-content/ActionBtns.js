@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from "utils/string/getFirstName";
+import { useBizData } from "init";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 import ClientProfile from "./modal-content-pages/ClientProfile";
@@ -8,10 +9,13 @@ import PurchaseHistoryBtn from "./history-purchase-btn/PurchaseHistoryBtn";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ActionBtns({ data }) {
+    const { bizPlanData } = useBizData();
+    const isPro = bizPlanData && bizPlanData.isPro;
+
     return (
         <section>
             {showBlobActionBtns(data)}
-            {showDeleteBtn(data)}
+            {showDeleteBtn(data, isPro)}
             <style jsx global>
                 {`
                     .title-blob-action {
@@ -88,24 +92,38 @@ const showBlobActionBtns = (data) => (
     </main>
 );
 
-const showDeleteBtn = (data) => (
-    <div className="animated zoomIn mt-5">
-        <YesNoModalBtn
-            button={{
-                iconFontAwesome: <FontAwesomeIcon icon="trash-alt" />,
-                backgroundColor: "var(--expenseRed)",
-                title: "excluir",
-                variant: "extended",
-                position: "relative",
-                size: "small",
-            }}
-            modalData={{
-                title: "Confirmação<br />de Exclusão de Cliente",
-                subTitle: `Nota: o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
-                itemData: data,
-            }}
-            setRun={null}
-            run={null}
-        />
-    </div>
-);
+function showDeleteBtn(data, isPro) {
+    const handleSubtitle = () => {
+        const target = "cliente";
+        const defaultChunk = `Confirmado a exclusão de: <strong>${data.name.cap()}</strong> ?`;
+        let custom = `<br /><strong>1 crédito</strong> do ${target} removido será adicionado de volta ao seu saldo em créditos`;
+        if (!isPro)
+            custom =
+                "Na versão grátis, créditos não são restaurados. Atualize para um <strong>plano pro</strong> para restaurar créditos";
+
+        return `Créditos Restauráveis: ${custom}<br /><br />${defaultChunk}`;
+    };
+
+    return (
+        <div className="animated zoomIn mt-5">
+            <YesNoModalBtn
+                button={{
+                    iconFontAwesome: <FontAwesomeIcon icon="trash-alt" />,
+                    backgroundColor: "var(--expenseRed)",
+                    title: "excluir",
+                    variant: "extended",
+                    position: "relative",
+                    size: "small",
+                }}
+                modalData={{
+                    title: "Exclusão de Cliente",
+                    subTitle: handleSubtitle(),
+                    itemData: data,
+                    isPro,
+                }}
+                setRun={null}
+                run={null}
+            />
+        </div>
+    );
+}

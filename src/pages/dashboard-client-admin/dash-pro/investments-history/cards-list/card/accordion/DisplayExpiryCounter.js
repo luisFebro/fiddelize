@@ -1,4 +1,3 @@
-// NEED UPDATE HERE
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";

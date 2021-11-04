@@ -18,7 +18,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
 
     const uify = useAction();
 
-    const { title, subTitle, itemData } = modalData;
+    const { title, subTitle, itemData, isPro } = modalData;
 
     const { bizId } = useBizData();
 
@@ -42,6 +42,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                     userId: bizId,
                     cliIds: itemData._id,
                     bizId,
+                    isPro,
                 },
                 fullCatch: true,
                 // params: { userId: bizId, thisRole: "cliente" },

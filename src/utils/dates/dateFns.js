@@ -76,7 +76,8 @@ const startWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 const endMonth = endOfMonth(new Date());
 
 const formatSlashDMY = (newDate = new Date()) => format(newDate, "dd/MM/yyyy");
-
+const formatDate = (newDate = new Date(), param = "dd/MMM") =>
+    format(new Date(newDate), param, { locale: pick() });
 // n1 - especially useful for expiration date
 const setUTCDateTime = (options = {}) => {
     // 4 hour is the most late offset so that we can UTC dates from midnight of the date. If in SP when the UTC offset is 3, it will be triggered 1am and so on... 4 hour offset is only valid in the backend because this date will be handled in a foreign server and UTC is 0, no diff.
@@ -90,6 +91,7 @@ export {
     ptBRLocale,
     formatDMY,
     formatSlashDMY,
+    formatDate,
     fromNow,
     calendar,
     addDays,

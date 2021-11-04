@@ -18,14 +18,17 @@ export default function RateFiddelize() {
     const [dataDB, setDataDB] = useState({
         nps: null,
         xpReport: "",
+        loadingDB: true,
     });
-    const { nps, xpReport } = dataDB;
+    const { nps, xpReport, loadingDB } = dataDB;
 
-    const [userId, customerName] = useData(["userId", "name"]);
-    const loadingData = userId === "...";
+    const { userId, name } = useData();
 
     useEffect(() => {
-        if (loadingData) return;
+        if (!userId) return;
+
+        // the scroll is make the modal suddenly shut down.
+        window.onscroll = undefined;
 
         (async () => {
             const data = await readUser(
@@ -40,9 +43,10 @@ export default function RateFiddelize() {
                 ...prev,
                 nps: reviewData && reviewData.nps,
                 xpReport: reviewData && reviewData.xpReport,
+                loadingDB: false,
             }));
         })();
-    }, [userId, loadingData]);
+    }, [userId]);
 
     return (
         <section>
@@ -52,12 +56,12 @@ export default function RateFiddelize() {
                 margin="mt-5"
                 padding=" "
             />
-            <ShowNPS dbNps={nps} userId={userId} loadingData={loadingData} />
+            <ShowNPS dbNps={nps} userId={userId} loadingData={loadingDB} />
             <ShowXpReportField
                 dbXpReport={xpReport}
                 userId={userId}
-                loadingData={loadingData}
-                customerName={customerName}
+                loadingData={loadingDB}
+                customerName={name}
             />
         </section>
     );
@@ -142,7 +146,7 @@ function ShowNPS({ dbNps, userId, loadingData }) {
                 </section>
             </section>
             <div
-                className="position-relative d-flex justify-content-end"
+                className="position-relative d-flex justify-content-end mr-3"
                 style={{
                     top: -15,
                 }}
@@ -160,7 +164,7 @@ function ShowNPS({ dbNps, userId, loadingData }) {
     );
 
     const showResearchMode = () => (
-        <Fragment>
+        <section className="mx-3">
             <h2 className="text-purple text-normal font-weight-bold">
                 Em uma escala de 1 a 10, quão provável você recomendaria a{" "}
                 <span className="text-underline">Fiddelize</span> para
@@ -188,10 +192,18 @@ function ShowNPS({ dbNps, userId, loadingData }) {
                     showToast={showToast}
                 />
             )}
-        </Fragment>
+        </section>
     );
 
     const isResearchMode = !dbNps || (!dbNps && edit) || edit;
+    if (loadingData) {
+        return (
+            <p className="container-center text-purple text-normal font-weight-bold">
+                Carregando...
+            </p>
+        );
+    }
+
     return (
         <Fragment>
             {isResearchMode ? showResearchMode() : showAlreadyDbDataMode()}
@@ -211,9 +223,7 @@ function ShowXpReportField({
     const styles = getStyles();
 
     useEffect(() => {
-        if (dbXpReport) {
-            setXpReport(dbXpReport);
-        }
+        if (dbXpReport) setXpReport(dbXpReport);
     }, [dbXpReport]);
 
     const handleReportEditDone = async () => {
@@ -236,10 +246,10 @@ function ShowXpReportField({
 
     const MAX_LEN = 300;
     const showResearchMode = () => (
-        <Fragment>
+        <section className="mx-3">
             <TextField
                 multiline
-                placeholder="Escreva sobre sua experiência, resultados e/ou sugestões de melhorias usando os serviços da Fiddelize."
+                placeholder="Escreva aqui seu relato"
                 rows={5}
                 InputProps={{
                     style: styles.fieldFormValue,
@@ -261,7 +271,12 @@ function ShowXpReportField({
                 </span>
             </div>
             {xpReport && (
-                <div className="container-center animated fadeInUp mx-3">
+                <div
+                    className="container-center animated fadeInUp mx-3"
+                    style={{
+                        marginBottom: 100,
+                    }}
+                >
                     <ButtonFab
                         title={
                             dbXpReport ? "atualizar relato" : "enviar relato"
@@ -275,7 +290,7 @@ function ShowXpReportField({
                     />
                 </div>
             )}
-        </Fragment>
+        </section>
     );
 
     const showAlreadyDbDataMode = () => (
@@ -311,12 +326,17 @@ function ShowXpReportField({
     const isResearchMode = !dbXpReport || (!dbXpReport && edit) || edit;
 
     const isEdit = edit ? "Atualize seu relato:" : "Dê seu relato";
+
     return (
-        <Fragment>
-            <h2 className="mt-3 text-purple text-center text-subtitle font-weight-bold">
+        <section className="mx-3">
+            <h2 className="mt-3 text-purple text-center text-subtitle">
                 {isResearchMode ? isEdit : "Seu último relato:"}
+                <p className="font-site text-em-0-8 font-normal text-grey">
+                    Escreva sobre sua experiência, resultados ou sugestões de
+                    melhorias usando os serviços da Fiddelize.
+                </p>
             </h2>
             {isResearchMode ? showResearchMode() : showAlreadyDbDataMode()}
-        </Fragment>
+        </section>
     );
 }

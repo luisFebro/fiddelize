@@ -7,6 +7,9 @@ export default function useDetectScrollUp() {
 
     useEffect(() => {
         detectScrollDirection((dirUp) => setScrollingUpward(dirUp));
+        return () => {
+            window.onscroll = undefined;
+        };
     }, []);
 
     return isScrollingUpward;

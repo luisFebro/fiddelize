@@ -1,0 +1,74 @@
+import InstructionBtn from "components/buttons/InstructionBtn";
+import { useBizData } from "init";
+import { formatDate } from "utils/dates/dateFns";
+import ActiveItemsBtn from "./active-items-btn/ActiveItemsBtn";
+
+export default function BillingCycleActiveItems() {
+    const { bizPlanData } = useBizData();
+
+    const isPro = bizPlanData && bizPlanData.isPro;
+    const startDate = bizPlanData && bizPlanData.startDate;
+    const finishDate = bizPlanData && bizPlanData.finishDate;
+
+    const startDayMonth = startDate && formatDate(startDate, "dd' 'MMM").cap();
+    const finishDayMonth =
+        finishDate && formatDate(finishDate, "dd' 'MMM").cap();
+
+    // years
+    const startYear = startDate && new Date(startDate).getFullYear();
+    const finishYear = finishDate && new Date(finishDate).getFullYear();
+    // end years
+
+    const showDates = () => (
+        <section className="container-center">
+            <section
+                className="d-flex justify-content-around"
+                style={{
+                    width: 300,
+                }}
+            >
+                <div>
+                    <strong className="text-subtitle font-weight-bold">
+                        {startDayMonth}
+                    </strong>
+                    <br />
+                    {startYear}
+                </div>
+                <p className="d-flex align-items-center">até</p>
+                <div>
+                    <strong className="text-subtitle font-weight-bold">
+                        {finishDayMonth}
+                    </strong>
+                    <br />
+                    {finishYear}
+                </div>
+            </section>
+            <div className="mt-3">
+                <ActiveItemsBtn />
+            </div>
+        </section>
+    );
+
+    const textInstru =
+        "A duração do plano é feita baseada no seu último pedido que incluem serviços expiráveis como Novvos Clientes e Novvos Membros.<br /><br />A data de expiração do ciclo do plano é aquela com duração mais longa.";
+
+    return (
+        <section className="mb-5 text-normal text-purple text-center">
+            <p className="container-center">
+                <div className="d-flex">
+                    <p className="mt-3 d-table text-pill">Duração do plano:</p>
+                    <div className="ml-3">
+                        <InstructionBtn text={textInstru} mode="tooltip" />
+                    </div>
+                </div>
+            </p>
+            {isPro ? (
+                showDates()
+            ) : (
+                <p className="my-3 text-center text-normal text-grey font-weight-bold">
+                    sem plano ativo
+                </p>
+            )}
+        </section>
+    );
+}

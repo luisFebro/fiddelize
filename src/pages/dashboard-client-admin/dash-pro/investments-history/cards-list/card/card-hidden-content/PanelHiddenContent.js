@@ -1,14 +1,12 @@
 import { Fragment, useState } from "react";
-import PropTypes from "prop-types";
-import TextField from "@material-ui/core/TextField";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import LoadableVisible from "components/code-splitting/LoadableVisible";
-import copyTextToClipboard from "utils/document/copyTextToClipboard";
 import setProRenewal from "utils/biz/setProRenewal";
 import showToast from "components/toasts";
 import { isScheduledDate } from "utils/dates/dateFns";
 import extractStrData from "utils/string/extractStrData";
+import copyText from "utils/document/copyText";
 
 const AsyncOrdersTableContent = LoadableVisible({
     loader: () =>
@@ -24,109 +22,65 @@ const AsyncPixDetails = LoadableVisible({
         ),
 });
 
-PanelHiddenContent.propTypes = {
-    data: PropTypes.object.isRequired,
-};
-
-const getStyles = () => ({
-    pointsContainer: {
-        position: "relative",
-    },
-    fieldFormValue: {
-        backgroundColor: "#fff",
-        color: "var(--themeP)",
-        fontSize: "20px",
-        fontWeight: "bold",
-        fontFamily: "var(--mainFont)",
-    },
-});
-
 function PanelHiddenContent({ history, data }) {
-    const [copy, setCopy] = useState(false);
     const [loadingOrderPage, setLoadingOrderPage] = useState(false);
 
-    const isDuePay =
-        !isScheduledDate(data.payDueDate, { isDashed: true }) &&
-        data.transactionStatus !== "pago"; // for boleto
+    const showBoletoDetails = () => {
+        const isDuePay =
+            !isScheduledDate(data.payDueDate, { isDashed: true }) &&
+            data.transactionStatus !== "pago"; // for boleto
 
-    const styles = getStyles();
+        const handleCopy = () => {
+            copyText(data.barcode, {
+                msg: "Linha Copiada! Use no App do seu banco favorito.",
+            });
+        };
 
-    const handleCopy = () => {
-        setCopy(true);
-        showToast("Linha Copiada! Use no App do seu banco favorito.", {
-            type: "success",
-        });
-        setTimeout(
-            () => copyTextToClipboard("#barcodeLineArea", () => null),
-            3000
+        return (
+            <Fragment>
+                {isDuePay ||
+                    (data.transactionStatus !== "pago" && (
+                        <Fragment>
+                            <section className="mt-4 text-normal text-break font-weight-bold text-shadow">
+                                <div className="d-flex">
+                                    <p className="align-items-center mr-4 text-subtitle font-weight-bold text-white text-shadow text-center">
+                                        • Linha:
+                                    </p>
+                                    <ButtonFab
+                                        position="relative"
+                                        size="small"
+                                        title="copiar"
+                                        onClick={() => handleCopy()}
+                                        backgroundColor="var(--themeSDark--default)"
+                                        variant="extended"
+                                    />
+                                </div>
+                                {data.barcode}
+                            </section>
+                            <section className="mt-4 mb-5 container-center">
+                                <a
+                                    rel="noopener noreferrer"
+                                    className="no-text-decoration"
+                                    href={data.paymentLink}
+                                    target="_blank"
+                                >
+                                    <ButtonFab
+                                        position="relative"
+                                        size="medium"
+                                        title="Abrir Boleto"
+                                        onClick={null}
+                                        backgroundColor="var(--themeSDark--default)"
+                                        variant="extended"
+                                    />
+                                </a>
+                            </section>
+                        </Fragment>
+                    ))}
+            </Fragment>
         );
     };
 
-    const showBarcodeLine = (data) => (
-        <Fragment>
-            {!copy ? (
-                <Fragment>{data.barcode}</Fragment>
-            ) : (
-                <TextField
-                    multiline
-                    rows={2}
-                    id="barcodeLineArea"
-                    name="message"
-                    InputProps={{
-                        style: styles.fieldFormValue,
-                    }}
-                    value={data.barcode}
-                    variant="outlined"
-                    fullWidth
-                />
-            )}
-        </Fragment>
-    );
-
-    const showBoletoDetails = (data) => (
-        <Fragment>
-            {isDuePay ||
-                (data.transactionStatus !== "pago" && (
-                    <Fragment>
-                        <section className="mt-4 text-normal text-break font-weight-bold text-shadow">
-                            <div className="d-flex">
-                                <p className="align-items-center mr-4 text-subtitle font-weight-bold text-white text-shadow text-center">
-                                    • Linha:
-                                </p>
-                                <ButtonFab
-                                    position="relative"
-                                    size="small"
-                                    title="copiar"
-                                    onClick={handleCopy}
-                                    backgroundColor="var(--themeSDark--default)"
-                                    variant="extended"
-                                />
-                            </div>
-                            {showBarcodeLine(data)}
-                        </section>
-                        <section className="mt-4 mb-5 container-center">
-                            <a
-                                rel="noopener noreferrer"
-                                className="no-text-decoration"
-                                href={data.paymentLink}
-                                target="_blank"
-                            >
-                                <ButtonFab
-                                    position="relative"
-                                    size="medium"
-                                    title="Abrir Boleto"
-                                    onClick={null}
-                                    backgroundColor="var(--themeSDark--default)"
-                                    variant="extended"
-                                />
-                            </a>
-                        </section>
-                    </Fragment>
-                ))}
-        </Fragment>
-    );
-
-    const showBankDebitDetails = (data) => (
+    const showBankDebitDetails = () => (
         <section className="mt-4 mb-5 container-center">
             <a
                 rel="noopener noreferrer"
@@ -146,7 +100,7 @@ function PanelHiddenContent({ history, data }) {
         </section>
     );
 
-    const showCreditCardDetails = (data) => {
+    const showCreditCardDetails = () => {
         const { paymentDetails } = data;
         const { installmentDesc } = extractStrData(paymentDetails);
 
@@ -159,7 +113,7 @@ function PanelHiddenContent({ history, data }) {
         );
     };
 
-    const showPixDetails = (data) => (
+    const showPixDetails = () => (
         <AsyncPixDetails itemAmount={data.investAmount} />
     );
 
@@ -181,10 +135,10 @@ function PanelHiddenContent({ history, data }) {
                     <span className="d-block text-normal font-weight-bold">
                         {data.reference}
                     </span>
-                    {isBoleto && showBoletoDetails(data)}
-                    {isBankDebit && showBankDebitDetails(data)}
-                    {isCreditCard && showCreditCardDetails(data)}
-                    {isPix && showPixDetails(data)}
+                    {isBoleto && showBoletoDetails()}
+                    {isBankDebit && showBankDebitDetails()}
+                    {isCreditCard && showCreditCardDetails()}
+                    {isPix && showPixDetails()}
                 </p>
             </section>
         );
@@ -275,34 +229,3 @@ function getPlanCodeBr(code) {
 // END HELPERS
 
 export default withRouter(PanelHiddenContent);
-
-/* ARCHIVES
-const displayCopyBtn = () => (
-    <section className="d-flex justify-content-end my-3">
-        <ButtonFab
-            size="medium"
-            title="Copiar"
-            onClick={handleCopy}
-            backgroundColor="var(--themeSDark--default)"
-            variant="extended"
-        />
-    </section>
-);
-
-
-<TextField
-    multiline
-    rows={8}
-    id="msgArea"
-    name="message"
-    InputProps={{
-        style: styles.fieldFormValue,
-    }}
-    value={data.sentMsgDesc}
-    variant="outlined"
-    fullWidth
-/>
-
-<p className="animated flip slow delay-2s"> first flip that I was looking for with the style of  a n entire 360 with zooming.
-<CreatedAtBr createdAt={createdAt} />
-*/
