@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useBizData } from "init";
+import usePro from "init/pro";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
@@ -14,8 +15,8 @@ export default function RemoveMemberBtn({ modalData }) {
 
     const { name, _id } = modalData;
 
-    const { bizId, bizPlanData } = useBizData();
-    const isPro = bizPlanData && bizPlanData.isPro;
+    const { bizId } = useBizData();
+    const { isPro } = usePro();
 
     const onOpen = () => {
         setFullOpen(true);

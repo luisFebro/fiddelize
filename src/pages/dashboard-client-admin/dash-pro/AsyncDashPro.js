@@ -3,7 +3,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import useDetectScrollUp from "hooks/scroll/useDetectScrollUp";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { Link } from "react-router-dom";
-import { useBizData } from "init";
+import usePro from "init/pro";
 import DashSectionTitle from "../../DashSectionTitle";
 import InvestHistory from "./investments-history/InvestHistory";
 import PlanAndServicesArea from "./PlanAndServicesArea";
@@ -23,9 +23,7 @@ export default function AsyncDashPro() {
     const [allowHideBtn, setAllowHideBtn] = useState(false);
     const isScrollingUp = useDetectScrollUp();
 
-    const { bizPlanData } = useBizData();
-    const plan = bizPlanData && bizPlanData.plan;
-    const isPro = bizPlanData && bizPlanData.isPro;
+    const { plan, isPro } = usePro();
 
     useEffect(() => {
         const runTimeout = setTimeout(() => {

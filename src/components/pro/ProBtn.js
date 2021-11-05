@@ -29,7 +29,7 @@ export default function ProBtn({ type = "link", linkTitle }) {
                     iconMu={AddCircleIcon}
                     size="medium"
                     color="white"
-                    backgroundColor="var(--themeSDark--default)"
+                    backgroundColor="var(--niceUiYellow)"
                 />
             </Link>
         );

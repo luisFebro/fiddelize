@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from "utils/string/getFirstName";
-import { useBizData } from "init";
+import usePro from "init/pro";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 import ClientProfile from "./modal-content-pages/ClientProfile";
@@ -9,8 +9,7 @@ import PurchaseHistoryBtn from "./history-purchase-btn/PurchaseHistoryBtn";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ActionBtns({ data }) {
-    const { bizPlanData } = useBizData();
-    const isPro = bizPlanData && bizPlanData.isPro;
+    const { isPro } = usePro();
 
     return (
         <section>

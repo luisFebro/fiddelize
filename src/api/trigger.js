@@ -22,7 +22,8 @@ function watchTrigger({
         return triggerVars;
     }
 
-    return false;
+    // allow the trigger for the first loading
+    return true;
 }
 
 // should be replaced by watchTrigger...

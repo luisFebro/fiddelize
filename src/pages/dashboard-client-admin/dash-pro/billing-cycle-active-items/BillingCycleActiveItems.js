@@ -1,14 +1,11 @@
+import { Fragment } from "react";
 import InstructionBtn from "components/buttons/InstructionBtn";
-import { useBizData } from "init";
 import { formatDate } from "utils/dates/dateFns";
+import usePro from "init/pro";
 import ActiveItemsBtn from "./active-items-btn/ActiveItemsBtn";
 
 export default function BillingCycleActiveItems() {
-    const { bizPlanData } = useBizData();
-
-    const isPro = bizPlanData && bizPlanData.isPro;
-    const startDate = bizPlanData && bizPlanData.startDate;
-    const finishDate = bizPlanData && bizPlanData.finishDate;
+    const { isPro, startDate, finishDate } = usePro();
 
     const startDayMonth = startDate && formatDate(startDate, "dd' 'MMM").cap();
     const finishDayMonth =
@@ -54,16 +51,23 @@ export default function BillingCycleActiveItems() {
 
     return (
         <section className="mb-5 text-normal text-purple text-center">
-            <p className="container-center">
-                <div className="d-flex">
-                    <p className="mt-3 d-table text-pill">Duração do plano:</p>
-                    <div className="ml-3">
-                        <InstructionBtn text={textInstru} mode="tooltip" />
-                    </div>
-                </div>
-            </p>
             {isPro ? (
-                showDates()
+                <Fragment>
+                    <p className="container-center">
+                        <div className="d-flex">
+                            <p className="mt-3 d-table text-pill">
+                                Duração do plano:
+                            </p>
+                            <div className="ml-3">
+                                <InstructionBtn
+                                    text={textInstru}
+                                    mode="tooltip"
+                                />
+                            </div>
+                        </div>
+                    </p>
+                    {showDates()}
+                </Fragment>
             ) : (
                 <p className="my-3 text-center text-normal text-grey font-weight-bold">
                     sem plano ativo

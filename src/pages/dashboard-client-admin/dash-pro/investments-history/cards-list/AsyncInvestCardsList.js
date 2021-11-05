@@ -168,7 +168,7 @@ export default function AsyncCardsList() {
                 src="/img/illustrations/empty-fiddelize-invest.svg"
                 offline
                 alt="sem investimentos"
-                title="Sem investimentos. Seu porquinho está vazio."
+                title={`Sem investimentos. <p class="text-em-0-8 line-height-30">Conquiste mais clientes oferecendo moeda digital exclusiva para troca de benefícios.</p>`}
             />
             <div
                 className="mt-3 container-center"
@@ -182,7 +182,7 @@ export default function AsyncCardsList() {
                 >
                     <ButtonFab
                         size="large"
-                        title="VER SERVIÇOS"
+                        title="ENTRE PARA O CLUBE"
                         position="relative"
                         onClick={null}
                         backgroundColor="var(--themeSDark--default)"

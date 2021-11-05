@@ -1,9 +1,10 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useData, { useBizData } from "init";
+import useData from "init";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import { Load } from "components/code-splitting/LoadableComp";
+import usePro from "init/pro";
 
 export default withRouter(PlanBadges);
 
@@ -16,12 +17,10 @@ export const AsyncNotificationBadge = Load({
 });
 
 function PlanBadges({ history }) {
-    // this export is required because this overrides the title in mobile testing...
-    const { bizPlan } = useBizData();
+    const { isPro, plan } = usePro();
 
     const [itemsCount, loading] = useData(["pendingOrderItemsCount"], "global");
     const gotPendingOrder = !loading && itemsCount > 0;
-    const isFree = bizPlan === "gratis";
 
     const destiny = itemsCount ? "/pedidos/admin" : "/planos?cliente-admin=1";
 
@@ -99,27 +98,27 @@ function PlanBadges({ history }) {
     );
 
     const showPlanTitle = () => (
-        <section className={`${bizPlan} position-relative`}>
-            <span className="title mr-2">{isFree && "Sua versão:"}</span>
+        <section className={`${plan} position-relative`}>
+            <span className="title mr-2">{!isPro && "Sua versão:"}</span>
             <span
-                className={`plan ${bizPlan} position-relative d-inline-block text-center main-font text-em-1-2 font-weight-bold`}
+                className={`plan ${plan} position-relative d-inline-block text-center main-font text-em-1-2 font-weight-bold`}
             >
-                {!isFree && "plano "}
-                {bizPlan}
+                {isPro && "plano "}
+                {plan}
             </span>
-            {gotPendingOrder && !isFree && displayPendingOrderBtn()}
+            {gotPendingOrder && isPro && displayPendingOrderBtn()}
         </section>
     );
 
     return (
         <section className="plan-badge--root text-small text-white animated fadeIn">
-            {!isFree && (
-                <div className={`${bizPlan}-icon position-relative`}>
+            {isPro && (
+                <div className={`${plan}-icon position-relative`}>
                     <FontAwesomeIcon icon="crown" />
                 </div>
             )}
             {showPlanTitle()}
-            {isFree && <Fragment>{showFreeUpdateBtn()}</Fragment>}
+            {!isPro && <Fragment>{showFreeUpdateBtn()}</Fragment>}
         </section>
     );
 }

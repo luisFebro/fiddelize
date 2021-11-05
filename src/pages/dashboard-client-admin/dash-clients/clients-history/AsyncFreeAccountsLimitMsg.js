@@ -51,8 +51,6 @@ const expiredMsg = () => {
 // END EXPIRING MSGS
 
 // Need to reload to update. And even after reloaded, there's a delay to update...
-// insert bizPlan checking in the component which holds this.
-
 export default function AsyncFreeAccountsLimitMsg() {
     const { name } = useData();
     const { countCliUsers } = useBizData();
