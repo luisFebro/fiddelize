@@ -2,22 +2,15 @@ import { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
-import setProRenewal from "utils/biz/setProRenewal";
-import { PeriodSelection } from "../../../comps/MainComps";
 import Simulator from "./Simulator";
+// import setProRenewal from "utils/biz/setProRenewal";
 // import NotesSwitcher from "components/buttons/NotesSwitcher";
 
 export default withRouter(AsyncAddCustomersContent);
 
-function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
+function AsyncAddCustomersContent({ modalData, handleFullClose }) {
     let { period } = modalData;
-    const {
-        handleItem,
-        // creditsBadge
-        isCreditsBadge,
-        currPlan,
-        // end creditsBadge
-    } = modalData;
+    const { handleItem, currPlan } = modalData;
 
     const [data, setData] = useState({
         totalPackage: 0,
@@ -42,7 +35,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
     };
 
     const handlePeriodName = () => {
-        if (isCreditsBadge) return "";
         return period === "yearly" ? "Anual" : "Mensal";
     };
 
@@ -70,17 +62,6 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         if (isFunc) {
             handleItem("update", { item });
             handleFullClose();
-        }
-
-        if (isCreditsBadge) {
-            setProRenewal({
-                itemList: [item],
-                period: innerPeriod,
-                planBr: currPlan,
-                investAmount: inv,
-            }).then(() => {
-                history.push("/pedidos/admin");
-            });
         }
     };
 
@@ -117,15 +98,10 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
         </Fragment>
     );
 
-    const showPeriodSelection = () => (
-        <PeriodSelection containerCenter handlePeriod={handleInnerPeriod} />
-    );
-
     return (
         <section>
             {showTitle()}
             {showIllustrationAndAbout()}
-            {isCreditsBadge && showPeriodSelection()}
             <Simulator
                 handleData={handleData}
                 period={period}
@@ -138,6 +114,22 @@ function AsyncAddCustomersContent({ history, modalData, handleFullClose }) {
 }
 
 /* ARCHIVED
+const showPeriodSelection = () => (
+    <PeriodSelection containerCenter handlePeriod={handleInnerPeriod} />
+);
+
+if (isCreditsBadge) {
+    setProRenewal({
+        itemList: [item],
+        period: innerPeriod,
+        planBr: currPlan,
+        investAmount: inv,
+    }).then(() => {
+        history.push("/pedidos/admin");
+    });
+}
+
+
 const notes = (
     <section className="text-purple font-site text-em-1-2 my-3 text-left mx-3">
         <p className="text-left text-purple mt-3">

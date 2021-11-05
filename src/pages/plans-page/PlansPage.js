@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useData, { useBizData } from "init";
-import usePro from "hooks/pro/usePro";
+import usePro from "init/pro";
 import StartPage from "./StartPage";
 import HandlePlan from "./plan-modes/HandlePlan";
 import ReturnBtn from "../dashboard-client-admin/ReturnBtn";
 
-export default function PlansPage() {
-    const [currPlan, setCurrPlan] = useState("all");
-
-    const { isPro, loading } = usePro();
-    useEffect(() => {
-        if (isPro) setCurrPlan("bronze");
-    }, [isPro]);
+export default function PlansPage({ location }) {
+    const { isPro } = usePro();
+    // skip the start page
+    const needStore =
+        isPro ||
+        (isPro && location.search && location.search.includes("store=1"));
+    const [currPlan, setCurrPlan] = useState(needStore ? "bronze" : "all");
 
     const { bizName, bizLogo } = useBizData();
     const { firstName: adminName } = useData();
@@ -24,18 +24,23 @@ export default function PlansPage() {
         setCurrPlan,
     };
 
-    if (loading) {
-        return (
-            <p className="full-page text-white text-center text-subtitle font-weight-bold">
-                Carregando...
-            </p>
-        );
-    }
     return (
         <section>
             <ReturnBtn icon="arrow-left" />
-            {!isPro && <StartPage {...startPageProps} />}
+            {!needStore && <StartPage {...startPageProps} />}
             <HandlePlan setCurrPlan={setCurrPlan} currPlan={currPlan} />
         </section>
     );
 }
+
+/* ARCHIVES
+
+if (loading) {
+    return (
+        <p className="full-page text-white text-center text-subtitle font-weight-bold">
+            Carregando...
+        </p>
+    );
+}
+
+ */

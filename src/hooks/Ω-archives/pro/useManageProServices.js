@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { default as checkToday } from "date-fns/isToday";
 import getAccurateDate from "utils/dates/getAccurateDate";
-import useAPI, { removeServices } from "api/useAPI";
+import useAPI from "api/useAPI";
 import getVar from "init/var";
 import { isScheduledDate, addDays } from "utils/dates/dateFns";
-import { IS_PROD } from "config/clientUrl";
 import didRunOnce from "utils/storage/didRunOnce";
 import { useBizData } from "init";
 import { sendNotification } from "api/frequent";
@@ -46,7 +45,7 @@ export default function useManageProServices() {
 
     useAPI({
         method: "delete",
-        url: removeServices(userId),
+        url: null,
         trigger: nextExpiryDate && isExpired,
         params: { nextExpiryDate },
     });
@@ -138,12 +137,12 @@ export default function useManageProServices() {
         // eslint-disable-next-line
     }, [nextExpiryDate, proData.loading]);
 
-    useEffect(() => {
-        // fix date redirection will only applied on production env.
-        if (isToday === false && userId && IS_PROD) {
-            window.location.href = "/conserte-data";
-        }
-    }, [isToday, userId]);
+    // useEffect(() => {
+    //     // fix date redirection will only applied on production env.
+    //     if (isToday === false && userId && IS_PROD) {
+    //         window.location.href = "/conserte-data";
+    //     }
+    // }, [isToday, userId]);
 }
 
 function getPushNotifData(type, data) {

@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
 const getStyles = () => ({
     crownIcon: {

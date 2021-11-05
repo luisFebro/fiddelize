@@ -32,7 +32,6 @@ import {
     // end cli-admin
     AsyncAccessPassword,
     AsyncNewPassword,
-    AsyncFixDatePage,
     AsyncPasswordPage,
     AsyncTeamPassword,
     AsyncTeamApp,
@@ -153,11 +152,6 @@ function Website({ location }) {
                     path="/temporariamente-indisponivel-503"
                     exact
                     component={UnavailableService}
-                />
-                <Route
-                    path="/conserte-data"
-                    exact
-                    component={AsyncFixDatePage}
                 />
                 <Route
                     path="/senha-de-acesso"

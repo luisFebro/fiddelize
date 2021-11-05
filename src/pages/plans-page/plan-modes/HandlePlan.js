@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncGoldPlan = Load({
     loader: () =>
@@ -20,16 +20,16 @@ const AsyncBronzePlan = Load({
         ),
 });
 
-export default function HandlePlan({ currPlan: status, setCurrPlan }) {
+export default function HandlePlan({ currPlan, setCurrPlan }) {
     return (
         <Fragment>
-            {status === "gold" && <AsyncGoldPlan setCurrPlan={setCurrPlan} />}
+            {currPlan === "gold" && <AsyncGoldPlan setCurrPlan={setCurrPlan} />}
 
-            {status === "silver" && (
+            {currPlan === "silver" && (
                 <AsyncSilverPlan setCurrPlan={setCurrPlan} />
             )}
 
-            {status === "bronze" && (
+            {currPlan === "bronze" && (
                 <AsyncBronzePlan setCurrPlan={setCurrPlan} />
             )}
         </Fragment>

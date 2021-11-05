@@ -1,9 +1,8 @@
 import { Fragment } from "react";
 import { useBizData } from "init";
 import FaqAccordion from "components/expansion-panels/faq/FaqAccordion";
-import usePro from "hooks/pro/usePro";
+import ProBtn from "components/pro/ProBtn";
 import "./_ReviewResults.scss";
-import AddCustomersBtn from "../../../../../plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
 
 const textQ1 = (
     <p>
@@ -79,25 +78,13 @@ const textQ5 = (
 export default function ReviewResults({ mainData = {}, isBizAdmin }) {
     const { detractors, passives, promoters } = mainData;
 
-    const { plan: currPlan, usageTimeEnd, credits } = usePro({
-        service: "Novvos Clientes",
-    });
-
-    const modalData = {
-        isCreditsBadge: true, // it will allow period choice and handle individual order
-        currPlan: currPlan === "gratis" ? "bronze" : currPlan,
-        expiryDate: usageTimeEnd,
-    };
-
     const textQ8 = (
         <Fragment>
             <p>
-                Basta investir nos pacotes de apps para clientes. O serviço de
+                Basta investir no alcance de novos clientes. O serviço de
                 avaliações (Pontuação Promotores e Nota XP), relatos de compra e
                 análises em tempo real são integrados{" "}
-                <strong>sem custos adicionais</strong>. É um serviço da
-                Fiddelize feito para aumentar o valor tanto para os apps como
-                para os negócios e seus clientes na plataforma.
+                <strong>sem limites ou custos adicionais</strong>.
             </p>
             <p>
                 Todas as funcionalidades do app dos clientes e dos membros são{" "}
@@ -106,9 +93,9 @@ export default function ReviewResults({ mainData = {}, isBizAdmin }) {
                 cores, ícones, etc.
             </p>
             <div>
-                <AddCustomersBtn
-                    linkTitle="Investir em mais apps para clientes agora"
-                    modalData={modalData}
+                <ProBtn
+                    type="link"
+                    linkTitle="Invista no alcance de novos clientes"
                 />
             </div>
         </Fragment>

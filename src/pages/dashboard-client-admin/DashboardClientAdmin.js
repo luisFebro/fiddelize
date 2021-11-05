@@ -1,22 +1,20 @@
 import { withRouter } from "react-router-dom";
+import getFirstName from "utils/string/getFirstName";
 import { Fragment } from "react";
-import GroupedDashSessions from "./GroupedDashSessions";
-import getDayGreetingBr from "../../utils/getDayGreetingBr";
-import "./mainLayout.scss";
-import getFirstName from "../../utils/string/getFirstName";
 import useData from "init";
+import getDayGreetingBr from "utils/getDayGreetingBr";
+import useBackColor from "hooks/useBackColor";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
+import GroupedDashSessions from "./GroupedDashSessions";
+import "./mainLayout.scss";
 import MoreOptionsMenu from "./MoreOptionsMenu";
 import PlanBadges from "./PlanBadges";
-import useBackColor from "../../hooks/useBackColor";
-import useScrollUp from "../../hooks/scroll/useScrollUp";
-import useManageProServices from "../../hooks/pro/useManageProServices";
-import NotifPermissionBanner from "../../components/pwa-push-notification/NotifPermissionBanner";
 
 function DashboardClientAdmin({ location, history }) {
     const { name } = useData();
     useBackColor("var(--themeBackground--default)");
     useScrollUp();
-    useManageProServices();
 
     const showGreeting = () => (
         <p

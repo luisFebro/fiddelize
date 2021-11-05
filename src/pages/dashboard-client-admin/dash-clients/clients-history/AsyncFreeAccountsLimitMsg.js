@@ -1,20 +1,10 @@
-import { useState, Fragment } from "react";
+import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useBizData } from "init";
-import useData from "init";
-import { useFiddelizeAdmin } from "init";
-import getFirstName from "../../../../utils/string/getFirstName";
-import usePro from "../../../../hooks/pro/usePro";
-
-import ModalFullContent from "../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../components/code-splitting/LoadableComp";
-
-const AsyncAddCustomersContent = Load({
-    loader: () =>
-        import(
-            "../../../../pages/plans-page/plan-modes/sessions/customer-packages/customer-btn/AsyncAddCustomersContent" /* webpackChunkName: "add-customers-full-page-lazy" */
-        ),
-});
+import useData, { useBizData, useFiddelizeAdmin } from "init";
+import getFirstName from "utils/string/getFirstName";
+import usePro from "init/pro";
+import { Load } from "components/code-splitting/LoadableComp";
+import ProBtn from "components/pro/ProBtn";
 
 const showTxtDefault = (txt) => (
     <div className="mx-2 text-left text-normal animated rubberBand my-5">
@@ -26,72 +16,37 @@ const showTxtDefault = (txt) => (
 );
 
 // EXPIRING MSGS
-const aboutToExpireMsg = ({
-    limitFreePlanNewUsers,
-    countCliUsers,
-    name,
-    handleOpenCustomerModal,
-    modalData,
-    handleCloseCustomerModal,
-    openModal,
-}) => {
+const aboutToExpireMsg = ({ name }) => {
     // const leftRegisters = limitFreePlanNewUsers - countCliUsers;
     const txt = (
         <span>
             - Seus clientes estão começando a aparecer, {getFirstName(name)}.
             Ótimo! Faltam mais alguns cadastros na versão grátis. Que tal ganhar
             mais alcance e resultado?{" "}
-            <div onClick={handleOpenCustomerModal} className="text-link">
-                Invista em Novvos Clientes e fiddelize mais.
+            <div className="container-center">
+                <ProBtn type="link" linkTitle="Ver planos pro" />
             </div>
         </span>
     );
 
-    return (
-        <Fragment>
-            {showTxtDefault(txt)}
-            {openModal && (
-                <ModalFullContent
-                    contentComp={
-                        <AsyncAddCustomersContent modalData={modalData} />
-                    }
-                    fullOpen={handleOpenCustomerModal}
-                    setFullOpen={handleCloseCustomerModal}
-                />
-            )}
-        </Fragment>
-    );
+    return <Fragment>{showTxtDefault(txt)}</Fragment>;
 };
 
-const expiredMsg = ({
-    modalData,
-    handleOpenCustomerModal,
-    handleCloseCustomerModal,
-    openModal,
-}) => {
+const expiredMsg = () => {
     const txt = (
         <section>
-            - O limite de cadastros para seu plano terminou.
+            - O limite de cadastros para seu plano terminou. Todos seus clientes
+            cadastraram usam suas moedas digitais por mais 1 mês.
             <br />
-            <div onClick={handleOpenCustomerModal} className="text-link">
-                Invista em mais cadastros e continue fiddelizando.
+            <div className="container-center">
+                <ProBtn
+                    type="link"
+                    linkTitle="Precisa cadastrar novos clientes? Invista em um plano pro"
+                />
             </div>
         </section>
     );
-    return (
-        <Fragment>
-            {showTxtDefault(txt)}
-            {openModal && (
-                <ModalFullContent
-                    contentComp={
-                        <AsyncAddCustomersContent modalData={modalData} />
-                    }
-                    fullOpen={handleOpenCustomerModal}
-                    setFullOpen={handleCloseCustomerModal}
-                />
-            )}
-        </Fragment>
-    );
+    return <Fragment>{showTxtDefault(txt)}</Fragment>;
 };
 // END EXPIRING MSGS
 
@@ -99,46 +54,18 @@ const expiredMsg = ({
 // insert bizPlan checking in the component which holds this.
 
 export default function AsyncFreeAccountsLimitMsg() {
-    const [openModal, setOpenModal] = useState(false);
     const { name } = useData();
     const { countCliUsers } = useBizData();
     const { limitFreePlanNewUsers } = useFiddelizeAdmin();
 
-    const { plan: currPlan, usageTimeEnd, credits } = usePro({
-        service: "Novvos Clientes",
-    });
-
-    const modalData = {
-        isCreditsBadge: true, // it will allow period choice and handle individual order
-        currPlan: currPlan === "gratis" ? "bronze" : currPlan,
-        expiryDate: usageTimeEnd,
-    };
-
-    const handleOpenCustomerModal = () => {
-        setOpenModal(true);
-    };
-
-    const handleCloseCustomerModal = () => {
-        setOpenModal(false);
-    };
+    const { credits } = usePro("Novvos Clientes");
 
     if (countCliUsers >= limitFreePlanNewUsers || !credits) {
-        return expiredMsg({
-            modalData,
-            handleOpenCustomerModal,
-            handleCloseCustomerModal,
-            openModal,
-        });
+        return expiredMsg();
     }
-    if (countCliUsers >= 7) {
+    if (countCliUsers >= 15) {
         return aboutToExpireMsg({
-            limitFreePlanNewUsers,
-            countCliUsers,
             name,
-            handleOpenCustomerModal,
-            handleCloseCustomerModal,
-            openModal,
-            modalData,
         });
     }
     return null;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
-import useAPI, { getProData } from "api/useAPI";
+import useAPI from "api/useAPI";
 import getVar from "init/var";
 import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 
@@ -21,10 +21,10 @@ export default function usePro(options = {}) {
     const [data, setData] = useState({
         isPro: false,
         plan: "",
-        totalScore: 0,
         nextExpiryData: "",
         bizPlanList: [],
         bizFreeCredits: {},
+        totalScore: 0,
     });
     const {
         isPro,
@@ -39,7 +39,7 @@ export default function usePro(options = {}) {
     const { role } = useData();
 
     const { data: backData, loading } = useAPI({
-        url: getProData(bizId || userId), // userId used if user not logged in.
+        url: null, // userId used if user not logged in.
         dataName: "proData",
         trigger: trigger && bizId && role === "cliente-admin",
     });

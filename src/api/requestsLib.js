@@ -90,13 +90,8 @@ export const checkOneClickInvest = (userId) =>
 export const removeOneClickInvest = (userId) =>
     `${ROOT}/pay/cc/remove/one-click-invest?userId=${userId}`; // PUT
 
-// pro
-// readUserOrderHistory
+// pro orders
 export const readUserOrderHistory = () => `${ROOT}/pro/orders/history`; // GET
-export const getProData = (userId) =>
-    `${ROOT}/pro/pro-member-data?userId=${userId}`; // POST
-export const removeServices = (userId) =>
-    `${ROOT}/pro/service/remove?userId=${userId}`; // DELETE
 
 // images (logo)
 export const uploadImages = (fileName) =>

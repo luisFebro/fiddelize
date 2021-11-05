@@ -69,13 +69,6 @@ export const AsyncPasswordPage = Load({
 });
 // END PASSWORDS
 
-export const AsyncFixDatePage = Load({
-    loader: () =>
-        import(
-            "../../pages/AsyncFixDatePage" /* webpackChunkName: "fix-date-page-lazy" */
-        ),
-});
-
 export const AsyncTeamApp = Load({
     loader: () =>
         import(

@@ -14,7 +14,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 import sendSMS from "hooks/sms/sendSMS";
 import { getUniqueId } from "api/useAPI";
 import { handleFocus } from "utils/form/handleFocus";
-import usePro from "hooks/pro/usePro";
+import usePro from "init/pro";
 import getAPI, { encryptPointsLink } from "api";
 import copyText from "utils/document/copyText";
 import RadiusBtn from "components/buttons/RadiusBtn";

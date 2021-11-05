@@ -6,7 +6,7 @@ import AttentionWaves from "./AttentionWaves";
 import ModalFullContent from "../../modals/ModalFullContent";
 import useStorage from "../../../hooks/storage/useStorage";
 import pickFeature from "./pickFeature";
-import usePro from "../../../hooks/pro/usePro";
+import usePro from "init/pro";
 
 const isSmall = window.Helper.isSmallScreen();
 

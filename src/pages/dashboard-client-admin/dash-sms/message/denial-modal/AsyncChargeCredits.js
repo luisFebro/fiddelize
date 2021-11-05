@@ -1,6 +1,6 @@
 import useData from "init";
+import usePro from "init/pro";
 import AddSMSBtn from "../../credits-balance/add-sms-btn/AddSMSBtn";
-import usePro from "../../../../../hooks/pro/usePro";
 
 export default function AsyncChargeCredits({ currBalance, totalRecipients }) {
     const { firstName } = useData();
