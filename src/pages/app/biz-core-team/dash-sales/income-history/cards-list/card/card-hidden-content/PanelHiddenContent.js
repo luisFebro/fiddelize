@@ -55,7 +55,7 @@ function PanelHiddenContent({ data }) {
                         • Serviços investidos:
                     </h2>
                     <AsyncOrdersTableContent
-                        orders={orders}
+                        listData={orders}
                         loading={!orders}
                         planBr={thisPlan}
                         period={thisPeriod}

@@ -92,11 +92,9 @@ function AsyncAddSMSContent({
                 height="auto"
             />
             <p className="mx-3 text-normal text-purple">
-                Tenha SMS como mais um meio eficiente de se comunicar e fisgar a
-                atenção dos clientes com suas campanhas, anúncios e eventos do
-                seu negócio. Pode também ser usado para comunicação entre a
-                equipe ou pessoal em geral com recursos exclusivos como
-                agendamento de envios.
+                Ganhe mais um super-poder de comunicar e fisgar a atenção dos
+                clientes com suas campanhas, anúncios e eventos do seu negócio
+                via SMS. Tenha recursos exclusivos como agendamento de envios.
             </p>
         </Fragment>
     );

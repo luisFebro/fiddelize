@@ -62,11 +62,24 @@ export default function PayArea({
 
     const uify = useAction();
 
-    const handlePeriod = () => {
-        if (period === "yearly") return "anual";
-        if (period === "monthly") return "mensal";
-        return "";
-    };
+    useEffect(() => {
+        const handlePeriod = () => {
+            if (period === "yearly") return "anual";
+            if (period === "monthly") return "mensal";
+            return "infinito";
+        };
+
+        const desc = `Plano ${planBr} ${handlePeriod()} com ${
+            itemsCount || ""
+        } serviço${
+            itemsCount > 1 ? "s" : ""
+        } no valor total de: R$ ${investAmount}`;
+
+        setData((thisData) => ({
+            ...thisData,
+            servDesc: desc,
+        }));
+    }, [period, planBr, itemsCount, investAmount]);
 
     useEffect(() => {
         if (alreadyReadUser) return;
@@ -76,13 +89,8 @@ export default function PayArea({
                 const thisReferrer = res.referrer;
                 const thisBirthDay = res.birthday;
                 let thisCPF = res.cpf;
-                if (thisCPF === "111.111.111-00") thisCPF = "319.683.234-14"; // for testing only
+                if (thisCPF === "023.248.892-42") thisCPF = "285.021.150-81"; // for testing only
 
-                const desc = `Plano ${planBr} ${handlePeriod()} com ${
-                    itemsCount || ""
-                } serviço${
-                    itemsCount > 1 ? "s" : ""
-                } no valor total de: R$ ${investAmount}`;
                 const thisSenderCPF = getOnlyNumbersFromStr(thisCPF);
                 const thisSenderAreaCode = convertPhoneStrToInt(phone, {
                     dddOnly: true,
@@ -101,7 +109,6 @@ export default function PayArea({
                 setData((thisData) => ({
                     ...thisData,
                     referrer: thisReferrer,
-                    servDesc: desc,
                     senderCPF: thisSenderCPF,
                     senderAreaCode: thisSenderAreaCode,
                     senderPhone: thisSenderPhone,
@@ -110,7 +117,7 @@ export default function PayArea({
                 }));
             }
         );
-    }, [planBr, itemsCount, phone, investAmount, alreadyReadUser]);
+    }, [userId, phone, alreadyReadUser]);
 
     const modalData = {
         userId,

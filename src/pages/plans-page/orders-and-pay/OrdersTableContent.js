@@ -19,12 +19,11 @@ const headCells = [
 
 export default function OrdersTableContent({
     listData,
-    deleteBtns = false,
-    loading,
     planBr,
     period,
     setData,
-    // orders,
+    deleteBtns = false,
+    loading = false,
 }) {
     const [list, setList] = useState([]);
 
