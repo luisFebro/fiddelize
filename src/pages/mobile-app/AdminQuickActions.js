@@ -110,7 +110,7 @@ function MoreOptionsBtn({
                         }}
                     />
                 ),
-                name: "+ Pontos",
+                name: "+ Moedas",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     setNewScore(true);

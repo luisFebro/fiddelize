@@ -37,6 +37,7 @@ export default function ActiveItemsBtn() {
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 contentComp={AsyncContent}
+                needIndex={false}
             />
         </Fragment>
     );

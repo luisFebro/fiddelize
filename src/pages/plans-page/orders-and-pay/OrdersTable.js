@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { useBizData } from "init";
@@ -6,7 +5,6 @@ import { setRun, useAction } from "global-data/ui";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import useDelay from "hooks/useDelay";
 import convertToReal from "utils/numbers/convertToReal";
-import getOrderTableList from "./helpers/getOrderTableList";
 import OrdersTableContent from "./OrdersTableContent";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -18,24 +16,13 @@ export default function OrdersTable({
     itemsCount,
     investAmount,
     handleCancel,
+    setData,
 }) {
-    const [list, setList] = useState([]);
     const loading = false;
 
     const uify = useAction();
 
     const { bizLinkName } = useBizData();
-
-    useEffect(() => {
-        const newList = getOrderTableList(itemList, {
-            period,
-            plan: planBr,
-        });
-
-        setList(newList);
-
-        // eslint-disable-next-line
-    }, [period, planBr]);
 
     const vanishMsgReady = useDelay(6000);
 
@@ -58,7 +45,14 @@ export default function OrdersTable({
                     />
                 </p>
             )}
-            <OrdersTableContent listData={list} loading={loading} />
+            <OrdersTableContent
+                deleteBtns
+                planBr={planBr}
+                period={period}
+                listData={itemList}
+                loading={loading}
+                setData={setData}
+            />
             <p className="m-0 mt-3 mr-3 d-flex justify-content-end text-normal text-purple">
                 {itemsCount} serviço{itemsCount > 1 ? "s" : ""} por:{" "}
                 <span className="d-inline-block ml-3 font-weight-bold">

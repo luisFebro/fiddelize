@@ -126,6 +126,7 @@ export default function OrdersAndPay({
             {showTitle()}
             {showSubtitle()}
             <OrdersTable
+                setData={setData}
                 investAmount={investAmount}
                 itemList={itemList}
                 itemsCount={itemsCount}

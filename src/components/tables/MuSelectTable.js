@@ -2,7 +2,7 @@
 required to update material ui to the latest stable version: 4.11 in order to use TableContainer.import
 In case of failing or something unusual, the last working version was ^4.7.2
  */
-import React, { useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -17,6 +17,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
+import DeleteButton from "components/buttons/DeleteButton";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 
 const MyTableCell = withStyles({
@@ -29,6 +30,7 @@ const MyTableCell = withStyles({
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        position: "relative",
         width: "100%",
     },
     paper: {
@@ -101,6 +103,7 @@ const tableListTest = [
 each row need to have the same id specified in the headCells
 */
 
+// LESSON: fields only accept strings and numbers, if dates will throw an error
 export default function MuSelectTable({
     headCells = [],
     rowsData = [],
@@ -111,6 +114,8 @@ export default function MuSelectTable({
     needMainTitle = true,
     needHighlightColor = true,
     marginBottom,
+    deleteBtns = false, // option to delete a row
+    callbackDeleteBtns,
 }) {
     const classes = useStyles({ marginBottom });
     const [order, setOrder] = React.useState("asc");
@@ -118,6 +123,7 @@ export default function MuSelectTable({
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [restoreBtn, setRestoreBtn] = React.useState(null);
     const [colorHighlighted, setColorHighlighted] = React.useState(true);
 
     useEffect(() => {
@@ -127,6 +133,14 @@ export default function MuSelectTable({
     useEffect(() => {
         if (!loading) setSelected(rowsData.map((contact) => contact.name));
     }, [loading]);
+
+    useRestoreList({
+        restoreBtn,
+        callbackDeleteBtns,
+        deleteBtns,
+        rowsData,
+        setRestoreBtn,
+    });
 
     const handleColor = () => {
         if (!needHighlightColor) return "#fff !important";
@@ -181,6 +195,8 @@ export default function MuSelectTable({
 
     const tableBodyProps = {
         enumeration,
+        deleteBtns,
+        callbackDeleteBtns,
         headCells,
         handleColorSelection,
         MyTableRow,
@@ -192,6 +208,7 @@ export default function MuSelectTable({
         rowsPerPage,
         setSelected,
         selected,
+        setRestoreBtn,
     };
     return (
         <div className={classes.root}>
@@ -255,6 +272,23 @@ export default function MuSelectTable({
                     </Fragment>
                 )}
             </Paper>
+            {deleteBtns && restoreBtn && (
+                <div className="animated fadeInUp">
+                    <ButtonFab
+                        size="medium"
+                        zIndex={1000}
+                        position="absolute"
+                        bottom={40}
+                        right={10}
+                        title="Restaurar Lista"
+                        onClick={() => {
+                            setRestoreBtn(false);
+                        }}
+                        backgroundColor="var(--themeSDark)"
+                        variant="extended"
+                    />
+                </div>
+            )}
         </div>
     );
 }
@@ -407,6 +441,9 @@ const ShowTableBody = ({
     rowsPerPage,
     setSelected,
     selected,
+    deleteBtns,
+    callbackDeleteBtns,
+    setRestoreBtn,
 }) => {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -445,7 +482,7 @@ const ShowTableBody = ({
                     <MyTableCell
                         id={ind}
                         padding="none"
-                        align="left"
+                        align={head.align || "left"}
                         style={{ fontSize: "15px", padding: "16px 0px" }}
                     >
                         {handleCellContent()}
@@ -493,12 +530,50 @@ const ShowTableBody = ({
                             )}
 
                             {MapRows(row)}
+                            {deleteBtns && (
+                                <MyTableCell>
+                                    <DeleteButton
+                                        onClick={() => {
+                                            callbackDeleteBtns(index);
+                                            setRestoreBtn(true);
+                                        }}
+                                    />
+                                </MyTableCell>
+                            )}
                         </MyTableRow>
                     );
                 })}
         </TableBody>
     );
 };
+
+// HOOKS
+function useRestoreList({
+    restoreBtn,
+    callbackDeleteBtns,
+    deleteBtns,
+    rowsData = [],
+    setRestoreBtn,
+}) {
+    const [recoverList, setRecoverList] = useState(null);
+
+    useEffect(() => {
+        if (!deleteBtns) return null;
+        // set only if it is the entire initial list of items
+        if (rowsData.length && !recoverList) return setRecoverList(rowsData);
+
+        // restoreBtn has three states: null, false (restore all), true (show restoreBtn)
+        const isRestore = restoreBtn === false;
+        if (isRestore) {
+            setRecoverList(null);
+            setRestoreBtn(null);
+            callbackDeleteBtns(null, { recoverList, restoreAll: true });
+        }
+        return null;
+        // eslint-disable-next-line
+    }, [rowsData, recoverList, restoreBtn]);
+}
+// END HOOKS
 
 // HELPERS
 function getStatusColor(status) {

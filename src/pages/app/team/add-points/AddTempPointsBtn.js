@@ -21,7 +21,7 @@ const muStyle = {
 const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
 export default function AddTempPointsBtn({
-    title = "PONTOS",
+    title = "MOEDAS",
     size = "large",
     backColor,
     sColor,
@@ -29,7 +29,7 @@ export default function AddTempPointsBtn({
     clientScoreOnly, // for quick register
     clientName, // for quick register
     handleCustomerScore, // for quick register
-    registerBtnTitle = "Adicionar Pontos",
+    registerBtnTitle = "Adicionar Moedas",
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 

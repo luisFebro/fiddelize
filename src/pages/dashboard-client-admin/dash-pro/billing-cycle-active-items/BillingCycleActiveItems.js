@@ -17,7 +17,12 @@ export default function BillingCycleActiveItems() {
     // end years
 
     const showDates = () => (
-        <section className="container-center">
+        <section
+            className="position-relative container-center"
+            style={{
+                top: -10,
+            }}
+        >
             <section
                 className="d-flex justify-content-around"
                 style={{
@@ -40,7 +45,7 @@ export default function BillingCycleActiveItems() {
                     {finishYear}
                 </div>
             </section>
-            <div className="mt-3">
+            <div className="mt-4">
                 <ActiveItemsBtn />
             </div>
         </section>
@@ -55,13 +60,14 @@ export default function BillingCycleActiveItems() {
                 <Fragment>
                     <p className="container-center">
                         <div className="d-flex">
-                            <p className="mt-3 d-table text-pill">
+                            <p className="m-0 mt-3 d-table text-pill">
                                 Duração do plano:
                             </p>
                             <div className="ml-3">
                                 <InstructionBtn
                                     text={textInstru}
                                     mode="tooltip"
+                                    zIndex={0}
                                 />
                             </div>
                         </div>

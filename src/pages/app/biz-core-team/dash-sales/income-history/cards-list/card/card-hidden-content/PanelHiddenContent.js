@@ -55,7 +55,6 @@ function PanelHiddenContent({ data }) {
                         • Serviços investidos:
                     </h2>
                     <AsyncOrdersTableContent
-                        needGenerateList
                         orders={orders}
                         loading={!orders}
                         planBr={thisPlan}

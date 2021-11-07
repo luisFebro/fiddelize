@@ -127,7 +127,7 @@ function Welcome({
         role === "cliente-membro" && (
             <section className={textStyle}>
                 <h2 className="text-subtitle">
-                    A principal missão é cadastrar pontos e clientes!
+                    A principal missão é cadastrar moedas PTS e clientes!
                 </h2>
                 <p>
                     <strong>No app, você também ganha:</strong>

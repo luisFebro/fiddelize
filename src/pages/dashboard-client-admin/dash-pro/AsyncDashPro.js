@@ -23,7 +23,7 @@ export default function AsyncDashPro() {
     const [allowHideBtn, setAllowHideBtn] = useState(false);
     const isScrollingUp = useDetectScrollUp();
 
-    const { plan, isPro } = usePro();
+    const { plan, isPro, period } = usePro();
 
     useEffect(() => {
         const runTimeout = setTimeout(() => {
@@ -74,7 +74,7 @@ export default function AsyncDashPro() {
             <div style={{ marginTop: "16px", display: "block" }}>
                 <DashSectionTitle title={DashProTitle} />
             </div>
-            <PlanAndServicesArea plan={plan} isPro={isPro} />
+            <PlanAndServicesArea period={period} plan={plan} isPro={isPro} />
             <InvestHistory />
             {(isScrollingUp || !allowHideBtn) && showActionFloatingBtns()}
         </Fragment>

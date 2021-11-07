@@ -168,7 +168,6 @@ function PanelHiddenContent({ history, data }) {
                     Extrato
                 </h2>
                 <AsyncOrdersTableContent
-                    needGenerateList
                     orders={orders}
                     loading={!orders}
                     planBr={thisPlan}

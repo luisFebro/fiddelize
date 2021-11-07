@@ -1,16 +1,16 @@
 import { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import InvestCard from "./card/accordion/InvestCard";
-import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
-import { calendar } from "../../../../../utils/dates/dateFns";
+import { calendar } from "utils/dates/dateFns";
 import { useBizData } from "init";
-import Img from "../../../../../components/Img";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-// import { isScheduledDate } from '../../../../../utils/dates/dateFns';
+import Img from "components/Img";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+// import { isScheduledDate } from 'utils/dates/dateFns';
 import useAPIList, { readUserOrderHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import convertToReal from "../../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
+import InvestCard from "./card/accordion/InvestCard";
+import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -89,7 +89,7 @@ export default function AsyncCardsList() {
                     style={{
                         ...styles.icon,
                         color: handleColor(plan),
-                        filter: handleFilter({ plan, generatedPeriod }),
+                        filter: handleFilter({ plan }),
                     }}
                 />
                 <span
@@ -229,7 +229,7 @@ function handleColor(plan) {
     if (plan === "bronze") return "#edbead";
 }
 
-function handleFilter({ plan, generatedPeriod }) {
+function handleFilter({ plan }) {
     if (plan === "bronze") return "drop-shadow(black 0.001em 0.001em 0.5em)";
 
     return "drop-shadow(0.001em 0.001em 0.15em grey)";

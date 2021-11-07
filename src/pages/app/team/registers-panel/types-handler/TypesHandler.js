@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import InstructionBtn from "components/buttons/InstructionBtn";
 import QuickRegister from "./QuickRegister";
 import CompleteRegister from "./CompleteRegister";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 
 const getStyles = () => ({
     title: {
