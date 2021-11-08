@@ -36,7 +36,7 @@ const getServiceSKU = (options = {}) => {
         getPlanBr(planBr),
         getQuantity(total),
         getPeriodBr(period, { gotFullPlan }),
-        gotFullPlan ? "PL" : "EX", // identify Range if included fullPlan it is P, or E for Extra services
+        gotFullPlan ? "PL" : "SE", // identify Range if included fullPlan it is P, or SE for selected for any Extra services without a fullPlan or any service from Bronze plan
         generateAlphaNumeric(7, "A#"),
         isPro ? "P" : "", // if user has purchased priorly
     ];

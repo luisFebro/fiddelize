@@ -72,12 +72,13 @@ export default function OrdersTableContent({
 
             const deleteServiceDesc = list[deleteInd].service.props.children;
             const isForbiddenItem =
-                planBr !== "bronze" &&
-                deleteServiceDesc &&
-                deleteServiceDesc.includes("Novvos Clientes");
+                (planBr !== "bronze" &&
+                    deleteServiceDesc &&
+                    deleteServiceDesc.includes("Novvos Clientes")) ||
+                deleteServiceDesc.includes("Novvos Membros");
             if (isForbiddenItem) {
                 showToast(
-                    "O serviço Novvos Clientes só pode ser removido no plano Bronze.",
+                    "Serviços principais Novvos Clientes ou Connecta Membros só podem ser removidos no plano Bronze.",
                     { type: "error" }
                 );
                 return priorList;
@@ -125,42 +126,37 @@ export default function OrdersTableContent({
 function getOrderTableList(orderList = [], options = {}) {
     const { plan, period } = options;
 
-    const handleRegisterCount = ({ count, plural }) => {
-        if (plan === "ouro") return "cadastros ilimitados";
-        return `+${convertToReal(count)} cadastro${plural}`;
-    };
-
     // Handle object into object and return custom data for table:
     // const thisModel = { currPlan: {count: 4, amount: 350}}
 
     const handleServiceName = ({ range, serv, count }) => {
-        const plural = count > 1 ? "s" : "";
-        const periodBr = handlePeriod({
-            period,
-        });
-
+        const defaultExtra = "não expira (Serv. Extra)";
+        // IMPORTANT: ther serv name should be DEMANTORARY included so that it can be detected and avoided to be removed in the order list
         if (range === "fullPlan")
-            return `Plano ${plan} ${periodBr}${handleDesc({
+            return `${serv}${handleDesc({
                 plan,
                 serv,
                 period,
+                count,
             })}`;
 
-        if (serv === "sms")
-            return `${convertToReal(
-                count
-            )} créditos de SMS - sem prazo de expiração`;
+        if (serv === "SMS")
+            return `+${convertToReal(count)} créditos de SMS | ${defaultExtra}`;
 
         if (serv === "Novvos Clientes")
-            return `Novvos Clientes ${periodBr} com ${handleRegisterCount({
+            return `Novvos Clientes ${handleDesc({
+                plan,
+                serv,
+                period,
                 count,
-                plural,
             })}`;
 
         if (serv === "Novvos Membros")
-            return `Novvos Membros ${periodBr} com ${handleRegisterCount({
+            return `Novvos Membros ${handleDesc({
+                plan,
+                serv,
+                period,
                 count,
-                plural,
             })}`;
 
         return serv;
@@ -206,32 +202,41 @@ function getOrderTableList(orderList = [], options = {}) {
 }
 
 // HELPERS
-function handleDesc({ plan, serv, period }) {
+function handleDesc({ plan, serv, period, count }) {
     const isCliCredits = serv === "Novvos Clientes";
-    if (plan === "ouro")
-        return ` com cadastro ilimitado de ${
-            isCliCredits ? "clientes" : "membros"
-        }`;
+    const defaultP = `(P. ${plan}, ${handlePeriod({ period })})`;
 
-    const maxCliCredits = convertToReal(
-        getMaxCredit(period).silver["Novvos Clientes"]
-    );
-    const maxMemberCredits = convertToReal(
-        getMaxCredit(period).silver["Novvos Membros"]
-    );
-    if (plan === "prata")
-        return ` com cadastro de até ${
-            isCliCredits
-                ? `${maxCliCredits} clientes`
-                : `${maxMemberCredits} membros`
-        }`;
+    if (plan === "ouro") {
+        if (isCliCredits) return ` com cadastro ilimitado ${defaultP}`;
+        return ` ilimitado ${defaultP}`;
+    }
+
+    if (plan === "prata") {
+        const maxCliCredits = convertToReal(
+            getMaxCredit(period).silver["Novvos Clientes"]
+        );
+        const maxMemberCredits = convertToReal(
+            getMaxCredit(period).silver["Novvos Membros"]
+        );
+
+        if (isCliCredits)
+            return ` com cadastro de +${maxCliCredits} clientes ${defaultP}`;
+        return ` com até ${maxMemberCredits} membros conectados ${defaultP}`;
+    }
+
+    if (plan === "bronze") {
+        if (isCliCredits)
+            return ` com cadastro de +${count} clientes ${defaultP}`;
+        return ` com até ${count} membros conectados ${defaultP}`;
+    }
 
     return "";
 }
 
 function handlePeriod({ period }) {
     if (period === "yearly") return "anual";
-    return "mensal";
+    if (period === "monthly") return "mensal";
+    return "extra";
 }
 // END HELPERS
 // END TABLE HTML CONTENT

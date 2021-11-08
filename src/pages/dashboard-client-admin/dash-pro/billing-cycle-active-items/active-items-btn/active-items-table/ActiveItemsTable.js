@@ -18,19 +18,31 @@ const headCells = [
         align: "center",
         disablePadding: false,
     },
+    {
+        id: "creditTypeBr",
+        label: "Tipo de Crédito",
+        align: "center",
+        disablePadding: false,
+    },
+    {
+        id: "expirable",
+        label: "créditos não usados expiram?",
+        align: "center",
+        disablePadding: false,
+    },
 ];
 
-export default function ActiveItemsTable({ itemList = [], loading }) {
+export default function ActiveItemsTable({ planList = [], loading }) {
     const [rowsData, setRowsData] = useState([]);
 
     useEffect(() => {
-        setRowsData(itemList);
-    }, [itemList]);
+        setRowsData(planList);
+    }, [planList]);
 
     return (
         <section className="my-5">
             <h1 className="mt-5 text-subtitle font-weight-bold text-center">
-                Lista de serviços ativos
+                Todos serviços ativos
             </h1>
             <MuSelectTable
                 headCells={headCells}

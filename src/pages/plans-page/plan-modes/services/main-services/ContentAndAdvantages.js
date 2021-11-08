@@ -59,25 +59,22 @@ function PlanContent({ isYearly, plan }) {
                         />
                     </div>
                     <br />
-                    <br />- <strong>Novvos Membros &#174;</strong>
+                    <br />- <strong>Connecta Membros &#174;</strong>
                     <br />
-                    Quantidade Créditos:
+                    Membros conectados:
                     <br />
                     <strong className="d-inline-block">
                         {plan === "gold" ? (
                             <span className="text-pill">Sem Limites</span>
                         ) : (
                             <span className="text-pill">
-                                +{convertToReal(10)}
+                                até {convertToReal(10)}
                             </span>
                         )}
                     </strong>
                     <div className="ml-3 d-inline-block position-absolute">
                         <InstructionBtn text={newMembersText} mode="tooltip" />
                     </div>
-                    <br />
-                    <br />-{" "}
-                    <strong>Todos os serviços integrados Fiddelize</strong>
                 </p>
             </div>
         </Fragment>

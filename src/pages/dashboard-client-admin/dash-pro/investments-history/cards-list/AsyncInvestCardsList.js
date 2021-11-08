@@ -212,7 +212,7 @@ function handlePlanCode(code) {
 }
 
 function handlePeriod(per, range) {
-    if (range === "EX") return "Extra";
+    if (range === "I") return "Extra";
     if (per === "A") return "Anual";
     if (per === "M") return "Mensal";
     return "Extra";

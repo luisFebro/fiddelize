@@ -36,6 +36,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
     // end credits
 
     const handlePlanDuration = (res) => {
+        console.log("res", res);
         setPlanDur(res);
     };
 
@@ -74,7 +75,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                 </p>
             </h1>
             <div className="mb-5 container-center">
-                <PeriodSelection handlePeriod={handlePlanDuration} />
+                <PeriodSelection callback={handlePlanDuration} />
             </div>
             <div className="pricing-table">
                 <div className="ptable-item">
@@ -116,7 +117,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                         <span className="font-site text-em-1 text-pill">
                                             sem limites
                                         </span>{" "}
-                                        para cadastrar <strong>membros</strong>{" "}
+                                        de <strong>membros</strong> conectados{" "}
                                         ao {currPlanBr}
                                     </li>
                                     <li>
@@ -184,7 +185,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                         <span className="font-site text-em-1 text-pill">
                                             até {silverMaxMemberCredits}
                                         </span>{" "}
-                                        cadastros de <strong>membros</strong> ao{" "}
+                                        <strong>membros conectados</strong> ao{" "}
                                         {currPlanBr}
                                     </li>
                                     <li>
@@ -243,7 +244,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                     <li>
                                         {getStatusIcon("on")}{" "}
                                         <span className="font-site text-em-1 text-pill">
-                                            até {bronzeMaxClientCredits}
+                                            +{bronzeMaxClientCredits}
                                         </span>{" "}
                                         cadastros de <strong>clientes</strong>{" "}
                                         ao {currPlanBr}
@@ -253,7 +254,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                         <span className="font-site text-em-1 text-pill">
                                             até {bronzeMaxMemberCredits}
                                         </span>{" "}
-                                        cadastros de <strong>membros</strong> ao{" "}
+                                        <strong>membros</strong> conectados ao{" "}
                                         {currPlanBr}
                                     </li>
                                     <li>

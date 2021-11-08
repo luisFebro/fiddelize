@@ -1,5 +1,4 @@
 import { useState, Fragment } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Img from "components/Img";
@@ -46,8 +45,9 @@ function AsyncAddSMSContent({
         const item = {
             range: "selected",
             expirable: false,
-            name: "sms",
+            name: "SMS",
             count: totalSMS,
+            creditType: "accumulative",
             amount: inv,
         };
 

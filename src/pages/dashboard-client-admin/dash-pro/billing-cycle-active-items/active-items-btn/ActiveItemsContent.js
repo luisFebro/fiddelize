@@ -1,6 +1,5 @@
 import useData from "init";
 import { useReadUser } from "api/frequent";
-import { formatDate } from "utils/dates/dateFns";
 import usePro from "init/pro";
 import ActiveItemsTable from "./active-items-table/ActiveItemsTable";
 import ActivePlanRenewal from "./active-plan-renewal/ActivePlanRenewal";
@@ -13,12 +12,11 @@ export default function ActiveItemsContent() {
     const { data, loading } = useReadUser(
         userId,
         "cliente-admin",
-        "clientAdminData.bizPlanList clientAdminData.bizPlanData.mainItemList"
+        "clientAdminData.bizPlanList clientAdminData.bizPlanData.mainItemList clientAdminData.bizPlanData.mainRef"
     );
 
-    const mainItemList =
-        data && !loading ? data.clientAdminData.bizPlanData.mainItemList : [];
-    const itemList = treatItemList(data, loading);
+    const mainRef = data && data.clientAdminData.bizPlanData.mainRef;
+    const { mainItemList, tableItemList, planList } = treatLists(data, loading);
 
     const showTitle = () => (
         <div className="mt-5 text-purple">
@@ -31,82 +29,85 @@ export default function ActiveItemsContent() {
                     lineHeight: "25px",
                 }}
             >
-                Na Fiddelize, seus{" "}
-                <strong>créditos não usados acumulam ao renovar</strong> seu
-                plano dentro do período de duração e você ganha mais tempo para
-                usar.
+                Saiba sobre seus <strong>créditos e renovação</strong> do seu
+                plano atual
             </h2>
         </div>
-    );
-
-    const showExpirationInfo = () => (
-        <section
-            className="position-relative text-normal text-center line-height-30"
-            style={{
-                top: -25,
-            }}
-        >
-            Seu plano{" "}
-            <strong className="text-pill">
-                {plan && plan.cap()} {period}
-            </strong>
-            <br />
-            termina em <strong>{handleExpiringDate(dataPro)}</strong>
-        </section>
     );
 
     return (
         <section className="mb-5 text-normal text-purple">
             {showTitle()}
-            <ActiveItemsTable loading={loading} itemList={itemList} />
-            {showExpirationInfo()}
+            <ActiveItemsTable loading={loading} planList={planList} />
             <ActivePlanRenewal
                 loading={loading}
                 mainItemList={mainItemList}
-                itemList={itemList}
+                mainRef={mainRef}
+                tableItemList={tableItemList}
                 planBr={plan}
                 periodBr={period}
+                dataPro={dataPro}
             />
         </section>
     );
 }
 
 // HELPERS
-function treatItemList(data, loading) {
+function treatLists(data, loading) {
     const bizPlanList =
         data && !loading ? data.clientAdminData.bizPlanList : [];
     const mainItemList =
         data && !loading ? data.clientAdminData.bizPlanData.mainItemList : [];
 
-    const finalList = [];
+    // it should be two lists since the active services can not be the same as the main plan list
+    const tableItemList = [];
+    const planList = [];
+
+    const getDefaultData = (i, currCredits, invAmount, invCredits) => ({
+        service: i.name || i.service,
+        currCredits,
+        invCredits,
+        invAmount,
+        creditTypeBr: handleCreditTypeBr(i.creditType),
+        expirable: i.expirable ? "sim" : "não",
+    });
+
     mainItemList.forEach((i) => {
         const planItem = bizPlanList.find((item) => item.service === i.name);
         const currCredits = planItem && planItem.creditEnd;
 
-        return finalList.push({
-            service: i.name,
-            currCredits,
-            invCredits: i.count,
-            invAmount: i.amount,
-        });
+        return tableItemList.push(
+            getDefaultData(i, currCredits, i.amount, i.count)
+        );
     });
 
-    return finalList;
+    bizPlanList.forEach((i) => {
+        const planItem = mainItemList.find((item) => item.name === i.service);
+        const invAmount = planItem && planItem.amount;
+        const invCredits = planItem && planItem.count;
+
+        return planList.push(
+            getDefaultData(i, i.creditEnd, invAmount, invCredits)
+        );
+    });
+
+    return {
+        mainItemList,
+        tableItemList,
+        planList,
+    };
 }
 
-// the clients are pro when using this comp, no need isPro to verify
-function handleExpiringDate(dataPro) {
-    const { daysLeft, finishDate } = dataPro;
-
-    const needCountDown = daysLeft <= 15;
-    if (needCountDown) return `${daysLeft} dias`;
-
-    const needYear = daysLeft >= 300;
-    const fullFinishDate = formatDate(
-        finishDate,
-        `dd' 'MMM${needYear ? "', 'yyyy" : ""}`
-    );
-
-    return fullFinishDate && fullFinishDate.cap();
+function handleCreditTypeBr(creditType) {
+    if (creditType === "unique") return "único";
+    if (creditType === "accumulative") return "acumulativo";
+    return "fixo";
 }
 // HELPERS
+
+/*
+Na Fiddelize, seus{" "}
+<strong>créditos não usados acumulam ao renovar</strong> seu
+plano dentro do período de duração e você ganha mais tempo para
+usar.
+ */

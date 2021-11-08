@@ -56,6 +56,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
             expirable: true,
             name: "Novvos Membros",
             count: Number(totalPackage),
+            creditType: "fixed",
             amount: Number(inv),
         };
 

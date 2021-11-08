@@ -2,8 +2,8 @@ const pricing = {
     gold: {
         "Novvos Clientes": {
             price: {
-                yearly: 1400,
-                monthly: 130, // we have to give a price for each service even limitless. In this gold plan case, it is 100 yearly, 30 monthly
+                yearly: 1200,
+                monthly: 120, // we have to give a price for each service even limitless. 20% diff from each main service
             },
             credit: {
                 yearly: Infinity,
@@ -12,8 +12,8 @@ const pricing = {
         },
         "Novvos Membros": {
             price: {
-                yearly: 100,
-                monthly: 20,
+                yearly: 300,
+                monthly: 30,
             },
             credit: {
                 yearly: Infinity,
@@ -24,8 +24,8 @@ const pricing = {
     silver: {
         "Novvos Clientes": {
             price: {
-                yearly: 950,
-                monthly: 80,
+                yearly: 800,
+                monthly: 80, // we have to give a price for each service even limitless. 20% diff from each main service
             },
             credit: {
                 yearly: 24000,
@@ -34,7 +34,7 @@ const pricing = {
         },
         "Novvos Membros": {
             price: {
-                yearly: 50, // 10 * 5
+                yearly: 200,
                 monthly: 20,
             },
             credit: {

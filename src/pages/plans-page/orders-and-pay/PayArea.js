@@ -64,9 +64,13 @@ export default function PayArea({
 
     useEffect(() => {
         const handlePeriod = () => {
+            const gotFullPlan =
+                itemList && itemList.some((i) => i.range === "fullPlan");
+            if (!gotFullPlan) return "extra";
             if (period === "yearly") return "anual";
             if (period === "monthly") return "mensal";
-            return "infinito";
+
+            return ""; // period === "infinite"
         };
 
         const desc = `Plano ${planBr} ${handlePeriod()} com ${

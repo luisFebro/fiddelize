@@ -11,10 +11,17 @@ ModalFullContent.propTypes = {
     style: PropTypes.object,
 };
 
+const handleZIndex = (needIndex) => {
+    if (typeof needIndex === "number") return needIndex;
+    if (needIndex) return 3000;
+
+    return 15;
+};
+
 const getStyles = ({ needIndex }) => ({
     // assign as false when you need to open other modals above this component like calendar dialog
     root: {
-        zIndex: needIndex ? needIndex || 3000 : 15,
+        zIndex: handleZIndex(needIndex),
         overflowX: "hidden",
     },
 });

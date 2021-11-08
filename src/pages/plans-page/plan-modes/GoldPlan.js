@@ -148,6 +148,8 @@ function useSetInitialPlanTotal({ period, setData }) {
             expirable: true,
             name: serviceName,
             count: pricing.gold[serviceName].credit[period],
+            creditType:
+                serviceName === "Novvos Clientes" ? "accumulative" : "fixed",
             amount: pricing.gold[serviceName].price[period],
         }));
 

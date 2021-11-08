@@ -56,6 +56,7 @@ function AsyncAddCustomersContent({ modalData, handleFullClose }) {
             expirable: true,
             name: "Novvos Clientes",
             count: Number(totalCount),
+            creditType: "accumulative",
             amount: Number(inv),
         };
 

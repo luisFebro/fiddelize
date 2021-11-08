@@ -19,6 +19,7 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import DeleteButton from "components/buttons/DeleteButton";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
+import convertToReal from "utils/numbers/convertToReal";
 
 const MyTableCell = withStyles({
     root: {
@@ -230,7 +231,7 @@ export default function MuSelectTable({
                             <Table
                                 className={classes.table}
                                 aria-labelledby="tableTitle"
-                                size={false ? "small" : "medium"}
+                                size="medium"
                                 aria-label="enhanced table"
                             >
                                 <ShowTableHead
@@ -399,7 +400,7 @@ function ShowTableHead(props) {
                 {headCells.map((headCell) => (
                     <MyTableCell
                         key={headCell.id}
-                        align={headCell.numeric ? "right" : "left"}
+                        align={headCell.headAlign || "left"}
                         padding={headCell.disablePadding ? "none" : "default"}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -473,6 +474,7 @@ const ShowTableBody = ({
                 if (head.id === "status")
                     return getStatusColor(rowData[head.id]);
                 if (head.id === "name") return rowData[head.id].cap();
+                if (head.numeric) return convertToReal(rowData[head.id]);
 
                 return rowData[head.id];
             };
@@ -483,7 +485,7 @@ const ShowTableBody = ({
                         id={ind}
                         padding="none"
                         align={head.align || "left"}
-                        style={{ fontSize: "15px", padding: "16px 0px" }}
+                        style={{ fontSize: "18px", padding: "16px 0px" }}
                     >
                         {handleCellContent()}
                     </MyTableCell>

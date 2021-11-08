@@ -5,17 +5,20 @@ import convertToReal from "utils/numbers/convertToReal";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import setProRenewal from "utils/biz/setProRenewal";
+import { formatDate } from "utils/dates/dateFns";
 
 function ActivePlanRenewal({
     history,
+    mainRef,
     mainItemList = [], // the actual raw itemList for order page
-    itemList = [], // modified itemList for the table
+    tableItemList = [], // modified itemList for the table
     loading,
     planBr,
     periodBr,
+    dataPro,
 }) {
-    const investAmount = itemList.length
-        ? itemList.reduce((acc, next) => acc + next.invAmount, 0)
+    const investAmount = mainItemList.length
+        ? mainItemList.reduce((acc, next) => acc + next.amount, 0)
         : 0;
     const isGold = planBr === "ouro";
     const newPeriod = periodBr === "mensal" ? "+ 1 mês" : "+ 1 ano";
@@ -29,6 +32,7 @@ function ActivePlanRenewal({
             itemList: mainItemList,
             planBr,
             investAmount,
+            // here does require I since it is always monthly or yearly
             period: periodBr === "mensal" ? "monthly" : "yearly",
         }).then(() => {
             history.push("/pedidos/admin");
@@ -38,7 +42,7 @@ function ActivePlanRenewal({
     const showRenewalItemList = () => (
         <section className="text-normal">
             <h2 className="text-subtitle text-center">Novos Créditos</h2>
-            {itemList.map((item) => (
+            {tableItemList.map((item) => (
                 <div key={item.service} className="text-normal text-left">
                     <p className="m-0 font-weight-bold">
                         {checkIcon()} {item.service}:
@@ -55,15 +59,35 @@ function ActivePlanRenewal({
                 <span className="text-pill">{`${newPeriod} ${
                     isExtraFreeMonth ? " e 1 mês extra" : ""
                 }`}</span>{" "}
-                para continuar aproveitando seus créditos
+                para continuar aproveitando seu plano
             </p>
             <hr className="lazer-purple" />
+            <p>
+                {checkIcon("check", 25)} ID plano principal atual:
+                <span className="d-table text-pill">{mainRef}</span>
+            </p>
             <p>
                 {checkIcon("check", 25)} Plano atual renovado sai por{" "}
                 <span className="text-pill">
                     R$ {convertToReal(investAmount)}
                 </span>
             </p>
+        </section>
+    );
+
+    const showExpirationInfo = () => (
+        <section
+            className="position-relative text-normal text-center line-height-30"
+            style={{
+                top: -25,
+            }}
+        >
+            Seu plano{" "}
+            <strong className="text-pill">
+                {planBr && planBr.cap()} {periodBr}
+            </strong>
+            <br />
+            termina em <strong>{handleExpiringDate(dataPro)}</strong>
         </section>
     );
 
@@ -76,7 +100,14 @@ function ActivePlanRenewal({
                 </p>
             </h2>
             {showRenewalItemList()}
-            <div className="mt-5 container-center">
+            <div
+                style={{
+                    margin: "70px 0 20px",
+                }}
+            >
+                {showExpirationInfo()}
+            </div>
+            <div className="container-center">
                 <ButtonFab
                     title="Renovar Plano"
                     backgroundColor="var(--themeSDark)"
@@ -91,19 +122,33 @@ function ActivePlanRenewal({
 }
 
 // HELPERS
-function showTooltip({ service = "Novvos Clientes", currCredits, invCredits }) {
-    const totalCredits = currCredits + invCredits;
-    const txt = `
-        <p class="text-center">${service}</p>
-        <p>Quantia créditos:</p>
-        <p class="m-0">${convertToReal(currCredits)} (atual) + ${convertToReal(
-        invCredits
-    )} (novo plano)</p>
-        <p>fica total de ${convertToReal(totalCredits)} créditos</p>
-        <p>você investe apenas pela quantia de ${convertToReal(
-            invCredits
-        )} créditos do novo plano e acumula os créditos atuais.</p>
-    `;
+function showTooltip({
+    creditTypeBr,
+    service = "Novvos Clientes",
+    currCredits,
+    invCredits,
+}) {
+    const getTooltipTxt = () => {
+        if (creditTypeBr === "acumulativo")
+            return `
+            <p class="text-center">${service}</p>
+            <p>você investe apenas pela quantia de ${convertToReal(
+                invCredits
+            )} créditos do novo plano e acumula com os créditos atuais.</p>
+        `;
+
+        if (creditTypeBr === "fixo")
+            return `
+            <p class="text-center">${service}</p>
+            <p>o valor de ${convertToReal(
+                currCredits
+            )} créditos é fixo e não acumula. Renovando, os membros da sua equipe continuam conectados usando todas as funcionalidades principais do app: cadastrar moedas, clientes e benefícios</p>
+        `;
+
+        return "";
+    };
+
+    const txt = getTooltipTxt();
 
     return (
         <span className="ml-3 d-inline-block">
@@ -120,19 +165,43 @@ function getNewCredits({ isGold, item }) {
     if (isGold) {
         return (
             <Fragment>
-                + créditos <span className="text-pill">ilimitados</span>
+                créditos <span className="text-pill">ilimitados</span>
             </Fragment>
         );
     }
 
+    const isAccumulative = item.creditTypeBr === "acumulativo";
+    const isFixed = item.creditTypeBr === "fixo";
+
     return (
         <Fragment>
             <span className="text-pill">
-                {convertToReal(item.currCredits + item.invCredits)}
+                {isFixed ? "até " : ""}{" "}
+                {convertToReal(
+                    isAccumulative
+                        ? item.currCredits + item.invCredits
+                        : item.currCredits
+                )}
             </span>{" "}
             créditos {showTooltip(item)}
         </Fragment>
     );
+}
+
+// the clients are pro when using this comp, no need isPro to verify
+function handleExpiringDate(dataPro) {
+    const { daysLeft, finishDate } = dataPro;
+
+    const needCountDown = daysLeft <= 15;
+    if (needCountDown) return `${daysLeft} dias`;
+
+    const needYear = daysLeft >= 300;
+    const fullFinishDate = formatDate(
+        finishDate,
+        `dd' 'MMM${needYear ? "', 'yyyy" : ""}`
+    );
+
+    return fullFinishDate && fullFinishDate.cap();
 }
 // END HELPERS
 

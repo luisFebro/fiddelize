@@ -11,8 +11,8 @@ const getStyles = () => ({
 });
 
 export default function AddSMS({ orderList, handleItem }) {
-    const smsOrder = orderList.find((o) => o.name === "sms") || {
-        name: "sms",
+    const smsOrder = orderList.find((o) => o.name === "SMS") || {
+        name: "SMS",
         count: 0,
         amount: 0,
     };
@@ -61,7 +61,7 @@ export default function AddSMS({ orderList, handleItem }) {
                         <div className="ml-3">
                             <DeleteButton
                                 position="relative"
-                                onClick={() => handleItem("remove", "sms")}
+                                onClick={() => handleItem("remove", "SMS")}
                             />
                         </div>
                     )}
