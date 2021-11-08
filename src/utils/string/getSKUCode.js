@@ -14,11 +14,10 @@ const getPlanBr = (plan) => {
 };
 
 const getPeriodBr = (per, options = {}) => {
-    const { itemList, total } = options;
+    const { gotFullPlan } = options;
 
     // like when the user buy ONLY a service with no expiration like SMS. In this case, it should not add any date to the service
-    const isInfinite =
-        per === "infinite" || itemList.every((i) => i.expirable === false);
+    const isInfinite = per === "infinite" || !gotFullPlan;
 
     if (isInfinite) return "I"; // monthly, yearly, infinity duration. This latter is for services like SMS and upcoming ones like buy games
     if (per === "yearly") return "A";
@@ -30,13 +29,16 @@ const getPeriodBr = (per, options = {}) => {
 const getQuantity = (total) => `Q${total}`;
 
 const getServiceSKU = (options = {}) => {
-    const { planBr, total = 0, period, itemList = [] } = options;
+    const { isPro, planBr, total = 0, period, itemList = [] } = options;
+    const gotFullPlan = itemList.some((i) => i.range === "fullPlan");
 
     const SKU = [
         getPlanBr(planBr),
         getQuantity(total),
-        getPeriodBr(period, { itemList, total }),
+        getPeriodBr(period, { gotFullPlan }),
+        gotFullPlan ? "PL" : "EX", // identify Range if included fullPlan it is P, or E for Extra services
         generateAlphaNumeric(7, "A#"),
+        isPro ? "P" : "", // if user has purchased priorly
     ];
     return SKU.join("-");
 };

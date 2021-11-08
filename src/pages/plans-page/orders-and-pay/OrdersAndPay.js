@@ -5,6 +5,7 @@ import showToast from "components/toasts";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import setProRenewal, { removeProRenewal } from "utils/biz/setProRenewal";
 import { getServiceSKU } from "utils/string/getSKUCode";
+import usePro from "init/pro";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
@@ -16,6 +17,8 @@ export default function OrdersAndPay({
     plan,
     setNextPage,
 }) {
+    const { isPro } = usePro();
+
     const [data, setData] = useState({
         reference: "",
         itemList: [],
@@ -53,9 +56,10 @@ export default function OrdersAndPay({
                     setData({
                         reference: setRef(
                             itemsCount2,
-                            planBr,
+                            plan,
                             period,
-                            orderList
+                            orderList,
+                            isPro
                         ),
                         itemList: orderList,
                         itemsCount: orderList ? orderList.length : 0,
@@ -85,7 +89,8 @@ export default function OrdersAndPay({
                     pendingOrderItemsCount,
                     pendingOrderPlanBr,
                     pendingOrderPeriod,
-                    pendingOrderItemList
+                    pendingOrderItemList,
+                    isPro
                 ),
                 itemList: pendingOrderItemList,
                 itemsCount: pendingOrderItemsCount,
@@ -96,7 +101,7 @@ export default function OrdersAndPay({
         })();
 
         // eslint-disable-next-line
-    }, [plan, orderList, orderTotal, period]);
+    }, [isPro, plan, orderList, orderTotal, period]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -150,12 +155,13 @@ export default function OrdersAndPay({
 }
 
 // HELPERS
-function setRef(itemsCount, planBr, period, itemList) {
+function setRef(itemsCount, planBr, period, itemList, isPro) {
     return getServiceSKU({
         total: itemsCount,
         planBr,
         period,
         itemList,
+        isPro,
     });
 }
 // END HELPERS

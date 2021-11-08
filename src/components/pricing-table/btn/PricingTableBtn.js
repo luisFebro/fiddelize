@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import ModalFullContent from "components/modals/ModalFullContent";
 import LoadableVisible from "components/code-splitting/LoadableVisible";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
@@ -13,11 +13,6 @@ export const AsyncPricingTable = LoadableVisible({
 export default function PricingTableBtn({ setCurrPlan }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    // Lesson: there is no fidd if declare Comp or set this comp directly.
-    const Comp = (
-        <AsyncPricingTable marginTop={100} setCurrPlan={setCurrPlan} />
-    );
-
     const handleFullOpen = () => {
         setFullOpen(true);
     };
@@ -25,6 +20,23 @@ export default function PricingTableBtn({ setCurrPlan }) {
     const handleFullClose = () => {
         setFullOpen(false);
     };
+
+    // Lesson: there is no fidd if declare Comp or set this comp directly.
+    const Comp = (
+        <Fragment>
+            <AsyncPricingTable marginTop={100} setCurrPlan={setCurrPlan} />
+            <div className="my-5 container-center">
+                <ButtonFab
+                    title="Voltar"
+                    position="relative"
+                    onClick={handleFullClose}
+                    variant="extended"
+                    size="large"
+                    backgroundColor="var(--themeSDark)"
+                />
+            </div>
+        </Fragment>
+    );
 
     return (
         <section className="container-center">
@@ -40,7 +52,7 @@ export default function PricingTableBtn({ setCurrPlan }) {
                 contentComp={Comp}
                 fullOpen={fullOpen}
                 backgroundColor="var(--themeP)"
-                needIndex={false}
+                needIndex={101}
                 setFullOpen={handleFullClose}
             />
         </section>

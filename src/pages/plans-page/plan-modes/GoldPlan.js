@@ -3,10 +3,13 @@ import pricing from "utils/biz/pricing";
 import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
 import useBackColor from "hooks/useBackColor";
 import useDetectScrollSingle from "hooks/scroll/useDetectScrollSingle";
+import {
+    SilverBtn,
+    BronzeBtn,
+} from "components/pricing-table/select-plan-btns/ProBtns";
 import { Load } from "components/code-splitting/LoadableComp";
 import useDetectScrollUp from "hooks/scroll/useDetectScrollUp";
 import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
-import { SilverBtn, BronzeBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
 import {
@@ -15,12 +18,10 @@ import {
     TotalInvest,
     PeriodSelection,
 } from "./comps/MainComps";
-
-// sessions
-import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
-import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
-import AddSMS from "./sessions/AddSMS";
-import { PlanAdvantages, PlanContent } from "./ContentAndAdvantages";
+// services
+import MainServices from "./services/main-services/MainServices";
+import ExtraServices from "./services/extra-services/ExtraServices";
+import IntegratedServices from "./services/integrated-services/IntegratedServices";
 
 const AsyncOrdersAndPay = Load({
     loader: () =>
@@ -95,9 +96,7 @@ export default function GoldPlan({ setCurrPlan }) {
                     ) : (
                         showPlanSwitchBtns()
                     )}
-                    <MainTitle
-                        planMsg="Cadastre novos clientes e membros de forma ilimitada" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
-                    />
+                    <MainTitle planMsg="Cadastre novos clientes e membros de forma ilimitada" />
                     <section className="period-selection">
                         <PeriodSelection
                             orderList={orderList}
@@ -107,24 +106,16 @@ export default function GoldPlan({ setCurrPlan }) {
                     </section>
                     <div style={{ height: 130 }} />
 
-                    <PlanContent isYearly={isYearly} plan="gold" />
+                    <MainServices isYearly={isYearly} plan="gold" />
 
-                    <PlanAdvantages isYearly={isYearly} plan="gold" />
-
-                    <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
-                        <span className="text-pill">Serviços Extras</span>
-                    </p>
-                    <AddSMS
+                    <ExtraServices
                         orderList={orderList}
                         handleItem={handleItem}
-                        top={-80}
+                        period={period}
                     />
-                    <div style={{ marginBottom: 100 }} />
+                    <div style={{ marginBottom: 50 }} />
 
-                    <ServicesGallery handleItem={null} period={period} />
-                    <div style={{ marginBottom: 100 }} />
-
-                    <IntegratedServicesCard />
+                    <IntegratedServices />
                     <div style={{ marginBottom: 100 }} />
 
                     <PricingTableBtn setCurrPlan={setCurrPlan} />

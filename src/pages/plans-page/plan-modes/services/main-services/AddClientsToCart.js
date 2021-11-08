@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import DeleteButton from "components/buttons/DeleteButton";
-import AddCustomersBtn from "./customer-packages/customer-btn/AddCustomersBtn";
-import AddMembersBtn from "./member-packages/member-btn/AddMembersBtn";
+import AddCustomersBtn from "./client-packages/customer-packages/customer-btn/AddCustomersBtn";
+import AddMembersBtn from "./client-packages/member-packages/member-btn/AddMembersBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -17,6 +17,7 @@ export default function AddClientsToCart({
     orderList,
     modalData,
     disableCliUser = false,
+    mainTitle = false,
 }) {
     const [data, setData] = useState(defaultData);
     const { addedCustomers, customersPrice, addedMembers, membersPrice } = data;
@@ -157,18 +158,27 @@ export default function AddClientsToCart({
 
     return (
         <section className="position-relative">
-            <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
-                {disableCliUser
-                    ? "Invista na equipe"
-                    : "Aumente seu alcance de novos cadastros"}
-                {disableCliUser && (
-                    <span className="d-block text-normal text-purple text-center">
-                        Membros da sua equipe te ajudam a cadastrar moedas e
-                        clientes, ver históricos e avaliações, confirmar
-                        benefícios, recebimentos e mais!
-                    </span>
-                )}
-            </p>
+            {mainTitle ? (
+                <h2 className="mx-3 text-subtitle font-weight-bold text-purple text-center">
+                    <span className="text-pill">Serviços Principais</span>
+                    <p className="mt-3 text-normal font-weight-bold">
+                        Aumente seu alcance de novos cadastros para seu clube
+                    </p>
+                </h2>
+            ) : (
+                <h2 className="mx-3 text-subtitle font-weight-bold text-purple text-center">
+                    {disableCliUser
+                        ? "Invista na equipe"
+                        : "Aumente seu alcance de novos cadastros"}
+                    {disableCliUser && (
+                        <span className="d-block text-normal text-purple text-center">
+                            Membros da sua equipe te ajudam a cadastrar moedas e
+                            clientes, ver históricos e avaliações, confirmar
+                            benefícios, recebimentos e mais!
+                        </span>
+                    )}
+                </h2>
+            )}
             <section className="d-flex justify-content-around">
                 {showNovvosMembros()}
                 {!disableCliUser && showNovvosClientes()}

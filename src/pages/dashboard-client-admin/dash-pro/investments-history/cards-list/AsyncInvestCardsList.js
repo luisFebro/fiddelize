@@ -110,10 +110,10 @@ export default function AsyncCardsList() {
             } = data;
 
             const referenceArray = reference && reference.split("-");
-            const [planCode, , period] = referenceArray;
+            const [planCode, , period, range] = referenceArray;
 
             const chosenPlan = handlePlanCode(planCode);
-            const chosenPeriod = handlePeriod(period);
+            const chosenPeriod = handlePeriod(period, range);
             const periodDays = handlePeriodDays(period);
 
             const mainHeading = (
@@ -211,10 +211,11 @@ function handlePlanCode(code) {
     return "extra";
 }
 
-function handlePeriod(per) {
+function handlePeriod(per, range) {
+    if (range === "EX") return "Extra";
     if (per === "A") return "Anual";
     if (per === "M") return "Mensal";
-    if (per === "I") return "Extra";
+    return "Extra";
 }
 
 function handlePeriodDays(per) {

@@ -1,28 +1,29 @@
 import { useState } from "react";
 import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
-import { GoldBtn, SilverBtn } from "../ProBtns";
+import { Load } from "components/code-splitting/LoadableComp";
+import useBackColor from "hooks/useBackColor";
+import showToast from "components/toasts";
+import useDetectScrollSingle from "hooks/scroll/useDetectScrollSingle";
+import useDetectScrollUp from "hooks/scroll/useDetectScrollUp";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import usePro from "init/pro";
+import {
+    GoldBtn,
+    SilverBtn,
+} from "components/pricing-table/select-plan-btns/ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
-import useBackColor from "../../../hooks/useBackColor";
 import {
     MinimizedUpperOptions,
     ContinueBtn,
     TotalInvest,
     PeriodSelection,
 } from "./comps/MainComps";
-import showToast from "../../../components/toasts";
-import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
-import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
-import useScrollUp from "../../../hooks/scroll/useScrollUp";
-
-// Sessions
-import AddClientsToCart from "./sessions/AddClientsToCart";
-import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
-import AddSMS from "./sessions/AddSMS";
-import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
 import { updateItem, removeItem, useOrderTotal } from "./helpers/customerOrder";
-
-import { Load } from "../../../components/code-splitting/LoadableComp";
+// services
+import MainServices from "./services/main-services/MainServices";
+import ExtraServices from "./services/extra-services/ExtraServices";
+import IntegratedServices from "./services/integrated-services/IntegratedServices";
 
 const AsyncOrdersAndPay = Load({
     loader: () =>
@@ -49,6 +50,7 @@ export default function BronzePlan({ setCurrPlan }) {
         period: "monthly",
     });
     const { orderList, orderAmount, orderCount, period } = data;
+    const { isPro, plan } = usePro();
 
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
@@ -97,12 +99,12 @@ export default function BronzePlan({ setCurrPlan }) {
         <section style={{ marginBottom: 150 }}>
             {!nextPage ? (
                 <section>
-                    <CircleBack />
+                    <CircleBack isPro={isPro} />
                     <ReturnBtn />
                     {!showMainUpperOpts ? (
                         <MinimizedUpperOptions
-                            hidePlan="bronze"
-                            currPlanBr="Bronze"
+                            hidePlan={isPro ? plan : "bronze"}
+                            currPlanBr={isPro ? plan && plan.cap() : "Bronze"}
                             period={period}
                             setCurrPlan={setCurrPlan}
                             isScrollingUpward={isScrollingUpward}
@@ -111,41 +113,39 @@ export default function BronzePlan({ setCurrPlan }) {
                         showPlanSwitchBtns()
                     )}
                     <MainTitle
-                        customPlanTitle="Meu Plano"
-                        plan="Bronze"
-                        planMsg={`
+                        customPlanTitle={isPro ? "Loja Serviços" : "Meu Plano"}
+                        plan={isPro ? plan : "Bronze"}
+                        planMsg={
+                            isPro
+                                ? "Renove ou adicione serviços extras ao seu plano atual"
+                                : `
                             Escolha preços e quantias dos serviços que precisar.
-                        `}
+                        `
+                        }
                     />
                     <section className="period-selection">
                         <PeriodSelection
                             setData={setData}
                             orderList={orderList}
-                            plan="bronze"
+                            plan={isPro ? plan : "bronze"}
                         />
                     </section>
                     <div style={{ height: 180 }} />
 
-                    <AddClientsToCart
+                    <MainServices
                         modalData={modalClientsData}
                         orderList={orderList}
                     />
                     <div style={{ marginBottom: 100 }} />
 
-                    <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
-                        <span className="text-pill">Serviços Extras</span>
-                    </p>
-                    <AddSMS
+                    <ExtraServices
                         orderList={orderList}
                         handleItem={handleItem}
-                        top={-80}
+                        period={period}
                     />
-                    <div style={{ marginBottom: 100 }} />
+                    <div style={{ marginBottom: 50 }} />
 
-                    <ServicesGallery handleItem={handleItem} period={period} />
-                    <div style={{ marginBottom: 100 }} />
-
-                    <IntegratedServicesCard />
+                    <IntegratedServices />
                     <div style={{ marginBottom: 100 }} />
 
                     <PricingTableBtn setCurrPlan={setCurrPlan} />
@@ -153,12 +153,13 @@ export default function BronzePlan({ setCurrPlan }) {
                     <TotalInvest
                         orderAmount={orderAmount}
                         orderCount={orderCount}
+                        isPro={isPro}
                     />
                     <ContinueBtn onClick={handleNextPage} />
                 </section>
             ) : (
                 <AsyncOrdersAndPay
-                    plan="bronze"
+                    plan={isPro ? plan : "bronze"}
                     period={period}
                     setNextPage={setNextPage}
                     orderList={orderList}

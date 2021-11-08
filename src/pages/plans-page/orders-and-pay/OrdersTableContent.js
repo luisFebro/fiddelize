@@ -125,17 +125,26 @@ export default function OrdersTableContent({
 function getOrderTableList(orderList = [], options = {}) {
     const { plan, period } = options;
 
+    const handleRegisterCount = ({ count, plural }) => {
+        if (plan === "ouro") return "cadastros ilimitados";
+        return `+${convertToReal(count)} cadastro${plural}`;
+    };
+
     // Handle object into object and return custom data for table:
     // const thisModel = { currPlan: {count: 4, amount: 350}}
 
-    const handleServiceName = ({ type, serv, plan, period, count }) => {
+    const handleServiceName = ({ range, serv, count }) => {
         const plural = count > 1 ? "s" : "";
+        const periodBr = handlePeriod({
+            period,
+        });
 
-        if (type === "fullPlan")
-            return `Plano ${plan || "pro"} ${handlePeriod({
+        if (range === "fullPlan")
+            return `Plano ${plan} ${periodBr}${handleDesc({
                 plan,
+                serv,
                 period,
-            })}${handleDesc({ plan, serv, period })}`;
+            })}`;
 
         if (serv === "sms")
             return `${convertToReal(
@@ -143,12 +152,16 @@ function getOrderTableList(orderList = [], options = {}) {
             )} créditos de SMS - sem prazo de expiração`;
 
         if (serv === "Novvos Clientes")
-            return `Novvos Clientes com +${convertToReal(
-                count
-            )} cadastro${plural} de cliente${plural}`;
+            return `Novvos Clientes ${periodBr} com ${handleRegisterCount({
+                count,
+                plural,
+            })}`;
 
         if (serv === "Novvos Membros")
-            return `Novvos Membros com +${count} cadastro${plural} de membro${plural}`;
+            return `Novvos Membros ${periodBr} com ${handleRegisterCount({
+                count,
+                plural,
+            })}`;
 
         return serv;
     };
@@ -163,7 +176,7 @@ function getOrderTableList(orderList = [], options = {}) {
     );
 
     const newList = orderList.map((item) => {
-        const { type, count, name } = item;
+        const { range, count, name } = item;
         let { amount } = item;
         amount = convertToReal(amount, {
             moneySign: true,
@@ -173,7 +186,7 @@ function getOrderTableList(orderList = [], options = {}) {
         const serviceElem = (
             <span className="d-inline-block" style={{ width: 250 }}>
                 {handleServiceName({
-                    type,
+                    range,
                     serv: name,
                     plan,
                     period,
@@ -216,9 +229,8 @@ function handleDesc({ plan, serv, period }) {
     return "";
 }
 
-function handlePeriod({ plan, period }) {
+function handlePeriod({ period }) {
     if (period === "yearly") return "anual";
-    if (!plan) return "";
     return "mensal";
 }
 // END HELPERS

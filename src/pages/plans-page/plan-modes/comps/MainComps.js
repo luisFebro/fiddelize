@@ -11,7 +11,7 @@ import "./_MainComps.scss";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const getStyles = () => ({
+const getStyles = (isPro = false) => ({
     continueBtn: {
         position: "fixed",
         bottom: 15,
@@ -22,7 +22,7 @@ const getStyles = () => ({
         bottom: 0,
         padding: 180,
         position: "fixed",
-        background: "var(--themeP)",
+        background: `var(--themeP${isPro ? "Dark" : ""})`,
         clipPath: `ellipse(${isSmall ? "49% 13%" : "40% 17%"} at 13% 96%)`, // alternative : clip-path: circle(50.5% at 10% 0%); padding: 330px
         webPackClipPath: `ellipse(${
             isSmall ? "49% 13%" : "40% 17%"
@@ -63,8 +63,8 @@ const ContinueBtn = ({ onClick }) => {
     );
 };
 
-const TotalInvest = ({ orderAmount, orderCount }) => {
-    const styles = getStyles();
+const TotalInvest = ({ orderAmount, orderCount, isPro }) => {
+    const styles = getStyles(isPro);
 
     const totalCartRef = useRef();
 

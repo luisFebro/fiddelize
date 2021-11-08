@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
 import pricing from "utils/biz/pricing";
 import convertToReal from "utils/numbers/convertToReal";
-import { GoldBtn, BronzeBtn } from "../ProBtns";
+import { Load } from "components/code-splitting/LoadableComp";
+import {
+    GoldBtn,
+    BronzeBtn,
+} from "components/pricing-table/select-plan-btns/ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
 import useBackColor from "../../../hooks/useBackColor";
@@ -15,11 +19,10 @@ import {
 } from "./comps/MainComps";
 import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
 import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
-import IntegratedServicesCard from "./sessions/services/IntegratedServicesCard";
-import AddSMS from "./sessions/AddSMS";
-import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
-import { PlanAdvantages, PlanContent } from "./ContentAndAdvantages";
-import { Load } from "components/code-splitting/LoadableComp";
+// services
+import MainServices from "./services/main-services/MainServices";
+import IntegratedServices from "./services/integrated-services/IntegratedServices";
+import ExtraServices from "./services/extra-services/ExtraServices";
 
 const AsyncOrdersAndPay = Load({
     loader: () =>
@@ -113,25 +116,16 @@ export default function SilverPlan({ setCurrPlan }) {
                     </section>
                     <div style={{ height: 130 }} />
 
-                    <PlanContent isYearly={isYearly} plan="silver" />
+                    <MainServices isYearly={isYearly} plan="silver" />
 
-                    <PlanAdvantages isYearly={isYearly} plan="silver" />
-
-                    <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
-                        <span className="text-pill">Serviços Extras</span>
-                    </p>
-
-                    <AddSMS
+                    <ExtraServices
                         orderList={orderList}
                         handleItem={handleItem}
-                        top={-80}
+                        period={period}
                     />
-                    <div style={{ marginBottom: 100 }} />
+                    <div style={{ marginBottom: 50 }} />
 
-                    <ServicesGallery handleItem={null} period={period} />
-                    <div style={{ marginBottom: 100 }} />
-
-                    <IntegratedServicesCard />
+                    <IntegratedServices />
                     <div style={{ marginBottom: 100 }} />
 
                     <PricingTableBtn setCurrPlan={setCurrPlan} />

@@ -1,6 +1,6 @@
 import convertToReal from "utils/numbers/convertToReal";
 import DeleteButton from "components/buttons/DeleteButton";
-import AddSMSBtn from "../../../dashboard-client-admin/dash-sms/credits-balance/add-sms-btn/AddSMSBtn";
+import AddSMSBtn from "../../../../dashboard-client-admin/dash-sms/credits-balance/add-sms-btn/AddSMSBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -29,8 +29,7 @@ export default function AddSMS({ orderList, handleItem }) {
                 <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                     Envvio SMS &#174;
                     <span className="d-block text-normal text-purple text-center">
-                        Invista em SMS e use quando precisar sem prazo para
-                        expirar
+                        Comunique-se com sua clientela com SMS.
                     </span>
                 </p>
                 <div className="position-relative text-title text-purple text-center">

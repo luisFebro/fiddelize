@@ -5,6 +5,7 @@ import { PeriodSelection } from "pages/plans-page/plan-modes/comps/MainComps";
 import { getMinPrice, getMaxCredit } from "utils/biz/pricing";
 import convertToReal from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SelectPlanBtns from "./select-plan-btns/SelectPlanBtns";
 
 export default function PricingTable({ setCurrPlan, marginTop }) {
     const [planDur, setPlanDur] = useState("monthly");
@@ -57,13 +58,12 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
     );
 
     return (
-        <Fragment>
-            <h1
-                style={{
-                    marginTop,
-                }}
-                className="container-center"
-            >
+        <section
+            style={{
+                marginTop,
+            }}
+        >
+            <h1 className="container-center">
                 <p
                     className="m-0 text-pill my-3 text-center text-white text-subtitle"
                     style={{
@@ -282,6 +282,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                     </div>
                 </div>
             </div>
+            <SelectPlanBtns setCurrPlan={setCurrPlan} />
             <style jsx>
                 {`
                     .pricing-table {
@@ -463,7 +464,7 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                     }
                 `}
             </style>
-        </Fragment>
+        </section>
     );
 }
 

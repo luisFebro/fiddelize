@@ -1,8 +1,18 @@
+// for silver and gold plans
 import { Fragment } from "react";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import convertToReal from "utils/numbers/convertToReal.js";
 import getPercentage from "utils/numbers/getPercentage.js";
 import { getMinPrice } from "utils/biz/pricing";
+
+export default function ContentAndAdvantages({ isYearly, plan }) {
+    return (
+        <Fragment>
+            <PlanContent isYearly={isYearly} plan={plan} />
+            <PlanAdvantages isYearly={isYearly} plan={plan} />
+        </Fragment>
+    );
+}
 
 const newCustomersText = `
     Seus clientes no próximo nível do marketing de relacionamento
@@ -17,12 +27,12 @@ const newMembersText = `
     benefícios, recebimentos e mais!
 `;
 
-export function PlanContent({ isYearly, plan }) {
+function PlanContent({ isYearly, plan }) {
     return (
         <Fragment>
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 <span className="text-pill">
-                    Conteúdo do Plano
+                    Serviços Principais
                     <br />
                 </span>
                 {isYearly ? "Anual" : "Mensal"}
@@ -74,7 +84,7 @@ export function PlanContent({ isYearly, plan }) {
     );
 }
 
-export function PlanAdvantages({ isYearly, plan }) {
+function PlanAdvantages({ isYearly, plan }) {
     const planPrice = getMinPrice(isYearly ? "yearly" : "monthly")[plan];
     const incAmount = getPercentage(planPrice, 20, { mode: "value" });
     const priceWithoutDiscount = convertToReal(planPrice + incAmount);

@@ -2,7 +2,6 @@ import { Fragment, useState } from "react";
 import Card from "@material-ui/core/Card";
 import parse from "html-react-parser";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import integratedData from "./integratedServicesData";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -75,21 +74,14 @@ export default function IntegratedServicesCard() {
 
     return (
         <Fragment>
-            <div className="container-center my-5">
-                <FontAwesomeIcon
-                    icon="plus"
-                    style={{ color: "var(--themeP)", fontSize: 35 }}
-                />
-            </div>
-            <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
+            <h2 className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 <span className="d-block mb-3 text-pill">
                     Serviços Integrados
                 </span>
-                <span className="d-block text-normal text-purple text-center">
-                    Invista no alcance de clientes e ganhe acesso ilimitado a
-                    todos os serviços integrados da Fiddelize.
+                <span className="d-block text-normal font-weight-bold text-purple text-center">
+                    Ganhe acesso ilimitado ao investir no alcance de clientes.
                 </span>
-            </p>
+            </h2>
             <Card
                 className="position-relative animated fadeInUp shadow-elevation"
                 style={styles.card}
@@ -103,6 +95,12 @@ export default function IntegratedServicesCard() {
 }
 
 /* ARCHIVES
+<div className="container-center my-5">
+    <FontAwesomeIcon
+        icon="plus"
+        style={{ color: "var(--themeP)", fontSize: 35 }}
+    />
+</div>
 <span className="text-normal text-purple">
     {convertToReal(serv.price, { moneySign: true })}
 </span>

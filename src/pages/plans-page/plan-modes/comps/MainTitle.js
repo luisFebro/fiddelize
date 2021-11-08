@@ -4,10 +4,10 @@ import parse from "html-react-parser";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const getStyles = () => ({
+const getStyles = ({ isPro }) => ({
     crownIcon: {
         position: "absolute",
-        top: -13,
+        top: -10,
         right: -19,
         transform: "rotate(40deg)",
         color: "#fff",
@@ -16,7 +16,7 @@ const getStyles = () => ({
     clipPathBack: {
         top: 0,
         position: "absolute",
-        background: "var(--themeP)",
+        background: `${isPro ? "var(--themePDark)" : "var(--themeP)"}`,
         clipPath: "circle(90.5% at 23% 0)",
         webPackClipPath: "circle(90.5% at 23% 0)",
         padding: "250px",
@@ -24,8 +24,8 @@ const getStyles = () => ({
     },
 });
 
-const CircleBack = () => {
-    const styles = getStyles();
+const CircleBack = ({ isPro }) => {
+    const styles = getStyles({ isPro });
 
     return <div style={styles.clipPathBack} />;
 };
@@ -36,8 +36,9 @@ export default function MainTitle({
     customPlanTitle = "Plano",
     plan = "Ouro",
     planMsg,
+    isPro,
 }) {
-    const styles = getStyles();
+    const styles = getStyles({ isPro });
 
     const subtitle = parse(planMsg);
     return (
@@ -54,7 +55,7 @@ export default function MainTitle({
                 </span>
                 <br />
                 <span className="d-inline-block position-relative">
-                    {plan}{" "}
+                    {plan && plan.cap()}{" "}
                     <FontAwesomeIcon icon="crown" style={styles.crownIcon} />
                 </span>
             </p>

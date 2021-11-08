@@ -26,8 +26,7 @@ export default function ServicesGallery({ handleItem, period }) {
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 Vitrine de Serviços
                 <span className="d-block text-normal text-purple text-center">
-                    Descubra serviços extras para beneficiar seu negócio e a
-                    clientela.
+                    Descubra mais serviços para conquistar sua clientela
                 </span>
             </p>
             <section className="container">
