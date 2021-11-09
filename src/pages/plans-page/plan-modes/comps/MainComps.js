@@ -191,43 +191,77 @@ const MinimizedUpperOptions = ({
     currPlanBr,
     period,
     setCurrPlan,
-}) => (
-    <Fragment>
-        <div className="minimized-upper period animated fadeInDown text-small text-white font-weight-bold">
-            Plano {currPlanBr} {period === "yearly" ? "Anual" : "Mensal"}
-        </div>
-        {isScrollingUpward && (
-            <section className="minimized-upper container-btns animated fadeInDown delay-1s">
-                <div>
-                    <div
-                        className={`${
-                            hidePlan === "gold" ? "d-none" : "d-block"
-                        } button gold-btn text-small text-white font-weight-bold`}
-                        onClick={() => setCurrPlan("gold")}
-                    >
-                        ouro
+    isPro = false,
+}) => {
+    if (isPro) {
+        if (currPlanBr === "Prata") {
+            return (
+                <Fragment>
+                    <div className="minimized-upper period animated fadeInDown delay-4s text-small text-white font-weight-bold">
+                        Plano {currPlanBr}{" "}
+                        {period === "yearly" ? "Anual" : "Mensal"}
                     </div>
-                    <div
-                        className={`${
-                            hidePlan === "silver" ? "d-none" : "d-block"
-                        } button silver-btn text-small text-white font-weight-bold`}
-                        onClick={() => setCurrPlan("silver")}
-                    >
-                        prata
+                    {isScrollingUpward && (
+                        <section className="minimized-upper container-btns animated fadeInDown delay-1s">
+                            <div>
+                                <div
+                                    className={`${
+                                        hidePlan === "gold"
+                                            ? "d-none"
+                                            : "d-block"
+                                    } button gold-btn text-small text-white font-weight-bold`}
+                                    onClick={() => setCurrPlan("gold")}
+                                >
+                                    ouro
+                                </div>
+                            </div>
+                        </section>
+                    )}
+                </Fragment>
+            );
+        }
+
+        return <div />;
+    }
+
+    return (
+        <Fragment>
+            <div className="minimized-upper period animated fadeInDown delay-4s text-small text-white font-weight-bold">
+                Plano {currPlanBr} {period === "yearly" ? "Anual" : "Mensal"}
+            </div>
+            {isScrollingUpward && (
+                <section className="minimized-upper container-btns animated fadeInDown delay-1s">
+                    <div>
+                        <div
+                            className={`${
+                                hidePlan === "gold" ? "d-none" : "d-block"
+                            } button gold-btn text-small text-white font-weight-bold`}
+                            onClick={() => setCurrPlan("gold")}
+                        >
+                            ouro
+                        </div>
+                        <div
+                            className={`${
+                                hidePlan === "silver" ? "d-none" : "d-block"
+                            } button silver-btn text-small text-white font-weight-bold`}
+                            onClick={() => setCurrPlan("silver")}
+                        >
+                            prata
+                        </div>
+                        <div
+                            className={`${
+                                hidePlan === "bronze" ? "d-none" : "d-block"
+                            } button bronze-btn text-white font-weight-bold`}
+                            onClick={() => setCurrPlan("bronze")}
+                        >
+                            bronze
+                        </div>
                     </div>
-                    <div
-                        className={`${
-                            hidePlan === "bronze" ? "d-none" : "d-block"
-                        } button bronze-btn text-white font-weight-bold`}
-                        onClick={() => setCurrPlan("bronze")}
-                    >
-                        bronze
-                    </div>
-                </div>
-            </section>
-        )}
-    </Fragment>
-);
+                </section>
+            )}
+        </Fragment>
+    );
+};
 
 export { ContinueBtn, TotalInvest, PeriodSelection, MinimizedUpperOptions };
 
@@ -235,7 +269,7 @@ export { ContinueBtn, TotalInvest, PeriodSelection, MinimizedUpperOptions };
 function handleDisablePeriod({ orderList, plan }) {
     const itemsCount = orderList && orderList.length;
 
-    // by default, Novvos Clientes and Novvos Membros from gold and silver plans are added the default. If any other service is added, it needed to be removed to avoid compute a service from a different period (month or year)
+    // by default, Novvos Clientes and Connecta Membros from gold and silver plans are added the default. If any other service is added, it needed to be removed to avoid compute a service from a different period (month or year)
     if (plan === "gold" || plan === "silver") {
         const TOTAL_FULL_PLAN_SERVICES = 2;
         if (itemsCount > TOTAL_FULL_PLAN_SERVICES) return true;

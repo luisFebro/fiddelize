@@ -485,7 +485,7 @@ const ShowTableBody = ({
                         id={ind}
                         padding="none"
                         align={head.align || "left"}
-                        style={{ fontSize: "18px", padding: "16px 0px" }}
+                        style={{ fontSize: "15px", padding: "16px 0px" }}
                     >
                         {handleCellContent()}
                     </MyTableCell>

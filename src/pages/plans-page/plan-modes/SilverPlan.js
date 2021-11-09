@@ -152,7 +152,7 @@ export default function SilverPlan({ setCurrPlan }) {
 // HOOKS
 function useSetInitialPlanTotal({ period, setData }) {
     useEffect(() => {
-        const allFullPlanServices = ["Novvos Clientes", "Novvos Membros"];
+        const allFullPlanServices = ["Novvos Clientes", "Connecta Membros"];
         const fullPlanList = allFullPlanServices.map((serviceName) => ({
             range: "fullPlan",
             expirable: true,

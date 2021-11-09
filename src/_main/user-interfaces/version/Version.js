@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v4.74.30";
+const latestVersion = "v4.74.50";
 // NEXT:
 // register bonus coins -
 const updateDescription = "pro plans 2.0 - payments, plans and cron-jobs PT 5";
@@ -52,7 +52,7 @@ new uify to handle global states
   "site - marketing - design com diferenciais pt 4",
   "app instantâneo, painel de apps, sistema multi-apps pt 13",
   "credit card pay frontend pt16",
-  "serviço novvos membros",
+  "serviço Connecta Membros",
   "app membro - sistema de acesso",
   "segurança dos link de convite com pontos para baixar app",
   "cartão virtual 3D de fidelidade",

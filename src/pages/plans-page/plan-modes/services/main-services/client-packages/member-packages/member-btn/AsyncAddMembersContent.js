@@ -40,7 +40,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
     const showTitle = () => (
         <div className="mt-4">
             <p className="text-subtitle text-purple text-center font-weight-bold">
-                &#187; Novvos Membros
+                &#187; Connecta Membros
                 <br />
                 {handlePeriodName()}
             </p>
@@ -54,7 +54,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
         const item = {
             range: "selected",
             expirable: true,
-            name: "Novvos Membros",
+            name: "Connecta Membros",
             count: Number(totalPackage),
             creditType: "fixed",
             amount: Number(inv),
@@ -118,7 +118,7 @@ const notes = (
         {period === "yearly" && (
             <Fragment>
                 <p>
-                    No plano anual, os créditos do serviço Novvos Membros são fixos e não se renovam como acontece para o serviço de Novvos Clientes. Isso significa que você mantém a mesma quantia de membros conectados ao longo do plano.
+                    No plano anual, os créditos do serviço Connecta Membros são fixos e não se renovam como acontece para o serviço de Novvos Clientes. Isso significa que você mantém a mesma quantia de membros conectados ao longo do plano.
                 </p>
                 <p>
                     Caso precise adicionar mais créditos, basta investir em mais créditos no plano Bronze, mesmo que tenha o plano prata ou ouro. Seu plano atual é atualizado com a nova quantia. Porém, o ciclo do plano permanece o mesmo.

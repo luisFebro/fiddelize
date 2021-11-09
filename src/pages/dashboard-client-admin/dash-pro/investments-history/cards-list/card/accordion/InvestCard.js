@@ -8,6 +8,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import DisplayExpiryCounter from "./DisplayExpiryCounter";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
+import usePro from "init/pro";
 // import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
 // import { isScheduledDate } from "utils/dates/dateFns";
 
@@ -57,11 +58,31 @@ export default function InvestCard({
     actions,
     needToggleButton = false,
 }) {
+    const { mainRef } = usePro();
+
     const classes = useStyles();
     const styles = getStyles({
         color: "var(--mainWhite)",
         backgroundColor: "var(--themePLight)",
     });
+
+    const displayMainRefOrderBadge = () => (
+        <div>
+            <ButtonFab
+                position="absolute"
+                top={-20}
+                right={140}
+                disabled
+                title="plano atual"
+                variant="extended"
+                fontWeight="bolder"
+                fontSize=".4em"
+                size="small"
+                color="var(--mainWhite)"
+                backgroundColor="var(--incomeGreen)"
+            />
+        </div>
+    );
 
     const displayStatusBadge = (panel) => {
         const transactionStatus = handleTransactionStatus({ panel });
@@ -74,7 +95,7 @@ export default function InvestCard({
         };
 
         return (
-            <div className="enabledLink">
+            <div>
                 <ButtonFab
                     position="absolute"
                     top={-20}
@@ -118,6 +139,7 @@ export default function InvestCard({
                     </Fragment>
                 )}
             </AccordionSummary>
+            {panel.data.reference === mainRef && displayMainRefOrderBadge()}
             {displayStatusBadge(panel)}
             <DisplayExpiryCounter panel={panel} />
         </section>

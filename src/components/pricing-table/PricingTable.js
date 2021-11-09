@@ -25,13 +25,13 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
         maxCreditData.silver["Novvos Clientes"]
     );
     const silverMaxMemberCredits = convertToReal(
-        maxCreditData.silver["Novvos Membros"]
+        maxCreditData.silver["Connecta Membros"]
     );
     const bronzeMaxClientCredits = convertToReal(
         maxCreditData.bronze["Novvos Clientes"]
     );
     const bronzeMaxMemberCredits = convertToReal(
-        maxCreditData.bronze["Novvos Membros"]
+        maxCreditData.bronze["Connecta Membros"]
     );
     // end credits
 

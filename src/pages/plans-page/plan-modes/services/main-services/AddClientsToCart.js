@@ -25,7 +25,7 @@ export default function AddClientsToCart({
     const { handleItem } = modalData;
 
     const gotClients = orderList.find((o) => o.name === "Novvos Clientes");
-    const gotMembers = orderList.find((o) => o.name === "Novvos Membros");
+    const gotMembers = orderList.find((o) => o.name === "Connecta Membros");
 
     useEffect(() => {
         if (!gotMembers && !gotClients) return;
@@ -62,7 +62,7 @@ export default function AddClientsToCart({
             }}
         >
             <p className="text-normal font-weight-bold d-block text-center text-purple">
-                Novvos Membros &#174;
+                Connecta Membros &#174;
             </p>
             <div className="text-title text-purple text-center">
                 <span className="d-inline-block font-size text-em-1-5 text-pill">
@@ -94,7 +94,7 @@ export default function AddClientsToCart({
                             bottom={-40}
                             right={-15}
                             onClick={() => {
-                                handleItem("remove", "Novvos Membros");
+                                handleItem("remove", "Connecta Membros");
                                 setData(defaultData);
                             }}
                         />

@@ -43,8 +43,8 @@ const getStyles = () => ({
 const getMembersData = (packages, isYearly) => {
     // unit, expires, unitSizeDec
     const period = isYearly ? "yearly" : "monthly";
-    const unit = pricing.bronze["Novvos Membros"].prices.units[period][0];
-    const credit = pricing.bronze["Novvos Membros"].credits[period];
+    const unit = pricing.bronze["Connecta Membros"].prices.units[period][0];
+    const credit = pricing.bronze["Connecta Membros"].credits[period];
 
     if (packages === credit[0]) return [unit, null, "1"];
     if (packages === credit[1]) return [unit, null, "1"];

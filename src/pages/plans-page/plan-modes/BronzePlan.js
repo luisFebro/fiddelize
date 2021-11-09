@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import PricingTableBtn from "components/pricing-table/btn/PricingTableBtn";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
@@ -71,16 +71,41 @@ export default function BronzePlan({ setCurrPlan }) {
 
     useBackColor("var(--mainWhite)");
 
-    const showPlanSwitchBtns = () => (
-        <section className="animated fadeInDown" style={styles.root}>
-            <div className="d-flex justify-content-end">
-                <div className="position-relative" style={{ marginRight: 25 }}>
-                    <GoldBtn setCurrPlan={setCurrPlan} />
-                </div>
-                <SilverBtn setCurrPlan={setCurrPlan} />
-            </div>
-        </section>
-    );
+    const showPlanSwitchBtns = () => {
+        const getMainContent = () => {
+            if (!isPro) {
+                return (
+                    <Fragment>
+                        <div
+                            className="position-relative"
+                            style={{ marginRight: 25 }}
+                        >
+                            <GoldBtn setCurrPlan={setCurrPlan} />
+                        </div>
+                        <SilverBtn setCurrPlan={setCurrPlan} />
+                    </Fragment>
+                );
+            }
+
+            if (plan === "prata") {
+                return (
+                    <Fragment>
+                        <GoldBtn setCurrPlan={setCurrPlan} />
+                    </Fragment>
+                );
+            }
+
+            return <div />;
+        };
+
+        const mainContent = getMainContent();
+
+        return (
+            <section className="animated fadeInDown" style={styles.root}>
+                <div className="d-flex justify-content-end">{mainContent}</div>
+            </section>
+        );
+    };
 
     const modalClientsData = {
         handleItem,
@@ -103,7 +128,8 @@ export default function BronzePlan({ setCurrPlan }) {
                     <ReturnBtn />
                     {!showMainUpperOpts ? (
                         <MinimizedUpperOptions
-                            hidePlan={isPro ? plan : "bronze"}
+                            isPro={isPro}
+                            hidePlan="bronze"
                             currPlanBr={isPro ? plan && plan.cap() : "Bronze"}
                             period={period}
                             setCurrPlan={setCurrPlan}
@@ -148,7 +174,9 @@ export default function BronzePlan({ setCurrPlan }) {
                     <IntegratedServices />
                     <div style={{ marginBottom: 100 }} />
 
-                    <PricingTableBtn setCurrPlan={setCurrPlan} />
+                    {plan !== "ouro" && (
+                        <PricingTableBtn setCurrPlan={setCurrPlan} />
+                    )}
 
                     <TotalInvest
                         orderAmount={orderAmount}

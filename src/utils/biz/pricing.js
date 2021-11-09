@@ -10,7 +10,7 @@ const pricing = {
                 monthly: Infinity,
             },
         },
-        "Novvos Membros": {
+        "Connecta Membros": {
             price: {
                 yearly: 300,
                 monthly: 30,
@@ -32,7 +32,7 @@ const pricing = {
                 monthly: 2000,
             },
         },
-        "Novvos Membros": {
+        "Connecta Membros": {
             price: {
                 yearly: 200,
                 monthly: 20,
@@ -58,7 +58,7 @@ const pricing = {
                 monthly: [300, 400, 600, 800, 1000],
             },
         },
-        "Novvos Membros": {
+        "Connecta Membros": {
             prices: {
                 yearly: [50, 100, 150, 200, 250],
                 monthly: [5, 10, 15, 20, 25],
@@ -80,10 +80,10 @@ export default pricing;
 const getMinPrice = (period) => ({
     gold:
         pricing.gold["Novvos Clientes"].price[period] +
-        pricing.gold["Novvos Membros"].price[period],
+        pricing.gold["Connecta Membros"].price[period],
     silver:
         pricing.silver["Novvos Clientes"].price[period] +
-        pricing.silver["Novvos Membros"].price[period],
+        pricing.silver["Connecta Membros"].price[period],
     bronze: pricing.bronze["Novvos Clientes"].prices[period][0],
 });
 
@@ -92,13 +92,13 @@ const getMaxCredit = (period) => ({
     // note that for silver is credit because it is a single number, differently from credits being an array with multiple numbers.
     silver: {
         "Novvos Clientes": pricing.silver["Novvos Clientes"].credit[period],
-        "Novvos Membros": pricing.silver["Novvos Membros"].credit[period],
+        "Connecta Membros": pricing.silver["Connecta Membros"].credit[period],
     },
     bronze: {
         "Novvos Clientes": pricing.bronze["Novvos Clientes"].credits[
             period
         ].slice(-1)[0],
-        "Novvos Membros": pricing.bronze["Novvos Membros"].credits[
+        "Connecta Membros": pricing.bronze["Connecta Membros"].credits[
             period
         ].slice(-1)[0],
     },

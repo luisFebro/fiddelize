@@ -21,11 +21,12 @@ export default function usePro(itemName) {
         startDate: (bizPlanData && bizPlanData.startDate) || new Date(),
         finishDate,
         daysLeft: getDatesCountdown(finishDate),
+        mainRef: (bizPlanData && bizPlanData.mainRef) || null,
     };
 }
 
 /* PAYLOAD EXAMPLE
-    credits: {Novvos Clientes: 5000, Novvos Membros: 5, sms: 100}
+    credits: {Novvos Clientes: 5000, Connecta Membros: 5, sms: 100}
     finishDate: "2023-10-26T00:31:06.632Z"
     isPro: true
     period: "anual"

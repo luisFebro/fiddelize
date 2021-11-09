@@ -75,7 +75,7 @@ export default function OrdersTableContent({
                 (planBr !== "bronze" &&
                     deleteServiceDesc &&
                     deleteServiceDesc.includes("Novvos Clientes")) ||
-                deleteServiceDesc.includes("Novvos Membros");
+                deleteServiceDesc.includes("Connecta Membros");
             if (isForbiddenItem) {
                 showToast(
                     "Serviços principais Novvos Clientes ou Connecta Membros só podem ser removidos no plano Bronze.",
@@ -151,8 +151,8 @@ function getOrderTableList(orderList = [], options = {}) {
                 count,
             })}`;
 
-        if (serv === "Novvos Membros")
-            return `Novvos Membros ${handleDesc({
+        if (serv === "Connecta Membros")
+            return `Connecta Membros ${handleDesc({
                 plan,
                 serv,
                 period,
@@ -216,7 +216,7 @@ function handleDesc({ plan, serv, period, count }) {
             getMaxCredit(period).silver["Novvos Clientes"]
         );
         const maxMemberCredits = convertToReal(
-            getMaxCredit(period).silver["Novvos Membros"]
+            getMaxCredit(period).silver["Connecta Membros"]
         );
 
         if (isCliCredits)

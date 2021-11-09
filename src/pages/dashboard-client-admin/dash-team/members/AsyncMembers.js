@@ -34,7 +34,7 @@ export default function AsyncMembers() {
                 Membros:
             </p>
             <div className="container-center mt-5">
-                <ProCreditsBadge service="Novvos Membros" />
+                <ProCreditsBadge service="Connecta Membros" />
             </div>
             <AsyncMembersList />
         </Fragment>
