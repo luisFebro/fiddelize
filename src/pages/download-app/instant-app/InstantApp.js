@@ -1,12 +1,12 @@
 import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import createInstantApp from "./helpers/createInstantApp";
-import getFilterDate from "../../../utils/dates/getFilterDate";
 import getVar, { removeVars, setVars, removeStore } from "init/var";
-import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import showToast from "../../../components/toasts";
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
+import getFilterDate from "utils/dates/getFilterDate";
+import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import showToast from "components/toasts";
+import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
+import getAPI, { createInstantApp as createInstant } from "api";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -72,7 +72,7 @@ export default function InstantApp({
             name: memberName,
         },
         tempPoints: encryptedPTS,
-        memberRole: !isCliUser ? undefined : getMemberJob(getMemberJob), // for member tasks newClient Record
+        memberRole: !isCliUser ? undefined : getMemberJob(memberJob), // for member tasks newClient Record
         linkCode: "", // e.g vocariza_ana:123abc
     };
 
@@ -80,7 +80,7 @@ export default function InstantApp({
         showToast("Criando app instantâneo. Um momento...");
         (async () => {
             if (isCliUser) {
-                body = { ...body, linkCode: linkCode };
+                body = { ...body, linkCode };
             }
 
             if (isCliAdmin) {
@@ -96,8 +96,8 @@ export default function InstantApp({
                 loadingCreation: true,
             }));
 
-            const succ = await createInstantApp({ body }).catch((e) => {
-                showToast(e.error, { type: "error" });
+            const succ = await createInstantApp({ body }).catch((error) => {
+                showToast(error, { type: "error" });
                 setData((prev) => ({ ...prev, errorOnce: true }));
             });
 
@@ -200,8 +200,18 @@ export default function InstantApp({
     );
 }
 
+async function createInstantApp({ body }) {
+    return await getAPI({
+        method: "post",
+        url: createInstant(),
+        body,
+        timeout: 30000,
+    });
+}
+
 // HELPERS
 function getMemberJob(memberJob) {
-    return memberJob ? "cliente-membro" : "cliente-admin";
+    if (memberJob === "admin") return "cliente-admin";
+    return "cliente-membro";
 }
 // END HELPERS

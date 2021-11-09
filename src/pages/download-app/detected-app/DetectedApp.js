@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import OfflineBoltIcon from "@material-ui/icons/OfflineBolt";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import InstantApp from "../instant-app/InstantApp";
 
 const iconStyle = {
@@ -47,7 +47,7 @@ export default function DetectedApp({
                     </div>
                     <p className="mt-3 animated fadeIn text-normal font-weight-bold text-left">
                         Instale novos apps usando apenas seu CPF via App
-                        Instantâneo sem precisar baixar de novo a Fiddelize.
+                        Instantâneo.
                     </p>
                     <div className="container-center-col mt-5">
                         <ButtonFab
