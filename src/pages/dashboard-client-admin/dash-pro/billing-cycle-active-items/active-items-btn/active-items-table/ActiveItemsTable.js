@@ -12,14 +12,7 @@ const headCells = [
         disablePadding: false,
     },
     {
-        id: "invCredits",
-        label: "Total Créditos Investido",
-        numeric: true,
-        align: "center",
-        disablePadding: false,
-    },
-    {
-        id: "creditTypeBr",
+        id: "creditTypeBrTooltip",
         label: "Tipo de Crédito",
         align: "center",
         disablePadding: false,

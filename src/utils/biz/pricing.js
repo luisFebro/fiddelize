@@ -6,7 +6,7 @@ const pricing = {
                 monthly: 120, // we have to give a price for each service even limitless. 20% diff from each main service
             },
             credit: {
-                yearly: Infinity,
+                yearly: Infinity, // LESSON: Infinity when converted in JSON it will turn into null since Infinity is not a supported type. MongoDB automatically converts stringified Infinity into a number
                 monthly: Infinity,
             },
         },

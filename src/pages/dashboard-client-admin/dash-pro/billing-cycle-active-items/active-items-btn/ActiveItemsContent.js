@@ -1,6 +1,8 @@
 import useData from "init";
 import { useReadUser } from "api/frequent";
 import usePro from "init/pro";
+import InstructionBtn from "components/buttons/InstructionBtn";
+import showToast from "components/toasts";
 import ActiveItemsTable from "./active-items-table/ActiveItemsTable";
 import ActivePlanRenewal from "./active-plan-renewal/ActivePlanRenewal";
 
@@ -69,12 +71,30 @@ function treatLists(data, loading) {
         invCredits,
         invAmount,
         creditTypeBr: handleCreditTypeBr(i.creditType),
+        creditTypeBrTooltip: (
+            <div
+                className="position-relative"
+                onClick={() =>
+                    showToast(getTooltipTxt(i.creditType), { dur: 10000 })
+                }
+                style={{
+                    zIndex: 10000,
+                }}
+            >
+                a {handleCreditTypeBr(i.creditType)}
+                <br />
+                {showCreditTypeTooltip()}
+            </div>
+        ),
         expirable: i.expirable ? "sim" : "não",
     });
 
     mainItemList.forEach((i) => {
         const planItem = bizPlanList.find((item) => item.service === i.name);
         const currCredits = planItem && planItem.creditEnd;
+
+        // if unique doesn't require buy more credits or doesn't expire. It was an uniqe purchase and is written off from the plan
+        if (i.creditType === "unique") return null;
 
         return tableItemList.push(
             getDefaultData(i, currCredits, i.amount, i.count)
@@ -102,6 +122,37 @@ function handleCreditTypeBr(creditType) {
     if (creditType === "unique") return "único";
     if (creditType === "accumulative") return "acumulativo";
     return "fixo";
+}
+
+// Tooltip not workng inside MuSelectTable
+function showCreditTypeTooltip() {
+    return (
+        <span className="d-inline-block position-relative">
+            <InstructionBtn
+                text={null}
+                mode="tooltip"
+                tooltipProps={{ disabled: true }}
+            />
+        </span>
+    );
+}
+
+/*
+// - accumulated e.g Novvos Clientes / SMS - it is credits based and count is always accumulable with every new item.
+// - fixed e.g Connecta Membros (the only service of this type) - it is credits based, but the count is not accumulable. it is expirable and its usage is fixed to a certain quantity. It only changes the quantity if the new current item is different from the prior recorded. Otherwise it will remain the same.
+// - unique e.g a pro feature in the app - it is only one credit, it requires one purchase, the usage is forever and doesn't require purchase more credits
+ */
+function getTooltipTxt(creditType) {
+    if (creditType === "accumulative")
+        return `Crédito tipo ACUMULATIVO acumula sempre os créditos a cada renovação. Exemplo serviços: Novvos Clientes e SMS`;
+
+    if (creditType === "fixed")
+        return "Crédito tipo FIXO não acumula ao renovar e é sempre mesmo. O valor só muda quando for investido em um serviço com outro valor fixo";
+
+    if (creditType === "unique")
+        return "Crédito tipo ÚNICO é para serviços que você investe apenas uma vez e usa sem limites.";
+
+    return "";
 }
 // HELPERS
 

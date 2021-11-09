@@ -28,6 +28,7 @@ function ActivePlanRenewal({
     const handleActiveRenewal = () => {
         if (loading) return null;
 
+        // Remember: mainItemList doesn't increase its value because this is done with the database with $inc
         setProRenewal({
             itemList: mainItemList,
             planBr,
@@ -43,11 +44,11 @@ function ActivePlanRenewal({
         <section className="text-normal">
             <h2 className="text-subtitle text-center">Novos Créditos</h2>
             {tableItemList.map((item) => (
-                <div key={item.service} className="text-normal text-left">
+                <div key={item.service} className="mb-4 text-normal text-left">
                     <p className="m-0 font-weight-bold">
                         {checkIcon()} {item.service}:
                     </p>
-                    <p className="mb-3">
+                    <p>
                         {getNewCredits({ isGold, item })}
                         <br />
                         por R$ {convertToReal(item.invAmount)}
@@ -96,7 +97,7 @@ function ActivePlanRenewal({
             <h2 className="text-center text-subtitle">
                 <span className="font-weight-bold">Renovação</span>
                 <p className="text-purple font-site text-em-0-8">
-                    Ao renovar seu plano atual, fica assim:
+                    Renove com os mesmos serviços do seu plano principal
                 </p>
             </h2>
             {showRenewalItemList()}
@@ -173,8 +174,16 @@ function getNewCredits({ isGold, item }) {
     const isAccumulative = item.creditTypeBr === "acumulativo";
     const isFixed = item.creditTypeBr === "fixo";
 
+    const showCalculation = () => (
+        <p className="m-0 text-grey">
+            {convertToReal(item.currCredits)} créditos (atual)
+            <br />+ {convertToReal(item.invCredits)} créditos (novo)
+        </p>
+    );
+
     return (
         <Fragment>
+            {isAccumulative && showCalculation()}
             <span className="text-pill">
                 {isFixed ? "até " : ""}{" "}
                 {convertToReal(
