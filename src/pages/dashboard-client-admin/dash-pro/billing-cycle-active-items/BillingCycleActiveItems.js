@@ -18,7 +18,7 @@ export default function BillingCycleActiveItems() {
 
     const showDates = () => (
         <section
-            className="position-relative container-center"
+            className="position-relative container-center-col"
             style={{
                 top: -10,
             }}

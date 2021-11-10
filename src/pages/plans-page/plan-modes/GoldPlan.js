@@ -96,7 +96,7 @@ export default function GoldPlan({ setCurrPlan }) {
                     ) : (
                         showPlanSwitchBtns()
                     )}
-                    <MainTitle planMsg="Cadastre novos clientes e membros de forma ilimitada" />
+                    <MainTitle planMsg="Cadastre novos clientes e tenha membros conectados de forma ilimitada" />
                     <section className="period-selection">
                         <PeriodSelection
                             orderList={orderList}

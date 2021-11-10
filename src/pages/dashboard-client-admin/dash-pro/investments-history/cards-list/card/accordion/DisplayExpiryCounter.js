@@ -27,7 +27,7 @@ const handleRenewalClick = ({ panel, history }) => {
 const getStyles = () => ({
     activated: {
         right: 55,
-        top: 70,
+        top: 50,
     },
 });
 

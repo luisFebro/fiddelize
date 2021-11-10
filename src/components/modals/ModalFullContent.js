@@ -35,6 +35,7 @@ export default function ModalFullContent({
     showBackBtn = false,
     needIndex = true,
     backgroundColor,
+    maxWidth = "500px",
     // style,
 }) {
     const { runName } = useRun();
@@ -55,7 +56,7 @@ export default function ModalFullContent({
             PaperProps={{
                 style: {
                     backgroundColor: backgroundColor || "var(--mainWhite)",
-                    maxWidth: "500px",
+                    maxWidth,
                     overflowX: "hidden",
                 },
             }}

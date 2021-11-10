@@ -1,10 +1,11 @@
 import { useState } from "react";
 import parse from "html-react-parser";
-import "./_NotifPermissionBanner.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useData from "init";
+import { IS_STAGING } from "api/root";
+import "./_NotifPermissionBanner.scss";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
-import useData from "init";
 import isOffline from "../../utils/server/isOffline";
 
 const isOnline = !isOffline();
@@ -54,6 +55,9 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
             />
         </div>
     );
+
+    // don`t show the notif comp while in staging because it will conflict with current app and update incorrectly to the test env app
+    if (IS_STAGING) return <div />;
 
     return (
         <section className={backDrop ? "backdrop-medium" : ""}>

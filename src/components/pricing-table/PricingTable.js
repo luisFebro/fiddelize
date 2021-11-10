@@ -117,8 +117,8 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                         <span className="font-site text-em-1 text-pill">
                                             sem limites
                                         </span>{" "}
-                                        de <strong>membros</strong> conectados{" "}
-                                        ao {currPlanBr}
+                                        de <strong>membros</strong> conectados /
+                                        {currPlanBr}
                                     </li>
                                     <li>
                                         {getStatusIcon(isYearly ? "on" : "off")}{" "}

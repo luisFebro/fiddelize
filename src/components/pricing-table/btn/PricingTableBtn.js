@@ -54,6 +54,7 @@ export default function PricingTableBtn({ setCurrPlan }) {
                 backgroundColor="var(--themeP)"
                 needIndex={101}
                 setFullOpen={handleFullClose}
+                maxWidth="1100px"
             />
         </section>
     );
