@@ -115,8 +115,8 @@ export default function BronzePlan({ setCurrPlan }) {
     const handleNextPage = () => {
         if (!orderAmount)
             return showToast("Carrinho Vazio! Selecione algum serviço.");
-        if (orderAmount < 25)
-            return showToast("Quantia mínima do pedido é de R$ 25");
+        if (orderAmount < 10)
+            return showToast("Quantia mínima do pedido é de R$ 10");
         return setNextPage(true);
     };
 

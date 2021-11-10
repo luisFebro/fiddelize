@@ -54,7 +54,7 @@ export default function PayMethodsBtn({
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const { isProUser, handleCancel } = modalData;
+    const { handleCancel } = modalData;
 
     const AsyncPayMethod = pickPayMethod(method, modalData);
 
@@ -65,7 +65,7 @@ export default function PayMethodsBtn({
             category: "Payment Methods",
             action: method,
         });
-        if (isProUser) handleCancel(); // remove curr order.
+        handleCancel(); // remove curr order.
     };
 
     const handleFullClose = () => {

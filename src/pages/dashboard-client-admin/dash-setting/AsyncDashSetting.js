@@ -4,7 +4,6 @@ import { useBizData } from "init";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./DashSetting.scss";
 import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
-import PremiumServicesBtn from "./PremiumServicesBtn";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import isThisApp from "../../../utils/window/isThisApp";
 
@@ -14,10 +13,10 @@ const DashSettingTitle = <Title />;
 // IMPLEMENT SOME CODE SPLITTING TO THE SETTING COMPONENTS
 export default function DashSetting() {
     const showBizDocs = () => (
-        <section>
-            <div className="d-flex justify-content-around align-items-center">
+        <section className="font-site text-normal">
+            <div className="my-5 d-flex justify-content-around align-items-center">
                 <a
-                    className="text-link text-small"
+                    className="text-link"
                     href={`${CLIENT_URL}/termos-de-uso`}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -25,7 +24,7 @@ export default function DashSetting() {
                     termos de uso
                 </a>
                 <a
-                    className="text-link text-small"
+                    className="text-link"
                     href={`${CLIENT_URL}/privacidade`}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -35,7 +34,7 @@ export default function DashSetting() {
             </div>
             <Link
                 to="/status-de-servicos"
-                className="mt-4 container-center text-link text-small"
+                className="mt-2 container-center text-link"
             >
                 status de serviços
             </Link>
@@ -50,7 +49,6 @@ export default function DashSetting() {
             <main className="mt-2">
                 <ShowConfigExpansiblePanel />
             </main>
-            <PremiumServicesBtn />
             {isApp && showBizDocs()}
             <div style={{ marginBottom: 50 }} />
         </Fragment>

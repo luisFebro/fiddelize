@@ -38,8 +38,9 @@ const getServiceSKU = (options = {}) => {
         getPeriodBr(period, { gotFullPlan }),
         gotFullPlan ? "PL" : "SE", // identify Range if included fullPlan it is P, or SE for selected for any Extra services without a fullPlan or any service from Bronze plan
         generateAlphaNumeric(7, "A#"),
-        isPro ? "P" : "", // if user has purchased priorly
+        "P", // if user has purchased priorly
     ];
+    if (!isPro) SKU.pop();
     return SKU.join("-");
 };
 

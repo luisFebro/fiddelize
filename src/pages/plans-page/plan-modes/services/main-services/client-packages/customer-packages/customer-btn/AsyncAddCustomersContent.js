@@ -52,7 +52,7 @@ function AsyncAddCustomersContent({ modalData, handleFullClose }) {
         const isFunc = typeof handleItem === "function";
 
         const item = {
-            range: "selected",
+            range: "fullPlan",
             expirable: true,
             name: "Novvos Clientes",
             count: Number(totalCount),

@@ -12,7 +12,7 @@ export default async function goFinishCheckout(props) {
 
     const {
         userId,
-        userName,
+        name,
         sandboxMode,
         senderEmail,
         senderCPF,
@@ -39,9 +39,9 @@ export default async function goFinishCheckout(props) {
     let body = {
         paymentMethod: selectedMethod,
         senderHash,
-        reference, // from v4.70 onwards, the renewal is completely created in the backend by identify the same reference.
+        reference,
         itemId: reference,
-        senderName: userName,
+        senderName: name,
         senderEmail: sandboxMode
             ? "teste.fiddelize@sandbox.pagseguro.com.br"
             : senderEmail,
@@ -83,7 +83,7 @@ export default async function goFinishCheckout(props) {
         body = {
             paymentMethod: selectedMethod,
             reference,
-            senderName: userName,
+            senderName: name,
             senderCPF,
             filter,
             itemAmount1: testValue || itemAmount,

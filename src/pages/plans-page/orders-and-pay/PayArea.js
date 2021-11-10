@@ -92,8 +92,7 @@ export default function PayArea({
                 setAlreadyReadUser(true);
                 const thisReferrer = res.referrer;
                 const thisBirthDay = res.birthday;
-                let thisCPF = res.cpf;
-                if (thisCPF === "023.248.892-42") thisCPF = "285.021.150-81"; // for testing only
+                const thisCPF = res.cpf;
 
                 const thisSenderCPF = getOnlyNumbersFromStr(thisCPF);
                 const thisSenderAreaCode = convertPhoneStrToInt(phone, {

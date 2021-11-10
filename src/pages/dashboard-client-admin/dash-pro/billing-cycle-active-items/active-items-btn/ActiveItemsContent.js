@@ -81,7 +81,7 @@ function treatLists(data, loading) {
                     zIndex: 10000,
                 }}
             >
-                a {handleCreditTypeBr(i.creditType)}
+                {handleCreditTypeBr(i.creditType)}
                 <br />
                 {showCreditTypeTooltip()}
             </div>

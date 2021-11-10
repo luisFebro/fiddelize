@@ -149,9 +149,6 @@ function DisplayExpiryCounter({ history, panel }) {
         !isScheduledDate(payDueDate, { isDashed: true }) && !isPaid;
     const isBoletoExpired = isBoleto && isBoletoPayExpired && isRenewable;
 
-    const isExpired = !isUnlimitedOrder && daysLeft <= 0;
-    if (isExpired) return <div />;
-
     if (isActive) {
         return (
             <Fragment>
@@ -182,5 +179,8 @@ export default withRouter(DisplayExpiryCounter);
 >
     {daysLeft || 0} dias
 </p>
+
+const isExpired = !isUnlimitedOrder && daysLeft <= 0;
+if (isExpired) return <div />;
 
  */

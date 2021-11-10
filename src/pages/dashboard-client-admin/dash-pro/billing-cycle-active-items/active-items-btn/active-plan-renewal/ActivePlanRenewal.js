@@ -57,10 +57,11 @@ function ActivePlanRenewal({
             ))}
             <h2 className="text-subtitle text-center">Mais tempo de uso</h2>
             <p>
-                <span className="text-pill">{`${newPeriod} ${
+                <span className="text-pill">{`${newPeriod}${
                     isExtraFreeMonth ? " e 1 mês extra" : ""
                 }`}</span>{" "}
-                para continuar aproveitando seu plano
+                para continuar aproveitando seu plano, contando a partir de
+                hoje.
             </p>
             <hr className="lazer-purple" />
             <p>
