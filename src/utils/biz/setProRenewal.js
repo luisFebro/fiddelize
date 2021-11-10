@@ -6,10 +6,13 @@ export default async function setProRenewal({
     planBr,
     period,
 }) {
+    if (!itemList || !investAmount || !planBr || !period)
+        throw new Error("Missing critical data for pro plan renewal");
+
     return await setVars({
-        pendingOrderItemList: itemList,
+        pendingOrderItemList: itemList || [],
         pendingOrderItemsCount: itemList ? itemList.length : 0,
-        pendingOrderInvestAmount: investAmount,
+        pendingOrderInvestAmount: Number(investAmount),
         pendingOrderPeriod: period,
         pendingOrderPlanBr: planBr,
     });

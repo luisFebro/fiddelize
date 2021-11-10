@@ -117,11 +117,11 @@ export default function getCardTypeData(cardType, options = {}) {
             }
             if (subtype === "proNearExpiryDate") {
                 title = "Lembrete de Vencimento";
-                brief = `O plano ${
+                brief = `O seu plano ${
                     planBr && planBr.cap()
                 } com ${totalServ} serviço${
                     totalServ > 1 ? "s" : ""
-                } vai expirar nos próximos dias. Você continua usando até ${
+                } vai expirar nos próximos 5 dias em ${
                     expiryDate && formatDMY(new Date(expiryDate))
                 }.`;
                 circularImg = "/img/icons/notif/crown-near-expired.svg";

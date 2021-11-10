@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import extractStrData from "utils/string/extractStrData";
 import setProRenewal from "utils/biz/setProRenewal";
 import { formatDMY } from "utils/dates/dateFns";
+import showToast from "components/toasts";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
 import RedirectLink from "../../../RedirectLink";
 import {
@@ -20,36 +21,27 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
     const isWelcomeProPay = subtype === "welcomeProPay";
     const isExpiredDate = subtype === "proExpiredDate";
     const isNearExpiryDate = subtype === "proNearExpiryDate";
-    const needOrderBtn = isExpiredDate || isNearExpiryDate;
 
     const contentData = content && extractStrData(content);
-    // free trial data
-    const maintenanceMonthExpDate =
-        contentData && contentData.maintenanceMonthExpDate;
-    // end free trial data
-    const needDataExpiration = contentData && !contentData.approvalDate;
-
-    const ref = needDataExpiration && contentData && contentData.ref;
-    const orders =
-        needDataExpiration &&
-        contentData.orders &&
-        JSON.parse(contentData.orders);
-    const planBr = needDataExpiration && contentData.planBr;
-    // const planDays = needDataExpiration && contentData.planDays;
-    const expiryDate = needDataExpiration && contentData.expiryDate;
-    const period = needDataExpiration && contentData.period;
-    const totalMoney = needDataExpiration && contentData.totalMoney;
     // proPay and welcomeProPay
     const isExtraFreeMonth =
         contentData && contentData.isExtraFreeMonth === "true";
 
     const handleOrderPageClick = () => {
+        if (!contentData) return showToast("Algo deu errado.");
+        const { planBr, orders, period, totalMoney } = contentData;
+
+        // handle correctly when count is null which means it was an Infinity value from pro gold.
+        const itemList = JSON.parse(orders).map((i) => ({
+            ...i,
+            count: i.count || Infinity,
+        }));
+
         setProRenewal({
             investAmount: totalMoney,
-            expiryDate,
-            orders,
-            planBr,
             period,
+            itemList,
+            planBr,
         }).then(() => {
             history.push("/pedidos/admin");
         });
@@ -103,6 +95,12 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
         </RedirectLink>
     );
 
+    const ChildrenBtnData =
+        isExpiredDate || isNearExpiryDate ? (
+            <ChildrenBtn />
+        ) : (
+            <GoToProSessionBtn />
+        );
     return (
         <section>
             <ShowTitle text={handleTitle()} />
@@ -114,10 +112,15 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
                         Para assegurar uma melhor experiência para seus
                         clientes, todos sua base de clientes ganharam mais{" "}
                         <i>1 mês de manuntenção</i> até dia{" "}
-                        <b>{formatDMY(maintenanceMonthExpDate)}</b> e já está
-                        ativado. Isso significa que você, sua equipe e clientes
-                        continuam usando os serviços da Fiddelize normalmente,
-                        de forma gratuita.
+                        <b>
+                            {formatDMY(
+                                contentData &&
+                                    contentData.maintenanceMonthExpDate
+                            )}
+                        </b>{" "}
+                        e já está ativado. Isso significa que você, sua equipe e
+                        clientes continuam usando os serviços da Fiddelize
+                        normalmente, de forma gratuita.
                     </p>
                     <p className={`${textStyle}`}>
                         A única restrição é que a funcionalidade de{" "}
@@ -141,7 +144,9 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
                         - Todas as moedas da sua base de clientes são expiradas
                         e funcionalidade de expiração desativada. Saiba mais
                         indo em app > moedas digitais > expiração de moedas.
-                        <br />- Apps de membros têm acesso bloqueado;
+                        <br />- Apps de membros têm acesso temporarimente
+                        bloqueado para todas as principais funcionalidades:
+                        cadastrar clientes, moedas e descontar benefícios;
                     </p>
                     <p className={`${textStyle}`}>
                         Para atualizar seu plano, bastar acessar seu app admin e
@@ -152,20 +157,27 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
             )}
             {isExpiredDate && (
                 <p className={`${textStyle} font-weight-bold`}>
-                    ID: {ref}
+                    Referência Plano:
+                    <br />
+                    <strong className="text-pill">
+                        {contentData && contentData.ref}
+                    </strong>
                     <br />
                     <br />
-                    Renove, continue usando e cadastre mais clientes!
+                    Renove para continuar cadastrando novos mais clientes no seu
+                    clube de compras.
                 </p>
             )}
             {isNearExpiryDate && (
                 <p className={`${textStyle} font-weight-bold`}>
-                    ID: {ref}
+                    Referência do plano:
+                    <br />
+                    <strong className="text-pill">
+                        {contentData && contentData.ref}
+                    </strong>
                     <br />
                     <br />
-                    Renove esse plano a qualquer momento.
-                    <br />
-                    Continue fiddelizando!
+                    Renove este plano a qualquer momento. Continue fiddelizando!
                 </p>
             )}
             {(isWelcomeProPay || isProPayOnly) && (
@@ -186,9 +198,7 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
             <ShowActionBtn
                 role={role}
                 titleCliAdmin="Ir para painel"
-                children={
-                    needOrderBtn ? <ChildrenBtn /> : <GoToProSessionBtn />
-                }
+                children={ChildrenBtnData}
             />
         </section>
     );
