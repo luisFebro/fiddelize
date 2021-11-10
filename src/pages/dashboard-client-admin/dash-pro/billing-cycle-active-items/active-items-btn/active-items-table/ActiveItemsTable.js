@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import MuSelectTable from "components/tables/MuSelectTable";
+import usePro from "init/pro";
 // import showToast from "components/toasts";
 
-const headCells = [
+const getHeadCells = (isGoldPlan = false) => [
     { id: "service", label: "Serviço", numeric: false, disablePadding: false },
     {
         id: "currCredits",
         label: "Total Créditos Atual",
-        numeric: true,
+        numeric: !isGoldPlan, // it is Infinity, it should be a string
         align: "center",
         disablePadding: false,
     },
@@ -28,6 +29,9 @@ const headCells = [
 export default function ActiveItemsTable({ planList = [], loading }) {
     const [rowsData, setRowsData] = useState([]);
 
+    const { plan } = usePro();
+    const isGoldPlan = plan === "ouro";
+
     useEffect(() => {
         setRowsData(planList);
     }, [planList]);
@@ -38,7 +42,7 @@ export default function ActiveItemsTable({ planList = [], loading }) {
                 Todos serviços ativos
             </h1>
             <MuSelectTable
-                headCells={headCells}
+                headCells={getHeadCells(isGoldPlan)}
                 rowsData={rowsData}
                 loading={loading}
                 needMainTitle={false}

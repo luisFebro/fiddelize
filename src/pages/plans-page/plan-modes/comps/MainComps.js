@@ -193,7 +193,7 @@ const MinimizedUpperOptions = ({
     setCurrPlan,
     isPro = false,
 }) => {
-    if (isPro) {
+    if (isPro && currPlanBr !== "Bronze") {
         if (currPlanBr === "Prata") {
             return (
                 <Fragment>

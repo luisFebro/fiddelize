@@ -73,7 +73,7 @@ export default function BronzePlan({ setCurrPlan }) {
 
     const showPlanSwitchBtns = () => {
         const getMainContent = () => {
-            if (!isPro) {
+            if (!isPro || plan === "bronze") {
                 return (
                     <Fragment>
                         <div
@@ -157,12 +157,15 @@ export default function BronzePlan({ setCurrPlan }) {
                         />
                     </section>
                     <div style={{ height: 180 }} />
-
-                    <MainServices
-                        modalData={modalClientsData}
-                        orderList={orderList}
-                    />
-                    <div style={{ marginBottom: 100 }} />
+                    {plan !== "ouro" && (
+                        <Fragment>
+                            <MainServices
+                                modalData={modalClientsData}
+                                orderList={orderList}
+                            />
+                            <div style={{ marginBottom: 100 }} />
+                        </Fragment>
+                    )}
 
                     <ExtraServices
                         orderList={orderList}
@@ -174,9 +177,7 @@ export default function BronzePlan({ setCurrPlan }) {
                     <IntegratedServices />
                     <div style={{ marginBottom: 100 }} />
 
-                    {plan !== "ouro" && (
-                        <PricingTableBtn setCurrPlan={setCurrPlan} />
-                    )}
+                    <PricingTableBtn setCurrPlan={setCurrPlan} />
 
                     <TotalInvest
                         orderAmount={orderAmount}

@@ -106,8 +106,9 @@ function treatLists(data, loading) {
         const invAmount = planItem && planItem.amount;
         const invCredits = planItem && planItem.count;
 
+        const creditEnd = i.creditEnd || "ilimitado"; // Infinity as JSON is null
         return planList.push(
-            getDefaultData(i, i.creditEnd, invAmount, invCredits)
+            getDefaultData(i, creditEnd, invAmount, invCredits)
         );
     });
 
