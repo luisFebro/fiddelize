@@ -95,7 +95,7 @@ export default function AsyncBoleto({ modalData = {} }) {
                 loading: false,
             }));
 
-            await handleCancel(); // remove current orders
+            handleCancel(); // remove current orders
         })();
     }, []);
 

@@ -49,7 +49,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                 error: false,
             }));
 
-            await handleCancel(); // remove current orders
+            handleCancel(); // remove current orders
         })();
     }, [selectedBank]);
 

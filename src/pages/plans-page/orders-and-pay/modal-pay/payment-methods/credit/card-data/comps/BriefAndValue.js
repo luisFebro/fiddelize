@@ -315,9 +315,10 @@ export default function BriefAndValue({
             setData({ ...data, loadingInvest: false, errorInvest: true });
             return;
         }
+
+        handleCancel(); // remove current orders
         await setData({ ...data, loadingInvest: false });
         await setCurrComp("successfulCCPay");
-        await handleCancel(); // remove current orders
     };
 
     const showFinalInvestBtn = () => (

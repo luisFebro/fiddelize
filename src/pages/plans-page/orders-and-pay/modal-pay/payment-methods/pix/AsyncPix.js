@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import useSendEmail from "hooks/email/useSendEmail";
 import useData from "init";
 import QrCode from "components/QrCode";
@@ -8,6 +7,7 @@ import RadiusBtn from "components/buttons/RadiusBtn";
 import convertToReal from "utils/numbers/convertToReal";
 import RedirectLink from "components/RedirectLink";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
+import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import "./_Pix.scss";
 
 // const isSmall = window.Helper.isSmallScreen();
@@ -33,8 +33,8 @@ export default function AsyncPix({ modalData }) {
             });
             if (!responseData) return;
 
+            handleCancel(); // remove current orders
             await setAlreadyPix(true);
-            await handleCancel(); // remove current orders
         };
 
         if (confirmedPix) runPix();

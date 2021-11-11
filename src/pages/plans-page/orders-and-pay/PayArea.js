@@ -124,7 +124,12 @@ export default function PayArea({
 
     // converting Infinity Value into string since JSON converted it to null
     if (planBr === "ouro")
-        itemList = itemList.map((i) => ({ ...i, count: i.count.toString() }));
+        itemList =
+            itemList.length &&
+            itemList.map((i) => ({
+                ...i,
+                count: i.count ? i.count.toString() : "Infinity",
+            }));
     const modalData = {
         userId,
         name,

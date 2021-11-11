@@ -43,21 +43,24 @@ export default function OrdersTableContent({
                 "pendingOrderItemList",
                 "pendingOrderItemsCount",
                 "pendingOrderInvestAmount",
-            ]).then(
-                ([
+            ]).then((pendingList) => {
+                if (!pendingList.length) return null;
+
+                const [
                     pendingOrderItemList,
                     pendingOrderItemsCount,
                     pendingOrderInvestAmount,
-                ]) => {
-                    setData((priorMainData) => ({
-                        ...priorMainData,
-                        itemList: pendingOrderItemList,
-                        itemsCount: pendingOrderItemsCount,
-                        investAmount: pendingOrderInvestAmount,
-                    }));
-                    setList(recoverList);
-                }
-            );
+                ] = pendingList;
+
+                setData((priorMainData) => ({
+                    ...priorMainData,
+                    itemList: pendingOrderItemList,
+                    itemsCount: pendingOrderItemsCount,
+                    investAmount: pendingOrderInvestAmount,
+                }));
+                setList(recoverList);
+                return null;
+            });
             return null;
         }
 
