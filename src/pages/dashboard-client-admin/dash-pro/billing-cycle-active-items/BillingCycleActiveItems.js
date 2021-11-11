@@ -52,7 +52,7 @@ export default function BillingCycleActiveItems() {
     );
 
     const textInstru =
-        "A duração do plano é feita baseada no seu último pedido que incluem serviços principais como Novvos Clientes e Connecta Membros.<br /><br />A data de expiração do ciclo do plano é aquela com duração mais longa.";
+        "A duração do plano é feita baseada no seu último pedido que incluem serviços principais como Novvos Clientes ou Connecta Membros.<br /><br />A data de expiração do ciclo do plano é aquela com duração mais longa.";
 
     return (
         <section className="mb-5 text-normal text-purple text-center">

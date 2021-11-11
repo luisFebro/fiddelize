@@ -31,16 +31,10 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
         if (!contentData) return showToast("Algo deu errado.");
         const { planBr, orders, period, totalMoney } = contentData;
 
-        // handle correctly when count is null which means it was an Infinity value from pro gold.
-        const itemList = JSON.parse(orders).map((i) => ({
-            ...i,
-            count: i.count || Infinity,
-        }));
-
         setProRenewal({
             investAmount: totalMoney,
             period,
-            itemList,
+            itemList: orders,
             planBr,
         }).then(() => {
             history.push("/pedidos/admin");
@@ -120,13 +114,15 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
                         </b>{" "}
                         e já está ativado. Isso significa que você, sua equipe e
                         clientes continuam usando os serviços da Fiddelize
-                        normalmente, de forma gratuita.
+                        normalmente como se o plano estivesse ativo.
                     </p>
                     <p className={`${textStyle}`}>
-                        A única restrição é que a funcionalidade de{" "}
+                        Devido a expiração dos créditos, a{" "}
+                        <strong>única restrição</strong> é que a funcionalidade
+                        de{" "}
                         <b>
                             cadastrar novos clientes foi desativada
-                            temporarimente
+                            temporarimente no <em>app dos membros e admin</em>
                         </b>{" "}
                         até que invista em um de nossos <b>planos pro</b>.
                     </p>
@@ -144,9 +140,9 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
                         - Todas as moedas da sua base de clientes são expiradas
                         e funcionalidade de expiração desativada. Saiba mais
                         indo em app > moedas digitais > expiração de moedas.
-                        <br />- Apps de membros têm acesso temporarimente
-                        bloqueado para todas as principais funcionalidades:
-                        cadastrar clientes, moedas e descontar benefícios;
+                        <br />- As principais funcionalidades dos apps de equipe
+                        e admin são temporarimente bloqueados: cadastrar
+                        clientes, moedas e descontar benefícios;
                     </p>
                     <p className={`${textStyle}`}>
                         Para atualizar seu plano, bastar acessar seu app admin e
@@ -156,17 +152,59 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
                 </Fragment>
             )}
             {isExpiredDate && (
-                <p className={`${textStyle} font-weight-bold`}>
-                    Referência Plano:
-                    <br />
-                    <strong className="text-pill">
-                        {contentData && contentData.ref}
-                    </strong>
-                    <br />
-                    <br />
-                    Renove para continuar cadastrando novos mais clientes no seu
-                    clube de compras.
-                </p>
+                <Fragment>
+                    <p className={`${textStyle}`}>
+                        Para assegurar uma melhor experiência para seus
+                        clientes, todos sua base de clientes ganharam mais{" "}
+                        <i>1 mês de manuntenção</i> até dia{" "}
+                        <b>
+                            {formatDMY(
+                                contentData &&
+                                    contentData.maintenanceMonthExpDate
+                            )}
+                        </b>{" "}
+                        e já está ativado. Isso significa que você, sua equipe e
+                        clientes continuam usando os serviços da Fiddelize
+                        normalmente como se o plano estivesse ativo.
+                    </p>
+                    <p className={`${textStyle}`}>
+                        A única restrição é que a funcionalidade de{" "}
+                        <b>
+                            cadastrar novos clientes foi desativada
+                            temporarimente no <em>app dos membros e admin</em>
+                        </b>{" "}
+                        até que invista em um de nossos <b>planos pro</b>.
+                    </p>
+                    <p className={`${textStyle}`}>
+                        <strong>Importante</strong>
+                        <br />
+                        <strong>Durante o mês de manuntenção:</strong> O prazo
+                        de expiração de todas as moedas dos clientes é ativado.
+                        Os clientes recebem notificações e o prazo fica visível
+                        quando eles entram no app.
+                        <br />
+                        <br />
+                        <strong>Ao final do mês de manuntenção:</strong>
+                        <br />
+                        - Todas as moedas da sua base de clientes são expiradas
+                        e funcionalidade de expiração desativada. Saiba mais
+                        indo em app > moedas digitais > expiração de moedas.
+                        <br />- As principais funcionalidades dos apps de equipe
+                        e admin são temporarimente bloqueadas: cadastrar
+                        clientes, moedas e descontar benefícios;
+                    </p>
+                    <p className={`${textStyle} font-weight-bold`}>
+                        Referência Plano Expirado:
+                        <br />
+                        <strong className="text-pill">
+                            {contentData && contentData.ref}
+                        </strong>
+                        <br />
+                        <br />
+                        Renove para continuar cadastrando mais clientes no seu
+                        clube de compras.
+                    </p>
+                </Fragment>
             )}
             {isNearExpiryDate && (
                 <p className={`${textStyle} font-weight-bold`}>

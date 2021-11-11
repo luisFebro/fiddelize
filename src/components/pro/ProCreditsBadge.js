@@ -29,13 +29,18 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
     );
 }
 
-function getUltimateProExpiringDate({ isPro, daysLeft, finishDate }) {
+function getUltimateProExpiringDate({
+    isPro,
+    daysLeft,
+    finishDate,
+    isProExpBlock1 = false,
+}) {
     const areCreditsActive = Boolean(daysLeft);
 
     if (!areCreditsActive) {
         return (
             <p className="text-small text-red font-weight-bold">
-                {isPro ? "Plano expirado" : "Versão expirada"}
+                {isProExpBlock1 ? "Plano expirado" : "Versão expirada"}
             </p>
         );
     }

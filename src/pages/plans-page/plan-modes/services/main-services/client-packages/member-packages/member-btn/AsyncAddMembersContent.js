@@ -52,7 +52,7 @@ function AsyncAddMembersContent({ history, modalData, handleFullClose }) {
 
         // totalPackage is the count since there is no package
         const item = {
-            range: "selected",
+            range: "fullPlan",
             expirable: true,
             name: "Connecta Membros",
             count: Number(totalPackage),

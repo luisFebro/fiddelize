@@ -132,7 +132,7 @@ export default function getCardTypeData(cardType, options = {}) {
                     planBr && planBr.cap()
                 } com ${totalServ} serviço${
                     totalServ > 1 ? "s" : ""
-                } expirou hoje. Renove seus serviços para continuar usando.`;
+                } expirou hoje. Renove seu plano para cadastrar mais clientes.`;
                 circularImg = "/img/icons/notif/crown-expired.svg";
             }
             break;

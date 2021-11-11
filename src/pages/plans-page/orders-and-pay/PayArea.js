@@ -128,8 +128,9 @@ export default function PayArea({
             itemList.length &&
             itemList.map((i) => ({
                 ...i,
-                count: i.count ? i.count.toString() : "Infinity",
+                count: handleInfinity(),
             }));
+
     const modalData = {
         userId,
         name,
@@ -189,4 +190,11 @@ export default function PayArea({
             {error && <ShowError />}
         </section>
     );
+}
+
+function handleInfinity() {
+    if (i.count === Infinity) return i.count.toString();
+    if (i.count) return i.count;
+
+    return "Infinity"; // in case of null when read from backend JSON request
 }
