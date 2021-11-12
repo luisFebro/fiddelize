@@ -9,6 +9,8 @@ import { Load } from "components/code-splitting/LoadableComp";
 import { useBizData } from "init";
 import DotBadge from "components/badges/DotBadge";
 import getItems from "init/lStorage";
+import usePro from "init/pro";
+import FuncExpModal from "components/pro/func-exp-modal/FuncExpModal";
 
 const [benefitsNotif] = getItems("bizData", ["benefitsNotif"]);
 
@@ -66,6 +68,9 @@ function MoreOptionsBtn({
     const [newCustomerOpen, setNewCustomer] = useState(false);
     const [promoteOpen, setPromote] = useState(false);
     const [benefitsOpen, setBenefits] = useState(false);
+    const [expModal, setExpModal] = useState(false);
+
+    const { isMainRegisterFuncBlocked } = usePro();
 
     const styles = getStyles();
 
@@ -122,7 +127,8 @@ function MoreOptionsBtn({
                 name: "+ Clientes",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
-                    setNewCustomer(true);
+                    if (isMainRegisterFuncBlocked) return setExpModal(true);
+                    return setNewCustomer(true);
                     // playBeep();
                 },
             },
@@ -253,6 +259,7 @@ function MoreOptionsBtn({
             {newCustomerOpen && showNewCustomerComp()}
             {promoteOpen && showNewPromoteComp()}
             {benefitsOpen && showBenefitsComp()}
+            {expModal && <FuncExpModal app="cliente" />}
         </div>
     );
 }

@@ -104,7 +104,7 @@ function PlanBadges({ history }) {
             className="animated fadeInUp position-absolute"
             style={{ top: 0, right: -100 }}
         >
-            <ProRenewalBtn />
+            <ProRenewalBtn size="small" />
         </section>
     );
 
@@ -141,12 +141,12 @@ function PlanBadges({ history }) {
                     .plan-maintenance-badge-inner {
                         position: absolute;
                         right: 25px;
-                        bottom: -10px;
+                        bottom: -5px;
                     }
 
                     .plan-maintenance-badge-inner .text {
                         border-radius: 20px;
-                        background-color: var(--expenseRed);
+                        background-color: var(--mainDark);
                         color: var(--mainWhite);
                         border: 2px solid #fff;
                         font-weight: bolder;

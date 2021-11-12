@@ -2,11 +2,19 @@ import { Fragment } from "react";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import { formatDate } from "utils/dates/dateFns";
 import usePro from "init/pro";
-import ActiveItemsBtn from "./active-items-btn/ActiveItemsBtn";
 import ProRenewalBtn from "components/pro/ProRenewalBtn";
+import ReportIcon from "@material-ui/icons/Report";
+import ActiveItemsBtn from "./active-items-btn/ActiveItemsBtn";
 
 export default function BillingCycleActiveItems() {
-    const { isPro, startDate, finishDate, isProExpBlock1 } = usePro();
+    const {
+        isPro,
+        startDate,
+        daysLeft,
+        finishDate,
+        isProExpBlock1,
+        isProExpBlock2,
+    } = usePro();
 
     const startDayMonth = startDate && formatDate(startDate, "dd' 'MMM").cap();
     const finishDayMonth =
@@ -57,13 +65,20 @@ export default function BillingCycleActiveItems() {
 
     const showPlanStatusMsg = () => (
         <Fragment>
-            {isProExpBlock1 ? (
-                <section>
-                    <p className="my-3 text-center text-normal text-red font-weight-bold">
+            {isProExpBlock1 || isProExpBlock2 ? (
+                <section className="text-grey text-normal text-left mx-3">
+                    <p className="my-3 text-center text-subtitle text-red font-weight-bold">
                         seu plano expirou
                     </p>
+                    {isProExpBlock1 &&
+                        !isProExpBlock2 &&
+                        showProExpBlock1({ daysLeft })}
+                    {isProExpBlock2 && showProExpBlock2()}
+                    <p className="font-italic text-center">
+                        Renove para desbloquear recursos
+                    </p>
                     <div className="container-center">
-                        <ProRenewalBtn title="Renovar plano" />
+                        <ProRenewalBtn title="Renovar plano" width="100%" />
                     </div>
                 </section>
             ) : (
@@ -98,5 +113,68 @@ export default function BillingCycleActiveItems() {
                 showPlanStatusMsg()
             )}
         </section>
+    );
+}
+
+function showProExpBlock1({ daysLeft }) {
+    return (
+        <Fragment>
+            <p>
+                +1 mês de manutenção foi ativado e termina em{" "}
+                <strong>{daysLeft} dias</strong>.
+            </p>
+            <section>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> ativado expiração de
+                    moedas clientes ao final do mês de manutenção
+                </p>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> bloqueado cadastro
+                    de novos clientes
+                    <br />
+                    (app admin/membros)
+                </p>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> bloqueado cadastro
+                    de novos membros
+                    <br />
+                    (app admin/membros)
+                </p>
+            </section>
+        </Fragment>
+    );
+}
+
+function showProExpBlock2() {
+    return (
+        <Fragment>
+            <p>
+                +1 mês de manutenção <strong>terminou</strong>.
+            </p>
+            <section>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> todas as moedas dos
+                    clientes expirados.
+                </p>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> bloqueado cadastro
+                    de novos clientes
+                    <br />
+                    (app admin/membros)
+                </p>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> bloqueado cadastro
+                    de novos membros
+                    <br />
+                    (app admin/membros)
+                </p>
+                <p>
+                    <ReportIcon style={{ fontSize: 25 }} /> bloqueado cadastro
+                    de moedas PTS
+                    <br />
+                    (app admin/membros)
+                </p>
+            </section>
+        </Fragment>
     );
 }

@@ -6,10 +6,10 @@ import HandlePlan from "./plan-modes/HandlePlan";
 import ReturnBtn from "../dashboard-client-admin/ReturnBtn";
 
 export default function PlansPage({ location }) {
-    const { isPro } = usePro();
+    const { isPro, isProExpBlock1 } = usePro();
     // skip the start page
     const needStore =
-        isPro ||
+        (isPro && !isProExpBlock1) ||
         (isPro && location.search && location.search.includes("store=1"));
     const [currPlan, setCurrPlan] = useState(needStore ? "bronze" : "all");
 

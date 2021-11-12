@@ -117,32 +117,25 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
                         normalmente como se o plano estivesse ativo.
                     </p>
                     <p className={`${textStyle}`}>
-                        Devido a expiração dos créditos, a{" "}
+                        Devido à expiração dos créditos, a{" "}
                         <strong>única restrição</strong> é que a funcionalidade
                         de{" "}
                         <b>
-                            cadastrar novos clientes foi desativada
-                            temporarimente no <em>app dos membros e admin</em>
+                            cadastrar novos clientes e membros foi desativada
+                            temporarimente
                         </b>{" "}
-                        até que invista em um de nossos <b>planos pro</b>.
+                        até renovação do <b>plano pro</b>.
                     </p>
                     <p className={`${textStyle}`}>
-                        <strong>Importante:</strong>
-                        <br />
-                        <strong>Durante o mês de manuntenção:</strong> O prazo
-                        de expiração de todas as moedas dos clientes é ativado.
-                        Os clientes recebem notificações e o prazo fica visível
-                        quando eles entram no app.
-                        <br />
-                        <br />
                         <strong>Ao final do mês de manuntenção:</strong>
                         <br />
                         - Todas as moedas da sua base de clientes são expiradas
                         e funcionalidade de expiração desativada. Saiba mais
                         indo em app > moedas digitais > expiração de moedas.
+                        <br />
                         <br />- As principais funcionalidades dos apps de equipe
                         e admin são temporarimente bloqueados: cadastrar
-                        clientes, moedas e descontar benefícios;
+                        clientes e moedas digitais PTS;
                     </p>
                     <p className={`${textStyle}`}>
                         Para atualizar seu plano, bastar acessar seu app admin e
@@ -154,44 +147,30 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
             {isExpiredDate && (
                 <Fragment>
                     <p className={`${textStyle}`}>
-                        Para assegurar uma melhor experiência para seus
-                        clientes, todos sua base de clientes ganharam mais{" "}
-                        <i>1 mês de manuntenção</i> até dia{" "}
+                        Devido à expiração dos créditos, a{" "}
+                        <strong>única restrição</strong> é que a funcionalidade
+                        de{" "}
                         <b>
-                            {formatDMY(
-                                contentData &&
-                                    contentData.maintenanceMonthExpDate
-                            )}
+                            cadastrar novos clientes e membros foi desativada
+                            temporarimente
                         </b>{" "}
-                        e já está ativado. Isso significa que você, sua equipe e
-                        clientes continuam usando os serviços da Fiddelize
-                        normalmente como se o plano estivesse ativo.
+                        até renovação do <b>plano pro</b>.
                     </p>
                     <p className={`${textStyle}`}>
-                        A única restrição é que a funcionalidade de{" "}
-                        <b>
-                            cadastrar novos clientes foi desativada
-                            temporarimente no <em>app dos membros e admin</em>
-                        </b>{" "}
-                        até que invista em um de nossos <b>planos pro</b>.
-                    </p>
-                    <p className={`${textStyle}`}>
-                        <strong>Importante</strong>
-                        <br />
-                        <strong>Durante o mês de manuntenção:</strong> O prazo
-                        de expiração de todas as moedas dos clientes é ativado.
-                        Os clientes recebem notificações e o prazo fica visível
-                        quando eles entram no app.
-                        <br />
-                        <br />
                         <strong>Ao final do mês de manuntenção:</strong>
                         <br />
                         - Todas as moedas da sua base de clientes são expiradas
                         e funcionalidade de expiração desativada. Saiba mais
                         indo em app > moedas digitais > expiração de moedas.
+                        <br />
                         <br />- As principais funcionalidades dos apps de equipe
-                        e admin são temporarimente bloqueadas: cadastrar
-                        clientes, moedas e descontar benefícios;
+                        e admin são temporarimente bloqueados: cadastrar
+                        clientes e moedas digitais PTS;
+                    </p>
+                    <p className={`${textStyle}`}>
+                        Para atualizar seu plano, bastar acessar seu app admin e
+                        clicar em atualizar ao lado do seu plano ao entrar no
+                        seu painel de controle.
                     </p>
                     <p className={`${textStyle} font-weight-bold`}>
                         Referência Plano Expirado:

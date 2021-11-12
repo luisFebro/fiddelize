@@ -18,17 +18,19 @@ export default function usePro(itemName) {
         (bizPlanData && bizPlanData.isFreeTrialExpBlock) || false; // block register of customer for admin apps and all main funcs in members apps
     const isProExpBlock1 = (bizPlanData && bizPlanData.isProExpBlock1) || false; // block register of customer and to know if the a current pro plan is expired
     const isProExpBlock2 = (bizPlanData && bizPlanData.isProExpBlock2) || false; // block all other functionalities after month maintenance (a.k.a RGP - redemption grace period)
+    const maintenanceExpDate = bizPlanData && bizPlanData.maintenanceExpDate;
 
-    const isNewCliFuncBlocked = isProExpBlock1;
-    const isAllAppsFuncBlocked = isFreeTrialExpBlock || isProExpBlock2;
+    const isMainRegisterFuncBlocked = isProExpBlock1 || isFreeTrialExpBlock;
+    const isAllAppsFuncBlocked = isProExpBlock2;
 
     // when in the level 1 of block, the prior plan should still appear but alongside with a maintenance month badge
     const mainRef = (bizPlanData && bizPlanData.mainRef) || null;
 
     return {
-        isPro: isProExpBlock1
-            ? true
-            : (bizPlanData && bizPlanData.isPro) || false,
+        isPro:
+            isProExpBlock1 && !isProExpBlock2 // if reaches level 2 of block, then the plan becomes free in the interface
+                ? true
+                : (bizPlanData && bizPlanData.isPro) || false,
         plan: isProExpBlock1
             ? getRefData(mainRef).planBr
             : (bizPlanData && bizPlanData.plan) || "gratis",
@@ -40,15 +42,16 @@ export default function usePro(itemName) {
         // billing cycle
         startDate: (bizPlanData && bizPlanData.startDate) || new Date(),
         finishDate,
-        daysLeft: getDatesCountdown(finishDate),
+        // maintenanceExpDate is automatically set to null when the plan is renewed
+        daysLeft: getDatesCountdown(maintenanceExpDate || finishDate),
         mainRef,
         mainItemList: bizPlanData && bizPlanData.mainItemList, // only available via init request if isProExpBlock1 is true for renewal
         // block and expiration
         isFreeTrialExpBlock,
         isProExpBlock1,
-        isNewCliFuncBlocked,
+        isMainRegisterFuncBlocked,
         isAllAppsFuncBlocked,
-        maintenanceExpDate: bizPlanData && bizPlanData.maintenanceExpDate, // after the expiration of a plan, this will be the second stage - the maintenance month - so that all customers can use at least for 30 days even if they signed up in the last day of the plan
+        maintenanceExpDate, // after the expiration of a plan, this will be the second stage - the maintenance month - so that all customers can use at least for 30 days even if they signed up in the last day of the plan
     };
 }
 

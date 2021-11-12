@@ -5,15 +5,13 @@ import ProBtn from "./ProBtn";
 
 export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
     const dataPro = usePro(service);
-    const { credits, plan } = dataPro;
+    const { credits, plan, isProExpBlock1 } = dataPro;
 
     const getCredits = () => {
-        const isLimitLess = plan === "ouro";
+        const isLimitLess = plan === "ouro" && !isProExpBlock1;
         if (isLimitLess) return "ilimitado";
 
-        return `${convertToReal(credits)} crédito${
-            credits === 1 || credits === 0 ? "" : "s"
-        }`;
+        return `${convertToReal(credits)} crédito${credits === 1 ? "" : "s"}`;
     };
 
     return (
@@ -35,7 +33,7 @@ function getUltimateProExpiringDate({
     finishDate,
     isProExpBlock1 = false,
 }) {
-    const areCreditsActive = Boolean(daysLeft);
+    const areCreditsActive = !isProExpBlock1 && Boolean(daysLeft);
 
     if (!areCreditsActive) {
         return (

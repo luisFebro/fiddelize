@@ -3,6 +3,8 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+import usePro from "init/pro";
+import FuncExpModal from "components/pro/func-exp-modal/FuncExpModal";
 
 const AsyncNewRegister = Load({
     loading: true,
@@ -41,9 +43,12 @@ export default function RegisterPanelBtn({
     needClick = true,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
+    const [expModal, setExpModal] = useState(false);
+    const { isMainRegisterFuncBlocked } = usePro();
 
     const handleFullOpen = () => {
-        setFullOpen(true);
+        if (isMainRegisterFuncBlocked) return setExpModal(true);
+        return setFullOpen(true);
     };
 
     const handleFullClose = () => {
@@ -102,6 +107,7 @@ export default function RegisterPanelBtn({
                         : "var(--mainWhite)"
                 }
             />
+            {expModal && <FuncExpModal app="cliente" />}
         </section>
     );
 }

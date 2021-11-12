@@ -45,7 +45,9 @@ const handleTransactionStatus = ({ panel }) => {
     const { transactionStatus } = panel.data;
 
     const isPaid =
-        transactionStatus === "pago" || transactionStatus === "disponível";
+        transactionStatus === "pago" ||
+        transactionStatus === "disponível" ||
+        transactionStatus === "expirado";
     if (!transactionStatus) return "PENDENTE";
     if (isPaid) return "PAGO";
 
@@ -58,7 +60,7 @@ export default function InvestCard({
     actions,
     needToggleButton = false,
 }) {
-    const { mainRef } = usePro();
+    const { mainRef, isProExpBlock1 } = usePro();
 
     const classes = useStyles();
     const styles = getStyles({
@@ -73,13 +75,15 @@ export default function InvestCard({
                 top={-20}
                 right={140}
                 disabled
-                title="plano atual"
+                title={isProExpBlock1 ? "plano expirou" : "plano atual"}
                 variant="extended"
                 fontWeight="bolder"
                 fontSize=".4em"
                 size="small"
                 color="var(--mainWhite)"
-                backgroundColor="var(--incomeGreen)"
+                backgroundColor={
+                    isProExpBlock1 ? "var(--expenseRed)" : "var(--incomeGreen)"
+                }
             />
         </div>
     );

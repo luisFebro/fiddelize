@@ -1,11 +1,16 @@
 import setProRenewal from "utils/biz/setProRenewal";
 import { withRouter } from "react-router-dom";
-import RadiusBtn from "components/buttons/RadiusBtn";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import usePro from "init/pro";
 
 // this renewal is supposed to be mainly for handled expired plans
 // mainItemList is always empty array if not expired here so the mainItemList doesn't load every time.
-function ProRenewalBtn({ history, title = "Renovar" }) {
+function ProRenewalBtn({
+    history,
+    title = "Renovar",
+    width = undefined,
+    size = "large",
+}) {
     // Remember: mainItemList doesn't increase its value because this is done with the database with $inc
     const { mainItemList, plan, periodEn } = usePro();
 
@@ -23,13 +28,14 @@ function ProRenewalBtn({ history, title = "Renovar" }) {
     };
 
     return (
-        <RadiusBtn
+        <ButtonFab
             title={title}
-            onClick={handleRenewal}
             backgroundColor="var(--themeSDark)"
-            padding="5px 10px"
-            fontSize="18px"
-            color="#fff"
+            onClick={handleRenewal}
+            position="relative"
+            variant="extended"
+            size={size}
+            width={width}
         />
     );
 }
