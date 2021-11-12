@@ -48,6 +48,7 @@ export default function OrdersAndPay({
 
                 return await Promise.all([
                     setProRenewal({
+                        isRenewalBtn: false,
                         itemList: orderList,
                         investAmount: orderTotal,
                         planBr: plan,

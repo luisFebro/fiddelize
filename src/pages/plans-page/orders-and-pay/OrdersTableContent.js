@@ -3,7 +3,7 @@ import convertToReal from "utils/numbers/convertToReal";
 import { useState, useEffect, Fragment } from "react";
 import MuSelectTable from "components/tables/MuSelectTable";
 import showToast from "components/toasts";
-import { getVars } from "init/var";
+import { useVar, getVars } from "init/var";
 // import NotesSwitcher from "components/buttons/NotesSwitcher";
 
 const headCells = [
@@ -26,6 +26,10 @@ export default function OrdersTableContent({
     loading = false,
 }) {
     const [list, setList] = useState([]);
+
+    const pendingOrderIsRenewalBtn = useVar("pendingOrderIsRenewalBtn", {
+        dots: true,
+    });
 
     useEffect(() => {
         const customizedHtmlList = getOrderTableList(listData, {
@@ -74,11 +78,24 @@ export default function OrdersTableContent({
             }
 
             const deleteServiceDesc = list[deleteInd].service.props.children;
-            const isForbiddenItem =
-                (planBr !== "bronze" &&
-                    deleteServiceDesc &&
+            const forbiddenItems =
+                (deleteServiceDesc &&
                     deleteServiceDesc.includes("Novvos Clientes")) ||
                 deleteServiceDesc.includes("Connecta Membros");
+            // renewal orders should have all main services and are not possible to remove. Since user could remove Connecta Membros and still use the service normally since there is no algo to remove only one expirable service at the moment, only both of them after reaching the expiring date
+            const isRenewalWithForbiddenItems =
+                planBr === "bronze" &&
+                pendingOrderIsRenewalBtn &&
+                forbiddenItems;
+            if (isRenewalWithForbiddenItems) {
+                showToast(
+                    "Serviços principais não podem ser removidos na renovação do plano. Apenas serviços extras.",
+                    { type: "error", dur: 9000 }
+                );
+                return priorList;
+            }
+
+            const isForbiddenItem = planBr !== "bronze" && forbiddenItems;
             if (isForbiddenItem) {
                 showToast(
                     "Serviços principais Novvos Clientes ou Connecta Membros só podem ser removidos no plano Bronze.",

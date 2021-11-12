@@ -1,5 +1,6 @@
 import { useBizData } from "init";
 import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
+import getRefData from "utils/biz/getRefData";
 
 export default function usePro(itemName) {
     const { bizPlanData } = useBizData();
@@ -21,16 +22,27 @@ export default function usePro(itemName) {
     const isNewCliFuncBlocked = isProExpBlock1;
     const isAllAppsFuncBlocked = isFreeTrialExpBlock || isProExpBlock2;
 
+    // when in the level 1 of block, the prior plan should still appear but alongside with a maintenance month badge
+    const mainRef = (bizPlanData && bizPlanData.mainRef) || null;
+
     return {
-        isPro: (bizPlanData && bizPlanData.isPro) || false,
-        period: (bizPlanData && bizPlanData.period) || null,
-        plan: (bizPlanData && bizPlanData.plan) || "gratis",
+        isPro: isProExpBlock1
+            ? true
+            : (bizPlanData && bizPlanData.isPro) || false,
+        plan: isProExpBlock1
+            ? getRefData(mainRef).planBr
+            : (bizPlanData && bizPlanData.plan) || "gratis",
+        period: isProExpBlock1
+            ? getRefData(mainRef).periodicityBr
+            : (bizPlanData && bizPlanData.period) || null,
+        periodEn: isProExpBlock1 && getRefData(mainRef).periodicity,
         credits: handleCredits(), // both free and pro together
         // billing cycle
         startDate: (bizPlanData && bizPlanData.startDate) || new Date(),
         finishDate,
         daysLeft: getDatesCountdown(finishDate),
-        mainRef: (bizPlanData && bizPlanData.mainRef) || null,
+        mainRef,
+        mainItemList: bizPlanData && bizPlanData.mainItemList, // only available via init request if isProExpBlock1 is true for renewal
         // block and expiration
         isFreeTrialExpBlock,
         isProExpBlock1,

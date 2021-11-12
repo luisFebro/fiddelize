@@ -5,6 +5,7 @@ import useData from "init";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import { Load } from "components/code-splitting/LoadableComp";
 import usePro from "init/pro";
+import ProRenewalBtn from "components/pro/ProRenewalBtn";
 
 export default withRouter(PlanBadges);
 
@@ -17,7 +18,8 @@ export const AsyncNotificationBadge = Load({
 });
 
 function PlanBadges({ history }) {
-    const { isPro, plan } = usePro();
+    const { isPro, plan, isProExpBlock1 } = usePro();
+    const isFreeTrialUser = !isPro && !isProExpBlock1;
 
     const [itemsCount, loading] = useData(["pendingOrderItemsCount"], "global");
     const gotPendingOrder = !loading && itemsCount > 0;
@@ -72,7 +74,7 @@ function PlanBadges({ history }) {
     const displayPendingOrderBtn = () => (
         <section
             className="animated fadeInUp position-absolute"
-            style={{ top: -10, right: -80 }}
+            style={{ top: -10, right: -85 }}
         >
             <AsyncNotificationBadge
                 animationName=" "
@@ -97,16 +99,61 @@ function PlanBadges({ history }) {
         </section>
     );
 
+    const displayRenewalBtn = () => (
+        <section
+            className="animated fadeInUp position-absolute"
+            style={{ top: 0, right: -100 }}
+        >
+            <ProRenewalBtn />
+        </section>
+    );
+
     const showPlanTitle = () => (
         <section className={`${plan} position-relative`}>
-            <span className="title mr-2">{!isPro && "Sua versão:"}</span>
+            <span className="title mr-2">
+                {isFreeTrialUser && "Sua versão:"}
+            </span>
             <span
                 className={`plan ${plan} position-relative d-inline-block text-center main-font text-em-1-2 font-weight-bold`}
             >
                 {isPro && "plano "}
                 {plan}
             </span>
-            {gotPendingOrder && isPro && displayPendingOrderBtn()}
+            {gotPendingOrder &&
+                isPro &&
+                !isProExpBlock1 &&
+                displayPendingOrderBtn()}
+            {isProExpBlock1 && displayRenewalBtn()}
+        </section>
+    );
+
+    const showMaintenanceBadge = () => (
+        <section className="plan-maintenance-badge">
+            <div className="plan-maintenance-badge-inner">
+                <div className="text text-nowrap text-shadow">+1 Mês</div>
+            </div>
+            <style jsx>
+                {`
+                    .plan-maintenance-badge {
+                        position: relative;
+                    }
+
+                    .plan-maintenance-badge-inner {
+                        position: absolute;
+                        right: 25px;
+                        bottom: -10px;
+                    }
+
+                    .plan-maintenance-badge-inner .text {
+                        border-radius: 20px;
+                        background-color: var(--expenseRed);
+                        color: var(--mainWhite);
+                        border: 2px solid #fff;
+                        font-weight: bolder;
+                        padding: 3px 6px;
+                    }
+                `}
+            </style>
         </section>
     );
 
@@ -118,7 +165,8 @@ function PlanBadges({ history }) {
                 </div>
             )}
             {showPlanTitle()}
-            {!isPro && <Fragment>{showFreeUpdateBtn()}</Fragment>}
+            {isFreeTrialUser && <Fragment>{showFreeUpdateBtn()}</Fragment>}
+            {isProExpBlock1 && showMaintenanceBadge()}
         </section>
     );
 }

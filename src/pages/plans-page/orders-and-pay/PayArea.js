@@ -128,7 +128,7 @@ export default function PayArea({
             itemList.length &&
             itemList.map((i) => ({
                 ...i,
-                count: handleInfinity(),
+                count: handleInfinity(i),
             }));
 
     const modalData = {
@@ -192,7 +192,7 @@ export default function PayArea({
     );
 }
 
-function handleInfinity() {
+function handleInfinity(i = {}) {
     if (i.count === Infinity) return i.count.toString();
     if (i.count) return i.count;
 

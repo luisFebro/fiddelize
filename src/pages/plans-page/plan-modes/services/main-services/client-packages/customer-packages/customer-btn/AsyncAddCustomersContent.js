@@ -120,7 +120,7 @@ const showPeriodSelection = () => (
 );
 
 if (isCreditsBadge) {
-    setProRenewal({
+    setProffdafdaal({
         itemList: [item],
         period: innerPeriod,
         planBr: currPlan,

@@ -3,9 +3,10 @@ import InstructionBtn from "components/buttons/InstructionBtn";
 import { formatDate } from "utils/dates/dateFns";
 import usePro from "init/pro";
 import ActiveItemsBtn from "./active-items-btn/ActiveItemsBtn";
+import ProRenewalBtn from "components/pro/ProRenewalBtn";
 
 export default function BillingCycleActiveItems() {
-    const { isPro, startDate, finishDate } = usePro();
+    const { isPro, startDate, finishDate, isProExpBlock1 } = usePro();
 
     const startDayMonth = startDate && formatDate(startDate, "dd' 'MMM").cap();
     const finishDayMonth =
@@ -54,9 +55,28 @@ export default function BillingCycleActiveItems() {
     const textInstru =
         "A duração do plano é feita baseada no seu último pedido que incluem serviços principais como Novvos Clientes ou Connecta Membros.<br /><br />A data de expiração do ciclo do plano é aquela com duração mais longa.";
 
+    const showPlanStatusMsg = () => (
+        <Fragment>
+            {isProExpBlock1 ? (
+                <section>
+                    <p className="my-3 text-center text-normal text-red font-weight-bold">
+                        seu plano expirou
+                    </p>
+                    <div className="container-center">
+                        <ProRenewalBtn title="Renovar plano" />
+                    </div>
+                </section>
+            ) : (
+                <p className="my-3 text-center text-normal text-grey font-weight-bold">
+                    sem plano ativo
+                </p>
+            )}
+        </Fragment>
+    );
+
     return (
         <section className="mb-5 text-normal text-purple text-center">
-            {isPro ? (
+            {isPro && !isProExpBlock1 ? (
                 <Fragment>
                     <p className="container-center">
                         <div className="d-flex">
@@ -75,9 +95,7 @@ export default function BillingCycleActiveItems() {
                     {showDates()}
                 </Fragment>
             ) : (
-                <p className="my-3 text-center text-normal text-grey font-weight-bold">
-                    sem plano ativo
-                </p>
+                showPlanStatusMsg()
             )}
         </section>
     );

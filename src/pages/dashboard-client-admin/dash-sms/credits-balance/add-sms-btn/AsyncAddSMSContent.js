@@ -58,6 +58,7 @@ function AsyncAddSMSContent({
 
         if (isFromSession) {
             setProRenewal({
+                isRenewalBtn: false,
                 itemList: [item],
                 period: "infinite",
                 planBr: currPlan,
