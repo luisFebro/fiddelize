@@ -34,7 +34,7 @@ function ProPay({ history, brief, role, mainImg, bizLogo, subtype, content }) {
         setProRenewal({
             investAmount: totalMoney,
             period,
-            itemList: orders,
+            itemList: JSON.parse(orders),
             planBr,
         }).then(() => {
             history.push("/pedidos/admin");

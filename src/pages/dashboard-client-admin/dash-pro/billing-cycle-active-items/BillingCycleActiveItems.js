@@ -154,7 +154,7 @@ function showProExpBlock2() {
             <section>
                 <p>
                     <ReportIcon style={{ fontSize: 25 }} /> todas as moedas dos
-                    clientes expirados.
+                    clientes expiraram.
                 </p>
                 <p>
                     <ReportIcon style={{ fontSize: 25 }} /> bloqueado cadastro

@@ -3,6 +3,8 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+import usePro from "init/pro";
+import FuncExpModal from "components/pro/func-exp-modal/FuncExpModal";
 
 const AsyncNewScoreModal = Load({
     loading: true,
@@ -32,8 +34,12 @@ export default function AddTempPointsBtn({
     registerBtnTitle = "Adicionar Moedas",
 }) {
     const [fullOpen, setFullOpen] = useState(false);
+    const [expModal, setExpModal] = useState(false);
+
+    const { isProExpBlock2 } = usePro();
 
     const handleFullOpen = () => {
+        if (isProExpBlock2) return setExpModal(true);
         setFullOpen(true);
     };
 
@@ -80,6 +86,9 @@ export default function AddTempPointsBtn({
                 needIndex={false}
                 backgroundColor={`var(--themeBackground--${backColor})`}
             />
+            {expModal && (
+                <FuncExpModal expModal={expModal} setExpModal={setExpModal} />
+            )}
         </section>
     );
 }

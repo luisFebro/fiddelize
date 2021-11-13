@@ -70,7 +70,7 @@ function MoreOptionsBtn({
     const [benefitsOpen, setBenefits] = useState(false);
     const [expModal, setExpModal] = useState(false);
 
-    const { isMainRegisterFuncBlocked } = usePro();
+    const { isMainRegisterFuncBlocked, isProExpBlock2 } = usePro();
 
     const styles = getStyles();
 
@@ -118,7 +118,8 @@ function MoreOptionsBtn({
                 name: "+ Moedas",
                 backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
-                    setNewScore(true);
+                    if (isProExpBlock2) return setExpModal(true);
+                    return setNewScore(true);
                     // playBeep();
                 },
             },
@@ -259,7 +260,9 @@ function MoreOptionsBtn({
             {newCustomerOpen && showNewCustomerComp()}
             {promoteOpen && showNewPromoteComp()}
             {benefitsOpen && showBenefitsComp()}
-            {expModal && <FuncExpModal app="cliente" />}
+            {expModal && (
+                <FuncExpModal expModal={expModal} setExpModal={setExpModal} />
+            )}
         </div>
     );
 }

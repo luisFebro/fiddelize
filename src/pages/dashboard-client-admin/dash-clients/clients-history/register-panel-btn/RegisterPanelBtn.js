@@ -107,7 +107,9 @@ export default function RegisterPanelBtn({
                         : "var(--mainWhite)"
                 }
             />
-            {expModal && <FuncExpModal app="cliente" />}
+            {expModal && (
+                <FuncExpModal setExpModal={setExpModal} expModal={expModal} />
+            )}
         </section>
     );
 }

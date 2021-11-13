@@ -1,6 +1,5 @@
 // this modal is automatically open when user got into the level 1 or 2 of functionality block due to expiration
 import ModalFullContent from "components/modals/ModalFullContent";
-import { useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncContent = Load({
@@ -10,17 +9,15 @@ const AsyncContent = Load({
         ),
 });
 
-export default function FuncExpModal() {
-    const [fullOpen, setFullOpen] = useState(true);
-
+export default function FuncExpModal({ expModal, setExpModal }) {
     const handleFullClose = () => {
-        setFullOpen(false);
+        setExpModal(false);
     };
 
     return (
         <ModalFullContent
             contentComp={<AsyncContent handleClose={handleFullClose} />}
-            fullOpen={fullOpen}
+            fullOpen={expModal}
             setFullOpen={handleFullClose}
         />
     );

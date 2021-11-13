@@ -12,28 +12,29 @@ export default function FuncExpModalContent({
     const isAdmin = role === "cliente-admin";
 
     return (
-        <section style={{ marginTop: isAdmin ? 150 : 50 }}>
+        <section style={{ marginTop: 80 }}>
             <Img
-                src="img/illustrations/pro/func-exp.svg"
+                src="/img/illustrations/pro/func-exp.svg"
                 alt="funcionalidade expirada"
                 height="auto"
                 className="mx-3"
                 width={350}
                 title="Funcionalidade<br />desativada"
             />
-            <div className={`${isAdmin ? "my-5" : "my-3"} mx-5`}>
+            <div className="my-3 mx-5">
                 {isAdmin ? (
-                    <ProRenewalBtn title="Renovar plano" width="100%" />
+                    <Fragment>
+                        <p className="text-center text-normal text-red">
+                            seu plano pro expirou.
+                        </p>
+                        <ProRenewalBtn title="Renovar plano" width="100%" />
+                    </Fragment>
                 ) : (
                     <Fragment>
                         <p className="text-normal text-purple">
                             Contate o admin do clube de compras para ativação.
                         </p>
-                        <div
-                            className={`${
-                                isAdmin ? "my-5" : "my-3"
-                            } container-center`}
-                        >
+                        <div className="my-3 container-center">
                             <ButtonFab
                                 title="Voltar"
                                 backgroundColor="var(--themeSDark)"

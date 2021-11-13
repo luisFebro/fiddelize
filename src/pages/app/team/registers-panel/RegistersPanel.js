@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import useData, { useBizData } from "init";
-import useDelay from "../../../../hooks/useDelay";
-import TypesHandler from "./types-handler/TypesHandler";
+import useDelay from "hooks/useDelay";
 import useAuth from "auth/useAuth";
-import removeImgFormat from "../../../../utils/biz/removeImgFormat";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import TypesHandler from "./types-handler/TypesHandler";
 
 const getStyles = () => ({
     clipPathBack: {
