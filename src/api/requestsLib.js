@@ -93,11 +93,6 @@ export const removeOneClickInvest = (userId) =>
 // pro orders
 export const readUserOrderHistory = () => `${ROOT}/pro/orders/history`; // GET
 
-// images (logo)
-export const uploadImages = (fileName) =>
-    `${ROOT}/user/image/upload?fileName=${fileName}`; // POST
-export const updateImages = (userId) =>
-    `${ROOT}/user/image/update?id=${userId}`; // PUT
 // coins/poins
 export const setExpiringCoinsToBase = () =>
     `${ROOT}/user/cli-admin/expiring-coins/base`; // POST
@@ -154,6 +149,15 @@ export const sendEmail = () => `${ROOT}/email/send`;
 // DB
 export const readAllDbData = (adminId) =>
     `${ROOT}/database/db-from-models/list/${adminId}`; // GET
+
+// MEDIA
+// admin logo
+export const uploadImages = (fileName) =>
+    `${ROOT}/media/image/upload?fileName=${fileName}`; // POST
+export const updateImages = (userId) =>
+    `${ROOT}/media/image/update?id=${userId}`; // PUT
+// target prize img
+export const setTargetPrizeImg = (userId) => `${ROOT}/media/image/target-prize`; // POST
 
 // PUSH NOTIFICATIONS
 export const subscribePushNotif = () => `${ROOT}/push-notification/subscribe`; // POST

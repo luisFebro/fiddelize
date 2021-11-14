@@ -99,6 +99,7 @@ export default function ButtonFab({
     height,
     disabled = false,
     iconToLeft = false,
+    component, // specially useful for upload button when need a span component
 }) {
     const [toggle, setToggle] = useState("");
 
@@ -186,6 +187,7 @@ export default function ButtonFab({
         <Fab
             id={id}
             variant={variant}
+            component={component}
             onClick={() =>
                 handleOnClick() === false
                     ? isClickFunc && onClick()

@@ -139,9 +139,9 @@ export default function PickLogo({
         if (!fileValue)
             return console.log("Nenhuma imagem encontrada. Tente novamente.");
         // Size Reference: 1mb = 1.000.000 / 1kb 1.000
-        if (fileValue.size > 1000000)
+        if (fileValue.size > 3000000)
             return showToast(
-                `A imagem ${fileValue.name.cap()} possui mais de 1 MB permitido. Por favor, escolha arquivo menor.`,
+                `A imagem ${fileValue.name.cap()} possui mais de 3 MB permitido. Por favor, escolha arquivo menor.`,
                 { type: "error" }
             );
 
@@ -221,7 +221,7 @@ export default function PickLogo({
     };
 
     const showUploadingBtn = () => (
-        <div className={!isFromDash && "animated rubberBand delay-3s"}>
+        <div className={!isFromDash && "animated rubberBand delay-1s"}>
             <input
                 accept="image/*"
                 onChange={handleMediaChange}

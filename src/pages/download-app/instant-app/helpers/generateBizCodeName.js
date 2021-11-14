@@ -11,16 +11,14 @@ export default async function generateBizCodeName(bizName) {
 
     const dashedBizName = addDashesToString(`${bizName}`);
 
-    const body = {
-        role: "cliente-admin",
-        field: "clientAdminData.bizLinkName",
-        value: dashedBizName,
-    };
-
     const hasNameAlready = await getAPI({
         method: "post",
         url: checkFieldGotValue,
-        body,
+        body: {
+            role: "cliente-admin",
+            field: "clientAdminData.bizLinkName",
+            value: dashedBizName,
+        },
         needAuth: false,
         timeoutMsgOn: false,
     });
@@ -31,16 +29,15 @@ export default async function generateBizCodeName(bizName) {
     const bizNameWithCode = `${dashedBizName}-${bizCode}`;
 
     // making sure if new code is already taken
-    const bodyWithCode = {
-        role: "cliente-admin",
-        field: "clientAdminData.bizLinkName",
-        value: bizNameWithCode,
-    };
-
     const checkedNameWithCode = await getAPI({
         method: "post",
         url: checkFieldGotValue,
-        body: bodyWithCode,
+        body: {
+            role: "cliente-admin",
+            field: "clientAdminData.bizLinkName",
+            value: bizNameWithCode,
+        },
+        needAuth: false,
         timeoutMsgOn: false,
     });
 

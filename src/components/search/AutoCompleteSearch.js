@@ -190,7 +190,8 @@ export default function AutoCompleteSearch({
                 setLoading(false);
             } catch (e) {
                 if (axios.isCancel(e)) return;
-                if (e.response.status === 403 || e.response.status === 401) {
+                const res = e.response && e.response.status;
+                if (res === 403 || res === 401) {
                     (async () => {
                         await disconnect();
                     })();
@@ -202,7 +203,7 @@ export default function AutoCompleteSearch({
                         }`
                     );
 
-                    const { status } = e.response;
+                    const status = e.response && e.response.status;
                     setLoading(false);
                 }
             }

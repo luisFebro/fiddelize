@@ -41,12 +41,10 @@ const getStyles = () => ({
 export default function BizForm({ history }) {
     const [data, setData] = useState({
         bizName: "",
-        bizLinkName: "",
         field: "",
         selectedValue: "", // field in the autoselect
     });
-    const { bizLinkName, field, bizName, selectedValue } = data;
-    console.log("bizLinkName", bizLinkName);
+    const { field, bizName, selectedValue } = data;
 
     useNeedRedirectPage({ history, priorPageId: "doneGamesPanel" });
 
@@ -54,16 +52,6 @@ export default function BizForm({ history }) {
         if (selectedValue)
             setData((prev) => ({ ...prev, field: selectedValue }));
     }, [selectedValue]);
-
-    const generateThisBizCode = async (ultimateBizName) => {
-        if (ultimateBizName) {
-            const finalDashedName = await generateBizCodeName(ultimateBizName);
-            setData((prev) => ({
-                ...prev,
-                bizLinkName: finalDashedName,
-            }));
-        }
-    };
 
     const styles = getStyles();
 
@@ -88,6 +76,8 @@ export default function BizForm({ history }) {
                     name="bizName"
                     value={bizName}
                     onKeyPress={(e) => {
+                        if (!isKeyPressed(e, "Enter")) return null;
+
                         const ultimateBizName =
                             e.target.value && e.target.value.cap();
                         handleNextField(e, "field1");
@@ -95,8 +85,6 @@ export default function BizForm({ history }) {
                             ...data,
                             bizName: ultimateBizName,
                         });
-                        if (isKeyPressed(e, "Enter"))
-                            generateThisBizCode(ultimateBizName);
                     }}
                     onBlur={(e) => {
                         handleNextField(e, "field1", { event: "onBlur" });
@@ -106,7 +94,6 @@ export default function BizForm({ history }) {
                             ...data,
                             bizName: ultimateBizName,
                         });
-                        generateThisBizCode(ultimateBizName);
                     }}
                     autoComplete="off"
                     type="text"
@@ -127,11 +114,13 @@ export default function BizForm({ history }) {
                 <AutoCompleteSearch
                     autocompleteUrl={autocompleteUrl}
                     setData={setData}
+                    clearOnEscape={false}
+                    clearOnBlur={false}
                     placeholder=""
                     openOnFocus={false}
                     selectOnFocus={false}
                     searchIcon="map-marked-alt"
-                    noOptionsText="Nada encontrado"
+                    noOptionsText="Sem sugestões"
                     maxHistory={7}
                     inputId="value2"
                     txtFont="1em"
@@ -150,6 +139,9 @@ export default function BizForm({ history }) {
             setFieldError("field");
             return showToast("Informe ramo de atividade.", { type: "error" });
         }
+
+        showToast("Salvando...", { dur: 3000 });
+        const bizLinkName = await generateUltimateBizCode(bizName);
 
         const [priorAdminData, selectedGame] = await getVars(
             ["clientAdminData", "game"],
@@ -183,7 +175,6 @@ export default function BizForm({ history }) {
             targetPoints,
             prizeDesc,
         });
-        console.log("gameUrl", gameUrl);
 
         history.push(gameUrl);
 
@@ -219,6 +210,11 @@ export default function BizForm({ history }) {
 }
 
 // HELPERS
+async function generateUltimateBizCode(bizName) {
+    const finalDashedName = await generateBizCodeName(bizName);
+    return finalDashedName;
+}
+
 function handleGameUrl({
     game,
     bizLinkName,
