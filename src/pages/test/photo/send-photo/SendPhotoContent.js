@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import UploadBtn from "components/multimedia/UploadBtn";
+import GiftBox from "pages/mobile-app/content/bottom-menu-contents/all-games/target-prize/gift-box/GiftBox";
+import { useBizData } from "init";
 
 export default function SendPhotoContent({
     savedPrizeImg, // when the user already uploaded
+    prizeDesc = "blusa top",
 }) {
     const [prizeImg, setPrizeImg] = useState(null);
+    const { themePColor: colorP, themeBackColor: colorBack } = useBizData();
 
     useEffect(() => {
         if (!savedPrizeImg) return;
@@ -31,40 +35,48 @@ export default function SendPhotoContent({
     const showMainContent = () => {
         if (prizeImg) {
             return (
-                <div className="animated fadeInUp">
-                    <img
-                        className="img-center"
-                        src={prizeImg || "/img/error.png"}
-                        alt="envio foto prêmio"
-                        height="auto"
-                        width={300}
+                <div
+                    style={{
+                        margin: "100px 0 50px",
+                    }}
+                    className="position-relative animated fadeInUp"
+                >
+                    <GiftBox
+                        className="bounce repeat-2 delay-3s"
+                        boxPColor={colorP}
+                        backColor={colorBack}
+                        prizeDesc={prizeDesc}
+                        prizeImg={prizeImg}
+                        callback={null}
+                        disableOpenBox={false}
+                        needSmallBox={false}
                     />
+                    <p className="text-center text-normal text-white text-shadow">
+                        Clique na caixa
+                    </p>
+                    {backGiftBoxBlob(`var(--themeBackColor--${colorBack})`)}
                 </div>
             );
         }
 
         return (
-            <img
-                className="img-center"
-                src="/img/illustrations/games/photo-prize-target.svg"
-                alt="envio foto prêmio"
-                height="auto"
-                width="85%"
-            />
+            <div className="container-center">
+                <img
+                    className="img-center"
+                    src="/img/illustrations/games/photo-prize-target.svg"
+                    alt="envio foto prêmio"
+                    height="auto"
+                    width="85%"
+                />
+            </div>
         );
     };
 
     return (
         <section>
             {showTitle()}
-            <div
-                style={{
-                    margin: "20px",
-                }}
-            >
-                {showMainContent()}
-            </div>
-            <div className="mt-3">
+            {showMainContent()}
+            <div className="container-center mt-3">
                 <UploadBtn
                     loadingMsg="Adicionando..."
                     callback={handleUpload}
@@ -100,6 +112,29 @@ export default function SendPhotoContent({
                 dispositivo do cliente e fica centralizado com até 300px de
                 largura e altura é de acordo com sua foto original.
             </section>
+        </section>
+    );
+}
+
+function backGiftBoxBlob(fill = "#FF0066") {
+    return (
+        <section
+            style={{
+                position: "absolute",
+                top: -140,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: -10,
+            }}
+        >
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    fill={fill}
+                    d="M43.5,-37.5C57.8,-29.2,71.7,-14.6,74.7,3C77.7,20.7,69.8,41.3,55.6,50.8C41.3,60.3,20.7,58.6,-0.8,59.4C-22.2,60.2,-44.5,63.5,-52.7,54C-60.9,44.5,-55.2,22.2,-55.7,-0.6C-56.3,-23.4,-63.2,-46.7,-55,-55C-46.7,-63.2,-23.4,-56.2,-4.4,-51.9C14.6,-47.5,29.2,-45.7,43.5,-37.5Z"
+                    transform="translate(100 100)"
+                />
+            </svg>
         </section>
     );
 }

@@ -145,7 +145,7 @@ export default function UploadBtn({
                 multiple={isMultiple}
             />
             <label htmlFor="uploaded-file">
-                <div className="mx-3 container-center">
+                <div className="container-center-col">
                     <ButtonFab
                         disabled={loading}
                         component="span" // the button requires to be a span instead of button. Otherwise it will not work

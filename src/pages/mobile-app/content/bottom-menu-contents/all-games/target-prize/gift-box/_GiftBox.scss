@@ -78,6 +78,7 @@
     & .gift-card {
         opacity: 0;
         transition: all 1s;
+        transition-delay: 0.5s;
         margin: 0 auto;
         position: relative;
         display: block;

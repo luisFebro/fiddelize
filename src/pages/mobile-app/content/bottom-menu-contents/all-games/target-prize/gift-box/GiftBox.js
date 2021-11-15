@@ -15,6 +15,7 @@ export default function GiftBox({
     backColor = "default",
     needSmallBox = false,
     callback,
+    prizeImg,
     prizeDesc,
     className,
     opacity = 1,
@@ -38,12 +39,17 @@ export default function GiftBox({
             }}
             onClick={handleClick}
         >
-            <section className="gift-card">
-                <GiftCard prizeDesc={prizeDesc} colorS={boxPColor} />
-            </section>
+            <GiftCard
+                prizeDesc={prizeDesc}
+                colorS={boxPColor}
+                prizeImg={prizeImg}
+            />
             <section
                 className="box-lid"
-                style={{ backgroundColor: boxLidColor }}
+                style={{
+                    backgroundColor: boxLidColor,
+                    filter: "drop-shadow(0.001em 0.001em 0.05em grey)",
+                }}
             >
                 <div className="box-bowtie" />
             </section>
