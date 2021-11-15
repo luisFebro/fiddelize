@@ -1,9 +1,16 @@
-import { useState } from "react";
-import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import showToast from "components/toasts";
+import { useState, useEffect } from "react";
+import UploadBtn from "components/multimedia/UploadBtn";
 
-export default function SendPhotoContent() {
+export default function SendPhotoContent({
+    savedPrizeImg, // when the user already uploaded
+}) {
+    const [prizeImg, setPrizeImg] = useState(null);
+
+    useEffect(() => {
+        if (!savedPrizeImg) return;
+        setPrizeImg(savedPrizeImg);
+    }, [savedPrizeImg]);
+
     const showTitle = () => (
         <div className="mt-4 mx-3 text-purple">
             <h1 className="text-subtitle text-center font-weight-bold">
@@ -16,135 +23,36 @@ export default function SendPhotoContent() {
         </div>
     );
 
-    function UploadBtn() {
-        const [uploadedPic, setUploadedPic] = useState("");
-        const gotPic = typeof uploadedPic === "object";
-        const picName = uploadedPic && uploadedPic.name;
+    const handleUpload = (result) => {
+        const removedImg = !result.uploadedPic;
+        setPrizeImg(removedImg ? null : result.img);
+    };
 
-        const handleMediaChange = (e) => {
-            const formData = new FormData();
-
-            const { name } = e.target;
-            const fileValue = e.target.files[0];
-            console.log("e.target", e.target);
-            console.log("fileValue", fileValue);
-
-            // Validattion
-            if (!fileValue)
-                return console.log(
-                    "Nenhuma imagem encontrada. Tente novamente."
-                );
-            // Size Reference: 1mb = 1.000.000 / 1kb 1.000
-            if (fileValue.size > 3000000)
-                return showToast(
-                    `A imagem ${fileValue.name.cap()} possui mais de 3 MB permitido. Por favor, escolha arquivo menor.`,
-                    { type: "error" }
-                );
-
-            const allowedTypes = [
-                "image/png",
-                "image/jpeg",
-                "image/gif",
-                "image/svg",
-                "image/svg+xml",
-                "image/ai",
-            ];
-            if (allowedTypes.every((type) => fileValue.type !== type)) {
-                return showToast(
-                    ` Formato '${fileValue.type.cap()}' não é suportado.`,
-                    { type: "error" }
-                );
-            }
-            // End Validation
-
-            formData.set(name, fileValue); // n1 - set and append diff
-            setUploadedPic(fileValue);
-
-            // setIsLoadingPic(true);
-
-            // setEditArea(false);
-            // n1
-            // const dataAdminClub = await getVar("clientAdminData", "pre_register");
-            // const clubBizLinkName = dataAdminClub && dataAdminClub.bizLinkName;
-            // // n1
-            // const generatedImg = await getAPI({
-            //     method: "post",
-            //     url: uploadImages(clubBizLinkName || bizLinkName),
-            //     body: formData,
-            //     fullCatch: true,
-            // }).catch(() => {
-            //     setIsLoadingPic(false);
-            //     showToast("Algo deu errado. Verifique sua conexão.", {
-            //         type: "error",
-            //     });
-            // });
-
-            return true;
-        };
+    const showMainContent = () => {
+        if (prizeImg) {
+            return (
+                <div className="animated fadeInUp">
+                    <img
+                        className="img-center"
+                        src={prizeImg || "/img/error.png"}
+                        alt="envio foto prêmio"
+                        height="auto"
+                        width={300}
+                    />
+                </div>
+            );
+        }
 
         return (
-            <section>
-                <input
-                    accept="image/*"
-                    onChange={handleMediaChange}
-                    name="file"
-                    style={{ display: "none" }}
-                    id="uploaded-file"
-                    type="file"
-                    multiple={false}
-                />
-                <label htmlFor="uploaded-file">
-                    <div className="mx-3 container-center">
-                        <ButtonFab
-                            component="span" // the button requires to be a span instead of button. Otherwise it will not work
-                            title={
-                                uploadedPic ? "Trocar foto" : "Selecione foto"
-                            }
-                            iconFontAwesome={
-                                <FontAwesomeIcon
-                                    icon="image"
-                                    style={{ fontSize: 30 }}
-                                />
-                            }
-                            backgroundColor="var(--themeSDark)"
-                            onClick={null}
-                            position="relative"
-                            variant="extended"
-                            size="large"
-                            width="100%"
-                            // textTransform="uppercase"
-                        />
-                        <p className="mt-3 text-grey text-small mx-3 position-relative">
-                            formatos: <strong>.jpg, .png, .svg, .ai</strong>
-                        </p>
-                    </div>
-                </label>
-                <div
-                    style={{ display: gotPic ? "block" : "none" }}
-                    className="zoomIn text-center text-small text-purple"
-                >
-                    <FontAwesomeIcon
-                        className="mr-2 animated rubberBand"
-                        icon="check-circle"
-                        style={{
-                            fontSize: "20px",
-                            color: "var(--incomeGreen)",
-                            animationIterationCount: 2,
-                        }}
-                    />
-                    <span>
-                        A foto
-                        <br />
-                        <span className="font-weight-bold">{picName}</span>
-                        <br />
-                        foi carregada!
-                        <br />
-                        <br />
-                    </span>
-                </div>
-            </section>
+            <img
+                className="img-center"
+                src="/img/illustrations/games/photo-prize-target.svg"
+                alt="envio foto prêmio"
+                height="auto"
+                width="85%"
+            />
         );
-    }
+    };
 
     return (
         <section>
@@ -154,16 +62,20 @@ export default function SendPhotoContent() {
                     margin: "20px",
                 }}
             >
-                <img
-                    className="img-center"
-                    src="/img/illustrations/games/photo-prize-target.svg"
-                    alt="envio foto prêmio"
-                    height="auto"
-                    width="85%"
-                />
+                {showMainContent()}
             </div>
             <div className="mt-3">
-                <UploadBtn />
+                <UploadBtn
+                    loadingMsg="Adicionando..."
+                    callback={handleUpload}
+                    body={{
+                        challId: "bhmTQYAM7lSJo-kVavxy",
+                        folder: "target-prize-game-pics", // folder to be stored in the provider
+                        tags: "cliente-admin",
+                        backup: false,
+                        prizeImg, // only for remove mode
+                    }}
+                />
             </div>
             <section className="mx-3 mb-5 text-purple text-normal">
                 <div className="container-center">

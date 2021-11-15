@@ -157,7 +157,7 @@ export const uploadImages = (fileName) =>
 export const updateImages = (userId) =>
     `${ROOT}/media/image/update?id=${userId}`; // PUT
 // target prize img
-export const setTargetPrizeImg = (userId) => `${ROOT}/media/image/target-prize`; // POST
+export const setTargetPrizeImg = () => `${ROOT}/media/image/target-prize`; // POST
 
 // PUSH NOTIFICATIONS
 export const subscribePushNotif = () => `${ROOT}/push-notification/subscribe`; // POST

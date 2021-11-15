@@ -256,7 +256,7 @@ function GoalForm({ history, bizName }) {
                 <p className="mt-3 text-shadow text-white font-site text-em-1">
                     <span className="font-weight-bold">Notas:</span>
                     <br />
-                    - Agora você pode mostrar a FOTO DO PRÊMIO para ser mostrado
+                    - Agora você pode salvar a FOTO DO PRÊMIO para ser mostrado
                     no app dos seus clientes.
                     <br />
                     <br />- Adicione a foto ou altere dados indo depois no seu

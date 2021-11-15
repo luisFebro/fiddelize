@@ -142,7 +142,8 @@ async function handleError({
         return reject(null);
     }
 
-    console.log(`getAPI error: ${JSON.stringify(finalMsg)}`);
+    // JSON.stringify can make requests stop working somehow. There is why we have a string fallback.
+    console.log(`getAPI error: ${JSON.stringify(finalMsg || "error")}`);
     return reject(finalMsg);
 }
 // END HELPERS
