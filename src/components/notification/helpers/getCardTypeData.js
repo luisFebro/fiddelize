@@ -144,7 +144,7 @@ export default function getCardTypeData(cardType, options = {}) {
                 title = "Nova Pontuação";
                 brief = `Opa! ${getFirstName(
                     userName
-                )}, você recebeu saldo de §${tempPoints} PTS§ no seu novo cartão de compra virtual da ${bizName}.`;
+                )}, você recebeu saldo de §${tempPoints} PTS§ no seu cartão de compra virtual da ${bizName}.`;
                 circularImg = "/img/icons/notif/fidelity-card.svg";
             }
             break;

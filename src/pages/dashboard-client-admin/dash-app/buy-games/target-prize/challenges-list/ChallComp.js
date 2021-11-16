@@ -88,6 +88,7 @@ export default function ChallComp({
                 milestoneIcon: data.icon,
                 targetPoints: Number(data.targetPoints),
                 prizeDesc: data.prizeDesc && data.prizeDesc.toLowerCase(),
+                prizeImg,
             },
         ];
         const newArray = findAndReplaceObjInArray(
@@ -276,8 +277,8 @@ export default function ChallComp({
                     <style jsx global>
                         {`
                             .target-prize-photo-btn {
-                                top: ${prizeImg ? "-75px" : "-45px"};
-                                right: -20px;
+                                top: ${prizeImg ? "-85px;" : "-45px;"}
+                                right: -30px;
                             }
                         `}
                     </style>

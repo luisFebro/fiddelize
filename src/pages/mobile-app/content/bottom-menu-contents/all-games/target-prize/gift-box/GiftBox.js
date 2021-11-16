@@ -21,6 +21,8 @@ export default function GiftBox({
     className,
     opacity = 1,
     disableOpenBox = false,
+    didBeatGame,
+    isCliApp,
 }) {
     const boxLidColor = pickColor({ boxPColor, backColor }); // lid = tampa;
     const boxBodyColor1 = "var(--themePDark--black)";
@@ -45,6 +47,8 @@ export default function GiftBox({
                 colorS={boxPColor}
                 prizeImg={prizeImg}
                 targetPoints={targetPoints}
+                didBeatGame={didBeatGame}
+                isCliApp={isCliApp}
             />
             <section
                 className="box-lid"

@@ -16,11 +16,11 @@ export default async function checkValidSession() {
             window.location.href.includes(pg)
         );
         const arePublicPages =
-            window.location.href.indexOf("app") >= 0 ||
             window.location.href.pathname === "/" ||
             window.location.href.indexOf("senha-de-acesso") >= 0 ||
-            window.location.href.pathname === "/acesso/verificacao" ||
             isWebsitePage;
+        // window.location.href.indexOf("app") >= 0 || allow checking in the main login areas
+        // window.location.href.pathname === "/acesso/verificacao" ||
 
         if (arePublicPages || !isLoggedIn) return;
 

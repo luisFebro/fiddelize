@@ -37,11 +37,52 @@ export default function ShowQA() {
             ),
         },
         {
-            title: "É possível adicionar metas aleatórios?",
+            title:
+                "Só preciso oferecer um prêmio ou um valor de desconto. Como faço?",
             text: (
                 <Fragment>
                     <p>
-                        Sim. Você pode adicionar metas aleatórios, metas em
+                        Basta deixar{" "}
+                        <strong>apenas um tipo de desafio ativo</strong> na
+                        lista que é o padrão. Ele será repetido a cada edição.
+                    </p>
+                    <p>
+                        Todo o fluxo acontece assim: seu cliente acumula moedas
+                        PTS, alcança sua meta, finaliza o desafio, resgata o
+                        prêmio, seu clube desconta as moedas no mesmo valor da
+                        meta e, logo em seguida, um mesmo desafio é reiniciado.
+                    </p>
+                </Fragment>
+            ),
+        },
+        {
+            title:
+                "Posso disponibilizar mais de um jogo de compra ao mesmo tempo?",
+            text: (
+                <Fragment>
+                    <p>
+                        Sim. No app dos clientes eles tem um botão principal
+                        "ver jogos disponíveis" onde podem alternar entre os
+                        jogos ativos.
+                    </p>
+                    <p>
+                        Se desativar um jogo, todos os apps dos seus clientes é
+                        atualizado para o jogo disponível mais próximo.
+                    </p>
+                    <p>
+                        Você precisa ter, pelo menos, um jogo de compras ativo.
+                        Seja oferecendo desconto ou um prêmio como benefício,
+                        por exemplo.
+                    </p>
+                </Fragment>
+            ),
+        },
+        {
+            title: "É possível adicionar metas aleatórias?",
+            text: (
+                <Fragment>
+                    <p>
+                        Sim. Você pode adicionar metas aleatórias, metas em
                         ordem crescente ou decrescente. Na Fiddelize, você ganha
                         controle total das metas.
                     </p>
@@ -50,7 +91,8 @@ export default function ShowQA() {
                         escolher um meta baseada no princípio do progresso onde
                         cada edição as metas aumentam um pouco ou colocar metas
                         aleatórias mais fáceis no meio para dar um senso de
-                        surpresa. Você pode alternar como preferir.
+                        surpresa. Você pode alternar como preferir ou escolhar
+                        uma estratégia.
                     </p>
                 </Fragment>
             ),

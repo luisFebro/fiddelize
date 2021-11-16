@@ -64,7 +64,7 @@ const LevelIconComp = ({
             <p className="text-subtitle text-purple text-center font-weight-bold">
                 Mude Ícone de Nível
                 <br />
-                do <strong>Desafio n.º {currChallNumber}</strong>
+                do <strong>Desafio tipo n.º {currChallNumber}</strong>
             </p>
         </div>
     );

@@ -9,7 +9,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
     const { bizId } = useBizData();
 
     const [challengesArray, setChallengesArray] = useState([]); // challList
-    const isConstantMode = challengesArray.length < 2;
+    // const isConstantMode = challengesArray.length < 2;
 
     const gotSomePic = !challengesArray.length
         ? false
@@ -77,13 +77,16 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
                     Sem nenhum prêmio adicionado.
                 </p>
             )}
+            <p className={txtStyle}>
+                <span className="text-subtitle font-weight-bold">
+                    {challengesArray.length} desafios
+                </span>{" "}
+                ativos:
+            </p>
             {challengesArray.map((chall, ind) => (
                 <div key={chall.id} className="mt-3">
-                    {isConstantMode ? (
-                        <p className={txtStyle} />
-                    ) : (
-                        <p className={txtStyle}>Para Desafio n.º {ind + 1}:</p>
-                    )}
+                    {ind !== 0 && <p className="mb-3" />}
+                    <p className={txtStyle}>tipo {ind + 1}:</p>
                     <ChallComp
                         currChallNumber={ind + 1}
                         challengesArray={challengesArray}

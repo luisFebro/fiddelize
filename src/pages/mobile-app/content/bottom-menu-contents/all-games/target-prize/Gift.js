@@ -26,6 +26,9 @@ export default function Gift() {
     const prizeDesc =
         prizeDescPreview ||
         (adminGame.targetPrize && adminGame.targetPrize.prizeDesc);
+
+    const prizeImg = adminGame.targetPrize && adminGame.targetPrize.prizeImg;
+
     const { challN: currChall = 1 } = userGame.targetPrize;
 
     const [isGiftOpen, setIsGiftOpen] = useState(false);
@@ -63,7 +66,7 @@ export default function Gift() {
                 className={`animated ${
                     userBeatedChall
                         ? "bounce repeat-2 delay-3s"
-                        : "fadeInUp delay-2s"
+                        : `${prizeImg ? "" : "fadeInUp delay-2s"}`
                 }`}
                 boxPColor={colorP}
                 backColor={colorBack}
@@ -71,7 +74,11 @@ export default function Gift() {
                 disableOpenBox={disableOpenBox}
                 needSmallBox={needSmallBox}
                 prizeDesc={prizeDesc}
+                targetPoints={targetPoints}
+                prizeImg={prizeImg}
                 opacity={opacity}
+                didBeatGame={currPoints >= targetPoints}
+                isCliApp
             />
         );
 
@@ -108,25 +115,38 @@ export default function Gift() {
                         </span>
                     </div>
                 </p>
-                <div className="enabled-click">
-                    <Tooltip
-                        needArrow
-                        whiteSpace
-                        width={325}
-                        text={tooltipTxt}
-                        element={
-                            <div>
-                                {displayGiftBox({
-                                    needSmallBox: true,
-                                    disableOpenBox: true,
-                                    opacity: 1,
-                                })}
-                            </div>
-                        }
-                        backgroundColor={`var(--themeS--${colorS})`}
-                        colorS={colorS}
-                    />
-                </div>
+                {prizeImg ? (
+                    <div className="enabled-click">
+                        {displayGiftBox({
+                            needSmallBox: true,
+                            disableOpenBox: !prizeImg,
+                            opacity: 1,
+                        })}
+                        <p className="text-grey font-site text-em-1-1">
+                            Clique na caixa
+                        </p>
+                    </div>
+                ) : (
+                    <div className="enabled-click">
+                        <Tooltip
+                            needArrow
+                            whiteSpace
+                            width={325}
+                            text={tooltipTxt}
+                            element={
+                                <div>
+                                    {displayGiftBox({
+                                        needSmallBox: true,
+                                        disableOpenBox: !prizeImg,
+                                        opacity: 1,
+                                    })}
+                                </div>
+                            }
+                            backgroundColor={`var(--themeS--${colorS})`}
+                            colorS={colorS}
+                        />
+                    </div>
+                )}
             </section>
         );
 
