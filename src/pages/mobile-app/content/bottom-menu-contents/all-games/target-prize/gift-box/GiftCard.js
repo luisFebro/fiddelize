@@ -6,7 +6,7 @@ const truncate = (name, leng) => window.Helper.truncate(name, leng);
 export default function GiftCard({
     prizeImg,
     prizeDesc,
-    targetPoints = 100,
+    targetPoints,
     colorS,
 }) {
     prizeDesc = truncate(prizeDesc, 21);
@@ -55,7 +55,7 @@ export default function GiftCard({
                                 overflow: visible !important;
                                 background: var(--mainWhite);
                                 height: auto;
-                                min-width: 220px;
+                                min-width: 230px;
                                 padding: 15px;
                                 z-index: 2000;
                             }

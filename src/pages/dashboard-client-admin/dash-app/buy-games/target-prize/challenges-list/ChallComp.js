@@ -9,6 +9,7 @@ import findAndReplaceObjInArray from "utils/arrays/findAndReplaceObjInArray";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import EditLevelIconModalBtn from "./chall-helpers/EditLevelIconModalBtn";
 import DeleteModalBtn from "./chall-helpers/DeleteModalBtn";
+import PhotoBtn from "./photo/PhotoBtn";
 
 const truncate = (text, leng) => window.Helper.truncate(text, leng);
 
@@ -26,10 +27,6 @@ const getStyles = () => ({
         borderRadius: "15px",
         padding: "15px",
         overflow: "visible",
-    },
-    actionBtns: {
-        top: -45,
-        right: -20,
     },
     levelIcon: {
         fontSize: 40,
@@ -55,11 +52,13 @@ export default function ChallComp({
     icon,
     targetPoints,
     prizeDesc,
+    prizeImg,
     challengesArray,
     setChallengesArray,
     showToast,
     currChallNumber,
     updateLocalList,
+    gotSomePic,
 }) {
     const [data, setData] = useState({
         currChallNumber,
@@ -194,10 +193,10 @@ export default function ChallComp({
         </div>
     );
 
-    const showActionBtns = () => (
+    const showEditBtn = () => (
         <section
             className="d-flex justify-content-around"
-            style={{ width: "120px" }}
+            style={{ width: "150px" }}
         >
             {saveChangeBtn ? (
                 <div className="animated rubberBand delay-2s">
@@ -249,17 +248,45 @@ export default function ChallComp({
         </section>
     );
 
+    const showPhotoBtn = () => {
+        const uploadData = {
+            challId: id,
+            savedPrizeImg: prizeImg,
+            targetPoints: data.targetPoints,
+            gotSomePic,
+        };
+
+        return <PhotoBtn modalData={uploadData} />;
+    };
+
     return (
         <Card style={styles.card}>
             <section className="position-relative">
+                <div
+                    className="position-absolute"
+                    style={{
+                        top: -45,
+                        right: currChallNumber === 1 ? 20 : 50,
+                    }}
+                >
+                    {showEditBtn()}
+                </div>
+                <div className="position-absolute target-prize-photo-btn">
+                    {showPhotoBtn()}
+                    <style jsx global>
+                        {`
+                            .target-prize-photo-btn {
+                                top: ${prizeImg ? "-75px" : "-45px"};
+                                right: -20px;
+                            }
+                        `}
+                    </style>
+                </div>
                 <section className="d-flex flex-column align-items-start flex-md-row text-white">
                     {showIcon()}
                     {showtargetPoints()}
                     {showPrizeDesc()}
                 </section>
-                <div className="position-absolute" style={styles.actionBtns}>
-                    {showActionBtns()}
-                </div>
             </section>
         </Card>
     );

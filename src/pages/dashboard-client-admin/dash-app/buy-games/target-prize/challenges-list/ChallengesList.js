@@ -11,6 +11,10 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
     const [challengesArray, setChallengesArray] = useState([]); // challList
     const isConstantMode = challengesArray.length < 2;
 
+    const gotSomePic = !challengesArray.length
+        ? false
+        : challengesArray.some((chall) => chall.prizeDesc);
+
     useEffect(() => {
         if (challList && challList.length) setChallengesArray(challList);
         if (challengesArray && challengesArray.length)
@@ -76,7 +80,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
             {challengesArray.map((chall, ind) => (
                 <div key={chall.id} className="mt-3">
                     {isConstantMode ? (
-                        <p className={txtStyle}>Para todos os desafios:</p>
+                        <p className={txtStyle} />
                     ) : (
                         <p className={txtStyle}>Para Desafio n.º {ind + 1}:</p>
                     )}
@@ -85,10 +89,12 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}
                         showToast={showToast}
+                        gotSomePic={gotSomePic}
                         id={chall.id}
                         icon={chall.milestoneIcon}
                         targetPoints={chall.targetPoints}
                         prizeDesc={chall.prizeDesc}
+                        prizeImg={chall.prizeImg}
                         updateLocalList={updateLocalList}
                     />
                 </div>

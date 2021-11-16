@@ -37,7 +37,12 @@ export default function FaqAccordion({ dataArray, lazyLoading = false }) {
                         aria-controls={`panel${ind + 1}a-content`}
                         id={`panel${ind + 1}a-header`}
                     >
-                        <Typography className={classes.heading}>
+                        <Typography
+                            className={classes.heading}
+                            style={{
+                                fontWeight: `600 !important`,
+                            }}
+                        >
                             {panel.title}
                         </Typography>
                     </AccordionSummary>

@@ -8,7 +8,7 @@ import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import getId from "utils/getId";
 import ChallengesList from "./challenges-list/ChallengesList";
-import ShowBizNotes from "./challenges-list/ShowBizNotes";
+import ShowQA from "./challenges-list/ShowQA";
 
 export default function TargetPrizeOptions({
     setComp,
@@ -120,8 +120,8 @@ export default function TargetPrizeOptions({
             <div className="container-center">
                 <section className="position-relative">
                     <Title
-                        title="LISTA DE PRÊMIOS"
-                        subTitle="Adicione prêmio(s), metas e personalize com ícones de cada desafio"
+                        title="LISTA DE DESAFIOS"
+                        subTitle="Adicione prêmios, metas, fotos e personalize com ícones de cada desafio"
                         color={on ? "var(--themeP)" : "grey"}
                         margin=" "
                         padding=" "
@@ -150,7 +150,7 @@ export default function TargetPrizeOptions({
             {showControlOptions()}
             <hr className="lazer-purple" />
             {showChallengesList()}
-            <ShowBizNotes />
+            <ShowQA />
         </section>
     );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import showToast from "components/toasts";
@@ -12,11 +12,16 @@ export default function UploadBtn({
     loadingMsg = "Salvando...",
     selectMsg = "Selecione foto",
     removeMsg = "Remover",
+    alreadyUploaded = false,
 }) {
     const [uploadedPic, setUploadedPic] = useState(false);
     const [loading, setLoading] = useState(false);
     const { userId } = useData();
     const { bizLinkName } = useBizData();
+
+    useEffect(() => {
+        if (alreadyUploaded) setUploadedPic(true);
+    }, [alreadyUploaded]);
 
     const handleMediaChange = async (e) => {
         setLoading(true);
@@ -170,9 +175,11 @@ export default function UploadBtn({
                         width={uploadedPic ? undefined : "100%"}
                         // textTransform="uppercase"
                     />
-                    <p className="mt-3 text-grey text-small mx-3 position-relative">
-                        formatos: <strong>.jpg, .png, .svg, .ai</strong>
-                    </p>
+                    {!uploadedPic && (
+                        <p className="mt-3 text-grey text-small mx-3 position-relative">
+                            formatos: <strong>.jpg, .png, .svg, .ai</strong>
+                        </p>
+                    )}
                 </div>
             </label>
         </section>

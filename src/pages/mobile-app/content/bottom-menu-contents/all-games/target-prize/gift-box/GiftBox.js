@@ -17,6 +17,7 @@ export default function GiftBox({
     callback,
     prizeImg,
     prizeDesc,
+    targetPoints,
     className,
     opacity = 1,
     disableOpenBox = false,
@@ -43,6 +44,7 @@ export default function GiftBox({
                 prizeDesc={prizeDesc}
                 colorS={boxPColor}
                 prizeImg={prizeImg}
+                targetPoints={targetPoints}
             />
             <section
                 className="box-lid"

@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v4.78.0";
+const latestVersion = "v4.78.50";
 // NEXT:
 // register bonus coins -
 const updateDescription = "pic for target prize game and image handling v2";

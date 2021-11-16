@@ -2,11 +2,15 @@ import { useState, useEffect } from "react";
 import UploadBtn from "components/multimedia/UploadBtn";
 import GiftBox from "pages/mobile-app/content/bottom-menu-contents/all-games/target-prize/gift-box/GiftBox";
 import { useBizData } from "init";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
-export default function SendPhotoContent({
-    savedPrizeImg, // when the user already uploaded
-    prizeDesc = "blusa top",
-}) {
+export default function PhotoContent({ modalData, handleCloseModal }) {
+    const {
+        savedPrizeImg, // when the user already uploaded
+        challId,
+        targetPoints,
+    } = modalData;
+
     const [prizeImg, setPrizeImg] = useState(null);
     const { themePColor: colorP, themeBackColor: colorBack } = useBizData();
 
@@ -18,12 +22,19 @@ export default function SendPhotoContent({
     const showTitle = () => (
         <div className="mt-4 mx-3 text-purple">
             <h1 className="text-subtitle text-center font-weight-bold">
-                Envio Foto Prêmio
+                {prizeImg ? "Edição" : "Envio"} Foto Prêmio
             </h1>
-            <p className="text-normal">
-                Envie uma foto do prêmio para empolgar visualmente seus clientes
-                nas compras
-            </p>
+            {prizeImg ? (
+                <p className="text-normal">
+                    No app dos seus clientes, a foto do prêmio é mostrada toda
+                    vez que é clicado na caixa de prêmio.
+                </p>
+            ) : (
+                <p className="text-normal">
+                    Envie uma foto do prêmio para empolgar visualmente seus
+                    clientes nas compras
+                </p>
+            )}
         </div>
     );
 
@@ -37,7 +48,7 @@ export default function SendPhotoContent({
             return (
                 <div
                     style={{
-                        margin: "100px 0 50px",
+                        margin: "80px 0 15px",
                     }}
                     className="position-relative animated fadeInUp"
                 >
@@ -45,11 +56,12 @@ export default function SendPhotoContent({
                         className="bounce repeat-2 delay-3s"
                         boxPColor={colorP}
                         backColor={colorBack}
-                        prizeDesc={prizeDesc}
+                        targetPoints={targetPoints}
                         prizeImg={prizeImg}
                         callback={null}
                         disableOpenBox={false}
                         needSmallBox={false}
+                        // prizeDesc={prizeDesc} doesn't inserted to display img
                     />
                     <p className="text-center text-normal text-white text-shadow">
                         Clique na caixa
@@ -76,42 +88,58 @@ export default function SendPhotoContent({
         <section>
             {showTitle()}
             {showMainContent()}
-            <div className="container-center mt-3">
+            <div className="container-center-col mt-1 mx-5">
+                {prizeImg && (
+                    <ButtonFab
+                        title="Finalizar"
+                        backgroundColor="var(--themeSDark)"
+                        onClick={() => handleCloseModal()}
+                        position="relative"
+                        variant="extended"
+                        size="large"
+                        width="100%"
+                        // textTransform="uppercase"
+                    />
+                )}
+                <div className="mb-3" />
                 <UploadBtn
                     loadingMsg="Adicionando..."
                     callback={handleUpload}
                     body={{
-                        challId: "bhmTQYAM7lSJo-kVavxy",
+                        challId,
+                        prizeImg, // only for remove mode
                         folder: "target-prize-game-pics", // folder to be stored in the provider
                         tags: "cliente-admin",
                         backup: false,
-                        prizeImg, // only for remove mode
                     }}
+                    alreadyUploaded={Boolean(savedPrizeImg)}
                 />
             </div>
-            <section className="mx-3 mb-5 text-purple text-normal">
-                <div className="container-center">
-                    <h2 className="text-pill d-flex text-normal font-weight-bold">
-                        Dicas para foto
-                    </h2>
-                </div>
-                <p>
-                    Uma foto do prêmio incrível segue{" "}
-                    <strong>3 simples critérios</strong>:
-                </p>
-                <p>1) a imagem é nítida, evitando imagens embaçadas;</p>
-                <p>
-                    2) possui iluminação adequada, evitando muito flash da
-                    câmera ou imagens apagadas;
-                </p>
-                <p>
-                    3) tem uma distância apropriada, não muito distante da
-                    câmera;
-                </p>
-                O formato da foto do prêmio é adaptado de acordo com o
-                dispositivo do cliente e fica centralizado com até 300px de
-                largura e altura é de acordo com sua foto original.
-            </section>
+            {!prizeImg && (
+                <section className="mx-3 mb-5 text-purple text-normal">
+                    <div className="container-center">
+                        <h2 className="text-pill d-flex text-normal font-weight-bold">
+                            Dicas para foto
+                        </h2>
+                    </div>
+                    <p>
+                        Uma foto do prêmio incrível segue{" "}
+                        <strong>3 simples critérios</strong>:
+                    </p>
+                    <p>1) a imagem é nítida, evitando imagens embaçadas;</p>
+                    <p>
+                        2) possui iluminação adequada, evitando muito flash da
+                        câmera ou imagens apagadas;
+                    </p>
+                    <p>
+                        3) tem uma distância apropriada, não muito distante da
+                        câmera;
+                    </p>
+                    O formato da foto do prêmio é adaptado de acordo com o
+                    dispositivo do cliente e fica centralizado com altura de
+                    acordo com sua foto e largura de até 230px.
+                </section>
+            )}
         </section>
     );
 }
@@ -121,7 +149,7 @@ function backGiftBoxBlob(fill = "#FF0066") {
         <section
             style={{
                 position: "absolute",
-                top: -140,
+                top: -130,
                 left: 0,
                 width: "100%",
                 height: "100%",
