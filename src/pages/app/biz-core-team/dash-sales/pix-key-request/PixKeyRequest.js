@@ -6,8 +6,9 @@ import showToast from "components/toasts";
 import handleChange from "utils/form/use-state/handleChange";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import EditButton from "components/buttons/EditButton";
-import { useReadUser, updateUser } from "api/frequent";
+import { updateUser } from "api/frequent";
 import useData from "init";
+import getVar from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -30,29 +31,26 @@ export default function PixKeyRequest() {
     const [data, setData] = useState({
         pix: "",
         alreadyHasPix: false,
+        loadingPix: true,
     });
-    const { pix, alreadyHasPix } = data;
+    const { pix, alreadyHasPix, loadingPix } = data;
 
     const { userId } = useData();
 
-    // use INIT/BOOTUP DATA in future updates
-    const { data: dataUser, loading: loadingPix } = useReadUser(
-        userId,
-        "nucleo-equipe",
-        "bizTeamData.pixKey",
-        { trigger: userId !== "..." }
-    );
-
     useEffect(() => {
-        if (!dataUser) return;
+        (async () => {
+            const dbPix = await getVar("pixKey", "user");
+            if (!dbPix)
+                return setData((prev) => ({ ...prev, loadingPix: false }));
 
-        const dbPix = dataUser.bizTeamData.pixKey;
-        setData((prev) => ({
-            ...prev,
-            pix: dbPix,
-            alreadyHasPix: true,
-        }));
-    }, [dataUser]);
+            return setData((prev) => ({
+                ...prev,
+                pix: dbPix,
+                alreadyHasPix: true,
+                loadingPix: false,
+            }));
+        })();
+    }, []);
 
     const styles = getStyles();
 

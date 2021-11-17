@@ -38,6 +38,7 @@ const getDataByRole = (role, initData) => {
         agentJob: initData.agentJob,
         redirectPayGatewayLink: initData.redirectPayGatewayLink,
         uniqueLinkId: initData.uniqueLinkId,
+        pixKey: initData.pixKey,
     };
 
     const cliAdmin = {

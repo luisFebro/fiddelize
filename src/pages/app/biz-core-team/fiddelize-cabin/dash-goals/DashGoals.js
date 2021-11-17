@@ -21,19 +21,24 @@ const getTitle = () => (
 export default function DashGoals() {
     const SectionTitle = getTitle();
 
-    const { data, loading } = useAPI({
+    const { data: weeklyData } = useAPI({
         url: getCabinMainData(),
         params: {
             period: "weekly",
         },
     });
 
-    const mainData = loading ? {} : data;
+    const { data } = useAPI({
+        url: getCabinMainData(),
+        params: {
+            period: "monthly",
+        },
+    });
 
     return (
         <Fragment>
             <DashSectionTitle title={SectionTitle} />
-            <OKR mainData={mainData} />
+            <OKR weeklyData={weeklyData || {}} monthlyData={data || {}} />
         </Fragment>
     );
 }

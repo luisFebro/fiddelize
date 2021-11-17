@@ -35,7 +35,7 @@ export default function GeneralTweaksContent() {
         if (!isDisabled && benefitsExpDays < 10)
             // !isDev
             return showToast(
-                "Prazo mínimo é partir de 10 dias. Digite zero para desativar",
+                "Prazo mínimo é apartir de 10 dias. Digite zero para desativar",
                 { type: "error", dur: "8000" }
             );
         if (benefitsExpDays > 180)
