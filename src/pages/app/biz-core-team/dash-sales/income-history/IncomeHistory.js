@@ -1,12 +1,12 @@
 import { Fragment } from "react";
-import Title from "../../../../../components/Title";
-import LoadableVisible from "../../../../../components/code-splitting/LoadableVisible";
+import Title from "components/Title";
+import LoadableVisible from "components/code-splitting/LoadableVisible";
 
 const AsyncIncomeCardsList = LoadableVisible({
     loading: true,
     loader: () =>
         import(
-            "./cards-list/AsyncIncomeCardsList.js" /* webpackChunkName: "income-cards-list-session-lazy" */
+            "./cards-list/AsyncIncomeCardsList" /* webpackChunkName: "income-cards-list-session-lazy" */
         ),
 });
 

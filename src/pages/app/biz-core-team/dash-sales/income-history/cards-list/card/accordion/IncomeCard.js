@@ -4,27 +4,12 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
-import PropTypes from "prop-types";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
-import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import { isScheduledDate } from "../../../../../../../../utils/dates/dateFns";
+// import { isScheduledDate } from "utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
-
-IncomeCard.propTypes = {
-    actions: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            mainHeading: PropTypes.object, // parser
-            secondaryHeading: PropTypes.object, // parser
-            hiddenContent: PropTypes.any,
-        })
-    ).isRequired,
-    backgroundColor: PropTypes.string,
-    color: PropTypes.string,
-    needToggleButton: PropTypes.bool,
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -132,8 +117,18 @@ export default function IncomeCard({
         </section>
     );
 
+    // display need to be block instead of flex in order to read the table inside card
     const showHiddenPanel = (panel) => (
-        <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
+        <AccordionDetails>
+            {panel.hiddenContent}
+            <style jsx global>
+                {`
+                    .MuiAccordionDetails-root {
+                        display: block;
+                    }
+                `}
+            </style>
+        </AccordionDetails>
     );
 
     const showAccordion = ({ panel }) => (

@@ -1,67 +1,47 @@
 import { Fragment } from "react";
-import PropTypes from "prop-types";
-import useRun from "global-data/ui";
 import { withRouter } from "react-router-dom";
-import { Load } from "../../../../../../../../components/code-splitting/LoadableComp";
+import { Load } from "components/code-splitting/LoadableComp";
 // import TextField from "@material-ui/core/TextField";
 
 const AsyncOrdersTableContent = Load({
     loader: () =>
         import(
-            "../../../../../../../../pages/plans-page/orders-and-pay/OrdersTableContent" /* webpackChunkName: "orders-table-content-comp-lazy" */
+            "pages/plans-page/orders-and-pay/OrdersTableContent" /* webpackChunkName: "orders-table-content-comp-lazy" */
         ),
 });
 
-PanelHiddenContent.propTypes = {
-    data: PropTypes.object.isRequired,
-};
-
-// const getStyles = () => ({
-//     pointsContainer: {
-//         position: "relative",
-//     },
-//     fieldFormValue: {
-//         backgroundColor: "#fff",
-//         color: "var(--themeP)",
-//         fontSize: "20px",
-//         fontWeight: "bold",
-//         fontFamily: "var(--mainFont)",
-//     },
-// });
-
 function PanelHiddenContent({ data }) {
-    const { runArray } = useRun();
-
-    const showInvestExtract = (data) => {
-        const isOpen = runArray.includes(data._id); // only when the card is open is loaded.
-
+    const showInvestExtract = () => {
         const handlePlanCode = (code) => {
             if (code === "OU") return "ouro";
             if (code === "PR") return "prata";
-            if (code === "BR") return "bronze";
+            return "bronze"; // (code === "BR")
         };
 
         const { itemList: orders, reference } = data;
         const referenceArray = reference && reference.split("-");
         const [planCode, , period] = referenceArray;
 
+        const handlePeriod = () => {
+            if (period === "I") return "infinite";
+            return period === "A" ? "yearly" : "monthly";
+        };
+
         const thisPlan = handlePlanCode(planCode);
-        const thisPeriod = period === "A" ? "yearly" : "monthly";
+        const thisPeriod = handlePeriod();
 
         return (
-            isOpen && (
-                <Fragment>
-                    <h2 className="mb-2 text-normal font-weight-bold text-white text-shadow">
-                        • Serviços investidos:
-                    </h2>
-                    <AsyncOrdersTableContent
-                        listData={orders}
-                        loading={!orders}
-                        planBr={thisPlan}
-                        period={thisPeriod}
-                    />
-                </Fragment>
-            )
+            <Fragment>
+                <h2 className="mb-2 text-normal font-weight-bold text-white text-shadow">
+                    • Serviços investidos:
+                </h2>
+                <AsyncOrdersTableContent
+                    listData={orders}
+                    loading={!orders}
+                    planBr={thisPlan}
+                    period={thisPeriod}
+                />
+            </Fragment>
         );
     };
 
@@ -81,7 +61,7 @@ function PanelHiddenContent({ data }) {
                     </span>
                 </p>
             </section>
-            {showInvestExtract(data)}
+            {showInvestExtract()}
         </section>
     );
 }

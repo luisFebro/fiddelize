@@ -85,7 +85,8 @@ async function setLstorageData(initData) {
     const run = (resolve, reject) => {
         if (!initData) reject("no initData passed as argument");
 
-        setItems("bizData", initData.bizData);
+        // for nucleo-equipe, there is no bizData in init when reloading, only in the first login. if this lack of updating may cause issue, then read it in the init in future versions
+        if (initData.bizData) setItems("bizData", initData.bizData);
         setItems("currUser", initData.currUser);
 
         resolve("done!");

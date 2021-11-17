@@ -1,5 +1,7 @@
 // this remove format and improves img quality
-export default function removeImgFormat(imgUrl) {
+export default function removeImgFormat(imgUrl, options = {}) {
+    const { isBizTeam } = options;
+
     if (!imgUrl)
         return {
             newImg: "/img/error.png", // official-logo-name.png
@@ -14,7 +16,7 @@ export default function removeImgFormat(imgUrl) {
     let width = 190;
     let height = 85;
 
-    if (isSquared) {
+    if (!isBizTeam && isSquared) {
         width = 110;
         height = 110;
     }

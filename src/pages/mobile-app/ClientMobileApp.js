@@ -191,9 +191,13 @@ function ClientMobileApp({ location, history }) {
         }
     }
 
-    const needClientLogo = (isApp && bizLogo) || (isAuthUser && bizLogo);
+    const needClientLogo =
+        (!isBizTeam && isApp && bizLogo) ||
+        (!isBizTeam && isAuthUser && bizLogo);
 
-    const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
+    const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo, {
+        isBizTeam,
+    });
     const logoSrc =
         isBizTeam || !needClientLogo
             ? "/img/official-logo-name.png"

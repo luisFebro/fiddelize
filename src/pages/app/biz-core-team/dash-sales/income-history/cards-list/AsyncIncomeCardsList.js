@@ -1,15 +1,16 @@
 import { Fragment, useState } from "react";
 import getDatesCountdown from "utils/dates/countdown/getDatesCountdown";
-import IncomeCard from "./card/accordion/IncomeCard";
-import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
-import { calendar } from "../../../../../../utils/dates/dateFns";
-import Img from "../../../../../../components/Img";
-// import { isScheduledDate } from '../../../../../../utils/dates/dateFns';
+import { calendar } from "utils/dates/dateFns";
+import Img from "components/Img";
 import useAPIList, { readAgentIncomeHistory } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import convertToReal from "utils/numbers/convertToReal";
 import useData from "init";
-import extractStrData from "../../../../../../utils/string/extractStrData";
+import extractStrData from "utils/string/extractStrData";
+import getId from "utils/getId";
+import IncomeCard from "./card/accordion/IncomeCard";
+import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
+// import { isScheduledDate } from 'utils/dates/dateFns';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -158,7 +159,7 @@ export default function AsyncCardsList() {
             const sideHeading = handleSecHeading(data, styles);
 
             return {
-                _id: data._id,
+                _id: getId(), // this is only meant to be for panelId and ToggleBtn to toggle the proper card.
                 mainHeading,
                 secondaryHeading: sideHeading,
                 data,
