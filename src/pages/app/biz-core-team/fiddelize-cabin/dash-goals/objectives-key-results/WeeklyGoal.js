@@ -103,7 +103,7 @@ export default function WeeklyGoal({
                     </div>
                 )}
             </div>
-            <KeyResult currKR={currKR} />
+            <KeyResult goalKR={goalKR} currKR={currKR} />
             <section className="font-site text-em-1-1 mt-2 d-flex justify-content-between">
                 <p className="m-0 text-purple font-weight-bold">
                     Começa:

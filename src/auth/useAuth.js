@@ -29,5 +29,6 @@ export default function useAuth(options = {}) {
         // eslint-disable-next-line
     }, [success, currRole]);
 
+    // success is an empty {} if the user collection is removed. But user collection removal is no longer made
     return Boolean(token || success);
 }

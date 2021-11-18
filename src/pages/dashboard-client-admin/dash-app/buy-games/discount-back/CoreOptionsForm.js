@@ -6,6 +6,7 @@ import convertToReal from "utils/numbers/convertToReal";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getPercentage from "utils/numbers/getPercentage";
 import showToast from "components/toasts";
+import getId from "utils/getId";
 
 export default function CoreOptionsForm({
     targetPoints, // required
@@ -44,6 +45,7 @@ export default function CoreOptionsForm({
                 type: "error",
             });
 
+        // TODO: NEED TO BE CHANGED TO CHALLLIST
         const dataToSend = {
             [`clientAdminData.games.${GAME}.targetMoney`]: targetMoney,
             [`clientAdminData.games.${GAME}.perc`]: perc,
@@ -58,9 +60,14 @@ export default function CoreOptionsForm({
                     games: {
                         discountBack: {
                             on: true,
-                            perc,
-                            targetMoney,
-                            targetPoints,
+                            challList: [
+                                {
+                                    id: getId(),
+                                    targetPoints,
+                                    targetMoney,
+                                    perc,
+                                },
+                            ],
                         },
                     },
                 },

@@ -34,8 +34,8 @@ export default function UploadBtn({
             // IMPORTANT: req.files only works if formData.set has name of file
             formData.set("file", imgDataList); // n1 - set and append diff
             // all this data below is accessed in req.body
-            formData.set("mode", "create");
             formData.set("userId", userId);
+            formData.set("mode", "create");
             formData.set("bizLinkName", bizLinkName); // n1 - set and append diff
             Object.keys(body).forEach((field) => {
                 formData.set(field, body[field]);

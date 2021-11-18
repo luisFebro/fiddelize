@@ -76,7 +76,6 @@ function useIndexedLoader({
             );
 
             setFinalData(updatedIndexedDB);
-
             return null;
         })();
 

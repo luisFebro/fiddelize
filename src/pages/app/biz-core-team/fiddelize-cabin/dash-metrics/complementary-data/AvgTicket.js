@@ -1,5 +1,5 @@
-import getMonthNowBr from "../../../../../../utils/dates/getMonthNowBr";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import getMonthNowBr from "utils/dates/getMonthNowBr";
+import convertToReal from "utils/numbers/convertToReal";
 
 export default function AvgTicket({ mainData }) {
     const currMonth = getMonthNowBr();

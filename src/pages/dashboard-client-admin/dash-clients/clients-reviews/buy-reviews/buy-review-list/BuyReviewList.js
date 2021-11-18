@@ -131,7 +131,7 @@ function useAdminChecked(trigger, bizId, isBizAdmin) {
                 ? "bizTeamData.reviewLastChecked"
                 : "clientAdminData.reviewLastChecked";
             const thisRole = isBizAdmin ? "nucleo-equipe" : "cliente-admin";
-            const thisId = isBizAdmin ? "604a9b7dff36c40017476cee" : bizId; // for now, it will track only primary account, after can track dinamically to check who read the last time the reports
+            const thisId = isBizAdmin ? "6001a843424a2d17346852d9" : bizId; // for now, it will track only primary account, after can track dinamically to check who read the last time the reports
 
             const body = {
                 [`${path}`]: new Date(),

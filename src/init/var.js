@@ -129,6 +129,7 @@ export const removeVars = async (strArray, options = {}) => {
 
 // removeStore is the culprit of a tremendous delay and actually preventing log out.
 // maybe because we have to insert new variables afterwards... removeStore("pre_register") is working fine for now...
+// don't use to remove user collection in further implementation
 export const removeStore = async (store) => {
     const storeName = handleStoreName(store);
 

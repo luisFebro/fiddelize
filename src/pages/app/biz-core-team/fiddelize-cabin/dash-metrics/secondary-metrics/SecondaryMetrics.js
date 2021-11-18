@@ -1,7 +1,7 @@
-import getPercentage from "../../../../../../utils/numbers/getPercentage";
+import getPercentage from "utils/numbers/getPercentage";
+import { getTextStatus } from "components/charts/speedometer-gauge/helpers";
 import colorsHandler from "../../../../../dashboard-client-admin/dash-clients/clients-reviews/helpers/colorsHandler";
 import NpsReportBtn from "../../../../../dashboard-client-admin/dash-clients/clients-reviews/nps/nps-report/NpsReportBtn";
-import { getTextStatus } from "../../../../../../components/charts/speedometer-gauge/helpers";
 import XpReports from "./XpReports";
 import ConversionRateReportBtn from "./conversion-rate-report/ConversionRateReportBtn";
 
@@ -117,7 +117,7 @@ function NPS({ mainData }) {
     );
 }
 
-function ConversionRate({ mainData }) {
+function ConversionRate({ mainData = {} }) {
     const { proCustomersCount, customersCount, freeCustomersCount } = mainData;
 
     const loading = false;

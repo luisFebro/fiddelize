@@ -5,7 +5,7 @@ import { gameIconsStore, gameBrNameStore } from "components/biz/GamesBadge";
 import getQueryByName from "utils/string/getQueryByName";
 import { useAction } from "global-data/ui";
 import { setDefaultData } from "init/setInitData";
-import { removeStore } from "init/var";
+import { setVars, removeStore } from "init/var";
 
 export const AsyncTargetPrizePanel = Load({
     loader: () =>
@@ -79,9 +79,18 @@ function useSetDefaultData(uify) {
         if (uify) setDefaultData(uify);
 
         (async () => {
+            // only vars can can potentially skew the result
+            const dataUpdateUser = {
+                adminGame: {
+                    targetPrize: {},
+                    discountBack: {},
+                    raffleTicket: {},
+                },
+                currGame: "",
+            };
             await Promise.all([
                 removeStore("pre_register"),
-                removeStore("user"),
+                setVars(dataUpdateUser, "user"),
             ]);
         })();
     }, [uify]);

@@ -1,10 +1,10 @@
 import { Fragment } from "react";
-import LoadableVisible from "../../../../../../components/code-splitting/LoadableComp";
+import LoadableVisible from "components/code-splitting/LoadableComp";
 
 const AsyncBarChart = LoadableVisible({
     loader: () =>
         import(
-            "../../../../../../components/charts/bar-chart/BarChart" /* webpackChunkName: "bar-chart-comp-lazy" */
+            "components/charts/bar-chart/BarChart" /* webpackChunkName: "bar-chart-comp-lazy" */
         ),
 });
 

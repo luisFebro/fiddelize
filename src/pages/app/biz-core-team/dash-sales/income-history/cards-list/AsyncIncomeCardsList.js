@@ -44,6 +44,9 @@ const handleSecHeading = (data, styles) => (
 // END HELPERS
 
 export default function AsyncCardsList() {
+    // LESSON: keep both request and useAPIList in sync. Otherwise the list will be incorrected bited off when loaded the second chunk onwards
+    // if that persits, filterId is the root of issue. Make sure an id is being sent and if it differents from _id, specify the target di with var filterId
+    const limit = 10;
     const [skip, setSkip] = useState(0);
     const styles = getStyles();
 
@@ -52,7 +55,7 @@ export default function AsyncCardsList() {
         "primaryAgent",
     ]);
 
-    const params = { uniqueLinkId, primaryAgent, skip };
+    const params = { limit, uniqueLinkId, primaryAgent, skip };
 
     const {
         list,
@@ -71,6 +74,8 @@ export default function AsyncCardsList() {
         skip,
         params,
         trigger: uniqueLinkId !== "...",
+        limit,
+        filterId: "id",
         forceTrigger: true,
         listName: "incomeCardsList",
     });

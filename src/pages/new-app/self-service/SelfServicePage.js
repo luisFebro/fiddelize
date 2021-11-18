@@ -8,14 +8,15 @@ import getVar, { setVars } from "init/var";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import "./style.scss";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
+import AppPickersHandler from "./pickers/AppPickersHandler";
 
 const isSmall = window.Helper.isSmallScreen();
-import AppPickersHandler from "./pickers/AppPickersHandler";
 
 removeItems("bizData", ["milestoneIcon"]);
 
 const setLocalData = async ({ type = "theming", colors, iconsData }) => {
     const priorAdminData = await getVar("clientAdminData", "pre_register");
+    // only targetPrize game will get here since the discountBack is redirected right to the final register page
     const priorGame = priorAdminData && priorAdminData.games.targetPrize;
 
     let newObj = { ...priorAdminData, ...colors };

@@ -4,18 +4,14 @@ export default function ProPlanData({ mainData }) {
     const {
         periodMonthly,
         periodYearly,
+        periodInfinite,
         planBronze,
         planGold,
         planSilver,
     } = planData;
 
-    return (
+    const showPlans = () => (
         <section>
-            <p className="mt-5 text-purple text-subtitle font-weight-bold text-center">
-                Dados Gerais
-                <br />
-                Venda de Planos
-            </p>
             <div className="d-flex justify-content-around">
                 <p
                     className="text-normal text-pill font-weight-bold"
@@ -33,6 +29,8 @@ export default function ProPlanData({ mainData }) {
                 >
                     {planSilver || 0} prata
                 </p>
+            </div>
+            <div className="container-center">
                 <p
                     className="text-normal text-pill font-weight-bold"
                     style={{
@@ -42,7 +40,12 @@ export default function ProPlanData({ mainData }) {
                     {planGold || 0} ouro
                 </p>
             </div>
-            <p className="mt-2 text-purple text-subtitle font-weight-bold text-center">
+        </section>
+    );
+
+    const showPeriods = () => (
+        <section>
+            <p className="text-purple text-subtitle font-weight-bold text-center">
                 Períodos
             </p>
             <div className="d-flex justify-content-around">
@@ -53,6 +56,28 @@ export default function ProPlanData({ mainData }) {
                     {periodYearly || 0} anuais
                 </p>
             </div>
+            <div className="container-center">
+                <p className="text-normal text-pill">
+                    {periodInfinite || 0} ilimitado
+                </p>
+            </div>
+        </section>
+    );
+
+    return (
+        <section>
+            <p className="mt-5 text-purple text-subtitle font-weight-bold text-center">
+                Dados Gerais
+                <br />
+                Venda de Planos
+                <br />
+                <span className="text-normal text-grey">
+                    (inclui renovações e extras)
+                </span>
+            </p>
+            {showPlans()}
+            <div className="mt-2" />
+            {showPeriods()}
         </section>
     );
 }

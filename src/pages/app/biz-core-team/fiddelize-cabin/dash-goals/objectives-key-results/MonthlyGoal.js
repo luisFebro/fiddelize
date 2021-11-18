@@ -99,7 +99,7 @@ export default function MonthlyGoal({
                     )}
                 </div>
             </main>
-            <KeyResult currKR={currKR} />
+            <KeyResult goalKR={goalKR} currKR={currKR} />
         </section>
     );
 }

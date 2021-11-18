@@ -4,11 +4,12 @@ import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import useAPI, { getAppTotals } from "api/useAPI";
+import convertToReal from "utils/numbers/convertToReal";
 
 const icons = { color: "var(--themeP)", fontSize: "50px" };
 
 export default function AppTotals() {
-    const { data, loading } = useAPI({
+    const { data } = useAPI({
         url: getAppTotals(),
     });
 
@@ -22,6 +23,13 @@ export default function AppTotals() {
         cliUserAppsCount,
     } = mainData;
 
+    const totalInstalledApps = convertToReal(
+        bizTeamAppsCount +
+            cliAdminAppsCount +
+            cliMemberAppsCount +
+            cliUserAppsCount
+    );
+
     return (
         <section>
             <p className="mt-5 text-purple text-subtitle font-weight-bold text-center">
@@ -32,7 +40,7 @@ export default function AppTotals() {
                     <div>
                         <MonetizationOnIcon style={icons} />
                     </div>
-                    <strong>{bizTeamAppsCount} Apps</strong>
+                    <strong>{convertToReal(bizTeamAppsCount)} Apps</strong>
                     <br />
                     Fiddelize
                 </div>
@@ -40,7 +48,7 @@ export default function AppTotals() {
                     <div>
                         <VpnKeyIcon style={icons} />
                     </div>
-                    <strong>{cliAdminAppsCount} Apps</strong>
+                    <strong>{convertToReal(cliAdminAppsCount)} Apps</strong>
                     <br />
                     Admin
                 </div>
@@ -48,7 +56,7 @@ export default function AppTotals() {
                     <div>
                         <PeopleAltIcon style={icons} />
                     </div>
-                    <strong>{cliMemberAppsCount} Apps</strong>
+                    <strong>{convertToReal(cliMemberAppsCount)} Apps</strong>
                     <br />
                     Membros
                 </div>
@@ -56,17 +64,28 @@ export default function AppTotals() {
                     <div>
                         <LocalMallIcon style={icons} />
                     </div>
-                    <strong>{cliUserAppsCount} Apps</strong>
+                    <strong>{convertToReal(cliUserAppsCount)} Apps</strong>
                     <br />
                     Clientes
                 </div>
             </section>
-            <section className="pt-3 container-center">
-                <div className="text-normal text-purple text-center">
+            <section className="container-center-col text-center text-normal text-purple">
+                <div>
+                    <strong>
+                        <span className="text-pill">
+                            {totalInstalledApps} apps gerais
+                        </span>
+                        <br />
+                        instalados
+                    </strong>
+                </div>
+                <div className="pt-3">
                     <div>
                         <GroupWorkIcon style={icons} />
                     </div>
-                    <strong>{cliUserScoresAmount} pontos</strong>
+                    <strong>
+                        {convertToReal(cliUserScoresAmount)} pontos gerais
+                    </strong>
                     <br />
                     adicionados
                 </div>

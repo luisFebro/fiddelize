@@ -3,9 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PercLinearProgress from "components/progressIndicators/perc-linear-progress/PercLinearProgress";
 import getPercentage from "utils/numbers/getPercentage";
 
-export default function KeyResult({ kr, krKeyword = "cliente", currKR = 0 }) {
+export default function KeyResult({
+    currKR = 0,
+    goalKR = 0,
+    krKeyword = "cliente",
+}) {
     const plural = currKR > 1 ? "s" : "";
-    const perc = getPercentage(kr, currKR, { moreThan100: true });
+
+    const perc = getPercentage(goalKR, currKR, { moreThan100: true });
+
     const finishedKR = perc >= 100;
     const currKr = `${
         Number.isNaN(currKR) ? "..." : currKR

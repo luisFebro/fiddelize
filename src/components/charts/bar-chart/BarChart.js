@@ -44,7 +44,7 @@ const getPlugins = ({ axisXTitle, axisYTitle }) => ({
 });
 
 const getOptions = ({ axisYTitle, axisXTitle }) => ({
-    low: 1,
+    low: 0, // LESSON: this should be always 0 even if you data start with 1. Otherwisei if graph only got one data, it won't show it
     showGridBackground: false,
     height: "300px",
     axisY: {
@@ -77,7 +77,7 @@ const getOptions = ({ axisYTitle, axisXTitle }) => ({
 export default function BarChart({
     title,
     xLabels,
-    dataArray,
+    dataArray = [],
     axisYTitle,
     axisXTitle,
     totalY = true,

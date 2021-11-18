@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import NotesSwitcher from "../../../../../../components/buttons/NotesSwitcher";
+import NotesSwitcher from "components/buttons/NotesSwitcher";
 import BuyReviewList from "../buy-review-list/BuyReviewList";
 
 const notes = (
