@@ -1,6 +1,6 @@
 import { useState } from "react";
+import LineChart from "components/charts/line-chart/LineChart";
 import RevenueList from "./revenue-list/RevenueList";
-import LineChart from "../../../../../../../components/charts/line-chart/LineChart";
 
 export default function RevenueHistoryContent() {
     const [dataRevenue, setDataRevenue] = useState({
@@ -27,18 +27,22 @@ export default function RevenueHistoryContent() {
 
         let thisXLabels = [];
         const isFirstSemester = currMonthInd <= 5;
-        // avoid to include zeros default when splicing with higher index
-        const thisDataArray = isFirstSemester ? [0, 0, 0, 0, 0, 0] : [];
+        const thisDataArray = [0, 0, 0, 0, 0, 0];
         const qualifiedMonthesInd = [];
 
         data.forEach((d) => {
             if (d.year === currYear) {
                 const sales = d.salesAmount ? d.salesAmount : 0;
                 const cost = d.costAmount ? d.costAmount : 0;
-                const monthInd = d.month - 1; // mongodb starts january with 1
+                // we need to take 6 monthes correspondin to the first 6 semester with the second half of the year
+                const treatMonthInd = d.month - 1; // mongodb starts january with 1
+                const monthInd = isFirstSemester
+                    ? treatMonthInd
+                    : treatMonthInd - 6; // -6 to adapt to the 6-spot array out of 12 months
 
                 qualifiedMonthesInd.push(monthInd);
-                thisDataArray.splice(monthInd, 1, sales - cost);
+                const profitAmount = sales - cost;
+                thisDataArray.splice(monthInd, 1, profitAmount);
             }
         });
 
@@ -51,9 +55,12 @@ export default function RevenueHistoryContent() {
         } else {
             thisXLabels = ["jul", "ago", "set", "out", "nov", "dez"];
         }
+
+        const finalDataArray = treatFinalData(thisDataArray);
+
         setDataRevenue({
             xLabels: thisXLabels,
-            dataArray: treatFinalData(thisDataArray),
+            dataArray: finalDataArray,
             isFirstPos: thisIsFirstPos,
             isLastPos: thisIsLastPos,
         });
@@ -85,8 +92,11 @@ export default function RevenueHistoryContent() {
 
 // HELPERS
 /*
-push the first values if negative before data and
+igore further zeros values, push the first values if negative before data and
 remove all negative value after it
+e.g
+thisDataArray (6) [0, 0, 0, 0, 1945, 0]
+finalDataArray (5) [0, 0, 0, 0, 1945]
 */
 function treatFinalData(arr) {
     const finalData = [];

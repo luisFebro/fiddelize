@@ -5,7 +5,6 @@ import convertToReal from "utils/numbers/convertToReal";
 import getPercentage from "utils/numbers/getPercentage";
 import getMonthNowBr from "utils/dates/getMonthNowBr";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import useData from "init";
 import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
 import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
 import CashflowBtn from "./cash-flow/CashflowBtn";
@@ -14,7 +13,6 @@ export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
     const [revenueMode, setRevenueMode] = useState("netProfit"); //or allTimeRevenue
     const revenueAmount = mainData && mainData.revenueAmount;
-    const { countCliUsers } = useData();
 
     const allTimeRevenueAmount = mainData && mainData.allTimeRevenueAmount;
     const allTimeNetProfitAmount = mainData && mainData.allTimeNetProfitAmount;
@@ -172,9 +170,37 @@ export default function PrimaryMetrics({ mainData }) {
                 <div style={{ display: "inline-flex" }}>
                     {displayChangeModeBtn()}
                     {revenueMode === "netProfit" ? (
-                        <div className="animated fadeIn">
+                        <section className="position-relative animated fadeIn">
                             {displayMoreOptBtn()}
-                        </div>
+                            <div
+                                className="position-absolute"
+                                style={{
+                                    top: -20,
+                                    right: -50,
+                                }}
+                            >
+                                <div className="position-relative text-purple">
+                                    <p
+                                        className="text-nowrap font-weight-bold position-absolute text-normal text-purple"
+                                        style={{
+                                            top: -25,
+                                            right: 10,
+                                        }}
+                                    >
+                                        Burn Rate
+                                    </p>
+                                    <img
+                                        src="/img/icons/curve-arrow-left-purple.svg"
+                                        width={40}
+                                        height={40}
+                                        alt="seta"
+                                        style={{
+                                            transform: "rotate(-20deg)",
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </section>
                     ) : undefined}
                 </div>
             </h2>

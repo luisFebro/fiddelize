@@ -122,7 +122,6 @@ export const getXpReviewList = () => `${ROOT}/admin/fiddelize-cabin/xp-reviews`;
 // finance
 export const getFiddelizeRevenueHistory = () =>
     `${ROOT}/admin/fiddelize-cabin/revenue-history`;
-export const convertCurrency = () => `${ROOT}/admin/fiddelize-cabin/curr-conv`;
 export const readFiddelizeCosts = () =>
     `${ROOT}/admin/fiddelize-cabin/read-costs`;
 export const addFiddelizeCosts = () =>

@@ -118,6 +118,7 @@ function NPS({ mainData }) {
 }
 
 function ConversionRate({ mainData = {} }) {
+    if (!mainData) return <div />;
     const { proCustomersCount, customersCount, freeCustomersCount } = mainData;
 
     const loading = false;

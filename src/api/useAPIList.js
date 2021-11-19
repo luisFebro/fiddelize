@@ -190,7 +190,7 @@ export default function useAPIList({
             url,
             method,
             data: body,
-            params: { ...params, skip },
+            params: { ...params, skip, limit },
             headers: chooseHeader({ token, needAuth }),
             cancelToken: new axios.CancelToken((c) => {
                 cancel = c;

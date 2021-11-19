@@ -1,8 +1,6 @@
-import { Fragment } from "react";
-import CurrentConverter from "./CurrentConverter";
-import { addDays } from "../../../../../../../utils/dates/dateFns";
-import getCurrMonthBr from "../../../../../../../utils/dates/getMonthNowBr";
-import convertToReal from "../../../../../../../utils/numbers/convertToReal";
+import { addDays } from "utils/dates/dateFns";
+import getCurrMonthBr from "utils/dates/getMonthNowBr";
+import convertToReal from "utils/numbers/convertToReal";
 
 export default function CashflowContent({ mainData }) {
     const showTitle = () => (
@@ -17,11 +15,17 @@ export default function CashflowContent({ mainData }) {
 
     const lastMonthCash = mainData && mainData.lastMonthCashAmount;
     const currMonthCash = mainData && mainData.allTimeNetProfitAmount;
-    const currMonthCashBurn = (lastMonthCash - currMonthCash).toFixed(1);
-    // LESSON: the current cash starts with the same value of lastMonthCash
-    // and then goes down while there are investiments(outflows) during the month.
-    const devisor = currMonthCashBurn === 0 ? 100 : Math.abs(currMonthCashBurn); // 100 just to avoid Infinity and NaN when is devided by zero
-    const runawayCashMonthes = Math.round(currMonthCash / devisor);
+    const CASH_BURN_MONTHS = 3;
+    const diffCash = lastMonthCash - currMonthCash;
+    const currMonthCashBurn = Number(
+        (
+            (diffCash === 0 ? -currMonthCash : diffCash) / CASH_BURN_MONTHS
+        ).toFixed(1)
+    );
+
+    const runawayCashMonthes = Math.abs(
+        Math.round(currMonthCash / currMonthCashBurn)
+    ); // if costs are covered which means we have a positive cash flow, the calculation is negative and needs to be abs
     const runawayCashDays = !runawayCashMonthes ? 0 : runawayCashMonthes * 30;
     const runawayCashMonthesGoal = 12;
     const isGoalBeated = runawayCashMonthes >= runawayCashMonthesGoal;
@@ -33,7 +37,7 @@ export default function CashflowContent({ mainData }) {
             currMonthCashBurn <= 0 ? "theme-back--green" : "theme-back--yellow",
         msg: currMonthCashBurn <= 0 ? "custo coberto" : "custo maior",
     };
-    const needMinus = status.res === "excelente";
+    const isBreakeven = status.res === "excelente";
 
     const gotData = Boolean(mainData && mainData.allTimeNetProfitAmount);
     const currMonth = getCurrMonthBr();
@@ -114,20 +118,40 @@ export default function CashflowContent({ mainData }) {
                     <br />
                     Queima-Dinheiro
                 </p>
-                <div className="text-title text-center mt-5 mb-4">
+                <div
+                    className={`font-size ${
+                        currMonthCashBurn > 999999
+                            ? "text-em-1-9 font-weight-bold"
+                            : "text-title"
+                    } text-center mt-5 mb-4`}
+                >
                     <span
                         className={`${
                             !gotData ? "text-grey" : status.color
-                        } d-inline-block font-size text-em-2`}
+                        } d-inline-block ${
+                            currMonthCashBurn < 999999 && "text-em-2"
+                        }`}
                         style={{
                             lineHeight: "30px",
                         }}
                     >
                         <span className="text-em-0-6">
-                            {needMinus ? "-" : ""}R$
+                            {isBreakeven ? "-" : ""}R$
                         </span>
-                        {gotData ? Math.abs(currMonthCashBurn) : "..."}
+                        {gotData
+                            ? convertToReal(Math.abs(currMonthCashBurn))
+                            : "..."}
                     </span>
+                    {isBreakeven && (
+                        <p className="line-height-25 text-sys-green font-site text-em-0-6">
+                            caixa atingiu
+                            <br />
+                            <strong className="text-subtitle font-weight-bold">
+                                breakeven
+                            </strong>
+                            !
+                        </p>
+                    )}
                 </div>
                 <p
                     className={`${
@@ -145,17 +169,11 @@ export default function CashflowContent({ mainData }) {
                         ({gotData ? status.msg : "..."})
                     </span>
                 </p>
+                <p className="text-purple text-normal text-center">
+                    Com base <strong>trimestral</strong>
+                </p>
             </div>
         </section>
-    );
-
-    const showCurrConvertor = () => (
-        <Fragment>
-            <h2 className="text-center text-normal text-purple font-weight-bold">
-                Conversor Agora
-            </h2>
-            <CurrentConverter />
-        </Fragment>
     );
 
     const showRunawayCash = () => (
@@ -166,18 +184,34 @@ export default function CashflowContent({ mainData }) {
                 Esgota-Dinheiro
             </h2>
             <p className="font-site text-em-1-1">
-                Meta: <strong>{runawayCashMonthesGoal} meses</strong> de
-                Esgota-Dinheiro.
+                <strong>META:</strong>{" "}
+                <strong className="text-pill">
+                    +{runawayCashMonthesGoal} meses
+                </strong>{" "}
+                de distância do Esgota-Dinheiro.
             </p>
             <p
                 className={`${
                     isGoalBeated ? "text-sys-green" : ""
-                } font-site text-em-1-0`}
+                } font-site text-em-1-1`}
             >
-                {isGoalBeated ? <strong>Meta conquistada!</strong> : ""} Falta{" "}
-                <strong>{runawayCashMonthes} meses</strong> ({lastMonthRunaway}{" "}
+                {isGoalBeated ? (
+                    <p className="m-0 text-center font-weight-bold">
+                        Meta conquistada!
+                    </p>
+                ) : (
+                    ""
+                )}
+                <strong>ATUAL: </strong>
+                <strong>+{runawayCashMonthes} meses</strong> ({lastMonthRunaway}{" "}
                 de {lastYearRunaway}, daqui a +{runawayCashDays} dias) para
-                esgotar dinheiro de caixa a taxa atual.
+                <strong>
+                    {" "}
+                    esgotar dinheiro de caixa atual (R${" "}
+                    {convertToReal(currMonthCash)})
+                </strong>{" "}
+                baseado no custo mensal. Invista a metade no negócio e espere
+                recuperar a meta.
             </p>
         </section>
     );
@@ -188,25 +222,44 @@ export default function CashflowContent({ mainData }) {
             {showAccumulatedMonthlyCash()}
             {showCashBurnRate()}
             {showRunawayCash()}
-            {showCurrConvertor()}
+            <div className="mx-3 my-5 font-site text-em-1-1 text-grey">
+                <p className="text-purple text-subtitle">Notas:</p>
+                - Cálculo esgota-dinheiro: Cash Runway = Total Cash Reserve /
+                Cash Burn Rate
+                <br />
+                <br />- It’s often best to have a{" "}
+                <strong>negative cash burn rate</strong>. That means you are
+                building your cash reserves, not using them up. There are
+                certainly cases where investing your cash in growth is a good
+                idea, though: startups, obviously, but also bootstrapped
+                companies that are trying to grow. Just make sure you plan for
+                that cash burn and then track your progress.
+                <br />
+                <br />A good rule of thumb when looking at cash flow is that if
+                a business is burning cash too quickly, it risks going out of
+                business. On the opposite side, if a business burns cash too
+                slowly it may showcase growth stagnation or a lack of investment
+                toward the future. For example, say a company started last
+                quarter with $200K in the bank but ended with only $110K. That’s
+                a loss of $90K in cash over three months—a burn rate of $30K per
+                month. From a cash runway perspective, that suggests that the
+                company now has just over three months of cash runway or cash on
+                hand. They need to lower their burn rate and get cash flow
+                positive soon.
+            </div>
         </section>
     );
 }
 
-/*
-<p>
-    Capital:
-</p>
-<p>
-    R$ 471,75 - Avenue
-</p>
-<p>
-    R$ 260,00 - Avenue
-</p>
-<p>
-    R$ 52 - Nubank
-</p>
-<p>
-    R$ 50 - Ebanx
-</p>
+/* ARCHIVES
+
+const showCurrConvertor = () => (
+    <Fragment>
+        <h2 className="text-center text-normal text-purple font-weight-bold">
+            Conversor Agora
+        </h2>
+        <CurrentConverter />
+    </Fragment>
+);
+
  */

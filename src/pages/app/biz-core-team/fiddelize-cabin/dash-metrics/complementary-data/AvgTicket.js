@@ -27,6 +27,10 @@ export default function AvgTicket({ mainData }) {
                     }}
                 >
                     Quanto cada cliente está investindo em {currMonth}?
+                    <br />
+                    <span className="text-normal text-grey">
+                        (total vendas R$ / qtde. vendas)
+                    </span>
                 </span>
             </p>
             <section className="d-flex justify-content-around">

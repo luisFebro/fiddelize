@@ -1,9 +1,9 @@
 import { useEffect, useState, Fragment } from "react";
-import NotifCard from "./NotifCard";
 import getAPI, { markAllAsSeen } from "api";
 import useAPIList, { readNotifications } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import { useBizData } from "init";
+import NotifCard from "./NotifCard";
 
 export default function NotifList({
     _id,

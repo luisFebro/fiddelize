@@ -1,6 +1,7 @@
 import BuyReviewsBtn from "../../../../../dashboard-client-admin/dash-clients/clients-reviews/buy-reviews/BuyReviewsBtn";
 
-export default function XpReports({ mainData }) {
+export default function XpReports({ mainData = {} }) {
+    if (!mainData) return <div />;
     const { uncheckedReviews, lastDateChecked } = mainData;
 
     const pluralReviews = uncheckedReviews > 1 ? "s" : "";

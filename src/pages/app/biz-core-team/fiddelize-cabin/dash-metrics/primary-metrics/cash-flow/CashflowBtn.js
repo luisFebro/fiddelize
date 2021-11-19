@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import ModalFullContent from "../../../../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
 
 const Async = Load({
     loader: () =>
