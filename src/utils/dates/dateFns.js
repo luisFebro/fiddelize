@@ -13,6 +13,7 @@ import endOfMonth from "date-fns/endOfMonth";
 import endOfWeek from "date-fns/endOfWeek";
 import isAfter from "date-fns/isAfter";
 import set from "date-fns/set";
+import getMonth from "date-fns/getMonth";
 import { getPureParsedDate } from "./helpers/dateFnsHelpers";
 import getDayMonthBr from "./getDayMonthBr"; // 20 de Junho de 2020 is better than 20º de junho, 2020...
 
@@ -86,7 +87,28 @@ const setUTCDateTime = (options = {}) => {
     return set(new Date(date), { hours, minutes, seconds });
 };
 
+const getCurrMonth = (date = new Date()) => {
+    const monthes = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+    ];
+
+    const indMonth = getMonth(date);
+    return monthes[indMonth];
+};
+
 export {
+    getCurrMonth,
     dateFnsUtils,
     ptBRLocale,
     formatDMY,

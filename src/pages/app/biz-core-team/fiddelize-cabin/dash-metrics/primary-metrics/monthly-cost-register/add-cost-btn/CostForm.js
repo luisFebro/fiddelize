@@ -12,6 +12,7 @@ import moneyMaskBr from "utils/validation/masks/moneyMaskBr";
 import useData from "init";
 import converToReal, { convertToDollar } from "utils/numbers/convertToReal";
 import getPercentage from "utils/numbers/getPercentage";
+import SelectField from "components/fields/SelectField";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -30,9 +31,10 @@ export default function CostForm({
     const [data, setData] = useState({
         desc: "",
         value: null,
+        isCAC: false,
         alreadySalary: false,
     });
-    const { desc, value, alreadySalary } = data;
+    const { desc, value, alreadySalary, isCAC } = data;
 
     const availableCash = mainData && mainData.allTimeNetProfitAmount;
     const alreadyCurrMonthWithdrawal = mainData
@@ -63,6 +65,7 @@ export default function CostForm({
             const newCostCard = {
                 desc,
                 value: convertToDollar(formattedValue),
+                isCAC,
             };
 
             await getAPI({
@@ -185,8 +188,35 @@ export default function CostForm({
                     marginTop: "100px",
                 }}
             >
-                Salário do mês já retirado.
+                Salário {ceoSalary}% do mês já retirado.
             </h2>
+        );
+    };
+
+    const showCaCSelect = () => {
+        const handleSelected = (val) => {
+            setData((prev) => ({
+                ...prev,
+                isCAC: val,
+            }));
+        };
+
+        const valuesArray = [
+            { val: true, showVal: "Sim" },
+            { val: false, showVal: "Não" },
+        ];
+
+        const defaultSelected = false;
+
+        return (
+            <div className="mt-3">
+                É CAC (custo venda/marketing)?
+                <SelectField
+                    title={defaultSelected}
+                    valuesArray={valuesArray}
+                    handleValue={handleSelected}
+                />
+            </div>
         );
     };
 
@@ -254,8 +284,13 @@ export default function CostForm({
                     }}
                 />
             </div>
+            {showCaCSelect()}
             {showCTA()}
             {!alreadySalary && showSalaryArea()}
+            <p className="text-grey font-site text-em-0-9 mx-3 my-3">
+                Quanto disponível, é verificado se há alguma transação de
+                salário não adicionada no mês atual.
+            </p>
         </form>
     );
 }

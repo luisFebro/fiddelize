@@ -3,6 +3,7 @@ import UploadBtn from "components/multimedia/UploadBtn";
 import GiftBox from "pages/mobile-app/content/bottom-menu-contents/all-games/target-prize/gift-box/GiftBox";
 import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { setTargetPrizeImg } from "api";
 
 export default function PhotoContent({ modalData, handleCloseModal }) {
     const {
@@ -12,7 +13,11 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
     } = modalData;
 
     const [prizeImg, setPrizeImg] = useState(null);
-    const { themePColor: colorP, themeBackColor: colorBack } = useBizData();
+    const {
+        bizLinkName,
+        themePColor: colorP,
+        themeBackColor: colorBack,
+    } = useBizData();
 
     useEffect(() => {
         if (!savedPrizeImg) return;
@@ -75,7 +80,7 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
             <div className="container-center">
                 <img
                     className="img-center"
-                    src="/img/illustrations/games/photo-prize-target.svg"
+                    src="/img/illustrations/media/photo-prize-target.svg"
                     alt="envio foto prêmio"
                     height="auto"
                     width="85%"
@@ -103,11 +108,13 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
                 )}
                 <div className="mb-3" />
                 <UploadBtn
+                    urlFunc={setTargetPrizeImg}
                     loadingMsg="Adicionando..."
                     callback={handleUpload}
                     body={{
                         challId,
-                        prizeImg, // only for remove mode
+                        nameId: bizLinkName, // this will be like nameId_photoName
+                        targetImg: prizeImg, // only for remove mode
                         folder: "target-prize-game-pics", // folder to be stored in the provider
                         tags: "cliente-admin",
                         backup: false,

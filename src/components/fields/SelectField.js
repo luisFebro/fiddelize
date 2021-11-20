@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import handleChange from "../../utils/form/use-state/handleChange";
+import handleChange from "utils/form/use-state/handleChange";
 
 /* EXAMPLES
 title = "selecione valor:"
@@ -45,17 +45,19 @@ export default function SelectField({
                 error={false}
                 style={{ backgroundColor: "#fff" }}
             >
-                <MenuItem value={selected}>
-                    <span
-                        className="text-p text-normal"
-                        style={{
-                            fontSize: "1.2em",
-                            fontFamily: "Poppins, sans-serif",
-                        }}
-                    >
-                        {title}
-                    </span>
-                </MenuItem>
+                {typeof title === "string" && (
+                    <MenuItem value={selected}>
+                        <span
+                            className="text-p text-normal"
+                            style={{
+                                fontSize: "1.2em",
+                                fontFamily: "Poppins, sans-serif",
+                            }}
+                        >
+                            {title}
+                        </span>
+                    </MenuItem>
+                )}
                 {valuesArray &&
                     valuesArray.map((elem, ind) => (
                         <MenuItem key={ind} value={elem.val}>

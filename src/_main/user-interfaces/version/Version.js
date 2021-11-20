@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v4.80.30";
+const latestVersion = "v4.81.0";
 // FINAL SUBPROJECTS BEFORE LAUNCHING:
 // biz app revised v2 - up to 21 nov
 // support real time chat and replace Whatsapp up to 28 nov

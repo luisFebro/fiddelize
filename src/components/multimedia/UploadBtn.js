@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import showToast from "components/toasts";
-import getAPI, { setTargetPrizeImg } from "api";
-import useData, { useBizData } from "init";
+import getAPI from "api";
+import useData from "init";
 
 export default function UploadBtn({
     isMultiple = false,
@@ -13,11 +13,11 @@ export default function UploadBtn({
     selectMsg = "Selecione foto",
     removeMsg = "Remover",
     alreadyUploaded = false,
+    urlFunc = () => null, // url request path from api
 }) {
     const [uploadedPic, setUploadedPic] = useState(false);
     const [loading, setLoading] = useState(false);
     const { userId } = useData();
-    const { bizLinkName } = useBizData();
 
     useEffect(() => {
         if (alreadyUploaded) setUploadedPic(true);
@@ -36,7 +36,7 @@ export default function UploadBtn({
             // all this data below is accessed in req.body
             formData.set("userId", userId);
             formData.set("mode", "create");
-            formData.set("bizLinkName", bizLinkName); // n1 - set and append diff
+            // further data for image
             Object.keys(body).forEach((field) => {
                 formData.set(field, body[field]);
             });
@@ -54,7 +54,7 @@ export default function UploadBtn({
                 { type: "error" }
             );
 
-        if (uploadedPic && !body.prizeImg) {
+        if (uploadedPic && !body.targetImg) {
             return showToast(
                 "Algo deu errado ao remover a foto. Feche esta tela e entre novamente.",
                 { type: "error" }
@@ -79,7 +79,7 @@ export default function UploadBtn({
 
         const img = await getAPI({
             method: "post",
-            url: setTargetPrizeImg(),
+            url: urlFunc(),
             body: handleDataForm(),
             fullCatch: true,
         }).catch(() => {
@@ -125,7 +125,7 @@ export default function UploadBtn({
                         ? async () => {
                               setLoading(true);
 
-                              await removeImg({ ...body, userId });
+                              await removeImg({ ...body, urlFunc, userId });
 
                               setUploadedPic(false);
                               setLoading(false);
@@ -189,13 +189,15 @@ export default function UploadBtn({
 export async function removeImg(data) {
     return await getAPI({
         method: "post",
-        url: setTargetPrizeImg(),
+        url: data.urlFunc(),
         body: {
             mode: "remove",
             userId: data.userId,
-            challId: data.challId,
-            img: data.prizeImg,
+            nameId: data.nameId, // this will be like nameId_photoName,
+            imgId: data.imgId, // imgId is the elem id where the img is in it
+            img: data.targetImg,
             folder: data.folder, // folder to be stored in the provider
+            ...data,
         },
         fullCatch: true,
     });
