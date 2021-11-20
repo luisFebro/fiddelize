@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import useBackColor from "hooks/useBackColor";
-import useAuth from "auth/useAuth";
 import useData from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
@@ -13,8 +12,6 @@ import BizTeamNavbar from "./navbar/BizTeamNavbar";
 
 export default function BizTeamApp({ history }) {
     const [userFirstName, agentJob] = useData(["firstName", "agentJob"]);
-
-    useAuth({ history, roles: "nucleo-equipe, cliente-admin, cliente-membro" });
 
     useScrollUp();
     useBackColor("var(--themeBackground--default)");

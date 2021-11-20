@@ -4,6 +4,7 @@ import useAPI, { readFiddelizeCosts } from "api/useAPI";
 import convertToReal from "utils/numbers/convertToReal";
 import getPercentage from "utils/numbers/getPercentage";
 import getMonthNowBr from "utils/dates/getMonthNowBr";
+import InstructionBtn from "components/buttons/InstructionBtn";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
 import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
@@ -70,8 +71,31 @@ export default function PrimaryMetrics({ mainData }) {
         </section>
     );
 
+    const displayParamsBtn = () => {
+        const txt = `
+            <p class="text-center">PARÂMETROS</p>
+            <p>>= 20% - Excelente</p>
+            <p>>= 10% - Ótimo</p>
+            <p>> 0% - Bom</p>
+            <p>< 0% - Ruim</p>
+        `;
+
+        return (
+            <div
+                className="position-absolute"
+                style={{
+                    bottom: -15,
+                    left: "60%",
+                    transform: "translateX(-60%)",
+                }}
+            >
+                <InstructionBtn text={txt} mode="tooltip" animated />
+            </div>
+        );
+    };
+
     const showProfit = () => (
-        <section className="my-5 container-center">
+        <section className="position-relative my-5 container-center">
             <div
                 style={{
                     borderRadius: "20px",
@@ -132,6 +156,7 @@ export default function PrimaryMetrics({ mainData }) {
                     {gotData ? status : "..."}
                 </p>
             </div>
+            {displayParamsBtn()}
         </section>
     );
 

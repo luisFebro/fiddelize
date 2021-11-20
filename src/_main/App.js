@@ -8,7 +8,7 @@ import useOffline from "hooks/useOffline";
 import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
-import checkValidSession from "auth/checkValidSession";
+import checkValidSession, { runSessionCheck } from "auth/checkValidSession";
 import useGlobalApp from "./useGlobalApp.js";
 import "utils/globalHelpers";
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
@@ -29,6 +29,8 @@ export default function App() {
 
     useEffect(() => {
         switchConsoleLogs();
+        // also check every app reload to avoid user open the app with an old auth still wrongly valid and open
+        runSessionCheck();
         checkValidSession();
 
         const runGoogleAnalytics = () => {

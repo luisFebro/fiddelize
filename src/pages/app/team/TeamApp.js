@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import useData, { useBizData } from "init";
 import { Load } from "components/code-splitting/LoadableComp";
 import getDayGreetingBr from "utils/getDayGreetingBr";
-import useAuth from "auth/useAuth";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useBackColor from "hooks/useBackColor";
@@ -35,9 +34,6 @@ export default function TeamApp({
         "bizId",
     ]);
     const isPreviewMode = location && location.search.includes("modo-prev=1");
-
-    // redirect if not auth
-    useAuth({ history, roles: "nucleo-equipe, cliente-membro, cliente-admin" });
 
     const { notifCount } = useData();
 

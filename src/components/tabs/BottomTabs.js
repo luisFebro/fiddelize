@@ -8,8 +8,8 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import getVar, { removeVar } from "init/var";
 import getItems from "init/lStorage";
-import useContext from "context";
-import scrollIntoView from "../../utils/document/scrollIntoView";
+import { useBizData } from "init";
+import scrollIntoView from "utils/document/scrollIntoView";
 import useDetectScrollSingle from "hooks/scroll/useDetectScrollSingle";
 import "./_BottomTabs.scss";
 
@@ -75,7 +75,7 @@ export default function BottomTabs({
 }) {
     const [mainColor] = getItems("bizData", ["themePColor"]);
     // themeBackColor for club maker front page
-    const { themePColor } = useContext();
+    const { themePColor } = useBizData();
     const tabMainColor = themePColor || mainColor;
 
     const isAppTopDetected = useDetectScrollSingle("#topAppContent");

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import Card from "@material-ui/core/Card";
-import convertToReal from "../../../../../utils/numbers/convertToReal";
-import getDiffDays from "../../../../../utils/dates/getDiffDays";
-import GroupedAppBar from "./GroupedAppBar";
+import convertToReal from "utils/numbers/convertToReal";
+import getDiffDays from "utils/dates/getDiffDays";
 import { getVars, setVars, removeVars } from "init/var";
-import { checkToday, endMonth } from "../../../../../utils/dates/dateFns";
+import { checkToday, endMonth } from "utils/dates/dateFns";
+import GroupedAppBar from "./GroupedAppBar";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -92,7 +92,7 @@ export default function CeoFinance() {
         daysBeforeEndMonth < MIN_DIVISION ? MIN_DIVISION : daysBeforeEndMonth;
     const availableToday =
         (firstBalance || ceoBalance) / daysBeforeEndMonthCalculation || 0;
-    const needMinus = todayCosts > availableToday;
+    const needMinus = availableToday > 0 && todayCosts > availableToday;
 
     const showTitle = () => (
         <div className="my-4">

@@ -23,7 +23,7 @@ const getStyles = () => ({
         color: "#fff",
     },
     fabRoot: {
-        bottom: "15px",
+        bottom: "45px",
         right: "15px",
     },
     fabTooltip: {

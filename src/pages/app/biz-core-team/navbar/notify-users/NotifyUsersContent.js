@@ -70,20 +70,28 @@ export default function NotifyUsersContent() {
     return (
         <section>
             {showTitle()}
-            <RecipientOptions
-                showMessage={showMessage}
-                handleList={handleList}
-                setWhichTab={handleWhichTab}
-                handleShowMessage={handleShowMessage}
-                handleAppType={handleAppType}
-            />
-            <MessageField
-                showMessage={showMessage}
-                setMainData={setData}
-                whichTab={whichTab}
-                usersList={usersList}
-                appType={appType}
-            />
+            <p className="mx-3 my-5 text-grey text-subtitle">
+                Sessão em manutenção.
+            </p>
         </section>
     );
 }
+
+/*
+
+<RecipientOptions
+    showMessage={showMessage}
+    handleList={handleList}
+    setWhichTab={handleWhichTab}
+    handleShowMessage={handleShowMessage}
+    handleAppType={handleAppType}
+/>
+<MessageField
+    showMessage={showMessage}
+    setMainData={setData}
+    whichTab={whichTab}
+    usersList={usersList}
+    appType={appType}
+/>
+
+ */

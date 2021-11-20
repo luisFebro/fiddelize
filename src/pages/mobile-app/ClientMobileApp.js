@@ -177,17 +177,15 @@ function ClientMobileApp({ location, history }) {
         // otherwise the user will be not able to access...
         // Always check if the data is still available on indexedDB, if not show login comp for users.
         if (!disconnectCliMember && userId) {
-            isSessionOver
-                ? history.push("/senha-equipe")
-                : history.push("/t/app/equipe");
+            if (isSessionOver) history.push("/senha-equipe");
+            else history.push("/t/app/equipe");
         }
     }
 
     if (isBizTeam) {
         if (!disconnectAgent && userId) {
-            isSessionOver
-                ? history.push("t/app/nucleo-equipe/acesso")
-                : history.push("t/app/nucleo-equipe");
+            if (isSessionOver) history.push("t/app/nucleo-equipe/acesso");
+            else history.push("t/app/nucleo-equipe");
         }
     }
 
