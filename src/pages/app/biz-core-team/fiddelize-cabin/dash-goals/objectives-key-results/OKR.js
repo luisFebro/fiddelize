@@ -39,6 +39,7 @@ export default function OKR({ weeklyData = {} }) {
                 currKR={proCustomersCount && proCustomersCount.curr}
                 goalDesc="clientes pro"
                 updateGoal={updateGoal}
+                growthRate={weeklyData && weeklyData.growthRate}
             />
         </section>
     );

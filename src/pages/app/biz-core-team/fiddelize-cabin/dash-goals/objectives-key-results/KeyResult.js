@@ -2,20 +2,22 @@ import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PercLinearProgress from "components/progressIndicators/perc-linear-progress/PercLinearProgress";
 import getPercentage from "utils/numbers/getPercentage";
+import parse from "html-react-parser";
 
 export default function KeyResult({
     currKR = 0,
     goalKR = 0,
     krKeyword = "cliente",
+    customTitle,
 }) {
     const plural = currKR > 1 ? "s" : "";
 
     const perc = getPercentage(goalKR, currKR, { moreThan100: true });
 
     const finishedKR = perc >= 100;
-    const currKr = `${
-        Number.isNaN(currKR) ? "..." : currKR
-    } ${krKeyword}${plural}`;
+    const mainTitle = customTitle
+        ? parse(customTitle)
+        : `${Number.isNaN(currKR) ? "..." : currKR} ${krKeyword}${plural}`;
 
     return (
         <Fragment>
@@ -46,7 +48,8 @@ export default function KeyResult({
                     }}
                 >
                     <span className="text-subtitle font-weight-bold">
-                        {perc > 100 ? perc : "100"}% - {currKr}
+                        {customTitle || mainTitle} - {perc > 100 ? perc : "100"}
+                        %
                     </span>
                     <br />
                     Resultado atingido!
@@ -59,7 +62,7 @@ export default function KeyResult({
                         lineHeight: "25px",
                     }}
                 >
-                    {currKr}
+                    {mainTitle}
                     <br />
                     <span className="text-normal">{perc}% concluído</span>
                 </h4>

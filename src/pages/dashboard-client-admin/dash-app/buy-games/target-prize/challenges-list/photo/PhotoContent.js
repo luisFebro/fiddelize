@@ -71,7 +71,9 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
                     <p className="text-center text-normal text-white text-shadow">
                         Clique na caixa
                     </p>
-                    {backGiftBoxBlob(`var(--themeBackColor--${colorBack})`)}
+                    {showSvgBackGiftBoxBlob(
+                        `var(--themeBackColor--${colorBack})`
+                    )}
                 </div>
             );
         }
@@ -151,7 +153,7 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
     );
 }
 
-function backGiftBoxBlob(fill = "#FF0066") {
+function showSvgBackGiftBoxBlob(fill = "#FF0066") {
     return (
         <section
             style={{
