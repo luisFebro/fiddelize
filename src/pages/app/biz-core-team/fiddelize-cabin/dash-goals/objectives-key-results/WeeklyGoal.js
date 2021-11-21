@@ -19,7 +19,7 @@ export default function WeeklyGoal(payload) {
                 Semana Atual:
             </h2>
             <GrowthRate payload={payload.growthRate || {}} />
-            <ProCustomers payload={payload} />
+            <ProCustomers {...payload} />
         </Fragment>
     );
 }
@@ -43,27 +43,53 @@ function GrowthRate({ payload }) {
 
     const keyRusultTitle = `
         <span class="text-normal font-weight-bold">
-            Receita Atual: <span class="text-subtitle font-weight-bold"><br />R$ ${convertToReal(
+            Receita Bruta Atual: <span class="text-subtitle font-weight-bold"><br />R$ ${convertToReal(
                 currAmount
             )}</span>
         </span>
     `;
 
     const showPercGoal = () => (
-        <section>
-            <div className="text-normal text-center font-weight-bold text-purple animated fadeInUp">
-                Meta:
-                <br />
-                <span className="font-weight-bold font-site text-em-2-5">
+        <section
+            style={{
+                margin: "80px 0 15px",
+            }}
+            className="position-relative"
+        >
+            <div
+                className={`${
+                    goalPerc <= currPerc ? "animated bounce delay-3s" : ""
+                } position-relative text-normal text-center font-weight-bold text-white`}
+                style={{
+                    top: -25,
+                    zIndex: 10,
+                }}
+            >
+                <p
+                    className="m-0 position-relative"
+                    style={{
+                        bottom: -10,
+                    }}
+                >
+                    Meta:
+                </p>
+                <span className="font-weight-bold font-site text-em-2-9">
                     {goalPerc}{" "}
-                    <span className="font-weight-bold font-site text-em-0-8">
+                    <span className="font-weight-bold font-site text-em-0-7">
                         %
                     </span>
                 </span>
-                <p className="text-grey text-normal">
+                <p
+                    className="text-normal position-relative"
+                    style={{
+                        color: "#ddd4d4",
+                        bottom: 15,
+                    }}
+                >
                     Atual: <strong>{currPerc}%</strong>
                 </p>
             </div>
+            {showSvgBackBlob(goalPerc <= currPerc ? "green" : "var(--themeP)")}
         </section>
     );
 
@@ -75,6 +101,7 @@ function GrowthRate({ payload }) {
                 goalKR={goalAmount}
                 currKR={currAmount}
                 customTitle={keyRusultTitle}
+                needWinPerc={false}
             />
             <section className="font-site text-em-1-1 mt-2 d-flex justify-content-between">
                 <p className="m-0 text-purple font-weight-bold">
@@ -112,6 +139,8 @@ function ProCustomers({
     goalDesc = "clientes pro",
     updateGoal,
 }) {
+    // const  = payload;
+
     const [edit, setEdit] = useState(false);
     const [data, setData] = useState({
         newGoal: null,
@@ -220,19 +249,36 @@ function ProCustomers({
     );
 }
 
-// function showSvgBackBlob(fill) {
-//     return (
-//         <section
-//             style={{
-//                 position: "relative",
-//                 width: "100%",
-//                 height: "100%",
-//                 zIndex: -10,
-//             }}
-//         >
-//             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-//               <path fill={fill} d="M34.8,-45.4C46.5,-31.6,58.5,-22,64.4,-8.4C70.3,5.2,70,22.7,63.9,40.1C57.7,57.4,45.5,74.5,30.4,77.2C15.4,79.8,-2.6,68.1,-17.9,58.5C-33.2,48.9,-45.9,41.3,-55.8,29.6C-65.7,17.9,-72.7,1.9,-72.2,-14.8C-71.7,-31.4,-63.6,-48.8,-50.3,-62.3C-37,-75.8,-18.5,-85.5,-3.5,-81.3C11.5,-77.1,23,-59.1,34.8,-45.4Z" transform="translate(100 100)" />
-//             </svg>
-//         </section>
-//     );
-// }
+function showSvgBackBlob(fill) {
+    return (
+        <section className="blob-weekly-goal">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    fill={fill}
+                    d="M34.8,-45.4C46.5,-31.6,58.5,-22,64.4,-8.4C70.3,5.2,70,22.7,63.9,40.1C57.7,57.4,45.5,74.5,30.4,77.2C15.4,79.8,-2.6,68.1,-17.9,58.5C-33.2,48.9,-45.9,41.3,-55.8,29.6C-65.7,17.9,-72.7,1.9,-72.2,-14.8C-71.7,-31.4,-63.6,-48.8,-50.3,-62.3C-37,-75.8,-18.5,-85.5,-3.5,-81.3C11.5,-77.1,23,-59.1,34.8,-45.4Z"
+                    transform="translate(100 100)"
+                />
+            </svg>
+            <style jsx>
+                {`
+                    .blob-weekly-goal {
+                        position: absolute;
+                        top: -95px;
+                        left: 50%;
+                        width: 100%;
+                        height: 100%;
+                        transform: translateX(-50%);
+                        max-width: 310px;
+                        z-index: 2;
+                    }
+
+                    @media only screen and (min-width: 600px) {
+                        .blob-weekly-goal {
+                            max-width: 340px;
+                        }
+                    }
+                `}
+            </style>
+        </section>
+    );
+}

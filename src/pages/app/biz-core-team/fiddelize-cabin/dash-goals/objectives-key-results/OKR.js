@@ -25,6 +25,14 @@ export default function OKR({ weeklyData = {} }) {
             );
     };
 
+    const dataWeeklyGoal = {
+        goalKR: proCustomersCount && proCustomersCount.goal,
+        currKR: proCustomersCount && proCustomersCount.curr,
+        goalDesc: "clientes pro",
+        updateGoal,
+        growthRate: weeklyData && weeklyData.growthRate,
+    };
+
     return (
         <section className="mt-5 mx-2">
             <MonthlyGoal
@@ -34,13 +42,7 @@ export default function OKR({ weeklyData = {} }) {
                 updateGoal={updateGoal}
             />
             <hr className="lazer-purple" />
-            <WeeklyGoal
-                goalKR={proCustomersCount && proCustomersCount.goal}
-                currKR={proCustomersCount && proCustomersCount.curr}
-                goalDesc="clientes pro"
-                updateGoal={updateGoal}
-                growthRate={weeklyData && weeklyData.growthRate}
-            />
+            <WeeklyGoal {...dataWeeklyGoal} />
         </section>
     );
 }

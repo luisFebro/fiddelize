@@ -9,12 +9,14 @@ export default function KeyResult({
     goalKR = 0,
     krKeyword = "cliente",
     customTitle,
+    needWinPerc = true,
 }) {
     const plural = currKR > 1 ? "s" : "";
 
     const perc = getPercentage(goalKR, currKR, { moreThan100: true });
 
     const finishedKR = perc >= 100;
+
     const mainTitle = customTitle
         ? parse(customTitle)
         : `${Number.isNaN(currKR) ? "..." : currKR} ${krKeyword}${plural}`;
@@ -48,8 +50,8 @@ export default function KeyResult({
                     }}
                 >
                     <span className="text-subtitle font-weight-bold">
-                        {customTitle || mainTitle} - {perc > 100 ? perc : "100"}
-                        %
+                        {parse(customTitle) || mainTitle}{" "}
+                        {needWinPerc ? `(+${perc > 100 ? perc : "100"} %)` : ""}
                     </span>
                     <br />
                     Resultado atingido!
@@ -67,7 +69,10 @@ export default function KeyResult({
                     <span className="text-normal">{perc}% concluído</span>
                 </h4>
             )}
-            <PercLinearProgress perc={finishedKR ? 100 : perc} />
+            <PercLinearProgress
+                perc={finishedKR ? 100 : perc}
+                color={finishedKR ? "green" : "var(--themeP)"}
+            />
         </Fragment>
     );
 }
