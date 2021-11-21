@@ -15,7 +15,7 @@ export default function ComplementaryData({ mainData }) {
             <RetentionGraph mainData={mainData} />
             <AvgTicket mainData={mainData} />
             <ProPlanData mainData={mainData} />
-            <AppTotals />
+            <AppTotals appTotals={mainData && mainData.appTotals} />
         </Fragment>
     );
 }

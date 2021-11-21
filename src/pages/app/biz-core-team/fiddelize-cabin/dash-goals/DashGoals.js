@@ -28,17 +28,10 @@ export default function DashGoals() {
         },
     });
 
-    const { data } = useAPI({
-        url: getCabinMainData(),
-        params: {
-            period: "monthly",
-        },
-    });
-
     return (
         <Fragment>
             <DashSectionTitle title={SectionTitle} />
-            <OKR weeklyData={weeklyData || {}} monthlyData={data || {}} />
+            <OKR weeklyData={weeklyData || {}} />
         </Fragment>
     );
 }

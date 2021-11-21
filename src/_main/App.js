@@ -29,7 +29,6 @@ export default function App() {
 
     useEffect(() => {
         switchConsoleLogs();
-        // also check every app reload to avoid user open the app with an old auth still wrongly valid and open
         runSessionCheck();
         checkValidSession();
 

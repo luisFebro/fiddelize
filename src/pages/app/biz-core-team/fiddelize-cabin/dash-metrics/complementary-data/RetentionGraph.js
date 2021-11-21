@@ -9,6 +9,7 @@ const AsyncBarChart = LoadableVisible({
 });
 
 export default function RetentionGraph({ mainData = {} }) {
+    if (!mainData) return <div />;
     const { retentionData } = mainData;
     const loading = Boolean(!retentionData);
 

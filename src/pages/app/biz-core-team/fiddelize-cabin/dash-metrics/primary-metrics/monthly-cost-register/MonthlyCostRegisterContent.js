@@ -9,6 +9,8 @@ export default function MonthlyCostRegisterContent({
 }) {
     const [newCardSet, setNewCardSet] = useState([]);
 
+    const allTimeCostAvgAmount = mainData && mainData.allTimeCostAvgAmount;
+
     const showTitle = () => (
         <div className="my-4">
             <p className="text-subtitle text-purple text-center font-weight-bold">
@@ -31,7 +33,10 @@ export default function MonthlyCostRegisterContent({
                 handleNewCostCard={handleNewCostCard}
                 mainData={mainData}
             />
-            <MonthlyCostsList newCardSet={newCardSet} />
+            <MonthlyCostsList
+                newCardSet={newCardSet}
+                allTimeCostAvgAmount={allTimeCostAvgAmount}
+            />
         </section>
     );
 }

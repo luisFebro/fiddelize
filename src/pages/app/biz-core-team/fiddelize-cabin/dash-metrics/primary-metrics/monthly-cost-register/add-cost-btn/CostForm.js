@@ -36,7 +36,7 @@ export default function CostForm({
     });
     const { desc, value, alreadySalary, isCAC } = data;
 
-    const availableCash = mainData && mainData.allTimeNetProfitAmount;
+    const availableCash = mainData && mainData.allTimeCashAmount;
     const alreadyCurrMonthWithdrawal = mainData
         ? mainData.alreadyCurrMonthWithdrawal
         : null;

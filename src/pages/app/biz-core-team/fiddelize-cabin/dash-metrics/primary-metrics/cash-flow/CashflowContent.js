@@ -14,7 +14,7 @@ export default function CashflowContent({ mainData }) {
     );
 
     const lastMonthCash = mainData && mainData.lastMonthCashAmount;
-    const currMonthCash = mainData && mainData.allTimeNetProfitAmount;
+    const currMonthCash = (mainData && mainData.allTimeCashAmount) || 0;
     const CASH_BURN_MONTHS = 3;
     const diffCash = lastMonthCash - currMonthCash;
     const currMonthCashBurn = Number(
@@ -39,7 +39,7 @@ export default function CashflowContent({ mainData }) {
     };
     const isBreakeven = status.res === "excelente";
 
-    const gotData = Boolean(mainData && mainData.allTimeNetProfitAmount);
+    const gotData = Boolean(mainData && mainData.allTimeCashAmount);
     const currMonth = getCurrMonthBr();
     const lastMonth = getCurrMonthBr(addDays(new Date(), -30));
     const lastMonthRunaway = getCurrMonthBr(

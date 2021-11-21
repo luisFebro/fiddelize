@@ -1,20 +1,18 @@
-import useData, { useBizData } from "init";
+import useData from "init";
 import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import MonthlyGoal from "./MonthlyGoal";
 import WeeklyGoal from "./WeeklyGoal";
 
-export default function OKR({ weeklyData = {}, monthlyData = {} }) {
+export default function OKR({ weeklyData = {} }) {
     const proCustomersCount = weeklyData && weeklyData.proCustomersCount;
-    const newCustomersCount =
-        monthlyData &&
-        monthlyData.freeCustomersCount + monthlyData.proCustomersCount;
+    const newCustomersCount = weeklyData && weeklyData.newCustomersCount;
+
     const { userId } = useData();
-    const { kro } = useBizData();
 
     const updateGoal = (target = "pro", newValue) => {
         const dataUpdate = {
-            [`bizTeamData.kro.${target}`]: newValue,
+            [`bizTeamData.okr.${target}`]: newValue,
         };
         updateUser(userId, "nucleo-equipe", dataUpdate)
             .then(() => {
@@ -30,15 +28,15 @@ export default function OKR({ weeklyData = {}, monthlyData = {} }) {
     return (
         <section className="mt-5 mx-2">
             <MonthlyGoal
-                goalKR={kro && kro.newCustomers}
-                currKR={newCustomersCount}
+                goalKR={newCustomersCount && newCustomersCount.goal}
+                currKR={newCustomersCount && newCustomersCount.curr}
                 goalDesc="novos clientes"
                 updateGoal={updateGoal}
             />
             <hr className="lazer-purple" />
             <WeeklyGoal
-                goalKR={kro && kro.pro}
-                currKR={proCustomersCount}
+                goalKR={proCustomersCount && proCustomersCount.goal}
+                currKR={proCustomersCount && proCustomersCount.curr}
                 goalDesc="clientes pro"
                 updateGoal={updateGoal}
             />

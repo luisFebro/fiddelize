@@ -116,7 +116,6 @@ export const readAgentIncomeHistory = () =>
 
 // cabin fiddelize-cabin
 export const getCabinMainData = () => `${ROOT}/admin/fiddelize-cabin/main-data`;
-export const getAppTotals = () => `${ROOT}/admin/fiddelize-cabin/app-totals`;
 export const getXpReviewList = () => `${ROOT}/admin/fiddelize-cabin/xp-reviews`;
 
 // finance

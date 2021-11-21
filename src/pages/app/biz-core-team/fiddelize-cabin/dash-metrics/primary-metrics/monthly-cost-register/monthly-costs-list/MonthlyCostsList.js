@@ -1,8 +1,9 @@
 import { Fragment } from "react";
 import useAPIList, { readFiddelizeCosts } from "api/useAPIList";
 import MonthlyCostsCard from "./card/MonthlyCostsCard";
+import convertToReal from "utils/numbers/convertToReal";
 
-export default function MonthlyCostsList({ newCardSet }) {
+export default function MonthlyCostsList({ newCardSet, allTimeCostAvgAmount }) {
     const {
         list = [],
         ShowOverMsg,
@@ -32,6 +33,15 @@ export default function MonthlyCostsList({ newCardSet }) {
             <h2 className="my-3 text-subtitle text-purple">
                 {gotRegisters && (
                     <Fragment>
+                        <strong>
+                            Média Mensal
+                            <br />
+                            Custo Geral:
+                        </strong>
+                        <br />
+                        R$ {convertToReal(allTimeCostAvgAmount)}
+                        <br />
+                        <br />
                         <strong>Total:</strong> {listTotal} registro{plural}
                     </Fragment>
                 )}

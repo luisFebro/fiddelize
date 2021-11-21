@@ -3,25 +3,18 @@ import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
-import useAPI, { getAppTotals } from "api/useAPI";
 import convertToReal from "utils/numbers/convertToReal";
 
 const icons = { color: "var(--themeP)", fontSize: "50px" };
 
-export default function AppTotals() {
-    const { data } = useAPI({
-        url: getAppTotals(),
-    });
-
-    const mainData = data || {};
-
+export default function AppTotals({ appTotals = {} }) {
     const {
         cliUserScoresAmount,
         bizTeamAppsCount,
         cliAdminAppsCount,
         cliMemberAppsCount,
         cliUserAppsCount,
-    } = mainData;
+    } = appTotals;
 
     const totalInstalledApps = convertToReal(
         bizTeamAppsCount +

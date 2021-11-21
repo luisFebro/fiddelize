@@ -16,7 +16,7 @@ export default function PrimaryMetrics({ mainData }) {
     const revenueAmount = mainData && mainData.revenueAmount;
 
     const allTimeRevenueAmount = mainData && mainData.allTimeRevenueAmount;
-    const allTimeNetProfitAmount = mainData && mainData.allTimeNetProfitAmount;
+    const allTimeCashAmount = mainData && mainData.allTimeCashAmount;
 
     const { data, loading } = useAPI({
         url: readFiddelizeCosts(),
@@ -61,7 +61,9 @@ export default function PrimaryMetrics({ mainData }) {
             <div className="position-relative text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Custos</span>
                 <br />
-                {convertToReal(monthlyCosts, { moneySign: true })}
+                {monthlyCosts === "..."
+                    ? "..."
+                    : convertToReal(monthlyCosts, { moneySign: true })}
                 <MonthlyCostRegisterBtn
                     currMonth={currMonth}
                     handleNewCostValue={handleNewCostValue}
@@ -186,6 +188,13 @@ export default function PrimaryMetrics({ mainData }) {
 
     const displayMoreOptBtn = () => <CashflowBtn mainData={mainData} />;
 
+    const handleRevenueColor = () => {
+        if (revenueMode === "netProfit") {
+            return allTimeCashAmount <= 0 ? "text-red" : "text-sys-green";
+        }
+        return allTimeRevenueAmount <= 0 ? "text-red" : "text-sys-green";
+    };
+
     const showTotalRevenue = () => (
         <section className="my-3 text-purple text-center">
             <h2 className="m-0 text-normal font-weight-bold">
@@ -231,14 +240,12 @@ export default function PrimaryMetrics({ mainData }) {
             </h2>
             {gotData ? (
                 <p
-                    className={`m-0 ${
-                        allTimeRevenueAmount < 0 ? "text-red" : "text-sys-green"
-                    } text-subtitle font-weight-bold`}
+                    className={`m-0 ${handleRevenueColor()} text-subtitle font-weight-bold`}
                 >
                     R${" "}
                     {convertToReal(
                         revenueMode === "netProfit"
-                            ? allTimeNetProfitAmount - newCostValue
+                            ? allTimeCashAmount - newCostValue
                             : allTimeRevenueAmount
                     )}
                 </p>

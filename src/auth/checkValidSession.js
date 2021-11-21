@@ -1,14 +1,16 @@
 import getAPI, { checkValidSession as check } from "api";
-import getVar from "init/var";
 import disconnect from "auth/disconnect";
+import getItems from "init/lStorage";
+// import getVar from "init/var";
 
 export default async function checkValidSession() {
     window.addEventListener("focus", runSessionCheck);
 }
 
 export async function runSessionCheck() {
-    // console.log(window.location.href);
-    const isLoggedIn = await getVar("success", "user");
+    const [token] = getItems("currUser", ["token"]);
+    const isLoggedIn = Boolean(token);
+
     const websitePages = [
         "/baixe-app",
         "/privacidade",
@@ -18,6 +20,7 @@ export async function runSessionCheck() {
     const isWebsitePage = websitePages.some((pg) =>
         window.location.href.includes(pg)
     );
+
     const arePublicPages =
         window.location.href.pathname === "/" ||
         window.location.href.indexOf("acesso") >= 0 ||
