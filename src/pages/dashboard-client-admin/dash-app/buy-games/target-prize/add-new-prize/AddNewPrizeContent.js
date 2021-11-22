@@ -57,7 +57,9 @@ export default function AddNewPrizeContent({ updateLocalList, closeModal }) {
             updateOnlyLocalItem: prizeData,
         });
 
-        showToast("Prêmio adicionado com sucesso!", { type: "success" });
+        showToast("Novo tipo de desafio adicionado com sucesso!", {
+            type: "success",
+        });
         closeModal();
 
         return "ok";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CoreOptionsForm from "pages/dashboard-client-admin/dash-app/buy-games/discount-back/CoreOptionsForm";
+import CoreOptionsForm from "pages/dashboard-client-admin/dash-app/buy-games/discount-back/challenges-list/add-new-chall/CoreOptionsForm";
 
 export default function DiscountBackPanel({ history }) {
     const [data, setData] = useState({

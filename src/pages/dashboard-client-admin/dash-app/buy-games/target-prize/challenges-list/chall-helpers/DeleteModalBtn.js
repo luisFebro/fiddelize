@@ -15,6 +15,7 @@ export default function DeleteModalBtn({
     id,
     challengeNumber,
     updateLocalList,
+    subject = "prêmio",
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
@@ -29,11 +30,12 @@ export default function DeleteModalBtn({
         <section>
             <DeleteButton onClick={() => setFullOpen(true)} />
             <ModalYesNo
-                title="Exclusão de prêmio"
+                title={`Exclusão de ${subject}`}
                 contentComp={
                     <DeleteContent
                         errorMsg={errorMsg}
                         challengeNumber={challengeNumber}
+                        subject={subject}
                     />
                 }
                 fullOpen={fullOpen}
@@ -44,7 +46,7 @@ export default function DeleteModalBtn({
     );
 }
 
-const DeleteContent = ({ errorMsg, challengeNumber }) => {
+const DeleteContent = ({ subject, errorMsg, challengeNumber }) => {
     const txtStyle = "text-normal font-weight-bold text-left mx-3";
 
     return (
@@ -55,9 +57,9 @@ const DeleteContent = ({ errorMsg, challengeNumber }) => {
                 </p>
             ) : (
                 <p className={`${txtStyle} text-purple`}>
-                    Confirmado a exclusão do
+                    Confirmado a exclusão de
                     <br />
-                    prêmio n.º {challengeNumber} ?
+                    {subject} tipo {challengeNumber} ?
                 </p>
             )}
         </div>

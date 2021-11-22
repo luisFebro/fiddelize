@@ -124,6 +124,12 @@ function GrowthRate({ payload }) {
                     </span>
                 </p>
             </section>
+            {!goalAmount && (
+                <div className="my-5 font-site text-em-1-1 text-grey mx-3">
+                    Como semana passada não teve nenhum resultado, a receita
+                    alvo da próxima será calculada baseado na semana atual.
+                </div>
+            )}
             <div
                 style={{
                     marginBottom: 50,

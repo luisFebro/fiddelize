@@ -26,7 +26,6 @@ export default function TargetPrizeOptions({
     const GAME = "targetPrize";
     const { on, challList, updatedOnce } = optionData;
     // use it to make sure got all important data before activate with the switch
-    // const allDataReady = true;
 
     const { userId } = useData();
 
@@ -103,7 +102,7 @@ export default function TargetPrizeOptions({
                             { type: "error" }
                         )
                     }
-                    disableToRight={!updatedOnce} // !allDataReady ||
+                    disableToRight={!updatedOnce}
                     disableToRightCallback={() =>
                         showToast(
                             "Favor, preencha e salve todos os dados abaixo para ativar o jogo",

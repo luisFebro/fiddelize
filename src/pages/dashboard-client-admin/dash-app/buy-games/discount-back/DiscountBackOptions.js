@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
+import Title from "components/Title";
 import BackButton from "components/buttons/BackButton";
 import { gameIconsStore } from "components/biz/GamesBadge";
 import { updateUser } from "api/frequent";
@@ -6,7 +7,8 @@ import showToast from "components/toasts";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn.js";
 import getId from "utils/getId";
 import useData from "init";
-import CoreOptionsForm from "./CoreOptionsForm";
+import ChallengesList from "./challenges-list/ChallengesList";
+import ShowQA from "../target-prize/challenges-list/ShowQA";
 
 export default function DiscountBackOptions({
     setComp,
@@ -18,34 +20,24 @@ export default function DiscountBackOptions({
     const [optionData, setOptionData] = useState({
         updatedOnce: false, // make sure user saved data before activating game
         on: null,
-        perc: null,
-        targetPoints: null,
-        targetMoney: 0,
+        challList: [],
     });
     const GAME = "discountBack";
 
-    const { updatedOnce, on, targetPoints, targetMoney, perc } = optionData;
-    const allDataReady = Boolean(targetMoney && targetMoney && perc);
+    const { on, updatedOnce, challList } = optionData;
+    // use it to make sure got all important data before activate with the switch
 
     const { userId } = useData();
 
     useEffect(() => {
         if (!gameData) return;
 
-        const {
-            on: thisOn,
-            targetMoney: voucherVal,
-            targetPoints: pts,
-            perc: buyPerc,
-        } = gameData;
+        const { on: thisOn, challList: list } = gameData;
 
         setOptionData((prev) => ({
             ...prev,
             on: thisOn,
-            targetMoney: !voucherVal ? 0 : voucherVal,
-            targetPoints: pts,
-            perc: buyPerc,
-            updatedOnce: false,
+            challList: list,
         }));
     }, [gameData]);
 
@@ -82,7 +74,7 @@ export default function DiscountBackOptions({
         </section>
     );
 
-    const showPowerSwitch = () => {
+    const showControlOptions = () => {
         const handleActivation = async (res) => {
             const isTruthy = res && res.includes("true");
 
@@ -120,7 +112,7 @@ export default function DiscountBackOptions({
                             { type: "error" }
                         )
                     }
-                    disableToRight={!allDataReady || !updatedOnce}
+                    disableToRight={!updatedOnce}
                     disableToRightCallback={() =>
                         showToast(
                             "Favor, preencha e salve todos os campos abaixo para ativar o jogo",
@@ -133,35 +125,28 @@ export default function DiscountBackOptions({
         );
     };
 
-    const showGeneratedAd = () => (
-        <section className="animated fadeInUp my-5 font-site text-em-0-8">
-            <h2 className="text-center text-subtitle font-weight-bold">
-                Resultado
-            </h2>
-            <h2 className="text-normal font-weight-bold">
-                Exemplos práticos de divulgação para clientes:
-            </h2>
-            <p className="mt-2 text-grey font-italic font-weight-bold">
-                &quot;A cada{" "}
-                <span className="text-pill">R$ {targetPoints}</span> em compras,
-                nossa clientela ganha <span className="text-pill">{perc}%</span>{" "}
-                de desconto!&quot;
-            </p>
-            <p className="text-grey font-italic font-weight-bold">ou</p>
-            <p className="text-grey font-italic font-weight-bold">
-                &quot;A cada{" "}
-                <span className="text-pill">{targetPoints} PTS</span> em
-                compras, você ganha um vale desconto no valor de{" "}
-                <span className="text-pill">R${targetMoney}</span>&quot;
-            </p>
-            <p className="text-grey font-italic font-weight-bold">ou</p>
-            <p className="text-grey font-italic font-weight-bold">
-                &quot;A cada compra, você ganha PTS - a moeda digital de pontos
-                de compra para troca de benefícios - e acumula até{" "}
-                <span className="text-pill">{perc}%</span> de desconto no nosso
-                clube de compras&quot;
-            </p>
-        </section>
+    const showChallengesList = () => (
+        <Fragment>
+            <div className="container-center">
+                <section className="position-relative">
+                    <Title
+                        title="LISTA DE DESAFIOS"
+                        subTitle="No jogo desconto retornado, você pode adicionar diferentes vales descontos e metas para seus clientes"
+                        color={on ? "var(--themeP)" : "grey"}
+                        margin=" "
+                        padding=" "
+                        fontSize="text-normal"
+                        className="font-weight-bold"
+                        subTitleClassName=" "
+                    />
+                </section>
+            </div>
+            <ChallengesList
+                loading={loading}
+                challList={challList}
+                setOptionData={setOptionData}
+            />
+        </Fragment>
     );
 
     return (
@@ -172,15 +157,10 @@ export default function DiscountBackOptions({
         >
             {showBackBtn()}
             {showGameTitle()}
-            {showPowerSwitch()}
-            <CoreOptionsForm
-                targetPoints={targetPoints}
-                perc={perc}
-                targetMoney={targetMoney}
-                setData={setOptionData}
-                userId={userId}
-            />
-            {allDataReady && showGeneratedAd()}
+            {showControlOptions()}
+            <hr className="lazer-purple" />
+            {showChallengesList()}
+            <ShowQA />
         </section>
     );
 }

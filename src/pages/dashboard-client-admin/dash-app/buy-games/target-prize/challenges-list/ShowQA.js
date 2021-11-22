@@ -38,19 +38,22 @@ export default function ShowQA() {
         },
         {
             title:
-                "Só preciso oferecer um prêmio ou um valor de desconto. Como faço?",
+                "Só preciso oferecer apenas um prêmio ou um valor de desconto. Como faço?",
             text: (
                 <Fragment>
                     <p>
                         Basta deixar{" "}
                         <strong>apenas um tipo de desafio ativo</strong> na
-                        lista que é o padrão. Ele será repetido a cada edição.
+                        lista de desafios. O primeiro é sempre o padrão e o
+                        primeiro a ser jogado pelos clientes. Ele será repetido
+                        a cada nova edição.
                     </p>
                     <p>
                         Todo o fluxo acontece assim: seu cliente acumula moedas
                         PTS, alcança sua meta, finaliza o desafio, resgata o
-                        prêmio, seu clube desconta as moedas no mesmo valor da
-                        meta e, logo em seguida, um mesmo desafio é reiniciado.
+                        benefício, seu clube desconta as moedas no mesmo valor
+                        da meta e, logo em seguida, o próximo desafio da lista é
+                        iniciado de forma personaliza para cada cliente.
                     </p>
                 </Fragment>
             ),
@@ -62,13 +65,30 @@ export default function ShowQA() {
                 <Fragment>
                     <p>
                         Sim. No app dos clientes eles tem um botão principal
-                        "ver jogos disponíveis" onde podem alternar entre os
-                        jogos ativos.
+                        <strong>abrir jogos disponíveis</strong> onde podem
+                        alternar entre os jogos ativos. A Fiddelize notifica
+                        seus clientes assim que ganharem algum dos benecífios
+                        ativos.
                     </p>
+                    <img
+                        className="my-4 img-center shadow-babadoo"
+                        width={300}
+                        src="/img/demos/qa-chall-list/img-1.png"
+                        alt="jogos disponíveis"
+                    />
                     <p>
-                        Se desativar um jogo, todos os apps dos seus clientes é
-                        atualizado para o jogo disponível mais próximo.
+                        Ao desativar um jogo de compra, é desativado também para
+                        todos os clientes.
+                        <br />
+                        No app dos seus clientes, é atualizado para o jogo
+                        disponível mais próximo.
                     </p>
+                    <img
+                        className="my-4 img-center shadow-babadoo"
+                        width={300}
+                        src="/img/demos/qa-chall-list/img-2.png"
+                        alt="jogo desativado para clientes"
+                    />
                     <p>
                         Você precisa ter, pelo menos, um jogo de compras ativo.
                         Seja oferecendo desconto ou um prêmio como benefício,
@@ -87,12 +107,15 @@ export default function ShowQA() {
                         controle total das metas.
                     </p>
                     <p>
-                        Você pode aumentar a dificuldade de cada desafio ao
+                        Você pode aumentar a dificuldade a cada novo desafio ao
                         escolher um meta baseada no princípio do progresso onde
                         cada edição as metas aumentam um pouco ou colocar metas
                         aleatórias mais fáceis no meio para dar um senso de
-                        surpresa. Você pode alternar como preferir ou escolhar
-                        uma estratégia.
+                        imprevisibilidade aos clientes.
+                    </p>
+                    <p>
+                        Você pode alternar como preferir e escolher sua
+                        estratégia.
                     </p>
                 </Fragment>
             ),
@@ -103,22 +126,24 @@ export default function ShowQA() {
             text: (
                 <Fragment>
                     <p>
-                        Sim. A Fiddelize registra o último jogo da lista e assim
-                        que o cliente conclui o desafio atual, o próximo será
-                        seu novo desafio.
+                        Sim. A Fiddelize registra o último tipo de desafio que
+                        cada cliente já conquistou e assim que o cliente
+                        concluir o desafio atual e já concluiu todos os tipos de
+                        desafio da sua lista, o próximo será seu novo desafio
+                        adicionado.
                     </p>
                     <p>Exemplo Prático:</p>
                     <ul>
                         <li>Você tem 3 desafios na lista;</li>
                         <li>
                             Um de seus clientes está atualmente no desafio de n°
-                            5, portanto, já zerou sua lista;
+                            5 do jogo atual, portanto, já "zerou" sua lista;
                         </li>
-                        <li>Você decide adicionar um novo desafio;</li>
+                        <li>Você decide adicionar um novo desafio depois;</li>
                         <li>
-                            Após o cliente concluir o desafio de n° 5, o próximo
-                            desafio de n° 6 deste cliente será o seu novo
-                            desafio adicionado;
+                            Após o cliente concluir o desafio de n° 5 (atual), o
+                            próximo desafio de n° 6 deste cliente será o seu
+                            novo desafio adicionado;
                         </li>
                     </ul>
                     <p>
@@ -140,18 +165,26 @@ export default function ShowQA() {
                     </p>
                     <p>
                         Você pode remover qualquer desafio, a qualquer momento.
-                        Principalmente quando seu prêmio não estiver disponível
-                        ou precisar atualizar alguma informação do benefício ou
-                        meta.
+                        Principalmente quando seu benefício não estiver mais
+                        disponível ou mesmo atualizar alguma informação do
+                        benefício ou meta.
                     </p>
                     <p>
                         A Fiddelize cuida de ajustar para o desafio mais próximo
-                        da lista automaticamente para cada cliente baseado nas
+                        da lista automaticamente para cada cliente baseado na
                         sua nova lista.
                     </p>
                     <p>
-                        Todos seus clientes ficam cientes destas eventuais
-                        mudanças de acordo com as regras do clube de compra.
+                        E, claro, a Fiddelize deixa ciente que o atual desafio
+                        foi mudado para um anterior assim que é detectado alguma
+                        exclusão na sua lista de desafios. Todos seus clientes
+                        são notificados da próxima vez que entrarem no app.
+                    </p>
+                    <p>
+                        Assim você fica tranquilo quando à exclusão de desafios.
+                        Além do mais, todos seus clientes estão cientes de
+                        eventuais mudanças nos jogos de compra de acordo com as{" "}
+                        <strong>regras do clube de compra</strong>.
                     </p>
                 </Fragment>
             ),

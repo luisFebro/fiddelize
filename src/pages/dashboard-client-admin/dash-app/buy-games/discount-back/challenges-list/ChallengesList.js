@@ -3,17 +3,12 @@ import { useBizData } from "init";
 import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import ChallComp from "./ChallComp";
-import AddNewPrizeBtn from "../add-new-prize/AddNewPrizeBtn";
+import AddNewChallBtn from "./add-new-chall/AddNewChallBtn";
 
 export default function ChallengesList({ challList, loading, setOptionData }) {
     const { bizId } = useBizData();
 
-    const [challengesArray, setChallengesArray] = useState([]); // challList
-    // const isConstantMode = challengesArray.length < 2;
-
-    const gotSomePic = !challengesArray.length
-        ? false
-        : challengesArray.some((chall) => chall.prizeDesc);
+    const [challengesArray, setChallengesArray] = useState([]);
 
     useEffect(() => {
         // !challengesArray.length is not presented here, then every time we update the list will overrided by the primary challList
@@ -48,7 +43,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         }
 
         const dataToSend = {
-            "clientAdminData.games.targetPrize.challList":
+            "clientAdminData.games.discountBack.challList":
                 updatedData || newModifiedArray,
         };
 
@@ -62,7 +57,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
     const showNewPrizeBtn = () => (
         <div className="container-center my-5">
             <section className="position-relative">
-                <AddNewPrizeBtn updateLocalList={updateLocalList} />
+                <AddNewChallBtn updateLocalList={updateLocalList} />
             </section>
         </div>
     );
@@ -76,7 +71,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
             )}
             {!loading && !challengesArray.length && (
                 <p className="text-center text-grey text-normal font-weight-bold my-5">
-                    Sem nenhum prêmio adicionado.
+                    Sem nenhum desafio adicionado.
                 </p>
             )}
             <p className={txtStyle}>
@@ -94,12 +89,10 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}
                         showToast={showToast}
-                        gotSomePic={gotSomePic}
                         id={chall.id}
-                        icon={chall.milestoneIcon}
+                        perc={chall.perc}
                         targetPoints={chall.targetPoints}
-                        prizeDesc={chall.prizeDesc}
-                        prizeImg={chall.prizeImg}
+                        targetMoney={chall.targetMoney}
                         updateLocalList={updateLocalList}
                     />
                 </div>

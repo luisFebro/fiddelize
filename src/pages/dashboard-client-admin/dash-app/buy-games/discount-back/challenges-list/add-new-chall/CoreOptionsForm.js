@@ -16,6 +16,7 @@ export default function CoreOptionsForm({
     isPlatform = false,
     userId, // only cli-admin dashboard
     history, // only for platform to continue new club creation
+    callback,
 }) {
     const GAME = "discountBack";
 
@@ -29,15 +30,17 @@ export default function CoreOptionsForm({
                 }),
             }));
         } else setData((prev) => ({ ...prev, targetMoney: 0 }));
+
+        // eslint-disable-next-line
     }, [targetPoints, perc]);
 
-    const handleUpdate = async () => {
+    const handleUpdateFromSite = async () => {
         if (!targetPoints)
-            return showToast("Insira o valor da META RESGATE", {
+            return showToast("Insira o valor da META EM PONTOS", {
                 type: "error",
             });
         if (!perc)
-            return showToast("Insira PERCENTUAL de cada compra", {
+            return showToast("Insira PERCENTUAL do desconto", {
                 type: "error",
             });
         if (!targetMoney)
@@ -45,46 +48,30 @@ export default function CoreOptionsForm({
                 type: "error",
             });
 
-        // TODO: NEED TO BE CHANGED TO CHALLLIST
-        const dataToSend = {
-            [`clientAdminData.games.${GAME}.targetMoney`]: targetMoney,
-            [`clientAdminData.games.${GAME}.perc`]: perc,
-            [`clientAdminData.games.${GAME}.targetPoints`]: targetPoints,
-        };
-
-        if (isPlatform) {
-            const data = {
-                game: "discountBack",
-                doneGamesPanel: true,
-                clientAdminData: {
-                    games: {
-                        discountBack: {
-                            on: true,
-                            challList: [
-                                {
-                                    id: getId(),
-                                    targetPoints,
-                                    targetMoney,
-                                    perc,
-                                },
-                            ],
-                        },
+        const data = {
+            game: "discountBack",
+            doneGamesPanel: true,
+            clientAdminData: {
+                games: {
+                    discountBack: {
+                        on: true,
+                        challList: [
+                            {
+                                id: getId(),
+                                targetPoints,
+                                targetMoney,
+                                perc,
+                            },
+                        ],
                     },
                 },
-            };
-            const { setVars } = await import("init/var");
-            await setVars(data, "pre_register");
-            history.push("/novo-clube/info-negocio");
-            return null;
-        }
+            },
+        };
 
-        const { updateUser } = await import(
-            "api/frequent" /* webpackChunkName: "dynamic-import-update-user" */
-        );
-        await updateUser(userId, "cliente-admin", dataToSend);
-
-        setData((prev) => ({ ...prev, updatedOnce: true }));
-        return showToast("Alterações salvas", { type: "success" });
+        const { setVars } = await import("init/var");
+        await setVars(data, "pre_register");
+        history.push("/novo-clube/info-negocio");
+        return null;
     };
 
     return (
@@ -95,18 +82,19 @@ export default function CoreOptionsForm({
                 </h2>
             )}
             <p className="mb-1 d-inline-block line-height-25 text-left font-weight-bold">
-                Meta de Resgate:
+                Meta em pontos:
             </p>
             <span className="ml-3 d-inline-block">
                 <InstructionBtn
                     text={`
-                        META DE RESGATE é o "TAL VALOR" na famosa frase de marketing: "a cada TAL VALOR em compras, ganhe X% de desconto".
+                        <p class="m-0 text-center">META EM PONTOS</p>
+                        É a meta do desafio que o cliente precisa alcançar para poder resgatar o valor do vale desconto.
                         <br />
                         <br />
-                        Ou seja, é a meta mínima que o cliente precisa alcançar para receber um desconto.
+                        Por exemplo, na frase: acumule 100 PTS, ganhe 10% de desconto. 100 PTS é a sua meta em pontos.
                         <br />
                         <br />
-                        Você pode dizer tanto PTS/pontos ou reais; como preferir: 1 PTS vale o mesmo que R$ 1!
+                        1 PTS tem o mesmo valor que R$ 1 em compras. E o valor real que o cliente recebe é o valor do vale desconto.
                     `}
                     mode="tooltip"
                     animated={false}
@@ -131,18 +119,19 @@ export default function CoreOptionsForm({
             <p className="mb-1 d-inline-block mt-4 line-height-25 text-left font-weight-bold">
                 Percentual
                 <br />
-                acumulativo:
+                desconto:
             </p>
             <span className="ml-3 d-inline-block">
                 <InstructionBtn
                     text={`
-                        PERCENTUAL ACUMULATIVO é o "TAL DESCONTO" na famosa frase de marketing: "a cada R$ X em compras, ganhe TAL DESCONTO"
+                        <p class="m-0 text-center">PERCENTUAL DE DESCONTO</p>
+                        É a porcentagem sobre a meta em pontos que define o valor final do vale desconto quando o cliente finaliza a meta do desafio.
                         <br />
                         <br />
-                        Seus clientes acumulam a cada compra este valor percentual até atingirem a meta de resgate onde trocam por um vale desconto.
+                        Por exemplo, na frase: acumule 100 PTS, ganhe 10% de desconto. Este 10% é o seu percentual de desconto.
                         <br />
                         <br />
-                        Valores percentuais frequentes estão entre 5% até 20%, ou você escolhe outro valor de acordo com sua estratégia comercial.
+                        O valor do vale desconto é calculado automaticamente. Neste exemplo, 10% de 100 PTS o cliente ganha um vale desconto de R$ 10 a cada 100 PTS acumulado em compras. Lembre-se que R$ 100 vale o mesmo que 100 PTS.
                     `}
                     mode="tooltip"
                     animated={false}
@@ -170,13 +159,14 @@ export default function CoreOptionsForm({
             <span className="ml-3 d-inline-block">
                 <InstructionBtn
                     text={`
-                        O VALE DESCONTO é o valor em reais final que o cliente recebe ao alcançar a meta de resgate em PTS.
+                        <p class="m-0 text-center">VALE DESCONTO</p>
+                        É o valor em reais final que o cliente recebe ao alcançar a meta em pontos.
                         <br />
                         <br />
-                        Seu valor é gerado automaticamente e é o resultado percentual da meta de resgate acima.
+                        Seu valor é gerado automaticamente e é o resultado percentual da meta em pontos definido acima.
                         <br />
                         <br />
-                        Seu cliente recebe sempre o mesmo valor de vale desconto. Se as compras acumuladas excederem a meta de resgate, o restante fica para a próxima meta de resgate.
+                        Se as compras acumuladas excederem a meta em pontos, o restante fica para o desafio seguinte.
                     `}
                     mode="tooltip"
                     animated={false}
@@ -188,11 +178,11 @@ export default function CoreOptionsForm({
             <div className="container-center mb-4 mt-5">
                 <ButtonFab
                     position="relative"
-                    onClick={handleUpdate}
-                    title={isPlatform ? "continuar" : "salvar alterações"}
+                    onClick={isPlatform ? handleUpdateFromSite : callback}
+                    title={isPlatform ? "continuar" : "adicionar"}
                     iconFontAwesome={
                         <FontAwesomeIcon
-                            icon={isPlatform ? "arrow-right" : "save"}
+                            icon={isPlatform ? "arrow-right" : "plus"}
                         />
                     }
                     variant="extended"

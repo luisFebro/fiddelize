@@ -1,25 +1,14 @@
 import { useState, Fragment, useEffect } from "react";
 import Card from "@material-ui/core/Card";
-import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import EditButton from "components/buttons/EditButton";
 import handleChange from "utils/form/use-state/handleChange";
 import findAndReplaceObjInArray from "utils/arrays/findAndReplaceObjInArray";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import EditLevelIconModalBtn from "./chall-helpers/EditLevelIconModalBtn";
-import DeleteModalBtn from "./chall-helpers/DeleteModalBtn";
-import PhotoBtn from "./photo/PhotoBtn";
-
-const truncate = (text, leng) => window.Helper.truncate(text, leng);
-
-ChallComp.propTypes = {
-    id: PropTypes.string,
-    icon: PropTypes.string,
-    targetPoints: PropTypes.number,
-    prizeDesc: PropTypes.string,
-    currChallNumber: PropTypes.number,
-};
+import convertToReal, { convertToDollar } from "utils/numbers/convertToReal";
+import getPercentage from "utils/numbers/getPercentage";
+import DeleteModalBtn from "../../target-prize/challenges-list/chall-helpers/DeleteModalBtn";
 
 const getStyles = () => ({
     card: {
@@ -27,11 +16,6 @@ const getStyles = () => ({
         borderRadius: "15px",
         padding: "15px",
         overflow: "visible",
-    },
-    levelIcon: {
-        fontSize: 40,
-        color: "#ff0",
-        filter: "drop-shadow(0 0 40px #ffc)",
     },
     iconBanner: {
         width: 80,
@@ -49,46 +33,49 @@ const getStyles = () => ({
 
 export default function ChallComp({
     id,
-    icon,
+    perc,
     targetPoints,
-    prizeDesc,
-    prizeImg,
+    targetMoney,
     challengesArray,
     setChallengesArray,
     showToast,
     currChallNumber,
     updateLocalList,
-    gotSomePic,
 }) {
     const [data, setData] = useState({
         currChallNumber,
         id,
-        icon,
+        perc,
         targetPoints,
-        prizeDesc,
+        targetMoney,
     });
 
-    const [edit, setEdit] = useState(false);
-    const [saveChangeBtn, setSaveChangeBtn] = useState(false);
-    const [selectedIcon, setSelectedIcon] = useState("");
     useEffect(() => {
-        if (selectedIcon) {
-            setData({ ...data, icon: selectedIcon });
-            setSaveChangeBtn(true);
-        }
-    }, [selectedIcon]);
+        const gotAllData = data.targetPoints && data.perc;
+        if (gotAllData) {
+            setData((prev) => ({
+                ...prev,
+                targetMoney: getPercentage(data.targetPoints, data.perc, {
+                    mode: "value",
+                }),
+            }));
+        } else setData((prev) => ({ ...prev, targetMoney: 0 }));
+    }, [data.targetPoints, data.perc]);
 
-    const txtStyle = "text-shadow font-site text-em-0-9 text-white m-0";
+    const [saveChangeBtn, setSaveChangeBtn] = useState(false);
+    const [edit, setEdit] = useState(false);
+
+    const txtStyle =
+        "text-shadow font-site text-em-0-9 text-white text-center m-0";
     const styles = getStyles();
 
     const handleDataChange = () => {
         const updatedArray = [
             {
                 id: data.id,
-                milestoneIcon: data.icon,
+                perc: data.perc,
                 targetPoints: Number(data.targetPoints),
-                prizeDesc: data.prizeDesc && data.prizeDesc.toLowerCase(),
-                prizeImg,
+                targetMoney: convertToDollar(data.targetMoney),
             },
         ];
         const newArray = findAndReplaceObjInArray(
@@ -103,25 +90,48 @@ export default function ChallComp({
         setTimeout(() => setEdit(false), 2000);
     };
 
-    const showIcon = () => (
+    const showPerc = () => (
         <div
             className="container-center flex-row flex-md-column justify-content-start"
             style={{ flexBasis: "20%" }}
         >
-            <p className={txtStyle}>Ícone Desafio:</p>
-            <FontAwesomeIcon
-                className="ml-md-0 ml-3"
-                icon={data.icon}
-                style={styles.levelIcon}
-            />
-            {edit && (
+            <p className={txtStyle}>Percentual:</p>
+            {!edit ? (
+                <p className="text-subtitle font-weight-bold text-center m-0 ml-md-0 ml-3">
+                    {data.perc} %
+                </p>
+            ) : (
                 <Fragment>
                     <div className="ml-3 ml-md-0 container-center animated zoomIn">
-                        <EditLevelIconModalBtn
-                            currChallNumber={data.currChallNumber}
-                            currIcon={data.icon}
-                            setSelectedIcon={setSelectedIcon}
-                        />
+                        <div className="position-relative">
+                            <TextField
+                                InputProps={{
+                                    style: {
+                                        ...styles.fieldForm,
+                                        width: "100px",
+                                    },
+                                }}
+                                margin="dense"
+                                type="tel"
+                                onChange={(e) => {
+                                    handleChange(setData, data)(e);
+                                    setSaveChangeBtn(true);
+                                }}
+                                name="perc"
+                                value={data.perc}
+                                autoComplete="off"
+                                fullWidth
+                            />
+                            <span
+                                className="position-absolute font-weight-bold text-subtitle"
+                                style={{
+                                    top: 15,
+                                    right: -30,
+                                }}
+                            >
+                                %
+                            </span>
+                        </div>
                     </div>
                 </Fragment>
             )}
@@ -160,37 +170,15 @@ export default function ChallComp({
         </div>
     );
 
-    const showPrizeDesc = () => (
+    const showDiscountCoupon = () => (
         <div
             className="container-center flex-column align-self-center"
             style={{ flexBasis: "60%" }}
         >
-            <p className={txtStyle}>Descrição Prêmio:</p>
-            {!edit ? (
-                <p className="text-left text-normal m-0">
-                    {truncate(data.prizeDesc || " ", 29)}
-                </p>
-            ) : (
-                <div className="animated zoomIn">
-                    <TextField
-                        InputProps={{
-                            style: styles.fieldForm,
-                        }}
-                        margin="dense"
-                        type="text"
-                        onChange={(e) => {
-                            handleChange(setData, data)(e);
-                            setSaveChangeBtn(true);
-                        }}
-                        name="prizeDesc"
-                        value={data.prizeDesc}
-                        autoComplete="off"
-                        multiline
-                        rows="2"
-                        fullWidth
-                    />
-                </div>
-            )}
+            <p className={txtStyle}>Valor Vale Desconto:</p>
+            <p className="text-left text-subtitle font-weight-bold m-0">
+                R$ {convertToReal(data.targetMoney)}
+            </p>
         </div>
     );
 
@@ -204,17 +192,17 @@ export default function ChallComp({
                     <ButtonFab
                         position="relative"
                         onClick={() => {
-                            if (!Number(data.targetPoints)) {
-                                return showToast(
-                                    "Em ponto-prêmio, insira apenas números.",
-                                    { type: "error" }
-                                );
-                            }
-
-                            if (!data.prizeDesc)
-                                return showToast("Insira alguma descrição", {
+                            if (!data.targetPoints) {
+                                return showToast("Insira a meta em pontos", {
                                     type: "error",
                                 });
+                            }
+
+                            if (!data.perc) {
+                                return showToast("Insira o valor percentual", {
+                                    type: "error",
+                                });
+                            }
 
                             handleDataChange();
                             setEdit(false);
@@ -238,27 +226,17 @@ export default function ChallComp({
                 <Fragment>
                     {currChallNumber !== 1 && (
                         <DeleteModalBtn
+                            subject="desconto"
                             id={data.id}
                             challengeNumber={currChallNumber}
                             updateLocalList={updateLocalList}
                         />
                     )}
-                    <EditButton onClick={() => setEdit(!edit)} />
+                    <EditButton zIndex={1} onClick={() => setEdit(!edit)} />
                 </Fragment>
             )}
         </section>
     );
-
-    const showPhotoBtn = () => {
-        const uploadData = {
-            challId: id,
-            savedPrizeImg: prizeImg,
-            targetPoints: data.targetPoints,
-            gotSomePic,
-        };
-
-        return <PhotoBtn modalData={uploadData} />;
-    };
 
     return (
         <Card style={styles.card}>
@@ -267,26 +245,15 @@ export default function ChallComp({
                     className="position-absolute"
                     style={{
                         top: -45,
-                        right: currChallNumber === 1 ? 20 : 50,
+                        right: -45,
                     }}
                 >
                     {showEditBtn()}
                 </div>
-                <div className="position-absolute target-prize-photo-btn">
-                    {showPhotoBtn()}
-                    <style jsx global>
-                        {`
-                            .target-prize-photo-btn {
-                                top: ${prizeImg ? "-85px;" : "-45px;"}
-                                right: -30px;
-                            }
-                        `}
-                    </style>
-                </div>
                 <section className="d-flex flex-column align-items-start flex-md-row text-white">
-                    {showIcon()}
                     {showtargetPoints()}
-                    {showPrizeDesc()}
+                    {showPerc()}
+                    {showDiscountCoupon()}
                 </section>
             </section>
         </Card>

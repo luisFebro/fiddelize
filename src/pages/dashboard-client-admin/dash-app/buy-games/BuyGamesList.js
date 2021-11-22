@@ -53,8 +53,8 @@ export default function BuyGamesList({ setComp }) {
                     className="text-grey text-normal text-sm-left text-center"
                     style={{ fontWeight: "normal" }}
                 >
-                    você ativa um ou mais jogos e pode oferecer diferentes
-                    benefícios aos clientes
+                    você pode ativar um ou mais jogos e oferecer diferentes
+                    benefícios aos seus clientes
                 </p>
             </h2>
             <section className="container">
