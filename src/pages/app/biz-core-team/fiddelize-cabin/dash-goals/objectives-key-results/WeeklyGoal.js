@@ -104,26 +104,26 @@ function GrowthRate({ payload }) {
                 needWinPerc={false}
             />
             <section className="font-site text-em-1-1 mt-2 d-flex justify-content-between">
-                <p className="m-0 text-purple font-weight-bold">
-                    Progresso:
+                <p className="m-0 text-grey font-weight-bold">
+                    Última Semana:
                     <br />
-                    <span className="font-site text-em-1-2 font-weight-bold">
-                        R$ {convertToReal(currAmount)}
+                    <span
+                        className="font-site text-em-1-2 text-shadow text-pill font-weight-bold"
+                        style={{
+                            backgroundColor: "grey",
+                        }}
+                    >
+                        R$ {convertToReal(startAmount)}
                     </span>
                 </p>
                 <p className="text-purple font-weight-bold">
                     Receita Alvo:
                     <br />
-                    <span className="font-site text-em-1-2 text-pill font-weight-bold">
+                    <span className="font-site text-em-1-2 text-shadow text-pill font-weight-bold">
                         R$ {convertToReal(goalAmount)}
                     </span>
                 </p>
             </section>
-            <div className="text-grey text-normal">
-                Semana Passada:
-                <br />
-                <strong>R$ {convertToReal(startAmount)}</strong>
-            </div>
             <div
                 style={{
                     marginBottom: 50,
