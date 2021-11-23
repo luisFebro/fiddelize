@@ -21,6 +21,44 @@ export default function ShowQA() {
             ),
         },
         {
+            title: "Qual é a ordem que os clientes fazem os desafios?",
+            text: (
+                <Fragment>
+                    <p>
+                        É em <strong>ordem decrescente</strong>, feito de acordo
+                        com ordem dos tipo (tipo 1, tipo 2, etc). Quando seu
+                        cliente bate sua meta e recebe um benefício, o próximo
+                        desafio da lista inicia automaticamente.
+                    </p>
+                    <p>
+                        Na Fiddelize, é usado dois contadores de desafio:
+                        <br />
+                        <strong>- tipo de desafio:</strong> permite você variar
+                        entre os desafios.
+                        <br />
+                        <strong>- edição do desafio:</strong> indica para seu
+                        cliente quantos desafios conseguiu completar,
+                        independente do tipo.
+                    </p>
+                    <p>
+                        Por exemplo, você pode ter apenas 1 tipo de desafio na
+                        sua lista, mas um cliente pode está na edição número 5
+                        se ele concluiu este mesmo desafio 5 vezes.
+                    </p>
+                    <img
+                        className="my-4 img-center shadow-babadoo"
+                        width={300}
+                        src="/img/demos/qa-chall-list/img-3.png"
+                        alt="cliente na edição 5 do desafio prêmio alvo"
+                    />
+                    <p>
+                        Por fim, pelo menos um jogo de compra e um desafio deve
+                        está ativo.
+                    </p>
+                </Fragment>
+            ),
+        },
+        {
             title:
                 "O que acontece quando o cliente terminar todos os desafios da lista?",
             text: (
@@ -160,25 +198,26 @@ export default function ShowQA() {
             text: (
                 <Fragment>
                     <p>
-                        Não afeta, de nunhuma forma, o progresso e as moedas dos
-                        seus clientes. Apenas é adaptado para sua nova lista.
+                        Não afeta, de nunhuma forma, o saldo em moedas PTS dos
+                        seus clientes. Apenas o progresso atual para o desafio
+                        anterior, de acordo com sua nova lista.
                     </p>
                     <p>
                         Você pode remover qualquer desafio, a qualquer momento.
-                        Principalmente quando seu benefício não estiver mais
-                        disponível ou mesmo atualizar alguma informação do
-                        benefício ou meta.
+                        Principalmente quando seu benefício como um
+                        prêmio/brinde não estiver mais disponível ou mesmo
+                        atualizar alguma informação de um benefício ou meta.
                     </p>
                     <p>
-                        A Fiddelize cuida de ajustar para o desafio mais próximo
-                        da lista automaticamente para cada cliente baseado na
-                        sua nova lista.
+                        Portanto, a Fiddelize cuida de ajustar para o desafio
+                        mais próximo da lista automaticamente para cada cliente
+                        baseado na sua nova lista.
                     </p>
                     <p>
-                        E, claro, a Fiddelize deixa ciente que o atual desafio
-                        foi mudado para um anterior assim que é detectado alguma
-                        exclusão na sua lista de desafios. Todos seus clientes
-                        são notificados da próxima vez que entrarem no app.
+                        Clientes que estiverem jogando no desafio que você
+                        excluiu são notificados que o seu desafio atual não está
+                        disponível e que retornaram para o tipo de desafio
+                        anterior.
                     </p>
                     <p>
                         Assim você fica tranquilo quando à exclusão de desafios.
