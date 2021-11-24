@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v4.85.85";
+const latestVersion = "v4.85.90";
 // FINAL SUBPROJECTS BEFORE LAUNCHING:
 // biz app revised v2 - up to 21 nov (DONE at 20 nov)
 // all QA tweaks and challList for discountBack up to 23 nov
@@ -14,7 +14,7 @@ const latestVersion = "v4.85.85";
 // create PREZI presentation to be presented in the meeting with customers - up to 17 dez.
 // start elevator speech rehearsal and message approach in social networks for target potential customers - up to 18 dez.
 // PROSPECT CLIENTS about Fiddelize from 19 Dez onwards - need to have at least 10 first clients until the end of the year.
-const updateDescription = "challList for discountBack PT3";
+const updateDescription = "challList for discountBack PT5";
 /* HISTORY
 biz app OKRs and KPIs v2
 biz app revised v2

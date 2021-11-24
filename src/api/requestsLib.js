@@ -93,12 +93,14 @@ export const removeOneClickInvest = (userId) =>
 // pro orders
 export const readUserOrderHistory = () => `${ROOT}/pro/orders/history`; // GET
 
-// coins/poins
+// coins/points
 export const setExpiringCoinsToBase = () =>
     `${ROOT}/user/cli-admin/expiring-coins/base`; // POST
 
 export const getExpiringTotalsAndDates = (adminId) =>
     `${ROOT}/user/cli-admin/expiring-coins/totals-dates?adminId=${adminId}`; // GET
+// games
+export const setChallTypeData = () => `${ROOT}/games/chall-type-data`; // POST
 
 // TEAM/CLI-MEMBER
 export const readTeamMemberList = () => `${ROOT}/user/team/list`;

@@ -2,7 +2,6 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import parse from "html-react-parser";
 import DeleteButton from "components/buttons/DeleteButton";
-import { useBizData } from "init";
 import ModalYesNo from "components/modals/ModalYesNo";
 
 DeleteModalBtn.propTypes = {
@@ -19,8 +18,6 @@ export default function DeleteModalBtn({
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
-
-    const { bizId } = useBizData();
 
     const handleDelete = (arrayId) => {
         updateLocalList({ deleteThisId: arrayId, needMsg: true });

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useBizData } from "init";
 import { updateUser } from "api/frequent";
+import getAPI, { setChallTypeData } from "api";
 import showToast from "components/toasts";
 import ChallComp from "./ChallComp";
 import AddNewChallBtn from "./add-new-chall/AddNewChallBtn";
@@ -19,7 +20,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         // eslint-disable-next-line
     }, [challList, challengesArray]);
 
-    const updateLocalList = (opts = {}) => {
+    const updateLocalList = async (opts = {}) => {
         const {
             needMsg,
             deleteThisId,
@@ -27,11 +28,17 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
             updateOnlyLocalItem,
         } = opts;
 
-        if (updateOnlyLocalItem)
+        if (updateOnlyLocalItem) {
+            await handleChallTypeData({
+                gameName: "discountBack",
+                bizId,
+            });
+
             return setChallengesArray((priorList) => [
                 ...priorList,
                 updateOnlyLocalItem,
             ]);
+        }
 
         let newModifiedArray;
         if (deleteThisId) {
@@ -43,13 +50,29 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         }
 
         const dataToSend = {
-            "clientAdminData.games.discountBack.challList":
+            "clientAdminData.games.targetPrize.challList":
                 updatedData || newModifiedArray,
         };
 
-        return updateUser(bizId, "cliente-admin", dataToSend).then(() => {
-            if (needMsg) showToast("Alterações salvas!", { type: "success" });
-        });
+        const dataChallTypeData = {
+            mode: deleteThisId ? "remove" : "lock",
+            adminId: bizId,
+            gameName: "discountBack",
+            deletedChallTypeId: deleteThisId,
+        };
+
+        await Promise.all([
+            deleteThisId
+                ? handleChallTypeData({
+                      gameName: "discountBack",
+                      bizId,
+                      removalId: deleteThisId,
+                  })
+                : null,
+            updateUser(bizId, "cliente-admin", dataToSend),
+        ]);
+
+        if (needMsg) showToast("Alterações salvas!", { type: "success" });
     };
 
     const txtStyle = "text-normal text-left font-weight-bold";
@@ -101,3 +124,23 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         </div>
     );
 }
+
+// HELPERS
+async function handleChallTypeData({ gameName, bizId, removalId }) {
+    const dataChallTypeData = {
+        mode: removalId ? "remove" : "lock",
+        adminId: bizId,
+        userId: bizId, // userId is just for auth reasons
+        gameName,
+        deletedChallTypeId: removalId,
+    };
+
+    await getAPI({
+        method: "post",
+        url: setChallTypeData(),
+        body: dataChallTypeData,
+    });
+
+    return "done";
+}
+// END HELPERS
