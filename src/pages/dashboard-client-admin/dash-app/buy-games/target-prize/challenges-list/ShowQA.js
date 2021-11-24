@@ -164,30 +164,31 @@ export default function ShowQA() {
             text: (
                 <Fragment>
                     <p>
-                        Sim. A Fiddelize registra o último tipo de desafio que
-                        cada cliente já conquistou e assim que o cliente
-                        concluir o desafio atual e já concluiu todos os tipos de
-                        desafio da sua lista, o próximo será seu novo desafio
-                        adicionado.
+                        Sim. A Fiddelize gerencia os tipos de desafios que seu
+                        cliente já concluiu e verifica se há novos disponíveis
+                        na sua lista e lança seus desafios de acordo com a
+                        edição que o cliente se encontra.
                     </p>
                     <p>Exemplo Prático:</p>
                     <ul>
-                        <li>Você tem 3 desafios na lista;</li>
+                        <li>Você tem 3 tipos de desafios na lista;</li>
                         <li>
-                            Um de seus clientes está atualmente no desafio de n°
-                            5 do jogo atual, portanto, já "zerou" sua lista;
+                            Um de seus clientes está atualmente no desafio -
+                            edição de n° 5 do jogo atual, portanto, já
+                            &quot;zerou&quot; todos os desafios da lista;
                         </li>
-                        <li>Você decide adicionar um novo desafio depois;</li>
+                        <li>Você decide adicionar dois novos desafios;</li>
                         <li>
                             Após o cliente concluir o desafio de n° 5 (atual), o
-                            próximo desafio de n° 6 deste cliente será o seu
-                            novo desafio adicionado;
+                            próximo desafio de n° 6 deste cliente será um de
+                            seus novos desafios adicionados. E assim segue para
+                            os próximos novos desafios.
                         </li>
                     </ul>
                     <p>
-                        Assim, todos seus clientes jogam todos os desafios da
-                        sua lista, independente de quando for adicionado um novo
-                        desafio.
+                        Desta forma, todos seus clientes jogam todos os desafios
+                        da sua lista, independente de quando for adicionado
+                        novos desafios.
                     </p>
                 </Fragment>
             ),

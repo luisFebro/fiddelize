@@ -38,6 +38,7 @@ export default function UndoContentBtn(props) {
         setFullOpen(false);
     };
 
+    console.log("props UNDO", props);
     const handleRemoval = async () => {
         const benefitBody = {
             isReceived: false,
@@ -46,6 +47,7 @@ export default function UndoContentBtn(props) {
             benefitId: props.benefitId,
             recordId: props.recordId,
             currChall: props.currChall,
+            challTypeId: props.challTypeId,
             gameName: props.gameName,
             staff: {
                 name: props.doneBy,

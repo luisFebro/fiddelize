@@ -37,6 +37,7 @@ export default function DiscountBenefit(props) {
     const benefitId = benefitData && benefitData.id;
     const benefitDesc = benefitData && benefitData.benefitDesc;
     const currChall = (benefitData && benefitData.currChall) || 1;
+    const challTypeId = benefitData && benefitData.challTypeId;
     const targetPoints = benefitData && benefitData.targetPoints;
 
     const name = getFirstName(customerName, { addSurname: true });
@@ -73,6 +74,7 @@ export default function DiscountBenefit(props) {
             totalBenefitsList: totalBenefitsList || 1,
             gameName,
             currChall,
+            challTypeId,
             staff: {
                 id: staffId,
                 job: staffJob || "admin",

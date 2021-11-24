@@ -18,6 +18,7 @@ export default function DoneCard({ data = {} }) {
         benefitId: data.id,
         recordId: data.recordId,
         currChall: data.currChall,
+        challTypeId: data.challTypeId,
         gameName: data.game,
         customerName,
         doneBy,

@@ -52,7 +52,7 @@ function checkForBeatGames({ currPoints }) {
 
 function checkGame(gameName, { list, currPoints }) {
     const { availableGames } = adminGame;
-    const { targetPoints } = adminGame[gameName];
+    const { targetPoints, id } = adminGame[gameName];
     const { pendingBenefits = [] } = userGame;
 
     const isGameAvailable = () => availableGames.includes(gameName);
@@ -71,6 +71,7 @@ function checkGame(gameName, { list, currPoints }) {
         targetPoints,
         benefitDesc: handleBenefitDesc(gameName),
         currChall: challN || 1,
+        challTypeId: id,
         received: false,
     });
 
