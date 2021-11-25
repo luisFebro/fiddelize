@@ -30,6 +30,14 @@ const AsyncProPay = LoadableVisible({
             "./types/ProPay" /* webpackChunkName: "pay-picked-notif-page-lazy" */
         ),
 });
+
+// const AsyncSystem = LoadableVisible({
+//     loader: () =>
+//         import(
+//             "./types/FiddelizeSystem" /* webpackChunkName: "system-picked-notif-page-lazy" */
+//         ),
+// });
+
 const AsyncScore = LoadableVisible({
     loader: () =>
         import(

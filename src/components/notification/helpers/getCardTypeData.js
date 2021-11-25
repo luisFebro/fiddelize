@@ -1,6 +1,7 @@
 import getFirstName from "utils/string/getFirstName";
 import extractStrData from "utils/string/extractStrData";
 import { formatDMY } from "utils/dates/dateFns";
+import { gameBrNameStore } from "components/biz/GamesBadge";
 
 export default function getCardTypeData(cardType, options = {}) {
     const { genderLetter, userName, bizName, role, content, subtype } = options;
@@ -41,6 +42,7 @@ export default function getCardTypeData(cardType, options = {}) {
                 expBalance,
                 expStartDate,
                 expDate,
+                gameName,
             } = extractStrData(content);
 
             if (subtype === "expirationEnd") {
@@ -50,6 +52,18 @@ export default function getCardTypeData(cardType, options = {}) {
                 )}§ expiraram hoje ${formatDMY(
                     new Date(expDate)
                 )} (${expDaysCount} dias de prazo). Seu saldo de §${expBalance} PTS§ também expirou para reiniciar corretamente os jogos.`;
+                circularImg =
+                    "/img/icons/trophies/fiddelize-trophy-expiration.svg";
+                break;
+            }
+
+            if (subtype === "removedChallType") {
+                title = "Desafio Removido";
+                brief = `${getFirstName(
+                    userName
+                )}, só pra avisar que o seu desafio mais recente do jogo de compra ${
+                    gameBrNameStore[gameName]
+                } teve que ser removido porque o benefício ficou indisponível ou teve que ser reajustado, podendo voltar em breve.`;
                 circularImg =
                     "/img/icons/trophies/fiddelize-trophy-expiration.svg";
                 break;
@@ -160,10 +174,6 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "system": {
-            title = "Fiddelize informa:";
-            brief =
-                "this should be changed dynamically with a subtype variable from backend";
-            circularImg = "teste.svg";
             break;
         }
         default:

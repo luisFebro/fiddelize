@@ -201,7 +201,7 @@ export default function ShowQA() {
                     <p>
                         Não afeta, de nunhuma forma, o saldo em moedas PTS dos
                         seus clientes. Apenas o progresso atual para o desafio
-                        anterior, de acordo com sua nova lista.
+                        mais próximo, de acordo com sua nova lista.
                     </p>
                     <p>
                         Você pode remover qualquer desafio, a qualquer momento.
@@ -210,16 +210,16 @@ export default function ShowQA() {
                         atualizar alguma informação de um benefício ou meta.
                     </p>
                     <p>
-                        Portanto, a Fiddelize cuida de ajustar para o desafio
-                        mais próximo da lista automaticamente para cada cliente
-                        baseado na sua nova lista.
-                    </p>
-                    <p>
                         Clientes que estiverem jogando no desafio que você
-                        excluiu são notificados que o seu desafio atual não está
-                        disponível e que retornaram para o tipo de desafio
-                        anterior.
+                        excluiu são notificados sobre o ajustado para o desafio
+                        mais próximo da sua lista com outro benefício da lista.
                     </p>
+                    <img
+                        className="my-4 img-center shadow-babadoo"
+                        width={300}
+                        src="/img/demos/qa-chall-list/img-4.png"
+                        alt="jogo desativado para clientes"
+                    />
                     <p>
                         Assim você fica tranquilo quando à exclusão de desafios.
                         Além do mais, todos seus clientes estão cientes de

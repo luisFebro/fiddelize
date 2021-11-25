@@ -50,15 +50,8 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         }
 
         const dataToSend = {
-            "clientAdminData.games.targetPrize.challList":
+            "clientAdminData.games.discountBack.challList":
                 updatedData || newModifiedArray,
-        };
-
-        const dataChallTypeData = {
-            mode: deleteThisId ? "remove" : "lock",
-            adminId: bizId,
-            gameName: "discountBack",
-            deletedChallTypeId: deleteThisId,
         };
 
         await Promise.all([
@@ -72,7 +65,11 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
             updateUser(bizId, "cliente-admin", dataToSend),
         ]);
 
-        if (needMsg) showToast("Alterações salvas!", { type: "success" });
+        const toastMsg = deleteThisId
+            ? "Tipo de desafio excluído com sucesso!"
+            : "Alterações salvas!";
+        if (needMsg) showToast(toastMsg, { type: "success" });
+        return null;
     };
 
     const txtStyle = "text-normal text-left font-weight-bold";

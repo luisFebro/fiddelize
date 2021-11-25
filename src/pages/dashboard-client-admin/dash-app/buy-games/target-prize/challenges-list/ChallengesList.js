@@ -70,7 +70,11 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
             updateUser(bizId, "cliente-admin", dataToSend),
         ]);
 
-        if (needMsg) showToast("Alterações salvas!", { type: "success" });
+        const toastMsg = deleteThisId
+            ? "Tipo de desafio excluído com sucesso!"
+            : "Alterações salvas!";
+        if (needMsg) showToast(toastMsg, { type: "success" });
+        return null;
     };
 
     const txtStyle = "text-normal text-left font-weight-bold";

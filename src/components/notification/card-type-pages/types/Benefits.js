@@ -23,6 +23,7 @@ export default function Benefits({
     const [loading, setLoading] = useState(false);
 
     const isBenefitsExp = subtype === "expirationEnd";
+    const isRemovedChall = subtype === "removedChallType";
 
     const {
         beatGamesData,
@@ -39,12 +40,13 @@ export default function Benefits({
         setLoading(false);
     };
 
-    const beatGamesDataTreated = !isBenefitsExp && JSON.parse(beatGamesData);
-    const totalBenefits = beatGamesDataTreated && beatGamesDataTreated.length;
-
     const showBenefitList = () => {
         // the deadlineDate will have exactly 30 days span of difference which does not mean exactly the same day like 5 set and 5 out since monthes quantity may vary from 28 to 31 days making slightly different days
         const deadlineDate = formatDMY(expDate);
+
+        const beatGamesDataTreated = JSON.parse(beatGamesData);
+        const totalBenefits =
+            beatGamesDataTreated && beatGamesDataTreated.length;
 
         return (
             <Fragment>
@@ -85,11 +87,32 @@ export default function Benefits({
     };
 
     const handleTitle = () => {
+        if (isRemovedChall) return "Desafio Removido";
         if (isBenefitsExp) return "Expirações Efetuadas";
         return "Benefícios Disponíveis";
     };
 
     const showMainContent = () => {
+        if (isRemovedChall) {
+            return (
+                <Fragment>
+                    <p>
+                        Mas não se preocupe, seu saldo em moedas e edição do
+                        desafio continua o mesmo.
+                    </p>
+                    <p>
+                        E seu progresso foi ajustado para um desafio mais
+                        próximo com outro benefício.
+                    </p>
+                    <p className="font-weight-bold font-italic">
+                        Agradecemos sua compreensão,
+                        <br />
+                        Boas compras!
+                    </p>
+                </Fragment>
+            );
+        }
+
         if (isBenefitsExp) {
             return (
                 <Fragment>
