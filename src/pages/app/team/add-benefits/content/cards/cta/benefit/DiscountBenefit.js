@@ -26,6 +26,7 @@ export default function DiscountBenefit(props) {
         customerId,
         recordId,
         allBenefitGames,
+        allAvailableBenefits,
         currPoints,
         customerName,
         gender,
@@ -54,15 +55,8 @@ export default function DiscountBenefit(props) {
     const handleDiscount = async () => {
         setDisableCTA(true);
 
-        // used to check unavailable games
-        const allAvailableGames = allBenefitGames.map((g) => ({
-            received: g.received,
-            game: g.game,
-            targetPoints: g.targetPoints,
-        }));
-
         const benefitBody = {
-            allAvailableGames,
+            allAvailableBenefits, // used to check unavailable games
             customerId,
             recordId,
             benefitId,

@@ -71,6 +71,7 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
 
             // since we are searching for a single customer, then get the first item
             const {
+                allAvailableBenefits,
                 beatGameList,
                 recordId,
                 currPoints,
@@ -93,6 +94,7 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
             }
 
             const benefitProps = {
+                allAvailableBenefits,
                 allBenefitGames: beatGameList,
                 closeModal: handleModalClose,
                 closeScanner: closeModal,

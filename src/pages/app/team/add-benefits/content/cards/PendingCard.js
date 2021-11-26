@@ -10,6 +10,7 @@ const [lastDate] = getItems("global", ["lastDatePendingBenefitCard"]);
 
 export default function PendingCard({ data }) {
     const {
+        allAvailableBenefits,
         benefitUpdatedAt,
         recordId,
         beatGameList,
@@ -27,6 +28,7 @@ export default function PendingCard({ data }) {
     const pluralBenefits = availableBenefitsCount > 1 ? "s" : "";
 
     const gameItemProps = {
+        allAvailableBenefits,
         availableBenefitsCount,
         customerId,
         recordId,

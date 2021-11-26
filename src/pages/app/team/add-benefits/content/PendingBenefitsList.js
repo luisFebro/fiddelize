@@ -198,6 +198,21 @@ export default function PendingBenefitsList() {
                     setFullOpen={handleScannerClose}
                 />
             )}
+            {!needEmptyIllustra && (
+                <section className="text-grey mx-3 font-site text-em-1-1 my-5">
+                    <p>
+                        <strong>Clientes verificados:</strong> cada cliente que
+                        aparece nesta lista foi verificado com sucesso e está
+                        qualificado para receber o benefício.
+                    </p>
+                    <p>
+                        Clientes com <strong>benefícios expirados</strong> ou
+                        que ficaram com{" "}
+                        <strong>saldo em moedas insuficiente</strong> são
+                        removidos da lista.
+                    </p>
+                </section>
+            )}
         </section>
     );
 }
