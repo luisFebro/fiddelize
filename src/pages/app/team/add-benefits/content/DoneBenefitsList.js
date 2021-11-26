@@ -93,11 +93,11 @@ export default function DoneBenefitsList() {
 
     const listMap = list.map((data, ind) =>
         checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
-            <section key={data._id} ref={detectedCard}>
+            <section key={data.recordId} ref={detectedCard}>
                 {showCard(data)}
             </section>
         ) : (
-            <section key={data._id}>{showCard(data)}</section>
+            <section key={data.recordId}>{showCard(data)}</section>
         )
     );
     // END INFINITY LOADING LIST

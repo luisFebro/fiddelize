@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { useBizData } from "init";
-import { gameIconsStore } from "components/biz/GamesBadge";
+import { selectBenefitType, gameIconsStore } from "components/biz/GamesBadge";
 import getFirstName from "utils/string/getFirstName";
 import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 import getItems from "init/lStorage";
@@ -9,29 +9,21 @@ import SelectedCTA from "./cta/SelectedCTA";
 const [lastDate] = getItems("global", ["lastDatePendingBenefitCard"]);
 
 export default function PendingCard({ data }) {
-    const { beatGameList, currPoints, customerId, gender } = data;
+    const {
+        benefitUpdatedAt,
+        recordId,
+        beatGameList,
+        currPoints,
+        customerId,
+        gender,
+    } = data;
     let { customerName } = data;
     customerName = getFirstName(customerName && customerName.cap(), {
         addSurname: true,
     });
 
-    let cardCreatedAt = null;
-    let recordId = "";
-
-    const allBenefitGames = [];
-    beatGameList.forEach((d) => {
-        const allData = d.data;
-        if (allData.length)
-            allData.forEach((thisD) => {
-                if (thisD.isBenefitExpired) return null;
-                allBenefitGames.push(thisD);
-                cardCreatedAt = d.createdAt;
-                recordId = d.recordId;
-            });
-    });
-
     const { themePColor } = useBizData();
-    const availableBenefitsCount = allBenefitGames.length;
+    const availableBenefitsCount = beatGameList.length;
     const pluralBenefits = availableBenefitsCount > 1 ? "s" : "";
 
     const gameItemProps = {
@@ -42,12 +34,12 @@ export default function PendingCard({ data }) {
         customerName,
         currPoints,
         gender,
-        gameName: allBenefitGames.length === 1 && allBenefitGames[0].game,
+        gameName: beatGameList.length === 1 && beatGameList[0].game,
     };
 
     const showBenefitsArea = () => (
         <section className="d-flex my-3 benefits-area">
-            {allBenefitGames
+            {beatGameList
                 .map((d, ind) => (
                     <Fragment key={d.game}>
                         <GameItem d={d} ind={ind} {...gameItemProps} />
@@ -61,7 +53,10 @@ export default function PendingCard({ data }) {
     );
 
     const showNewCardBadge = () => {
-        const isCardNew = checkCardNew({ targetDate: cardCreatedAt, lastDate });
+        const isCardNew = checkCardNew({
+            targetDate: benefitUpdatedAt,
+            lastDate,
+        });
 
         return (
             <div
@@ -87,7 +82,7 @@ export default function PendingCard({ data }) {
                 disponí{pluralBenefits === "s" ? "veis:" : "vel:"}
             </p>
             {showBenefitsArea()}
-            <SelectedCTA allBenefitGames={allBenefitGames} {...gameItemProps} />
+            <SelectedCTA allBenefitGames={beatGameList} {...gameItemProps} />
             <style jsx>
                 {`
                     .benefit-card--root {
@@ -112,11 +107,6 @@ export default function PendingCard({ data }) {
 }
 
 function GameItem({ d, ind, availableBenefitsCount, themePColor }) {
-    const selectBenefitType = (game) => {
-        if (game === "discountBack") return "vale";
-        return "prêmio";
-    };
-
     return (
         <div className="position-relative mr-3 container-center-col">
             {gameIconsStore[d.game]}

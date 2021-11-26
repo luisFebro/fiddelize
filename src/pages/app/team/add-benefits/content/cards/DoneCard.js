@@ -1,31 +1,28 @@
 import { useBizData } from "init";
-import { gameIconsStore } from "components/biz/GamesBadge";
+import { gameIconsStore, selectBenefitType } from "components/biz/GamesBadge";
 import { calendar } from "utils/dates/dateFns";
 import UndoContentBtn from "./undo/UndoContentBtn";
 
 export default function DoneCard({ data = {} }) {
-    const { game, benefitDesc, doneBy, customerName, updatedAt } = data;
+    const { beatenGame, customerName } = data;
+    const { game, doneBy, benefitDesc, updatedAt } = beatenGame;
 
     const { themePColor } = useBizData();
 
-    const selectBenefitType = () => {
-        if (game === "discountBack") return "vale";
-        return "prêmio";
-    };
-
     const undoProps = {
+        currPoints: data.currPoints,
+        gender: data.gender,
         customerId: data.customerId,
-        benefitId: data.id,
         recordId: data.recordId,
-        currChall: data.currChall,
-        challTypeId: data.challTypeId,
-        gameName: data.game,
         customerName,
+        // benefit
+        gameName: game,
+        benefitId: beatenGame.id,
+        currChall: beatenGame.currChall,
+        challTypeId: beatenGame.challTypeId,
+        targetPoints: beatenGame.targetPoints,
         doneBy,
         benefitDesc,
-        currPoints: data.currPoints,
-        targetPoints: data.targetPoints,
-        gender: data.gender,
     };
 
     const showStatusBadge = () => (

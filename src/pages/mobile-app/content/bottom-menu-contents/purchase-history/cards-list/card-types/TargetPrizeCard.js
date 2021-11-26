@@ -121,7 +121,7 @@ export default function TargetPrizeCard({ historyData, colorP }) {
 
 /* ARCHIVES
 
-{isBenefitExpired && (
+{isBenefitEfdaxpired && (
     <div className="icon">
         <FontAwesomeIcon
             icon="times-circle"

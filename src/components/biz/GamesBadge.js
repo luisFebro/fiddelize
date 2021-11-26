@@ -14,8 +14,14 @@ export const gameIconsStore = {
 export const gameBrNameStore = {
     targetPrize: "Prêmio Alvo",
     discountBack: "Desconto Retornado",
-    raffleTicket: "Bilhete Premiado",
     topCustomers: "Clientes Tops",
+    raffleTicket: "Bilhete Premiado",
+};
+
+export const selectBenefitType = (game) => {
+    if (game === "discountBack") return "vale";
+    if (game === "targetPrize") return "prize";
+    return "benefício";
 };
 
 // userGame data example

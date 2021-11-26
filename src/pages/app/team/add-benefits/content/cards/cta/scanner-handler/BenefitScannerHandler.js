@@ -69,8 +69,10 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
                     { type: "error" }
                 );
 
+            // since we are searching for a single customer, then get the first item
             const {
                 beatGameList,
+                recordId,
                 currPoints,
                 customerId,
                 gender,
@@ -80,19 +82,7 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
                 addSurname: true,
             });
 
-            let recordId = "";
-
-            const allBenefitGames = [];
-            beatGameList.forEach((d) => {
-                const allData = d.data;
-                if (allData.length)
-                    allData.forEach((thisD) => {
-                        allBenefitGames.push(thisD);
-                        recordId = d.recordId;
-                    });
-            });
-
-            const availableBenefitsCount = allBenefitGames.length;
+            const availableBenefitsCount = beatGameList.length;
 
             if (!availableBenefitsCount) {
                 showToast("Cliente sem benefícios a receber", {
@@ -103,18 +93,16 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
             }
 
             const benefitProps = {
-                allBenefitGames,
+                allBenefitGames: beatGameList,
                 closeModal: handleModalClose,
                 closeScanner: closeModal,
-                totalBenefitsList: availableBenefitsCount,
                 customerId,
                 recordId,
                 themePColor,
                 customerName,
                 currPoints,
                 gender,
-                gameName:
-                    allBenefitGames.length === 1 && allBenefitGames[0].game,
+                gameName: beatGameList.length === 1 && beatGameList[0].game,
             };
 
             return setModal((prev) => ({

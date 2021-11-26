@@ -1,11 +1,6 @@
-import { gameIconsStore } from "components/biz/GamesBadge";
+import { gameIconsStore, selectBenefitType } from "components/biz/GamesBadge";
 import { useBizData } from "init";
 import DiscountBenefitBtn from "../benefit/DiscountBenefitBtn";
-
-const selectBenefitType = (game) => {
-    if (game === "discountBack") return "vale";
-    return "prêmio";
-};
 
 export default function ChooseDialog(props) {
     const { allBenefitGames = [] } = props;
@@ -48,10 +43,6 @@ export default function ChooseDialog(props) {
                                     title="este aqui"
                                     needTxtNoWrap
                                     position="relative"
-                                    totalBenefitsList={
-                                        allBenefitGames &&
-                                        allBenefitGames.length
-                                    }
                                     {...props}
                                     {...g}
                                     gameName={g.game} // LESSON: this order matters, DO NOT CHANGE IT! to override undefined gameName picked from one single benefit select

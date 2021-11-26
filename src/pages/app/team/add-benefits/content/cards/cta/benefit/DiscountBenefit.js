@@ -5,7 +5,7 @@ import useData from "init";
 import getAPI, { changeBenefit } from "api";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import showToast from "components/toasts";
-import { gameIconsStore } from "components/biz/GamesBadge";
+import { gameIconsStore, gameBrNameStore } from "components/biz/GamesBadge";
 import getFirstName from "utils/string/getFirstName";
 import { setRun, useAction } from "global-data/ui";
 import getId from "utils/getId";
@@ -25,7 +25,6 @@ export default function DiscountBenefit(props) {
         closeScanner, // only for qrCode
         customerId,
         recordId,
-        totalBenefitsList,
         allBenefitGames,
         currPoints,
         customerName,
@@ -57,6 +56,7 @@ export default function DiscountBenefit(props) {
 
         // used to check unavailable games
         const allAvailableGames = allBenefitGames.map((g) => ({
+            received: g.received,
             game: g.game,
             targetPoints: g.targetPoints,
         }));
@@ -71,7 +71,6 @@ export default function DiscountBenefit(props) {
             isReceived: true,
             newPoints: Number(targetPoints),
             newBalance: leftCustomerPoints,
-            totalBenefitsList: totalBenefitsList || 1,
             gameName,
             currChall,
             challTypeId,
@@ -130,7 +129,7 @@ export default function DiscountBenefit(props) {
             <div className="all-game-info text-left text-normal text-white text-shadow mt-3 mb-1 text-center">
                 <p className="discount-benefit-game-title pt-1 m-0 font-weight-bold">
                     {gameIconsStore[gameName]}
-                    {getGameName(gameName)}
+                    {gameBrNameStore[gameName]}
                     <br />
                     <span className="d-block position-relative">
                         N.º {currChall}
@@ -222,14 +221,6 @@ export default function DiscountBenefit(props) {
     );
 }
 
-function getGameName(name) {
-    if (name === "targetPrize") return "Prêmio Alvo";
-    if (name === "discountBack") return "Desconto Retornado";
-    if (name === "topCustomers") return "Clientes Tops";
-    if (name === "raffleTicket") return "Bilhete Premiado";
-
-    return null;
-}
 /* COMMENTS
 Lesson:
 e.target: effects an specific element;

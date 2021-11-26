@@ -38,7 +38,6 @@ export default function UndoContentBtn(props) {
         setFullOpen(false);
     };
 
-    console.log("props UNDO", props);
     const handleRemoval = async () => {
         const benefitBody = {
             isReceived: false,
