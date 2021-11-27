@@ -2,11 +2,11 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v4.91.0";
+const latestVersion = "v4.91.10";
 // FINAL SUBPROJECTS BEFORE LAUNCHING:
 // biz app revised v2 - up to 21 nov (DONE at 20 nov)
 // all QA tweaks and challList for discountBack up to 23 nov (DONE at 24 nov)
-// discountBack for cli-admins with auto discount coupon design in order page up to 26 nov
+// discountBack for cli-admins with auto discount coupon design in order page up to 26 nov (PENDING)
 // support real time chat and replace Whatsapp up to 10 dez
 // final tests - check with Brena`s phone if the updates are fixed and her app can receive updates up to 11 dez
 // MARKETING PHASE
@@ -14,8 +14,9 @@ const latestVersion = "v4.91.0";
 // create PREZI presentation to be presented in the meeting with customers - up to 17 dez.
 // start elevator speech rehearsal and message approach in social networks for target potential customers - up to 18 dez.
 // PROSPECT CLIENTS about Fiddelize from 19 Dez onwards - need to have at least 10 first clients until the end of the year.
-const updateDescription = "tweaks in benefits and login";
+const updateDescription = "support real time chat and replace Whatsapp";
 /* HISTORY
+tweaks in benefits and login
 challList for discountBack and algos
 biz app OKRs and KPIs v2
 biz app revised v2
