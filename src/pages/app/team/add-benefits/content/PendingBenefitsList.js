@@ -29,7 +29,6 @@ export default function PendingBenefitsList() {
     const [search, setSearch] = useState("");
     const { bizId } = useBizData();
     const { userId } = useData();
-    console.log("userId", userId);
 
     // SCANNER PANEL
     const [scanner, setScanner] = useState({

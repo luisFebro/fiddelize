@@ -53,6 +53,8 @@ export default function UndoContentBtn(props) {
             },
         };
 
+        showToast("Removendo... Um momento...");
+
         await getAPI({
             method: "put",
             url: changeBenefit(),
