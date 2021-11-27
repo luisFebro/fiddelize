@@ -31,6 +31,13 @@ const AsyncProPay = LoadableVisible({
         ),
 });
 
+const AsyncScore = LoadableVisible({
+    loader: () =>
+        import(
+            "./types/Score" /* webpackChunkName: "score-picked-notif-page-lazy" */
+        ),
+});
+
 // const AsyncSystem = LoadableVisible({
 //     loader: () =>
 //         import(
@@ -38,15 +45,13 @@ const AsyncProPay = LoadableVisible({
 //         ),
 // });
 
-const AsyncScore = LoadableVisible({
-    loader: () =>
-        import(
-            "./types/Score" /* webpackChunkName: "score-picked-notif-page-lazy" */
-        ),
-});
 // END CARD TYPES
 
 export default function pickCardType(cardType, options = {}) {
+    return () => getCardType(cardType, options);
+}
+
+function getCardType(cardType, payload) {
     const {
         cardId,
         content,
@@ -61,7 +66,7 @@ export default function pickCardType(cardType, options = {}) {
         updatedBy,
         handleFullClose,
         closeNotifModal,
-    } = options;
+    } = payload;
 
     const defaultProps = { brief, role, mainImg, bizName, userName };
 
@@ -70,15 +75,18 @@ export default function pickCardType(cardType, options = {}) {
         closeNotifModal();
     };
 
-    const typeList = {
-        welcome: (
+    if (cardType === "welcome") {
+        return (
             <AsyncWelcome
                 {...defaultProps}
                 bizLogo={bizLogo}
                 content={content}
             />
-        ),
-        challenge: (
+        );
+    }
+
+    if (cardType === "challenge") {
+        return (
             <AsyncBenefits
                 {...defaultProps}
                 bizLogo={bizLogo}
@@ -90,34 +98,45 @@ export default function pickCardType(cardType, options = {}) {
                 updatedBy={updatedBy}
                 handleFullClose={handleModalsClose}
             />
-        ),
-        system: null,
-        birthday: (
+        );
+    }
+
+    if (cardType === "birthday") {
+        return (
             <AsyncBirthdayGreeting
                 {...defaultProps}
                 bizLogo={bizLogo}
                 content={content}
             />
-        ),
-        pro: (
+        );
+    }
+
+    if (cardType === "pro") {
+        return (
             <AsyncProPay
                 {...defaultProps}
                 subtype={subtype}
                 content={content || undefined}
             />
-        ),
-        score: (
+        );
+    }
+
+    if (cardType === "score") {
+        return (
             <AsyncScore
                 {...defaultProps}
                 bizLogo={bizLogo}
                 subtype={subtype}
                 content={content}
             />
-        ),
-        announcement: <AsyncAnnouncement mainImg={mainImg} content={content} />,
-    };
+        );
+    }
 
-    const pickComp = () => typeList[cardType];
+    if (cardType === "announcement") {
+        return <AsyncAnnouncement mainImg={mainImg} content={content} />;
+    }
 
-    return pickComp;
+    if (cardType === "system") {
+        return null;
+    }
 }

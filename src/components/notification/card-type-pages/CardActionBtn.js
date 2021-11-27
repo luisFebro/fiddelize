@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getAPI, { markOneClicked } from "api";
 import ButtonMulti, { faStyle } from "../../buttons/material-ui/ButtonMulti";
@@ -7,28 +7,20 @@ import pickCardType from "./pickCardType";
 import Spinner from "../../loadingIndicators/Spinner";
 // import getId from "../../../utils/getId";
 
-function CardActionBtn(props) {
-    const {
-        bizId,
-        cardId,
-        userId,
-        clicked,
-        backColor,
-        cardType,
-        role,
-        forceCliUser,
-    } = props;
+export default function CardActionBtn(props) {
+    const { bizId, cardId, userId, clicked, backColor, cardType, role } = props;
 
-    const [fullOpen, setFullOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [seen, setSeen] = useState(false);
+    // LESSON: use setData instead of multiple separate useState to avoid unexpexted page reloading or even missed data
+    const [data, setData] = useState({
+        fullOpen: false,
+        loading: false,
+        seen: false,
+    });
 
-    const handleFullOpen = () => {
-        setFullOpen(true);
-    };
+    const { fullOpen, loading, seen } = data;
 
     const handleFullClose = () => {
-        setFullOpen(false);
+        setData((prev) => ({ ...prev, fullOpen: false }));
     };
 
     const handlePickedComp = () => {
@@ -41,7 +33,7 @@ function CardActionBtn(props) {
     };
 
     const handleClickedCard = async () => {
-        setIsLoading(true);
+        setData((prev) => ({ ...prev, loading: true }));
 
         const updatedBy = props.userName;
 
@@ -49,6 +41,13 @@ function CardActionBtn(props) {
             role === "cliente-admin" || role === "cliente-membro"
                 ? updatedBy
                 : undefined;
+
+        setData((prev) => ({
+            ...prev,
+            fullOpen: true,
+            loading: false,
+            seen: true,
+        }));
 
         const body = {
             cardId,
@@ -61,19 +60,13 @@ function CardActionBtn(props) {
             method: "put",
             url: markOneClicked(bizId || userId),
             body,
-        }).catch(() => setIsLoading(false));
-
-        handleFullOpen();
-        setTimeout(() => {
-            setIsLoading(false);
-            setSeen(true);
-        }, 3000);
+        });
 
         return false;
     };
 
     const handleBtnTitle = () => {
-        if (isLoading) {
+        if (loading) {
             return <Spinner size="mini" marginY="5px" />;
         }
         if (seen) {
@@ -82,12 +75,14 @@ function CardActionBtn(props) {
         return !clicked ? "Ver" : "Ok ✔️";
     };
 
+    const ThisPickedComp = handlePickedComp();
+
     return (
         <section className="action-btn">
             <ButtonMulti
                 onClick={handleClickedCard}
                 iconFontAwesome={
-                    !clicked && !isLoading && !seen ? (
+                    !clicked && !loading && !seen ? (
                         <FontAwesomeIcon
                             icon="bolt"
                             style={{ ...faStyle, fontSize: 22 }}
@@ -105,7 +100,7 @@ function CardActionBtn(props) {
                 {handleBtnTitle()}
             </ButtonMulti>
             <ModalFullContent
-                contentComp={handlePickedComp()}
+                contentComp={ThisPickedComp}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 exitBtn="text"
@@ -113,5 +108,3 @@ function CardActionBtn(props) {
         </section>
     );
 }
-
-export default React.memo(CardActionBtn);

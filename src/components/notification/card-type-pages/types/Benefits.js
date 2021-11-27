@@ -26,7 +26,7 @@ export default function Benefits({
     const isRemovedChall = subtype === "removedChallType";
 
     const {
-        beatGamesData,
+        beatGamesData = [],
         expDate = new Date(),
         expDaysCount = 0,
     } = extractStrData(content);
@@ -40,13 +40,14 @@ export default function Benefits({
         setLoading(false);
     };
 
+    const beatGamesDataTreated = beatGamesData.length
+        ? JSON.parse(beatGamesData)
+        : [];
+    const totalBenefits = beatGamesDataTreated && beatGamesDataTreated.length;
+
     const showBenefitList = () => {
         // the deadlineDate will have exactly 30 days span of difference which does not mean exactly the same day like 5 set and 5 out since monthes quantity may vary from 28 to 31 days making slightly different days
         const deadlineDate = formatDMY(expDate);
-
-        const beatGamesDataTreated = JSON.parse(beatGamesData);
-        const totalBenefits =
-            beatGamesDataTreated && beatGamesDataTreated.length;
 
         return (
             <Fragment>

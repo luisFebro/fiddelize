@@ -69,7 +69,9 @@ export default function getCardTypeData(cardType, options = {}) {
                 break;
             }
 
-            const beatGamesDataTreated = JSON.parse(beatGamesData);
+            const beatGamesDataTreated = beatGamesData
+                ? JSON.parse(beatGamesData)
+                : [];
             const gameData = beatGamesDataTreated.map(
                 (elem) => elem.benefitDesc
             );

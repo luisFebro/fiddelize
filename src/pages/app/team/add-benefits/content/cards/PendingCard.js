@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { useBizData } from "init";
-import { selectBenefitType, gameIconsStore } from "components/biz/GamesBadge";
+import { selectBrBenefitType, gameIconsStore } from "components/biz/GamesBadge";
 import getFirstName from "utils/string/getFirstName";
 import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 import getItems from "init/lStorage";
@@ -113,7 +113,7 @@ function GameItem({ d, ind, availableBenefitsCount, themePColor }) {
         <div className="position-relative mr-3 container-center-col">
             {gameIconsStore[d.game]}
             <span className="text-small font-weight-bold">
-                {selectBenefitType(d.game)}
+                {selectBrBenefitType(d.game)}
             </span>
             {ind === 1 && availableBenefitsCount > 2 && (
                 <div className="more-than-three position-absolute font-weight-bold">

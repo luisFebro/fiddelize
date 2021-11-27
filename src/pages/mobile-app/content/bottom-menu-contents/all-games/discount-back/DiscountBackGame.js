@@ -34,9 +34,8 @@ export default function DiscountBackGame({ didUserScroll, needClick }) {
         </section>
     ) : (
         <section className="text-center font-weight-bold text-normal animated fadeInUp">
-            A cada <span className="text-title">{targetPoints} PTS,</span>
-            <br />
-            você ganha:
+            Acumule <span className="text-title">{targetPoints} PTS,</span>
+            <br />e ganhe:
         </section>
     );
 
