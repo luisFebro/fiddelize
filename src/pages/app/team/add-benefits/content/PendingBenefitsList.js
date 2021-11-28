@@ -210,6 +210,18 @@ export default function PendingBenefitsList() {
                         <strong>saldo em moedas insuficiente</strong> são
                         removidos da lista.
                     </p>
+                    <p>
+                        Clientes com saldo suficiente para resgatar{" "}
+                        <strong>múltiplos benefícios</strong> do mesmo jogo de
+                        compra, validam e resgatam o benefício seguinte{" "}
+                        <strong>
+                            após adicionarem qualquer quantia de moedas PTS na
+                            próxima compra
+                        </strong>
+                        . Após isso, o benefício aparecerá novamente na lista
+                        enquanto o saldo for suficiente para resgatar algum
+                        benefício.
+                    </p>
                 </section>
             )}
         </section>

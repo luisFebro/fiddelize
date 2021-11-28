@@ -11,7 +11,7 @@ const getStyles = () => ({
     balance: {
         minWidth: "114px",
     },
-    credits: { top: isSmall ? "50px" : "70px", right: "0px" },
+    credits: { top: isSmall ? "55px" : "70px", right: "0px" },
 });
 
 export default function CreditsBalance({ handleBalance }) {
@@ -45,7 +45,7 @@ export default function CreditsBalance({ handleBalance }) {
 
     return (
         <section className="my-3">
-            <div className="container-center">
+            <div className="container-center-col">
                 <div className="position-relative text-title text-purple text-center">
                     Saldo:
                     <span
