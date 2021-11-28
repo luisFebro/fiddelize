@@ -4,6 +4,7 @@ import convertToReal from "utils/numbers/convertToReal";
 import MuSlider from "components/sliders/MuSlider";
 import handleChange from "utils/form/use-state/handleChange";
 import getIncreasedPerc from "utils/numbers/getIncreasedPerc";
+import pricing from "utils/biz/pricing";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -41,17 +42,27 @@ const getStyles = () => ({
     },
 });
 
-const getSMSData = (packages) => {
+const { units, packages, credits } = pricing.SMS;
+
+const getSMSData = (packs) => {
     // unit, expires, unitSizeDec, unitSizeInc
-    if (packages < 10) return [0.14, null, "1-1", "1-1"];
-    if (packages >= 10 && packages < 100) return [0.12, null, "1", "1-2"];
-    if (packages >= 100 && packages < 500) return [0.1, null, "0-9", "1-3"];
-    if (packages >= 500 && packages < 1000) return [0.09, null, "0-8", "1-4"];
-    if (packages >= 1000) return [0.08, null, "0-6", "1-5"];
+    if (packs >= packages.slice(-1)[0])
+        return [units.slice(-1)[0], null, "0-6", "1-5"];
+    if (packs >= packages.slice(-2)[0])
+        return [units.slice(-2)[0], null, "0-8", "1-4"];
+    if (packs >= packages.slice(-3)[0])
+        return [units.slice(-3)[0], null, "0-9", "1-3"];
+    if (packs >= packages.slice(-4)[0])
+        return [units.slice(-4)[0], null, "1", "1-2"];
+    if (packs >= packages.slice(-5)[0])
+        return [units.slice(-5)[0], null, "1-1", "1-1"];
+
+    return [];
 };
 
+// WARNING: SMS is the last simulator with package oriented. Next service should be straight to credits instead of package measure
 export default function Simulator({ handleData }) {
-    const [packages, setPackages] = useState(1);
+    const [packs, setPackages] = useState(1);
     const [discountDiff, setDiscountDiff] = useState(null);
     const [increasedPerc, setIncreasedPerc] = useState(null);
     const [data, setData] = useState({
@@ -68,7 +79,7 @@ export default function Simulator({ handleData }) {
         }
     }, [newQuantity]);
 
-    const [unit, , unitSizeDec, unitSizeInc] = getSMSData(packages);
+    const [unit, , unitSizeDec, unitSizeInc] = getSMSData(packs);
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -76,14 +87,13 @@ export default function Simulator({ handleData }) {
 
     const styles = getStyles();
 
-    const oneSMSPackage = 200;
-    const totalSMS = oneSMSPackage * packages;
-    const smsUnit = unit;
-    const totalFinalMoney = totalSMS * smsUnit;
-    const firstPhasePrice = totalSMS * 0.14;
+    const creditsByPack = credits[0];
+    const totalSMS = creditsByPack * packs;
+    const firstPhasePrice = totalSMS * units[0];
+    const totalFinalMoney = totalSMS * unit;
 
     const totalSMSReal = convertToReal(totalSMS);
-    const smsUnitReal = convertToReal(smsUnit, {
+    const smsUnitReal = convertToReal(unit, {
         moneySign: true,
         needFraction: true,
     });
@@ -95,14 +105,14 @@ export default function Simulator({ handleData }) {
 
     useEffect(() => {
         handleData({
-            totalPackage: packages,
+            totalPackage: packs,
             totalSMS,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
-    }, [packages]);
+    }, [packs]);
 
     useEffect(() => {
-        if (unit !== 0.14) {
+        if (unit !== units[0]) {
             const diff = firstPhasePrice - totalFinalMoney;
             const incPerc = getIncreasedPerc(totalFinalMoney, firstPhasePrice);
             setDiscountDiff(diff);
@@ -125,7 +135,7 @@ export default function Simulator({ handleData }) {
                 <span className="text-title"> X </span>
                 <span
                     className={`text-em-${unitSizeDec} font-site ${
-                        unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
+                        unit <= units[3] ? "font-weight-bold" : ""
                     }`}
                 >
                     {smsUnitReal}
@@ -157,8 +167,8 @@ export default function Simulator({ handleData }) {
                     <span className="text-subtitle font-weight-bold">
                         {discountDiffReal} ({Math.ceil(increasedPerc)}%)
                     </span>{" "}
-                    comparado com o preço total de {firstPhasePriceReal} (R$
-                    0,14 por unidade);
+                    comparado com o preço total de {firstPhasePriceReal}
+                    {/*(R$ 0,14 por unidade)*/}
                 </p>
             </section>
         );
@@ -170,9 +180,7 @@ export default function Simulator({ handleData }) {
             </h2>
             <div className="text-normal text-left">
                 ✔ Total de Pacotes:{" "}
-                <span className="text-subtitle font-weight-bold">
-                    {packages}
-                </span>
+                <span className="text-subtitle font-weight-bold">{packs}</span>
                 <br />✔ Total de SMS:{" "}
                 <span className="text-subtitle font-weight-bold">
                     {totalSMSReal}
@@ -209,12 +217,12 @@ export default function Simulator({ handleData }) {
         <section className="position-relative">
             <MuSlider
                 color="var(--themeP)"
-                value={packages}
+                value={packs}
                 callback={handlePackages}
                 disabled={!!newQuantity}
                 needSlideInstru
             />
-            {packages <= 230 && !newQuantity && (
+            {packs <= 230 && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardRight}
@@ -225,7 +233,7 @@ export default function Simulator({ handleData }) {
                 </div>
             )}
 
-            {packages >= 55 && !newQuantity && (
+            {packs >= 55 && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}
@@ -238,7 +246,7 @@ export default function Simulator({ handleData }) {
     );
 
     const showQuantityField = () =>
-        (packages >= 290 || Boolean(newQuantity)) && (
+        (packs >= 290 || Boolean(newQuantity)) && (
             <section
                 className="animated fadeInUp slow
         my-3 d-flex align-items-center justify-content-end"

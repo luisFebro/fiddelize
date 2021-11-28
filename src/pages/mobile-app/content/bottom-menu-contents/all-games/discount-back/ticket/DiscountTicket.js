@@ -41,10 +41,10 @@ export default function DiscountTicket({
             <ButtonFab
                 title="usar valor"
                 onClick={
-                    gotOverflowedBenefits
+                    gotOverflowedBenefits.discountBack
                         ? () =>
                               showToast(
-                                  "O benefício que você ganhou atual ainda não foi registrado e não disponível para resgate. Para isso, você precisa de mais um cartão virtual com PTS de qualquer valor e aplicar as moedas. Obrigada!",
+                                  "É preciso mais um cartão de compra de qualquer valor para registrar e resgatar este benefício. Obrigada!",
                                   { dur: 20000 }
                               )
                         : toggleOpen

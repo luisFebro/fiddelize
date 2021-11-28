@@ -73,6 +73,12 @@ const pricing = {
             },
         },
     },
+    // SMS is accumulative credit type
+    SMS: {
+        packages: [1, 10, 100, 500, 1000], // each level of package define a slighly diff in price as discount in bulk
+        credits: [200, 2000, 20000, 100000, 200000], // for reference
+        units: [0.14, 0.12, 0.11, 0.1, 0.09],
+    },
 };
 
 export default pricing;

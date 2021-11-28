@@ -1,5 +1,5 @@
 import { useBizData } from "init";
-import { gameIconsStore, selectBenefitType } from "components/biz/GamesBadge";
+import { gameIconsStore, selectBrBenefitType } from "components/biz/GamesBadge";
 import { calendar } from "utils/dates/dateFns";
 import UndoContentBtn from "./undo/UndoContentBtn";
 
@@ -63,7 +63,7 @@ export default function DoneCard({ data = {} }) {
                 <div className="container-center-col">
                     {gameIconsStore[game]}
                     <span className="font-weight-bold text-small">
-                        {selectBenefitType(game)}
+                        {selectBrBenefitType(game)}
                     </span>
                 </div>
                 <div className="benefit-desc px-2 position-relative text-normal ml-3">

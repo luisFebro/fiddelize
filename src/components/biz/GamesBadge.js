@@ -18,9 +18,9 @@ export const gameBrNameStore = {
     raffleTicket: "Bilhete Premiado",
 };
 
-export const selectBenefitType = (game) => {
+export const selectBrBenefitType = (game) => {
     if (game === "discountBack") return "vale";
-    if (game === "targetPrize") return "prize";
+    if (game === "targetPrize") return "prêmio";
     return "benefício";
 };
 

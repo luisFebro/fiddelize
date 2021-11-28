@@ -1,4 +1,4 @@
-import { gameIconsStore, selectBenefitType } from "components/biz/GamesBadge";
+import { gameIconsStore, selectBrBenefitType } from "components/biz/GamesBadge";
 import { useBizData } from "init";
 import DiscountBenefitBtn from "../benefit/DiscountBenefitBtn";
 
@@ -33,7 +33,7 @@ export default function ChooseDialog(props) {
                                 {gameIconsStore[g.game]}
                             </div>
                             <h2 className="text-center text-normal font-weight-bold">
-                                {selectBenefitType(g.game)}
+                                {selectBrBenefitType(g.game)}
                             </h2>
                             <p className="text-small pb-5 font-weight-bold">
                                 {g.benefitDesc}
