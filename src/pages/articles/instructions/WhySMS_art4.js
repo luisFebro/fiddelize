@@ -38,11 +38,8 @@ const Body = () => {
             <p>
                 Com a crescente e iminente tecnologia, já somos praticamente
                 "cyborgs" onde o celular já se tornou uma extensão do corpo
-                humano. Não acredita? Por causa do trabalho, entretenimento,
-                estudos, relacionamentos ou tudo isso junto é difícil ver alguém
-                que não esteja plugado com seu celular 24 horas / 7 dias por
-                semana seja no trabalho, em casa, na faculdade, na academia, no
-                shopping, ou seja, em todo lugar. E é aí que entra o SMS como{" "}
+                humano. Praticamente todo mundo tem um considerável tempo de uso
+                com seus <em>smartphones</em>. E é aí que entra o SMS como{" "}
                 <strong>forma de comunicação efetiva</strong> para suas
                 campanhas e o alcance simultâneo de sua mensagem.
             </p>
@@ -57,17 +54,14 @@ const Body = () => {
             <h3 className="my-3 font-site text-purple">Tipos de SMS</h3>
 
             <p>
-                Bom, você já deve ter percebido o{" "}
-                <strong>potencial desta ferramenta</strong> para seu negócio
-                porque todos as pessoas já são cyborgs e tal... Mas como? Para
-                começar, conheça quais são os 4 tipos de SMS mais usados hoje
-                que trazem um alto ROI (taxa de conversão) para diferentes
-                formatos de negócio.
+                Conheça quais são os 4 tipos de SMS mais usados hoje que trazem
+                um alto ROI (taxa de conversão) para diferentes formatos de
+                negócio.
             </p>
 
             <p>
                 <strong>1. SMS promocional</strong> - divulga novos produtos,
-                descontos exclusivos, serviços, promoções e ofertas.
+                serviços, promoções e ofertas.
             </p>
 
             <p>
@@ -78,10 +72,9 @@ const Body = () => {
             </p>
 
             <p>
-                <strong>3. SMS sazonal</strong> - mensagens da sua marca em
-                datas como Natal, Páscoa, Ano Novo e no dia do aniversário dos
-                clientes é uma forma de se fazer presente e estreitar a relação
-                com eles.
+                <strong>3. SMS sazonal</strong> - divulgação de ofertas em datas
+                como Natal, Páscoa, Ano Novo para ofertas exclusivas nestes
+                eventos com aumento de venda do mercado em geral.
             </p>
 
             <p>
@@ -125,17 +118,9 @@ const Body = () => {
                 3. Histórico de SMS
             </p>
 
-            <ShowPicture
-                imgContainerClass="why-sms--picture"
-                dataSrc="/img/articles/why-sms/pic-3-b.png"
-                reference=""
-                subtitle="robô assistente da Fiddelize"
-            />
-
             <p>
-                E o melhor é que a última etapa fica por conta do{" "}
-                <strong>robô assistente da Fiddelize</strong> que gera em tempo
-                real e de forma automática seu histórico SMS. Não precisa nem
+                E o melhor é que a última etapa a FIddelize gera em tempo real e
+                de forma automática seu histórico SMS. Não precisa nem
                 recarregar seu app para atualizar. Veja só - a seguir - como
                 funciona cada etapa brevemente.
             </p>
@@ -244,8 +229,8 @@ const Body = () => {
                 fácil identificação como data de envio e quantidade de SMS. Ao
                 clicar no botão de mais, você tem acesso ao{" "}
                 <strong>extrato de envio</strong> com lista com todos os
-                contatos com status de recebimento e das operadores enviados.
-                Além, é claro, a mensagem que foi enviada junto com uma{" "}
+                contatos com status de recebimento e das operadores. Além, é
+                claro, a mensagem que foi enviada junto com uma{" "}
                 <strong>opção de reenvio</strong> para os mesmos contatos.
             </p>
 
@@ -260,19 +245,16 @@ const Body = () => {
 
             <p>
                 <strong>✔ Créditos não expiram.</strong> Use quando e como
-                quiser sem se preocupar em perdê-los devido a planos de
-                expiração. Já pensou em quantos créditos/dinheiro você já perdeu
-                porque nunca usou?{" "}
-                <strong>Você não tem esse problema na Fiddelize.</strong>
+                quiser sem data de expiração.
             </p>
 
             <p>
                 <strong>✔ Agendamentos de Envio.</strong> Escolha uma data e
                 hora para envio de seus SMS. Você pode agendar que uma mensagem
                 seja enviada em datas importantes ou comemorativas como
-                lembretes de reuniões, eventos, Ano Novo, Natal e outras datas
-                especiais como o aniversário. Agende o envio para um ou vários
-                contatos que receberão simultanemente sua mensagem.
+                lembretes de reuniões, eventos, Ano Novo, Natal e outras datas.
+                Agende o envio para um ou vários contatos que receberão
+                simultanemente sua mensagem.
             </p>
 
             <ShowPicture
@@ -286,31 +268,9 @@ const Body = () => {
                 <strong>✔ Flexibilidade da plataforma.</strong> Você pode
                 escolher de qual dispositivo enviar, visto que a plataforma da
                 Fiddelize roda em diversos dispositivos modernos como
-                smartphones, tabletes, notebooks e computadores. Além do mais,
-                você pode acessar seu painel de controle diretamente pelo nosso
-                site além do app.
+                smartphones, tabletes, notebooks e computadores. Tenha acesso
+                rápido via <strong>https://fiddelize.com.br/app</strong>
             </p>
-
-            <p>
-                <strong>
-                    ✔ Suas mensagens são privadas e estamos constantemente
-                    melhorando nossa segurança.
-                </strong>
-                . Somente você e os contatos de destino poderão ler as mensagens
-                porque no nosso banco de dados todas as mensagens são
-                criptografadas com algoritmos fortes que somente poderão ser
-                lidos com um chave codificada única que a cada novo envio muda
-                para uma diferente. Isso aumenta significativamente a segurança
-                e privacidade de nossa base de dados.
-            </p>
-
-            <ShowPicture
-                imgContainerClass="why-sms--picture"
-                dataSrc="/img/articles/why-sms/pic-9-aa.png"
-                reference=""
-                subtitle="sua mensagem é criptografada no banco de dados da Fiddelize"
-            />
-
             <p>
                 <strong>
                     ✔ Investimos em Performance e experiência personalizada

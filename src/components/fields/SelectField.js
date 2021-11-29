@@ -65,6 +65,15 @@ export default function SelectField({
                         </MenuItem>
                     ))}
             </Select>
+            <style jsx global>
+                {`
+                    .MuiMenuItem-root.MuiListItem-root,
+                    .MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu {
+                        font-size: 1.2rem;
+                        color: var(--themeP);
+                    }
+                `}
+            </style>
         </section>
     );
 }

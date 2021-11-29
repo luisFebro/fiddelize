@@ -34,19 +34,19 @@ const Footer = ({ location }) => {
         <section className="col-md-4">
             <div className="footer-col first">
                 <h4>Sobre a Fiddelize</h4>
-                <p className="text-small text-voca-cyan">
+                <p>
                     Ajudamos negócios a oferecer <strong>benefícios</strong>{" "}
-                    para seus clientes com{" "}
-                    <strong>moeda digital e jogos de compra</strong>. Na nossa
-                    plataforma, você monta seu clube e personaliza web apps com
-                    sua marca.
-                    <br />
-                    <br />
+                    para seus clientes com <strong>clube de compra</strong>.
+                </p>
+                <p>
+                    No clube, clientes recebem <strong>moedas digitais</strong>{" "}
+                    nas compras para troca de benefícios ao concluir a meta de
+                    um <strong>jogo de compra</strong>.
+                </p>
+                <p>
                     Somos uma martech especializada em{" "}
-                    <strong>
-                        marketing de relacionamento e análise de compra
-                    </strong>{" "}
-                    da clientela.
+                    <strong>marketing</strong> de relacionamento e{" "}
+                    <strong>gestão</strong> de clubes de compra.
                 </p>
             </div>
         </section>
