@@ -45,11 +45,9 @@ export function useBizData() {
 
 export function useFiddelizeAdmin() {
     const LIMIT_FREE_PLAN_NEW_USERS = 50;
-    const MAIN_TECH_WHATSAPP = "(92) 99281-7363";
 
     return {
         limitFreePlanNewUsers: LIMIT_FREE_PLAN_NEW_USERS,
-        mainTechWhatsapp: MAIN_TECH_WHATSAPP,
     };
 }
 

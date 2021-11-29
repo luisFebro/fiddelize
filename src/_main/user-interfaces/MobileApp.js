@@ -12,6 +12,7 @@ import Default from "pages/Default";
 import UnavailableService from "pages/UnavailableService";
 import {
     AsyncLoginPage,
+    AsyncSupport,
     // cli-admin
     AsyncDashboardClientAdmin,
     AsyncOrdersAndPay,
@@ -77,6 +78,7 @@ function Mobile({ location }) {
                     exact
                     component={AsyncLoginPage}
                 />
+                <Route path="/suporte" exact component={AsyncSupport} />
                 <Route path="/app" exact component={ClientMobileApp} />
                 <Route
                     path="/cliente/pontos-de-compra"

@@ -1,13 +1,8 @@
-import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useBizData } from "init";
-import convertPhoneStrToInt from "../../utils/numbers/convertPhoneStrToInt";
+import convertPhoneStrToInt from "utils/numbers/convertPhoneStrToInt";
 import ButtonMulti, { faStyle } from "./material-ui/ButtonMulti";
 import showToast from "../toasts";
-
-WhatsappBtn.propTypes = {
-    elsePhone: PropTypes.string,
-};
 
 export default function WhatsappBtn({
     title = "Iniciar chat",

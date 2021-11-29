@@ -3,7 +3,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
 import { useBizData } from "init";
-import CropFreeIcon from "@material-ui/icons/CropFree";
+import Icon from "styles/Icon";
 
 const AsyncBenefitScanner = Load({
     loading: true,
@@ -29,7 +29,7 @@ export default function BenefitScannerBtn(props) {
         <section>
             <ButtonFab
                 size="large"
-                iconMu={<CropFreeIcon style={{ fontSize: 35 }} />}
+                iconMu={<Icon type="qrCodeScanner" />}
                 backgroundColor={`var(--themeSDark--${themeSColor})`}
                 onClick={handleFullOpen}
                 position="relative"

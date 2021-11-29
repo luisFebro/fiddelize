@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CropFreeIcon from "@material-ui/icons/CropFree";
+import Icon from "styles/Icon";
 import showToast from "components/toasts";
 import getAPI, { readBenefitCards } from "api";
 import useData, { useBizData } from "init";
@@ -121,7 +121,8 @@ export default function BenefitScannerHandler({ closeModal, scannerData }) {
     return (
         <section className="full-height text-purple">
             <div className="container-center mt-5">
-                <CropFreeIcon
+                <Icon
+                    type="qrCodeScanner"
                     style={{
                         fontSize: "150px",
                         color: "var(--themeP)",

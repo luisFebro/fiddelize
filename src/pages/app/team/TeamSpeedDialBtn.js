@@ -3,7 +3,6 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import HelpIcon from "@material-ui/icons/Help";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import showToast from "components/toasts";
 import SpeedDialButton from "components/buttons/SpeedDialButton";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -53,10 +52,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Suporte ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                if (!disableClick) {
-                    showToast("Um momento. Redirecionando...", { dur: 12000 });
-                    window.location.href = `https://api.whatsapp.com/send?phone=5592992817363`;
-                }
+                if (!disableClick) history.push("/suporte");
             },
         },
         {

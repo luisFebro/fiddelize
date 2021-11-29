@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import FaqAccordion from "components/expansion-panels/faq/FaqAccordion";
 import DateWithIcon from "components/date-time/DateWithIcon";
 import useScrollUp from "hooks/scroll/useScrollUp";
+import { Link } from "react-router-dom";
 // import parse from "html-react-parser";
 
 const text1 = (
@@ -194,11 +195,6 @@ const text4 = (
             rotas não previstas ou "becos sem saídas" - <em>edge cases</em>.
         </p>
         <p>
-            Você pode reportar falhas indo na opção{" "}
-            <strong>Fale conosco</strong> encontrado no rodapé do site e no
-            painel de controle do seu app.
-        </p>
-        <p>
             Priorizamos e corrigimos primeiro as falhas críticas de
             funcionalidades ou de segurança. Não tendo nenhum falha crítica, é
             corrigido as falhas estéticas, tipográficas ou aquelas que não
@@ -219,6 +215,13 @@ const text4 = (
             . Algumas falhas pode depender de outros fatores ou levarem mais
             tempo para serem resolvidas. Em último caso, a funcionalidade
             defeituosa pode ser retirada completamente por tempo indeterminado.
+        </p>
+        <p>
+            Se eventualmente encontrar alguma falha, contate o{" "}
+            <Link className="text-link" to="/suporte">
+                suporte da Fiddelize
+            </Link>{" "}
+            e resolveremos o quanto antes.
         </p>
     </Fragment>
 );

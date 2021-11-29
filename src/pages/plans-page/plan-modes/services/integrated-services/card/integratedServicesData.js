@@ -6,7 +6,7 @@ import ListAltIcon from "@material-ui/icons/ListAlt";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import AmpStoriesIcon from "@material-ui/icons/AmpStories";
-import CropFreeIcon from "@material-ui/icons/CropFree";
+import Icon from "styles/Icon";
 
 const styles = {
     muStyle: {
@@ -129,7 +129,7 @@ const integratedData = [
     {
         name:
             "<strong>Código QR personalizado</strong><br />com sua logo e cor<br />para divulgação com<br />opção para baixar",
-        Icon: <CropFreeIcon style={styles.muStyle} />,
+        Icon: <Icon type="qrCodeScanner" style={styles.muStyle} />,
         price: null,
         greyedout: false,
     },

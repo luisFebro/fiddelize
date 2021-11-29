@@ -8,6 +8,15 @@ export const AsyncLoginPage = Load({
         ),
 });
 
+// GENERAL
+export const AsyncSupport = Load({
+    loader: () =>
+        import(
+            "pages/support/Support.js" /* webpackChunkName: "support-page-lazy" */
+        ),
+});
+// END GENERAL
+
 // CLI-ADMIN
 export const AsyncDashboardClientAdmin = Load({
     loader: () =>

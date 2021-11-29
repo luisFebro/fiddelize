@@ -15,7 +15,6 @@ export default async function setInitData(data, options = {}) {
     if (!data) return null;
 
     const { role } = data.currUser;
-
     // update app's UI
     uify(["bizData", data.bizData]);
     uify(["currUser", data.currUser]);
@@ -88,7 +87,13 @@ async function setLstorageData(initData) {
 
         // for nucleo-equipe, there is no bizData in init when reloading, only in the first login. if this lack of updating may cause issue, then read it in the init in future versions
         if (initData.bizData) setItems("bizData", initData.bizData);
-        setItems("currUser", initData.currUser);
+
+        const { role } = initData.currUser;
+        const currUserData =
+            role === "nucleo-equipe"
+                ? { ...initData.currUser, agentJob: initData.agentJob }
+                : initData.currUser;
+        setItems("currUser", currUserData);
 
         resolve("done!");
     };

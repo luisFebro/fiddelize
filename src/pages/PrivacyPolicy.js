@@ -1,7 +1,8 @@
 import { Fragment } from "react";
-import FaqAccordion from "../components/expansion-panels/faq/FaqAccordion";
-import DateWithIcon from "../components/date-time/DateWithIcon";
-import useScrollUp from "../hooks/scroll/useScrollUp";
+import { Link } from "react-router-dom";
+import FaqAccordion from "components/expansion-panels/faq/FaqAccordion";
+import DateWithIcon from "components/date-time/DateWithIcon";
+import useScrollUp from "hooks/scroll/useScrollUp";
 
 const text1 = (
     <Fragment>
@@ -291,11 +292,6 @@ const text6 = (
             .
         </p>
         <p>
-            O cliente-administrador pode fazer a solicitação indo em{" "}
-            <strong>fale conosco</strong> encontrado no rodapé de nosso site ou
-            indo pelo painel de controle no seu app.
-        </p>
-        <p>
             <strong>Ao remover os dados do cliente-administrador</strong>, todos
             os seus dados relacionados são removidos incluindo os de seus
             clientes e membros bem como cópias de seguranças periódicas da
@@ -316,6 +312,12 @@ const text6 = (
         <p>
             Por lei, a Fiddelize tem o <strong>prazo de 30 dias</strong> para
             remover todos os seus dados após a solicitação.
+        </p>
+        <p>
+            Quaisquer dúvidas adicionais, contate o{" "}
+            <Link className="text-link" to="/suporte">
+                suporte da Fiddelize
+            </Link>
         </p>
     </Fragment>
 );

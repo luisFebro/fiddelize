@@ -1,12 +1,14 @@
 import { Fragment } from "react";
 import WhatsappBtn from "components/buttons/WhatsappBtn";
-import { useFiddelizeAdmin } from "init";
+import ButtonMulti, {
+    faStyle,
+} from "components/buttons/material-ui/ButtonMulti";
 import { useBizData } from "init";
 import removeImgFormat from "utils/biz/removeImgFormat";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function SupportBizContact() {
-    const { mainTechWhatsapp } = useFiddelizeAdmin();
-
     const { bizLogo, bizName } = useBizData();
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
@@ -66,12 +68,18 @@ export default function SupportBizContact() {
                 app
             </p>
             <section className="container-center">
-                <WhatsappBtn
-                    icon="cogs"
-                    title="iniciar suporte"
-                    isDisabled={false}
-                    elsePhone={mainTechWhatsapp}
-                />
+                <Link to="/suporte" className="no-text-decoration">
+                    <ButtonMulti
+                        title="Iniciar Suporte"
+                        onClick={null}
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeSDark)"
+                        backColorOnHover="var(--themeSDark)"
+                        iconFontAwesome={
+                            <FontAwesomeIcon icon="cogs" style={faStyle} />
+                        }
+                    />
+                </Link>
             </section>
             {showNote()}
             <div style={{ marginBottom: 150 }} />

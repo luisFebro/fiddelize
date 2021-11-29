@@ -24,6 +24,7 @@ import {
 } from "./comp-pages/AsyncNewAppPages";
 import {
     AsyncLoginPage,
+    AsyncSupport,
     // cli-admin
     AsyncDashboardClientAdmin,
     AsyncOrdersAndPay,
@@ -90,6 +91,7 @@ function Website({ location }) {
                     exact
                     component={AsyncLoginPage}
                 />
+                <Route path="/suporte" exact component={AsyncSupport} />
                 <Route
                     path="/cliente/pontos-de-compra"
                     exact
