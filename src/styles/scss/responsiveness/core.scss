@@ -1,12 +1,4 @@
-.center-to-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 989;
-}
-
+// BOOTSTRAP
 .container-center {
     display: flex;
     justify-content: center;
@@ -26,6 +18,91 @@
     justify-content: center;
     align-items: center;
     flex-flow: row nowrap;
+}
+
+.d-table {
+    display: table !important;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.flex-row {
+    -ms-flex-direction: row !important;
+    flex-direction: row !important
+}
+
+.flex-column {
+    -ms-flex-direction: column !important;
+    flex-direction: column !important
+}
+
+@media (min-width:576px) {
+    .flex-sm-row {
+        -ms-flex-direction: row !important;
+        flex-direction: row !important
+    }
+    .flex-sm-column {
+        -ms-flex-direction: column !important;
+        flex-direction: column !important
+    }
+
+    .d-sm-none {
+        display: none !important;
+    }
+}
+
+@media (min-width:768px) {
+    .flex-md-row {
+        -ms-flex-direction: row !important;
+        flex-direction: row !important
+    }
+    .flex-md-column {
+        -ms-flex-direction: column !important;
+        flex-direction: column !important
+    }
+    .d-md-none {
+        display: none !important;
+    }
+}
+
+@media (min-width:992px) {
+    .flex-lg-row {
+        -ms-flex-direction: row !important;
+        flex-direction: row !important
+    }
+    .flex-lg-column {
+        -ms-flex-direction: column !important;
+        flex-direction: column !important
+    }
+    .d-lg-none {
+        display: none !important;
+    }
+}
+
+@media (min-width:1200px) {
+    .flex-xl-row {
+        -ms-flex-direction: row !important;
+        flex-direction: row !important
+    }
+    .flex-xl-column {
+        -ms-flex-direction: column !important;
+        flex-direction: column !important
+    }
+    .d-xl-none {
+        display: none !important;
+    }
+}
+// END BOOTSTRAP
+
+.center-to-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 989;
 }
 
 .container-center-max-width-500 {
@@ -106,10 +183,6 @@
     flex-flow: column wrap;
     height: 20em; // fallback in case of ch is not supported
     height: 100vh;
-}
-
-.d-table {
-    display: table !important;
 }
 
 /*MOBILE FIRST RESPONSIVE MEDIA QUERIES*/

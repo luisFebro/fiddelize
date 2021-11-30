@@ -436,7 +436,7 @@ pre code {
 
 .container {
     width: 100%;
-    padding-right: 10px !important;
+    padding-right: 10px !important; /* 15px is from boostrap */
     padding-left: 10px !important;
     margin-right: auto;
     margin-left: auto;

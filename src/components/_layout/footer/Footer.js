@@ -32,7 +32,7 @@ const Footer = ({ location }) => {
 
     const showAboutColumn = () => (
         <section className="col-md-4">
-            <div className="footer-col first">
+            <div className="footer-col first text-voca-cyan">
                 <h4>Sobre a Fiddelize</h4>
                 <p>
                     Ajudamos negócios a oferecer <strong>benefícios</strong>{" "}
