@@ -122,7 +122,11 @@ const Footer = ({ location }) => {
                         />
                     </div>
                 )}
-                <div className={`container ${!isHome ? "theme-p-dark" : ""}`}>
+                <div
+                    className={`p-4 container-fluid ${
+                        !isHome ? "theme-p-dark" : ""
+                    }`}
+                >
                     <div className="row">
                         {showAboutColumn()}
                         {showBizLinks()}

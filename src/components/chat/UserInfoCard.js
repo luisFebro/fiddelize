@@ -2,17 +2,15 @@ import { Fragment } from "react";
 import useContext from "context";
 
 export default function UserInfoCard() {
-    const { showUserInfo, userInfoData } = useContext();
-    console.log("showUserInfo", showUserInfo);
-
-    const { avatar } = userInfoData;
+    const { chatData, openChat } = useContext();
+    const { avatar, otherUserName } = chatData;
 
     return (
         <Fragment>
             <div
                 className={`${
-                    showUserInfo ? "d-block" : "d-none"
-                } chat--mobile user-profile col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4`}
+                    openChat ? "d-block" : "d-none d-xl-block"
+                } user-profile col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4`}
             >
                 <div className="user-profile__close d-flex d-xl-none">
                     <svg
@@ -34,12 +32,16 @@ export default function UserInfoCard() {
                 </div>
                 <div className="user-profile__wrapper">
                     <div className="user-profile__avatar">
-                        <img src={avatar} alt="Jenny Smith" loading="lazy" />
+                        <img src={avatar} alt={otherUserName} loading="lazy" />
                     </div>
                     <div className="user-profile__details mt-1">
-                        <span className="user-profile__name">Jenny Smith</span>
+                        <span className="user-profile__name">
+                            Suporte {otherUserName}
+                        </span>
                         <span className="user-profile__phone">
-                            Atendimento das 9 até as 18:00
+                            <span className="text-em-1-1 font-weight-bold">
+                                das 9:00 até as 18:00
+                            </span>
                         </span>
                         <span className="user-profile__location">
                             De Segunda a Sábado

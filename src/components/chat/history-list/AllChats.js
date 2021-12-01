@@ -1,43 +1,100 @@
+import { Fragment } from "react";
 import useContext from "context";
 import getId from "utils/getId";
+import { getSubjectBr } from "../helpers";
 
-export default function MessagingPanel({ mainDataList }) {
-    const { setData } = useContext();
+const truncate = (name, leng) => window.Helper.truncate(name, leng);
+
+export default function AllChats({ mainDataList, isDev }) {
+    const { setData, isSupport } = useContext();
 
     const handleOpenChat = (data) => {
         setData((prev) => ({ ...prev, openChat: getId(), chatData: data }));
     };
 
     return (
-        <ul className="messages-page__list pb-5 px-1 px-md-3">
-            {mainDataList.map((data) => (
-                <li
-                    key={data._id}
-                    className={`messaging-member messaging-member--new messaging-member--${data.status}`}
-                    onClick={() => handleOpenChat(data)}
-                >
-                    <div className="messaging-member__wrapper">
-                        <div className="messaging-member__avatar">
-                            <img
-                                src={data.avatar}
-                                alt={data.otherUserName}
-                                loading="lazy"
-                            />
-                            <div className="user-status" />
-                        </div>
+        <Fragment>
+            <ChatSearcher isDev={isDev} isSupport={isSupport} />
+            <ul className="messages-page__list pb-5 px-1 px-md-2">
+                {mainDataList.map((data) => (
+                    <li
+                        key={data._id}
+                        className={`messaging-member ${
+                            data.newMsg ? "messaging-member--new" : ""
+                        }`}
+                        onClick={() => handleOpenChat(data)}
+                    >
+                        <div className="messaging-member__wrapper">
+                            <div className="messaging-member__avatar">
+                                <img
+                                    src={data.avatar}
+                                    alt={data.otherUserName}
+                                    loading="lazy"
+                                />
+                                <div
+                                    className={`user-status user-status${
+                                        data.status === "online"
+                                            ? "--online"
+                                            : ""
+                                    }`}
+                                />
+                            </div>
 
-                        <span className="messaging-member__name">
-                            {data.userName}
-                        </span>
-                        <span className="messaging-member__message">
-                            {data.lastMsg}
-                        </span>
-                    </div>
-                </li>
-            ))}
-        </ul>
+                            <span className="messaging-member__name">
+                                {truncate(data.otherUserName, 20)}{" "}
+                                {isSupport
+                                    ? `(${getSubjectBr(data.subject)})`
+                                    : ""}
+                            </span>
+                            <span className="d-block mt-2 messaging-member__message">
+                                {getLastMsg(data.msgList)}
+                            </span>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </Fragment>
     );
 }
+
+// COMPS
+function ChatSearcher({ isDev, isSupport = true }) {
+    return (
+        <div className="messages-page__search mb-0 px-3 px-md-1 pb-3">
+            <div className="custom-form__search-wrapper">
+                <input
+                    type="text"
+                    className="form-control custom-form"
+                    id="search"
+                    placeholder={`Procure mensagem, ${
+                        isSupport ? "assunto" : "usuário"
+                    }${isDev ? ", assunto" : "..."}`}
+                    autoComplete="off"
+                />
+                <button type="submit" className="custom-form__search-submit">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="svg-icon svg-icon--search"
+                        viewBox="0 0 46.6 46.6"
+                    >
+                        <path
+                            d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z"
+                            fill="#f68b3c"
+                        />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    );
+}
+// END COMPS
+
+// HELPERS
+function getLastMsg(msgList = []) {
+    if (!msgList.length) return [];
+    return msgList.slice(-1)[0].msgs.slice(-1)[0];
+}
+// END HELPERS
 
 /*
 

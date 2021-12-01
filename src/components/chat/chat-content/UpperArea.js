@@ -2,19 +2,20 @@ import { Fragment } from "react";
 import useContext from "context";
 import animateCSS from "utils/animateCSS";
 import getId from "utils/getId";
+import { getSubjectBr } from "../helpers";
 
 export default function UpperArea() {
-    const { setData, chatData } = useContext();
+    const { setData, chatData, isSupport } = useContext();
 
     const handleCloseChat = () => {
         const chat = document.querySelector(".chat");
         animateCSS(chat, "zoomOut", "faster", () => {
-            setData((prev) => ({ ...prev, openChat: false, chatData: {} }));
+            setData((prev) => ({ ...prev, openChat: false }));
         });
     };
 
     return (
-        <div className="chat__messaging messaging-member--online pb-2 pb-md-2 pl-2 pl-md-4 pr-2">
+        <div className="chat__messaging messaging-member--online pb-2 pb-md-2 px-2 pl-md-4">
             <div
                 className="chat__previous d-flex d-md-none"
                 onClick={handleCloseChat}
@@ -31,26 +32,39 @@ export default function UpperArea() {
                 </svg>
             </div>
             <BadgeNewChat />
-            <ChatMemberInfo setData={setData} chatData={chatData} />
+            <ChatMemberInfo
+                setData={setData}
+                chatData={chatData}
+                isSupport={isSupport}
+            />
         </div>
     );
 }
 
 // COMPS
-function ChatMemberInfo({ setData, chatData }) {
-    const { otherUserName, avatar, status } = chatData;
+function ChatMemberInfo({ setData, chatData, isSupport }) {
+    const { otherUserName, avatar, status, subject } = chatData;
+
+    const isOnline = status === "online";
 
     const showAvatarInfo = () => (
         <div className="chat__infos pl-2 pl-md-0">
-            <div className="chat-member__wrapper" data-online="true">
+            <div className="chat-member__wrapper">
                 <div className="chat-member__avatar">
                     <img src={avatar} alt={otherUserName} loading="lazy" />
-                    <div className="user-status user-status--large" />
+                    <div
+                        className={`user-status user-status${
+                            isOnline ? "--online" : ""
+                        }`}
+                    />
                 </div>
                 <div className="chat-member__details">
-                    <span className="chat-member__name">{otherUserName}</span>
+                    <span className="text-wrap chat-member__name">
+                        {otherUserName}{" "}
+                        {isSupport ? `(${getSubjectBr(subject)})` : ""}
+                    </span>
                     <span className="chat-member__status">
-                        {status === "online" ? "Online" : "Offline"}
+                        {isOnline ? "Online" : "Offline"}
                     </span>
                 </div>
             </div>
@@ -97,10 +111,13 @@ function ChatMemberInfo({ setData, chatData }) {
 }
 
 function BadgeNewChat() {
+    const display = false;
     return (
-        <div className="d-none chat__notification d-flex d-md-none chat__notification--new">
-            <span>1</span>
-        </div>
+        display && (
+            <div className="d-none chat__notification d-flex d-md-none chat__notification--new">
+                <span>1</span>
+            </div>
+        )
     );
 }
 // END COMPS

@@ -434,9 +434,11 @@ pre code {
     word-break: normal;
 }
 
+/* LESSON: use container fluid for layout that requires fixed 100% of width like footer and container for text in a blog for instance */
+.container-fluid,
 .container {
     width: 100%;
-    padding-right: 10px !important; /* 15px is from boostrap */
+    padding-right: 10px !important;
     padding-left: 10px !important;
     margin-right: auto;
     margin-left: auto;

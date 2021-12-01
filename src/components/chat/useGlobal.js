@@ -1,13 +1,14 @@
 import { useState } from "react";
 // import useData from "init";
 
+const isSmall = window.Helper.isSmallScreen();
+
 export default function useGlobal(props) {
-    // const { userGame } = useData();
+    const { mainDataList = [] } = props;
+
     const [data, setData] = useState({
-        openChat: false,
-        chatData: {},
-        showUserInfo: false,
-        userInfoData: {},
+        openChat: !isSmall,
+        chatData: mainDataList[0] || {}, // the first and most recent message will be selected by default
         darkMode: false,
     });
 

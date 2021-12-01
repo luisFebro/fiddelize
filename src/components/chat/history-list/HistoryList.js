@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import useData from "init";
 import useContext from "context";
 import { setItems } from "init/lStorage";
-import MessagingPanel from "./MessagingPanel";
+import AllChats from "./AllChats";
 
 export default function HistoryList() {
     const { agentJob } = useData();
@@ -14,46 +14,13 @@ export default function HistoryList() {
         <Fragment>
             <div className="col-12 col-md-4 col-lg-5 col-xl-3 px-0 messages-page__list-scroll">
                 <div className="messages-page__header mb-0 px-4 pt-3 pb-3">
-                    <span className="messages-page__title">
-                        Histórico de Chats
-                    </span>
+                    <span className="messages-page__title">Histórico</span>
                     <DarkModeToggler setDarkMode={setDarkMode} />
                 </div>
-                <ChatSearcher isDev={isDev} />
 
-                <MessagingPanel mainDataList={mainDataList} />
+                <AllChats mainDataList={mainDataList} isDev={isDev} />
             </div>
         </Fragment>
-    );
-}
-
-function ChatSearcher({ isDev }) {
-    return (
-        <div className="messages-page__search mb-0 px-3 pb-3">
-            <div className="custom-form__search-wrapper">
-                <input
-                    type="text"
-                    className="form-control custom-form"
-                    id="search"
-                    placeholder={`Procure uma mensagem, usuário${
-                        isDev ? ", ou assunto" : "..."
-                    }`}
-                    autoComplete="off"
-                />
-                <button type="submit" className="custom-form__search-submit">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="svg-icon svg-icon--search"
-                        viewBox="0 0 46.6 46.6"
-                    >
-                        <path
-                            d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z"
-                            fill="#f68b3c"
-                        />
-                    </svg>
-                </button>
-            </div>
-        </div>
     );
 }
 

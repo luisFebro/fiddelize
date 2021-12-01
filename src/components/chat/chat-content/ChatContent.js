@@ -10,7 +10,7 @@ export default function ChatContent() {
         <div
             className={`${
                 openChat ? "d-block animated fadeInUp" : "d-none"
-            } chat chat--mobile col-12 col-md-8 col-lg-7 col-xl-6 px-0 pl-md-1`}
+            } chat col-12 col-md-8 col-lg-7 col-xl-6 px-0 pl-md-1`}
         >
             <div className="chat__container">
                 <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">

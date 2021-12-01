@@ -9,10 +9,16 @@ import HistoryList from "./history-list/HistoryList";
 import ChatContent from "./chat-content/ChatContent";
 import UserInfoCard from "./UserInfoCard";
 import "./Chat.scss";
+import "styles/references/bootstrap4.ref.css";
+
+// LoadableVisible({
+//     loader: () =>
+//         import("styles/references/bootstrap4.ref.css" /* webpackChunkName: "full-bootstrap-lazy" */),
+// })
 
 const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 
-export default function Chat({ subject = "suggestion", role }) {
+export default function Chat({ subject, role }) {
     useChatHandlers();
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
 
@@ -64,52 +70,76 @@ export default function Chat({ subject = "suggestion", role }) {
             _id: "12332321",
             isFirstDayMsg: true,
             bubble: "me",
-            msgs: ["Obrigado, filho da puta!!!", "Bye!!!"],
+            msgs: ["Obrigado", "Bye!!!"],
             createdAt: new Date(),
         },
     ];
 
+    // The list will be read as the most recent at the top to bottom
     const list = [
         {
             _id: "231313211211",
             otherUserName: "Fiddelize",
+            subject: "bugReport",
+            newMsg: true,
             status: "online",
-            avatar: "/img/logo.png",
-            lastMsg:
-                "Yes, I need your help with the project, it need it done by tomorrow 😫",
+            avatar: "/img/logo-chat.png",
             msgList,
+        },
+        {
+            _id: "23131321121dadsa1",
+            meName: "Febro",
+            otherUserName:
+                "Vocariza Languages Mohter fucker fsfdsfd fds fds fsd",
+            subject: "usageHelp",
+            newMsg: false,
+            status: "offline",
+            avatar: "/img/test/vocariza.png",
+            msgList: [
+                {
+                    _id: "12332321",
+                    isFirstDayMsg: true,
+                    bubble: "other",
+                    msgs: ["Não esqueça de passar lá no nosso website!"],
+                    createdAt: new Date(),
+                },
+            ],
         },
     ];
 
+    // sent by content field if the chat is support or other kind of chat
+    const isSupport = true;
     const store = useGlobal({
-        subject,
         role,
         mainDataList: list || [],
         setDarkMode,
+        isSupport,
     });
 
     return (
         <Provider store={store}>
-            <div
-                className={`chat--root ${
-                    darkMode ? "dark-mode" : ""
-                } home-page__content messages-page`}
-            >
-                <div className="container h-100">
-                    <div className="row px-0 h-100">
-                        <HistoryList />
-                        <ChatContent />
-                        <UserInfoCard />
+            <section className="chat--root">
+                <div
+                    className={`${
+                        darkMode ? "dark-mode" : ""
+                    } home-page__content messages-page`}
+                >
+                    <div className="container-fluid h-100">
+                        <div className="row px-0 h-100">
+                            <HistoryList />
+                            <ChatContent />
+                            <UserInfoCard />
+                        </div>
                     </div>
+                    <style jsx>
+                        {`
+                            .h-100 {
+                                height: 100% !important;
+                            }
+                        `}
+                    </style>
                 </div>
-                <style jsx>
-                    {`
-                        .h-100 {
-                            height: 100% !important;
-                        }
-                    `}
-                </style>
-            </div>
+            </section>
         </Provider>
     );
 }
