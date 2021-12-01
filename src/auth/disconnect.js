@@ -9,13 +9,28 @@ const isApp = isThisApp();
 export default async function disconnect(options = {}) {
     const {
         needRedirect = true,
+        onlyRedirect = false,
         msg = false,
         history,
         rememberAccess = true,
     } = options;
     if (!needRedirect && !history) return null;
 
+    function redirect() {
+        if (history) return isApp ? history.push("/app") : history.push("/");
+        const destiny = isApp ? "/app" : "/acesso/verificacao";
+
+        window.location.href = destiny;
+
+        setTimeout(() => {
+            showProgress("end");
+        }, 10000);
+        return null;
+    }
+
     showProgress("go");
+    if (onlyRedirect) return redirect();
+
     if (msg) showToast("Finalizando sua sessão...", { dur: 15000 });
 
     const [role] = await Promise.all([
@@ -43,10 +58,7 @@ export default async function disconnect(options = {}) {
         ).catch((err) => `ERROR disconnect setVars ${err}`);
     // end
 
-    if (history) return isApp ? history.push("/app") : history.push("/");
-    const destiny = isApp ? "/app" : "/acesso/verificacao";
-
-    window.location.href = destiny;
+    redirect();
     return null;
 }
 

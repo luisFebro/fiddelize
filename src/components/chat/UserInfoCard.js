@@ -1,13 +1,23 @@
 import { Fragment } from "react";
+import useContext from "context";
 
 export default function UserInfoCard() {
+    const { showUserInfo, userInfoData } = useContext();
+    console.log("showUserInfo", showUserInfo);
+
+    const { avatar } = userInfoData;
+
     return (
         <Fragment>
-            <div class="col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4 user-profile">
-                <div class="user-profile__close d-flex d-xl-none">
+            <div
+                className={`${
+                    showUserInfo ? "d-block" : "d-none"
+                } chat--mobile user-profile col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4`}
+            >
+                <div className="user-profile__close d-flex d-xl-none">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="svg-icon"
+                        className="svg-icon"
                         viewBox="0 0 38.8 38.9"
                     >
                         <g>
@@ -22,69 +32,70 @@ export default function UserInfoCard() {
                         </g>
                     </svg>
                 </div>
-                <div class="user-profile__wrapper">
-                    <div class="user-profile__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/women/56.jpg"
-                            alt="Jenny Smith"
-                            loading="lazy"
-                        />
+                <div className="user-profile__wrapper">
+                    <div className="user-profile__avatar">
+                        <img src={avatar} alt="Jenny Smith" loading="lazy" />
                     </div>
-                    <div class="user-profile__details mt-1">
-                        <span class="user-profile__name">Jenny Smith</span>
-                        <span class="user-profile__phone">
-                            (025) 015-234-567
+                    <div className="user-profile__details mt-1">
+                        <span className="user-profile__name">Jenny Smith</span>
+                        <span className="user-profile__phone">
+                            Atendimento das 9 até as 18:00
                         </span>
-                        <span class="user-profile__location">
-                            New York, United States
+                        <span className="user-profile__location">
+                            De Segunda a Sábado
                         </span>
-                    </div>
-                    <div class="user-profile__description">
-                        <p>
-                            Fly me to the moon 🌙 If you feel like your life is
-                            a routine, step back and take a deep breath.
-                        </p>
-                    </div>
-                    <div class="user-profile__learning mt-4">
-                        <span class="user-profile__label">Social Medias</span>
-                        <ul class="user-profile__tags user-profile__tags--primary mt-2">
-                            <li>
-                                <a
-                                    href="https://www.instagram.com/tiantsoa_sh/"
-                                    target="_blank"
-                                >
-                                    Instagram
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://www.linkedin.com/in/tiantsoa-rabemananjara-254655152/"
-                                    target="_blank"
-                                >
-                                    Linkedin
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://codepen.io/tiantsoa"
-                                    target="_blank"
-                                >
-                                    Codepen
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="user-profile__hobbies">
-                        <span class="user-profile__label">Activities</span>
-                        <ul class="user-profile__tags user-profile__tags--secondary mt-2">
-                            <li>Biking</li>
-                            <li>Cooking</li>
-                            <li>Traveling</li>
-                            <li>Grahic design</li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </Fragment>
     );
 }
+
+/* ARCHIVES
+
+<div className="user-profile__description">
+    <p>
+        Fly me to the moon 🌙 If you feel like your life is
+        a routine, step back and take a deep breath.
+    </p>
+</div>
+<div className="user-profile__learning mt-4">
+    <span className="user-profile__label">Social Medias</span>
+    <ul className="user-profile__tags user-profile__tags--primary mt-2">
+        <li>
+            <a
+                href="https://www.instagram.com/tiantsoa_sh/"
+                target="_blank"
+            >
+                Instagram
+            </a>
+        </li>
+        <li>
+            <a
+                href="https://www.linkedin.com/in/tiantsoa-rabemananjara-254655152/"
+                target="_blank"
+            >
+                Linkedin
+            </a>
+        </li>
+        <li>
+            <a
+                href="https://codepen.io/tiantsoa"
+                target="_blank"
+            >
+                Codepen
+            </a>
+        </li>
+    </ul>
+</div>
+<div className="user-profile__hobbies">
+    <span className="user-profile__label">Activities</span>
+    <ul className="user-profile__tags user-profile__tags--secondary mt-2">
+        <li>Biking</li>
+        <li>Cooking</li>
+        <li>Traveling</li>
+        <li>Grahic design</li>
+    </ul>
+</div>
+
+ */

@@ -1,224 +1,80 @@
 import { Fragment } from "react";
+import useData from "init";
+import useContext from "context";
+import { setItems } from "init/lStorage";
+import MessagingPanel from "./MessagingPanel";
 
 export default function HistoryList() {
+    const { agentJob } = useData();
+    const { mainDataList, setDarkMode } = useContext();
+
+    const isDev = agentJob === "dev";
+
     return (
         <Fragment>
-            <div class="col-12 col-md-4 col-lg-5 col-xl-3 px-0 messages-page__list-scroll">
-                <div class="messages-page__header mb-0 px-4 pt-3 pb-3">
-                    <span class="messages-page__title">Histórico de Chats</span>
-                    <DarkModeToggler />
+            <div className="col-12 col-md-4 col-lg-5 col-xl-3 px-0 messages-page__list-scroll">
+                <div className="messages-page__header mb-0 px-4 pt-3 pb-3">
+                    <span className="messages-page__title">
+                        Histórico de Chats
+                    </span>
+                    <DarkModeToggler setDarkMode={setDarkMode} />
                 </div>
-                <div class="messages-page__search mb-0 px-3 pb-3">
-                    <div class="custom-form__search-wrapper">
-                        <input
-                            type="text"
-                            class="form-control custom-form"
-                            id="search"
-                            placeholder="Rechercher un message, un utilisateur…"
-                            autocomplete="off"
-                        />
-                        <button
-                            type="submit"
-                            class="custom-form__search-submit"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="svg-icon svg-icon--search"
-                                viewBox="0 0 46.6 46.6"
-                            >
-                                <path
-                                    d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z"
-                                    fill="#f68b3c"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+                <ChatSearcher isDev={isDev} />
 
-                <ul class="messages-page__list pb-5 px-1 px-md-3">
-                    <li class="messaging-member messaging-member--new messaging-member--online">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/men/74.jpg"
-                                    alt="Bessie Cooper"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Bessie Cooper
-                            </span>
-                            <span class="messaging-member__message">
-                                Yes, I need your help with the project, it need
-                                it done by tomorrow 😫
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member messaging-member--online messaging-member--active">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/women/56.jpg"
-                                    alt="Jenny Smith"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Jenny Smith
-                            </span>
-                            <span class="messaging-member__message">
-                                Perfect, thanks !
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/women/17.jpg"
-                                    alt="Courtney Simmons"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Courtney Simmons
-                            </span>
-                            <span class="messaging-member__message">
-                                Going home soon, don't worry
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member messaging-member--online">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/women/39.jpg"
-                                    alt="Martha Curtis"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Martha Curtis
-                            </span>
-                            <span class="messaging-member__message">
-                                Great 😂
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member messaging-member--online">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/men/27.jpg"
-                                    alt="Rozie Tucker"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">Gab Ryan</span>
-                            <span class="messaging-member__message">
-                                Sure, may I get your phone number? 😃
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/men/17.jpg"
-                                    alt="Jules Zimmermann"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Jules Zimmermann
-                            </span>
-                            <span class="messaging-member__message">
-                                Well, here I am, coming as faaast as I can !
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/men/9.jpg"
-                                    alt="Mark Reid"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Mark Reid
-                            </span>
-                            <span class="messaging-member__message">
-                                Have you listened to the latest album? Pure
-                                perfection
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member  messaging-member--online">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/men/54.jpg"
-                                    alt="Russell Williams"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Russell Williams
-                            </span>
-                            <span class="messaging-member__message">
-                                Nice to meet you again{" "}
-                            </span>
-                        </div>
-                    </li>
-                    <li class="messaging-member">
-                        <div class="messaging-member__wrapper">
-                            <div class="messaging-member__avatar">
-                                <img
-                                    src="https://randomuser.me/api/portraits/thumb/women/85.jpg"
-                                    alt="Savannah Nguyen"
-                                    loading="lazy"
-                                />
-                                <div class="user-status"></div>
-                            </div>
-
-                            <span class="messaging-member__name">
-                                Savannah Nguyen
-                            </span>
-                            <span class="messaging-member__message">
-                                Really ?!
-                            </span>
-                        </div>
-                    </li>
-                </ul>
+                <MessagingPanel mainDataList={mainDataList} />
             </div>
         </Fragment>
     );
 }
 
-function DarkModeToggler() {
+function ChatSearcher({ isDev }) {
     return (
-        <div class="messages-page__dark-mode-toogler">
+        <div className="messages-page__search mb-0 px-3 pb-3">
+            <div className="custom-form__search-wrapper">
+                <input
+                    type="text"
+                    className="form-control custom-form"
+                    id="search"
+                    placeholder={`Procure uma mensagem, usuário${
+                        isDev ? ", ou assunto" : "..."
+                    }`}
+                    autoComplete="off"
+                />
+                <button type="submit" className="custom-form__search-submit">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="svg-icon svg-icon--search"
+                        viewBox="0 0 46.6 46.6"
+                    >
+                        <path
+                            d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z"
+                            fill="#f68b3c"
+                        />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function DarkModeToggler({ setDarkMode = () => null }) {
+    const handleDarkMode = () => {
+        setDarkMode((prev) => {
+            setItems("global", {
+                chatDarkMode: !prev,
+            });
+            return !prev;
+        });
+    };
+
+    return (
+        <div
+            className="messages-page__dark-mode-toogler"
+            onClick={handleDarkMode}
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="svg-icon svg-icon--dark-mode"
+                className="svg-icon svg-icon--dark-mode"
                 viewBox="0 0 49.7 49.7"
             >
                 <path

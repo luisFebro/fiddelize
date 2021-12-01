@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import convertToReal from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PercLinearProgress from "components/progressIndicators/perc-linear-progress/PercLinearProgress";
 import getPercentage from "utils/numbers/getPercentage";
@@ -10,16 +11,19 @@ export default function KeyResult({
     krKeyword = "cliente",
     customTitle,
     needWinPerc = true,
+    toFixed = false, // should be a number
 }) {
     const plural = currKR > 1 ? "s" : "";
 
-    const perc = getPercentage(goalKR, currKR, { moreThan100: true });
+    const perc = getPercentage(goalKR, currKR, { moreThan100: true, toFixed });
 
     const finishedKR = perc >= 100;
 
     const mainTitle = customTitle
         ? parse(customTitle)
-        : `${Number.isNaN(currKR) ? "..." : currKR} ${krKeyword}${plural}`;
+        : `${
+              Number.isNaN(currKR) ? "..." : convertToReal(currKR)
+          } ${krKeyword}${plural}`;
 
     return (
         <Fragment>
@@ -66,7 +70,10 @@ export default function KeyResult({
                 >
                     {mainTitle}
                     <br />
-                    <span className="text-normal">{perc}% concluído</span>
+                    <span className="text-normal">
+                        {toFixed ? perc && perc.toFixed(toFixed) : perc}%
+                        concluído
+                    </span>
                 </h4>
             )}
             <PercLinearProgress

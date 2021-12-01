@@ -1,12 +1,14 @@
 import useData from "init";
 import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
-import MonthlyGoal from "./MonthlyGoal";
 import WeeklyGoal from "./WeeklyGoal";
+import MonthlyGoal from "./MonthlyGoal";
+import YearlyGoal from "./YearlyGoal";
 
 export default function OKR({ weeklyData = {} }) {
     const proCustomersCount = weeklyData && weeklyData.proCustomersCount;
     const newCustomersCount = weeklyData && weeklyData.newCustomersCount;
+    const allTimeAccountsCount = weeklyData && weeklyData.allTimeAccountsCount;
 
     const { userId } = useData();
 
@@ -35,14 +37,25 @@ export default function OKR({ weeklyData = {} }) {
 
     return (
         <section className="mt-5 mx-2">
+            <WeeklyGoal {...dataWeeklyGoal} />
+            <hr className="lazer-purple" />
             <MonthlyGoal
                 goalKR={newCustomersCount && newCustomersCount.goal}
                 currKR={newCustomersCount && newCustomersCount.curr}
-                goalDesc="novos clientes"
+                goalDesc="novos cliente-admins"
                 updateGoal={updateGoal}
             />
             <hr className="lazer-purple" />
-            <WeeklyGoal {...dataWeeklyGoal} />
+            <YearlyGoal
+                goalKR={allTimeAccountsCount && allTimeAccountsCount.goal}
+                currKR={allTimeAccountsCount && allTimeAccountsCount.curr}
+                goalDesc="apps instalados"
+            />
+            <div
+                style={{
+                    marginBottom: 100,
+                }}
+            />
         </section>
     );
 }

@@ -1,12 +1,27 @@
 import { Fragment } from "react";
+import useContext from "context";
+import animateCSS from "utils/animateCSS";
+import getId from "utils/getId";
 
 export default function UpperArea() {
+    const { setData, chatData } = useContext();
+
+    const handleCloseChat = () => {
+        const chat = document.querySelector(".chat");
+        animateCSS(chat, "zoomOut", "faster", () => {
+            setData((prev) => ({ ...prev, openChat: false, chatData: {} }));
+        });
+    };
+
     return (
-        <div class="chat__messaging messaging-member--online pb-2 pb-md-2 pl-2 pl-md-4 pr-2">
-            <div class="chat__previous d-flex d-md-none">
+        <div className="chat__messaging messaging-member--online pb-2 pb-md-2 pl-2 pl-md-4 pr-2">
+            <div
+                className="chat__previous d-flex d-md-none"
+                onClick={handleCloseChat}
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="svg-icon svg-icon--previous"
+                    className="svg-icon svg-icon--previous"
                     viewBox="0 0 45.5 30.4"
                 >
                     <path
@@ -16,68 +31,62 @@ export default function UpperArea() {
                 </svg>
             </div>
             <BadgeNewChat />
-            <ChatMemberInfo />
+            <ChatMemberInfo setData={setData} chatData={chatData} />
         </div>
     );
 }
 
 // COMPS
-function ChatMemberInfo() {
+function ChatMemberInfo({ setData, chatData }) {
+    const { otherUserName, avatar, status } = chatData;
+
     const showAvatarInfo = () => (
-        <div class="chat__infos pl-2 pl-md-0">
-            <div class="chat-member__wrapper" data-online="true">
-                <div class="chat-member__avatar">
-                    <img
-                        src="https://randomuser.me/api/portraits/thumb/women/56.jpg"
-                        alt="Jenny Smith"
-                        loading="lazy"
-                    />
-                    <div class="user-status user-status--large"></div>
+        <div className="chat__infos pl-2 pl-md-0">
+            <div className="chat-member__wrapper" data-online="true">
+                <div className="chat-member__avatar">
+                    <img src={avatar} alt={otherUserName} loading="lazy" />
+                    <div className="user-status user-status--large" />
                 </div>
-                <div class="chat-member__details">
-                    <span class="chat-member__name">Jenny Smith</span>
-                    <span class="chat-member__status">Online</span>
+                <div className="chat-member__details">
+                    <span className="chat-member__name">{otherUserName}</span>
+                    <span className="chat-member__status">
+                        {status === "online" ? "Online" : "Offline"}
+                    </span>
                 </div>
             </div>
         </div>
     );
 
-    const showBtnActions = () => {
-        return (
-            <div class="chat__actions mr-2 ">
-                <ul class="m-0">
-                    <li class="chat__details d-flex d-xl-none">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="svg-icon"
-                            viewBox="0 0 42.2 11.1"
-                        >
-                            <g>
-                                <circle
-                                    cx="5.6"
-                                    cy="5.6"
-                                    r="5.6"
-                                    fill="#d87232"
-                                />
-                                <circle
-                                    cx="21.1"
-                                    cy="5.6"
-                                    r="5.6"
-                                    fill="#d87232"
-                                />
-                                <circle
-                                    cx="36.6"
-                                    cy="5.6"
-                                    r="5.6"
-                                    fill="#d87232"
-                                />
-                            </g>
-                        </svg>
-                    </li>
-                </ul>
-            </div>
-        );
+    const handleOnClick = () => {
+        setData((prev) => ({
+            ...prev,
+            showUserInfo: getId(),
+            userInfoData: { test: "done" },
+        }));
     };
+
+    const showBtnActions = () => (
+        <div className="chat__actions mr-2 ">
+            <ul className="m-0">
+                <li
+                    className="chat__details d-flex d-xl-none"
+                    onClick={handleOnClick}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="svg-icon"
+                        viewBox="0 0 42.2 11.1"
+                    >
+                        <g>
+                            <circle cx="5.6" cy="5.6" r="5.6" fill="#d87232" />
+                            <circle cx="21.1" cy="5.6" r="5.6" fill="#d87232" />
+                            <circle cx="36.6" cy="5.6" r="5.6" fill="#d87232" />
+                        </g>
+                    </svg>
+                </li>
+            </ul>
+        </div>
+    );
 
     return (
         <Fragment>
@@ -89,7 +98,7 @@ function ChatMemberInfo() {
 
 function BadgeNewChat() {
     return (
-        <div class="chat__notification d-flex d-md-none chat__notification--new">
+        <div className="d-none chat__notification d-flex d-md-none chat__notification--new">
             <span>1</span>
         </div>
     );

@@ -24,8 +24,13 @@
     display: table !important;
 }
 
+// LESSON: the order here matters, if d-block is before d-none, then some toggle will fail even placing d-block after the className list like in PAsswordCircleFields.js
 .d-none {
     display: none !important;
+}
+
+.d-block {
+    display: block !important;
 }
 
 .flex-row {
