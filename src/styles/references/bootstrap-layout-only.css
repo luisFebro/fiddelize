@@ -5,8 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-/* This file only contains position, height, width, margin, padding and responsive flex layout essencial for the project and aiming a smaller bundler */
-
+/* this file only contains position, height, width, margin, padding and responsive flex layout essencial for the project and aiming a smaller bundler */
 .container {
     width: 100%;
     padding-right: 15px;
@@ -14,31 +13,26 @@
     margin-right: auto;
     margin-left: auto;
 }
-
 @media (min-width: 576px) {
     .container {
         max-width: 540px;
     }
 }
-
 @media (min-width: 768px) {
     .container {
         max-width: 720px;
     }
 }
-
 @media (min-width: 992px) {
     .container {
         max-width: 960px;
     }
 }
-
 @media (min-width: 1200px) {
     .container {
         max-width: 1140px;
     }
 }
-
 .container-fluid,
 .container-lg,
 .container-md,
@@ -50,14 +44,12 @@
     margin-right: auto;
     margin-left: auto;
 }
-
 @media (min-width: 576px) {
     .container,
     .container-sm {
         max-width: 540px;
     }
 }
-
 @media (min-width: 768px) {
     .container,
     .container-md,
@@ -65,7 +57,6 @@
         max-width: 720px;
     }
 }
-
 @media (min-width: 992px) {
     .container,
     .container-lg,
@@ -74,7 +65,6 @@
         max-width: 960px;
     }
 }
-
 @media (min-width: 1200px) {
     .container,
     .container-lg,
@@ -84,7 +74,6 @@
         max-width: 1140px;
     }
 }
-
 .row {
     display: -ms-flexbox;
     display: flex;
@@ -93,7 +82,6 @@
     margin-right: -15px;
     margin-left: -15px;
 }
-
 .col,
 .col-1,
 .col-10,
@@ -169,135 +157,114 @@
     padding-right: 15px;
     padding-left: 15px;
 }
-
 .col {
     -ms-flex-preferred-size: 0;
-    flex-basis: 0;
+    flex-basis: 0%;
     -ms-flex-positive: 1;
     flex-grow: 1;
     min-width: 0;
     max-width: 100%;
 }
-
 .row-cols-1 > * {
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
     max-width: 100%;
 }
-
 .row-cols-2 > * {
     -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
 }
-
 .row-cols-3 > * {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 33.333333%;
     max-width: 33.333333%;
 }
-
 .row-cols-4 > * {
     -ms-flex: 0 0 25%;
     flex: 0 0 25%;
     max-width: 25%;
 }
-
 .row-cols-5 > * {
     -ms-flex: 0 0 20%;
     flex: 0 0 20%;
     max-width: 20%;
 }
-
 .row-cols-6 > * {
     -ms-flex: 0 0 16.666667%;
     flex: 0 0 16.666667%;
     max-width: 16.666667%;
 }
-
 .col-auto {
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
 }
-
 .col-1 {
     -ms-flex: 0 0 8.333333%;
     flex: 0 0 8.333333%;
     max-width: 8.333333%;
 }
-
 .col-2 {
     -ms-flex: 0 0 16.666667%;
     flex: 0 0 16.666667%;
     max-width: 16.666667%;
 }
-
 .col-3 {
     -ms-flex: 0 0 25%;
     flex: 0 0 25%;
     max-width: 25%;
 }
-
 .col-4 {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 33.333333%;
     max-width: 33.333333%;
 }
-
 .col-5 {
     -ms-flex: 0 0 41.666667%;
     flex: 0 0 41.666667%;
     max-width: 41.666667%;
 }
-
 .col-6 {
     -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
 }
-
 .col-7 {
     -ms-flex: 0 0 58.333333%;
     flex: 0 0 58.333333%;
     max-width: 58.333333%;
 }
-
 .col-8 {
     -ms-flex: 0 0 66.666667%;
     flex: 0 0 66.666667%;
     max-width: 66.666667%;
 }
-
 .col-9 {
     -ms-flex: 0 0 75%;
     flex: 0 0 75%;
     max-width: 75%;
 }
-
 .col-10 {
     -ms-flex: 0 0 83.333333%;
     flex: 0 0 83.333333%;
     max-width: 83.333333%;
 }
-
 .col-11 {
     -ms-flex: 0 0 91.666667%;
     flex: 0 0 91.666667%;
     max-width: 91.666667%;
 }
-
 .col-12 {
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
     max-width: 100%;
 }
-
 @media (min-width: 576px) {
     .col-sm {
         -ms-flex-preferred-size: 0;
-        flex-basis: 0;
+        flex-basis: 0%;
         -ms-flex-positive: 1;
         flex-grow: 1;
         min-width: 0;
@@ -400,11 +367,10 @@
         max-width: 100%;
     }
 }
-
 @media (min-width: 768px) {
     .col-md {
         -ms-flex-preferred-size: 0;
-        flex-basis: 0;
+        flex-basis: 0%;
         -ms-flex-positive: 1;
         flex-grow: 1;
         min-width: 0;
@@ -507,11 +473,10 @@
         max-width: 100%;
     }
 }
-
 @media (min-width: 992px) {
     .col-lg {
         -ms-flex-preferred-size: 0;
-        flex-basis: 0;
+        flex-basis: 0%;
         -ms-flex-positive: 1;
         flex-grow: 1;
         min-width: 0;
@@ -614,11 +579,10 @@
         max-width: 100%;
     }
 }
-
 @media (min-width: 1200px) {
     .col-xl {
         -ms-flex-preferred-size: 0;
-        flex-basis: 0;
+        flex-basis: 0%;
         -ms-flex-positive: 1;
         flex-grow: 1;
         min-width: 0;
@@ -721,45 +685,35 @@
         max-width: 100%;
     }
 }
-
 .d-none {
     display: none !important;
 }
-
 .d-inline {
     display: inline !important;
 }
-
 .d-inline-block {
     display: inline-block !important;
 }
-
 .d-block {
     display: block !important;
 }
-
 .d-table {
     display: table !important;
 }
-
 .d-table-row {
     display: table-row !important;
 }
-
 .d-table-cell {
     display: table-cell !important;
 }
-
 .d-flex {
     display: -ms-flexbox !important;
     display: flex !important;
 }
-
 .d-inline-flex {
     display: -ms-inline-flexbox !important;
     display: inline-flex !important;
 }
-
 @media (min-width: 576px) {
     .d-sm-none {
         display: none !important;
@@ -791,7 +745,6 @@
         display: inline-flex !important;
     }
 }
-
 @media (min-width: 768px) {
     .d-md-none {
         display: none !important;
@@ -823,7 +776,6 @@
         display: inline-flex !important;
     }
 }
-
 @media (min-width: 992px) {
     .d-lg-none {
         display: none !important;
@@ -855,7 +807,6 @@
         display: inline-flex !important;
     }
 }
-
 @media (min-width: 1200px) {
     .d-xl-none {
         display: none !important;
@@ -887,177 +838,142 @@
         display: inline-flex !important;
     }
 }
-
 .flex-row {
     -ms-flex-direction: row !important;
     flex-direction: row !important;
 }
-
 .flex-column {
     -ms-flex-direction: column !important;
     flex-direction: column !important;
 }
-
 .flex-row-reverse {
     -ms-flex-direction: row-reverse !important;
     flex-direction: row-reverse !important;
 }
-
 .flex-column-reverse {
     -ms-flex-direction: column-reverse !important;
     flex-direction: column-reverse !important;
 }
-
 .flex-wrap {
     -ms-flex-wrap: wrap !important;
     flex-wrap: wrap !important;
 }
-
 .flex-nowrap {
     -ms-flex-wrap: nowrap !important;
     flex-wrap: nowrap !important;
 }
-
 .flex-wrap-reverse {
     -ms-flex-wrap: wrap-reverse !important;
     flex-wrap: wrap-reverse !important;
 }
-
 .flex-fill {
     -ms-flex: 1 1 auto !important;
     flex: 1 1 auto !important;
 }
-
 .flex-grow-0 {
     -ms-flex-positive: 0 !important;
     flex-grow: 0 !important;
 }
-
 .flex-grow-1 {
     -ms-flex-positive: 1 !important;
     flex-grow: 1 !important;
 }
-
 .flex-shrink-0 {
     -ms-flex-negative: 0 !important;
     flex-shrink: 0 !important;
 }
-
 .flex-shrink-1 {
     -ms-flex-negative: 1 !important;
     flex-shrink: 1 !important;
 }
-
 .justify-content-start {
     -ms-flex-pack: start !important;
     justify-content: flex-start !important;
 }
-
 .justify-content-end {
     -ms-flex-pack: end !important;
     justify-content: flex-end !important;
 }
-
 .justify-content-center {
     -ms-flex-pack: center !important;
     justify-content: center !important;
 }
-
 .justify-content-between {
     -ms-flex-pack: justify !important;
     justify-content: space-between !important;
 }
-
 .justify-content-around {
     -ms-flex-pack: distribute !important;
     justify-content: space-around !important;
 }
-
 .align-items-start {
     -ms-flex-align: start !important;
     align-items: flex-start !important;
 }
-
 .align-items-end {
     -ms-flex-align: end !important;
     align-items: flex-end !important;
 }
-
 .align-items-center {
     -ms-flex-align: center !important;
     align-items: center !important;
 }
-
 .align-items-baseline {
     -ms-flex-align: baseline !important;
     align-items: baseline !important;
 }
-
 .align-items-stretch {
     -ms-flex-align: stretch !important;
     align-items: stretch !important;
 }
-
 .align-content-start {
     -ms-flex-line-pack: start !important;
     align-content: flex-start !important;
 }
-
 .align-content-end {
     -ms-flex-line-pack: end !important;
     align-content: flex-end !important;
 }
-
 .align-content-center {
     -ms-flex-line-pack: center !important;
     align-content: center !important;
 }
-
 .align-content-between {
     -ms-flex-line-pack: justify !important;
     align-content: space-between !important;
 }
-
 .align-content-around {
     -ms-flex-line-pack: distribute !important;
     align-content: space-around !important;
 }
-
 .align-content-stretch {
     -ms-flex-line-pack: stretch !important;
     align-content: stretch !important;
 }
-
 .align-self-auto {
     -ms-flex-item-align: auto !important;
     align-self: auto !important;
 }
-
 .align-self-start {
     -ms-flex-item-align: start !important;
     align-self: flex-start !important;
 }
-
 .align-self-end {
     -ms-flex-item-align: end !important;
     align-self: flex-end !important;
 }
-
 .align-self-center {
     -ms-flex-item-align: center !important;
     align-self: center !important;
 }
-
 .align-self-baseline {
     -ms-flex-item-align: baseline !important;
     align-self: baseline !important;
 }
-
 .align-self-stretch {
     -ms-flex-item-align: stretch !important;
     align-self: stretch !important;
 }
-
 @media (min-width: 576px) {
     .flex-sm-row {
         -ms-flex-direction: row !important;
@@ -1196,7 +1112,6 @@
         align-self: stretch !important;
     }
 }
-
 @media (min-width: 768px) {
     .flex-md-row {
         -ms-flex-direction: row !important;
@@ -1335,7 +1250,6 @@
         align-self: stretch !important;
     }
 }
-
 @media (min-width: 992px) {
     .flex-lg-row {
         -ms-flex-direction: row !important;
@@ -1474,7 +1388,6 @@
         align-self: stretch !important;
     }
 }
-
 @media (min-width: 1200px) {
     .flex-xl-row {
         -ms-flex-direction: row !important;
@@ -1613,19 +1526,15 @@
         align-self: stretch !important;
     }
 }
-
 .float-left {
     float: left !important;
 }
-
 .float-right {
     float: right !important;
 }
-
 .float-none {
     float: none !important;
 }
-
 @media (min-width: 576px) {
     .float-sm-left {
         float: left !important;
@@ -1637,7 +1546,6 @@
         float: none !important;
     }
 }
-
 @media (min-width: 768px) {
     .float-md-left {
         float: left !important;
@@ -1649,7 +1557,6 @@
         float: none !important;
     }
 }
-
 @media (min-width: 992px) {
     .float-lg-left {
         float: left !important;
@@ -1661,7 +1568,6 @@
         float: none !important;
     }
 }
-
 @media (min-width: 1200px) {
     .float-xl-left {
         float: left !important;
@@ -1673,57 +1579,46 @@
         float: none !important;
     }
 }
-
 .user-select-all {
     -webkit-user-select: all !important;
     -moz-user-select: all !important;
     -ms-user-select: all !important;
     user-select: all !important;
 }
-
 .user-select-auto {
     -webkit-user-select: auto !important;
     -moz-user-select: auto !important;
     -ms-user-select: auto !important;
     user-select: auto !important;
 }
-
 .user-select-none {
     -webkit-user-select: none !important;
     -moz-user-select: none !important;
     -ms-user-select: none !important;
     user-select: none !important;
 }
-
 .overflow-auto {
     overflow: auto !important;
 }
-
 .overflow-hidden {
     overflow: hidden !important;
 }
-
 .position-static {
     position: static !important;
 }
-
 .position-relative {
     position: relative !important;
 }
-
 .position-absolute {
     position: absolute !important;
 }
-
 .position-fixed {
     position: fixed !important;
 }
-
 .position-sticky {
     position: -webkit-sticky !important;
     position: sticky !important;
 }
-
 .fixed-top {
     position: fixed;
     top: 0;
@@ -1731,7 +1626,6 @@
     left: 0;
     z-index: 1030;
 }
-
 .fixed-bottom {
     position: fixed;
     right: 0;
@@ -1739,7 +1633,6 @@
     left: 0;
     z-index: 1030;
 }
-
 @supports ((position: -webkit-sticky) or (position: sticky)) {
     .sticky-top {
         position: -webkit-sticky;

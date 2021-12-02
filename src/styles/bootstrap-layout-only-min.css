@@ -1,4 +1,4 @@
-/* BOOTSTRAP - This file only contains position, height, width, margin, padding and responsive flex layout essencial for the project and aiming a smaller bundler */
+/* this file only contains position, height, width, margin, padding and responsive flex layout essencial for the project and aiming a smaller bundler */
 .container {
     width: 100%;
     padding-right: 15px;
