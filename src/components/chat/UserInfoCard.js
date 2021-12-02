@@ -2,17 +2,26 @@ import { Fragment } from "react";
 import useContext from "context";
 
 export default function UserInfoCard() {
-    const { chatData, openChat } = useContext();
+    const { chatData, openUserCard, setData } = useContext();
     const { avatar, otherUserName } = chatData;
+
+    const closeUserCard = () => {
+        setData((prev) => ({ ...prev, openUserCard: false }));
+    };
 
     return (
         <Fragment>
             <div
                 className={`${
-                    openChat ? "d-block" : "d-none d-xl-block"
-                } user-profile col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4`}
+                    openUserCard
+                        ? "d-block animated fadeInUp"
+                        : "d-none d-xl-block"
+                } user-profile user-profile--mobile col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4`}
             >
-                <div className="user-profile__close d-flex d-xl-none">
+                <div
+                    className="user-profile__close d-flex d-xl-none"
+                    onClick={closeUserCard}
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="svg-icon"

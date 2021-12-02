@@ -9,7 +9,7 @@ import HistoryList from "./history-list/HistoryList";
 import ChatContent from "./chat-content/ChatContent";
 import UserInfoCard from "./UserInfoCard";
 import "./Chat.scss";
-import "styles/references/bootstrap4.ref.css";
+import "styles/bootstrap-layout-only-min.css";
 
 // LoadableVisible({
 //     loader: () =>
@@ -89,8 +89,7 @@ export default function Chat({ subject, role }) {
         {
             _id: "23131321121dadsa1",
             meName: "Febro",
-            otherUserName:
-                "Vocariza Languages Mohter fucker fsfdsfd fds fds fsd",
+            otherUserName: "Luis Febro",
             subject: "usageHelp",
             newMsg: false,
             status: "offline",
@@ -153,58 +152,47 @@ function useChatHandlers() {
         const profile = document.querySelector(".user-profile");
 
         // Screen resize handler
+        // for instance, change modal to fixed when in mobile and remove it when in large screen, etc
         const smallDevice = window.matchMedia("(max-width: 767px)");
-        const largeScreen = window.matchMedia("(max-width: 1199px)");
         smallDevice.addEventListener("change", handleDeviceChange);
-        largeScreen.addEventListener("change", handleLargeScreenChange);
+        // const largeScreen = window.matchMedia("(max-width: 1199px)");
+
+        // largeScreen.addEventListener("change", handleLargeScreenChange);
 
         function handleDeviceChange(e) {
             function chatMobile() {
                 if (chat) chat.classList.add("chat--mobile");
+                if (profile) profile.classList.add("user-profile--mobile");
             }
 
             function chatDesktop() {
                 if (chat) chat.classList.remove("chat--mobile");
+                if (profile) profile.classList.remove("user-profile--mobile");
             }
 
             if (e.matches) chatMobile(chat);
             else chatDesktop(chat);
         }
 
-        function handleLargeScreenChange(e) {
-            function profileToogleOnLarge() {
-                if (profile) profile.classList.add("user-profile--large");
-            }
-
-            function profileExtraLarge() {
-                if (profile) profile.classList.remove("user-profile--large");
-            }
-
-            if (e.matches) profileToogleOnLarge(profile);
-            else profileExtraLarge(profile);
-        }
-
         handleDeviceChange(smallDevice);
-        handleLargeScreenChange(largeScreen);
+        // handleLargeScreenChange(largeScreen);
     }, []);
 }
 // END HOOKS
 
-/* JS methonds
+/* ARCHIVES
 
+function handleLargeScreenChange(e) {
+    function profileToogleOnLarge() {
+        if (profile) profile.classList.add("user-profile--large");
+    }
 
-// Events
-$(".chat__details").click(function () {
-  $profile.fadeIn();
-  $profile.addClass("user-profile--show");
-});
+    function profileExtraLarge() {
+        if (profile) profile.classList.remove("user-profile--large");
+    }
 
-$(".user-profile__close").click(function () {
-  $profile.removeClass("user-profile--show");
-});
-
-$(".messages-page__dark-mode-toogler").click(function () {
-  $("body").toggleClass("dark-mode");
-});
+    if (e.matches) profileToogleOnLarge(profile);
+    else profileExtraLarge(profile);
+}
 
 */

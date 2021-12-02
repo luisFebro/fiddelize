@@ -622,6 +622,8 @@ $breakpoints: (
           @include very-small-text-rfs;
         }
       }
+
+      // Changing automatically className according to current responsive width of screen
       &__profile {
         width: 100%;
         height: 100%;
@@ -630,12 +632,12 @@ $breakpoints: (
 
       &--mobile {
         position: fixed;
+        display: block;
         top: 0;
         left: 0;
         z-index: $navbar-z-index + 1;
-        transform: translateY(100%);
-        display: none;
         transition: transform 0.3s ease-in-out 0.1s;
+        // transform: translateY(100%);
 
         & #{$self}__wrapper {
           border-radius: 0;
@@ -771,23 +773,23 @@ $breakpoints: (
         }
       }
 
-      &--large {
-        display: none;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: $navbar-z-index + 2;
-        transform: translateX(100%);
-        transition: transform 0.3s ease-in-out 0.1s;
-        background-color: var(--bg-page);
-        box-shadow: -3px 0 3px rgba($color: #000000, $alpha: 0.06);
-
-        &#{$self}--show {
+        &--mobile {
+          position: fixed;
           display: block;
-          transform: translateX(0%);
-          border-radius: 0;
+          top: 0;
+          left: 0;
+          z-index: $navbar-z-index + 1;
+          transition: transform 0.3s ease-in-out 0.1s;
+
+          & #{$self}__wrapper {
+            border-radius: 0;
+          }
+          // &#{$self}--show {
+          //   display: block;
+          //   transform: translateY(0%);
+          //   border-radius: 0;
+          // }
         }
-      }
     }
 
     .user-status {
@@ -858,3 +860,21 @@ $breakpoints: (
       }
     }
 }
+
+// &--large {
+//     display: fixed;
+//     position: fixed;
+//     top: 0;
+//     right: 0;
+//     z-index: $navbar-z-index + 2;
+//     // transform: translateX(100%);
+//     // transition: transform 0.3s ease-in-out 0.1s;
+//     background-color: var(--bg-page);
+//     box-shadow: -3px 0 3px rgba($color: #000000, $alpha: 0.06);
+
+//     &#{$self}--show {
+//       display: block;
+//       transform: translateX(0%);
+//       border-radius: 0;
+//     }
+//   }

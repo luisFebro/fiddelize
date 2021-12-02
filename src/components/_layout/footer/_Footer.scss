@@ -3,6 +3,7 @@ footer {
     font-family: var(--mainFont);
     color: var(--mainWhite);
     background-color: var(--themeP);
+    padding-top: 7rem;
     padding-bottom: 0; // prior 0.5rem
 
     & .container.theme-p-dark {
@@ -49,16 +50,6 @@ footer {
         list-style: none;
     }
 
-    // LESSON: the waves should be as thin as possible to fit the layout without overflowing it.
-    & .shape {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        -webkit-transform: translateY(-10%);
-        transform: translateY(-10%);
-    }
-
     & .copyright-slogon {
         position: relative;
         bottom: 0;
@@ -67,7 +58,7 @@ footer {
     }
 
     & .copyright-slogon div {
-        padding-bottom: 85px;
+        padding-bottom: 15px;
     }
 
     @media (min-width: 1200px) {

@@ -7,7 +7,8 @@ export default function useGlobal(props) {
     const { mainDataList = [] } = props;
 
     const [data, setData] = useState({
-        openChat: !isSmall,
+        openChat: !isSmall, // in large screen, keep open.
+        openUserCard: !isSmall,
         chatData: mainDataList[0] || {}, // the first and most recent message will be selected by default
         darkMode: false,
     });

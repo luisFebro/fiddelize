@@ -2,3 +2,77 @@
 @import 'fontSizeEm';
 @import 'fluidTypography';
 
+/* BOOTSTRAP */
+.text-nowrap {
+    white-space: nowrap !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+@media (max-width: 400px) {
+    .text-sm-left {
+        text-align: left !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .text-md-left {
+        text-align: left !important;
+    }
+}
+
+.text-capitalize {
+    text-transform: capitalize !important;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+.font-italic {
+    font-style: italic !important;
+}
+
+.font-normal {
+    font-style: none !important;
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+.text-hide {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+}
+
+.text-decoration-none {
+    text-decoration: none !important;
+}
+
+.text-break {
+    word-wrap: break-word !important;
+}
+
+.visible {
+    visibility: visible !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+/* END BOOTSTRAP */
+

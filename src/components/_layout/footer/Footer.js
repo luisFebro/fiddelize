@@ -19,7 +19,6 @@ const Footer = ({ location }) => {
     const [fullOpen, setFullOpen] = useState(false);
     const versionReady = useDelay(3000);
     const locationNow = location.pathname;
-    const isHome = locationNow === "/";
 
     const handleFullClose = () => {
         setFullOpen(false);
@@ -114,19 +113,8 @@ const Footer = ({ location }) => {
     return (
         !isBlackList && (
             <footer>
-                {isHome && (
-                    <div className="shape">
-                        <img
-                            src="/img/illustrations/home/shapes/landing-footer.svg"
-                            alt="shape 1"
-                        />
-                    </div>
-                )}
-                <div
-                    className={`p-4 container-fluid ${
-                        !isHome ? "theme-p-dark" : ""
-                    }`}
-                >
+                {showSvgWave()}
+                <div className="container-fluid">
                     <div className="row">
                         {showAboutColumn()}
                         {showBizLinks()}
@@ -135,8 +123,8 @@ const Footer = ({ location }) => {
                 </div>
                 <div className="copyright-slogon">
                     {" "}
-                    <div className="position-relative target-download theme-p-dark text-s text-center pt-3 text-voca-cyan">
-                        <span className="d-inline-block mx-3 font-weight-bold text-small">
+                    <div className="pt-3 pb-5 pb-md-2 position-relative target-download theme-p-dark text-s text-center text-voca-cyan">
+                        <span className="pb-5 pb-md-2 d-inline-block mx-3 font-weight-bold text-small">
                             © 2020-{new Date().getFullYear()} Fiddelize
                             <br />
                             Conquiste clientes no próximo nível.
@@ -164,6 +152,35 @@ const Footer = ({ location }) => {
 };
 
 export default withRouter(Footer);
+
+// HELPERS
+function showSvgWave(fill = "#1a1a1a") {
+    return (
+        <section className="footer-shape shape-elevation">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path
+                    fill={fill}
+                    d="M 0,112.99894 40,94.165786 C 80,75.332629 160,37.666314 240,37.666314 c 80,0 160,37.666315 240,53.38023 80,15.478506 160,9.593136 240,-3.178095 80,-12.53582 160,-31.368978 240,-18.833157 80,12.771234 160,56.322908 240,56.499468 80,-0.17656 160,-43.728234 200,-65.916047 l 40,-21.952399 V 0 h -40 C 1360,0 1280,0 1200,0 1120,0 1040,0 960,0 880,0 800,0 720,0 640,0 560,0 480,0 400,0 320,0 240,0 160,0 80,0 40,0 H 0 Z"
+                    id="path2"
+                />
+            </svg>
+            <style jsx>
+                {`
+                    /* LESSON: the waves should be as thin as possible to fit the layout without overflowing it. */
+                    .footer-shape {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        -webkit-transform: translateY(-5%);
+                        transform: translateY(-5%);
+                    }
+                `}
+            </style>
+        </section>
+    );
+}
+// END HELPERS
 
 /*
 <footer

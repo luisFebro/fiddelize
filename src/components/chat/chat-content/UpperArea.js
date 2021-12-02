@@ -9,7 +9,7 @@ export default function UpperArea() {
 
     const handleCloseChat = () => {
         const chat = document.querySelector(".chat");
-        animateCSS(chat, "zoomOut", "faster", () => {
+        animateCSS(chat, "zoomOut", "fast", () => {
             setData((prev) => ({ ...prev, openChat: false }));
         });
     };
@@ -74,8 +74,7 @@ function ChatMemberInfo({ setData, chatData, isSupport }) {
     const handleOnClick = () => {
         setData((prev) => ({
             ...prev,
-            showUserInfo: getId(),
-            userInfoData: { test: "done" },
+            openUserCard: getId(),
         }));
     };
 

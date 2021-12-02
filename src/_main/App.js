@@ -18,6 +18,7 @@ import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // Selected is just the other ones...
 import "../styles/scss/App.scss";
 import "../styles/bootstrap.selected.css";
+import "../styles/bootstrap-padding-margin-w-h-only.min.css";
 import "../styles/libraries/fontAwesomeLib";
 // END STYLING
 // import ScrollToTop from 'react-router-scroll-top';
