@@ -1,23 +1,99 @@
 // BOOTSTRAP
-.container-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: row wrap;
-}
-.container-center-col {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column wrap;
+/* LESSON: use container fluid for layout that requires fixed 100% of width like footer and container for text in a blog for instance */
+.container-fluid,
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
-.container-center-nowrap {
-    // for btns in a row
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+.row {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: row nowrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-4,
+.col-6,
+.col-10,
+.col-12,
+.col-lg-4,
+.col-md-4,
+.col-md-6 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+
+.col-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-10 {
+    flex: 0 0 83.333333%;
+    max-width: 83.333333%;
+}
+
+.col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-lg-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+
+    .col-lg-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
 }
 
 .d-table {
@@ -99,7 +175,36 @@
         display: none !important;
     }
 }
+
+.align-self-end {
+    align-self: flex-end !important;
+}
+
+.align-self-start {
+    align-self: flex-start !important;
+}
 // END BOOTSTRAP
+
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.container-center-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
+}
+
+.container-center-nowrap {
+    // for btns in a row
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row nowrap;
+}
 
 .center-to-screen {
     position: fixed;
@@ -165,14 +270,6 @@
 .image-responsive-80 {
     width: 80%;
     height: auto;
-}
-//FLEX
-.align-self-end {
-    align-self: flex-end !important;
-}
-
-.align-self-start {
-    align-self: flex-start !important;
 }
 /*END IMAGES*/
 

@@ -2,7 +2,7 @@
     Variables
 ====================================== */
 :root {
-  --bg-page: #ffffff;
+  --bg-page: var(--mainWhite); // #ffffff
   --bg-page-darker: #f7f7f7;
   --bg-page-darkest: #b3b3b3;
   --colour-primary: var(--themeP);//#3996fb;
@@ -522,6 +522,7 @@ $breakpoints: (
         }
       }
       &__bubble {
+        $bub: &;
         position: relative;
         color: var(--colour-text-darkest);
         padding: 0.5rem 1rem;
@@ -536,11 +537,18 @@ $breakpoints: (
         overflow-wrap: break-word;
         word-break: break-word;
 
+        &--b-time {
+            font-size: 12px;
+            padding-left: 5px;
+            display: inline-block;
+        }
+
         &--other {
           margin-right: 2rem;
           color: white;
           background-color: var(--chat-bubble-other);
         }
+
         &--me {
           margin-left: 2rem;
           background-color: var(--chat-bubble-me);
@@ -772,12 +780,16 @@ $breakpoints: (
           }
         }
       }
+      // top: 0;
+      // right: 0;
+      position: relative;
+      display: block;
 
         &--mobile {
           position: fixed;
           display: block;
           top: 0;
-          left: 0;
+          right: 0;
           z-index: $navbar-z-index + 1;
           transition: transform 0.3s ease-in-out 0.1s;
 
@@ -848,7 +860,7 @@ $breakpoints: (
         }
       }
       &--previous {
-        width: 55%;
+        width: 75%;
       }
       &--dark-mode {
         width: 80%;

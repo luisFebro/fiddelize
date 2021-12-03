@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useContext from "context";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
@@ -5,8 +6,16 @@ import ChatBubbles from "./ChatBubbles";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ChatContent() {
-    const { openChat, chatData } = useContext();
+    const [newMsg, setNewMsg] = useState("");
+    const { openChat, chatData, handleNewMsg } = useContext();
     const { msgList } = chatData;
+
+    const saveNewMsg = () => {
+        handleNewMsg({
+            m: newMsg,
+            t: new Date(),
+        });
+    };
 
     return (
         <div
@@ -23,7 +32,14 @@ export default function ChatContent() {
                     <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
                         <div className="custom-form__send-wrapper">
                             <input
+                                style={{
+                                    border: "0.2px solid grey",
+                                }}
+                                rows="15"
                                 type="text"
+                                name="newMsg"
+                                value={newMsg}
+                                onChange={(e) => setNewMsg(e.target.value)}
                                 className="form-control custom-form"
                                 id="message"
                                 placeholder="Escreva sua mensagem"
@@ -56,6 +72,7 @@ export default function ChatContent() {
                             <button
                                 type="submit"
                                 className="custom-form__send-submit"
+                                onClick={saveNewMsg}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

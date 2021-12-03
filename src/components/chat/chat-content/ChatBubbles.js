@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { fromNow } from "utils/dates/dateFns";
+import { calendar, getLocalHour } from "utils/dates/dateFns";
 
 export default function ChatBubbles({ msgList = [] }) {
     return (
@@ -10,15 +10,18 @@ export default function ChatBubbles({ msgList = [] }) {
                         <li key={data._id}>
                             {data.isFirstDayMsg && (
                                 <div className="chat__time">
-                                    {fromNow(data.createdAt)}
+                                    {calendar(data.createdAt)}
                                 </div>
                             )}
-                            {data.msgs.map((msg, ind) => (
+                            {data.msgs.map((ms, ind) => (
                                 <div
                                     key={ind}
                                     className={`chat__bubble chat__bubble--${data.bubble}`}
                                 >
-                                    {msg}
+                                    {ms.m}
+                                    <span className="chat__bubble--b-time">
+                                        {getLocalHour(ms.t)}
+                                    </span>
                                 </div>
                             ))}
                         </li>

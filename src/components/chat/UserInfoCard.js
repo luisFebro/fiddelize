@@ -14,7 +14,7 @@ export default function UserInfoCard() {
             <div
                 className={`${
                     openUserCard
-                        ? "d-block animated fadeInUp"
+                        ? "d-block animated slideInRight"
                         : "d-none d-xl-block"
                 } user-profile user-profile--mobile col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4`}
             >

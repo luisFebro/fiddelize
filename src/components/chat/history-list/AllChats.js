@@ -118,7 +118,7 @@ function ChatSearcher({ isDev, isSupport = true }) {
 // HELPERS
 function getLastMsg(msgList = []) {
     if (!msgList.length) return [];
-    return msgList.slice(-1)[0].msgs.slice(-1)[0];
+    return msgList.slice(-1)[0].msgs.slice(-1)[0].m;
 }
 // END HELPERS
 

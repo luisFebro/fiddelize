@@ -22,6 +22,11 @@ export const Provider = ({ children, store }) => (
 );
 
 // REDUCER
+/* data here is reducer and initialData like
+const initState = {
+    currUser: {},
+};
+*/
 export function useUify(...data) {
     const [state, uify] = useReducer(...data);
 

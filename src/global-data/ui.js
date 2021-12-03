@@ -1,5 +1,5 @@
 import { useGlobalContext } from "context";
-import { setItems } from "init/lStorage";
+import getItems, { setItems } from "init/lStorage";
 
 // these methods aim to update ui data globally
 export default function useRun() {
@@ -42,6 +42,16 @@ export const updateUI = (storeName, data, uify) => {
 
     setItems(storeName, treatedData);
     uify([storeName, treatedData]);
+};
+
+// use it to recover the saved data from updateUI
+export const useReadUI = (coll = "global") => {
+    const [priorData] = getItems(coll);
+
+    const context = useGlobalContext();
+    const currData = context ? context[coll] : {};
+
+    return { ...priorData, ...currData };
 };
 
 // HELPERS

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import useData from "init";
 import useContext from "context";
-import { setItems } from "init/lStorage";
+import { updateUI, useAction } from "global-data/ui";
 import AllChats from "./AllChats";
 
 export default function HistoryList() {
@@ -25,11 +25,19 @@ export default function HistoryList() {
 }
 
 function DarkModeToggler({ setDarkMode = () => null }) {
+    const uify = useAction();
+
     const handleDarkMode = () => {
         setDarkMode((prev) => {
-            setItems("global", {
-                chatDarkMode: !prev,
-            });
+            const isDarkMode = !prev;
+            const chatBgColor = isDarkMode ? "#1a1a1a" : "var(--mainWhite)";
+            const data = {
+                chatDarkMode: isDarkMode,
+                chatBgColor,
+            };
+
+            updateUI("global", data, uify);
+
             return !prev;
         });
     };

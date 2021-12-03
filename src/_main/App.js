@@ -9,16 +9,16 @@ import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
 import checkValidSession, { runSessionCheck } from "auth/checkValidSession";
-import useGlobalApp from "./useGlobalApp.js";
 import "utils/globalHelpers";
+import useGlobalApp from "./useGlobalApp.js";
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // STYLING
 // I inlined all critical bootstrap classes on critical css... OMG!!
 // Selected is just the other ones...
+import "../styles/bootstrap-padding-margin-w-h-only.min.css";
 import "../styles/scss/App.scss";
 import "../styles/bootstrap.selected.css";
-import "../styles/bootstrap-padding-margin-w-h-only.min.css";
 import "../styles/libraries/fontAwesomeLib";
 // END STYLING
 // import ScrollToTop from 'react-router-scroll-top';

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useDelay from "hooks/useDelay";
 import AsyncVersion from "_main/user-interfaces/version/AsyncVersion";
 import ModalFullContent from "components/modals/ModalFullContent";
+import { useReadUI } from "global-data/ui";
 import "./_Footer.scss";
 import { Load } from "../../code-splitting/LoadableComp";
 
@@ -19,6 +20,12 @@ const Footer = ({ location }) => {
     const [fullOpen, setFullOpen] = useState(false);
     const versionReady = useDelay(3000);
     const locationNow = location.pathname;
+
+    const { chatBgColor } = useReadUI("global");
+
+    const isSupportPage = locationNow.includes("suporte");
+    const supportColor = chatBgColor;
+    const fill = getWaveFillColor({ isSupportPage, supportColor });
 
     const handleFullClose = () => {
         setFullOpen(false);
@@ -113,7 +120,7 @@ const Footer = ({ location }) => {
     return (
         !isBlackList && (
             <footer>
-                {showSvgWave()}
+                {showSvgWave(fill)}
                 <div className="container-fluid">
                     <div className="row">
                         {showAboutColumn()}
@@ -151,12 +158,16 @@ const Footer = ({ location }) => {
     );
 };
 
-export default withRouter(Footer);
-
 // HELPERS
+function getWaveFillColor({ isSupportPage, supportColor }) {
+    if (isSupportPage && !supportColor) return "var(--mainWhite)"; // default color for the first time user enter in the support or not toggling the dark mode
+    if (isSupportPage && supportColor) return supportColor;
+    return "var(--themeBackground--default)";
+}
+
 function showSvgWave(fill = "var(--themeBackground--default)") {
     return (
-        <section className="footer-shape shape-elevation">
+        <section className="footer-shape">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                 <path
                     fill={fill}
@@ -181,6 +192,8 @@ function showSvgWave(fill = "var(--themeBackground--default)") {
     );
 }
 // END HELPERS
+
+export default withRouter(Footer);
 
 /*
 <footer

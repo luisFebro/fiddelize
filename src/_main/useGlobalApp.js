@@ -11,6 +11,7 @@ const legacyEasyPeasy = {
 const initState = {
     currUser: {},
     bizData: {},
+    global: {},
     ...legacyEasyPeasy,
 };
 
@@ -21,6 +22,10 @@ const reducer = (state, action) => {
         return { ...state, currUser: { ...state.currUser, ...payload } }; // inner ...state.currUser so that variables can be inserted individually when updating data with updateUser.
     if (type === "bizData")
         return { ...state, bizData: { ...state.bizData, ...payload } };
+    // al other types of data (use scarcely, only in the last case for transfering data from distant components)
+    if (type === "global")
+        return { ...state, global: { ...state.global, ...payload } };
+
     if (type === "run") return { ...state, run: !state.run };
     if (type === "runName")
         return { ...state, runName: payload && payload.toString() };
