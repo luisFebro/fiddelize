@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Provider } from "context";
 import getItems from "init/lStorage";
 import { io } from "socket.io-client";
+import useData from "init";
 import useGlobal from "./useGlobal";
 import HistoryList from "./history-list/HistoryList";
 import ChatContent from "./chat-content/ChatContent";
@@ -12,100 +13,34 @@ import UserInfoCard from "./UserInfoCard";
 import "./Chat.scss";
 import "styles/bootstrap-layout-only-min.css";
 
-// LoadableVisible({
-//     loader: () =>
-//         import("styles/references/bootstrap4.ref.css" /* webpackChunkName: "full-bootstrap-lazy" */),
-// })
-
 const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 
-export default function Chat({ subject, role }) {
+export default function Chat({ subject }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
-    useStartSocketIo();
-    useChatHandlers();
 
-    // request the client list of chats here
+    const { userId, name, agentJob, role } = useData();
+    const isDev = agentJob === "dev";
+
+    const socketIo = useStartSocketIo({ isDev, name, subject, userId, role });
+
+    useChatHandlers();
 
     const msgList = [
         {
-            _id: "1233ff2321",
+            msgId: "12332321ddsadsadssad",
+            userId: "",
             isFirstDayMsg: true,
-            bubble: "me",
-            msgs: [
-                {
-                    m:
-                        "Hey, I bought something yesterdat but haven't gotten any confirmation. Do you know I if the order went through?",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-                {
-                    m:
-                        "Hi! I just checked, cool, your order went through and is on it's way home. Enjoy your new computer! 😃",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-            ],
-            createdAt: new Date(),
-        },
-        {
-            _id: "123323fsdfds21",
-            isFirstDayMsg: false,
             bubble: "other",
-            msgs: [
-                {
-                    m: "Ohh thanks ! I was really worried about it !",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-                {
-                    m: "Can't wait for it to be delivered",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-            ],
-            createdAt: new Date(),
+            msg: "Hello!",
+            createdAt: "2021-12-02T12:38:18.366Z",
         },
         {
-            _id: "1233232fds1",
-            isFirstDayMsg: true,
-            bubble: "me",
-            msgs: [
-                {
-                    m:
-                        "Aenean iaculis massa non lorem dignissim volutpat. Praesent id faucibus lorem, a sagittis nunc. Duis facilisis lectus vel sapien ultricies, sed placerat augue elementum. In sagittis, justo nec sodales posuere, nunc est sagittis tellus, eget scelerisque dolor risus vel augue",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-                { m: "Is everything alright?", t: "2021-12-02T12:38:18.366Z" },
-            ],
-            createdAt: new Date(),
-        },
-        {
-            _id: "12332321fdsf",
+            msgId: "12332321dsad",
+            userId: "",
             isFirstDayMsg: false,
-            bubble: "other",
-            msgs: [
-                {
-                    m:
-                        "Vestibulum finibus pulvinar quam, at tempus lorem. Pellentesque justo sapien, pulvinar sed magna et, vulputate commodo nisl. Aenean pharetra ornare turpis. Pellentesque viverra blandit ullamcorper. Mauris tincidunt ac lacus vel convallis. Vestibulum id nunc nec urna accumsan dapibus quis ullamcorper massa. Aliquam erat volutpat. Nam mollis mi et arcu dapibus condimentum.",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-                {
-                    m:
-                        "Nulla facilisi. Duis laoreet dignissim lectus vel maximus",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-                {
-                    m: "Curabitur volutpat, ipsum a condimentum hendrerit ! 😊",
-                    t: "2021-12-02T12:38:18.366Z",
-                },
-            ],
-            createdAt: new Date(),
-        },
-        {
-            _id: "12332321",
-            isFirstDayMsg: true,
             bubble: "me",
-            msgs: [
-                { m: "Obrigado", t: "2021-12-02T12:38:18.366Z" },
-                { m: "Bye!!!", t: "2021-12-02T20:38:18.366Z" },
-            ],
-            createdAt: new Date(),
+            msg: "Buy!",
+            createdAt: "2021-12-02T12:38:18.366Z",
         },
     ];
 
@@ -115,30 +50,25 @@ export default function Chat({ subject, role }) {
             _id: "231313211211",
             otherUserName: "Fiddelize",
             subject: "bugReport",
-            newMsg: true,
+            gotPendingMsg: true,
             status: "online",
             avatar: "/img/logo-chat.png",
-            msgList,
+            dbMsgs: msgList,
         },
         {
             _id: "23131321121dadsa1",
             meName: "Febro",
             otherUserName: "Luis Febro",
             subject: "usageHelp",
-            newMsg: false,
+            gotPendingMsg: false,
             status: "offline",
             avatar: "/img/test/vocariza.png",
-            msgList: [
+            dbMsgs: [
                 {
-                    _id: "12332321",
+                    msgId: "12332321",
                     isFirstDayMsg: true,
                     bubble: "other",
-                    msgs: [
-                        {
-                            m: "Não esqueça de passar lá no nosso website!",
-                            t: "2021-12-02T12:38:18.366Z",
-                        },
-                    ],
+                    msg: "Não esqueça de passar lá no nosso website!",
                     createdAt: new Date(),
                 },
             ],
@@ -152,6 +82,7 @@ export default function Chat({ subject, role }) {
         mainDataList: list || [],
         setDarkMode,
         isSupport,
+        socketIo,
     });
 
     return (
@@ -170,7 +101,7 @@ export default function Chat({ subject, role }) {
                     >
                         <div className="row px-0 h-100 h-md-0">
                             <HistoryList />
-                            <ChatContent />
+                            <ChatContent userId={userId} />
                             <UserInfoCard />
                         </div>
                     </div>
@@ -188,13 +119,23 @@ export default function Chat({ subject, role }) {
 }
 
 // HOOKS
-function useStartSocketIo() {
+function useStartSocketIo({
+    userId = "123",
+    role = null,
+    name,
+    subject = "compliment",
+    isDev,
+}) {
+    const [socketIo, setSocketIo] = useState(null);
+
     useEffect(() => {
-        const socket = io();
-        socket.on("connect", () => {
-            console.log("socket.id", socket.id);
+        const thisSocketIo = io(undefined, {
+            query: `cliName=${name}&subject=${subject}&userId=${userId}&role=${role}&isDev=${isDev}`,
         });
+        setSocketIo(thisSocketIo);
     }, []);
+
+    return socketIo;
 }
 
 function useChatHandlers() {

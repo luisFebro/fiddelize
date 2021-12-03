@@ -31,7 +31,7 @@ export default function Support() {
 
     useScrollUp();
     useBackColor("var(--themeP)");
-    const { role, firstName } = useData();
+    const { firstName } = useData();
 
     const showSubjectSelectField = () => {
         const defaultVal = "Selecione assunto:";
@@ -116,11 +116,7 @@ export default function Support() {
     return (
         <Fragment>
             {success ? (
-                <AsyncChat
-                    subject={data.subject}
-                    subjectBr={data.subjectBr}
-                    role={role}
-                />
+                <AsyncChat subject={data.subject} subjectBr={data.subjectBr} />
             ) : (
                 showMain()
             )}

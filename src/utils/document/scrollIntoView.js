@@ -18,9 +18,17 @@ export default function scrollIntoView(thisElem, options = {}) {
         // const defaultDuration = 500;
         // const edgeOffset = 30;
         const container = document.querySelector(mainContainer);
-        const target = document.querySelector(thisElem);
-        const myScroller = zenscroll.createScroller(container); // defaultDuration, edgeOffset
-        // myScroller.to(target);
+        const target =
+            typeof thisElem === "string"
+                ? document.querySelector(thisElem)
+                : thisElem;
+        const myScroller = zenscroll.createScroller(
+            container,
+            duration,
+            offset,
+            () => onDone()
+        ); // defaultDuration, edgeOffset
+        // myScroller.intoView(target);
         return;
     }
 

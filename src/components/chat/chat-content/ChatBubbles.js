@@ -4,8 +4,8 @@ import { calendar, getLocalHour } from "utils/dates/dateFns";
 export default function ChatBubbles({ msgList = [] }) {
     return (
         <Fragment>
-            <div className="chat__content pt-4 px-3">
-                <ul className="chat__list-messages">
+            <div className="chat__content pt-4 px-3 pb-5">
+                <ul className="position-relative chat__list-messages">
                     {msgList.map((data) => (
                         <li key={data._id}>
                             {data.isFirstDayMsg && (
@@ -13,17 +13,22 @@ export default function ChatBubbles({ msgList = [] }) {
                                     {calendar(data.createdAt)}
                                 </div>
                             )}
-                            {data.msgs.map((ms, ind) => (
-                                <div
-                                    key={ind}
-                                    className={`chat__bubble chat__bubble--${data.bubble}`}
+                            <div
+                                className={`chat__bubble chat__bubble--${data.bubble}`}
+                            >
+                                {data.msg}
+                                <span
+                                    className="chat__bubble--b-time"
+                                    style={{
+                                        color:
+                                            data.bubble === "me"
+                                                ? "grey"
+                                                : "white",
+                                    }}
                                 >
-                                    {ms.m}
-                                    <span className="chat__bubble--b-time">
-                                        {getLocalHour(ms.t)}
-                                    </span>
-                                </div>
-                            ))}
+                                    {getLocalHour(data.createdAt)}
+                                </span>
+                            </div>
                         </li>
                     ))}
                 </ul>

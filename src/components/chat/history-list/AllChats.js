@@ -20,7 +20,7 @@ export default function AllChats({ mainDataList, isDev }) {
                     <li
                         key={data._id}
                         className={`messaging-member ${
-                            data.newMsg ? "messaging-member--new" : ""
+                            data.gotPendingMsg ? "messaging-member--new" : ""
                         }`}
                         onClick={() => handleOpenChat(data)}
                     >
@@ -118,7 +118,7 @@ function ChatSearcher({ isDev, isSupport = true }) {
 // HELPERS
 function getLastMsg(msgList = []) {
     if (!msgList.length) return [];
-    return msgList.slice(-1)[0].msgs.slice(-1)[0].m;
+    return msgList.slice(-1)[0].msg;
 }
 // END HELPERS
 

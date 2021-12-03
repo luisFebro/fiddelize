@@ -1,20 +1,87 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useContext from "context";
+import getId from "utils/getId";
+import isSameDay from "date-fns/isSameDay";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function ChatContent() {
-    const [newMsg, setNewMsg] = useState("");
-    const { openChat, chatData, handleNewMsg } = useContext();
-    const { msgList } = chatData;
+export default function ChatContent({ userId }) {
+    const [currData, setCurrData] = useState({
+        newMsg: "",
+        msgList: [],
+        lastMsg: null, // object
+        currUserId: "",
+    });
+    const { newMsg, msgList, lastMsg, currUserId } = currData;
+
+    const { openChat, chatData, socketIo } = useContext();
+    const { dbMsgs } = chatData;
+
+    function appendNewMsg(data) {
+        function removeDuplicate(prev) {
+            const filterId = "msgId";
+            return [...prev.msgList, data].filter(
+                (val, ind, arr) =>
+                    arr.findIndex((t) => t[filterId] === val[filterId]) === ind
+            );
+        }
+
+        return setCurrData((prev) => ({
+            ...prev,
+            msgList: removeDuplicate(prev),
+            newMsg: "",
+        }));
+    }
+
+    useEffect(() => {
+        setCurrData((prev) => ({ ...prev, currUserId: userId || getId() }));
+    }, [userId]);
+
+    useEffect(() => {
+        if (!socketIo) return;
+        socketIo.on("newMsg", (data) => {
+            // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
+            return appendNewMsg(data);
+        });
+        // eslint-disable-next-line
+    }, [socketIo]);
+
+    const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : [];
+
+    useEffect(() => {
+        if (!msgList.length)
+            setCurrData((prev) => ({
+                ...prev,
+                msgList: dbMsgs,
+                lastMsg: lastDbMsg,
+            }));
+    }, [msgList.length, lastDbMsg]);
 
     const saveNewMsg = () => {
-        handleNewMsg({
-            m: newMsg,
-            t: new Date(),
-        });
+        if (!newMsg) return;
+
+        const newMsgTobeEmitted = {
+            msgId: getId(),
+            userId: currUserId,
+            bubble: "me",
+            isFirstDayMsg: false,
+            msg: newMsg,
+            createdAt: new Date(),
+        };
+
+        socketIo.emit("newMsg", newMsgTobeEmitted);
+
+        appendNewMsg(newMsgTobeEmitted);
+
+        const chatContainer = document.querySelector(".chat__content");
+
+        function scrollToBottom(container) {
+            container.scrollTop = container.scrollHeight;
+        }
+
+        scrollToBottom(chatContainer);
     };
 
     return (
@@ -28,7 +95,7 @@ export default function ChatContent() {
             <div className="chat__container">
                 <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">
                     <UpperArea />
-                    <ChatBubbles msgList={msgList} />
+                    <ChatBubbles msgList={msgList} socketIo={socketIo} />
                     <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
                         <div className="custom-form__send-wrapper">
                             <input
@@ -39,7 +106,12 @@ export default function ChatContent() {
                                 type="text"
                                 name="newMsg"
                                 value={newMsg}
-                                onChange={(e) => setNewMsg(e.target.value)}
+                                onChange={(e) =>
+                                    setCurrData((prev) => ({
+                                        ...prev,
+                                        newMsg: e.target.value,
+                                    }))
+                                }
                                 className="form-control custom-form"
                                 id="message"
                                 placeholder="Escreva sua mensagem"
