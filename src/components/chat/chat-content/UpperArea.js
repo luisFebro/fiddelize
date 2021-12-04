@@ -5,11 +5,12 @@ import getId from "utils/getId";
 import { getSubjectBr } from "../helpers";
 
 export default function UpperArea() {
-    const { setData, chatData, isSupport } = useContext();
+    const { setData, chatData, isSupport, socket } = useContext();
 
     const handleCloseChat = () => {
         const chat = document.querySelector(".chat");
         animateCSS(chat, "zoomOut", "fast", () => {
+            socket.disconnect(true);
             setData((prev) => ({ ...prev, openChat: false }));
         });
     };

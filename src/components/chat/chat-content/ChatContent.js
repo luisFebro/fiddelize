@@ -5,6 +5,8 @@ import isSameDay from "date-fns/isSameDay";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 
+const today = new Date();
+
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ChatContent({ userId }) {
@@ -16,8 +18,13 @@ export default function ChatContent({ userId }) {
     });
     const { newMsg, msgList, lastMsg, currUserId } = currData;
 
-    const { openChat, chatData, socketIo } = useContext();
-    const { dbMsgs } = chatData;
+    const {
+        openChat,
+        chatData: currChatData,
+        socket,
+        userSocketId,
+    } = useContext();
+    const { dbMsgs, type } = currChatData;
 
     function appendNewMsg(data) {
         function removeDuplicate(prev) {
@@ -40,13 +47,14 @@ export default function ChatContent({ userId }) {
     }, [userId]);
 
     useEffect(() => {
-        if (!socketIo) return;
-        socketIo.on("newMsg", (data) => {
-            // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
-            return appendNewMsg(data);
+        if (!socket) return;
+        // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
+        socket.on("newMsg", (data) => {
+            appendNewMsg(data);
+            scrollToBottom();
         });
         // eslint-disable-next-line
-    }, [socketIo]);
+    }, [socket]);
 
     const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : [];
 
@@ -62,26 +70,26 @@ export default function ChatContent({ userId }) {
     const saveNewMsg = () => {
         if (!newMsg) return;
 
+        // for the division of dates when it was sent.
+        const lastMsgDate = lastMsg && new Date(lastMsg.createdAt);
+
         const newMsgTobeEmitted = {
-            msgId: getId(),
+            msgId: `msg${getId()}`,
             userId: currUserId,
+            chatType: type,
+            roomId: type === "pvtPair" ? userSocketId : `room:${getId()}`,
+            isFirstMsgEver: Boolean(lastDbMsg.length), // if true, we have to create a new document in the chat collection
+            isFirstMsgToday: !isSameDay(lastMsgDate, today),
             bubble: "me",
-            isFirstDayMsg: false,
             msg: newMsg,
             createdAt: new Date(),
         };
 
-        socketIo.emit("newMsg", newMsgTobeEmitted);
+        socket.emit("newMsg", newMsgTobeEmitted);
 
         appendNewMsg(newMsgTobeEmitted);
 
-        const chatContainer = document.querySelector(".chat__content");
-
-        function scrollToBottom(container) {
-            container.scrollTop = container.scrollHeight;
-        }
-
-        scrollToBottom(chatContainer);
+        scrollToBottom();
     };
 
     return (
@@ -95,7 +103,7 @@ export default function ChatContent({ userId }) {
             <div className="chat__container">
                 <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">
                     <UpperArea />
-                    <ChatBubbles msgList={msgList} socketIo={socketIo} />
+                    <ChatBubbles msgList={msgList} socket={socket} />
                     <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
                         <div className="custom-form__send-wrapper">
                             <input
@@ -170,3 +178,10 @@ export default function ChatContent({ userId }) {
         </div>
     );
 }
+
+// HELPERS
+function scrollToBottom() {
+    const chatContainer = document.querySelector(".chat__content");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+// END HELPERS

@@ -8,7 +8,7 @@ export default function ChatBubbles({ msgList = [] }) {
                 <ul className="position-relative chat__list-messages">
                     {msgList.map((data) => (
                         <li key={data._id}>
-                            {data.isFirstDayMsg && (
+                            {data.isFirstMsgToday && (
                                 <div className="chat__time">
                                     {calendar(data.createdAt)}
                                 </div>

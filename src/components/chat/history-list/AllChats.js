@@ -6,9 +6,10 @@ import { getSubjectBr } from "../helpers";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function AllChats({ mainDataList, isDev }) {
-    const { setData, isSupport } = useContext();
+    const { setData, isSupport, socket } = useContext();
 
     const handleOpenChat = (data) => {
+        if (socket.disconnected) socket.connect();
         setData((prev) => ({ ...prev, openChat: getId(), chatData: data }));
     };
 

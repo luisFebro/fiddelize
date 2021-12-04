@@ -2,6 +2,7 @@
 // reference: https://codepen.io/tiantsoa/pen/RwpwoWY
 // ref whatsapp chat (some further inspiration in features): https://codepen.io/swaibu/pen/QxJjwN
 import { useEffect, useState } from "react";
+import useScrollUp from "hooks/scroll/useScrollUp";
 import { Provider } from "context";
 import getItems from "init/lStorage";
 import { io } from "socket.io-client";
@@ -18,10 +19,12 @@ const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 export default function Chat({ subject }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
 
+    useScrollUp();
+
     const { userId, name, agentJob, role } = useData();
     const isDev = agentJob === "dev";
 
-    const socketIo = useStartSocketIo({ isDev, name, subject, userId, role });
+    const socketData = useStartSocketIo({ isDev, name, subject, userId, role });
 
     useChatHandlers();
 
@@ -49,29 +52,14 @@ export default function Chat({ subject }) {
         {
             _id: "231313211211",
             otherUserName: "Fiddelize",
-            subject: "bugReport",
+            chatType: "pvtPair",
+            support: {
+                subject: "bugReport",
+            },
             gotPendingMsg: true,
             status: "online",
             avatar: "/img/logo-chat.png",
             dbMsgs: msgList,
-        },
-        {
-            _id: "23131321121dadsa1",
-            meName: "Febro",
-            otherUserName: "Luis Febro",
-            subject: "usageHelp",
-            gotPendingMsg: false,
-            status: "offline",
-            avatar: "/img/test/vocariza.png",
-            dbMsgs: [
-                {
-                    msgId: "12332321",
-                    isFirstDayMsg: true,
-                    bubble: "other",
-                    msg: "Não esqueça de passar lá no nosso website!",
-                    createdAt: new Date(),
-                },
-            ],
         },
     ];
 
@@ -82,7 +70,7 @@ export default function Chat({ subject }) {
         mainDataList: list || [],
         setDarkMode,
         isSupport,
-        socketIo,
+        ...socketData,
     });
 
     return (
@@ -126,16 +114,31 @@ function useStartSocketIo({
     subject = "compliment",
     isDev,
 }) {
-    const [socketIo, setSocketIo] = useState(null);
+    // LESSON: always use useEffect to initialize methods like io(). It was bugging aorund with many requests and preventing using broadcast.imit to exclude the sender
+    const [data, setData] = useState({
+        socket: null,
+        userSocketId: null,
+    });
 
     useEffect(() => {
         const thisSocketIo = io(undefined, {
             query: `cliName=${name}&subject=${subject}&userId=${userId}&role=${role}&isDev=${isDev}`,
         });
-        setSocketIo(thisSocketIo);
-    }, []);
 
-    return socketIo;
+        // every time a socket is connected or reconnected, a new socketId is generated both here and in the server to identify the current user session. This is great to identify and update status
+        thisSocketIo.on("connect", () => {
+            setData({
+                socket: thisSocketIo,
+                // if some issue with reloading occurs, consider save the socketId separately in the localstorage
+                userSocketId: thisSocketIo.id,
+            });
+        });
+
+        // the socket will not reconnect only in case of forcefully or manually disconnection
+        thisSocketIo.on("disconnect", () => {});
+    }, [isDev, name, subject, userId, role]);
+
+    return data;
 }
 
 function useChatHandlers() {
