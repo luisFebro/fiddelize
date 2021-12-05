@@ -4,17 +4,18 @@
 import { useEffect, useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Provider } from "context";
-import getItems from "init/lStorage";
+import getItems, { setItems } from "init/lStorage";
 import { io } from "socket.io-client";
 import useData from "init";
+import getId from "utils/getId";
 import useGlobal from "./useGlobal";
-import HistoryList from "./history-list/HistoryList";
-import ChatContent from "./chat-content/ChatContent";
+import HistoryChatList from "./history-list/HistoryChatList";
 import UserInfoCard from "./UserInfoCard";
 import "./Chat.scss";
 import "styles/bootstrap-layout-only-min.css";
 
 const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
+const isSmall = window.Helper.isSmallScreen();
 
 export default function Chat({ subject }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
@@ -50,16 +51,30 @@ export default function Chat({ subject }) {
     // The list will be read as the most recent at the top to bottom
     const list = [
         {
-            _id: "231313211211",
+            _id: "601df6b42be9a28986c2a821",
             otherUserName: "Fiddelize",
             chatType: "pvtPair",
+            roomId: null,
             support: {
                 subject: "bugReport",
             },
             gotPendingMsg: true,
-            status: "online",
+            status: "offline",
             avatar: "/img/logo-chat.png",
-            dbMsgs: msgList,
+            dbMsgs: [],
+        },
+        {
+            _id: "visitor:TQfX0CZRFJQWpmXX_XVh",
+            otherUserName: "Cliente",
+            chatType: "pvtPair",
+            roomId: null,
+            support: {
+                subject: "bugReport",
+            },
+            gotPendingMsg: true,
+            status: "offline",
+            avatar: "/img/logo-chat.png",
+            dbMsgs: [],
         },
     ];
 
@@ -88,8 +103,7 @@ export default function Chat({ subject }) {
                         }}
                     >
                         <div className="row px-0 h-100 h-md-0">
-                            <HistoryList />
-                            <ChatContent userId={userId} />
+                            <HistoryChatList />
                             <UserInfoCard />
                         </div>
                     </div>
@@ -108,35 +122,74 @@ export default function Chat({ subject }) {
 
 // HOOKS
 function useStartSocketIo({
-    userId = "123",
+    userId,
     role = null,
-    name,
+    name = null,
     subject = "compliment",
     isDev,
 }) {
     // LESSON: always use useEffect to initialize methods like io(). It was bugging aorund with many requests and preventing using broadcast.imit to exclude the sender
     const [data, setData] = useState({
         socket: null,
-        userSocketId: null,
+        chatUserId: null,
+        doneInit: false,
     });
+    const { chatUserId, doneInit } = data;
 
     useEffect(() => {
-        const thisSocketIo = io(undefined, {
-            query: `cliName=${name}&subject=${subject}&userId=${userId}&role=${role}&isDev=${isDev}`,
-        });
+        // handling visitors uniqueId
+        if (!userId) {
+            const [chatVisitorId] = getItems("global", ["chatVisitorId"]);
+            if (!chatVisitorId) {
+                const newVisitorId = `visitor:${getId()}`;
 
-        // every time a socket is connected or reconnected, a new socketId is generated both here and in the server to identify the current user session. This is great to identify and update status
-        thisSocketIo.on("connect", () => {
-            setData({
-                socket: thisSocketIo,
-                // if some issue with reloading occurs, consider save the socketId separately in the localstorage
-                userSocketId: thisSocketIo.id,
-            });
+                setItems("global", {
+                    chatVisitorId: newVisitorId,
+                });
+                return setData((prev) => ({
+                    ...prev,
+                    chatUserId: newVisitorId,
+                }));
+            }
+
+            return setData((prev) => ({ ...prev, chatUserId: chatVisitorId }));
+        }
+
+        return setData((prev) => ({ ...prev, chatUserId: userId }));
+    }, [userId]);
+
+    useEffect(() => {
+        if (!chatUserId || doneInit) return;
+
+        const device = isSmall ? "app" : "desktop";
+        const host = undefined; // window.location is the default "http://yourdomain.com";
+        const query = {
+            userId: chatUserId,
+            device: device,
+            cliName: name,
+            subject,
+            role,
+            isDev,
+        };
+
+        const thisSocket = io(host, {
+            query,
+            reconnection: false,
+            // rejectUnauthorized: false,
+            // transports: ['websocket'],  // https://stackoverflow.com/a/52180905/8987128
+            // upgrade: false,
         });
 
         // the socket will not reconnect only in case of forcefully or manually disconnection
-        thisSocketIo.on("disconnect", () => {});
-    }, [isDev, name, subject, userId, role]);
+        // thisSocket.on("disconnect", () => {});
+
+        setData((prev) => ({
+            ...prev,
+            socket: thisSocket,
+            doneInit: true,
+        }));
+        // eslint-disable-next-line
+    }, [chatUserId, doneInit]);
 
     return data;
 }

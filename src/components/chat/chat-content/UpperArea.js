@@ -5,12 +5,12 @@ import getId from "utils/getId";
 import { getSubjectBr } from "../helpers";
 
 export default function UpperArea() {
-    const { setData, chatData, isSupport, socket } = useContext();
+    const { setData, chatData, isSupport } = useContext();
 
     const handleCloseChat = () => {
         const chat = document.querySelector(".chat");
         animateCSS(chat, "zoomOut", "fast", () => {
-            socket.disconnect(true);
+            // socket.disconnect(true); // user can return to channel list and still be online, so this is commented out for now.
             setData((prev) => ({ ...prev, openChat: false }));
         });
     };

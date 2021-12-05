@@ -4,32 +4,38 @@ import getId from "utils/getId";
 import isSameDay from "date-fns/isSameDay";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
+import useAutoresizeableTextarea from "hooks/useAutoresizeableTextarea";
 
 const today = new Date();
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function ChatContent({ userId }) {
+export default function ChatContent() {
     const [currData, setCurrData] = useState({
         newMsg: "",
         msgList: [],
         lastMsg: null, // object
-        currUserId: "",
     });
-    const { newMsg, msgList, lastMsg, currUserId } = currData;
+    const { newMsg, msgList, lastMsg } = currData;
+    useAutoresizeableTextarea();
 
     const {
         openChat,
         chatData: currChatData,
         socket,
-        userSocketId,
+        chatUserId,
+        clearFieldMsg = false,
     } = useContext();
-    const { dbMsgs, type } = currChatData;
+    const { dbMsgs, type, pvtGroup } = currChatData;
 
-    function appendNewMsg(data) {
+    useEffect(() => {
+        if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: " " }));
+    }, [clearFieldMsg]);
+
+    function appendNewMsg(currMsg) {
         function removeDuplicate(prev) {
             const filterId = "msgId";
-            return [...prev.msgList, data].filter(
+            return [...prev.msgList, currMsg].filter(
                 (val, ind, arr) =>
                     arr.findIndex((t) => t[filterId] === val[filterId]) === ind
             );
@@ -39,12 +45,9 @@ export default function ChatContent({ userId }) {
             ...prev,
             msgList: removeDuplicate(prev),
             newMsg: "",
+            lastMsg: currMsg,
         }));
     }
-
-    useEffect(() => {
-        setCurrData((prev) => ({ ...prev, currUserId: userId || getId() }));
-    }, [userId]);
 
     useEffect(() => {
         if (!socket) return;
@@ -65,24 +68,29 @@ export default function ChatContent({ userId }) {
                 msgList: dbMsgs,
                 lastMsg: lastDbMsg,
             }));
-    }, [msgList.length, lastDbMsg]);
+        // eslint-disable-next-line
+    }, [msgList.length]); // if lastDbMsg will cause max exceed reload error
 
     const saveNewMsg = () => {
         if (!newMsg) return;
 
         // for the division of dates when it was sent.
-        const lastMsgDate = lastMsg && new Date(lastMsg.createdAt);
+        const lastMsgDate = lastMsg.createdAt
+            ? new Date(lastMsg.createdAt)
+            : null;
 
         const newMsgTobeEmitted = {
             msgId: `msg${getId()}`,
-            userId: currUserId,
+            userId: chatUserId,
             chatType: type,
-            roomId: type === "pvtPair" ? userSocketId : `room:${getId()}`,
-            isFirstMsgEver: Boolean(lastDbMsg.length), // if true, we have to create a new document in the chat collection
-            isFirstMsgToday: !isSameDay(lastMsgDate, today),
+            roomId: pvtGroup && pvtGroup.roomId,
+            isFirstMsgEver: lastDbMsg.length === 0, // if true, we have to create a new document in the chat collection
+            isFirstMsgToday: !lastMsgDate
+                ? true
+                : !isSameDay(lastMsgDate, today),
             bubble: "me",
             msg: newMsg,
-            createdAt: new Date(),
+            createdAt: today,
         };
 
         socket.emit("newMsg", newMsgTobeEmitted);
@@ -105,12 +113,13 @@ export default function ChatContent({ userId }) {
                     <UpperArea />
                     <ChatBubbles msgList={msgList} socket={socket} />
                     <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
-                        <div className="custom-form__send-wrapper">
-                            <input
+                        <div className="custom-form__send-wrapper shadow-field">
+                            <textarea
                                 style={{
                                     border: "0.2px solid grey",
                                 }}
-                                rows="15"
+                                rows={1}
+                                col={1}
                                 type="text"
                                 name="newMsg"
                                 value={newMsg}
@@ -122,7 +131,7 @@ export default function ChatContent({ userId }) {
                                 }
                                 className="form-control custom-form"
                                 id="message"
-                                placeholder="Escreva sua mensagem"
+                                placeholder=""
                                 autoComplete="off"
                             />
                             <div className="custom-form__send-img">

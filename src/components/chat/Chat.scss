@@ -21,7 +21,8 @@
   --search-form-bg-colour: #f2f2f2;
   --send-form-bg-colour: #f2f2f2;
   --send-btn-box-shadow-colour: var(--themePLight); //#7bbafd;
-  --chat-bubble-me: #f2f2f2;
+  --shadow-border-form: #d8d0d0;
+  --chat-bubble-me: #ebf6f1;
   --chat-bubble-other: var(--colour-primary);
 }
 
@@ -43,6 +44,7 @@
 
   --search-form-bg-colour: #363636;
   --send-form-bg-colour: #363636;
+  --shadow-border-form: var(--bg-page);
   --send-btn-box-shadow-colour: #44515f;
   --chat-bubble-me: #363636;
   --chat-bubble-other: var(--colour-primary);
@@ -183,14 +185,15 @@ $breakpoints: (
         height: 100%;
         position: relative;
 
-        & input {
+        & textarea, & input {
+            box-shadow: 0 5px 6px var(--shadow-border-form);
           &::placeholder {
             color: var(--colour-text-lighter);
             @include small-text-rfs;
           }
           &:focus {
             outline: none;
-            box-shadow: none;
+            // box-shadow: none;
           }
         }
       }
@@ -198,11 +201,11 @@ $breakpoints: (
         & input {
           padding-right: 3rem;
           background-color: var(--search-form-bg-colour);
-          border: 1px solid var(--bg-page);
+          border: 0.1px solid var(--bg-page);
 
           &:placeholder-shown {
             background-color: var(--search-form-bg-colour);
-            border: 1px solid var(--bg-page);
+            border: 0.1px solid var(--bg-page);
           }
           &:focus {
             background-color: var(--bg-page);
@@ -212,11 +215,12 @@ $breakpoints: (
         }
       }
       &__send-wrapper {
-        & input {
+        & textarea {
           padding-right: 6rem;
           padding-left: 3.25rem;
           background-color: var(--send-form-bg-colour);
           border: none;
+          resize: none; // remove the click-and-drag of textarea in the bottom right-corner
 
           &:focus {
             background-color: var(--send-form-bg-colour);
@@ -523,12 +527,14 @@ $breakpoints: (
       }
       &__bubble {
         $bub: &;
+        box-shadow: 0 5px 6px var(--shadow-border-form);
         position: relative;
         color: var(--colour-text-darkest);
         padding: 0.5rem 1rem;
         border-radius: 22px;
         background-color: var(--bg-page);
         max-width: 30rem;
+        white-space: pre-wrap; // read all spacing from textarea field
         margin-bottom: 0.2rem !important;
 
         @include small-text-rfs;

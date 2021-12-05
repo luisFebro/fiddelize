@@ -6,11 +6,19 @@ import { getSubjectBr } from "../helpers";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function AllChats({ mainDataList, isDev }) {
-    const { setData, isSupport, socket } = useContext();
+    const { setData, isSupport, socket, chatUserId } = useContext();
 
     const handleOpenChat = (data) => {
-        if (socket.disconnected) socket.connect();
-        setData((prev) => ({ ...prev, openChat: getId(), chatData: data }));
+        if (socket.disconnected) {
+            socket.connect();
+            socket.emit("chatPanelStatus", chatUserId);
+        }
+        setData((prev) => ({
+            ...prev,
+            openChat: getId(),
+            chatData: data,
+            clearFieldMsg: getId(),
+        })); // need to clear field every time user enter a chat panel, otherwise the prior msg will appear in every chat panel in the list
     };
 
     return (
@@ -65,7 +73,7 @@ function ChatSearcher({ isDev, isSupport = true }) {
             <div className="custom-form__search-wrapper">
                 <input
                     type="text"
-                    className="form-control custom-form"
+                    className="shadow-field form-control custom-form"
                     id="search"
                     placeholder={`Procure mensagem, ${
                         isSupport ? "assunto" : "usuário"
