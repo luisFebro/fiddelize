@@ -10,13 +10,13 @@ export default function ChatBubbles({ msgList = [] }) {
                         <li key={data.msgId}>
                             {data.isFirstMsgToday && (
                                 <div className="chat__time">
-                                    {calendar(data.createdAt)}
+                                    {calendar(data.firstMsgTodayDate)}
                                 </div>
                             )}
                             <div
                                 className={`chat__bubble chat__bubble--${data.bubble} shadow-field`}
                             >
-                                {data.msg}
+                                {data.msg && data.msg.trim()}
                                 <span
                                     className="chat__bubble--b-time"
                                     style={{
@@ -26,7 +26,7 @@ export default function ChatBubbles({ msgList = [] }) {
                                                 : "white",
                                     }}
                                 >
-                                    {getLocalHour(data.createdAt)}
+                                    {getLocalHour(data.msgDate)}
                                 </span>
                             </div>
                         </li>

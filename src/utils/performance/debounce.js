@@ -1,8 +1,8 @@
 import isObj from "../isObj";
 // n1
 // DEFINITION
-// TRAILING EDGE - when we are only interested on the final value, after user stops an action.
-// LEADING FLAG on. We want to wait to the last letter typed.
+// TRAILING EDGE - run function only after the LAST keystroke and wait is passed
+// LEADING FLAG on. run function RIGHT AWAY when user starts typing the FIRST keystroke
 // for searching bar timing: _.debounce(function, 1300));
 // from lodash
 

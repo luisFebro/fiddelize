@@ -10,12 +10,12 @@ export default function useAutoresizeableTextarea() {
 function setAutoresizeableTextarea() {
     const txtArea = document.getElementsByTagName("textarea");
     const defaultFieldSize = "45px";
+    const deniedSizes = [0, 72]; // if the initial value is here, then default size
 
     for (let i = 0; i < txtArea.length; i++) {
-        const scrollHeight =
-            txtArea[i].scrollHeight === 0
-                ? defaultFieldSize
-                : txtArea[i].scrollHeight;
+        const scrollHeight = deniedSizes.includes(txtArea[i].scrollHeight)
+            ? defaultFieldSize
+            : txtArea[i].scrollHeight;
 
         txtArea[i].setAttribute(
             "style",
@@ -35,6 +35,9 @@ function setAutoresizeableTextarea() {
 
     function onBlur() {
         setTimeout(() => {
+            const gotSomeTxt = this.innerHTML;
+            if (gotSomeTxt) return; // don't change the height if got some text
+
             this.style.height = defaultFieldSize;
         }, 1000); // a small delay to avoid conflict when clicking in sending. Otherwise, user will have to click twice to send text with spacing
     }

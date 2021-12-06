@@ -16,7 +16,6 @@ export default function HistoryChatList() {
         // every time a socket is connected or reconnected, a new socketId is generated both here and in the server to identify the current user session. This is great to identify and update status
         socket.once("connect", () => {
             socket.on("userOnline", (backUserId) => {
-                console.log("backUserId ONLINE", backUserId);
                 const newMainList = getNewMainList("online", {
                     userId: backUserId,
                     mainDataList,
@@ -30,7 +29,6 @@ export default function HistoryChatList() {
             });
 
             socket.on("userOffline", (backUserId) => {
-                console.log("backUserId OFFLINE", backUserId);
                 const newMainList = getNewMainList("offline", {
                     userId: backUserId,
                     mainDataList,
@@ -108,11 +106,13 @@ function getNewMainList(status, options = {}) {
 
     const [chatRealtimeUserIds] = getItems("global", ["chatRealtimeUserIds"]);
 
+    const selectedOnlineArray = !chatRealtimeUserIds
+        ? [userId]
+        : [...new Set([...chatRealtimeUserIds, userId])];
+
     const newRealtimeList =
         status === "online"
-            ? !chatRealtimeUserIds
-                ? [userId]
-                : [...new Set([...chatRealtimeUserIds, userId])]
+            ? selectedOnlineArray
             : removeArrayItem(chatRealtimeUserIds, userId);
 
     setItems("global", {

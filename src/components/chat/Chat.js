@@ -22,10 +22,9 @@ export default function Chat({ subject }) {
 
     useScrollUp();
 
-    const { userId, name, agentJob, role } = useData();
-    const isDev = agentJob === "dev";
+    const { userId, name, role } = useData();
 
-    const socketData = useStartSocketIo({ isDev, name, subject, userId, role });
+    const socketData = useStartSocketIo({ name, subject, userId, role });
 
     useChatHandlers();
 
@@ -64,11 +63,11 @@ export default function Chat({ subject }) {
             dbMsgs: [],
         },
         {
-            _id: "visitor:TQfX0CZRFJQWpmXX_XVh",
+            _id: "visitor-TQfX0CZRFJQWpmXX_XVh",
             otherUserName: "Cliente",
             chatType: "pvtPair",
             roomId: null,
-            support: {
+            dataType: {
                 subject: "bugReport",
             },
             gotPendingMsg: true,
@@ -126,7 +125,6 @@ function useStartSocketIo({
     role = null,
     name = null,
     subject = "compliment",
-    isDev,
 }) {
     // LESSON: always use useEffect to initialize methods like io(). It was bugging aorund with many requests and preventing using broadcast.imit to exclude the sender
     const [data, setData] = useState({
@@ -141,7 +139,7 @@ function useStartSocketIo({
         if (!userId) {
             const [chatVisitorId] = getItems("global", ["chatVisitorId"]);
             if (!chatVisitorId) {
-                const newVisitorId = `visitor:${getId()}`;
+                const newVisitorId = `visitor-${getId()}`;
 
                 setItems("global", {
                     chatVisitorId: newVisitorId,
@@ -165,11 +163,10 @@ function useStartSocketIo({
         const host = undefined; // window.location is the default "http://yourdomain.com";
         const query = {
             userId: chatUserId,
-            device: device,
             cliName: name,
+            device,
             subject,
             role,
-            isDev,
         };
 
         const thisSocket = io(host, {
