@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import useContext from "context";
 
 export default function UserInfoCard() {
-    const { chatData, openUserCard, setData } = useContext();
-    const { avatar, otherUserName } = chatData;
+    const { currChatData, openUserCard, setData } = useContext();
+    const { avatar, otherUserName } = currChatData;
 
     const closeUserCard = () => {
         setData((prev) => ({ ...prev, openUserCard: false }));
@@ -41,11 +41,15 @@ export default function UserInfoCard() {
                 </div>
                 <div className="user-profile__wrapper">
                     <div className="user-profile__avatar">
-                        <img src={avatar} alt={otherUserName} loading="lazy" />
+                        <img
+                            src="/img/logo-chat.png"
+                            alt="Fiddelize"
+                            loading="lazy"
+                        />
                     </div>
                     <div className="user-profile__details mt-1">
                         <span className="user-profile__name">
-                            Suporte {otherUserName}
+                            Suporte Fiddelize
                         </span>
                         <span className="user-profile__phone">
                             <span className="text-em-1-1 font-weight-bold">

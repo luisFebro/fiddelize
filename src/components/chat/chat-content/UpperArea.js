@@ -2,10 +2,11 @@ import { Fragment } from "react";
 import useContext from "context";
 import animateCSS from "utils/animateCSS";
 import getId from "utils/getId";
-import { getSubjectBr } from "../helpers";
+import { getAvatarSelection } from "../history-list/AllChats";
+import getSubjectBr from "../helpers";
 
 export default function UpperArea() {
-    const { setData, chatData, isSupport } = useContext();
+    const { setData, currChatData, isSupport, role } = useContext();
 
     const handleCloseChat = () => {
         const chat = document.querySelector(".chat");
@@ -35,16 +36,17 @@ export default function UpperArea() {
             <BadgeNewChat />
             <ChatMemberInfo
                 setData={setData}
-                chatData={chatData}
+                currChatData={currChatData}
                 isSupport={isSupport}
+                role={role}
             />
         </div>
     );
 }
 
 // COMPS
-function ChatMemberInfo({ setData, chatData, isSupport }) {
-    const { otherUserName, avatar, status, subject } = chatData;
+function ChatMemberInfo({ setData, currChatData, isSupport, role }) {
+    const { otherUserName, avatar, status, subject } = currChatData;
 
     const isOnline = status === "online";
 
@@ -52,7 +54,12 @@ function ChatMemberInfo({ setData, chatData, isSupport }) {
         <div className="chat__infos pl-2 pl-md-0">
             <div className="chat-member__wrapper">
                 <div className="chat-member__avatar">
-                    <img src={avatar} alt={otherUserName} loading="lazy" />
+                    {getAvatarSelection({
+                        size: 55,
+                        avatar,
+                        otherUserName,
+                        currUserRole: role,
+                    })}
                     <div
                         className={`user-status user-status${
                             isOnline ? "--online" : ""

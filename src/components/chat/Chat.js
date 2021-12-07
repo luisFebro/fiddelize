@@ -4,75 +4,100 @@
 import { useEffect, useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Provider } from "context";
-import getItems, { setItems } from "init/lStorage";
+import getItems from "init/lStorage";
 import { io } from "socket.io-client";
-import useData from "init";
-import getId from "utils/getId";
+import useSupportWaveColor from "pages/support/useSupportWaveColor";
 import useGlobal from "./useGlobal";
 import HistoryChatList from "./history-list/HistoryChatList";
 import UserInfoCard from "./UserInfoCard";
+// import
 import "./Chat.scss";
 import "styles/bootstrap-layout-only-min.css";
 
-const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
+const [chatDarkMode, chatBgColor] = getItems("global", [
+    "chatDarkMode",
+    "chatBgColor",
+]);
 const isSmall = window.Helper.isSmallScreen();
 
-export default function Chat({ subject }) {
+export default function Chat({ subject, chatUserId, name, role }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
 
     useScrollUp();
+    useSupportWaveColor(chatBgColor);
 
-    const { userId, name, role } = useData();
-
-    const socketData = useStartSocketIo({ name, subject, userId, role });
+    const socketData = useStartSocketIo({ name, subject, chatUserId, role });
 
     useChatHandlers();
 
-    const msgList = [
-        {
-            msgId: "12332321ddsadsadssad",
-            userId: "",
-            isFirstDayMsg: true,
-            bubble: "other",
-            msg: "Hello!",
-            createdAt: "2021-12-02T12:38:18.366Z",
-        },
-        {
-            msgId: "12332321dsad",
-            userId: "",
-            isFirstDayMsg: false,
-            bubble: "me",
-            msg: "Buy!",
-            createdAt: "2021-12-02T12:38:18.366Z",
-        },
-    ];
+    // const msgList = [
+    //     {
+    //         msgId: "12332321ddsadsadssad",
+    //         userId: "",
+    //         unread: true,
+    //         isFirstDayMsg: true,
+    //         bubble: "other",
+    //         msg: "Hello!",
+    //         createdAt: "2021-12-02T12:38:18.366Z",
+    //     },
+    // ];
 
     // The list will be read as the most recent at the top to bottom
     const list = [
         {
             _id: "601df6b42be9a28986c2a821",
-            otherUserName: "Fiddelize",
-            chatType: "pvtPair",
-            roomId: null,
-            support: {
-                subject: "bugReport",
-            },
-            gotPendingMsg: true,
-            status: "offline",
-            avatar: "/img/logo-chat.png",
-            dbMsgs: [],
-        },
-        {
-            _id: "visitor-TQfX0CZRFJQWpmXX_XVh",
-            otherUserName: "Cliente",
+            otherUserName: "Renata Fernandis",
+            otherUserRole: "cliente-membro",
             chatType: "pvtPair",
             roomId: null,
             dataType: {
                 subject: "bugReport",
             },
-            gotPendingMsg: true,
+            gotPendingMsg: false, // This will be verified when reading chat list
             status: "offline",
-            avatar: "/img/logo-chat.png",
+            avatar: "/img/logo-chat.png", // /img/logo-chat.png avatar for users will be initially their first letters with material-ui avatars
+            dbMsgs: [],
+        },
+        {
+            _id: "601df6b42be9adasdsa28986c2a821",
+            otherUserName: "Luis Febro",
+            otherUserRole: "cliente-admin",
+            chatType: "pvtPair",
+            roomId: null,
+            dataType: {
+                subject: "others",
+            },
+            gotPendingMsg: false, // This will be verified when reading chat list
+            status: "offline",
+            avatar: "/img/logo-chat.png", // /img/logo-chat.png avatar for users will be initially their first letters with material-ui avatars
+            dbMsgs: [],
+        },
+        {
+            _id: "601df6ab42be9adsadasdsa28986c2a821",
+            otherUserName: "Ricardo Italo",
+            otherUserRole: "cliente",
+            chatType: "pvtPair",
+            roomId: null,
+            dataType: {
+                subject: "suggestion",
+            },
+            gotPendingMsg: false, // This will be verified when reading chat list
+            status: "offline",
+            avatar: "/img/logo-chat.png", //  avatar for users will be initially their first letters with material-ui avatars
+            dbMsgs: [],
+        },
+        {
+            _id: "601df6ab42be9ads(((adasdsa28986c2a821",
+            otherUserName: "Jéssica Lins",
+            otherUserRole: "visitante",
+            chatType: "pvtPair",
+            roomId: null,
+            dataType: {
+                subject: "suggestion",
+            },
+            gotPendingMsg: false, // This will be verified when reading chat list
+            status: "offline",
+            avatar: "/img/logo-chat.png", //  avatar for users will be initially their first letters with material-ui avatars
             dbMsgs: [],
         },
     ];
@@ -120,41 +145,13 @@ export default function Chat({ subject }) {
 }
 
 // HOOKS
-function useStartSocketIo({
-    userId,
-    role = null,
-    name = null,
-    subject = "compliment",
-}) {
+function useStartSocketIo({ chatUserId, role = null, name = null, subject }) {
     // LESSON: always use useEffect to initialize methods like io(). It was bugging aorund with many requests and preventing using broadcast.imit to exclude the sender
     const [data, setData] = useState({
         socket: null,
-        chatUserId: null,
         doneInit: false,
     });
-    const { chatUserId, doneInit } = data;
-
-    useEffect(() => {
-        // handling visitors uniqueId
-        if (!userId) {
-            const [chatVisitorId] = getItems("global", ["chatVisitorId"]);
-            if (!chatVisitorId) {
-                const newVisitorId = `visitor-${getId()}`;
-
-                setItems("global", {
-                    chatVisitorId: newVisitorId,
-                });
-                return setData((prev) => ({
-                    ...prev,
-                    chatUserId: newVisitorId,
-                }));
-            }
-
-            return setData((prev) => ({ ...prev, chatUserId: chatVisitorId }));
-        }
-
-        return setData((prev) => ({ ...prev, chatUserId: userId }));
-    }, [userId]);
+    const { doneInit } = data;
 
     useEffect(() => {
         if (!chatUserId || doneInit) return;

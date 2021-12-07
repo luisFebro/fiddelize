@@ -6,7 +6,7 @@
   --bg-page-darker: #f7f7f7;
   --bg-page-darkest: #b3b3b3;
   --colour-primary: var(--themeP);//#3996fb;
-  --colour-primary-lightest: #e8f3ff;
+  --colour-primary-lightest: #e4e0e8; // #e8f3ff
   --colour-primary-darker: var(--themePDark);
   --colour-third: #419d78;
   --colour-third-lighter: #7bc9aa;
@@ -329,7 +329,7 @@ $breakpoints: (
         }
       }
 
-      &--active {
+      &--active, &.selected-chat {
         background-color: var(--colour-primary-lightest);
 
         &:hover {

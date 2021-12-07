@@ -1,4 +1,4 @@
-export function getSubjectBr(subject) {
+export default function getSubjectBr(subject) {
     if (subject === "suggestion") return "sugestão";
     if (subject === "question") return "dúvida";
     if (subject === "compliment") return "elogio";

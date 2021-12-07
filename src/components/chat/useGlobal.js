@@ -9,7 +9,7 @@ export default function useGlobal(props) {
     const [data, setData] = useState({
         openChat: !isSmall, // in large screen, keep open.
         openUserCard: false,
-        chatData: dbMainList[0] || {}, // the first and most recent message will be selected by default
+        currChatData: dbMainList[0] || {}, // the first and most recent message will be selected by default
         darkMode: false,
         clearFieldMsg: false,
         mainDataList: [],
@@ -17,11 +17,17 @@ export default function useGlobal(props) {
 
     useEffect(() => {
         if (!dbMainList.length) return null;
+
         return setData((prev) => ({
             ...prev,
-            mainDataList: dbMainList,
+            mainDataList: data.mainDataList.length
+                ? data.mainDataList
+                : dbMainList,
+            // load most recent chat as the most recent
+            currChatData: data.mainDataList[0] || dbMainList[0] || {},
         }));
-    }, [dbMainList.length]);
+        // eslint-disable-next-line
+    }, [dbMainList.length, data.mainDataList]);
 
     const store = {
         ...props,

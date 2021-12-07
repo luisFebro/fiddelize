@@ -143,6 +143,15 @@ export const getNpsChartData = (userId) =>
 export const getXpScoreChartData = (userId) =>
     `${ROOT}/reviews/xp-score-chart?userId=${userId}`;
 
+// CHAT, SUPPORT AND REAL TIME
+export const startSupport = () =>
+    // POST
+    `${ROOT}/chat/start-support`;
+export const readSupportHistory = () =>
+    // GET
+    `${ROOT}/chat/support-history`;
+// END CHAT, SUPPORT AND REAL TIME
+
 // EMAIL
 export const sendEmail = () => `${ROOT}/email/send`;
 

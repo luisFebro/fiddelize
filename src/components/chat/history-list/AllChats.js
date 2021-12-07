@@ -1,14 +1,23 @@
 import { Fragment } from "react";
 import useContext from "context";
 import getId from "utils/getId";
-import { getSubjectBr } from "../helpers";
+import Avatar from "@material-ui/core/Avatar";
+import parse from "html-react-parser";
+import getSubjectBr from "../helpers";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function AllChats({ mainDataList, isDev }) {
-    const { setData, isSupport, socket, chatUserId } = useContext();
+export default function AllChats({ mainDataList, isBizTeam }) {
+    const {
+        setData,
+        isSupport,
+        socket,
+        chatUserId,
+        currChatData,
+        role,
+    } = useContext();
 
-    const handleOpenChat = (data) => {
+    const handleOpenChat = (currChatData) => {
         if (socket.disconnected) {
             socket.connect();
             socket.emit("chatPanelStatus", chatUserId);
@@ -16,35 +25,37 @@ export default function AllChats({ mainDataList, isDev }) {
         setData((prev) => ({
             ...prev,
             openChat: getId(),
-            chatData: data,
+            currChatData,
             clearFieldMsg: getId(),
         })); // need to clear field every time user enter a chat panel, otherwise the prior msg will appear in every chat panel in the list
     };
 
+    const getDataStatus = (data) => `
+        user-status user-status${data.status === "online" ? "--online" : ""}
+    `;
+
     return (
         <Fragment>
-            <ChatSearcher isDev={isDev} isSupport={isSupport} />
+            <ChatSearcher isBizTeam={isBizTeam} isSupport={isSupport} />
             <ul className="messages-page__list pb-5 px-1 px-md-2">
                 {mainDataList.map((data) => (
                     <li
                         key={data._id}
                         className={`messaging-member ${
-                            data.gotPendingMsg ? "messaging-member--new" : ""
-                        }`}
+                            currChatData._id === data._id ? "selected-chat" : ""
+                        } ${data.gotPendingMsg ? "messaging-member--new" : ""}`}
                         onClick={() => handleOpenChat(data)}
                     >
                         <div className="messaging-member__wrapper">
                             <div className="messaging-member__avatar">
-                                <img
-                                    src={data.avatar}
-                                    alt={data.otherUserName}
-                                    loading="lazy"
-                                />
+                                {getAvatarSelection({
+                                    avatar: data.avatar,
+                                    otherUserName: data.otherUserName,
+                                    currUserRole: role,
+                                })}
                                 <div
-                                    className={`user-status user-status${
-                                        data.status === "online"
-                                            ? "--online"
-                                            : ""
+                                    className={`${
+                                        isBizTeam ? getDataStatus(data) : ""
                                     }`}
                                 />
                             </div>
@@ -52,7 +63,13 @@ export default function AllChats({ mainDataList, isDev }) {
                             <span className="messaging-member__name">
                                 {truncate(data.otherUserName, 20)}{" "}
                                 {isSupport
-                                    ? `(${getSubjectBr(data.subject)})`
+                                    ? parse(
+                                          `(${getSubjectBr(
+                                              data.dataType.subject
+                                          )}: <span class="text-em-0-9">${
+                                              data.otherUserRole
+                                          }</span>)`
+                                      )
                                     : ""}
                             </span>
                             <span className="d-block mt-2 messaging-member__message">
@@ -67,7 +84,44 @@ export default function AllChats({ mainDataList, isDev }) {
 }
 
 // COMPS
-function ChatSearcher({ isDev, isSupport = true }) {
+
+export function getAvatarSelection({
+    avatar,
+    currUserRole,
+    otherUserName,
+    size,
+}) {
+    const needAvatar = currUserRole === "nucleo-equipe";
+    if (needAvatar)
+        return (
+            <div className="all-chats-avatar-letters">
+                <Avatar
+                    style={{
+                        backgroundColor: stringToHexColor(otherUserName),
+                        width: size,
+                        height: size,
+                    }}
+                >
+                    {getFirstLetters(otherUserName)}
+                </Avatar>
+                <style jsx global>
+                    {`
+                        .all-chats-avatar-letters .MuiAvatar-root {
+                            width: 65px;
+                            height: 65px;
+                            font-family: var(--mainFont);
+                            font-size: 2.3rem;
+                            text-shadow: 1px 1px 3px black;
+                        }
+                    `}
+                </style>
+            </div>
+        );
+
+    return <img src={avatar} alt={otherUserName} loading="lazy" />;
+}
+
+function ChatSearcher({ isBizTeam, isSupport = true }) {
     return (
         <div className="messages-page__search mb-0 px-3 px-md-1 pb-3">
             <div className="custom-form__search-wrapper">
@@ -77,7 +131,7 @@ function ChatSearcher({ isDev, isSupport = true }) {
                     id="search"
                     placeholder={`Procure mensagem, ${
                         isSupport ? "assunto" : "usuário"
-                    }${isDev ? ", assunto" : "..."}`}
+                    }${isBizTeam ? ", assunto" : "..."}`}
                     autoComplete="off"
                 />
                 <button type="submit" className="custom-form__search-submit">
@@ -128,6 +182,44 @@ function ChatSearcher({ isDev, isSupport = true }) {
 function getLastMsg(msgList = []) {
     if (!msgList.length) return [];
     return msgList.slice(-1)[0].msg;
+}
+
+function getFirstLetters(name, options = {}) {
+    const { limit = 2, upperCase = true } = options;
+
+    if (!name) return "";
+    const splitNames = name.split(" ");
+    const letters = [];
+
+    splitNames.forEach((word, ind) => {
+        const currPos = ind + 1;
+        if (currPos > limit) return null;
+
+        const newLetter = upperCase ? word[0].toUpperCase() : word[0];
+        return letters.push(newLetter);
+    });
+
+    return letters.join("");
+}
+
+function stringToHexColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.substr(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
 }
 // END HELPERS
 

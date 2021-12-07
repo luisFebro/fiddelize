@@ -7,8 +7,9 @@ import ChatContent from "../chat-content/ChatContent";
 import AllChats from "./AllChats";
 
 export default function HistoryChatList() {
-    const { agentJob } = useData();
+    const { role } = useData();
     const { mainDataList, setDarkMode, socket, setData } = useContext();
+    const isBizTeam = role === "nucleo-equipe";
 
     useEffect(() => {
         if (!socket) return;
@@ -17,33 +18,29 @@ export default function HistoryChatList() {
         socket.once("connect", () => {
             socket.on("userOnline", (backUserId) => {
                 const newMainList = getNewMainList("online", {
-                    userId: backUserId,
+                    chatUserId: backUserId,
                     mainDataList,
                 });
 
                 setData((prev) => ({
                     ...prev,
                     mainDataList: newMainList,
-                    // chatData: currChatData,
                 }));
             });
 
             socket.on("userOffline", (backUserId) => {
                 const newMainList = getNewMainList("offline", {
-                    userId: backUserId,
+                    chatUserId: backUserId,
                     mainDataList,
                 });
 
                 setData((prev) => ({
                     ...prev,
                     mainDataList: newMainList,
-                    // chatData: currChatData,
                 }));
             });
         });
     }, [socket]);
-
-    const isDev = agentJob === "dev";
 
     return (
         <Fragment>
@@ -53,7 +50,7 @@ export default function HistoryChatList() {
                     <DarkModeToggler setDarkMode={setDarkMode} />
                 </div>
 
-                <AllChats mainDataList={mainDataList} isDev={isDev} />
+                <AllChats mainDataList={mainDataList} isBizTeam={isBizTeam} />
             </div>
             <ChatContent />
         </Fragment>
@@ -100,21 +97,23 @@ function DarkModeToggler({ setDarkMode = () => null }) {
 // HELPERS
 // persist all online users in localstorage,clients who is not that is consided offline
 function getNewMainList(status, options = {}) {
-    const { userId, mainDataList = [] } = options;
+    const { chatUserId, mainDataList = [] } = options;
 
     if (!mainDataList.length) return [];
 
     const [chatRealtimeUserIds] = getItems("global", ["chatRealtimeUserIds"]);
 
     const selectedOnlineArray = !chatRealtimeUserIds
-        ? [userId]
-        : [...new Set([...chatRealtimeUserIds, userId])];
+        ? [chatUserId]
+        : [...new Set([...chatRealtimeUserIds, chatUserId])];
 
     const newRealtimeList =
         status === "online"
             ? selectedOnlineArray
-            : removeArrayItem(chatRealtimeUserIds, userId);
+            : removeArrayItem(selectedOnlineArray, chatUserId);
 
+    console.log("newRealtimeList", newRealtimeList);
+    console.log("status", status);
     setItems("global", {
         chatRealtimeUserIds: newRealtimeList,
     });
@@ -128,7 +127,6 @@ function getNewMainList(status, options = {}) {
                 ...chat,
                 status: "online",
             };
-            // currChatData = thisCurrChatData;
             return thisCurrChatData;
         }
 

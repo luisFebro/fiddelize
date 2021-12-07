@@ -3,8 +3,14 @@ import useScrollUp from "hooks/scroll/useScrollUp";
 import useBackColor from "hooks/useBackColor";
 import useData from "init";
 import SelectField from "components/fields/SelectField";
-
+import getId from "utils/getId";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import getAPI, { startSupport } from "api";
+import getItems, { setItems } from "init/lStorage";
+import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
+import { useVar } from "init/var";
+import useSupportWaveColor from "./useSupportWaveColor";
 
 export const AsyncChat = Load({
     loader: () =>
@@ -16,55 +22,108 @@ export const AsyncChat = Load({
 export default function Support() {
     const [data, setData] = useState({
         subject: null,
-        subjectBr: null,
+        chatUserId: null,
         selected: false,
         success: true,
     });
-    const { success, selected } = data;
+    const { firstName, name = null, role = null, userId } = useData();
+    const { success, subject, chatUserId, selected } = data;
 
-    useEffect(() => {
-        if (!selected) return;
-        setTimeout(() => {
-            setData((prev) => ({ ...prev, success: true }));
-        }, 2000);
-    }, [selected]);
-
+    /* need to set as JSON.stringify-ed from the oldest to the newest
+        record it to every new started chat:
+        const chts = {
+            [roomId1]: [{ msg1: "sdad" }, { msg2: "s"}],
+            [roomId2]: [{ msg1: "sdad" }, { msg2: "s"}],
+        }
+    */
+    const userGotChatHistory = useVar("chts", { dots: true });
+    useSupportWaveColor(undefined, { trigger: !success });
     useScrollUp();
     useBackColor("var(--themeP)");
-    const { firstName } = useData();
+    useHandleUserId(userId, setData);
+
+    const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
+
+    useEffect(() => {
+        if (!selected || !chatUserId) return;
+
+        const body = {
+            roomId: getId(),
+            chatType: "support",
+            dataType: {
+                subject,
+            },
+            userList: {
+                userId: chatUserId, // admin dev nucleo-equipe id
+                role: role || "visitante",
+                userName: name || "Visitante", // first name and surname
+            },
+        };
+
+        getAPI({
+            method: "post",
+            url: startSupport(),
+            body,
+        }).then(() => {
+            setTimeout(() => {
+                goChatPanel();
+            }, 1500);
+        });
+
+        // eslint-disable-next-line
+    }, [selected, subject, chatUserId]);
 
     const showSubjectSelectField = () => {
         const defaultVal = "Selecione assunto:";
+        // LESSON: keep all data in English language, then create a file for translation and use throught the project like getSomethingBr
+
         const valuesArray = [
             { val: "question", showVal: "Dúvida" },
             { val: "suggestion", showVal: "Sugestão" },
             { val: "usageHelp", showVal: "Ajuda de uso" },
             { val: "bugReport", showVal: "Relatar falha" },
-            { val: "compliment", showVal: "Elogio" },
             { val: "others", showVal: "Outros" },
         ];
 
         const handleSelectValue = (val) => {
             if (!val || val === defaultVal) return;
 
-            const { showVal, val: originalVal } = valuesArray.find(
+            const { val: subjectSelected } = valuesArray.find(
                 (elem) => elem.val === val
             );
             setData((prev) => ({
                 ...prev,
-                subject: originalVal,
-                subjectBr: showVal,
+                subject: subjectSelected,
                 selected: true,
             }));
         };
 
         return (
             <div className="col-md-6">
-                <SelectField
-                    title={defaultVal}
-                    valuesArray={valuesArray}
-                    handleValue={handleSelectValue}
-                />
+                <div className="container-center-col">
+                    <SelectField
+                        title={defaultVal}
+                        valuesArray={valuesArray}
+                        handleValue={handleSelectValue}
+                    />
+                    <ButtonFab
+                        title="Ver histórico"
+                        backgroundColor="var(--themeSDark)"
+                        onClick={() => {
+                            if (userGotChatHistory === "...")
+                                return showToast("Carregando...");
+                            if (!userGotChatHistory)
+                                return showToast(
+                                    "Você não tem histórico de atendimento. Selecione um assunto para iniciar."
+                                );
+                            return goChatPanel();
+                        }}
+                        titleSize="small"
+                        position="relative"
+                        variant="extended"
+                        size="small"
+                    />
+                </div>
             </div>
         );
     };
@@ -85,14 +144,14 @@ export default function Support() {
             </h1>
             <section className="mb-md-5 middle-area d-flex flex-column flex-md-row mx-3">
                 <p className="col-md-6 text-shadow">
-                    Possui alguma dúvida, uma sugestão, ou precisa de ajuda com
-                    o seu app? Estamos aqui para te ajudar
+                    Tem alguma dúvida, uma sugestão, ou precisa de ajuda com o
+                    seu app? Estamos aqui para te ajudar
                     {firstName ? `, ${firstName}` : ""}!
                 </p>
                 {showSubjectSelectField()}
             </section>
             {selected && (
-                <div className="text-center mt-3 mb-5 animated fadeInUp text-shadow">
+                <div className="text-center mb-5 animated fadeInUp text-shadow">
                     Iniciando...
                 </div>
             )}
@@ -116,10 +175,41 @@ export default function Support() {
     return (
         <Fragment>
             {success ? (
-                <AsyncChat subject={data.subject} subjectBr={data.subjectBr} />
+                <AsyncChat
+                    subject={data.subject}
+                    chatUserId={chatUserId}
+                    name={name}
+                    role={role}
+                />
             ) : (
                 showMain()
             )}
         </Fragment>
     );
 }
+
+// HOOKS
+function useHandleUserId(userId, setData) {
+    useEffect(() => {
+        // handling visitors uniqueId
+        if (!userId) {
+            const [chatVisitorId] = getItems("global", ["chatVisitorId"]);
+            if (!chatVisitorId) {
+                const newVisitorId = `visitor-${getId()}`;
+
+                setItems("global", {
+                    chatVisitorId: newVisitorId,
+                });
+                return setData((prev) => ({
+                    ...prev,
+                    chatUserId: newVisitorId,
+                }));
+            }
+
+            return setData((prev) => ({ ...prev, chatUserId: chatVisitorId }));
+        }
+
+        return setData((prev) => ({ ...prev, chatUserId: userId }));
+    }, [userId]);
+}
+// END HOOKS

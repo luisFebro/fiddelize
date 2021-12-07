@@ -22,13 +22,13 @@ export default function ChatContent() {
 
     const {
         openChat,
-        chatData: currChatData,
+        currChatData,
         socket,
         chatUserId,
         clearFieldMsg = false,
     } = useContext();
-    const { dbMsgs, type, dataType } = currChatData;
-    const roomId = dataType && dataType.roomId;
+
+    const { dbMsgs = {}, type, roomId } = currChatData;
 
     useEffect(() => {
         if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: "" }));
