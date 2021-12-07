@@ -162,6 +162,7 @@ $breakpoints: (
         list-style: none;
         flex-grow: 1;
         overflow-y: auto;
+        padding-bottom: 150px;
       }
       &__list-scroll {
         height: 100%;
@@ -276,12 +277,20 @@ $breakpoints: (
         color: white;
         padding-right: 0.1rem;
 
+        &:disabled {
+            background-color: grey;
+            box-shadow: 0 3px 3px grey;
+        }
+
         &:focus {
           outline: none;
           border: none;
         }
         &:hover {
           background-color: var(--colour-primary-darker);
+        }
+        &:hover:disabled {
+          background-color: grey;
         }
       }
       &__send-img {

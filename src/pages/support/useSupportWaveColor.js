@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { updateUI, useAction } from "global-data/ui";
+import getItems from "init/lStorage";
+
+const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 
 export default function useSupportWaveColor(
-    color = "var(--themePDark)",
-    options = {}
+    options = {},
+    fromChatPanel = false
 ) {
     const { trigger = true } = options;
 
@@ -12,13 +15,19 @@ export default function useSupportWaveColor(
     useEffect(() => {
         if (!trigger) return;
         // update footer wave color
-        const isDarkMode = color === "#1a1a1a";
-        const thisColor = {
-            chatDarkMode: isDarkMode,
-            chatBgColor: color,
+        const handleBgColor = () => {
+            const darkColor = "#1a1a1a";
+            const whiteColor = "var(--mainWhite)";
+            return chatDarkMode ? darkColor : whiteColor;
         };
+
+        const thisColor = {
+            chatBgColor: handleBgColor(),
+        };
+
+        if (fromChatPanel) thisColor.chatDarkMode = chatDarkMode;
 
         updateUI("global", thisColor, uify);
         // eslint-disable-next-line
-    }, [trigger]);
+    }, [trigger, fromChatPanel]);
 }

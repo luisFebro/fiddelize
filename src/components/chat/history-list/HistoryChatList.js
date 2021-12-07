@@ -6,7 +6,7 @@ import getItems, { setItems } from "init/lStorage";
 import ChatContent from "../chat-content/ChatContent";
 import AllChats from "./AllChats";
 
-export default function HistoryChatList() {
+export default function HistoryChatList({ dataChatList }) {
     const { role } = useData();
     const { mainDataList, setDarkMode, socket, setData } = useContext();
     const isBizTeam = role === "nucleo-equipe";
@@ -50,7 +50,11 @@ export default function HistoryChatList() {
                     <DarkModeToggler setDarkMode={setDarkMode} />
                 </div>
 
-                <AllChats mainDataList={mainDataList} isBizTeam={isBizTeam} />
+                <AllChats
+                    dataChatList={dataChatList}
+                    mainDataList={mainDataList}
+                    isBizTeam={isBizTeam}
+                />
             </div>
             <ChatContent />
         </Fragment>

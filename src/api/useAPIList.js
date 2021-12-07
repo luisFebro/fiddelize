@@ -41,8 +41,8 @@ useAPIList.propTypes = {
 
 const isSmall = window.Helper.isSmallScreen();
 
-const ShowLoadingComp = ({ size = "small" }) => (
-    <Spinner marginY={100} size={size} />
+const ShowLoadingComp = ({ marginY = 100, size = "small" }) => (
+    <Spinner marginY={marginY} size={size} />
 );
 
 export default function useAPIList({
@@ -351,7 +351,7 @@ export default function useAPIList({
                         margin: "70px 0 100px",
                     }}
                 >
-                    Isso é tudo, {userName || "Febro"}.
+                    Isso é tudo{`, ${userName}.` || "."}
                 </p>
             )}
 

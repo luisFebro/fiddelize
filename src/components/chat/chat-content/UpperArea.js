@@ -46,7 +46,7 @@ export default function UpperArea() {
 
 // COMPS
 function ChatMemberInfo({ setData, currChatData, isSupport, role }) {
-    const { otherUserName, avatar, status, subject } = currChatData;
+    const { otherUserName, avatar, status, dataType } = currChatData;
 
     const isOnline = status === "online";
 
@@ -55,10 +55,11 @@ function ChatMemberInfo({ setData, currChatData, isSupport, role }) {
             <div className="chat-member__wrapper">
                 <div className="chat-member__avatar">
                     {getAvatarSelection({
-                        size: 55,
+                        size: 45,
                         avatar,
                         otherUserName,
                         currUserRole: role,
+                        needGreyColor: dataType && !dataType.isPendingSupport,
                     })}
                     <div
                         className={`user-status user-status${
@@ -69,7 +70,9 @@ function ChatMemberInfo({ setData, currChatData, isSupport, role }) {
                 <div className="chat-member__details">
                     <span className="text-wrap chat-member__name">
                         {otherUserName}{" "}
-                        {isSupport ? `(${getSubjectBr(subject)})` : ""}
+                        {isSupport
+                            ? `(${getSubjectBr(dataType && dataType.subject)})`
+                            : ""}
                     </span>
                     <span className="chat-member__status">
                         {isOnline ? "Online" : "Offline"}

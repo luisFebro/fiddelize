@@ -28,7 +28,8 @@ export default function ChatContent() {
         clearFieldMsg = false,
     } = useContext();
 
-    const { dbMsgs = {}, type, roomId } = currChatData;
+    const { dbMsgs = [], roomId, dataType } = currChatData;
+    const isSupportOver = dataType && !dataType.isPendingSupport;
 
     useEffect(() => {
         if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: "" }));
@@ -60,7 +61,7 @@ export default function ChatContent() {
         // eslint-disable-next-line
     }, [socket]);
 
-    const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : [];
+    const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : {};
 
     useEffect(() => {
         if (!msgList.length)
@@ -86,8 +87,6 @@ export default function ChatContent() {
             msgId: `msg${getId()}`,
             userId: chatUserId,
             roomId,
-            chatType: type,
-            isFirstMsgEver: lastDbMsg.length === 0, // if true, we have to create a new document in the chat collection
             isFirstMsgToday,
             bubble: "me",
             msg: newMsg,
@@ -103,6 +102,19 @@ export default function ChatContent() {
         scrollToBottom();
     };
 
+    const showLockChatMsg = () => (
+        <div className="container-center">
+            <span
+                className="text-shadow text-pill font-site text-em-1"
+                style={{
+                    background: "grey",
+                }}
+            >
+                Este assunto foi finalizado
+            </span>
+        </div>
+    );
+
     return (
         <div
             className={`${
@@ -115,12 +127,14 @@ export default function ChatContent() {
                 <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">
                     <UpperArea />
                     <ChatBubbles msgList={msgList} socket={socket} />
+                    {isSupportOver && showLockChatMsg()}
                     <MsgSender
                         newMsg={newMsg}
                         setCurrData={setCurrData}
                         saveNewMsg={saveNewMsg}
                         socket={socket}
                         roomId={roomId}
+                        disabled={isSupportOver}
                     />
                 </div>
             </div>

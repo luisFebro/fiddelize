@@ -2,12 +2,28 @@ import { Fragment } from "react";
 import useContext from "context";
 import getId from "utils/getId";
 import Avatar from "@material-ui/core/Avatar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import getSubjectBr from "../helpers";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function AllChats({ mainDataList, isBizTeam }) {
+export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
+    const {
+        list = [],
+        listTotal,
+        needEmptyIllustra,
+        // isPlural,
+        hasMore,
+        loading,
+        ShowLoading,
+        error,
+        ShowError,
+        isOffline,
+        setSkip,
+    } = dataChatList;
+
     const {
         setData,
         isSupport,
@@ -17,7 +33,7 @@ export default function AllChats({ mainDataList, isBizTeam }) {
         role,
     } = useContext();
 
-    const handleOpenChat = (currChatData) => {
+    const handleOpenChat = (currData) => {
         if (socket.disconnected) {
             socket.connect();
             socket.emit("chatPanelStatus", chatUserId);
@@ -25,7 +41,7 @@ export default function AllChats({ mainDataList, isBizTeam }) {
         setData((prev) => ({
             ...prev,
             openChat: getId(),
-            currChatData,
+            currChatData: currData,
             clearFieldMsg: getId(),
         })); // need to clear field every time user enter a chat panel, otherwise the prior msg will appear in every chat panel in the list
     };
@@ -34,51 +50,114 @@ export default function AllChats({ mainDataList, isBizTeam }) {
         user-status user-status${data.status === "online" ? "--online" : ""}
     `;
 
+    const showEmptyIllustration = () => <div />;
+
+    // INFINITY LOADING LIST
+    const detectedCard = useElemDetection({
+        loading,
+        hasMore,
+        setSkip,
+        isOffline,
+    });
+
+    const getRoleInTitle = (data) =>
+        isBizTeam
+            ? `: <span class="text-em-0-9">${data.otherUserRole}</span>)`
+            : ")";
+
+    const checkSelectedUser = (data) =>
+        currChatData._id === data._id ? "selected-chat" : "";
+
+    const showSupportCheckIcon = () => (
+        <div
+            className="position-absolute"
+            style={{
+                bottom: 5,
+                right: 5,
+            }}
+        >
+            <FontAwesomeIcon
+                icon="check-circle"
+                style={{
+                    fontSize: 25,
+                    color: "green",
+                }}
+            />
+        </div>
+    );
+
+    const showCard = (data) => (
+        <li
+            className={`messaging-member ${checkSelectedUser(data)} ${
+                data.unreadCount >= 1 ? "messaging-member--new" : ""
+            }`}
+            onClick={() => handleOpenChat(data)}
+        >
+            <div className="position-relative messaging-member__wrapper">
+                <div className="messaging-member__avatar">
+                    {getAvatarSelection({
+                        avatar: data.avatar,
+                        otherUserName: data.otherUserName,
+                        currUserRole: role,
+                        needGreyColor:
+                            data.dataType && !data.dataType.isPendingSupport,
+                    })}
+                    <div
+                        className={`${isBizTeam ? getDataStatus(data) : ""}`}
+                    />
+                </div>
+
+                <span className="messaging-member__name">
+                    {truncate(data.otherUserName, 20)}{" "}
+                    {isSupport
+                        ? parse(
+                              `(${getSubjectBr(data.dataType.subject)}${
+                                  data.otherUserRole === "visitante"
+                                      ? ")"
+                                      : getRoleInTitle(data)
+                              }
+                              `
+                          )
+                        : ""}
+                </span>
+                <span className="d-block mt-2 messaging-member__message">
+                    {getLastMsg(data.msgList)}
+                </span>
+                {data.dataType &&
+                    !data.dataType.isPendingSupport &&
+                    showSupportCheckIcon()}
+            </div>
+        </li>
+    );
+
+    const listMap = list.map((data, ind) =>
+        checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
+            <section key={data._id} ref={detectedCard}>
+                {showCard(data)}
+            </section>
+        ) : (
+            <section key={data._id}>{showCard(data)}</section>
+        )
+    );
+    // END INFINITY LOADING LIST
+
     return (
         <Fragment>
-            <ChatSearcher isBizTeam={isBizTeam} isSupport={isSupport} />
-            <ul className="messages-page__list pb-5 px-1 px-md-2">
-                {mainDataList.map((data) => (
-                    <li
-                        key={data._id}
-                        className={`messaging-member ${
-                            currChatData._id === data._id ? "selected-chat" : ""
-                        } ${data.gotPendingMsg ? "messaging-member--new" : ""}`}
-                        onClick={() => handleOpenChat(data)}
-                    >
-                        <div className="messaging-member__wrapper">
-                            <div className="messaging-member__avatar">
-                                {getAvatarSelection({
-                                    avatar: data.avatar,
-                                    otherUserName: data.otherUserName,
-                                    currUserRole: role,
-                                })}
-                                <div
-                                    className={`${
-                                        isBizTeam ? getDataStatus(data) : ""
-                                    }`}
-                                />
-                            </div>
-
-                            <span className="messaging-member__name">
-                                {truncate(data.otherUserName, 20)}{" "}
-                                {isSupport
-                                    ? parse(
-                                          `(${getSubjectBr(
-                                              data.dataType.subject
-                                          )}: <span class="text-em-0-9">${
-                                              data.otherUserRole
-                                          }</span>)`
-                                      )
-                                    : ""}
-                            </span>
-                            <span className="d-block mt-2 messaging-member__message">
-                                {getLastMsg(data.msgList)}
-                            </span>
-                        </div>
-                    </li>
-                ))}
+            <ChatSearcher />
+            <p className="ml-3">
+                Total de: <strong>{listTotal}</strong>{" "}
+                {isBizTeam ? "clientes" : "assuntos"}
+            </p>
+            <ul
+                className={`messages-page__list ${
+                    !loading ? "" : "pb-5"
+                } px-1 px-md-2`}
+            >
+                {listMap}
             </ul>
+            {loading && <ShowLoading size="small" marginY={0} />}
+            {needEmptyIllustra && showEmptyIllustration()}
+            {error && <ShowError />}
         </Fragment>
     );
 }
@@ -90,6 +169,7 @@ export function getAvatarSelection({
     currUserRole,
     otherUserName,
     size,
+    needGreyColor = false,
 }) {
     const needAvatar = currUserRole === "nucleo-equipe";
     if (needAvatar)
@@ -97,7 +177,9 @@ export function getAvatarSelection({
             <div className="all-chats-avatar-letters">
                 <Avatar
                     style={{
-                        backgroundColor: stringToHexColor(otherUserName),
+                        backgroundColor: needGreyColor
+                            ? "grey"
+                            : stringToHexColor(otherUserName),
                         width: size,
                         height: size,
                     }}
@@ -107,10 +189,10 @@ export function getAvatarSelection({
                 <style jsx global>
                     {`
                         .all-chats-avatar-letters .MuiAvatar-root {
-                            width: 65px;
-                            height: 65px;
+                            width: 55px;
+                            height: 55px;
                             font-family: var(--mainFont);
-                            font-size: 2.3rem;
+                            font-size: 1.8rem;
                             text-shadow: 1px 1px 3px black;
                         }
                     `}
@@ -118,10 +200,21 @@ export function getAvatarSelection({
             </div>
         );
 
-    return <img src={avatar} alt={otherUserName} loading="lazy" />;
+    return (
+        <img
+            style={{
+                filter: needGreyColor ? "grayscale(1)" : "none",
+            }}
+            src={avatar}
+            alt={otherUserName}
+            loading="lazy"
+        />
+    );
 }
 
-function ChatSearcher({ isBizTeam, isSupport = true }) {
+function ChatSearcher() {
+    // isBizTeam, isSupport = true
+
     return (
         <div className="messages-page__search mb-0 px-3 px-md-1 pb-3">
             <div className="custom-form__search-wrapper">
@@ -129,9 +222,7 @@ function ChatSearcher({ isBizTeam, isSupport = true }) {
                     type="text"
                     className="shadow-field form-control custom-form"
                     id="search"
-                    placeholder={`Procure mensagem, ${
-                        isSupport ? "assunto" : "usuário"
-                    }${isBizTeam ? ", assunto" : "..."}`}
+                    placeholder="Procure um assunto"
                     autoComplete="off"
                 />
                 <button type="submit" className="custom-form__search-submit">
@@ -203,6 +294,8 @@ function getFirstLetters(name, options = {}) {
 }
 
 function stringToHexColor(string) {
+    if (!string) return "";
+
     let hash = 0;
     let i;
 
@@ -223,158 +316,8 @@ function stringToHexColor(string) {
 }
 // END HELPERS
 
-/*
-
-<li className="messaging-member messaging-member--online messaging-member--active">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/women/56.jpg"
-                            alt="Jenny Smith"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Jenny Smith
-                    </span>
-                    <span className="messaging-member__message">
-                        Perfect, thanks !
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/women/17.jpg"
-                            alt="Courtney Simmons"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Courtney Simmons
-                    </span>
-                    <span className="messaging-member__message">
-                        Going home soon, don't worry
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member messaging-member--online">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/women/39.jpg"
-                            alt="Martha Curtis"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Martha Curtis
-                    </span>
-                    <span className="messaging-member__message">
-                        Great 😂
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member messaging-member--online">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/men/27.jpg"
-                            alt="Rozie Tucker"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">Gab Ryan</span>
-                    <span className="messaging-member__message">
-                        Sure, may I get your phone number? 😃
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/men/17.jpg"
-                            alt="Jules Zimmermann"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Jules Zimmermann
-                    </span>
-                    <span className="messaging-member__message">
-                        Well, here I am, coming as faaast as I can !
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/men/9.jpg"
-                            alt="Mark Reid"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Mark Reid
-                    </span>
-                    <span className="messaging-member__message">
-                        Have you listened to the latest album? Pure
-                        perfection
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member  messaging-member--online">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/men/54.jpg"
-                            alt="Russell Williams"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Russell Williams
-                    </span>
-                    <span className="messaging-member__message">
-                        Nice to meet you again{" "}
-                    </span>
-                </div>
-            </li>
-            <li className="messaging-member">
-                <div className="messaging-member__wrapper">
-                    <div className="messaging-member__avatar">
-                        <img
-                            src="https://randomuser.me/api/portraits/thumb/women/85.jpg"
-                            alt="Savannah Nguyen"
-                            loading="lazy"
-                        />
-                        <div className="user-status"></div>
-                    </div>
-
-                    <span className="messaging-member__name">
-                        Savannah Nguyen
-                    </span>
-                    <span className="messaging-member__message">
-                        Really ?!
-                    </span>
-                </div>
-            </li>
-
- */
+/* ARCHIVES
+`Procure mensagem, ${
+    isSupport ? "assunto" : "usuário"
+}${isBizTeam ? ", assunto" : "..."}`
+*/

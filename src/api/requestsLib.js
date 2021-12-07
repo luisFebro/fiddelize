@@ -146,10 +146,10 @@ export const getXpScoreChartData = (userId) =>
 // CHAT, SUPPORT AND REAL TIME
 export const startSupport = () =>
     // POST
-    `${ROOT}/chat/start-support`;
+    `${ROOT}/support/start`;
 export const readSupportHistory = () =>
     // GET
-    `${ROOT}/chat/support-history`;
+    `${ROOT}/support/history`;
 // END CHAT, SUPPORT AND REAL TIME
 
 // EMAIL

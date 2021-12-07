@@ -10,7 +10,10 @@ import getItems, { setItems } from "init/lStorage";
 import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
 import { useVar } from "init/var";
-import useSupportWaveColor from "./useSupportWaveColor";
+// import useSupportWaveColor from "./useSupportWaveColor";
+
+const [loggedRole] = getItems("currUser", ["role"]);
+const isFiddelizeTeam = loggedRole === "nucleo-equipe";
 
 export const AsyncChat = Load({
     loader: () =>
@@ -24,7 +27,7 @@ export default function Support() {
         subject: null,
         chatUserId: null,
         selected: false,
-        success: true,
+        success: isFiddelizeTeam,
     });
     const { firstName, name = null, role = null, userId } = useData();
     const { success, subject, chatUserId, selected } = data;
@@ -37,7 +40,7 @@ export default function Support() {
         }
     */
     const userGotChatHistory = useVar("chts", { dots: true });
-    useSupportWaveColor(undefined, { trigger: !success });
+    // useSupportWaveColor({ trigger: !success });
     useScrollUp();
     useBackColor("var(--themeP)");
     useHandleUserId(userId, setData);
@@ -175,12 +178,7 @@ export default function Support() {
     return (
         <Fragment>
             {success ? (
-                <AsyncChat
-                    subject={data.subject}
-                    chatUserId={chatUserId}
-                    name={name}
-                    role={role}
-                />
+                <AsyncChat chatUserId={chatUserId} role={role} />
             ) : (
                 showMain()
             )}

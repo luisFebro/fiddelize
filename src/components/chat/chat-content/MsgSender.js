@@ -9,6 +9,7 @@ export default function MsgSender({
     saveNewMsg,
     socket,
     roomId,
+    disabled = false,
 }) {
     const { firstName } = useData();
     const [typingData, setTypingData] = useState({
@@ -88,6 +89,7 @@ export default function MsgSender({
                         }}
                         rows={1}
                         col={1}
+                        disabled={disabled}
                         type="text"
                         name="newMsg"
                         value={newMsg}
@@ -104,7 +106,11 @@ export default function MsgSender({
                         placeholder=""
                         autoComplete="off"
                     />
-                    <div className="custom-form__send-img">
+                    <div
+                        className={`${
+                            disabled ? "disabled-link" : ""
+                        } custom-form__send-img`}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="svg-icon svg-icon--send-img"
@@ -116,7 +122,11 @@ export default function MsgSender({
                             />
                         </svg>
                     </div>
-                    <div className="custom-form__send-emoji">
+                    <div
+                        className={`${
+                            disabled ? "disabled-link" : ""
+                        } custom-form__send-emoji`}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="svg-icon svg-icon--send-emoji"
@@ -130,8 +140,11 @@ export default function MsgSender({
                     </div>
                     <button
                         type="submit"
-                        className="custom-form__send-submit"
+                        className={`custom-form__send-submit ${
+                            disabled ? "disabled" : ""
+                        }`}
                         onClick={onClickSendBtn}
+                        disabled={disabled}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
