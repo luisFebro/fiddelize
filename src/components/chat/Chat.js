@@ -7,8 +7,9 @@ import { Provider } from "context";
 import getItems from "init/lStorage";
 import useSupportWaveColor from "pages/support/useSupportWaveColor";
 import useAPIList, { readSupportHistory } from "api/useAPIList";
-import useRun from "global-data/ui";
-import { useInitSocket } from "./socket/socketInit";
+import useRun, { setRun, useAction } from "global-data/ui";
+import getId from "utils/getId";
+import { useInitSocket } from "./socket/initSocket";
 import useGlobal from "./useGlobal";
 import HistoryChatList from "./history-list/HistoryChatList";
 import UserInfoCard from "./UserInfoCard";
@@ -46,12 +47,19 @@ export default function Chat({ chatUserId, role }) {
 
     // UPDATE
     const { runName } = useRun(); // for update list from other comps
+    const uify = useAction();
     useEffect(() => {
         if (runName && runName.includes("ChatSupportList")) {
             setSkip(0);
             setSearch("");
+            setRun("runName", null, uify);
         }
     }, [runName, search]);
+    // update list
+    const updateChatList = () => {
+        // need diff id to trigger multiple times
+        setRun("runName", `ChatSupportList${getId()}`, uify);
+    };
     // END UPDATE
 
     const dataChatList = useAPIList({
@@ -73,6 +81,8 @@ export default function Chat({ chatUserId, role }) {
     const socketData = useInitSocket({
         namespace: "nspSupport",
         userId: chatUserId,
+        roomId: list.length && list[0].roomId, // the first item
+        role,
     });
     useChatHandlers();
     // END HOOKS
@@ -84,6 +94,9 @@ export default function Chat({ chatUserId, role }) {
         mainDataList: list || [],
         setDarkMode,
         isSupport,
+        updateChatList,
+        setSkip,
+        setSearch,
         ...socketData,
     });
 
@@ -102,9 +115,7 @@ export default function Chat({ chatUserId, role }) {
                         }}
                     >
                         <div className="row px-0 h-100 h-md-0">
-                            <HistoryChatList
-                                dataChatList={{ ...dataChatList, setSkip }}
-                            />
+                            <HistoryChatList dataChatList={dataChatList} />
                             <UserInfoCard />
                         </div>
                     </div>

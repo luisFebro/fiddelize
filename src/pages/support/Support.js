@@ -10,9 +10,12 @@ import getItems, { setItems } from "init/lStorage";
 import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
 import { useVar } from "init/var";
+import getSubjectBr from "components/chat/helpers";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
+// disable chatPreventMainPanel right closing an attendance so that customers can request a new attendence request
+const [chatPreventMainPanel] = getItems("global", ["chatPreventMainPanel"]);
 const isFiddelizeTeam = loggedRole === "nucleo-equipe";
 
 export const AsyncChat = Load({
@@ -27,9 +30,9 @@ export default function Support() {
         subject: null,
         chatUserId: null,
         selected: false,
-        success: isFiddelizeTeam,
+        success: isFiddelizeTeam || chatPreventMainPanel,
     });
-    const { firstName, name = null, role = null, userId } = useData();
+    const { firstName, name = null, role = "visitante", userId } = useData();
     const { success, subject, chatUserId, selected } = data;
 
     /* need to set as JSON.stringify-ed from the oldest to the newest
@@ -55,6 +58,7 @@ export default function Support() {
             chatType: "support",
             dataType: {
                 subject,
+                subjectOtherLang: getSubjectBr(subject), // to be searchable in query
             },
             userList: {
                 userId: chatUserId, // admin dev nucleo-equipe id

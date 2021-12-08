@@ -1,10 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import useContext from "context";
 import getId from "utils/getId";
 import Avatar from "@material-ui/core/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import getSubjectBr from "../helpers";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -21,7 +22,6 @@ export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
         error,
         ShowError,
         isOffline,
-        setSkip,
     } = dataChatList;
 
     const {
@@ -31,6 +31,9 @@ export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
         chatUserId,
         currChatData,
         role,
+        updateChatList,
+        setSkip,
+        setSearch,
     } = useContext();
 
     const handleOpenChat = (currData) => {
@@ -50,7 +53,23 @@ export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
         user-status user-status${data.status === "online" ? "--online" : ""}
     `;
 
-    const showEmptyIllustration = () => <div />;
+    const showEmptyIllustration = () => (
+        <section
+            className="animated fadeInUp position-relative mx-3 my-5 container-center-col"
+            style={{
+                top: -220,
+            }}
+        >
+            <img
+                width={200}
+                src="/img/illustrations/empty-data.svg"
+                alt="nada encontrado"
+            />
+            <h2 className="mt-3 font-size text-em-1-1 font-weight-bold text-grey">
+                Nada encontrado.
+            </h2>
+        </section>
+    );
 
     // INFINITY LOADING LIST
     const detectedCard = useElemDetection({
@@ -143,7 +162,11 @@ export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
 
     return (
         <Fragment>
-            <ChatSearcher />
+            <ChatSearcher
+                updateChatList={updateChatList}
+                setSearch={setSearch}
+                setSkip={setSkip}
+            />
             <p className="ml-3">
                 Total de: <strong>{listTotal}</strong>{" "}
                 {isBizTeam ? "clientes" : "assuntos"}
@@ -212,59 +235,101 @@ export function getAvatarSelection({
     );
 }
 
-function ChatSearcher() {
-    // isBizTeam, isSupport = true
+function ChatSearcher({ setSearch, setSkip, updateChatList }) {
+    const [newSearch, setNewSearch] = useState("");
+    const handleNewSearch = () => {
+        if (!newSearch) return;
+
+        setSkip(0);
+        setSearch(newSearch);
+    };
+
+    const showCleanBtn = () => {
+        const onCleanBtn = () => {
+            setNewSearch("");
+            updateChatList();
+        };
+
+        return (
+            <div
+                className="position-absolute"
+                style={{
+                    bottom: -15,
+                    right: 35,
+                }}
+            >
+                <RadiusBtn
+                    position="relative"
+                    backgroundColor="var(--themeSDark)"
+                    title="limpar"
+                    size="extra-small"
+                    fontSize="15px"
+                    onClick={onCleanBtn}
+                />
+            </div>
+        );
+    };
 
     return (
-        <div className="messages-page__search mb-0 px-3 px-md-1 pb-3">
-            <div className="custom-form__search-wrapper">
-                <input
-                    type="text"
-                    className="shadow-field form-control custom-form"
-                    id="search"
-                    placeholder="Procure um assunto"
-                    autoComplete="off"
-                />
-                <button type="submit" className="custom-form__search-submit">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="svg-icon svg-icon--search"
-                        viewBox="0 0 46.6 46.6"
+        <section className="position-relative">
+            <div className="messages-page__search mb-0 px-3 px-md-1 pb-3">
+                <div className="custom-form__search-wrapper">
+                    <input
+                        type="text"
+                        className="shadow-field form-control custom-form"
+                        id="search"
+                        name="newSearch"
+                        value={newSearch}
+                        onChange={(e) => setNewSearch(e.target.value)}
+                        placeholder="Procure um assunto"
+                        autoComplete="off"
+                    />
+                    <button
+                        type="submit"
+                        className="custom-form__search-submit"
+                        onClick={handleNewSearch}
                     >
-                        <path
-                            d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z"
-                            fill="#f68b3c"
-                        />
-                    </svg>
-                </button>
-            </div>
-            <style jsx>
-                {`
-                    .form-control {
-                        display: block;
-                        width: 100%;
-                        height: calc(1.5em + 0.75rem + 2px);
-                        padding: 0.375rem 0.75rem;
-                        font-size: 1rem;
-                        font-weight: 400;
-                        line-height: 1.5;
-                        color: #495057;
-                        background-color: #fff;
-                        background-clip: padding-box;
-                        border: 1px solid #ced4da;
-                        border-radius: 0.25rem;
-                        transition: border-color 0.15s ease-in-out,
-                            box-shadow 0.15s ease-in-out;
-                    }
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="svg-icon svg-icon--search"
+                            viewBox="0 0 46.6 46.6"
+                        >
+                            <path
+                                d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z"
+                                fill="#f68b3c"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <style jsx>
+                    {`
+                        .form-control {
+                            display: block;
+                            width: 100%;
+                            height: calc(1.5em + 0.75rem + 2px);
+                            padding: 0.375rem 0.75rem;
+                            font-size: 1rem;
+                            font-weight: 400;
+                            line-height: 1.5;
+                            color: #495057;
+                            background-color: #fff;
+                            background-clip: padding-box;
+                            border: 1px solid #ced4da;
+                            border-radius: 0.25rem;
+                            transition: border-color 0.15s ease-in-out,
+                                box-shadow 0.15s ease-in-out;
+                        }
 
-                    .custom-form {
-                        color: var(--colour-text-darkest);
-                        padding: 1.5rem;
-                        border-radius: 13px;
-                    }
-                `}
-            </style>
-        </div>
+                        .custom-form {
+                            color: var(--colour-text-darkest);
+                            padding: 1.5rem;
+                            border-radius: 13px;
+                        }
+                    `}
+                </style>
+            </div>
+            {newSearch && showCleanBtn()}
+        </section>
     );
 }
 // END COMPS

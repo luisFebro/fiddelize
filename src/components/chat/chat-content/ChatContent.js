@@ -105,7 +105,7 @@ export default function ChatContent() {
     const showLockChatMsg = () => (
         <div className="container-center">
             <span
-                className="text-shadow text-pill font-site text-em-1"
+                className="mb-3 mb-md-0 text-shadow text-pill font-site text-em-1"
                 style={{
                     background: "grey",
                 }}
