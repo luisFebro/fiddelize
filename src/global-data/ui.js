@@ -20,7 +20,7 @@ export const useAction = () => {
 };
 
 export const setRun = (type, data, uify) => {
-    if (!type || !data || !uify)
+    if (!type || !uify)
         throw new Error("missing required arguments: type, data, uify");
     // const { array, runName2 } = options;
     // const data = { payload, array, runName2 };

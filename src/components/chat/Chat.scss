@@ -50,7 +50,7 @@
   --chat-bubble-other: var(--colour-primary);
 }
 
-$navbar-z-index: 10000;
+$navbar-z-index: 1000;
 
 //  BREAKPOINTS
 $breakpoints: (
@@ -821,7 +821,7 @@ $breakpoints: (
 
     .user-status {
       position: absolute;
-      right: 0;
+      right: -5px;
       bottom: 0;
       width: 1rem;
       height: 1rem;
@@ -831,6 +831,12 @@ $breakpoints: (
 
       &--online {
         background-color: var(--colour-third-lighter) !important;
+      }
+
+      @media only screen and (min-width: 768px) {
+          .user-status {
+             right: 0px;
+          }
       }
     }
 

@@ -7,7 +7,7 @@ import useAPIList, {
 } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import { setItems } from "init/lStorage";
-import useRun from "global-data/ui";
+import useRun, { setRun, useAction } from "global-data/ui";
 import { getScannedData } from "hooks/media/useQrScanner";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
@@ -58,12 +58,15 @@ export default function PendingBenefitsList() {
     };
 
     // UPDATE
-    const { runName } = useRun();
+    const { runName } = useRun(); // for update list from other comps
+    const uify = useAction();
     useEffect(() => {
         if (runName && runName.includes("PendingBenefitsList")) {
             setSkip(0);
             setSearch("");
+            setRun("runName", null, uify);
         }
+        // eslint-disable-next-line
     }, [runName, search]);
     // END UPDATE
 

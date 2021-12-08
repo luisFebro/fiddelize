@@ -6,11 +6,12 @@ import SelectField from "components/fields/SelectField";
 import getId from "utils/getId";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getAPI, { startSupport } from "api";
-import getItems, { setItems } from "init/lStorage";
+import getItems from "init/lStorage";
 import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
 import { useVar } from "init/var";
 import getSubjectBr from "components/chat/helpers";
+import getPersistentData from "init/getPersistentData";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
@@ -29,11 +30,12 @@ export default function Support() {
     const [data, setData] = useState({
         subject: null,
         chatUserId: null,
+        chatRoomId: null,
         selected: false,
         success: isFiddelizeTeam || chatPreventMainPanel,
     });
     const { firstName, name = null, role = "visitante", userId } = useData();
-    const { success, subject, chatUserId, selected } = data;
+    const { success, subject, chatUserId, chatRoomId, selected } = data;
 
     /* need to set as JSON.stringify-ed from the oldest to the newest
         record it to every new started chat:
@@ -46,12 +48,15 @@ export default function Support() {
     // useSupportWaveColor({ trigger: !success });
     useScrollUp();
     useBackColor("var(--themeP)");
-    useHandleUserId(userId, setData);
+    // roomId and userId
+    useHandleUniqueIds(userId, setData, role);
 
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     useEffect(() => {
-        if (!selected || !chatUserId) return;
+        // chatPreventMainPanel prevents possible duplicates with some reloading here
+        if (chatPreventMainPanel || !selected || !chatUserId || !chatRoomId)
+            return;
 
         const body = {
             roomId: getId(),
@@ -62,8 +67,9 @@ export default function Support() {
             },
             userList: {
                 userId: chatUserId, // admin dev nucleo-equipe id
+                roomId: chatRoomId,
                 role: role || "visitante",
-                userName: name || "Visitante", // first name and surname
+                userName: name || `Visitante ${getId(5)}`, // first name and surname
             },
         };
 
@@ -78,7 +84,7 @@ export default function Support() {
         });
 
         // eslint-disable-next-line
-    }, [selected, subject, chatUserId]);
+    }, [selected, subject, chatUserId, chatRoomId]);
 
     const showSubjectSelectField = () => {
         const defaultVal = "Selecione assunto:";
@@ -182,7 +188,11 @@ export default function Support() {
     return (
         <Fragment>
             {success ? (
-                <AsyncChat chatUserId={chatUserId} role={role} />
+                <AsyncChat
+                    chatUserId={chatUserId}
+                    role={role}
+                    chatRoomId={chatRoomId}
+                />
             ) : (
                 showMain()
             )}
@@ -190,28 +200,53 @@ export default function Support() {
     );
 }
 
+// // persist a value in local storage - generally an id - that requires to be the same over and over again
+// function getPersistentData(options = {}) {
+//     const {
+//         coll = "global",
+//         name = "chatVisitorId", // variable name
+//         val = null, // val to persist e.g some nanoId
+//     } = options;
+
+//     if(!name || !val) throw new Error("No val found");
+
+//     const [storedData] = getItems(coll, [name]);
+//     if (!storedData) {
+//         setItems("global", {
+//             [name]: val,
+//         });
+//         return val;
+//     }
+
+//     return storedData;
+// }
+
 // HOOKS
-function useHandleUserId(userId, setData) {
+function useHandleUniqueIds(userId, setData, role) {
     useEffect(() => {
-        // handling visitors uniqueId
-        if (!userId) {
-            const [chatVisitorId] = getItems("global", ["chatVisitorId"]);
-            if (!chatVisitorId) {
-                const newVisitorId = `visitor-${getId()}`;
+        let thisChatUserId = userId;
 
-                setItems("global", {
-                    chatVisitorId: newVisitorId,
-                });
-                return setData((prev) => ({
-                    ...prev,
-                    chatUserId: newVisitorId,
-                }));
-            }
+        if (!thisChatUserId || role === "visitante") {
+            const chatVisitorId = getPersistentData({
+                name: "chatVisitorId",
+                val: getId(),
+            });
 
-            return setData((prev) => ({ ...prev, chatUserId: chatVisitorId }));
+            thisChatUserId = chatVisitorId;
         }
 
-        return setData((prev) => ({ ...prev, chatUserId: userId }));
+        const chatRoomId = getPersistentData({
+            name: "chatRoomId",
+            val: getId(),
+        });
+
+        return setData((prev) => ({
+            ...prev,
+            chatUserId: thisChatUserId,
+            chatRoomId,
+        }));
+
+        // eslint-disable-next-line
     }, [userId]);
 }
 // END HOOKS

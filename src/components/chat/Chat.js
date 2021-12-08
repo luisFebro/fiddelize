@@ -34,7 +34,7 @@ const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 //     },
 // ];
 
-export default function Chat({ chatUserId, role }) {
+export default function Chat({ chatUserId, chatRoomId, role }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -55,8 +55,8 @@ export default function Chat({ chatUserId, role }) {
             setRun("runName", null, uify);
         }
     }, [runName, search]);
-    // update list
-    const updateChatList = () => {
+    // update list else where
+    const updateChatList = async () => {
         // need diff id to trigger multiple times
         setRun("runName", `ChatSupportList${getId()}`, uify);
     };
@@ -81,7 +81,7 @@ export default function Chat({ chatUserId, role }) {
     const socketData = useInitSocket({
         namespace: "nspSupport",
         userId: chatUserId,
-        roomId: list.length && list[0].roomId, // the first item
+        roomId: chatRoomId, // the first item
         role,
     });
     useChatHandlers();
@@ -97,6 +97,7 @@ export default function Chat({ chatUserId, role }) {
         updateChatList,
         setSkip,
         setSearch,
+        chatUserId,
         ...socketData,
     });
 

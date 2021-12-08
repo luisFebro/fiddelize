@@ -6,7 +6,7 @@ import useAPIList, {
     benefitCardsAutocomplete,
 } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import useRun from "global-data/ui";
+import useRun, { setRun, useAction } from "global-data/ui";
 import DoneCard from "./cards/DoneCard";
 
 export default function DoneBenefitsList() {
@@ -24,11 +24,14 @@ export default function DoneBenefitsList() {
 
     // UPDATE
     const { runName } = useRun(); // for update list from other comps
+    const uify = useAction();
     useEffect(() => {
         if (runName && runName.includes("DoneBenefitsList")) {
             setSkip(0);
             setSearch("");
+            setRun("runName", null, uify);
         }
+        // eslint-disable-next-line
     }, [runName, search]);
     // END UPDATE
 
