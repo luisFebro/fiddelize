@@ -10,7 +10,20 @@ import getSubjectBr from "../helpers";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
+export default function AllChats({ isBizTeam }) {
+    const {
+        setData,
+        isSupport,
+        socket,
+        chatUserId,
+        currChatData,
+        role,
+        updateChatList,
+        setSkip,
+        setSearch,
+        dataChatList,
+    } = useContext();
+
     const {
         list = [],
         listTotal,
@@ -23,18 +36,6 @@ export default function AllChats({ dataChatList, mainDataList, isBizTeam }) {
         ShowError,
         isOffline,
     } = dataChatList;
-
-    const {
-        setData,
-        isSupport,
-        socket,
-        chatUserId,
-        currChatData,
-        role,
-        updateChatList,
-        setSkip,
-        setSearch,
-    } = useContext();
 
     const handleOpenChat = (currData) => {
         if (socket.disconnected) {

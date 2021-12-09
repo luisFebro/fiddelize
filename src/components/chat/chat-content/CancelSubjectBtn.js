@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import { Load } from "components/code-splitting/LoadableComp";
 import getAPI, { updateSupport } from "api";
+import { removeItems } from "init/lStorage";
 import showToast from "components/toasts";
 
 const AsyncModalYesNo = Load({
@@ -42,6 +43,7 @@ export default function CancelSubjectBtn({
             showToast("Ocorreu um erro ao finalizar assunto.");
         });
 
+        removeItems("global", ["chatPreventMainPanel"]);
         updateChatList();
         showToast(`Assunto ${subject} finalizado com sucesso!`, {
             type: "success",

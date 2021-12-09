@@ -4,11 +4,12 @@
 import { useEffect, useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Provider } from "context";
-import getItems from "init/lStorage";
+import getItems, { removeItems } from "init/lStorage";
 import useSupportWaveColor from "pages/support/useSupportWaveColor";
 import useAPIList, { readSupportHistory } from "api/useAPIList";
 import useRun, { setRun, useAction } from "global-data/ui";
 import getId from "utils/getId";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import { useInitSocket } from "./socket/initSocket";
 import useGlobal from "./useGlobal";
 import HistoryChatList from "./history-list/HistoryChatList";
@@ -72,8 +73,6 @@ export default function Chat({ chatUserId, chatRoomId, role }) {
         trigger: search || runName || true, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
     });
 
-    const { list = [] } = dataChatList;
-
     // HOOKS
     useScrollUp();
     useSupportWaveColor();
@@ -91,18 +90,46 @@ export default function Chat({ chatUserId, chatRoomId, role }) {
     const isSupport = true;
     const store = useGlobal({
         role,
-        mainDataList: list || [],
         setDarkMode,
         isSupport,
         updateChatList,
         setSkip,
         setSearch,
         chatUserId,
+        dataChatList,
         ...socketData,
     });
 
+    const showReturnAppBtn = () => (
+        <div className="chat-return-app-btn position-absolute">
+            <RadiusBtn
+                zIndex={1}
+                position="relative"
+                width={150}
+                backgroundColor="var(--themePLight)"
+                title="Retornar app"
+                top={-5}
+                left={140}
+                size="small"
+                fontSize="15px"
+                onClick={() => {
+                    removeItems("global", ["chatPreventMainPanel"]);
+                    window.location.href = "/app";
+                }}
+            />
+            <style jsx>
+                {`
+                    .chat-return-app-btn {
+                        pointer-events: event;
+                    }
+                `}
+            </style>
+        </div>
+    );
+
     return (
         <Provider store={store}>
+            {showReturnAppBtn()}
             <section className="chat--root">
                 <div
                     className={`${
@@ -116,7 +143,7 @@ export default function Chat({ chatUserId, chatRoomId, role }) {
                         }}
                     >
                         <div className="row px-0 h-100 h-md-0">
-                            <HistoryChatList dataChatList={dataChatList} />
+                            <HistoryChatList />
                             <UserInfoCard />
                         </div>
                     </div>

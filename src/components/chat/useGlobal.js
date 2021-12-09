@@ -5,21 +5,22 @@ import { setItems } from "init/lStorage";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function useGlobal(props) {
-    const { mainDataList: dbMainList } = props;
+    const { dataChatList } = props;
+    const { list } = dataChatList;
 
     const [data, setData] = useState({
         openChat: !isSmall, // in large screen, keep open.
         openUserCard: false,
-        currChatData: dbMainList[0] || {}, // the first and most recent message will be selected by default
+        currRoomId: list[0] && list[0].roomId,
+        currChatData: list[0] || {}, // the first and most recent message will be selected by default
         darkMode: false,
         clearFieldMsg: false,
-        mainDataList: [],
     });
 
     useEffect(() => {
-        if (!dbMainList.length) return null;
+        if (!list.length) return null;
 
-        const thisCurrChatData = data.mainDataList[0] || dbMainList[0] || {};
+        const thisCurrChatData = list[0];
         const lastPendingSupport =
             thisCurrChatData &&
             thisCurrChatData.dataType &&
@@ -28,18 +29,16 @@ export default function useGlobal(props) {
         if (lastPendingSupport)
             setItems("global", {
                 chatPreventMainPanel: true,
+                chatHistoryOn: true,
             });
 
         return setData((prev) => ({
             ...prev,
-            mainDataList: data.mainDataList.length
-                ? data.mainDataList
-                : dbMainList,
-            // load most recent chat as the most recent
             currChatData: thisCurrChatData,
         }));
+
         // eslint-disable-next-line
-    }, [dbMainList.length, data.mainDataList]);
+    }, [list]);
 
     const store = {
         ...props,
@@ -49,3 +48,17 @@ export default function useGlobal(props) {
 
     return store;
 }
+
+/* ARCHIVES
+
+return setData((prev) => ({
+    ...prev,
+    mainDataList: list,
+    // mainDataList: data.mainDataList.length
+    //     ? data.mainDataList
+    //     : list,
+    // load most recent chat as the most recent
+    currChatData: thisCurrChatData,
+}));
+
+*/

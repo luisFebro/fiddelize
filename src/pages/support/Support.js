@@ -9,14 +9,16 @@ import getAPI, { startSupport } from "api";
 import getItems from "init/lStorage";
 import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
-import { useVar } from "init/var";
 import getSubjectBr from "components/chat/helpers";
 import getPersistentData from "init/getPersistentData";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
 // disable chatPreventMainPanel right closing an attendance so that customers can request a new attendence request
-const [chatPreventMainPanel] = getItems("global", ["chatPreventMainPanel"]);
+const [chatPreventMainPanel, chatHistoryOn] = getItems("global", [
+    "chatPreventMainPanel",
+    "chatHistoryOn",
+]);
 const isFiddelizeTeam = loggedRole === "nucleo-equipe";
 
 export const AsyncChat = Load({
@@ -44,7 +46,6 @@ export default function Support() {
             [roomId2]: [{ msg1: "sdad" }, { msg2: "s"}],
         }
     */
-    const userGotChatHistory = useVar("chts", { dots: true });
     // useSupportWaveColor({ trigger: !success });
     useScrollUp();
     useBackColor("var(--themeP)");
@@ -123,9 +124,7 @@ export default function Support() {
                         title="Ver histórico"
                         backgroundColor="var(--themeSDark)"
                         onClick={() => {
-                            if (userGotChatHistory === "...")
-                                return showToast("Carregando...");
-                            if (!userGotChatHistory)
+                            if (!chatHistoryOn)
                                 return showToast(
                                     "Você não tem histórico de atendimento. Selecione um assunto para iniciar."
                                 );

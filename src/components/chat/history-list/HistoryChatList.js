@@ -6,9 +6,9 @@ import getItems, { setItems } from "init/lStorage";
 import ChatContent from "../chat-content/ChatContent";
 import AllChats from "./AllChats";
 
-export default function HistoryChatList({ dataChatList }) {
+export default function HistoryChatList() {
     const { role } = useData();
-    const { mainDataList, setDarkMode, socket, setData } = useContext();
+    const { setDarkMode, socket, setData } = useContext();
     const isBizTeam = role === "nucleo-equipe";
 
     useEffect(() => {
@@ -16,29 +16,26 @@ export default function HistoryChatList({ dataChatList }) {
 
         // every time a socket is connected or reconnected, a new socketId is generated both here and in the server to identify the current user session. This is great to identify and update status
         socket.once("connect", () => {
-            socket.on("userOnline", (backUserId) => {
-                const newMainList = getNewMainList("online", {
-                    chatUserId: backUserId,
-                    mainDataList,
-                });
-
-                setData((prev) => ({
-                    ...prev,
-                    mainDataList: newMainList,
-                }));
-            });
-
-            socket.on("userOffline", (backUserId) => {
-                const newMainList = getNewMainList("offline", {
-                    chatUserId: backUserId,
-                    mainDataList,
-                });
-
-                setData((prev) => ({
-                    ...prev,
-                    mainDataList: newMainList,
-                }));
-            });
+            // socket.on("userOnline", (backUserId) => {
+            //     const newMainList = getNewMainList("online", {
+            //         chatUserId: backUserId,
+            //         mainDataList,
+            //     });
+            //     setData((prev) => ({
+            //         ...prev,
+            //         mainDataList: newMainList,
+            //     }));
+            // });
+            // socket.on("userOffline", (backUserId) => {
+            //     const newMainList = getNewMainList("offline", {
+            //         chatUserId: backUserId,
+            //         mainDataList,
+            //     });
+            //     setData((prev) => ({
+            //         ...prev,
+            //         mainDataList: newMainList,
+            //     }));
+            // });
         });
     }, [socket]);
 
@@ -50,11 +47,7 @@ export default function HistoryChatList({ dataChatList }) {
                     <DarkModeToggler setDarkMode={setDarkMode} />
                 </div>
 
-                <AllChats
-                    dataChatList={dataChatList}
-                    mainDataList={mainDataList}
-                    isBizTeam={isBizTeam}
-                />
+                <AllChats isBizTeam={isBizTeam} />
             </div>
             <ChatContent />
         </Fragment>
@@ -100,46 +93,44 @@ function DarkModeToggler({ setDarkMode = () => null }) {
 
 // HELPERS
 // persist all online users in localstorage,clients who is not that is consided offline
-function getNewMainList(status, options = {}) {
-    const { chatUserId, mainDataList = [] } = options;
+// function getNewMainList(status, options = {}) {
+//     const { chatUserId, mainDataList = [] } = options;
 
-    if (!mainDataList.length) return [];
+//     if (!mainDataList.length) return [];
 
-    const [chatRealtimeUserIds] = getItems("global", ["chatRealtimeUserIds"]);
+//     const [chatRealtimeUserIds] = getItems("global", ["chatRealtimeUserIds"]);
 
-    const selectedOnlineArray = !chatRealtimeUserIds
-        ? [chatUserId]
-        : [...new Set([...chatRealtimeUserIds, chatUserId])];
+//     const selectedOnlineArray = !chatRealtimeUserIds
+//         ? [chatUserId]
+//         : [...new Set([...chatRealtimeUserIds, chatUserId])];
 
-    const newRealtimeList =
-        status === "online"
-            ? selectedOnlineArray
-            : removeArrayItem(selectedOnlineArray, chatUserId);
+//     const newRealtimeList =
+//         status === "online"
+//             ? selectedOnlineArray
+//             : removeArrayItem(selectedOnlineArray, chatUserId);
 
-    console.log("newRealtimeList", newRealtimeList);
-    console.log("status", status);
-    setItems("global", {
-        chatRealtimeUserIds: newRealtimeList,
-    });
+//     setItems("global", {
+//         chatRealtimeUserIds: newRealtimeList,
+//     });
 
-    return mainDataList.map((chat) => {
-        const isOnline = !newRealtimeList
-            ? false
-            : newRealtimeList.includes(chat._id);
-        if (isOnline) {
-            const thisCurrChatData = {
-                ...chat,
-                status: "online",
-            };
-            return thisCurrChatData;
-        }
+//     return mainDataList.map((chat) => {
+//         const isOnline = !newRealtimeList
+//             ? false
+//             : newRealtimeList.includes(chat._id);
+//         if (isOnline) {
+//             const thisCurrChatData = {
+//                 ...chat,
+//                 status: "online",
+//             };
+//             return thisCurrChatData;
+//         }
 
-        return {
-            ...chat,
-            status: "offline",
-        };
-    });
-}
+//         return {
+//             ...chat,
+//             status: "offline",
+//         };
+//     });
+// }
 
 function removeArrayItem(array = [], item) {
     if (!array.length) return [];
