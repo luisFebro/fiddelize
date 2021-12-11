@@ -1,8 +1,6 @@
 import { useState, Fragment } from "react";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import { Load } from "components/code-splitting/LoadableComp";
-import getAPI, { updateSupport } from "api";
-import { removeItems } from "init/lStorage";
 import showToast from "components/toasts";
 
 const AsyncModalYesNo = Load({
@@ -12,12 +10,7 @@ const AsyncModalYesNo = Load({
         ),
 });
 
-export default function CancelSubjectBtn({
-    subject,
-    roomId,
-    userId,
-    updateChatList,
-}) {
+export default function FinishSubjectBtn({ subject, roomId, socket }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
@@ -25,26 +18,8 @@ export default function CancelSubjectBtn({
     };
 
     const markSupportOver = async () => {
-        const params = {
-            roomId,
-            userId,
-        };
-        const body = {
-            "dataType.isPendingSupport": false,
-            updatedAt: new Date(),
-        };
+        socket.emit("finishSubject", roomId);
 
-        await getAPI({
-            method: "POST",
-            url: updateSupport(),
-            body,
-            params,
-        }).catch(() => {
-            showToast("Ocorreu um erro ao finalizar assunto.");
-        });
-
-        removeItems("global", ["chatPreventMainPanel"]);
-        updateChatList();
         showToast(`Assunto ${subject} finalizado com sucesso!`, {
             type: "success",
         });

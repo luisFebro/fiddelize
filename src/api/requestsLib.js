@@ -148,10 +148,6 @@ export const startSupport = () =>
     // POST
     `${ROOT}/support/start`;
 
-export const updateSupport = () =>
-    // POST
-    `${ROOT}/support/update`;
-
 export const readSupportHistory = () =>
     // GET
     `${ROOT}/support/history`;

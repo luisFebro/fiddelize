@@ -5,49 +5,47 @@ import { setItems } from "init/lStorage";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function useGlobal(props) {
-    const { dataChatList } = props;
-    const { list } = dataChatList;
+    const { list: dbList } = props.dataChatList;
 
     const [data, setData] = useState({
         openChat: !isSmall, // in large screen, keep open.
         openUserCard: false,
-        currRoomId: list[0] && list[0].roomId,
-        currChatData: list[0] || {}, // the first and most recent message will be selected by default
+        currRoomId: dbList[0] && dbList[0].roomId,
         darkMode: false,
         clearFieldMsg: false,
     });
 
+    const lastPendingSupport =
+        dbList[0] && dbList[0].dataType && dbList[0].dataType.isPendingSupport;
+
     useEffect(() => {
-        if (!list.length) return null;
+        if (!lastPendingSupport) return;
 
-        const thisCurrChatData = list[0];
-        const lastPendingSupport =
-            thisCurrChatData &&
-            thisCurrChatData.dataType &&
-            thisCurrChatData.dataType.isPendingSupport;
-        // Especially for customers - if there is a pending support as the last chat, don't switch back to main support panel, but keep the user logged in the chat support panel
-        if (lastPendingSupport)
-            setItems("global", {
-                chatPreventMainPanel: true,
-                chatHistoryOn: true,
-            });
+        setItems("global", {
+            chatPreventMainPanel: true,
+            chatHistoryOn: true,
+        });
+    }, [lastPendingSupport]);
 
-        return setData((prev) => ({
-            ...prev,
-            currChatData: thisCurrChatData,
-        }));
-
-        // eslint-disable-next-line
-    }, [list]);
+    const currChatData = getCurrChatData(dbList, data.currRoomId);
 
     const store = {
         ...props,
         ...data,
         setData,
+        dbList,
+        currChatData,
     };
 
     return store;
 }
+
+// HELPERS
+function getCurrChatData(list, roomId) {
+    if (!list || !list[0] || !roomId) return list[0] || {};
+    return list.find((session) => session.roomId === roomId);
+}
+// END HELPERS
 
 /* ARCHIVES
 

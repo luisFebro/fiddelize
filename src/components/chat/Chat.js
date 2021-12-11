@@ -10,7 +10,7 @@ import useAPIList, { readSupportHistory } from "api/useAPIList";
 import useRun, { setRun, useAction } from "global-data/ui";
 import getId from "utils/getId";
 import RadiusBtn from "components/buttons/RadiusBtn";
-import { useInitSocket } from "./socket/initSocket";
+import useUpdateChatList from "./socket/socketListeners";
 import useGlobal from "./useGlobal";
 import HistoryChatList from "./history-list/HistoryChatList";
 import UserInfoCard from "./UserInfoCard";
@@ -35,7 +35,7 @@ const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 //     },
 // ];
 
-export default function Chat({ chatUserId, chatRoomId, role }) {
+export default function Chat({ socket, chatUserId, role }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -59,8 +59,16 @@ export default function Chat({ chatUserId, chatRoomId, role }) {
     // update list else where
     const updateChatList = async () => {
         // need diff id to trigger multiple times
-        setRun("runName", `ChatSupportList${getId()}`, uify);
+        const newId = getId();
+        setRun("runName", `ChatSupportList${newId}`, uify);
     };
+
+    const data = {
+        role,
+        updateChatList,
+    };
+
+    useUpdateChatList(socket, data);
     // END UPDATE
 
     const dataChatList = useAPIList({
@@ -70,24 +78,19 @@ export default function Chat({ chatUserId, chatRoomId, role }) {
         listName: "ChatSupportList",
         limit: 10,
         needAuth: false,
-        trigger: search || runName || true, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
+        trigger: chatUserId && (search || runName || true), // search shoulb be the first, otherwise it will not trigger if other static value is in front.
     });
 
     // HOOKS
     useScrollUp();
     useSupportWaveColor();
 
-    const socketData = useInitSocket({
-        namespace: "nspSupport",
-        userId: chatUserId,
-        roomId: chatRoomId, // the first item
-        role,
-    });
     useChatHandlers();
     // END HOOKS
 
     // sent by content field if the chat is support or other kind of chat
     const isSupport = true;
+    const needStatus = false;
     const store = useGlobal({
         role,
         setDarkMode,
@@ -97,7 +100,8 @@ export default function Chat({ chatUserId, chatRoomId, role }) {
         setSearch,
         chatUserId,
         dataChatList,
-        ...socketData,
+        needStatus,
+        socket,
     });
 
     const showReturnAppBtn = () => (

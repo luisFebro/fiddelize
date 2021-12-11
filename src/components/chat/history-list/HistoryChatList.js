@@ -1,43 +1,14 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import useData from "init";
 import useContext from "context";
 import { updateUI, useAction } from "global-data/ui";
-import getItems, { setItems } from "init/lStorage";
 import ChatContent from "../chat-content/ChatContent";
 import AllChats from "./AllChats";
 
 export default function HistoryChatList() {
     const { role } = useData();
-    const { setDarkMode, socket, setData } = useContext();
+    const { setDarkMode } = useContext();
     const isBizTeam = role === "nucleo-equipe";
-
-    useEffect(() => {
-        if (!socket) return;
-
-        // every time a socket is connected or reconnected, a new socketId is generated both here and in the server to identify the current user session. This is great to identify and update status
-        socket.once("connect", () => {
-            // socket.on("userOnline", (backUserId) => {
-            //     const newMainList = getNewMainList("online", {
-            //         chatUserId: backUserId,
-            //         mainDataList,
-            //     });
-            //     setData((prev) => ({
-            //         ...prev,
-            //         mainDataList: newMainList,
-            //     }));
-            // });
-            // socket.on("userOffline", (backUserId) => {
-            //     const newMainList = getNewMainList("offline", {
-            //         chatUserId: backUserId,
-            //         mainDataList,
-            //     });
-            //     setData((prev) => ({
-            //         ...prev,
-            //         mainDataList: newMainList,
-            //     }));
-            // });
-        });
-    }, [socket]);
 
     return (
         <Fragment>
@@ -91,56 +62,64 @@ function DarkModeToggler({ setDarkMode = () => null }) {
     );
 }
 
-// HELPERS
-// persist all online users in localstorage,clients who is not that is consided offline
-// function getNewMainList(status, options = {}) {
-//     const { chatUserId, mainDataList = [] } = options;
+/* ARCHIVES
 
-//     if (!mainDataList.length) return [];
+    useEffect(() => {
+        if(!onlineIds.length) return;
 
-//     const [chatRealtimeUserIds] = getItems("global", ["chatRealtimeUserIds"]);
+        const newMainList = getNewMainList({ onlineIds, dbList });
+        setData((prev) => ({
+            ...prev,
+            currList: newMainList,
+        }));
+}, [onlineIds, currList.length])
 
-//     const selectedOnlineArray = !chatRealtimeUserIds
-//         ? [chatUserId]
-//         : [...new Set([...chatRealtimeUserIds, chatUserId])];
+    useEffect(() => {
+        if (!socket) return;
 
-//     const newRealtimeList =
-//         status === "online"
-//             ? selectedOnlineArray
-//             : removeArrayItem(selectedOnlineArray, chatUserId);
+        // every time a socket is connected or reconnected, a new socketId is generated both here and in the server to identify the current user session. This is great to identify and update status
+        socket.once("connect", () => {
+            // connections are all online userIds, roomIds and status
+            socket.on("connectedUsers", (conns) => {
+                const theseOnlineIds = [];
+                if(conns.length) conns.forEach(session => {
+                    if(session.connected) theseOnlineIds.push(session.userId);
+                })
 
-//     setItems("global", {
-//         chatRealtimeUserIds: newRealtimeList,
-//     });
+                setOnlineIds(theseOnlineIds);
+            });
+        });
+    }, [socket, currList.length]);
 
-//     return mainDataList.map((chat) => {
-//         const isOnline = !newRealtimeList
-//             ? false
-//             : newRealtimeList.includes(chat._id);
+*/
+
+// function getNewMainList({ onlineIds, currList }) {
+//     return currList.map((session) => {
+//         const isOnline = onlineIds.includes(session.otherUserId)
+
 //         if (isOnline) {
-//             const thisCurrChatData = {
-//                 ...chat,
+//             return {
+//                 ...session,
 //                 status: "online",
 //             };
-//             return thisCurrChatData;
 //         }
 
 //         return {
-//             ...chat,
+//             ...session,
 //             status: "offline",
 //         };
 //     });
 // }
 
-function removeArrayItem(array = [], item) {
-    if (!array.length) return [];
+// function removeArrayItem(array = [], item) {
+//     if (!array.length) return [];
 
-    const targetInd = array.indexOf(item);
-    // if no item found, return the original array
-    if (targetInd < 0) return array;
+//     const targetInd = array.indexOf(item);
+//     // if no item found, return the original array
+//     if (targetInd < 0) return array;
 
-    array.splice(targetInd, 1);
+//     array.splice(targetInd, 1);
 
-    return array;
-}
+//     return array;
+// }
 // END HELPERS

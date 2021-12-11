@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import useContext from "context";
 import animateCSS from "utils/animateCSS";
 import getId from "utils/getId";
-import CancelSubjectBtn from "./CancelSubjectBtn";
+import FinishSubjectBtn from "./FinishSubjectBtn";
 import { getAvatarSelection } from "../history-list/AllChats";
 import getSubjectBr from "../helpers";
 
@@ -10,10 +10,11 @@ export default function UpperArea() {
     const {
         setData,
         currChatData,
-        chatUserId,
         isSupport,
         role,
         updateChatList,
+        socket,
+        needStatus,
     } = useContext();
 
     const handleCloseChat = () => {
@@ -43,12 +44,13 @@ export default function UpperArea() {
             </div>
             <BadgeNewChat />
             <ChatMemberInfo
-                setData={setData}
-                chatUserId={chatUserId}
                 updateChatList={updateChatList}
                 currChatData={currChatData}
+                setData={setData}
                 isSupport={isSupport}
                 role={role}
+                socket={socket}
+                needStatus={needStatus}
             />
         </div>
     );
@@ -57,17 +59,23 @@ export default function UpperArea() {
 // COMPS
 function ChatMemberInfo({
     setData,
-    chatUserId,
-    updateChatList,
     currChatData,
     isSupport,
     role,
+    socket,
+    needStatus,
 }) {
-    const { otherUserName, avatar, status, roomId, dataType } = currChatData;
+    const {
+        otherUserName,
+        otherAvatar,
+        otherStatus,
+        roomId,
+        dataType,
+    } = currChatData;
 
     const subjectBr = getSubjectBr(dataType && dataType.subject);
     const isSupportOver = dataType && !dataType.isPendingSupport;
-    const isOnline = status === "online";
+    const isOnline = otherStatus === "online";
 
     const showAvatarInfo = () => (
         <div className="chat__infos pl-2 pl-md-0">
@@ -75,32 +83,40 @@ function ChatMemberInfo({
                 <div className="chat-member__avatar">
                     {getAvatarSelection({
                         size: 45,
-                        avatar,
+                        avatar: otherAvatar,
                         otherUserName,
                         currUserRole: role,
                         needGreyColor: isSupportOver,
                     })}
-                    <div
-                        className={`user-status user-status${
-                            isOnline ? "--online" : ""
-                        }`}
-                    />
+                    {needStatus && (
+                        <div
+                            className={`user-status user-status${
+                                isOnline ? "--online" : ""
+                            }`}
+                        />
+                    )}
                 </div>
                 <div className="chat-member__details">
-                    <span className="text-wrap chat-member__name">
+                    <span
+                        className="text-wrap chat-member__name"
+                        style={{
+                            marginTop: needStatus ? "auto" : "-25px",
+                        }}
+                    >
                         {otherUserName || "Nenhum cliente"}{" "}
                         {isSupport ? `(${subjectBr})` : ""}
                     </span>
-                    <span className="chat-member__status">
-                        {isOnline ? "Online" : "Offline"}
-                    </span>
+                    {needStatus && (
+                        <span className="chat-member__status">
+                            {isOnline ? "Online" : "Offline"}
+                        </span>
+                    )}
                 </div>
                 {!isSupportOver && otherUserName && (
-                    <CancelSubjectBtn
+                    <FinishSubjectBtn
                         subject={subjectBr}
-                        updateChatList={updateChatList}
                         roomId={roomId}
-                        userId={chatUserId}
+                        socket={socket}
                     />
                 )}
             </div>

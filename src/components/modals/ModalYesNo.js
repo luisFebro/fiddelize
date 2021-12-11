@@ -87,7 +87,7 @@ export default function ModalYesNo({
             open={fullOpen}
             maxWidth="sm"
             aria-labelledby="form-dialog-title"
-            className="animated slideInLeft faster"
+            className="animated fadeIn faster"
         >
             {showTitle()}
             {showSubTitle()}

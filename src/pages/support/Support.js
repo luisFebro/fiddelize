@@ -8,9 +8,9 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getAPI, { startSupport } from "api";
 import getItems from "init/lStorage";
 import showToast from "components/toasts";
+import { useInitSocket } from "components/chat/socket/initSocket";
 import { Load } from "components/code-splitting/LoadableComp";
 import getSubjectBr from "components/chat/helpers";
-import getPersistentData from "init/getPersistentData";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
@@ -31,36 +31,37 @@ export const AsyncChat = Load({
 export default function Support() {
     const [data, setData] = useState({
         subject: null,
-        chatUserId: null,
-        chatRoomId: null,
         selected: false,
         success: isFiddelizeTeam || chatPreventMainPanel,
     });
     const { firstName, name = null, role = "visitante", userId } = useData();
-    const { success, subject, chatUserId, chatRoomId, selected } = data;
+    const { success, subject, selected } = data;
 
-    /* need to set as JSON.stringify-ed from the oldest to the newest
-        record it to every new started chat:
-        const chts = {
-            [roomId1]: [{ msg1: "sdad" }, { msg2: "s"}],
-            [roomId2]: [{ msg1: "sdad" }, { msg2: "s"}],
-        }
-    */
     // useSupportWaveColor({ trigger: !success });
     useScrollUp();
     useBackColor("var(--themeP)");
-    // roomId and userId
-    useHandleUniqueIds(userId, setData, role);
+
+    const { socket, chatUserId, chatRoomId, isStored } = useInitSocket({
+        namespace: "nspSupport",
+        userId,
+        role,
+    });
 
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     useEffect(() => {
-        // chatPreventMainPanel prevents possible duplicates with some reloading here
-        if (chatPreventMainPanel || !selected || !chatUserId || !chatRoomId)
+        // isStored and chatPreventMainPanel prevents possible duplicates with some reloading here
+        if (
+            !isStored ||
+            chatPreventMainPanel ||
+            !selected ||
+            !chatUserId ||
+            !chatRoomId
+        )
             return;
 
         const body = {
-            roomId: getId(),
+            roomId: chatRoomId,
             chatType: "support",
             dataType: {
                 subject,
@@ -68,7 +69,6 @@ export default function Support() {
             },
             userList: {
                 userId: chatUserId, // admin dev nucleo-equipe id
-                roomId: chatRoomId,
                 role: role || "visitante",
                 userName: name || `Visitante ${getId(5)}`, // first name and surname
             },
@@ -85,7 +85,7 @@ export default function Support() {
         });
 
         // eslint-disable-next-line
-    }, [selected, subject, chatUserId, chatRoomId]);
+    }, [isStored, selected, subject, chatUserId, chatRoomId]);
 
     const showSubjectSelectField = () => {
         const defaultVal = "Selecione assunto:";
@@ -189,8 +189,8 @@ export default function Support() {
             {success ? (
                 <AsyncChat
                     chatUserId={chatUserId}
+                    socket={socket}
                     role={role}
-                    chatRoomId={chatRoomId}
                 />
             ) : (
                 showMain()
@@ -199,53 +199,18 @@ export default function Support() {
     );
 }
 
-// // persist a value in local storage - generally an id - that requires to be the same over and over again
-// function getPersistentData(options = {}) {
-//     const {
-//         coll = "global",
-//         name = "chatVisitorId", // variable name
-//         val = null, // val to persist e.g some nanoId
-//     } = options;
+// ARCHIVES
+// function useHandleUniqueIds() {
+//     const uify = useAction();
 
-//     if(!name || !val) throw new Error("No val found");
-
-//     const [storedData] = getItems(coll, [name]);
-//     if (!storedData) {
-//         setItems("global", {
-//             [name]: val,
-//         });
-//         return val;
-//     }
-
-//     return storedData;
+//     updateUI("global", {
+//         chatUserId: getPersistentData({
+//             name: "chatUserId",
+//             val: getId(),
+//         }),
+//         chatRoomId: getPersistentData({
+//             name: "chatRoomId",
+//             val: getId(),
+//         }),
+//     }, uify)
 // }
-
-// HOOKS
-function useHandleUniqueIds(userId, setData, role) {
-    useEffect(() => {
-        let thisChatUserId = userId;
-
-        if (!thisChatUserId || role === "visitante") {
-            const chatVisitorId = getPersistentData({
-                name: "chatVisitorId",
-                val: getId(),
-            });
-
-            thisChatUserId = chatVisitorId;
-        }
-
-        const chatRoomId = getPersistentData({
-            name: "chatRoomId",
-            val: getId(),
-        });
-
-        return setData((prev) => ({
-            ...prev,
-            chatUserId: thisChatUserId,
-            chatRoomId,
-        }));
-
-        // eslint-disable-next-line
-    }, [userId]);
-}
-// END HOOKS

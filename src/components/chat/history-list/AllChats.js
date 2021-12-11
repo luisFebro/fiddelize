@@ -15,23 +15,23 @@ export default function AllChats({ isBizTeam }) {
         setData,
         isSupport,
         socket,
-        chatUserId,
         currChatData,
+        dbList,
         role,
         updateChatList,
         setSkip,
         setSearch,
         dataChatList,
+        needStatus,
     } = useContext();
 
     const {
-        list = [],
         listTotal,
         needEmptyIllustra,
         // isPlural,
         hasMore,
         loading,
-        ShowLoading,
+        // ShowLoading,
         error,
         ShowError,
         isOffline,
@@ -40,18 +40,19 @@ export default function AllChats({ isBizTeam }) {
     const handleOpenChat = (currData) => {
         if (socket.disconnected) {
             socket.connect();
-            socket.emit("chatPanelStatus", chatUserId);
         }
         setData((prev) => ({
             ...prev,
             openChat: getId(),
-            currChatData: currData,
+            currRoomId: currData.roomId,
             clearFieldMsg: getId(),
         })); // need to clear field every time user enter a chat panel, otherwise the prior msg will appear in every chat panel in the list
     };
 
     const getDataStatus = (data) => `
-        user-status user-status${data.status === "online" ? "--online" : ""}
+        user-status user-status${
+            data.otherStatus === "online" ? "--online" : ""
+        }
     `;
 
     const showEmptyIllustration = () => (
@@ -86,7 +87,7 @@ export default function AllChats({ isBizTeam }) {
             : ")";
 
     const checkSelectedUser = (data) =>
-        currChatData._id === data._id ? "selected-chat" : "";
+        currChatData && currChatData._id === data._id ? "selected-chat" : "";
 
     const showSupportCheckIcon = () => (
         <div
@@ -116,14 +117,14 @@ export default function AllChats({ isBizTeam }) {
             <div className="position-relative messaging-member__wrapper">
                 <div className="messaging-member__avatar">
                     {getAvatarSelection({
-                        avatar: data.avatar,
+                        avatar: data.otherAvatar,
                         otherUserName: data.otherUserName,
                         currUserRole: role,
                         needGreyColor:
                             data.dataType && !data.dataType.isPendingSupport,
                     })}
                     <div
-                        className={`${isBizTeam ? getDataStatus(data) : ""}`}
+                        className={`${needStatus ? getDataStatus(data) : ""}`}
                     />
                 </div>
 
@@ -150,8 +151,8 @@ export default function AllChats({ isBizTeam }) {
         </li>
     );
 
-    const listMap = list.map((data, ind) =>
-        checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
+    const listMap = dbList.map((data, ind) =>
+        checkDetectedElem({ list: dbList, ind, indFromLast: 2 }) ? (
             <section key={data._id} ref={detectedCard}>
                 {showCard(data)}
             </section>
@@ -179,13 +180,13 @@ export default function AllChats({ isBizTeam }) {
             >
                 {listMap}
             </ul>
-            {loading && <ShowLoading size="small" marginY={0} />}
             {needEmptyIllustra && showEmptyIllustration()}
             {error && <ShowError />}
         </Fragment>
     );
 }
 
+// {loading && <ShowLoading size="small" marginY={0} />}
 // COMPS
 
 export function getAvatarSelection({
