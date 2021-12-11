@@ -23,6 +23,7 @@ export default function AllChats({ isBizTeam }) {
         setSearch,
         dataChatList,
         needStatus,
+        typing,
     } = useContext();
 
     const {
@@ -142,7 +143,9 @@ export default function AllChats({ isBizTeam }) {
                         : ""}
                 </span>
                 <span className="d-block mt-2 messaging-member__message">
-                    {getLastMsg(data.msgList)}
+                    {typing.display && typing.roomId === data.roomId
+                        ? `${typing.name} está digitando...`
+                        : getLastMsg(data.dbMsgs)}
                 </span>
                 {data.dataType &&
                     !data.dataType.isPendingSupport &&
@@ -337,9 +340,9 @@ function ChatSearcher({ setSearch, setSkip, updateChatList }) {
 // END COMPS
 
 // HELPERS
-function getLastMsg(msgList = []) {
-    if (!msgList.length) return [];
-    return msgList.slice(-1)[0].msg;
+function getLastMsg(dbMsgs = []) {
+    if (!dbMsgs.length) return [];
+    return dbMsgs.slice(-1)[0].msg;
 }
 
 function getFirstLetters(name, options = {}) {

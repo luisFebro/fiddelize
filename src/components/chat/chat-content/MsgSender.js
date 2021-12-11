@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState, useCallback } from "react";
 import ChatTyping from "components/loadingIndicators/ChatTyping";
+import useContext from "context";
 import debounce from "utils/performance/debounce";
 import useData from "init";
 
@@ -18,6 +19,7 @@ export default function MsgSender({
         senderName: null,
     });
     const { isUserTyping, typingDisplay, senderName } = typingData;
+    const { setData } = useContext();
 
     useEffect(() => {
         if (!socket) return null;
@@ -42,9 +44,18 @@ export default function MsgSender({
         if (!socket) return;
 
         socket.on("typingDisplay", (data) => {
+            setData((prev) => ({
+                ...prev,
+                typing: {
+                    roomId: data.roomId,
+                    display: data.typingDisplay,
+                    name: data.senderName,
+                },
+            }));
             setTypingData({
                 typingDisplay: data.typingDisplay,
-                senderName: data.senderName,
+                senderName:
+                    data.senderName === "Febro" ? "Fiddelize" : data.senderName,
             });
         });
     }, [socket]);

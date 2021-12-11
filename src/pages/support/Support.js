@@ -41,7 +41,7 @@ export default function Support() {
     useScrollUp();
     useBackColor("var(--themeP)");
 
-    const { socket, chatUserId, chatRoomId, isStored } = useInitSocket({
+    const { socket, chatUserId, chatRoomId, blockNewSupport } = useInitSocket({
         namespace: "nspSupport",
         userId,
         role,
@@ -50,9 +50,14 @@ export default function Support() {
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     useEffect(() => {
-        // isStored and chatPreventMainPanel prevents possible duplicates with some reloading here
+        // allowNewSupport and chatPreventMainPanel prevents possible duplicates with some reloading here
+        console.log("blockNewSupport", blockNewSupport);
+        console.log("chatPreventMainPanel", chatPreventMainPanel);
+        console.log("!selected", !selected);
+        console.log("!chatUserId", !chatUserId);
+        console.log("!chatRoomId", !chatRoomId);
         if (
-            !isStored ||
+            blockNewSupport ||
             chatPreventMainPanel ||
             !selected ||
             !chatUserId ||
@@ -85,7 +90,7 @@ export default function Support() {
         });
 
         // eslint-disable-next-line
-    }, [isStored, selected, subject, chatUserId, chatRoomId]);
+    }, [blockNewSupport, selected, subject, chatUserId, chatRoomId]);
 
     const showSubjectSelectField = () => {
         const defaultVal = "Selecione assunto:";

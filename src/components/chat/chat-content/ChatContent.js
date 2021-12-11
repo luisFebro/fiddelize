@@ -31,6 +31,19 @@ export default function ChatContent() {
     const { dbMsgs = [], roomId, dataType } = currChatData;
     const isSupportOver = dataType && !dataType.isPendingSupport;
 
+    const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : {};
+
+    useEffect(() => {
+        if (!dbMsgs.length) return;
+
+        setCurrData((prev) => ({
+            ...prev,
+            msgList: dbMsgs,
+            lastMsg: lastDbMsg,
+        }));
+        // eslint-disable-next-line
+    }, [dbMsgs.length]); // if lastDbMsg will cause max exceed reload error
+
     useEffect(() => {
         if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: "" }));
     }, [clearFieldMsg]);
@@ -61,23 +74,12 @@ export default function ChatContent() {
         // eslint-disable-next-line
     }, [socket]);
 
-    const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : {};
-
-    useEffect(() => {
-        if (!msgList.length)
-            setCurrData((prev) => ({
-                ...prev,
-                msgList: dbMsgs,
-                lastMsg: lastDbMsg,
-            }));
-        // eslint-disable-next-line
-    }, [msgList.length]); // if lastDbMsg will cause max exceed reload error
-
     const saveNewMsg = () => {
         if (!newMsg) return;
 
         // for the division of dates when it was sent.
-        const lastMsgDate = lastMsg.msgDate ? new Date(lastMsg.msgDate) : null;
+        const lastMsgDate =
+            lastMsg && lastMsg.msgDate ? new Date(lastMsg.msgDate) : null;
 
         const isFirstMsgToday = !lastMsgDate
             ? true

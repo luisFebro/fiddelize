@@ -33,17 +33,9 @@ export function useInitSocket({ namespace, userId, role, autoConnect = true }) {
         doneInit: false,
         chatUserId: null,
         chatRoomId: null,
-        isStored: false, // if the ids are being retrieved from localstorage
+        blockNewSupport: false, // if the ids are being retrieved from localstorage
     });
     const { doneInit } = data;
-
-    const setAuthData = (d) => {
-        setData((prev) => ({
-            ...prev,
-            chatUserId: d.userId,
-            chatRoomId: d.roomId,
-        }));
-    };
 
     useEffect(() => {
         if (doneInit) return null;
@@ -54,9 +46,14 @@ export function useInitSocket({ namespace, userId, role, autoConnect = true }) {
         const socket = getInitSocket({ namespace, autoConnect, auth, query });
         socket.userId = userId;
 
-        const [chatRoomId, chatUserId] = getItems("global", [
+        const [
+            chatRoomId,
+            chatUserId,
+            chatPreventMainPanel,
+        ] = getItems("global", [
             "chatRoomId",
             "chatUserId",
+            "chatPreventMainPanel",
         ]);
         if (chatRoomId) {
             // this.usernameAlreadySelected = true;
@@ -64,11 +61,13 @@ export function useInitSocket({ namespace, userId, role, autoConnect = true }) {
             socket.query = { role };
             socket.userId = chatUserId;
 
-            setAuthData({
-                userId: chatUserId,
-                roomId: chatRoomId,
-                isStored: true,
-            });
+            setData((prev) => ({
+                ...prev,
+                chatUserId,
+                chatRoomId,
+                // if user has previous stored data, but has no pending attendance, allow s/he to take another one. chatPrentMainPanel is only true while there is one pending and going attendance
+                blockNewSupport: chatPreventMainPanel,
+            }));
         }
 
         // connect right away
@@ -81,19 +80,22 @@ export function useInitSocket({ namespace, userId, role, autoConnect = true }) {
 
         // LESSON: create ramdom Id in the backend and attach it and start socket before anything to be saved, otherwise - saving in the frontend - will cause the id to be different
         socket.on("session", (d) => {
+            setItems("global", {
+                chatRoomId: d.roomId, // only requires this, but chatUserId is used to keep consistency especially in requests
+                chatUserId: d.userId,
+            });
+
             // attach the session ID to the next reconnection attempts
             socket.auth = { roomId: d.roomId, userId };
             socket.query = { role };
             socket.userId = d.userId;
             // store it in the localStorage
-            if (!chatRoomId && !doneInit) {
-                setItems("global", {
-                    chatRoomId: d.roomId, // only requires this, but chatUserId is used to keep consistency especially in requests
-                    chatUserId: d.userId,
-                });
 
-                setAuthData({ userId: d.userId, roomId: d.roomId });
-            }
+            setData((prev) => ({
+                ...prev,
+                chatUserId: d.userId,
+                chatRoomId: d.roomId,
+            }));
         });
 
         socket.on("connect_error", (err) => {
@@ -119,6 +121,6 @@ export function useInitSocket({ namespace, userId, role, autoConnect = true }) {
         socket: data.socket,
         chatUserId: data.chatUserId,
         chatRoomId: data.chatRoomId,
-        isStored: data.isStored,
+        blockNewSupport: data.blockNewSupport,
     };
 }

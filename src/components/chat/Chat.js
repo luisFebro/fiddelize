@@ -21,20 +21,6 @@ import "styles/bootstrap-layout-only-min.css";
 const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 // const isSmall = window.Helper.isSmallScreen();
 
-// list inspired by DoneBenefitsList. (in case of future autocomplete feature implementation)
-
-// const msgList = [
-//     {
-//         msgId: "12332321ddsadsadssad",
-//         userId: "",
-//         unread: true,
-//         isFirstDayMsg: true,
-//         bubble: "other",
-//         msg: "Hello!",
-//         createdAt: "2021-12-02T12:38:18.366Z",
-//     },
-// ];
-
 export default function Chat({ socket, chatUserId, role }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
     const [skip, setSkip] = useState(0);

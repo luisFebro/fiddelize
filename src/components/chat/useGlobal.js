@@ -13,6 +13,11 @@ export default function useGlobal(props) {
         currRoomId: dbList[0] && dbList[0].roomId,
         darkMode: false,
         clearFieldMsg: false,
+        typing: {
+            display: false,
+            name: null,
+            roomId: null,
+        },
     });
 
     const lastPendingSupport =
