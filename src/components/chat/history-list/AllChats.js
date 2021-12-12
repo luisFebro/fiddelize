@@ -24,6 +24,7 @@ export default function AllChats({ isBizTeam }) {
         dataChatList,
         needStatus,
         typing,
+        lastPanelMsg,
     } = useContext();
 
     const {
@@ -32,7 +33,7 @@ export default function AllChats({ isBizTeam }) {
         // isPlural,
         hasMore,
         loading,
-        // ShowLoading,
+        ShowLoading,
         error,
         ShowError,
         isOffline,
@@ -108,7 +109,7 @@ export default function AllChats({ isBizTeam }) {
         </div>
     );
 
-    const showCard = (data) => (
+    const showCard = (data, ind) => (
         <li
             className={`messaging-member ${checkSelectedUser(data)} ${
                 data.unreadCount >= 1 ? "messaging-member--new" : ""
@@ -143,9 +144,7 @@ export default function AllChats({ isBizTeam }) {
                         : ""}
                 </span>
                 <span className="d-block mt-2 messaging-member__message">
-                    {typing.display && typing.roomId === data.roomId
-                        ? `${typing.name} está digitando...`
-                        : getLastMsg(data.dbMsgs)}
+                    {handleLastMsg({ typing, ind, data, lastPanelMsg })}
                 </span>
                 {data.dataType &&
                     !data.dataType.isPendingSupport &&
@@ -157,7 +156,7 @@ export default function AllChats({ isBizTeam }) {
     const listMap = dbList.map((data, ind) =>
         checkDetectedElem({ list: dbList, ind, indFromLast: 2 }) ? (
             <section key={data._id} ref={detectedCard}>
-                {showCard(data)}
+                {showCard(data, ind)}
             </section>
         ) : (
             <section key={data._id}>{showCard(data)}</section>
@@ -183,13 +182,13 @@ export default function AllChats({ isBizTeam }) {
             >
                 {listMap}
             </ul>
+            {loading && <ShowLoading size="small" marginY={0} />}
             {needEmptyIllustra && showEmptyIllustration()}
             {error && <ShowError />}
         </Fragment>
     );
 }
 
-// {loading && <ShowLoading size="small" marginY={0} />}
 // COMPS
 
 export function getAvatarSelection({
@@ -340,9 +339,23 @@ function ChatSearcher({ setSearch, setSkip, updateChatList }) {
 // END COMPS
 
 // HELPERS
-function getLastMsg(dbMsgs = []) {
-    if (!dbMsgs.length) return [];
-    return dbMsgs.slice(-1)[0].msg;
+function handleLastMsg({ typing, ind, data, lastPanelMsg }) {
+    const getLastMsg = (dbMsgs = []) => {
+        if (!dbMsgs.length) return [];
+        return dbMsgs.slice(-1)[0].content.msg;
+    };
+
+    // if still not detected the currnt roomId, set only the first chat to be displayed
+    const isBot = ind === 0 && typing.display && typing.name === "Fiddo Bot";
+    const isUserTyping =
+        isBot || (typing.display && typing.roomId === data.roomId);
+    if (isUserTyping) return `${typing.name} está digitando...`;
+
+    const recentSentMsg =
+        lastPanelMsg.msg && lastPanelMsg.roomId === data.roomId;
+    if (recentSentMsg) return lastPanelMsg.msg;
+
+    return getLastMsg(data.dbMsgs);
 }
 
 function getFirstLetters(name, options = {}) {

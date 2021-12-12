@@ -18,6 +18,10 @@ export default function useGlobal(props) {
             name: null,
             roomId: null,
         },
+        lastPanelMsg: {
+            msg: null,
+            roomId: null,
+        },
     });
 
     const lastPendingSupport =

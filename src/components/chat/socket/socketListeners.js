@@ -16,8 +16,12 @@ export default function useUpdateChatList(socket, data = {}) {
                 }
 
                 updateChatList();
+                // chatRoomId should be deleted every time a subject is closed so that a new roomId is generated next time and avoid duplicates
                 if (finishSubject)
-                    removeItems("global", ["chatPreventMainPanel"]);
+                    removeItems("global", [
+                        "chatPreventMainPanel",
+                        "chatRoomId",
+                    ]);
             }
         );
     }, [socket, role]);

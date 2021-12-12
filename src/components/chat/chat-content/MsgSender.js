@@ -11,6 +11,7 @@ export default function MsgSender({
     socket,
     roomId,
     disabled = false,
+    bot = {},
 }) {
     const { firstName } = useData();
     const [typingData, setTypingData] = useState({
@@ -72,13 +73,13 @@ export default function MsgSender({
     // Important: they must have diff wait seconds. Otherwise, only once will work
     // eslint-disable-next-line
     const onChangeDetectTypingOff = useCallback(
-        debounce(handleUserStopTyping, 3000),
+        debounce(handleUserStopTyping, 1000),
         []
     );
     // this method is executed right away and wait 3 seconds to trigger again if user no longer stroking.
     // eslint-disable-next-line
     const onChangeDetectTypingOn = useCallback(
-        debounce(handleUserStartTyping, 2000, {
+        debounce(handleUserStartTyping, 500, {
             leading: true,
             trailing: false,
         }),
@@ -91,7 +92,11 @@ export default function MsgSender({
 
     return (
         <Fragment>
-            <ChatTyping show={typingDisplay} userFirstName={senderName} />
+            <ChatTyping
+                show={bot.typingDisplay || typingDisplay}
+                userFirstName={bot.senderName || senderName}
+                isBot={bot.typingDisplay}
+            />
             <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
                 <div className="custom-form__send-wrapper shadow-field">
                     <textarea
@@ -112,7 +117,7 @@ export default function MsgSender({
                             onChangeDetectTypingOff();
                             onChangeDetectTypingOn();
                         }}
-                        className="form-control custom-form"
+                        className="msg-sender form-control custom-form"
                         id="message"
                         placeholder=""
                         autoComplete="off"

@@ -1,5 +1,8 @@
 import { Fragment } from "react";
 import { calendar, getLocalHour } from "utils/dates/dateFns";
+import getItems from "init/lStorage";
+
+const [chatUserId] = getItems("global", ["chatUserId"]);
 
 export default function ChatBubbles({ msgList = [] }) {
     return (
@@ -8,33 +11,72 @@ export default function ChatBubbles({ msgList = [] }) {
                 <ul className="position-relative chat__list-messages">
                     {!msgList.length
                         ? []
-                        : msgList.map((data) => (
-                              <li key={data.msgId}>
-                                  {data.isFirstMsgToday && (
-                                      <div className="chat__time">
-                                          {calendar(data.firstMsgTodayDate)}
-                                      </div>
-                                  )}
-                                  <div
-                                      className={`chat__bubble chat__bubble--${data.bubble} shadow-field`}
-                                  >
-                                      {data.msg && data.msg.trim()}
-                                      <span
-                                          className="chat__bubble--b-time"
-                                          style={{
-                                              color:
-                                                  data.bubble === "me"
-                                                      ? "grey"
-                                                      : "white",
-                                          }}
+                        : msgList.map((data) => {
+                              const { from, content } = data;
+                              const bubble = pickBubble({ from });
+                              const {
+                                  msgId,
+                                  msgDate,
+                                  firstMsgTodayDate,
+                                  msg,
+                              } = content;
+
+                              return (
+                                  <li key={msgId} className="position-relative">
+                                      {from === "Fiddo Bot" && (
+                                          <div
+                                              className="position-absolute animated delay-2s fadeInUp"
+                                              style={{
+                                                  top: -10,
+                                                  left: -15,
+                                                  zIndex: 1000,
+                                              }}
+                                          >
+                                              <img
+                                                  width={50}
+                                                  src="/img/icons/fiddelize-fiddobot.svg"
+                                                  alt="altrabot"
+                                              />
+                                          </div>
+                                      )}
+                                      {firstMsgTodayDate && (
+                                          <div className="chat__time">
+                                              {calendar(firstMsgTodayDate)}
+                                          </div>
+                                      )}
+                                      <div
+                                          className={`chat__bubble chat__bubble--${bubble} shadow-field`}
                                       >
-                                          {getLocalHour(data.msgDate)}
-                                      </span>
-                                  </div>
-                              </li>
-                          ))}
+                                          {msg && msg.trim()}
+                                          <span
+                                              className="chat__bubble--b-time"
+                                              style={{
+                                                  color:
+                                                      bubble === "me"
+                                                          ? "grey"
+                                                          : "white",
+                                              }}
+                                          >
+                                              {getLocalHour(msgDate)}
+                                          </span>
+                                      </div>
+                                  </li>
+                              );
+                          })}
                 </ul>
             </div>
         </Fragment>
     );
 }
+
+// HELPERS
+function pickBubble({ from }) {
+    const isBot = from === "Fiddo Bot";
+    if (isBot) return "other";
+
+    const isCurrUserMsg = from === chatUserId;
+
+    const currBubble = isCurrUserMsg ? "me" : "other";
+    return currBubble;
+}
+// END HELPERS

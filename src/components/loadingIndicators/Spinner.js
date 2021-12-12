@@ -41,10 +41,10 @@ export default function Spinner({
     const showSpinner = (isRunning) =>
         isRunning && (
             <Fragment>
-                <div className="spinner" />
+                <div className="main-circle-spinner" />
                 <style jsx>
                     {`
-                        .spinner {
+                        .main-circle-spinner {
                             position: relative;
                             height: ${logoOpts[size]};
                             width: ${logoOpts[size]};
@@ -53,10 +53,10 @@ export default function Spinner({
                             border-top: 3px solid var(--lightPurple);
                             border-radius: 100%;
 
-                            animation: spin 0.8s linear infinite;
+                            animation: circleSpin 0.8s linear infinite;
                         }
 
-                        @keyframes spin {
+                        @keyframes circleSpin {
                             from {
                                 transform: rotate(0deg);
                             }

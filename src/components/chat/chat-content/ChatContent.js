@@ -3,6 +3,7 @@ import useContext from "context";
 import getId from "utils/getId";
 import isSameDay from "date-fns/isSameDay";
 import useAutoresizeableTextarea from "hooks/useAutoresizeableTextarea";
+import useAutoMsgBot from "pages/support/fiddelizeChatBot";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 import MsgSender from "./MsgSender";
@@ -14,8 +15,12 @@ export default function ChatContent() {
         newMsg: "",
         msgList: [],
         lastMsg: null, // object
+        bot: {
+            typingDisplay: false,
+            senderName: null,
+        },
     });
-    const { newMsg, msgList, lastMsg } = currData;
+    const { newMsg, msgList, lastMsg, bot } = currData;
     const today = new Date();
 
     useAutoresizeableTextarea();
@@ -26,6 +31,8 @@ export default function ChatContent() {
         socket,
         chatUserId,
         clearFieldMsg = false,
+        setData,
+        subject,
     } = useContext();
 
     const { dbMsgs = [], roomId, dataType } = currChatData;
@@ -44,6 +51,8 @@ export default function ChatContent() {
         // eslint-disable-next-line
     }, [dbMsgs.length]); // if lastDbMsg will cause max exceed reload error
 
+    scrollToBottom();
+
     useEffect(() => {
         if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: "" }));
     }, [clearFieldMsg]);
@@ -53,7 +62,9 @@ export default function ChatContent() {
             const filterId = "msgId";
             return [...prev.msgList, currMsg].filter(
                 (val, ind, arr) =>
-                    arr.findIndex((t) => t[filterId] === val[filterId]) === ind
+                    arr.findIndex(
+                        (t) => t.content[filterId] === val.content[filterId]
+                    ) === ind
             );
         }
 
@@ -69,31 +80,39 @@ export default function ChatContent() {
         // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
         socket.on("newMsg", (data) => {
             appendNewMsg(data);
+            showLastPanelMsg({
+                setData,
+                newMsg: data.content && data.content.msg,
+                roomId,
+            });
             scrollToBottom();
         });
         // eslint-disable-next-line
     }, [socket]);
 
-    const saveNewMsg = () => {
-        if (!newMsg) return;
+    const saveNewMsg = (botMsg) => {
+        if (!newMsg && !botMsg) return;
 
         // for the division of dates when it was sent.
+        const content = lastMsg && lastMsg.content;
         const lastMsgDate =
-            lastMsg && lastMsg.msgDate ? new Date(lastMsg.msgDate) : null;
+            content && lastMsg.content.msgDate
+                ? new Date(lastMsg.content.msgDate)
+                : null;
 
         const isFirstMsgToday = !lastMsgDate
             ? true
             : !isSameDay(lastMsgDate, today);
 
         const newMsgTobeEmitted = {
-            msgId: `msg${getId()}`,
-            userId: chatUserId,
-            roomId,
-            isFirstMsgToday,
-            bubble: "me",
-            msg: newMsg,
-            msgDate: today,
-            firstMsgTodayDate: isFirstMsgToday ? today : undefined,
+            from: botMsg ? "Fiddo Bot" : chatUserId,
+            to: roomId,
+            content: {
+                msgId: `msg${getId()}`,
+                msg: botMsg || newMsg,
+                msgDate: today,
+                firstMsgTodayDate: isFirstMsgToday ? today : undefined,
+            },
         };
 
         socket.emit("newMsg", newMsgTobeEmitted);
@@ -101,8 +120,30 @@ export default function ChatContent() {
         appendNewMsg(newMsgTobeEmitted);
         setCurrData((prev) => ({ ...prev, newMsg: "" }));
 
+        showLastPanelMsg({
+            setData,
+            newMsg,
+            roomId,
+        });
         scrollToBottom();
+
+        // focus after sending:
+        const newMsgTxt = document.querySelector(".msg-sender");
+        // keep size of field after focusing.
+        setTimeout(() => {
+            newMsgTxt.focus();
+            newMsgTxt.style.height = "72px";
+        }, 1000);
     };
+
+    useAutoMsgBot({
+        subject,
+        activateBot: !dbMsgs.length,
+        saveNewMsg,
+        setCurrData,
+        setData,
+        roomId,
+    });
 
     const showLockChatMsg = () => (
         <div className="container-center">
@@ -128,7 +169,7 @@ export default function ChatContent() {
             <div className="chat__container">
                 <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">
                     <UpperArea />
-                    <ChatBubbles msgList={msgList} socket={socket} />
+                    <ChatBubbles msgList={msgList} />
                     {isSupportOver && showLockChatMsg()}
                     <MsgSender
                         newMsg={newMsg}
@@ -137,6 +178,7 @@ export default function ChatContent() {
                         socket={socket}
                         roomId={roomId}
                         disabled={isSupportOver}
+                        bot={bot}
                     />
                 </div>
             </div>
@@ -144,9 +186,16 @@ export default function ChatContent() {
     );
 }
 
-// HELPERS
 function scrollToBottom() {
     const chatContainer = document.querySelector(".chat__content");
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function showLastPanelMsg({ setData, newMsg, roomId }) {
+    const lastPanelMsg = {
+        msg: newMsg,
+        roomId,
+    };
+    setData((prev) => ({ ...prev, lastPanelMsg }));
 }
 // END HELPERS

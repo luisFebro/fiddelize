@@ -6,11 +6,12 @@ import SelectField from "components/fields/SelectField";
 import getId from "utils/getId";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getAPI, { startSupport } from "api";
-import getItems from "init/lStorage";
+import getItems, { setItems } from "init/lStorage";
 import showToast from "components/toasts";
 import { useInitSocket } from "components/chat/socket/initSocket";
 import { Load } from "components/code-splitting/LoadableComp";
 import getSubjectBr from "components/chat/helpers";
+import Field from "components/fields";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
@@ -33,9 +34,15 @@ export default function Support() {
         subject: null,
         selected: false,
         success: isFiddelizeTeam || chatPreventMainPanel,
+        chatUserName: null,
     });
+    const { success, chatUserName, subject, selected } = data;
     const { firstName, name = null, role = "visitante", userId } = useData();
-    const { success, subject, selected } = data;
+
+    useEffect(() => {
+        if (firstName)
+            setData((prev) => ({ ...prev, chatUserName: firstName }));
+    }, [firstName]);
 
     // useSupportWaveColor({ trigger: !success });
     useScrollUp();
@@ -49,21 +56,17 @@ export default function Support() {
 
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
-    useEffect(() => {
+    const startNewSupport = async () => {
         // allowNewSupport and chatPreventMainPanel prevents possible duplicates with some reloading here
-        console.log("blockNewSupport", blockNewSupport);
-        console.log("chatPreventMainPanel", chatPreventMainPanel);
-        console.log("!selected", !selected);
-        console.log("!chatUserId", !chatUserId);
-        console.log("!chatRoomId", !chatRoomId);
-        if (
+        const someInfoInvalid =
             blockNewSupport ||
             chatPreventMainPanel ||
             !selected ||
             !chatUserId ||
-            !chatRoomId
-        )
-            return;
+            !chatRoomId;
+
+        if (someInfoInvalid)
+            return showToast("No momento o suporte não está disponível");
 
         const body = {
             roomId: chatRoomId,
@@ -72,29 +75,29 @@ export default function Support() {
                 subject,
                 subjectOtherLang: getSubjectBr(subject), // to be searchable in query
             },
-            userList: {
+            fromData: {
                 userId: chatUserId, // admin dev nucleo-equipe id
                 role: role || "visitante",
                 userName: name || `Visitante ${getId(5)}`, // first name and surname
             },
         };
 
-        getAPI({
+        await getAPI({
             method: "post",
             url: startSupport(),
             body,
-        }).then(() => {
-            setTimeout(() => {
-                goChatPanel();
-            }, 1500);
         });
 
-        // eslint-disable-next-line
-    }, [blockNewSupport, selected, subject, chatUserId, chatRoomId]);
+        setItems("global", { chatUserName });
+
+        showToast("Iniciando sua sessão de suporte...", { type: "success" });
+        setTimeout(() => goChatPanel(), 1500);
+        return "started";
+    };
 
     const showSubjectSelectField = () => {
         const defaultVal = "Selecione assunto:";
-        // LESSON: keep all data in English language, then create a file for translation and use throught the project like getSomethingBr
+        // LESSON: keep all data in English language, then create a file for translation and use throught the project like getOtherLang(br)
 
         const valuesArray = [
             { val: "question", showVal: "Dúvida" },
@@ -117,29 +120,76 @@ export default function Support() {
             }));
         };
 
+        const userNameSelection = () => {
+            if (firstName) {
+                return (
+                    <p className="m-0 font-site text-em-1-4">{firstName},</p>
+                );
+            }
+
+            return (
+                <section className="container-center">
+                    <p className="font-site text-em-0-8 text-white text-left mb-2">
+                        Informe seu nome:
+                    </p>
+                    <Field
+                        textAlign="text-center"
+                        size="medium"
+                        name="chatUserName"
+                        value={chatUserName}
+                        onChangeCallback={setData}
+                        zIndex={1}
+                    />
+                </section>
+            );
+        };
+
         return (
             <div className="col-md-6">
                 <div className="container-center-col">
+                    {userNameSelection()}
                     <SelectField
                         title={defaultVal}
                         valuesArray={valuesArray}
                         handleValue={handleSelectValue}
                     />
-                    <ButtonFab
-                        title="Ver histórico"
-                        backgroundColor="var(--themeSDark)"
-                        onClick={() => {
-                            if (!chatHistoryOn)
-                                return showToast(
-                                    "Você não tem histórico de atendimento. Selecione um assunto para iniciar."
-                                );
-                            return goChatPanel();
-                        }}
-                        titleSize="small"
-                        position="relative"
-                        variant="extended"
-                        size="small"
-                    />
+                    <div className="container-center">
+                        <ButtonFab
+                            title="Ver histórico"
+                            backgroundColor="var(--themeSDark)"
+                            onClick={() => {
+                                if (!chatHistoryOn)
+                                    return showToast(
+                                        "Você não tem histórico de atendimento. Selecione um assunto para iniciar."
+                                    );
+                                return goChatPanel();
+                            }}
+                            titleSize="small"
+                            position="relative"
+                            variant="extended"
+                            size="small"
+                        />
+                        <div className="ml-3">
+                            <ButtonFab
+                                title="Continuar"
+                                backgroundColor="var(--themeSDark)"
+                                onClick={() => {
+                                    if (!chatUserName)
+                                        return showToast(
+                                            "Informe seu nome e uma categoria de assunto"
+                                        );
+                                    if (!selected)
+                                        return showToast(
+                                            `${firstName}, favor selecione um assunto`
+                                        );
+                                    return startNewSupport();
+                                }}
+                                position="relative"
+                                variant="extended"
+                                size="medium"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -147,7 +197,7 @@ export default function Support() {
 
     const showMain = () => (
         <section className="text-normal text-white">
-            <h1 className="my-5">
+            <h1 className="mt-2 mb-5">
                 <img
                     className="img-center"
                     src="/img/logo.png"
@@ -162,16 +212,10 @@ export default function Support() {
             <section className="mb-md-5 middle-area d-flex flex-column flex-md-row mx-3">
                 <p className="col-md-6 text-shadow">
                     Tem alguma dúvida, uma sugestão, ou precisa de ajuda com o
-                    seu app? Estamos aqui para te ajudar
-                    {firstName ? `, ${firstName}` : ""}!
+                    seu app? Estamos aqui para te ajudar!
                 </p>
                 {showSubjectSelectField()}
             </section>
-            {selected && (
-                <div className="text-center mb-5 animated fadeInUp text-shadow">
-                    Iniciando...
-                </div>
-            )}
             <div
                 className="d-block d-md-none position-relative"
                 style={{
@@ -194,6 +238,7 @@ export default function Support() {
             {success ? (
                 <AsyncChat
                     chatUserId={chatUserId}
+                    subject={subject}
                     socket={socket}
                     role={role}
                 />
