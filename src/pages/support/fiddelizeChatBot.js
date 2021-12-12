@@ -18,7 +18,7 @@ export default function useAutoMsgBot({
             typing: {
                 roomId,
                 display: status,
-                name: "Fiddo Bot",
+                name: "Fidda Bot",
             },
         }));
 
@@ -27,7 +27,7 @@ export default function useAutoMsgBot({
             ...prev,
             bot: {
                 typingDisplay: status,
-                senderName: status ? "Fiddo Bot" : null,
+                senderName: status ? "Fidda Bot" : null,
             },
         }));
     };
@@ -46,11 +46,13 @@ export default function useAutoMsgBot({
     }, [activateBot, roomId]);
 }
 
-function pickBotMsg({ userName = "Febro", subject = "suggestion" }) {
+function pickBotMsg(data) {
+    const { userName } = data;
+
     const greeting = getDayGreetingBr();
     const userGreeting = `${greeting}, ${userName}`;
 
-    return chooseMsg({ userGreeting, subject });
+    return chooseMsg({ ...data, userGreeting });
 }
 
 // HELPERS

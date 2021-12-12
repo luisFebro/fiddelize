@@ -128,7 +128,7 @@ export default function Support() {
             }
 
             return (
-                <section className="container-center">
+                <section className="container-center-col">
                     <p className="font-site text-em-0-8 text-white text-left mb-2">
                         Informe seu nome:
                     </p>
@@ -136,6 +136,7 @@ export default function Support() {
                         textAlign="text-center"
                         size="medium"
                         name="chatUserName"
+                        maxLength="30"
                         value={chatUserName}
                         onChangeCallback={setData}
                         zIndex={1}
@@ -238,6 +239,7 @@ export default function Support() {
             {success ? (
                 <AsyncChat
                     chatUserId={chatUserId}
+                    chatUserName={chatUserName}
                     subject={subject}
                     socket={socket}
                     role={role}

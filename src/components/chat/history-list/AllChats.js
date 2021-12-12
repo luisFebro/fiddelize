@@ -346,7 +346,7 @@ function handleLastMsg({ typing, ind, data, lastPanelMsg }) {
     };
 
     // if still not detected the currnt roomId, set only the first chat to be displayed
-    const isBot = ind === 0 && typing.display && typing.name === "Fiddo Bot";
+    const isBot = ind === 0 && typing.display && typing.name === "Fidda Bot";
     const isUserTyping =
         isBot || (typing.display && typing.roomId === data.roomId);
     if (isUserTyping) return `${typing.name} está digitando...`;

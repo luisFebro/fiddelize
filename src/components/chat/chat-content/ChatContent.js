@@ -30,6 +30,7 @@ export default function ChatContent() {
         currChatData,
         socket,
         chatUserId,
+        chatUserName,
         clearFieldMsg = false,
         setData,
         subject,
@@ -105,7 +106,7 @@ export default function ChatContent() {
             : !isSameDay(lastMsgDate, today);
 
         const newMsgTobeEmitted = {
-            from: botMsg ? "Fiddo Bot" : chatUserId,
+            from: botMsg ? "Fidda Bot" : chatUserId,
             to: roomId,
             content: {
                 msgId: `msg${getId()}`,
@@ -142,6 +143,7 @@ export default function ChatContent() {
         saveNewMsg,
         setCurrData,
         setData,
+        userName: chatUserName,
         roomId,
     });
 

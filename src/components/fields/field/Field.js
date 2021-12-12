@@ -26,6 +26,7 @@ export default function Field({
     fullWidth = true,
     debounceCallback = () => null,
     zIndex = 2000,
+    maxLength,
 }) {
     const sizes = ["small", "medium", "large"];
     const variants = ["filled", "outlined", "standard"];
@@ -58,6 +59,7 @@ export default function Field({
                 multiline={multiline}
                 rows={multiline ? rows : undefined}
                 fullWidth={width ? false : fullWidth}
+                maxLength={maxLength}
             />
             <style jsx>
                 {`

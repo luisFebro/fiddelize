@@ -23,18 +23,18 @@ export default function ChatBubbles({ msgList = [] }) {
 
                               return (
                                   <li key={msgId} className="position-relative">
-                                      {from === "Fiddo Bot" && (
+                                      {from === "Fidda Bot" && (
                                           <div
                                               className="position-absolute animated delay-2s fadeInUp"
                                               style={{
                                                   top: -10,
-                                                  left: -15,
+                                                  left: -23,
                                                   zIndex: 1000,
                                               }}
                                           >
                                               <img
                                                   width={50}
-                                                  src="/img/icons/fiddelize-fiddobot.svg"
+                                                  src="/img/icons/fiddelize-fiddabot.svg"
                                                   alt="altrabot"
                                               />
                                           </div>
@@ -71,7 +71,7 @@ export default function ChatBubbles({ msgList = [] }) {
 
 // HELPERS
 function pickBubble({ from }) {
-    const isBot = from === "Fiddo Bot";
+    const isBot = from === "Fidda Bot";
     if (isBot) return "other";
 
     const isCurrUserMsg = from === chatUserId;

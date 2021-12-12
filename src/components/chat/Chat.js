@@ -21,7 +21,13 @@ import "styles/bootstrap-layout-only-min.css";
 const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
 // const isSmall = window.Helper.isSmallScreen();
 
-export default function Chat({ socket, chatUserId, role, subject }) {
+export default function Chat({
+    socket,
+    chatUserName,
+    chatUserId,
+    role,
+    subject,
+}) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -85,6 +91,7 @@ export default function Chat({ socket, chatUserId, role, subject }) {
         setSkip,
         setSearch,
         chatUserId,
+        chatUserName,
         dataChatList,
         needStatus,
         socket,
