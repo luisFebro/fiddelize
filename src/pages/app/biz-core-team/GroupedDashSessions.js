@@ -6,6 +6,7 @@ import TabSessions from "components/tabs/TabSessions";
 import LoadableVisible from "components/code-splitting/LoadableVisible";
 import Icon from "styles/Icon";
 import useData from "init";
+import NotificationBadge from "components/badges/NotificationBadge";
 import DashSales from "./dash-sales/DashSales";
 
 const AsyncDashCRM = LoadableVisible({
@@ -32,7 +33,23 @@ const getData = ({ isDev }) => [
     },
     {
         tabLabel: "Suporte",
-        tabIcon: <Icon type="support" fill="grey" />,
+        tabIcon: (
+            <div className="position-relative">
+                <NotificationBadge
+                    animationName=" "
+                    badgeValue={5}
+                    badgeInvisible={false}
+                    backgroundColor="var(--mainRed)"
+                    borderColor="var(--themePLight--red)"
+                    top={10}
+                    right={-25}
+                    fontSize="17px"
+                    padding="15px"
+                >
+                    <Icon type="support" fill="grey" />
+                </NotificationBadge>
+            </div>
+        ),
         tabContentPanel: isDev ? <AsyncSupportCenter /> : null,
     },
     {

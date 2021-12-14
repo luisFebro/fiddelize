@@ -18,16 +18,14 @@ import UserInfoCard from "./UserInfoCard";
 import "./Chat.scss";
 import "styles/bootstrap-layout-only-min.css";
 
-const [chatDarkMode] = getItems("global", ["chatDarkMode"]);
+const [chatDarkMode, chatUserName, chatUserId] = getItems("global", [
+    "chatDarkMode",
+    "chatUserName",
+    "chatUserId",
+]);
 // const isSmall = window.Helper.isSmallScreen();
 
-export default function Chat({
-    socket,
-    chatUserName,
-    chatUserId,
-    role,
-    subject,
-}) {
+export default function Chat({ socket, role, subject }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -59,6 +57,10 @@ export default function Chat({
         role,
         updateChatList,
     };
+
+    useEffect(() => {
+        if (socket.disconnected) socket.connect();
+    }, [socket.disconnected]);
 
     useUpdateChatList(socket, data);
     // END UPDATE

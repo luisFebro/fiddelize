@@ -26,7 +26,7 @@ export default function useAutoMsgBot({
         setCurrData((prev) => ({
             ...prev,
             bot: {
-                typingDisplay: status,
+                typingShow: status,
                 senderName: status ? "Fidda Bot" : null,
             },
         }));
@@ -40,7 +40,7 @@ export default function useAutoMsgBot({
         setTimeout(() => {
             toggleBot(false);
 
-            const botMsg = pickBotMsg({ userName, subject });
+            const botMsg = pickBotMsg({ userName, subject, msg: 1 });
             saveNewMsg(botMsg);
         }, 7000);
     }, [activateBot, roomId]);
@@ -58,8 +58,8 @@ function pickBotMsg(data) {
 // HELPERS
 function chooseMsg({ userGreeting, userName, subject }) {
     // Check if working hours, if not send a message that attendance is not available and will reach out as soon as possible
-    const defaultNotWorking = `Olá ${userName}! O suporte Fiddelize funciona das 9 às 18 horas de Segunda a Domingo. Deixe sua mensagem e responderemos logo.`;
-    if (isWorkingHour) return defaultNotWorking;
+    const unavailableMsg = `Olá ${userName}! O suporte Fiddelize funciona das 9 às 18 horas de Segunda a Domingo. Deixe sua mensagem e responderemos logo.`;
+    if (!isWorkingHour()) return unavailableMsg;
 
     if (subject === "suggestion")
         return `
@@ -78,7 +78,7 @@ function chooseMsg({ userGreeting, userName, subject }) {
 
     if (subject === "bugReport")
         return `
-        Ah falhas acontecem e são feitas para serem resolvidas, ${userName}! Descreva a falha em detalhes ou mande um print/foto explicando o problema. Vamos te ajudar o mais breve possível.
+        ${userName}, descreva a falha em detalhes ou mande um print/foto explicando o problema. Vamos te ajudar o mais breve possível.
     `;
 
     if (subject === "others")

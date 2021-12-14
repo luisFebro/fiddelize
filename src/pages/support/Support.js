@@ -3,7 +3,6 @@ import useScrollUp from "hooks/scroll/useScrollUp";
 import useBackColor from "hooks/useBackColor";
 import useData from "init";
 import SelectField from "components/fields/SelectField";
-import getId from "utils/getId";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getAPI, { startSupport } from "api";
 import getItems, { setItems } from "init/lStorage";
@@ -12,14 +11,15 @@ import { useInitSocket } from "components/chat/socket/initSocket";
 import { Load } from "components/code-splitting/LoadableComp";
 import getSubjectBr from "components/chat/helpers";
 import Field from "components/fields";
+import getFirstName from "utils/string/getFirstName";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
 // disable chatPreventMainPanel right closing an attendance so that customers can request a new attendence request
-const [chatPreventMainPanel, chatHistoryOn] = getItems("global", [
-    "chatPreventMainPanel",
-    "chatHistoryOn",
-]);
+const [chatPreventMainPanel, chatHistoryOn, storedUserName] = getItems(
+    "global",
+    ["chatPreventMainPanel", "chatHistoryOn", "chatUserName"]
+);
 const isFiddelizeTeam = loggedRole === "nucleo-equipe";
 
 export const AsyncChat = Load({
@@ -35,38 +35,54 @@ export default function Support() {
         selected: false,
         success: isFiddelizeTeam || chatPreventMainPanel,
         chatUserName: null,
+        chatUserId: null,
+        chatRoomId: null,
     });
-    const { success, chatUserName, subject, selected } = data;
-    const { firstName, name = null, role = "visitante", userId } = useData();
-
-    useEffect(() => {
-        if (firstName)
-            setData((prev) => ({ ...prev, chatUserName: firstName }));
-    }, [firstName]);
+    const {
+        success,
+        chatUserName,
+        chatUserId,
+        chatRoomId,
+        subject,
+        selected,
+    } = data;
+    const { name = null, role = "visitante", userId } = useData();
 
     // useSupportWaveColor({ trigger: !success });
     useScrollUp();
     useBackColor("var(--themeP)");
 
-    const { socket, chatUserId, chatRoomId, blockNewSupport } = useInitSocket({
+    const socket = useInitSocket({
         namespace: "nspSupport",
+        userName: chatUserName,
+        setData,
         userId,
         role,
     });
 
+    useEffect(() => {
+        if (selected) socket.connect();
+        // eslint-disable-next-line
+    }, [selected]);
+
+    useEffect(() => {
+        if (name) setData((prev) => ({ ...prev, chatUserName: name }));
+    }, [name]);
+
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     const startNewSupport = async () => {
-        // allowNewSupport and chatPreventMainPanel prevents possible duplicates with some reloading here
-        const someInfoInvalid =
-            blockNewSupport ||
-            chatPreventMainPanel ||
-            !selected ||
-            !chatUserId ||
-            !chatRoomId;
+        if (!chatUserName)
+            return showToast("Informe seu nome e uma categoria de assunto");
+
+        if (!selected) return showToast("Favor selecione um assunto");
+
+        const someInfoInvalid = !selected || !chatUserId || !chatRoomId;
 
         if (someInfoInvalid)
-            return showToast("No momento o suporte não está disponível");
+            return showToast("Favor, clique em continuar novamente.", {
+                dur: 7000,
+            });
 
         const body = {
             roomId: chatRoomId,
@@ -78,7 +94,7 @@ export default function Support() {
             fromData: {
                 userId: chatUserId, // admin dev nucleo-equipe id
                 role: role || "visitante",
-                userName: name || `Visitante ${getId(5)}`, // first name and surname
+                userName: chatUserName, // first name and surname
             },
         };
 
@@ -88,6 +104,7 @@ export default function Support() {
             body,
         });
 
+        socket.emit("updateBizRooms");
         setItems("global", { chatUserName });
 
         showToast("Iniciando sua sessão de suporte...", { type: "success" });
@@ -121,9 +138,11 @@ export default function Support() {
         };
 
         const userNameSelection = () => {
-            if (firstName) {
+            if (getFirstName(storedUserName || name)) {
                 return (
-                    <p className="m-0 font-site text-em-1-4">{firstName},</p>
+                    <p className="m-0 font-site text-em-1-4">
+                        {getFirstName(storedUserName || name)},
+                    </p>
                 );
             }
 
@@ -174,17 +193,7 @@ export default function Support() {
                             <ButtonFab
                                 title="Continuar"
                                 backgroundColor="var(--themeSDark)"
-                                onClick={() => {
-                                    if (!chatUserName)
-                                        return showToast(
-                                            "Informe seu nome e uma categoria de assunto"
-                                        );
-                                    if (!selected)
-                                        return showToast(
-                                            `${firstName}, favor selecione um assunto`
-                                        );
-                                    return startNewSupport();
-                                }}
+                                onClick={startNewSupport}
                                 position="relative"
                                 variant="extended"
                                 size="medium"
@@ -237,13 +246,7 @@ export default function Support() {
     return (
         <Fragment>
             {success ? (
-                <AsyncChat
-                    chatUserId={chatUserId}
-                    chatUserName={chatUserName}
-                    subject={subject}
-                    socket={socket}
-                    role={role}
-                />
+                <AsyncChat subject={subject} socket={socket} role={role} />
             ) : (
                 showMain()
             )}

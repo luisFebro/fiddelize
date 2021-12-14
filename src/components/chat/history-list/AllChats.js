@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import useContext from "context";
 import getId from "utils/getId";
 import Avatar from "@material-ui/core/Avatar";
@@ -7,6 +7,8 @@ import parse from "html-react-parser";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import RadiusBtn from "components/buttons/RadiusBtn";
 import getSubjectBr from "../helpers";
+
+const isSmall = window.Helper.isSmallScreen();
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
@@ -40,6 +42,12 @@ export default function AllChats({ isBizTeam }) {
     } = dataChatList;
 
     const handleOpenChat = (currData) => {
+        if (!currData) return;
+
+        socket.emit("joinRoom", currData.roomId);
+        // NOte: this doesn't work cuz returns to the first caht in the list when updated -- update all other chats on click
+        // if(!currData.firstChat) socket.emit("updateBizRooms");
+
         if (socket.disconnected) {
             socket.connect();
         }
@@ -49,7 +57,15 @@ export default function AllChats({ isBizTeam }) {
             currRoomId: currData.roomId,
             clearFieldMsg: getId(),
         })); // need to clear field every time user enter a chat panel, otherwise the prior msg will appear in every chat panel in the list
+
+        // SCROLL not working when the chat is archived
+        scrollToBottom();
     };
+
+    useEffect(() => {
+        // for smaller devices, the panel is closed and chat need to be clicked
+        if (!isSmall) handleOpenChat(dbList[0]);
+    }, [loading]);
 
     const getDataStatus = (data) => `
         user-status user-status${
@@ -134,12 +150,9 @@ export default function AllChats({ isBizTeam }) {
                     {truncate(data.otherUserName, 20)}{" "}
                     {isSupport
                         ? parse(
-                              `(${getSubjectBr(data.dataType.subject)}${
-                                  data.otherUserRole === "visitante"
-                                      ? ")"
-                                      : getRoleInTitle(data)
-                              }
-                              `
+                              `(${getSubjectBr(
+                                  data.dataType.subject
+                              )}${getRoleInTitle(data)}`
                           )
                         : ""}
                 </span>
@@ -341,7 +354,7 @@ function ChatSearcher({ setSearch, setSkip, updateChatList }) {
 // HELPERS
 function handleLastMsg({ typing, ind, data, lastPanelMsg }) {
     const getLastMsg = (dbMsgs = []) => {
-        if (!dbMsgs.length) return [];
+        if (!dbMsgs.length) return "";
         return dbMsgs.slice(-1)[0].content.msg;
     };
 
@@ -399,6 +412,10 @@ function stringToHexColor(string) {
 }
 // END HELPERS
 
+function scrollToBottom() {
+    const chatContainer = document.querySelector(".chat__content");
+    if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 /* ARCHIVES
 `Procure mensagem, ${
     isSupport ? "assunto" : "usuário"

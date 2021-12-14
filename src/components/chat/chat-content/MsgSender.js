@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState, useCallback } from "react";
 import ChatTyping from "components/loadingIndicators/ChatTyping";
 import useContext from "context";
 import debounce from "utils/performance/debounce";
-import useData from "init";
 
 export default function MsgSender({
     newMsg,
@@ -13,50 +12,60 @@ export default function MsgSender({
     disabled = false,
     bot = {},
 }) {
-    const { firstName } = useData();
     const [typingData, setTypingData] = useState({
         isUserTyping: null,
-        typingDisplay: false,
+        typingShow: false,
         senderName: null,
     });
-    const { isUserTyping, typingDisplay, senderName } = typingData;
-    const { setData } = useContext();
+    const { isUserTyping, typingShow, senderName, typing } = typingData;
+    const { setData, chatUserName } = useContext();
 
     useEffect(() => {
         if (!socket) return null;
 
-        // this socket typing will trigger another called typingDisplay to other user(s);
+        // this socket typing will trigger another called typingShow to other user(s);
         const setSocketStatus = (status) => {
             socket.emit("typing", {
                 roomId,
-                senderName: status === false ? null : firstName || "Visitante",
-                typingDisplay: status,
+                senderName: status === false ? null : chatUserName,
+                typingShow: status,
             });
         };
 
         // every falsy or truthy cond is supposed to run once, since it will be true boolean which will next time will be same value until set false
-        if (!isUserTyping || isUserTyping === null)
-            return setSocketStatus(false);
-        return setSocketStatus(true);
+        if (isUserTyping) return setSocketStatus(true);
+        return setSocketStatus(false);
         // eslint-disable-next-line
     }, [socket, isUserTyping]);
 
     useEffect(() => {
         if (!socket) return;
 
-        socket.on("typingDisplay", (data) => {
+        socket.on("lastMsgShow", (data) => {
+            setData((prev) => ({
+                ...prev,
+                lastPanelMsg: {
+                    msg: data.newMsg,
+                    roomId: data.roomId,
+                },
+            }));
+        });
+
+        socket.on("typingShow", (data) => {
             setData((prev) => ({
                 ...prev,
                 typing: {
                     roomId: data.roomId,
-                    display: data.typingDisplay,
+                    display: data.typingShow,
                     name: data.senderName,
                 },
             }));
             setTypingData({
-                typingDisplay: data.typingDisplay,
+                typingShow: data.typingShow,
                 senderName:
-                    data.senderName === "Febro" ? "Fiddelize" : data.senderName,
+                    data.senderName === "Febro Feitoza"
+                        ? "Fiddelize"
+                        : data.senderName,
             });
         });
     }, [socket]);
@@ -93,9 +102,11 @@ export default function MsgSender({
     return (
         <Fragment>
             <ChatTyping
-                show={bot.typingDisplay || typingDisplay}
+                show={
+                    typing.roomId === roomId && (bot.typingShow || typingShow)
+                }
                 userFirstName={bot.senderName || senderName}
-                isBot={bot.typingDisplay}
+                isBot={bot.typingShow}
             />
             <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
                 <div className="custom-form__send-wrapper shadow-field">

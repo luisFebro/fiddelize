@@ -2,6 +2,7 @@ import data from "./dataWorkingHour";
 
 export default function isWorkingHour(openHour = 9, closeHour = 18) {
     const weekDayBr = checkTodayDay(data);
+
     const isRestDay = weekDayBr === "Domingo";
     if (isRestDay) return false;
 

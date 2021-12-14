@@ -24,6 +24,8 @@ export default function useGlobal(props) {
         },
     });
 
+    console.log("data.currRoomId", data.currRoomId);
+
     const lastPendingSupport =
         dbList[0] && dbList[0].dataType && dbList[0].dataType.isPendingSupport;
 
@@ -52,7 +54,7 @@ export default function useGlobal(props) {
 // HELPERS
 function getCurrChatData(list, roomId) {
     if (!list || !list[0] || !roomId) return list[0] || {};
-    return list.find((session) => session.roomId === roomId);
+    return list.find((session) => session.roomId === roomId) || {}; // even with list and roomId, it can't be found when filtering
 }
 // END HELPERS
 

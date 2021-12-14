@@ -16,8 +16,9 @@ export default function ChatContent() {
         msgList: [],
         lastMsg: null, // object
         bot: {
-            typingDisplay: false,
+            typingShow: false,
             senderName: null,
+            roomId: null,
         },
     });
     const { newMsg, msgList, lastMsg, bot } = currData;
@@ -34,25 +35,26 @@ export default function ChatContent() {
         clearFieldMsg = false,
         setData,
         subject,
+        dataChatList,
+        role,
     } = useContext();
+    const { loading } = dataChatList;
 
     const { dbMsgs = [], roomId, dataType } = currChatData;
+
     const isSupportOver = dataType && !dataType.isPendingSupport;
 
     const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : {};
+    scrollToBottom();
 
     useEffect(() => {
-        if (!dbMsgs.length) return;
-
         setCurrData((prev) => ({
             ...prev,
-            msgList: dbMsgs,
-            lastMsg: lastDbMsg,
+            msgList: dbMsgs || [],
+            lastMsg: lastDbMsg || {},
         }));
         // eslint-disable-next-line
-    }, [dbMsgs.length]); // if lastDbMsg will cause max exceed reload error
-
-    scrollToBottom();
+    }, [roomId]); // if lastDbMsg will cause max exceed reload error
 
     useEffect(() => {
         if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: "" }));
@@ -61,11 +63,14 @@ export default function ChatContent() {
     function appendNewMsg(currMsg) {
         function removeDuplicate(prev) {
             const filterId = "msgId";
+            // originalArr - The array on which filter() was called.
+            // findIndex - The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
             return [...prev.msgList, currMsg].filter(
-                (val, ind, arr) =>
-                    arr.findIndex(
-                        (t) => t.content[filterId] === val.content[filterId]
-                    ) === ind
+                (item1, ind, originalArr) =>
+                    originalArr.findIndex(
+                        (item2) =>
+                            item2.content[filterId] === item1.content[filterId]
+                    ) === ind // if find the item, returns its ind which should be the same as filter method, then we can remove duplicates.
             );
         }
 
@@ -80,19 +85,22 @@ export default function ChatContent() {
         if (!socket) return;
         // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
         socket.on("newMsg", (data) => {
-            appendNewMsg(data);
-            showLastPanelMsg({
-                setData,
-                newMsg: data.content && data.content.msg,
-                roomId,
-            });
-            scrollToBottom();
+            // avoid push in another chat room when updating the list
+            console.log("data.to === roomId", data.to === roomId);
+            console.log("data.to", data.to);
+            if (data.to === roomId) {
+                appendNewMsg(data);
+                scrollToBottom();
+            }
         });
+        console.log("roomId CHAT", roomId);
         // eslint-disable-next-line
-    }, [socket]);
+    }, [socket, roomId]);
 
     const saveNewMsg = (botMsg) => {
         if (!newMsg && !botMsg) return;
+        // need reload chat list to display botMsg
+        if (botMsg) socket.emit("updateBizRooms");
 
         // for the division of dates when it was sent.
         const content = lastMsg && lastMsg.content;
@@ -117,15 +125,14 @@ export default function ChatContent() {
         };
 
         socket.emit("newMsg", newMsgTobeEmitted);
+        socket.emit("lastMsg", {
+            newMsg: botMsg || newMsg,
+            roomId,
+        });
 
         appendNewMsg(newMsgTobeEmitted);
         setCurrData((prev) => ({ ...prev, newMsg: "" }));
 
-        showLastPanelMsg({
-            setData,
-            newMsg,
-            roomId,
-        });
         scrollToBottom();
 
         // focus after sending:
@@ -139,10 +146,11 @@ export default function ChatContent() {
 
     useAutoMsgBot({
         subject,
-        activateBot: !dbMsgs.length,
+        activateBot: role !== "nucleo-equipe" && !loading && dbMsgs.length <= 0,
         saveNewMsg,
         setCurrData,
         setData,
+        socket,
         userName: chatUserName,
         roomId,
     });
@@ -191,13 +199,5 @@ export default function ChatContent() {
 function scrollToBottom() {
     const chatContainer = document.querySelector(".chat__content");
     if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-function showLastPanelMsg({ setData, newMsg, roomId }) {
-    const lastPanelMsg = {
-        msg: newMsg,
-        roomId,
-    };
-    setData((prev) => ({ ...prev, lastPanelMsg }));
 }
 // END HELPERS
