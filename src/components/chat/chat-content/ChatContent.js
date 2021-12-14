@@ -4,11 +4,20 @@ import getId from "utils/getId";
 import isSameDay from "date-fns/isSameDay";
 import useAutoresizeableTextarea from "hooks/useAutoresizeableTextarea";
 import useAutoMsgBot from "pages/support/fiddelizeChatBot";
+import getItems, { setItems } from "init/lStorage";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 import MsgSender from "./MsgSender";
 
 const isSmall = window.Helper.isSmallScreen();
+
+// all recent messges should be stored in-memory so they will not be lost when switch between chat roomIds
+const tempRecentMsgs = {};
+
+const [chatTempLastFieldMsgs, chatDarkMode] = getItems("global", [
+    "chatTempLastFieldMsgs",
+    "chatDarkMode",
+]);
 
 export default function ChatContent() {
     const [currData, setCurrData] = useState({
@@ -20,8 +29,17 @@ export default function ChatContent() {
             senderName: null,
             roomId: null,
         },
+        tempLastFieldMsgs: chatTempLastFieldMsgs || {},
+        pushTemp: false, // an random id to store temp lasg filed data
     });
-    const { newMsg, msgList, lastMsg, bot } = currData;
+    const {
+        pushTemp,
+        tempLastFieldMsgs,
+        newMsg,
+        msgList,
+        lastMsg,
+        bot,
+    } = currData;
     const today = new Date();
 
     useAutoresizeableTextarea();
@@ -32,10 +50,10 @@ export default function ChatContent() {
         socket,
         chatUserId,
         chatUserName,
-        clearFieldMsg = false,
         setData,
         subject,
         dataChatList,
+        tempLastPanelMsg,
         role,
     } = useContext();
     const { loading } = dataChatList;
@@ -44,39 +62,55 @@ export default function ChatContent() {
 
     const isSupportOver = dataType && !dataType.isPendingSupport;
 
-    const lastDbMsg = dbMsgs.length ? dbMsgs.slice(-1)[0] : {};
+    const lastStoredMsg = getLastStoredMsg(dbMsgs, roomId);
     scrollToBottom();
+
+    useEffect(() => {
+        if (pushTemp) {
+            const tempObj = tempLastFieldMsgs;
+            tempObj[roomId] = newMsg;
+
+            setCurrData((prev) => ({
+                ...prev,
+                tempLastFieldMsgs: tempObj,
+            }));
+
+            setItems("global", {
+                chatTempLastFieldMsgs: tempObj,
+            });
+        }
+    }, [pushTemp]);
 
     useEffect(() => {
         setCurrData((prev) => ({
             ...prev,
-            msgList: dbMsgs || [],
-            lastMsg: lastDbMsg || {},
+            newMsg: tempLastFieldMsgs[roomId] || "",
         }));
         // eslint-disable-next-line
-    }, [roomId]); // if lastDbMsg will cause max exceed reload error
+    }, [roomId]);
 
     useEffect(() => {
-        if (clearFieldMsg) setCurrData((prev) => ({ ...prev, newMsg: "" }));
-    }, [clearFieldMsg]);
+        const getMsgList = () => {
+            if (!tempRecentMsgs[roomId]) return dbMsgs;
+            return [...dbMsgs, ...tempRecentMsgs[roomId]];
+            // removeMultiObjDuplicate(prev.msgList, dbMsgs);
+        };
+
+        setCurrData((prev) => ({
+            ...prev,
+            msgList: getMsgList(),
+            lastMsg: lastStoredMsg || {},
+        }));
+        // eslint-disable-next-line
+    }, [roomId]); // if lastStoredMsg will cause max exceed reload error
 
     function appendNewMsg(currMsg) {
-        function removeDuplicate(prev) {
-            const filterId = "msgId";
-            // originalArr - The array on which filter() was called.
-            // findIndex - The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
-            return [...prev.msgList, currMsg].filter(
-                (item1, ind, originalArr) =>
-                    originalArr.findIndex(
-                        (item2) =>
-                            item2.content[filterId] === item1.content[filterId]
-                    ) === ind // if find the item, returns its ind which should be the same as filter method, then we can remove duplicates.
-            );
-        }
-
         return setCurrData((prev) => ({
             ...prev,
-            msgList: removeDuplicate(prev),
+            msgList: removeObjDuplicate({
+                list: prev.msgList,
+                newObj: currMsg,
+            }),
             lastMsg: currMsg,
         }));
     }
@@ -99,6 +133,7 @@ export default function ChatContent() {
 
     const saveNewMsg = (botMsg) => {
         if (!newMsg && !botMsg) return;
+
         // need reload chat list to display botMsg
         if (botMsg) socket.emit("updateBizRooms");
 
@@ -124,6 +159,11 @@ export default function ChatContent() {
             },
         };
 
+        // temp chat store
+        if (!tempRecentMsgs[roomId])
+            tempRecentMsgs[roomId] = [newMsgTobeEmitted];
+        else tempRecentMsgs[roomId].push(newMsgTobeEmitted);
+
         socket.emit("newMsg", newMsgTobeEmitted);
         socket.emit("lastMsg", {
             newMsg: botMsg || newMsg,
@@ -131,7 +171,14 @@ export default function ChatContent() {
         });
 
         appendNewMsg(newMsgTobeEmitted);
-        setCurrData((prev) => ({ ...prev, newMsg: "" }));
+
+        const tempObj = tempLastFieldMsgs;
+        tempObj[roomId] = "";
+        setCurrData((prev) => ({
+            ...prev,
+            newMsg: "",
+            tempLastFieldMsgs: tempObj,
+        }));
 
         scrollToBottom();
 
@@ -185,7 +232,9 @@ export default function ChatContent() {
                         newMsg={newMsg}
                         setCurrData={setCurrData}
                         saveNewMsg={saveNewMsg}
+                        tempLastPanelMsg={tempLastPanelMsg}
                         socket={socket}
+                        chatDarkMode={chatDarkMode}
                         roomId={roomId}
                         disabled={isSupportOver}
                         bot={bot}
@@ -200,4 +249,72 @@ function scrollToBottom() {
     const chatContainer = document.querySelector(".chat__content");
     if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
 }
+
+function getLastStoredMsg(dbMsgs, roomId) {
+    const getLastOne = (list) => (list.length ? list.slice(-1)[0] : {});
+    let list = tempRecentMsgs[roomId] || [];
+    if (!list.length) list = dbMsgs;
+
+    return getLastOne(list);
+}
+
+function removeObjDuplicate({ list, filterId = "msgId", newObj }) {
+    // originalArr - The array on which filter() was called.
+    // findIndex - The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
+
+    return [...list, newObj].filter(
+        (item1, ind, originalArr) =>
+            originalArr.findIndex(
+                (item2) => item2.content[filterId] === item1.content[filterId]
+            ) === ind // if find the item, returns its ind which should be the same as filter method, then we can remove duplicates.
+    );
+}
+
+// reference: https://stackoverflow.com/questions/54134156/javascript-merge-two-arrays-of-objects-only-if-not-duplicate-based-on-specifi
+
+function mergeUniqueObjArrays(initialArray, newArray, id = "msgId") {
+    const ids = new Set(initialArray.map((d) => d[id]));
+    const merged = [
+        ...initialArray,
+        ...newArray.filter((d) => !ids.has(d[id])),
+    ];
+    return merged;
+}
+
+/*
+TEST
+
+// console.log(mergeUniqueObjArrays(initialData, newData))
+
+var initialData = [{
+    'msgId': 1,
+    'FirstName': 'Sally'
+  },
+  {
+    'msgId': 2,
+    'FirstName': 'Jim'
+  },
+  {
+    'msgId': 3,
+    'FirstName': 'Bob'
+  }
+];
+
+var newData = [{
+    'msgId': 2,
+    'FirstName': 'Jim'
+  },
+  {
+    'msgId': 4,
+    'FirstName': 'Tom'
+  },
+  {
+    'msgId': 5,
+    'FirstName': 'George'
+  }
+];
+
+
+*/
+
 // END HELPERS

@@ -5,7 +5,7 @@ import useData from "init";
 import SelectField from "components/fields/SelectField";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getAPI, { startSupport } from "api";
-import getItems, { setItems } from "init/lStorage";
+import getItems, { removeItems, setItems } from "init/lStorage";
 import showToast from "components/toasts";
 import { useInitSocket } from "components/chat/socket/initSocket";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -59,6 +59,13 @@ export default function Support() {
         userId,
         role,
     });
+
+    useEffect(() => {
+        // remove any previously saved chatRoomId for customers to avoid duplicate chats
+        if (!chatPreventMainPanel && role !== "nucleo-equipe") {
+            removeItems("global", ["chatRoomId"]);
+        }
+    }, []);
 
     useEffect(() => {
         if (selected) socket.connect();

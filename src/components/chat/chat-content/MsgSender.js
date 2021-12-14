@@ -2,6 +2,8 @@ import { Fragment, useEffect, useState, useCallback } from "react";
 import ChatTyping from "components/loadingIndicators/ChatTyping";
 import useContext from "context";
 import debounce from "utils/performance/debounce";
+import getId from "utils/getId";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function MsgSender({
     newMsg,
@@ -10,14 +12,23 @@ export default function MsgSender({
     socket,
     roomId,
     disabled = false,
+    tempLastPanelMsg,
     bot = {},
+    chatDarkMode,
 }) {
     const [typingData, setTypingData] = useState({
         isUserTyping: null,
         typingShow: false,
         senderName: null,
+        draftSaving: false,
     });
-    const { isUserTyping, typingShow, senderName, typing } = typingData;
+    const {
+        draftSaving,
+        isUserTyping,
+        typingShow,
+        senderName,
+        typing,
+    } = typingData;
     const { setData, chatUserName } = useContext();
 
     useEffect(() => {
@@ -42,8 +53,16 @@ export default function MsgSender({
         if (!socket) return;
 
         socket.on("lastMsgShow", (data) => {
+            const getTempLastPanelMsg = () => {
+                const tempObj = tempLastPanelMsg || {};
+                tempObj[data.roomId] = data.newMsg;
+
+                return tempObj;
+            };
+
             setData((prev) => ({
                 ...prev,
+                tempLastPanelMsg: getTempLastPanelMsg(),
                 lastPanelMsg: {
                     msg: data.newMsg,
                     roomId: data.roomId,
@@ -60,18 +79,27 @@ export default function MsgSender({
                     name: data.senderName,
                 },
             }));
-            setTypingData({
+            setTypingData((prev) => ({
+                ...prev,
                 typingShow: data.typingShow,
                 senderName:
                     data.senderName === "Febro Feitoza"
                         ? "Fiddelize"
                         : data.senderName,
-            });
+            }));
         });
     }, [socket]);
 
     const handleUserStopTyping = () => {
-        setTypingData((prev) => ({ ...prev, isUserTyping: false }));
+        setCurrData((prev) => ({ ...prev, pushTemp: getId() }));
+        setTypingData((prev) => ({
+            ...prev,
+            isUserTyping: false,
+            draftSaving: true,
+        }));
+        setTimeout(() => {
+            setTypingData((prev) => ({ ...prev, draftSaving: false }));
+        }, 2000);
     };
 
     const handleUserStartTyping = () => {
@@ -99,16 +127,46 @@ export default function MsgSender({
         setTypingData((prev) => ({ ...prev, isUserTyping: null }));
     };
 
+    const showDraftStatus = () => (
+        <section
+            className="animated fadeIn delay-3s text-small position-absolute"
+            style={{
+                bottom: -20,
+                left: 45,
+                zIndex: 20,
+            }}
+        >
+            <p
+                style={{
+                    color: chatDarkMode ? "#696969" : "#696969",
+                }}
+            >
+                Rascunho: {draftSaving ? "salvando..." : "salvo!"}{" "}
+                {!draftSaving && (
+                    <FontAwesomeIcon
+                        icon="check-circle"
+                        style={{
+                            fontSize: 15,
+                        }}
+                        className="ml-1"
+                    />
+                )}
+            </p>
+        </section>
+    );
+
     return (
         <Fragment>
             <ChatTyping
-                show={
-                    typing.roomId === roomId && (bot.typingShow || typingShow)
-                }
+                show={Boolean(
+                    typing &&
+                        typing.roomId === roomId &&
+                        (bot.typingShow || typingShow)
+                )}
                 userFirstName={bot.senderName || senderName}
                 isBot={bot.typingShow}
             />
-            <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
+            <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3 mb-2">
                 <div className="custom-form__send-wrapper shadow-field">
                     <textarea
                         style={{
@@ -191,6 +249,7 @@ export default function MsgSender({
                         </svg>
                     </button>
                 </div>
+                {newMsg && showDraftStatus()}
             </div>
         </Fragment>
     );

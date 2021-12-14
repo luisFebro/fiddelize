@@ -27,6 +27,8 @@ export default function AllChats({ isBizTeam }) {
         needStatus,
         typing,
         lastPanelMsg,
+        tempLastPanelMsg,
+        tempLastFieldMsgs,
     } = useContext();
 
     const {
@@ -55,11 +57,11 @@ export default function AllChats({ isBizTeam }) {
             ...prev,
             openChat: getId(),
             currRoomId: currData.roomId,
-            clearFieldMsg: getId(),
         })); // need to clear field every time user enter a chat panel, otherwise the prior msg will appear in every chat panel in the list
 
-        // SCROLL not working when the chat is archived
-        scrollToBottom();
+        setTimeout(() => {
+            scrollToBottom();
+        }, 50);
     };
 
     useEffect(() => {
@@ -157,7 +159,13 @@ export default function AllChats({ isBizTeam }) {
                         : ""}
                 </span>
                 <span className="d-block mt-2 messaging-member__message">
-                    {handleLastMsg({ typing, ind, data, lastPanelMsg })}
+                    {handleLastMsg({
+                        typing,
+                        ind,
+                        data,
+                        lastPanelMsg,
+                        tempLastPanelMsg,
+                    })}
                 </span>
                 {data.dataType &&
                     !data.dataType.isPendingSupport &&
@@ -352,7 +360,7 @@ function ChatSearcher({ setSearch, setSkip, updateChatList }) {
 // END COMPS
 
 // HELPERS
-function handleLastMsg({ typing, ind, data, lastPanelMsg }) {
+function handleLastMsg({ typing, ind, data, lastPanelMsg, tempLastPanelMsg }) {
     const getLastMsg = (dbMsgs = []) => {
         if (!dbMsgs.length) return "";
         return dbMsgs.slice(-1)[0].content.msg;
@@ -365,8 +373,9 @@ function handleLastMsg({ typing, ind, data, lastPanelMsg }) {
     if (isUserTyping) return `${typing.name} está digitando...`;
 
     const recentSentMsg =
-        lastPanelMsg.msg && lastPanelMsg.roomId === data.roomId;
-    if (recentSentMsg) return lastPanelMsg.msg;
+        tempLastPanelMsg[data.roomId] ||
+        (lastPanelMsg.msg && lastPanelMsg.roomId === data.roomId);
+    if (recentSentMsg) return tempLastPanelMsg[data.roomId] || lastPanelMsg.msg;
 
     return getLastMsg(data.dbMsgs);
 }
@@ -414,7 +423,9 @@ function stringToHexColor(string) {
 
 function scrollToBottom() {
     const chatContainer = document.querySelector(".chat__content");
-    if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+    const xH = chatContainer.scrollHeight;
+    if (chatContainer) chatContainer.scrollTo(0, xH);
+    // chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 /* ARCHIVES
 `Procure mensagem, ${

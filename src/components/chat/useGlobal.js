@@ -12,12 +12,13 @@ export default function useGlobal(props) {
         openUserCard: false,
         currRoomId: dbList[0] && dbList[0].roomId,
         darkMode: false,
-        clearFieldMsg: false,
         typing: {
             display: false,
             name: null,
             roomId: null,
         },
+        // store all last msgs
+        tempLastPanelMsg: {},
         lastPanelMsg: {
             msg: null,
             roomId: null,
