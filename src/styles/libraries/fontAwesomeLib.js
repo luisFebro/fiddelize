@@ -43,7 +43,7 @@ import { faReply } from "@fortawesome/free-solid-svg-icons/faReply"; // back, re
 import { faSave } from "@fortawesome/free-solid-svg-icons/faSave";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons/faShareAlt";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/faShoppingCart";
-import { faSyncAlt } from "@fortawesome/free-solid-svg-icons/faSyncAlt"; // change something, update
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons/faSyncAlt"; // change something, update icon
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes"; // keypad cancel btn
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons/faTimesCircle"; // closing btn
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt"; // delete btn

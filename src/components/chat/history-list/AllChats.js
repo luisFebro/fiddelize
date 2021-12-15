@@ -28,7 +28,6 @@ export default function AllChats({ isBizTeam }) {
         typing,
         lastPanelMsg,
         tempLastPanelMsg,
-        tempLastFieldMsgs,
     } = useContext();
 
     const {

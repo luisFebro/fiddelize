@@ -151,6 +151,10 @@ export const startSupport = () =>
 export const readSupportHistory = () =>
     // GET
     `${ROOT}/support/history`;
+
+export const readSupportRecentData = () =>
+    // GET
+    `${ROOT}/support/recent-data`;
 // END CHAT, SUPPORT AND REAL TIME
 
 // EMAIL

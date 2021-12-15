@@ -7,6 +7,7 @@ import LoadableVisible from "components/code-splitting/LoadableVisible";
 import Icon from "styles/Icon";
 import useData from "init";
 import NotificationBadge from "components/badges/NotificationBadge";
+import useAPI, { readSupportRecentData } from "api/useAPI";
 import DashSales from "./dash-sales/DashSales";
 
 const AsyncDashCRM = LoadableVisible({
@@ -25,7 +26,7 @@ const muStyle = {
     fontSize: 35,
 };
 
-const getData = ({ isDev }) => [
+const getData = ({ isDev, pendingSubjectCount }) => [
     {
         tabLabel: "Ganhos",
         tabIcon: <MonetizationOnIcon style={muStyle} />,
@@ -37,11 +38,11 @@ const getData = ({ isDev }) => [
             <div className="position-relative">
                 <NotificationBadge
                     animationName=" "
-                    badgeValue={5}
+                    badgeValue={pendingSubjectCount}
                     badgeInvisible={false}
                     backgroundColor="var(--mainRed)"
                     borderColor="var(--themePLight--red)"
-                    top={10}
+                    top={20}
                     right={-25}
                     fontSize="17px"
                     padding="15px"
@@ -60,9 +61,20 @@ const getData = ({ isDev }) => [
 ];
 
 export default function GroupedDashSessions() {
-    const { agentJob } = useData();
+    const { agentJob, userId } = useData();
+
+    const { data: dataRecentSupport } = useAPI({
+        url: readSupportRecentData(),
+        params: { userId }, // for auth only
+        needAuth: true,
+        needOnlyOnce: true,
+    });
+
+    const pendingSubjectCount =
+        dataRecentSupport && dataRecentSupport.pendingSubjectCount;
+
     const isDev = agentJob === "dev";
-    const data = getData({ isDev });
+    const data = getData({ isDev, pendingSubjectCount });
     return <TabSessions data={data} needTabFullWidth />;
 }
 

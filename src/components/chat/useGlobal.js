@@ -25,8 +25,6 @@ export default function useGlobal(props) {
         },
     });
 
-    console.log("data.currRoomId", data.currRoomId);
-
     const lastPendingSupport =
         dbList[0] && dbList[0].dataType && dbList[0].dataType.isPendingSupport;
 
