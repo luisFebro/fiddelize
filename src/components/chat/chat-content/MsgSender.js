@@ -22,14 +22,8 @@ export default function MsgSender({
         senderName: null,
         draftSaving: false,
     });
-    const {
-        draftSaving,
-        isUserTyping,
-        typingShow,
-        senderName,
-        typing,
-    } = typingData;
-    const { setData, chatUserName } = useContext();
+    const { draftSaving, isUserTyping, typingShow, senderName } = typingData;
+    const { setData, chatUserName, typing } = useContext();
 
     useEffect(() => {
         if (!socket) return null;
@@ -82,24 +76,21 @@ export default function MsgSender({
             setTypingData((prev) => ({
                 ...prev,
                 typingShow: data.typingShow,
-                senderName:
-                    data.senderName === "Febro Feitoza"
-                        ? "Fiddelize"
-                        : data.senderName,
+                senderName: data.senderName,
             }));
         });
     }, [socket]);
 
     const handleUserStopTyping = () => {
-        setCurrData((prev) => ({ ...prev, pushTemp: getId() }));
         setTypingData((prev) => ({
             ...prev,
             isUserTyping: false,
             draftSaving: true,
         }));
         setTimeout(() => {
+            setCurrData((prev) => ({ ...prev, pushTemp: getId() }));
             setTypingData((prev) => ({ ...prev, draftSaving: false }));
-        }, 2000);
+        }, 1500);
     };
 
     const handleUserStartTyping = () => {
@@ -155,13 +146,13 @@ export default function MsgSender({
         </section>
     );
 
+    // bot typing is for the own user and doesn't need verify roomId
     return (
         <Fragment>
             <ChatTyping
                 show={Boolean(
-                    typing &&
-                        typing.roomId === roomId &&
-                        (bot.typingShow || typingShow)
+                    bot.typingShow ||
+                        (typing && typing.roomId === roomId && typingShow)
                 )}
                 userFirstName={bot.senderName || senderName}
                 isBot={bot.typingShow}
@@ -207,22 +198,6 @@ export default function MsgSender({
                             />
                         </svg>
                     </div>
-                    <div
-                        className={`${
-                            disabled ? "disabled-link" : ""
-                        } custom-form__send-emoji`}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="svg-icon svg-icon--send-emoji"
-                            viewBox="0 0 46.2 46.2"
-                        >
-                            <path
-                                d="M23.1,0A23.1,23.1,0,1,0,46.2,23.1,23.1,23.1,0,0,0,23.1,0Zm0,41.6A18.5,18.5,0,1,1,41.6,23.1,18.5,18.5,0,0,1,23.1,41.6Zm8.1-20.8a3.5,3.5,0,0,0,3.5-3.5,3.5,3.5,0,0,0-7,0,3.5,3.5,0,0,0,3.5,3.5ZM15,20.8a3.5,3.5,0,0,0,3.5-3.5A3.5,3.5,0,0,0,15,13.9a3.4,3.4,0,0,0-3.4,3.4A3.5,3.5,0,0,0,15,20.8Zm8.1,15a12.6,12.6,0,0,0,10.5-5.5,1.7,1.7,0,0,0-1.3-2.6H14a1.7,1.7,0,0,0-1.4,2.6A12.9,12.9,0,0,0,23.1,35.8Z"
-                                fill="#f68b3c"
-                            />
-                        </svg>
-                    </div>
                     <button
                         type="submit"
                         className={`custom-form__send-submit ${
@@ -254,3 +229,24 @@ export default function MsgSender({
         </Fragment>
     );
 }
+
+/*
+
+<div
+    className={`${
+        disabled ? "disabled-link" : ""
+    } custom-form__send-emoji`}
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="svg-icon svg-icon--send-emoji"
+        viewBox="0 0 46.2 46.2"
+    >
+        <path
+            d="M23.1,0A23.1,23.1,0,1,0,46.2,23.1,23.1,23.1,0,0,0,23.1,0Zm0,41.6A18.5,18.5,0,1,1,41.6,23.1,18.5,18.5,0,0,1,23.1,41.6Zm8.1-20.8a3.5,3.5,0,0,0,3.5-3.5,3.5,3.5,0,0,0-7,0,3.5,3.5,0,0,0,3.5,3.5ZM15,20.8a3.5,3.5,0,0,0,3.5-3.5A3.5,3.5,0,0,0,15,13.9a3.4,3.4,0,0,0-3.4,3.4A3.5,3.5,0,0,0,15,20.8Zm8.1,15a12.6,12.6,0,0,0,10.5-5.5,1.7,1.7,0,0,0-1.3-2.6H14a1.7,1.7,0,0,0-1.4,2.6A12.9,12.9,0,0,0,23.1,35.8Z"
+            fill="#f68b3c"
+        />
+    </svg>
+</div>
+
+ */

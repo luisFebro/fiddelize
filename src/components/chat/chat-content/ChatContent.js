@@ -28,6 +28,7 @@ export default function ChatContent() {
             typingShow: false,
             senderName: null,
             roomId: null,
+            sentMsg1: false,
         },
         tempLastFieldMsgs: chatTempLastFieldMsgs || {},
         pushTemp: false, // an random id to store temp lasg filed data
@@ -91,8 +92,10 @@ export default function ChatContent() {
 
     useEffect(() => {
         const getMsgList = () => {
+            console.log("tempRecentMsgs[roomId]", tempRecentMsgs[roomId]);
+            console.log("tempRecentMsgs", tempRecentMsgs);
             if (!tempRecentMsgs[roomId]) return dbMsgs;
-            return [...dbMsgs, ...tempRecentMsgs[roomId]];
+            return mergeUniqueObjArrays(dbMsgs, tempRecentMsgs[roomId]);
             // removeMultiObjDuplicate(prev.msgList, dbMsgs);
         };
 
@@ -105,6 +108,12 @@ export default function ChatContent() {
     }, [roomId]); // if lastStoredMsg will cause max exceed reload error
 
     function appendNewMsg(currMsg) {
+        const thisRoomId = currMsg.to;
+
+        // temp chat store
+        if (!tempRecentMsgs[thisRoomId]) tempRecentMsgs[thisRoomId] = [currMsg];
+        else tempRecentMsgs[thisRoomId].push(currMsg);
+
         return setCurrData((prev) => ({
             ...prev,
             msgList: removeObjDuplicate({
@@ -120,14 +129,11 @@ export default function ChatContent() {
         // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
         socket.on("newMsg", (data) => {
             // avoid push in another chat room when updating the list
-            console.log("data.to === roomId", data.to === roomId);
-            console.log("data.to", data.to);
             if (data.to === roomId) {
                 appendNewMsg(data);
                 scrollToBottom();
             }
         });
-        console.log("roomId CHAT", roomId);
         // eslint-disable-next-line
     }, [socket, roomId]);
 
@@ -159,11 +165,6 @@ export default function ChatContent() {
             },
         };
 
-        // temp chat store
-        if (!tempRecentMsgs[roomId])
-            tempRecentMsgs[roomId] = [newMsgTobeEmitted];
-        else tempRecentMsgs[roomId].push(newMsgTobeEmitted);
-
         socket.emit("newMsg", newMsgTobeEmitted);
         socket.emit("lastMsg", {
             newMsg: botMsg || newMsg,
@@ -193,7 +194,11 @@ export default function ChatContent() {
 
     useAutoMsgBot({
         subject,
-        activateBot: role !== "nucleo-equipe" && !loading && dbMsgs.length <= 0,
+        activateBot:
+            role !== "nucleo-equipe" &&
+            !loading &&
+            !bot.sentMsg1 &&
+            msgList.length === 0,
         saveNewMsg,
         setCurrData,
         setData,
@@ -280,6 +285,11 @@ function mergeUniqueObjArrays(initialArray, newArray, id = "msgId") {
     ];
     return merged;
 }
+
+// TEMP LIST
+function addTempMsg() {}
+
+function getTempDbMsgList() {}
 
 /*
 TEST

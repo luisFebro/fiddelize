@@ -21,97 +21,57 @@ export default function getInitSocket({ auth, query, namespace }) {
     return socket;
 }
 
-export function useInitSocket({ namespace, userId, setData, userName, role }) {
+export function useInitSocket({ namespace, role, userId, name }) {
     // LESSON: always use useEffect to initialize methods like io(). It was bugging aorund with many requests and preventing using broadcast.imit to exclude the sender
     const [socketData, setSocketData] = useState(null);
 
     useEffect(() => {
-        // first time, the roomId is created in the backend and fetch back to the frontend
-        // userId and userName only if the user is loggedIn. If it is a visitor, this userName is attached to the socket when user click in the continue button
-        const auth = { roomId: undefined, userName, userId, role };
+        const socket = getInitSocket({ namespace });
 
-        const socket = getInitSocket({ namespace, auth });
-
-        retrieveDataOnReload(socket, { setData, role, userName });
-        startInitialListeners(socket, { setData, role, userName });
+        startSocketSession(socket, {
+            role,
+            userId,
+            name,
+        });
+        startInitialListeners(socket);
 
         return setSocketData(socket);
         // eslint-disable-next-line
-    }, [userId, role, userName]);
+    }, [role, userId, name, namespace]);
 
     return socketData;
 }
 
-// after user reloads the page, fetch the previously added ids directly from the localstorage
-function retrieveDataOnReload(socket, options = {}) {
-    const { setData, role, userName } = options;
+// save locally and socket - used both in every reconnection and starting right after click on continue button to enter in the support page
+export function startSocketSession(socket, data = {}) {
+    const [chatRoomId, chatUserId, chatUserName, chatRoom] = getItems(
+        "global",
+        ["chatRoomId", "chatUserId", "chatUserName", "chatRoom"]
+    );
 
-    const [chatRoomId, chatUserId, chatUserName] = getItems("global", [
-        "chatRoomId",
-        "chatUserId",
-        "chatUserName",
-    ]);
+    let values = {
+        chatRoomId: data.chatRoomId || chatRoomId, // only requires this, but chatUserId is used to keep consistency especially in requests
+        chatUserId: data.chatUserId || chatUserId,
+        chatUserName: data.chatUserName || chatUserName,
+        chatRole: data.chatRole || chatRoom,
+    };
 
-    if (chatRoomId) {
-        socket.auth = {
-            roomId: chatRoomId,
-            userId: chatUserId,
-            userName: chatUserName || userName,
-            role,
+    if (data.role === "nucleo-equipe") {
+        values = {
+            chatRoomId: "cgOdhq7Jzfuh9hujfMX0", // only requires this, but chatUserId is used to keep consistency especially in requests
+            chatRole: "nucleo-equipe",
+            chatUserId: data.userId,
+            chatUserName: data.name,
         };
-
-        setData((prev) => ({
-            ...prev,
-            chatUserId,
-            chatRoomId,
-        }));
     }
 
-    return true;
+    setItems("global", values);
+    socket.auth = values;
 }
 
-function startInitialListeners(socket, options = {}) {
-    const { setData, role, userName } = options;
-    //  register a catch-all listener, any event received by the client will be printed in the console.
+function startInitialListeners(socket) {
     socket.onAny((event, ...args) => {
         console.log(event, args);
-    });
-
-    socket.on("session", (d) => {
-        const [chatRoomId, chatUserId, chatUserName] = getItems("global", [
-            "chatRoomId",
-            "chatUserId",
-            "chatUserName",
-        ]);
-
-        // in order to make sure the roomId and userId is consistent and possible changes in the backend, try find the previously added ids in the localstorage before get from the server
-        const ultimateRoomId = chatRoomId || d.roomId;
-        const ultimateUserId = chatUserId || d.userId;
-        const ultimateUserName = chatUserName || d.userName;
-
-        // set ids to the localstorage if they are new
-        if (!chatRoomId) {
-            setItems("global", {
-                chatRoomId: ultimateRoomId, // only requires this, but chatUserId is used to keep consistency especially in requests
-                chatUserId: ultimateUserId,
-                chatUserName: ultimateUserName,
-            });
-        }
-
-        setData((prev) => ({
-            ...prev,
-            chatRoomId: ultimateRoomId,
-            chatUserId: ultimateUserId,
-            // userName is set in the support page
-        }));
-
-        // attach the session ID to the next reconnection attempts
-        socket.auth = {
-            roomId: ultimateRoomId,
-            userId: ultimateUserId,
-            userName: ultimateUserName || userName,
-            role,
-        };
     });
 
     socket.on("connect_error", (err) => {

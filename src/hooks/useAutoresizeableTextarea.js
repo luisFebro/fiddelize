@@ -57,6 +57,8 @@ function setAutoresizeableTextarea() {
 // reference: https://stackoverflow.com/questions/4331022/focus-input-box-on-load
 function placeCursorAtEnd() {
     if (this.setSelectionRange) {
+        const gotSomeTxt = this.innerHTML;
+        if (!gotSomeTxt) return;
         // Double the length because Opera is inconsistent about
         // whether a carriage return is one character or two.
         var len = this.value.length * 2;

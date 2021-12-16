@@ -9,7 +9,6 @@ import RadiusBtn from "components/buttons/RadiusBtn";
 import getSubjectBr from "../helpers";
 
 const isSmall = window.Helper.isSmallScreen();
-
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function AllChats({ isBizTeam }) {

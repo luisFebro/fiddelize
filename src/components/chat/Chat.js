@@ -18,14 +18,14 @@ import UserInfoCard from "./UserInfoCard";
 import "./Chat.scss";
 import "styles/bootstrap-layout-only-min.css";
 
-const [chatDarkMode, chatUserName, chatUserId] = getItems("global", [
+const [chatDarkMode, chatUserId, chatUserName] = getItems("global", [
     "chatDarkMode",
-    "chatUserName",
     "chatUserId",
+    "chatUserName",
 ]);
 // const isSmall = window.Helper.isSmallScreen();
 
-export default function Chat({ socket, role, subject }) {
+export default function Chat({ socket, subject, role }) {
     const [darkMode, setDarkMode] = useState(chatDarkMode || false);
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");

@@ -28,6 +28,7 @@ export default function useAutoMsgBot({
             bot: {
                 typingShow: status,
                 senderName: status ? "Fidda Bot" : null,
+                sentMsg1: true,
             },
         }));
     };

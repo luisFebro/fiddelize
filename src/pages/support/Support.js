@@ -5,21 +5,32 @@ import useData from "init";
 import SelectField from "components/fields/SelectField";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import getAPI, { startSupport } from "api";
-import getItems, { removeItems, setItems } from "init/lStorage";
+import getItems from "init/lStorage";
 import showToast from "components/toasts";
-import { useInitSocket } from "components/chat/socket/initSocket";
+import {
+    useInitSocket,
+    startSocketSession,
+} from "components/chat/socket/initSocket";
 import { Load } from "components/code-splitting/LoadableComp";
 import getSubjectBr from "components/chat/helpers";
+import getId from "utils/getId";
 import Field from "components/fields";
 import getFirstName from "utils/string/getFirstName";
 // import useSupportWaveColor from "./useSupportWaveColor";
 
 const [loggedRole] = getItems("currUser", ["role"]);
 // disable chatPreventMainPanel right closing an attendance so that customers can request a new attendence request
-const [chatPreventMainPanel, chatHistoryOn, storedUserName] = getItems(
-    "global",
-    ["chatPreventMainPanel", "chatHistoryOn", "chatUserName"]
-);
+const [
+    chatPreventMainPanel,
+    chatHistoryOn,
+    storedUserName,
+    chatUserId,
+] = getItems("global", [
+    "chatPreventMainPanel",
+    "chatHistoryOn",
+    "chatUserName",
+    "chatUserId",
+]);
 const isFiddelizeTeam = loggedRole === "nucleo-equipe";
 
 export const AsyncChat = Load({
@@ -35,17 +46,8 @@ export default function Support() {
         selected: false,
         success: isFiddelizeTeam || chatPreventMainPanel,
         chatUserName: null,
-        chatUserId: null,
-        chatRoomId: null,
     });
-    const {
-        success,
-        chatUserName,
-        chatUserId,
-        chatRoomId,
-        subject,
-        selected,
-    } = data;
+    const { success, chatUserName, subject, selected } = data;
     const { name = null, role = "visitante", userId } = useData();
 
     // useSupportWaveColor({ trigger: !success });
@@ -54,23 +56,10 @@ export default function Support() {
 
     const socket = useInitSocket({
         namespace: "nspSupport",
-        userName: chatUserName,
-        setData,
-        userId,
         role,
+        userId,
+        name,
     });
-
-    useEffect(() => {
-        // remove any previously saved chatRoomId for customers to avoid duplicate chats
-        if (!chatPreventMainPanel && role !== "nucleo-equipe") {
-            removeItems("global", ["chatRoomId"]);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (selected) socket.connect();
-        // eslint-disable-next-line
-    }, [selected]);
 
     useEffect(() => {
         if (name) setData((prev) => ({ ...prev, chatUserName: name }));
@@ -79,29 +68,37 @@ export default function Support() {
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     const startNewSupport = async () => {
-        if (!chatUserName)
+        if (!chatUserName && !storedUserName)
             return showToast("Informe seu nome e uma categoria de assunto");
 
         if (!selected) return showToast("Favor selecione um assunto");
 
-        const someInfoInvalid = !selected || !chatUserId || !chatRoomId;
+        // if user is loggedIn, use his/her userId instead. Or secondly, if it is the second time a visitor is entering, use his/her prior id to get his/her history
+        const newChatRoomId = `room${getId()}`;
+        const newChatUserId = userId || chatUserId || `user${getId()}`;
+        const newChatUserName = chatUserName || storedUserName;
 
-        if (someInfoInvalid)
-            return showToast("Favor, clique em continuar novamente.", {
-                dur: 7000,
-            });
+        // save locally and socket
+        const chatRoom = {
+            chatRoomId: newChatRoomId, // only requires this, but chatUserId is used to keep consistency especially in requests
+            chatUserId: newChatUserId,
+            chatUserName: newChatUserName,
+            chatRole: role,
+        };
+
+        startSocketSession(socket, chatRoom);
 
         const body = {
-            roomId: chatRoomId,
+            roomId: newChatRoomId,
             chatType: "support",
             dataType: {
                 subject,
                 subjectOtherLang: getSubjectBr(subject), // to be searchable in query
             },
             fromData: {
-                userId: chatUserId, // admin dev nucleo-equipe id
+                userId: newChatUserId,
                 role: role || "visitante",
-                userName: chatUserName, // first name and surname
+                userName: newChatUserName, // first name and surname
             },
         };
 
@@ -111,11 +108,12 @@ export default function Support() {
             body,
         });
 
-        socket.emit("updateBizRooms");
-        setItems("global", { chatUserName });
-
         showToast("Iniciando sua sessão de suporte...", { type: "success" });
-        setTimeout(() => goChatPanel(), 1500);
+
+        setTimeout(() => {
+            socket.emit("updateBizRooms");
+            goChatPanel();
+        }, 1500);
         return "started";
     };
 
@@ -253,7 +251,7 @@ export default function Support() {
     return (
         <Fragment>
             {success ? (
-                <AsyncChat subject={subject} socket={socket} role={role} />
+                <AsyncChat role={role} subject={subject} socket={socket} />
             ) : (
                 showMain()
             )}
