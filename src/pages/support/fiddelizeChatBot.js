@@ -43,7 +43,7 @@ export default function useAutoMsgBot({
 
             const botMsg = pickBotMsg({ userName, subject, msg: 1 });
             saveNewMsg(botMsg);
-        }, 7000);
+        }, 4000);
     }, [activateBot, roomId]);
 }
 
@@ -69,12 +69,12 @@ function chooseMsg({ userGreeting, userName, subject }) {
 
     if (subject === "question")
         return `
-        Olá ${userName}! Qual dúvida sobre a Fiddelize você possui?
+        ${userGreeting}! Qual dúvida sobre a Fiddelize você possui?
     `;
 
     if (subject === "usageHelp")
         return `
-        ${userName}, qual funcionalidade você precisa de ajuda?
+        ${userGreeting}!, qual funcionalidade você precisa de ajuda?
     `;
 
     if (subject === "bugReport")

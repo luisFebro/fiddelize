@@ -47,8 +47,10 @@ function setAutoresizeableTextarea() {
     window.addEventListener("load", () => {
         setTimeout(() => {
             const thisTxtArea = document.querySelector(".msg-sender");
-            if (thisTxtArea) thisTxtArea.focus();
-            thisTxtArea.addEventListener("load", placeCursorAtEnd);
+            if (thisTxtArea) {
+                thisTxtArea.focus();
+                thisTxtArea.addEventListener("load", placeCursorAtEnd);
+            }
         }, 1600);
     });
 }

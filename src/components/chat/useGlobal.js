@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { setItems } from "init/lStorage";
+import { removeItems, setItems } from "init/lStorage";
 // import useData from "init";
 
 const isSmall = window.Helper.isSmallScreen();
 
 export default function useGlobal(props) {
-    const { list: dbList } = props.dataChatList;
+    const { list: dbList, loading } = props.dataChatList;
 
     const [data, setData] = useState({
         openChat: !isSmall, // in large screen, keep open.
@@ -29,15 +29,23 @@ export default function useGlobal(props) {
         dbList[0] && dbList[0].dataType && dbList[0].dataType.isPendingSupport;
 
     useEffect(() => {
-        if (!lastPendingSupport) return;
+        if (loading) return null;
 
-        setItems("global", {
+        if (!lastPendingSupport) {
+            return removeItems("global", [
+                "chatPreventMainPanel",
+                "chatRoomId",
+            ]);
+        }
+
+        return setItems("global", {
             chatPreventMainPanel: true,
+            // to notify user whether s/he has previously added chat support when clicking on the see-history button. should only be assigned once
             chatHistoryOn: true,
         });
-    }, [lastPendingSupport]);
+    }, [lastPendingSupport, loading]);
 
-    const currChatData = getCurrChatData(dbList, data.currRoomId);
+    const [currChatData, currInd] = getCurrChatData(dbList, data.currRoomId);
 
     const store = {
         ...props,
@@ -45,6 +53,7 @@ export default function useGlobal(props) {
         setData,
         dbList,
         currChatData,
+        currInd,
     };
 
     return store;
@@ -52,8 +61,10 @@ export default function useGlobal(props) {
 
 // HELPERS
 function getCurrChatData(list, roomId) {
-    if (!list || !list[0] || !roomId) return list[0] || {};
-    return list.find((session) => session.roomId === roomId) || {}; // even with list and roomId, it can't be found when filtering
+    if (!list || !list[0] || !roomId) return [list[0] || {}];
+    const foundChat = list.find((session) => session.roomId === roomId) || {}; // even with list and roomId, it can't be found when filtering
+    const currInd = list.findIndex((session) => session.roomId === roomId) || 0;
+    return [foundChat, currInd];
 }
 // END HELPERS
 

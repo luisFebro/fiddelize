@@ -27,6 +27,11 @@ export default function useUpdateChatList(socket, data = {}) {
                 }
             }
         });
+
+        socket.on("joinNewUserRoom", ({ newUserRoomId }) => {
+            const isBizTeam = true;
+            socket.emit("joinRoom", newUserRoomId, isBizTeam);
+        });
     }, [socket, role]);
 }
 

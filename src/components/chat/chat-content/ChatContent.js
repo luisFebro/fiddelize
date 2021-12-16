@@ -11,14 +11,12 @@ import MsgSender from "./MsgSender";
 
 const isSmall = window.Helper.isSmallScreen();
 
-// all recent messges should be stored in-memory so they will not be lost when switch between chat roomIds
-const tempRecentMsgs = {};
-
 const [chatTempLastFieldMsgs, chatDarkMode] = getItems("global", [
     "chatTempLastFieldMsgs",
     "chatDarkMode",
 ]);
 
+const tempPostMsgs = {}; // tempPostMsgs are all msgs received and sent AFTER the first load. all these messages should be stored in-memory so they will not be lost when switch between chat roomIds
 export default function ChatContent() {
     const [currData, setCurrData] = useState({
         newMsg: "",
@@ -48,6 +46,7 @@ export default function ChatContent() {
     const {
         openChat,
         currChatData,
+        currInd,
         socket,
         chatUserId,
         chatUserName,
@@ -56,6 +55,7 @@ export default function ChatContent() {
         dataChatList,
         tempLastPanelMsg,
         role,
+        // dbList,
     } = useContext();
     const { loading } = dataChatList;
 
@@ -63,7 +63,6 @@ export default function ChatContent() {
 
     const isSupportOver = dataType && !dataType.isPendingSupport;
 
-    const lastStoredMsg = getLastStoredMsg(dbMsgs, roomId);
     scrollToBottom();
 
     useEffect(() => {
@@ -82,37 +81,28 @@ export default function ChatContent() {
         }
     }, [pushTemp]);
 
+    const lastStoredMsg = getLastStoredMsg(dbMsgs, roomId);
+    const lastMsgId = lastStoredMsg.content && lastStoredMsg.content.msgId;
+
     useEffect(() => {
         setCurrData((prev) => ({
             ...prev,
+            msgList: getMsgList({
+                roomId,
+                dbMsgs,
+            }),
             newMsg: tempLastFieldMsgs[roomId] || "",
-        }));
-        // eslint-disable-next-line
-    }, [roomId]);
-
-    useEffect(() => {
-        const getMsgList = () => {
-            console.log("tempRecentMsgs[roomId]", tempRecentMsgs[roomId]);
-            console.log("tempRecentMsgs", tempRecentMsgs);
-            if (!tempRecentMsgs[roomId]) return dbMsgs;
-            return mergeUniqueObjArrays(dbMsgs, tempRecentMsgs[roomId]);
-            // removeMultiObjDuplicate(prev.msgList, dbMsgs);
-        };
-
-        setCurrData((prev) => ({
-            ...prev,
-            msgList: getMsgList(),
             lastMsg: lastStoredMsg || {},
         }));
-        // eslint-disable-next-line
-    }, [roomId]); // if lastStoredMsg will cause max exceed reload error
+    }, [roomId, lastMsgId]);
 
     function appendNewMsg(currMsg) {
-        const thisRoomId = currMsg.to;
-
         // temp chat store
-        if (!tempRecentMsgs[thisRoomId]) tempRecentMsgs[thisRoomId] = [currMsg];
-        else tempRecentMsgs[thisRoomId].push(currMsg);
+
+        addTempMsg({
+            roomId: currMsg.to,
+            newMsg: currMsg,
+        });
 
         return setCurrData((prev) => ({
             ...prev,
@@ -128,11 +118,17 @@ export default function ChatContent() {
         if (!socket) return;
         // solved in the backend with broadcast.emit! -- Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she push a new msg.
         socket.on("newMsg", (data) => {
+            appendNewMsg(data);
+            scrollToBottom();
+
+            // Some other user messages were prevented to be displayed
             // avoid push in another chat room when updating the list
-            if (data.to === roomId) {
-                appendNewMsg(data);
-                scrollToBottom();
-            }
+            // const msgInd = !dbList.length ? null : dbList.findIndex(session => session.roomId === data.to);
+
+            // if (msgInd === currInd) {
+            //     appendNewMsg(data);
+            //     scrollToBottom();
+            // }
         });
         // eslint-disable-next-line
     }, [socket, roomId]);
@@ -141,7 +137,7 @@ export default function ChatContent() {
         if (!newMsg && !botMsg) return;
 
         // need reload chat list to display botMsg
-        if (botMsg) socket.emit("updateBizRooms");
+        if (botMsg) socket.emit("updateBizRooms", { newUserRoomId: roomId }); // to join the user roomId automatically
 
         // for the division of dates when it was sent.
         const content = lastMsg && lastMsg.content;
@@ -250,6 +246,25 @@ export default function ChatContent() {
     );
 }
 
+function addTempMsg({ roomId, newMsg }) {
+    const tempObj = tempPostMsgs;
+
+    if (!tempObj[roomId]) tempObj[roomId] = [newMsg];
+    else {
+        // remove duplicates
+        const alreadyGot = tempObj[roomId].find(
+            (m) => m.content.msgId === newMsg.content.msgId
+        );
+        if (!alreadyGot) tempObj[roomId].push(newMsg);
+    }
+}
+
+// both db and temp msgs
+function getMsgList({ roomId, dbMsgs }) {
+    if (!tempPostMsgs[roomId]) return dbMsgs;
+    return [...dbMsgs, ...tempPostMsgs[roomId]];
+}
+
 function scrollToBottom() {
     const chatContainer = document.querySelector(".chat__content");
     if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -257,17 +272,19 @@ function scrollToBottom() {
 
 function getLastStoredMsg(dbMsgs, roomId) {
     const getLastOne = (list) => (list.length ? list.slice(-1)[0] : {});
-    let list = tempRecentMsgs[roomId] || [];
+    let list = tempPostMsgs[roomId] || [];
     if (!list.length) list = dbMsgs;
 
     return getLastOne(list);
 }
 
-function removeObjDuplicate({ list, filterId = "msgId", newObj }) {
+function removeObjDuplicate({ list = [], filterId = "msgId", newObj }) {
     // originalArr - The array on which filter() was called.
     // findIndex - The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
+    if (!list || !list.length) return [];
+    const finalList = !newObj ? list : [...list, newObj];
 
-    return [...list, newObj].filter(
+    return finalList.filter(
         (item1, ind, originalArr) =>
             originalArr.findIndex(
                 (item2) => item2.content[filterId] === item1.content[filterId]
@@ -275,21 +292,20 @@ function removeObjDuplicate({ list, filterId = "msgId", newObj }) {
     );
 }
 
+// function toStr(data) {
+//     return JSON.stringify(data);
+// }
+
 // reference: https://stackoverflow.com/questions/54134156/javascript-merge-two-arrays-of-objects-only-if-not-duplicate-based-on-specifi
 
-function mergeUniqueObjArrays(initialArray, newArray, id = "msgId") {
-    const ids = new Set(initialArray.map((d) => d[id]));
-    const merged = [
-        ...initialArray,
-        ...newArray.filter((d) => !ids.has(d[id])),
-    ];
-    return merged;
-}
-
-// TEMP LIST
-function addTempMsg() {}
-
-function getTempDbMsgList() {}
+// function mergeUniqueObjArrays(initialArray, newArray, id = "_id") {
+//     const ids = new Set(initialArray.map((d) => d[id]));
+//     const merged = [
+//         ...initialArray,
+//         ...newArray.filter((d) => !ids.has(d[id])),
+//     ];
+//     return merged;
+// }
 
 /*
 TEST
