@@ -2,8 +2,8 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.0.25";
-// FINAL SUBPROJECTS BEFORE LAUNCHING:
+const latestVersion = "v5.0.30";
+// FINAL SUBPROJECTS BEFORE LAUNCHING: // updating app
 // biz app revised v2 - up to 21 nov (DONE at 20 nov)
 // all QA tweaks and challList for discountBack up to 23 nov (DONE at 24 nov)
 // discountBack for cli-admins with auto discount coupon design in order page up to 26 nov (PENDING)
