@@ -11,18 +11,18 @@ export const chooseHeaderAsync = async ({ token, needAuth = true }) => {
         if (!token) {
             const forageToken = await getVar("token", "user");
             return {
-                "Content-type": "application/json",
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${forageToken}`,
             };
         }
 
         return {
-            "Content-type": "application/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         };
     }
 
-    return { "Content-type": "application/json" };
+    return { "Content-Type": "application/json" };
 };
 
 // for axios http request

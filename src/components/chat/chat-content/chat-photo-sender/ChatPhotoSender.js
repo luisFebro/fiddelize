@@ -69,9 +69,6 @@ export default function ChatPhotoSender({
             method: "post",
             url: setChatSupportImg(),
             body: handleDataForm(),
-            headers: {
-                "content-type": "application/x-www-form-urlencoded",
-            },
             fullCatch: true,
         }).catch((err) => {
             setLoading(false);

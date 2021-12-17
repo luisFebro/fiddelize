@@ -81,9 +81,6 @@ export default function UploadBtn({
             method: "post",
             url: urlFunc(),
             body: handleDataForm(),
-            headers: {
-                "content-type": "multipart/form-data",
-            },
             fullCatch: true,
         }).catch(() => {
             setLoading(false);

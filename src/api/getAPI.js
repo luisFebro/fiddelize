@@ -60,6 +60,7 @@ export default function getAPI({
                 cancel = c;
             }), // n1
         };
+        console.log("config GETAPI", config);
 
         if (!trigger) {
             clearTimeout(stopRequest);

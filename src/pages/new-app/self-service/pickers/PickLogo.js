@@ -175,9 +175,6 @@ export default function PickLogo({
             method: "post",
             url: uploadImages(clubBizLinkName || bizLinkName),
             body: formData,
-            headers: {
-                "content-type": "multipart/form-data",
-            },
             fullCatch: true,
         }).catch(() => {
             setIsLoadingPic(false);
