@@ -18,6 +18,8 @@ export default function ChatPhotoSender({
 
         // multiple photos not implemented
         const imgDataList = e.target.files[0];
+        console.log("e.target.files", e.target.files);
+        console.log("imgDataList", imgDataList);
 
         const handleDataForm = () => {
             const formData = new FormData();
@@ -70,7 +72,7 @@ export default function ChatPhotoSender({
             url: setChatSupportImg(),
             body: handleDataForm(),
             headers: {
-                "content-type": "multipart/form-data",
+                "content-type": "application/x-www-form-urlencoded",
             },
             fullCatch: true,
         }).catch((err) => {
