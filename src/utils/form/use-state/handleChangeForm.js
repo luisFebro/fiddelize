@@ -1,14 +1,13 @@
-const handleChangeForm = (setObj, obj, formData, anotherName = "phone") => e => {
+const handleChangeForm = (setObj, obj, formData, anotherName = "phone") => (
+    e
+) => {
     const { name } = e.target;
 
     const isPhoto = name === anotherName;
-    const value = isPhoto
-    ? e.target.files[0]
-    : e.target.value
+    const value = isPhoto ? e.target.files[0] : e.target.value;
 
-    formData.set(name, value);
+    formData.append(name, value);
     setObj({ ...obj, [name]: value });
-}
+};
 
 export default handleChangeForm;
-

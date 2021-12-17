@@ -161,7 +161,7 @@ export default function PickLogo({
         }
         // End Validation
 
-        formData.set(name, fileValue); // n1 - set and append diff
+        formData.append(name, fileValue); // n1 - set and append diff
         setUploadedPic(fileValue);
 
         setIsLoadingPic(true);
@@ -175,6 +175,9 @@ export default function PickLogo({
             method: "post",
             url: uploadImages(clubBizLinkName || bizLinkName),
             body: formData,
+            headers: {
+                "content-type": "multipart/form-data",
+            },
             fullCatch: true,
         }).catch(() => {
             setIsLoadingPic(false);

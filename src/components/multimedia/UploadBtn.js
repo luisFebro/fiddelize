@@ -32,13 +32,13 @@ export default function UploadBtn({
         const handleDataForm = () => {
             const formData = new FormData();
             // IMPORTANT: req.files only works if formData.set has name of file
-            formData.set("file", imgDataList); // n1 - set and append diff
+            formData.append("file", imgDataList); // n1 - set and append diff
             // all this data below is accessed in req.body
-            formData.set("userId", userId);
-            formData.set("mode", "create");
+            formData.append("userId", userId);
+            formData.append("mode", "create");
             // further data for image
             Object.keys(body).forEach((field) => {
-                formData.set(field, body[field]);
+                formData.append(field, body[field]);
             });
 
             return formData;
@@ -81,6 +81,9 @@ export default function UploadBtn({
             method: "post",
             url: urlFunc(),
             body: handleDataForm(),
+            headers: {
+                "content-type": "multipart/form-data",
+            },
             fullCatch: true,
         }).catch(() => {
             setLoading(false);

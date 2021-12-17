@@ -13,6 +13,7 @@ export default function getAPI({
     method = "get",
     body, // obj
     params, // obj
+    headers,
     needAuth = true,
     timeout = 20000,
     trigger = true,
@@ -44,14 +45,17 @@ export default function getAPI({
             return reject(null);
         }, timeout);
 
-        const headers = await chooseHeaderAsync({ token, needAuth });
+        const authHeaders = await chooseHeaderAsync({ token, needAuth });
 
         const config = {
             url,
             method,
             data: body,
             params,
-            headers,
+            headers: {
+                ...authHeaders,
+                ...headers,
+            },
             cancelToken: new axios.CancelToken((c) => {
                 cancel = c;
             }), // n1

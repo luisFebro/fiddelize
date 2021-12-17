@@ -22,18 +22,18 @@ export default function ChatPhotoSender({
         const handleDataForm = () => {
             const formData = new FormData();
             // IMPORTANT: req.files only works if formData.set has name of file
-            formData.set("file", imgDataList); // n1 - set and append diff
+            formData.append("file", imgDataList); // n1 - set and append diff
             // all this data below is accessed in req.body
-            formData.set("currRoomId", currRoomId);
-            formData.set("mode", "create");
-            formData.set("folder", "support");
-            formData.set("tags", role);
-            formData.set("backup", false);
-            formData.set("from", from);
-            formData.set("firstMsgTodayDate", firstMsgTodayDate);
+            formData.append("currRoomId", currRoomId);
+            formData.append("mode", "create");
+            formData.append("folder", "support");
+            formData.append("tags", role);
+            formData.append("backup", false);
+            formData.append("from", from);
+            formData.append("firstMsgTodayDate", firstMsgTodayDate);
             // further data for image
             // Object.keys(body).forEach((field) => {
-            //     formData.set(field, body[field]);
+            //     formData.append(field, body[field]);
             // });
 
             return formData;
@@ -69,6 +69,9 @@ export default function ChatPhotoSender({
             method: "post",
             url: setChatSupportImg(),
             body: handleDataForm(),
+            headers: {
+                "content-type": "multipart/form-data",
+            },
             fullCatch: true,
         }).catch((err) => {
             setLoading(false);
@@ -130,3 +133,7 @@ export default function ChatPhotoSender({
         </Fragment>
     );
 }
+
+/* COMMENTS
+n1: The difference between FormData. set and append() is that if the specified key already exists, FormData. set will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values
+*/
