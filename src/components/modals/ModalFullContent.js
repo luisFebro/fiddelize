@@ -36,6 +36,7 @@ export default function ModalFullContent({
     needIndex = true,
     backgroundColor,
     maxWidth = "500px",
+    overflowY = undefined,
     // style,
 }) {
     const { runName } = useRun();
@@ -58,6 +59,7 @@ export default function ModalFullContent({
                     backgroundColor: backgroundColor || "var(--mainWhite)",
                     maxWidth,
                     overflowX: "hidden",
+                    overflowY,
                 },
             }}
             maxWidth="md"

@@ -125,52 +125,69 @@ export default function AllChats({ isBizTeam }) {
         </div>
     );
 
-    const showCard = (data, ind) => (
-        <li
-            className={`messaging-member ${checkSelectedUser(data)} ${
-                data.unreadCount >= 1 ? "messaging-member--new" : ""
-            }`}
-            onClick={() => handleOpenChat(data)}
-        >
-            <div className="position-relative messaging-member__wrapper">
-                <div className="messaging-member__avatar">
-                    {getAvatarSelection({
-                        avatar: data.otherAvatar,
-                        otherUserName: data.otherUserName,
-                        currUserRole: role,
-                        needGreyColor:
-                            data.dataType && !data.dataType.isPendingSupport,
-                    })}
-                    <div
-                        className={`${needStatus ? getDataStatus(data) : ""}`}
-                    />
-                </div>
+    const showCard = (data, ind) => {
+        let selectedLastMsg = handleLastMsg({
+            typing,
+            ind,
+            data,
+            lastPanelMsg,
+            tempLastPanelMsg,
+        });
+        const isImg = selectedLastMsg && selectedLastMsg.includes("/image/");
+        if (isImg)
+            selectedLastMsg = (
+                <span
+                    className="position-relative d-inline-block"
+                    style={{ top: -3 }}
+                >
+                    <span className="text-em-1-4">📷 </span>imagem
+                </span>
+            );
 
-                <span className="messaging-member__name">
-                    {truncate(data.otherUserName, 20)}{" "}
-                    {isSupport
-                        ? parse(
-                              `(${getSubjectBr(
-                                  data.dataType.subject
-                              )}${getRoleInTitle(data)}`
-                          )
-                        : ""}
-                </span>
-                <span className="d-block mt-2 messaging-member__message">
-                    {handleLastMsg({
-                        typing,
-                        ind,
-                        data,
-                        lastPanelMsg,
-                        tempLastPanelMsg,
-                    })}
-                </span>
-                {data.dataType &&
-                    !data.dataType.isPendingSupport &&
-                    showSupportCheckIcon()}
-            </div>
-        </li>
-    );
+        return (
+            <li
+                className={`messaging-member ${checkSelectedUser(data)} ${
+                    data.unreadCount >= 1 ? "messaging-member--new" : ""
+                }`}
+                onClick={() => handleOpenChat(data)}
+            >
+                <div className="position-relative messaging-member__wrapper">
+                    <div className="messaging-member__avatar">
+                        {getAvatarSelection({
+                            avatar: data.otherAvatar,
+                            otherUserName: data.otherUserName,
+                            currUserRole: role,
+                            needGreyColor:
+                                data.dataType &&
+                                !data.dataType.isPendingSupport,
+                        })}
+                        <div
+                            className={`${
+                                needStatus ? getDataStatus(data) : ""
+                            }`}
+                        />
+                    </div>
+
+                    <span className="messaging-member__name">
+                        {truncate(data.otherUserName, 20)}{" "}
+                        {isSupport
+                            ? parse(
+                                  `(${getSubjectBr(
+                                      data.dataType.subject
+                                  )}${getRoleInTitle(data)}`
+                              )
+                            : ""}
+                    </span>
+                    <span className="d-block mt-2 messaging-member__message">
+                        {selectedLastMsg}
+                    </span>
+                    {data.dataType &&
+                        !data.dataType.isPendingSupport &&
+                        showSupportCheckIcon()}
+                </div>
+            </li>
+        );
+    };
 
     const listMap = dbList.map((data, ind) =>
         checkDetectedElem({ list: dbList, ind, indFromLast: 2 }) ? (

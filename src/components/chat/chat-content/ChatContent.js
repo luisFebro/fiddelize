@@ -39,6 +39,7 @@ export default function ChatContent() {
         lastMsg,
         bot,
     } = currData;
+
     const today = new Date();
 
     useAutoresizeableTextarea();
@@ -46,7 +47,6 @@ export default function ChatContent() {
     const {
         openChat,
         currChatData,
-        currInd,
         socket,
         chatUserId,
         chatUserName,
@@ -55,6 +55,7 @@ export default function ChatContent() {
         dataChatList,
         tempLastPanelMsg,
         role,
+        // currInd,
         // dbList,
     } = useContext();
     const { loading } = dataChatList;
@@ -133,12 +134,7 @@ export default function ChatContent() {
         // eslint-disable-next-line
     }, [socket, roomId]);
 
-    const saveNewMsg = (botMsg) => {
-        if (!newMsg && !botMsg) return;
-
-        // need reload chat list to display botMsg
-        if (botMsg) socket.emit("updateBizRooms", { newUserRoomId: roomId }); // to join the user roomId automatically
-
+    function checkFirstMsgTodayDate() {
         // for the division of dates when it was sent.
         const content = lastMsg && lastMsg.content;
         const lastMsgDate =
@@ -150,20 +146,38 @@ export default function ChatContent() {
             ? true
             : !isSameDay(lastMsgDate, today);
 
-        const newMsgTobeEmitted = {
+        return isFirstMsgToday ? today : undefined;
+    }
+
+    const firstMsgTodayDate = checkFirstMsgTodayDate();
+
+    const saveNewMsg = (botMsg, newImg) => {
+        if (!newMsg && !botMsg && !newImg) return;
+
+        // need reload chat list to display botMsg
+        if (botMsg) socket.emit("updateBizRooms", { newUserRoomId: roomId }); // to join the user roomId automatically
+
+        let newMsgTobeEmitted = {
             from: botMsg ? "Fidda Bot" : chatUserId,
             to: roomId,
             content: {
                 msgId: `msg${getId()}`,
                 msg: botMsg || newMsg,
                 msgDate: today,
-                firstMsgTodayDate: isFirstMsgToday ? today : undefined,
+                firstMsgTodayDate,
             },
+        };
+
+        if (newImg) newMsgTobeEmitted = newImg;
+
+        const handleNewMsg = () => {
+            if (newImg) return newImg.content && newImg.content.msg;
+            return botMsg || newMsg;
         };
 
         socket.emit("newMsg", newMsgTobeEmitted);
         socket.emit("lastMsg", {
-            newMsg: botMsg || newMsg,
+            newMsg: handleNewMsg(),
             roomId,
         });
 
@@ -236,9 +250,12 @@ export default function ChatContent() {
                         tempLastPanelMsg={tempLastPanelMsg}
                         socket={socket}
                         chatDarkMode={chatDarkMode}
+                        chatUserId={chatUserId}
                         roomId={roomId}
                         disabled={isSupportOver}
                         bot={bot}
+                        role={role}
+                        firstMsgTodayDate={firstMsgTodayDate}
                     />
                 </div>
             </div>

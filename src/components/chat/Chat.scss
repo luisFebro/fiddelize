@@ -255,9 +255,9 @@ $breakpoints: (
         margin: 0;
         padding: 0;
         position: absolute;
-        top: 50%;
+        top: 15%;
         right: 0.5rem;
-        transform: translateY(-50%);
+        transform: translateY(-15%);
         height: 2.3rem;
         width: 2.3rem;
 
@@ -295,9 +295,9 @@ $breakpoints: (
       }
       &__send-img {
         position: absolute;
-        top: 50%;
+        top: 30%; // prior: 50% for adapting the new input
         left: 0.5rem;
-        transform: translateY(-50%);
+        transform: translateY(-30%); // prior: 50% for adapting the new input
         width: 2.3rem;
         cursor: pointer;
 
@@ -307,9 +307,9 @@ $breakpoints: (
       }
       &__send-emoji {
         position: absolute;
-        top: 50%;
+        top: 30%;
         right: 3.2rem;
-        transform: translateY(-50%);
+        transform: translateY(-30%);
         width: 2.3rem;
         cursor: pointer;
 

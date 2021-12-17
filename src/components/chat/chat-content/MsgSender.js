@@ -4,6 +4,9 @@ import useContext from "context";
 import debounce from "utils/performance/debounce";
 import getId from "utils/getId";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ChatPhotoSender from "./chat-photo-sender/ChatPhotoSender";
+
+const isSmall = window.Helper.isSmallScreen();
 
 export default function MsgSender({
     newMsg,
@@ -15,6 +18,9 @@ export default function MsgSender({
     tempLastPanelMsg,
     bot = {},
     chatDarkMode,
+    chatUserId,
+    firstMsgTodayDate,
+    role,
 }) {
     const [typingData, setTypingData] = useState({
         isUserTyping: null,
@@ -146,6 +152,10 @@ export default function MsgSender({
         </section>
     );
 
+    const handleNewImg = (newImgData) => {
+        saveNewMsg(null, newImgData);
+    };
+
     // bot typing is for the own user and doesn't need verify roomId
     return (
         <Fragment>
@@ -158,7 +168,12 @@ export default function MsgSender({
                 isBot={bot.typingShow}
             />
             <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3 mb-2">
-                <div className="custom-form__send-wrapper shadow-field">
+                <div
+                    className="custom-form__send-wrapper shadow-field"
+                    style={{
+                        bottom: isSmall ? "-20px" : undefined,
+                    }}
+                >
                     <textarea
                         style={{
                             border: "0.2px solid grey",
@@ -182,22 +197,14 @@ export default function MsgSender({
                         placeholder=""
                         autoComplete="off"
                     />
-                    <div
-                        className={`${
-                            disabled ? "disabled-link" : ""
-                        } custom-form__send-img`}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="svg-icon svg-icon--send-img"
-                            viewBox="0 0 45.7 45.7"
-                        >
-                            <path
-                                d="M6.6,45.7A6.7,6.7,0,0,1,0,39.1V6.6A6.7,6.7,0,0,1,6.6,0H39.1a6.7,6.7,0,0,1,6.6,6.6V39.1h0a6.7,6.7,0,0,1-6.6,6.6ZM39,4H6.6A2.6,2.6,0,0,0,4,6.6V39.1a2.6,2.6,0,0,0,2.6,2.6H39.1a2.6,2.6,0,0,0,2.6-2.6V6.6A2.7,2.7,0,0,0,39,4Zm4.7,35.1Zm-4.6-.4H6.6a2.1,2.1,0,0,1-1.8-1.1,2,2,0,0,1,.3-2.1l8.1-10.4a1.8,1.8,0,0,1,1.5-.8,2.4,2.4,0,0,1,1.6.7l4.2,5.1,6.6-8.5a1.8,1.8,0,0,1,1.6-.8,1.8,1.8,0,0,1,1.5.8L40.7,35.5a2,2,0,0,1,.1,2.1A1.8,1.8,0,0,1,39.1,38.7Zm-17.2-4H35.1l-6.5-8.6-6.5,8.4C22,34.6,22,34.7,21.9,34.7Zm-11.2,0H19l-4.2-5.1Z"
-                                fill="#f68b3c"
-                            />
-                        </svg>
-                    </div>
+                    <ChatPhotoSender
+                        disabled={disabled}
+                        role={role}
+                        currRoomId={roomId}
+                        from={chatUserId}
+                        firstMsgTodayDate={firstMsgTodayDate}
+                        callback={handleNewImg}
+                    />
                     <button
                         type="submit"
                         className={`custom-form__send-submit ${

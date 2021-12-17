@@ -1,6 +1,7 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { calendar, getLocalHour } from "utils/dates/dateFns";
 import getItems from "init/lStorage";
+import ModalFullContent from "components/modals/ModalFullContent";
 
 const [chatUserId] = getItems("global", ["chatUserId"]);
 
@@ -13,13 +14,7 @@ export default function ChatBubbles({ msgList = [] }) {
                         ? []
                         : removeObjDuplicate({ list: msgList }).map((data) => {
                               const { from, content } = data;
-                              const bubble = pickBubble({ from });
-                              const {
-                                  msgId,
-                                  msgDate,
-                                  firstMsgTodayDate,
-                                  msg,
-                              } = content;
+                              const { msgId, firstMsgTodayDate } = content;
 
                               return (
                                   <li key={msgId} className="position-relative">
@@ -44,22 +39,7 @@ export default function ChatBubbles({ msgList = [] }) {
                                               {calendar(firstMsgTodayDate)}
                                           </div>
                                       )}
-                                      <div
-                                          className={`chat__bubble chat__bubble--${bubble} shadow-field`}
-                                      >
-                                          {msg && msg.trim()}
-                                          <span
-                                              className="chat__bubble--b-time"
-                                              style={{
-                                                  color:
-                                                      bubble === "me"
-                                                          ? "grey"
-                                                          : "white",
-                                              }}
-                                          >
-                                              {getLocalHour(msgDate)}
-                                          </span>
-                                      </div>
+                                      <SelectedMsgType data={data} />
                                   </li>
                               );
                           })}
@@ -68,6 +48,120 @@ export default function ChatBubbles({ msgList = [] }) {
         </Fragment>
     );
 }
+
+// COMP
+function SelectedMsgType({ data }) {
+    const [openImage, setOpenImagem] = useState(false);
+    const { from, content } = data;
+
+    const handleFullClose = () => {
+        setOpenImagem(false);
+    };
+
+    const { msgType, msgDate, msg } = content;
+    const isImg = msgType === "img";
+
+    const bubble = pickBubble({ from });
+
+    // TYPES
+    const text = (
+        <div className={`chat__bubble chat__bubble--${bubble} shadow-field`}>
+            {msg && msg.trim()}
+            <span
+                className="chat__bubble--b-time"
+                style={{
+                    color: bubble === "me" ? "grey" : "white",
+                }}
+            >
+                {getLocalHour(msgDate)}
+            </span>
+        </div>
+    );
+
+    const img = (
+        <div
+            onClick={() => setOpenImagem(msg)}
+            className={`position-relative chat__bubble chat__bubble--${bubble} chat__img shadow-field`}
+        >
+            <img
+                src={msg}
+                height="auto"
+                width={250}
+                alt="imagem suporte fiddelize"
+            />
+            <span
+                className="text-pill text-nowrap bubble-img-timer position-absolute"
+                style={{
+                    bottom: 10,
+                    right: 10,
+                    color: "white",
+                }}
+            >
+                {getLocalHour(msgDate)}
+            </span>
+            <style jsx>
+                {`
+                    .bubble-img-timer {
+                        font-size: 12px;
+                        background-color: rgba(26, 26, 26, 0.67);
+                    }
+
+                    .chat__img {
+                        //min-height: 250px;
+                        padding: 5px !important;
+                    }
+
+                    .chat__img img {
+                        border-radius: 15px;
+                    }
+                `}
+            </style>
+            {openImage && (
+                <ModalFullContent
+                    contentComp={
+                        <FullImg closeImg={handleFullClose} src={openImage} />
+                    }
+                    fullOpen={openImage}
+                    setFullOpen={handleFullClose}
+                    backgroundColor="transparent"
+                    overflowY="hidden"
+                />
+            )}
+        </div>
+    );
+
+    return isImg ? img : text;
+}
+
+function FullImg({ src, closeImg }) {
+    useEffect(() => {
+        document.body.addEventListener("click", closeImg, true);
+    }, []);
+
+    return (
+        <section className="chat-full-img enabledLink">
+            <img
+                src={src}
+                className="animated fadeInUp"
+                alt="imagem inteira chat"
+                width="100%"
+                height="auto"
+            />
+            <style jsx>
+                {`
+                    .chat-full-img {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        height: 100%;
+                    }
+                `}
+            </style>
+        </section>
+    );
+}
+// END COMP
 
 // HELPERS
 function removeObjDuplicate({ list = [], filterId = "msgId", newObj }) {

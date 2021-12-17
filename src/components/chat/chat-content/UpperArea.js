@@ -132,7 +132,12 @@ function ChatMemberInfo({
 
     const showBtnActions = () => (
         <div className="chat__actions mr-2 ">
-            <ul className="m-0">
+            <ul
+                className="m-0 position-relative"
+                style={{
+                    right: "45px",
+                }}
+            >
                 <li
                     className="chat__details d-flex d-xl-none"
                     onClick={handleOnClick}
