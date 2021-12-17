@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { CLIENT_URL } from "config/clientUrl";
+import { ROOT } from "api/root";
 import getItems, { setItems } from "init/lStorage";
 import showToast from "components/toasts";
 
 export default function getInitSocket({ auth, query, namespace }) {
+    console.log("ROOT", ROOT);
     // every namespace should includes nsp before the actual name. e.g nspSupport
-    const URL = namespace ? `${CLIENT_URL}/${namespace}` : CLIENT_URL;
+    const URL = namespace ? `${ROOT}/${namespace}` : CLIENT_URL;
     const socket = io(URL, {
         // url/root from frontend like localhost:3000 window.location is the default "http://yourdomain.com";
         auth,
@@ -17,6 +18,7 @@ export default function getInitSocket({ auth, query, namespace }) {
         // transports: ['websocket'],  // https://stackoverflow.com/a/52180905/8987128
         // upgrade: false,
     });
+    console.log("socket INITIALIZED", socket);
 
     return socket;
 }

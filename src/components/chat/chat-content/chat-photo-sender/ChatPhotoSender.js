@@ -18,8 +18,6 @@ export default function ChatPhotoSender({
 
         // multiple photos not implemented
         const imgDataList = e.target.files[0];
-        console.log("e.target.files", e.target.files);
-        console.log("imgDataList", imgDataList);
 
         const handleDataForm = () => {
             const formData = new FormData();
