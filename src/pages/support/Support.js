@@ -47,6 +47,8 @@ export default function Support() {
         success: isFiddelizeTeam || chatPreventMainPanel,
         chatUserName: null,
     });
+    const [disabled, setDisabled] = useState(false);
+
     const { success, chatUserName, subject, selected } = data;
     const { name = null, role = "visitante", userId } = useData();
 
@@ -68,6 +70,7 @@ export default function Support() {
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     const startNewSupport = async () => {
+        setDisabled(true);
         if (!chatUserName && !storedUserName)
             return showToast("Informe seu nome e uma categoria de assunto");
 
@@ -114,6 +117,7 @@ export default function Support() {
             socket.emit("updateBizRooms");
             goChatPanel();
         }, 1500);
+
         return "started";
     };
 
@@ -197,6 +201,7 @@ export default function Support() {
                         <div className="ml-3">
                             <ButtonFab
                                 title="Continuar"
+                                disabled={disabled}
                                 backgroundColor="var(--themeSDark)"
                                 onClick={startNewSupport}
                                 position="relative"

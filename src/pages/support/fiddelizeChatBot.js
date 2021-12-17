@@ -59,7 +59,7 @@ function pickBotMsg(data) {
 // HELPERS
 function chooseMsg({ userGreeting, userName, subject }) {
     // Check if working hours, if not send a message that attendance is not available and will reach out as soon as possible
-    const unavailableMsg = `Olá ${userName}! O suporte Fiddelize funciona das 9 às 18 horas de Segunda a Domingo. Deixe sua mensagem e responderemos logo.`;
+    const unavailableMsg = `Olá ${userName}! O suporte Fiddelize funciona das 9 às 18 horas de Segunda a Sábado. Deixe sua mensagem e responderemos logo.`;
     if (!isWorkingHour()) return unavailableMsg;
 
     if (subject === "suggestion")

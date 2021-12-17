@@ -70,7 +70,8 @@ export default function ChatPhotoSender({
             url: setChatSupportImg(),
             body: handleDataForm(),
             fullCatch: true,
-        }).catch(() => {
+        }).catch((err) => {
+            console.log("err CHAT PHOTO SENDER", err);
             setLoading(false);
             showToast("Algo deu errado. Verifique sua conexão.", {
                 type: "error",

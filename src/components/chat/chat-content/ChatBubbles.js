@@ -87,6 +87,9 @@ function SelectedMsgType({ data }) {
                 src={msg}
                 height="auto"
                 width={250}
+                style={{
+                    cursor: "pointer",
+                }}
                 alt="imagem suporte fiddelize"
             />
             <span
@@ -144,6 +147,9 @@ function FullImg({ src, closeImg }) {
                 src={src}
                 className="animated fadeInUp"
                 alt="imagem inteira chat"
+                style={{
+                    cursor: "pointer",
+                }}
                 width="100%"
                 height="auto"
             />
