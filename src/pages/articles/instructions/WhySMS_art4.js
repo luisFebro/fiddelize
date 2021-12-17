@@ -283,7 +283,7 @@ const Body = () => {
                     rapidez de acesso em qualquer velocidade de conexão com a
                     internet
                 </strong>
-                . Inclusive você pode acessar offline.
+                .
             </p>
 
             <ShowPicture
