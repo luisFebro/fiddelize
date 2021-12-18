@@ -3,7 +3,7 @@ import { calendar } from "utils/dates/dateFns";
 import PhotoBtn from "./photo/PhotoBtn";
 
 export default function MonthlyCostsCard({ data }) {
-    const { _id, desc, value, receiptImg, createdAt } = data;
+    const { _id, desc, value, createdAt, receiptImg } = data;
 
     const investedValue = convertToReal(value, { moneySign: true });
     const registerDate = createdAt && calendar(createdAt);
@@ -14,7 +14,7 @@ export default function MonthlyCostsCard({ data }) {
             savedImg: receiptImg,
         };
 
-        return <PhotoBtn modalData={uploadData} />;
+        return <PhotoBtn modalData={{ ...uploadData }} />;
     };
 
     return (

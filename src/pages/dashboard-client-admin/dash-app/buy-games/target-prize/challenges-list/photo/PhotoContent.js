@@ -5,7 +5,12 @@ import { useBizData } from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { setTargetPrizeImg } from "api";
 
-export default function PhotoContent({ modalData, handleCloseModal }) {
+export default function PhotoContent({
+    modalData,
+    handleCloseModal,
+    newImg,
+    setNewImg,
+}) {
     const {
         savedPrizeImg, // when the user already uploaded
         challId,
@@ -20,9 +25,10 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
     } = useBizData();
 
     useEffect(() => {
-        if (!savedPrizeImg) return;
-        setPrizeImg(savedPrizeImg);
-    }, [savedPrizeImg]);
+        // first check if there is a newImg set here. Otherwise if savedImg is null, it will returns falsy result
+        if (!newImg && !savedPrizeImg) return;
+        setPrizeImg(newImg || savedPrizeImg);
+    }, [savedPrizeImg, newImg]);
 
     const showTitle = () => (
         <div className="mt-4 mx-3 text-purple">
@@ -46,6 +52,9 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
     const handleUpload = (result) => {
         const removedImg = !result.uploadedPic;
         setPrizeImg(removedImg ? null : result.img);
+
+        if (removedImg) setNewImg(null);
+        else setNewImg(result.img);
     };
 
     const showMainContent = () => {
@@ -121,7 +130,7 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
                         tags: "cliente-admin",
                         backup: false,
                     }}
-                    alreadyUploaded={Boolean(savedPrizeImg)}
+                    alreadyUploaded={Boolean(prizeImg)}
                 />
             </div>
             {!prizeImg && (

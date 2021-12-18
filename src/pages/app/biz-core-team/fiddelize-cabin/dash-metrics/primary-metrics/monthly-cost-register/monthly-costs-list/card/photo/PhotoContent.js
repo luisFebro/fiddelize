@@ -4,7 +4,12 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { setBizReceiptImg } from "api";
 import { getCurrMonth } from "utils/dates/dateFns";
 
-export default function PhotoContent({ modalData, handleCloseModal }) {
+export default function PhotoContent({
+    modalData,
+    handleCloseModal,
+    newImg,
+    setNewImg,
+}) {
     const {
         savedImg, // when the user already uploaded
         imgId,
@@ -16,9 +21,10 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
     const [targetImg, setTargetImg] = useState(null);
 
     useEffect(() => {
-        if (!savedImg) return;
-        setTargetImg(savedImg);
-    }, [savedImg]);
+        // first check if there is a newImg set here. Otherwise if savedImg is null, it will returns falsy result
+        if (!newImg && !savedImg) return;
+        setTargetImg(newImg || savedImg);
+    }, [savedImg, newImg]);
 
     const showTitle = () => (
         <div className="mt-4 mx-3 text-purple">
@@ -37,6 +43,9 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
     const handleUpload = (result) => {
         const removedImg = !result.uploadedPic;
         setTargetImg(removedImg ? null : result.img);
+
+        if (removedImg) setNewImg(null);
+        else setNewImg(result.img);
     };
 
     const showMainContent = () => {
@@ -105,7 +114,7 @@ export default function PhotoContent({ modalData, handleCloseModal }) {
                         year,
                         month,
                     }}
-                    alreadyUploaded={Boolean(savedImg)}
+                    alreadyUploaded={Boolean(targetImg)}
                 />
             </div>
         </section>

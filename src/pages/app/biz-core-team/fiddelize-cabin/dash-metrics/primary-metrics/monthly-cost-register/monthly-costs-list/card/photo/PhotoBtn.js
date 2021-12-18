@@ -13,6 +13,7 @@ const AsyncContent = Load({
 
 export default function PhotoBtn({ modalData = {} }) {
     const [fullOpen, setFullOpen] = useState(false);
+    const [newImg, setNewImg] = useState(false);
     const { savedImg } = modalData;
 
     const handleFullOpen = () => {
@@ -26,11 +27,11 @@ export default function PhotoBtn({ modalData = {} }) {
     const Icon = <AddAPhotoIcon style={{ fontSize: 30 }} />;
     return (
         <Fragment>
-            {savedImg ? (
+            {newImg || savedImg ? (
                 <section className="container-center-col">
                     <img
                         className="shadow-babadoo"
-                        src={savedImg}
+                        src={newImg || savedImg}
                         height="auto"
                         width={50}
                         alt=""
@@ -60,6 +61,8 @@ export default function PhotoBtn({ modalData = {} }) {
                     <AsyncContent
                         modalData={modalData}
                         handleCloseModal={handleFullClose}
+                        setNewImg={setNewImg}
+                        newImg={newImg}
                     />
                 }
                 fullOpen={fullOpen}

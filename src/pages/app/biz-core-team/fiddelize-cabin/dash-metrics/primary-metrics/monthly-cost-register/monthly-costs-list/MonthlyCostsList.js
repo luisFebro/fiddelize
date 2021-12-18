@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import useAPIList, { readFiddelizeCosts } from "api/useAPIList";
-import MonthlyCostsCard from "./card/MonthlyCostsCard";
 import convertToReal from "utils/numbers/convertToReal";
+import MonthlyCostsCard from "./card/MonthlyCostsCard";
 
 export default function MonthlyCostsList({ newCardSet, allTimeCostAvgAmount }) {
     const {
@@ -17,16 +17,13 @@ export default function MonthlyCostsList({ newCardSet, allTimeCostAvgAmount }) {
         params: {
             list: true,
         },
+        trigger: true,
     });
 
     const finalList = [...newCardSet, ...list];
     const listTotal = !loading ? finalList.length : 0;
     const plural = listTotal > 1 ? "s" : "";
     const gotRegisters = Boolean(newCardSet.length || listTotal);
-
-    const listMap = finalList.map((cost) => (
-        <MonthlyCostsCard key={cost._id} data={cost} />
-    ));
 
     return (
         <section className="mx-3">
@@ -46,7 +43,11 @@ export default function MonthlyCostsList({ newCardSet, allTimeCostAvgAmount }) {
                     </Fragment>
                 )}
             </h2>
-            <section className="mt-3 mb-5">{listMap}</section>
+            <section className="mt-3 mb-5">
+                {finalList.map((cost) => (
+                    <MonthlyCostsCard key={cost._id} data={cost} />
+                ))}
+            </section>
             {!gotRegisters && (
                 <h2
                     className="text-center text-grey text-normal font-weight-bold"

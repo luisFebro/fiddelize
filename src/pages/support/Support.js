@@ -70,11 +70,11 @@ export default function Support() {
     const goChatPanel = () => setData((prev) => ({ ...prev, success: true }));
 
     const startNewSupport = async () => {
-        setDisabled(true);
         if (!chatUserName && !storedUserName)
             return showToast("Informe seu nome e uma categoria de assunto");
 
         if (!selected) return showToast("Favor selecione um assunto");
+        setDisabled(true);
 
         // if user is loggedIn, use his/her userId instead. Or secondly, if it is the second time a visitor is entering, use his/her prior id to get his/her history
         const newChatRoomId = `room${getId()}`;

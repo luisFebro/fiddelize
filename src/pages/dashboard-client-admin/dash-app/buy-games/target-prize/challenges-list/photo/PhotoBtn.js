@@ -6,7 +6,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import UpgradeRequiredModal from "components/pro/upgrade-required/UpgradeRequiredModal.js";
 import usePro from "init/pro";
 
-const AsyncContent = Load({
+const AsyncPhotoContent = Load({
     loader: () =>
         import(
             "./PhotoContent" /* webpackChunkName: "target-prize-send-photo-full-page-lazy" */
@@ -16,6 +16,7 @@ const AsyncContent = Load({
 export default function PhotoBtn({ modalData = {} }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [proModal, setProModal] = useState(false);
+    const [newImg, setNewImg] = useState(false);
     const { savedPrizeImg, gotSomePic } = modalData;
 
     const { plan } = usePro();
@@ -33,11 +34,11 @@ export default function PhotoBtn({ modalData = {} }) {
     const Icon = <AddAPhotoIcon style={{ fontSize: 30 }} />;
     return (
         <Fragment>
-            {savedPrizeImg ? (
+            {newImg || savedPrizeImg ? (
                 <section className="container-center-col">
                     <img
                         className="shadow-babadoo"
-                        src={savedPrizeImg}
+                        src={newImg || savedPrizeImg}
                         height="auto"
                         width={50}
                         alt=""
@@ -64,8 +65,10 @@ export default function PhotoBtn({ modalData = {} }) {
             )}
             <ModalFullContent
                 contentComp={
-                    <AsyncContent
+                    <AsyncPhotoContent
                         modalData={modalData}
+                        newImg={newImg}
+                        setNewImg={setNewImg}
                         handleCloseModal={handleFullClose}
                     />
                 }
