@@ -12,3 +12,8 @@ const prodLink = IS_STAGING
 
 exports.IS_STAGING = IS_STAGING;
 exports.ROOT = IS_PROD ? prodLink : "http://localhost:5000/api";
+
+const getRootDomain = () =>
+    IS_PROD ? prodLink.replace("/api", "") : "http://localhost:5000";
+
+exports.ROOT_DOMAIN = getRootDomain();
