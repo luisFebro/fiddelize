@@ -7,9 +7,13 @@ import showToast from "components/toasts";
 
 export default function getInitSocket({ namespace }) {
     // every namespace should includes nsp before the actual name. e.g nspSupport
-    const URL = "/";
+    const URL = "https://fiddelize.herokuapp.com";
     // const URL = `/${namespace}`; // https://fiddelize.com.br
     const socket = io(URL, {
+        // withCredentials: true,
+        // extraHeaders: {
+        //     "Access-Control-Allow-Origin": "*",
+        // }
         // url/root is the / or namespace, window.location is the default.
         // path: "/socket.io",
         // autoConnect: false,
