@@ -86,6 +86,7 @@ function SelectedMsgType({ data }) {
             <img
                 src={msg}
                 height="auto"
+                minHeight={100}
                 width={250}
                 style={{
                     cursor: "pointer",
@@ -110,7 +111,7 @@ function SelectedMsgType({ data }) {
                     }
 
                     .chat__img {
-                        //min-height: 250px;
+                        min-height: 100px;
                         padding: 5px !important;
                     }
 
