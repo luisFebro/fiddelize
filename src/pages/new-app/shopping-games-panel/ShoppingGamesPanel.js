@@ -181,7 +181,7 @@ const showSysExplanation = () => (
                 2) Muito se fala em atrair clientes com Marketing, mas já
                 pensou em suas estratégias de estimular os clientes a
                 continuar comprando? Isso, o prêmio é seu investimento de
-                Marketing de relacionamento para sua clientela ativa.
+                marketing de benefícios para sua clientela ativa.
                 <br />
                 <br />
                 3) Sai bem mais em conta do que o Marketing para atrair

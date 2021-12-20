@@ -90,8 +90,8 @@ function AsyncAddCustomersContent({ modalData, handleFullClose }) {
                 height="auto"
             />
             <p className="mx-3 text-normal text-purple">
-                Seus clientes no próximo nível do marketing de relacionamento
-                com destaques como <strong>moeda digital</strong> para troca de
+                Seus clientes no próximo nível do marketing de benefícios com
+                destaques como <strong>moeda digital</strong> para troca de
                 benecífios, <strong>cartão digital e jogos de compra</strong>.
                 Vão ter mais motivos para voltar a comprar do seu negócio.
                 Invista em seus clientes!

@@ -4,14 +4,14 @@ import { ROOT_DOMAIN } from "api/root";
 import { IS_DEV } from "config/clientUrl";
 import getItems, { setItems } from "init/lStorage";
 import showToast from "components/toasts";
-console.log("IS_DEV", IS_DEV);
 
 export default function getInitSocket({ auth, query, namespace }) {
     // every namespace should includes nsp before the actual name. e.g nspSupport
-    const URL = `/${namespace}`;
+    const URL = `https://fiddelize.com.br/${namespace}`;
     const socket = io(URL, {
         // url/root is the / or namespace, window.location is the default.
-        path: IS_DEV ? "/socket.io" : `${ROOT_DOMAIN}/socket.io`, //, // path is the server side
+        path: "/socket.io",
+        // path: IS_DEV ? "/socket.io" : `${ROOT_DOMAIN}/socket.io`, //, // path is the server side
         auth,
         query,
         autoConnect: false,

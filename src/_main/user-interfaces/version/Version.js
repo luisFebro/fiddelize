@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.0.90";
+const latestVersion = "v5.0.95";
 // FINAL SUBPROJECTS BEFORE LAUNCHING: // updating app
 // biz app revised v2 - up to 21 nov (DONE at 20 nov)
 // all QA tweaks and challList for discountBack up to 23 nov (DONE at 24 nov)

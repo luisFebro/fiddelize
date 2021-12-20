@@ -116,7 +116,7 @@ const text2 = (
                     negócio usando tecnologia;
                 </li>
                 <li>
-                    <strong>Marketing de relacionamento</strong> para divulgar e
+                    <strong>marketing de benefícios</strong> para divulgar e
                     engajar com sua clientela;
                 </li>
                 <li>

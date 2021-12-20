@@ -51,7 +51,7 @@ const Footer = ({ location }) => {
                 </p>
                 <p>
                     Somos uma martech especializada em{" "}
-                    <strong>marketing</strong> de relacionamento e{" "}
+                    <strong>marketing</strong> de benefícios e{" "}
                     <strong>gestão</strong> de clubes de compra.
                 </p>
             </div>
