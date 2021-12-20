@@ -3,7 +3,7 @@ import { IS_DEV } from "../../config/clientUrl";
 
 // This allow console.log only on development environment and disabled otherwise.
 export default function switchConsoleLogs() {
-    const debug = true; //IS_DEV;
+    const debug = IS_DEV;
 
     if (debug === false) {
         if (typeof window.console === "undefined") {
