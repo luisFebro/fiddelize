@@ -35,15 +35,15 @@ export default function QrCodeScanner() {
     const showTitle = () => {
         const { newImg, width, height } = removeImgFormat(null);
         return (
-            <section className="container-center-col mt-5">
+            <section className="container-center-col">
                 <img src={newImg} width={width} height={height} alt="logo" />
-                <h1 className="mt-5 text-subtitle font-weight-bold text-center">
+                <h1 className="text-subtitle font-weight-bold text-center">
                     Escaneador QR
                 </h1>
                 <p className="mb-5 text-normal text-center">
                     Escaneie qualquer código QR
                     <br />
-                    (quick response code)
+                    <span className="d-none">(quick response code)</span>
                 </p>
             </section>
         );
