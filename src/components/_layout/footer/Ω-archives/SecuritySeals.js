@@ -17,8 +17,8 @@ export default function SecuritySeals() {
                         <br />
                         <a
                             rel="noopener noreferrer"
-                            href="https://www.symantec.com/pt/br/ssl-certificates"
                             target="_blank"
+                            href="https://www.symantec.com/pt/br/ssl-certificates"
                             style={{
                                 color: "#000000",
                                 textDecoration: "none",

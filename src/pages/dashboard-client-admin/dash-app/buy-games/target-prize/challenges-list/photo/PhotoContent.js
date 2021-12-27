@@ -11,11 +11,7 @@ export default function PhotoContent({
     newImg,
     setNewImg,
 }) {
-    const {
-        savedPrizeImg, // when the user already uploaded
-        challId,
-        targetPoints,
-    } = modalData;
+    const { challId, targetPoints } = modalData;
 
     const [prizeImg, setPrizeImg] = useState(null);
     const {
@@ -25,10 +21,8 @@ export default function PhotoContent({
     } = useBizData();
 
     useEffect(() => {
-        // first check if there is a newImg set here. Otherwise if savedImg is null, it will returns falsy result
-        if (!newImg && !savedPrizeImg) return;
-        setPrizeImg(newImg || savedPrizeImg);
-    }, [savedPrizeImg, newImg]);
+        if (newImg) setPrizeImg(newImg);
+    }, [newImg]);
 
     const showTitle = () => (
         <div className="mt-4 mx-3 text-purple">
@@ -50,6 +44,7 @@ export default function PhotoContent({
     );
 
     const handleUpload = (result) => {
+        console.log("result HANDLEUPLOAD", result);
         const removedImg = !result.uploadedPic;
         setPrizeImg(removedImg ? null : result.img);
 

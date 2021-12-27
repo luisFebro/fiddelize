@@ -143,7 +143,7 @@ function Navbar({ history, location }) {
         const handleLogoClick = () => {
             if (isClientAdmin && locationNow.includes("pontos-de-compra"))
                 return "/app?client-admin=1";
-            return isApp ? "/app" : "/";
+            return "/app";
         };
 
         const logoSrc =

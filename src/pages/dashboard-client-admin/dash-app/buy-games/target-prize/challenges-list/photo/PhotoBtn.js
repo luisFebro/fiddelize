@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -21,6 +21,10 @@ export default function PhotoBtn({ modalData = {} }) {
 
     const { plan } = usePro();
 
+    useEffect(() => {
+        if (savedPrizeImg) setNewImg(savedPrizeImg);
+    }, [savedPrizeImg]);
+
     const handleFullOpen = () => {
         const isFreeUserWithOnePic = gotSomePic && plan === "gratis";
         if (isFreeUserWithOnePic) return setProModal(true);
@@ -34,11 +38,11 @@ export default function PhotoBtn({ modalData = {} }) {
     const Icon = <AddAPhotoIcon style={{ fontSize: 30 }} />;
     return (
         <Fragment>
-            {newImg || savedPrizeImg ? (
+            {newImg ? (
                 <section className="container-center-col">
                     <img
                         className="shadow-babadoo"
-                        src={newImg || savedPrizeImg}
+                        src={newImg}
                         height="auto"
                         width={50}
                         alt=""

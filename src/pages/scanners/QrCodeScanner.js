@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import useQrScanner from "hooks/media/useQrScanner";
 import { prerenderAudio, playAudio } from "hooks/media/usePlayAudio";
-import copyText from "utils/document/copyText";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import scrollIntoView from "utils/document/scrollIntoView";
+// import copyText from "utils/document/copyText";
 
 export default function QrCodeScanner() {
     const [newQr, setNewQr] = useState("");
@@ -50,20 +50,27 @@ export default function QrCodeScanner() {
     };
 
     const showCopyButton = () => {
-        const handleCopy = () => {
-            copyText(newQr, { msg: "Código QR copiado!" });
-        };
+        // const handleCopy = () => {
+        //     copyText(newQr, { msg: "Código QR copiado!" });
+        // };
 
         return (
             <div className="container-center">
-                <ButtonFab
-                    title="copiar"
-                    position="relative"
-                    onClick={handleCopy}
-                    size="large"
-                    backgroundColor="var(--themeSDark)"
-                    variant="extended"
-                />
+                <a
+                    rel="noopener noreferrer"
+                    target="_self"
+                    href={newQr || "https://google.com"}
+                    className="no-text-decoration"
+                >
+                    <ButtonFab
+                        title="Acessar"
+                        position="relative"
+                        onClick={null}
+                        size="large"
+                        backgroundColor="var(--themeSDark)"
+                        variant="extended"
+                    />
+                </a>
             </div>
         );
     };

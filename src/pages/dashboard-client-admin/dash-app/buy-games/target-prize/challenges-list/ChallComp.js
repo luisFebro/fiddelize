@@ -277,7 +277,7 @@ export default function ChallComp({
                     <style jsx global>
                         {`
                             .target-prize-photo-btn {
-                                top: "-60px";
+                                top: -60px;
                                 right: -30px;
                             }
                         `}

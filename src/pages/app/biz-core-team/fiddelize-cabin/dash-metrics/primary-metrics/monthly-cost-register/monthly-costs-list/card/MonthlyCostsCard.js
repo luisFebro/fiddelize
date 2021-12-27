@@ -27,7 +27,7 @@ export default function MonthlyCostsCard({ data }) {
                 <style jsx global>
                     {`
                         .target-prize-photo-btn {
-                            top: ${receiptImg ? "10px;" : "35px;"}
+                            top: ${receiptImg ? "5px;" : "35px;"}
                             right: 30px;
                         }
                     `}

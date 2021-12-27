@@ -27,7 +27,7 @@ export default function BuyGamesList({ setComp }) {
     }
 
     let allAvailableGamesCount = 0;
-    const gamesFromDb = data.clientAdminData.games;
+    const gamesFromDb = data && data.clientAdminData.games;
     Object.keys(gamesFromDb).forEach((gameName) => {
         if (!gamesFromDb || typeof gamesFromDb[gameName].on !== "boolean")
             return;
