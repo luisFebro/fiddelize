@@ -351,7 +351,7 @@ function AsyncPointsPanel({ location }) {
             await resetAddPtsData();
             window.location.href = path;
         } else {
-            window.location.href = "/acesso/verificacao";
+            window.location.href = "/app"; //"/acesso/verificacao";
             disconnect();
         }
     };

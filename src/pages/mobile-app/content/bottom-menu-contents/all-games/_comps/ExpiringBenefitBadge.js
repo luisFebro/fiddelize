@@ -40,7 +40,7 @@ export default function ExpiringBenefitBadge() {
     return (
         <Fragment>
             <div style={styles.deadlineBoard}>
-                {benefitsExpDays === 0 && (
+                {finalExpDaysCount === 0 && ( // prior: benefitsExpDate
                     <p className="m-0 mx-3 text-normal text-white text-shadow text-center text-nowrap">
                         Não expira
                     </p>
