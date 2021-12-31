@@ -36,6 +36,13 @@ export default function Icon({
     );
 }
 
+/* ICON LIST - for searching
+support
+qrCodeScannerIcon / qrCodeIcon
+balloonPop
+
+ */
+
 function getIcon(type) {
     if (type === "support") {
         return (

@@ -5,9 +5,10 @@ import getAPI, { setChallTypeData } from "api";
 import showToast from "components/toasts";
 import ChallComp from "./ChallComp";
 import AddNewChallBtn from "./add-new-chall/AddNewChallBtn";
+import BalloonPopFaq from "./BalloonPopFaq";
 
-export default function ChallengesList({ challList, loading, setOptionData }) {
-    const { bizId } = useBizData();
+export default function BenefitsList({ challList, loading, setOptionData }) {
+    const { bizId, bizLinkName } = useBizData();
 
     const [challengesArray, setChallengesArray] = useState([]);
 
@@ -30,7 +31,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
 
         if (updateOnlyLocalItem) {
             await handleChallTypeData({
-                gameName: "discountBack",
+                gameName: "balloonPop",
                 bizId,
             });
 
@@ -50,14 +51,14 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         }
 
         const dataToSend = {
-            "clientAdminData.games.discountBack.challList":
+            "clientAdminData.games.balloonPop.beneList":
                 updatedData || newModifiedArray,
         };
 
         await Promise.all([
             deleteThisId
                 ? handleChallTypeData({
-                      gameName: "discountBack",
+                      gameName: "balloonPop",
                       bizId,
                       removalId: deleteThisId,
                   })
@@ -66,7 +67,7 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
         ]);
 
         const toastMsg = deleteThisId
-            ? "Tipo de desafio excluído com sucesso!"
+            ? "Benefício excluído com sucesso!"
             : "Alterações salvas!";
         if (needMsg) showToast(toastMsg, { type: "success" });
         return null;
@@ -91,33 +92,36 @@ export default function ChallengesList({ challList, loading, setOptionData }) {
             )}
             {!loading && !challengesArray.length && (
                 <p className="text-center text-grey text-normal font-weight-bold my-5">
-                    Nenhum desafio adicionado.
+                    Nenhum benefício adicionado.
                 </p>
             )}
             <p className={txtStyle}>
                 <span className="text-subtitle font-weight-bold">
-                    {challengesArray.length} desafios
+                    {challengesArray.length} benefícios
                 </span>{" "}
-                ativos:
+                adicionados:
             </p>
             {challengesArray.map((chall, ind) => (
-                <div key={chall.id} className="mt-3">
+                <div key={chall.id} className="mt-5">
                     {ind !== 0 && <p className="mb-3" />}
-                    <p className={txtStyle}>tipo {ind + 1}:</p>
                     <ChallComp
-                        currChallNumber={ind + 1}
+                        id={chall.id}
+                        desc={chall.desc}
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}
                         showToast={showToast}
-                        id={chall.id}
-                        perc={chall.perc}
-                        targetPoints={chall.targetPoints}
-                        targetMoney={chall.targetMoney}
                         updateLocalList={updateLocalList}
+                        currChallNumber={ind + 1}
                     />
                 </div>
             ))}
             {showNewPrizeBtn()}
+            <p className="text-normal mx-3 my-5">
+                Acesse o jogo de compra via:
+                <br />
+                https://fiddelize.com/{bizLinkName}/estoure
+            </p>
+            <BalloonPopFaq />
         </div>
     );
 }

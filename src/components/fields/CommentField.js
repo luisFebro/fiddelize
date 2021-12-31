@@ -13,10 +13,13 @@ const getStyles = () => ({
 
 export default function CommentField({
     setValue,
+    name = "buyReport",
     value,
+    rows = 5,
     placeholder = "escreva seu comentário",
     maxLen = 300,
     maxLenColor = "purple",
+    maxLenTxtSize = "0-9",
 }) {
     const styles = getStyles();
 
@@ -25,7 +28,7 @@ export default function CommentField({
             <TextField
                 multiline
                 placeholder={placeholder}
-                rows={5}
+                rows={rows}
                 InputProps={{
                     style: styles.fieldFormValue,
                 }}
@@ -33,7 +36,7 @@ export default function CommentField({
                 inputProps={{
                     maxLength: maxLen,
                 }}
-                name="buyReport"
+                name={name}
                 value={value}
                 onChange={(e) => handleChange(setValue)(e)}
                 onBlur={null}
@@ -43,7 +46,9 @@ export default function CommentField({
             <div
                 className={`mb-3 position-relative text-${maxLenColor} text-left`}
             >
-                <span className="font-site text-em-0-9 font-weight-bold">
+                <span
+                    className={`font-site text-em-${maxLenTxtSize} font-weight-bold`}
+                >
                     {value ? value.length : 0}/{maxLen} characteres
                 </span>
             </div>

@@ -3,10 +3,12 @@ import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CasinoIcon from "@material-ui/icons/Casino";
 import PollIcon from "@material-ui/icons/Poll";
+import BalloonPopIcon from "../../styles/icons/BalloonPopIcon";
 
 export const gameIconsStore = {
     targetPrize: <FontAwesomeIcon style={{ fontSize: 40 }} icon="gift" />,
     discountBack: <LoyaltyIcon style={{ fontSize: 50 }} />,
+    balloonPop: <BalloonPopIcon style={{ fontSize: 50 }} />,
     raffleTicket: <CasinoIcon style={{ fontSize: 50 }} />,
     topCustomers: <PollIcon style={{ fontSize: 50 }} />,
 };

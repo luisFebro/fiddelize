@@ -11,6 +11,7 @@ export default function getRandomArray(array, options = {}) {
     const ind = array.length;
     const randomNum = Math.floor(Math.random() * ind); // 0 to 9 index. select one of the first 10 results from the random array.
 
+    // return only the first random result
     if (selectOne) return sortedArray[randomNum];
 
     return sortedArray;

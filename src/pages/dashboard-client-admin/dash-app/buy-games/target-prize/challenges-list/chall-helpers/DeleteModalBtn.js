@@ -15,6 +15,7 @@ export default function DeleteModalBtn({
     challengeNumber,
     updateLocalList,
     subject = "prêmio",
+    needType = true,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
@@ -33,6 +34,7 @@ export default function DeleteModalBtn({
                         errorMsg={errorMsg}
                         challengeNumber={challengeNumber}
                         subject={subject}
+                        needType={needType}
                     />
                 }
                 fullOpen={fullOpen}
@@ -43,7 +45,7 @@ export default function DeleteModalBtn({
     );
 }
 
-const DeleteContent = ({ subject, errorMsg, challengeNumber }) => {
+const DeleteContent = ({ needType, subject, errorMsg, challengeNumber }) => {
     const txtStyle = "text-normal font-weight-bold text-left mx-3";
 
     return (
@@ -55,8 +57,8 @@ const DeleteContent = ({ subject, errorMsg, challengeNumber }) => {
             ) : (
                 <p className={`${txtStyle} text-purple`}>
                     Confirmado a exclusão de
-                    <br />
-                    {subject} tipo {challengeNumber} ?
+                    {needType ? <br /> : " "}
+                    {subject} {needType ? `tipo ${challengeNumber}` : ""} ?
                 </p>
             )}
         </div>

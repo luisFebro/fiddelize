@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
+import BalloonPopIcon from "styles/icons/BalloonPopIcon";
 
 export default function getGameCardData({
     isAdmin,
@@ -41,6 +42,24 @@ export default function getGameCardData({
             ),
         };
     }
+
+    if (gameName === "balloonPop") {
+        return {
+            nameBr: "Estoure Balão",
+            article: false,
+            concept: null, // handleConcept("balloonPop", { isAdmin }),
+            icon: (
+                <BalloonPopIcon
+                    fill={isDisabled ? "#cad3c87d" : "#ff0"}
+                    style={{
+                        height: "100%",
+                        width: "100%",
+                    }}
+                />
+            ),
+        };
+    }
+
     if (gameName === "raffleTicket") return {};
 
     return {};

@@ -16,6 +16,13 @@ export const AsyncDiscountBackOptions = Load({
         ),
 });
 
+export const AsyncBalloonPopOptions = Load({
+    loader: () =>
+        import(
+            "./balloon-pop/BalloonPopOptions" /* webpackChunkName: "balloon-pop-comp-lazy" */
+        ),
+});
+
 export default function MainBuyGames() {
     const [comp, setComp] = useState({
         name: "",
@@ -31,6 +38,9 @@ export default function MainBuyGames() {
             )}
             {name === "discountBack" && (
                 <AsyncDiscountBackOptions setComp={setComp} {...props} />
+            )}
+            {name === "balloonPop" && (
+                <AsyncBalloonPopOptions setComp={setComp} {...props} />
             )}
         </section>
     );

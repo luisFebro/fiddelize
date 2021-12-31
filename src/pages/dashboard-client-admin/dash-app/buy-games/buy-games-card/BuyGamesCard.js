@@ -5,6 +5,8 @@ import { useBizData } from "init";
 import getGameCardData from "./getGameCardData";
 import "./_Card.scss";
 
+const isSmall = window.Helper.isSmallScreen();
+
 export default function BuyGamesCard(props) {
     const [loading, setLoading] = useState(false);
 
@@ -77,6 +79,7 @@ export default function BuyGamesCard(props) {
         </section>
     );
 
+    const disableArticleBtn = gameName === "balloonPop";
     const showArticleBtn = () => (
         <InstructionBtn mode="modal" article={article} />
     );
@@ -85,9 +88,14 @@ export default function BuyGamesCard(props) {
         <main
             className="col-6 mx-auto mb-4" // not using  col-md-4  col-lg-3 since it is in a modal, only 2 columns of 6 / 6 from 12
         >
-            <section className="position-relative shadow-babadoo card--root">
+            <section
+                className="position-relative shadow-babadoo card--root"
+                style={{
+                    minWidth: isSmall ? undefined : 150,
+                }}
+            >
                 <div className="about-btn position-absolute">
-                    {showArticleBtn()}
+                    {!disableArticleBtn && showArticleBtn()}
                 </div>
                 <div
                     className="img-container p-4 p-sm-3"
