@@ -5,6 +5,7 @@ import formatRelative from "date-fns/formatRelative";
 import format from "date-fns/format";
 import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
+import addMinutes from "date-fns/addMinutes";
 import getHours from "date-fns/getHours";
 import getMinutes from "date-fns/getMinutes";
 import isToday from "date-fns/isToday";
@@ -60,6 +61,7 @@ const getLocalHour = (date) =>
     `${getHours(new Date(date))}:${treatZero(getMinutes(new Date(date)))}`;
 
 // targetDate is inclusive. it will only be expired after the targetDate has passed.
+// in other words, check if a future date is still pending
 const isScheduledDate = (targetDate, options = {}) => {
     const { isDashed = false } = options; // dashed Date = 2020-12-30 format
     if (!targetDate) return null;
@@ -107,6 +109,14 @@ const getCurrMonth = (date = new Date()) => {
     return monthes[indMonth];
 };
 
+const hasPassedDate = (lateDate) => {
+    // Is the first date after the second one?
+    // LESSON: always compare two dates in the same time zone, if the lateDate is UTC, should be converted to local with new Date();
+
+    const currDate = new Date();
+    return isAfter(currDate, new Date(lateDate));
+};
+
 export {
     getCurrMonth,
     dateFnsUtils,
@@ -123,9 +133,11 @@ export {
     isScheduledDate,
     endWeek,
     startWeek,
-    isAfter, // Is the first date after the second one?
+    isAfter,
+    hasPassedDate,
     endMonth,
     setUTCDateTime,
+    addMinutes,
 };
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

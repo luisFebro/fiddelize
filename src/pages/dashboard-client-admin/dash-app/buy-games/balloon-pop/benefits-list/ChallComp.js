@@ -151,13 +151,15 @@ export default function ChallComp({
                 </div>
             ) : (
                 <Fragment>
-                    <DeleteModalBtn
-                        subject="benefício"
-                        id={data.id}
-                        challengeNumber={currChallNumber}
-                        updateLocalList={updateLocalList}
-                        needType={false}
-                    />
+                    {Boolean(currChallNumber >= 3) && (
+                        <DeleteModalBtn
+                            subject="benefício"
+                            id={data.id}
+                            challengeNumber={currChallNumber}
+                            updateLocalList={updateLocalList}
+                            needType={false}
+                        />
+                    )}
                     <EditButton zIndex={1} onClick={() => setEdit(!edit)} />
                 </Fragment>
             )}

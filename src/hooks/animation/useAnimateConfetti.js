@@ -19,8 +19,8 @@ const loadConfetti = async (command) => {
 };
 
 // options:
-export default function useAnimateConfettiuseAnimateConfetti(options = {}) {
-    const { trigger, showMoreComps } = options;
+export default function useAnimateConfetti(options = {}) {
+    const { trigger, maxTimeSec, showMoreComps } = options;
 
     const [runSound, setRunSound] = useState(false);
 
@@ -52,10 +52,18 @@ export default function useAnimateConfettiuseAnimateConfetti(options = {}) {
             removeItems(localCollection, ["confettiPlay"]);
         }
 
+        if (trigger && maxTimeSec) {
+            setRunSound(true);
+            loadConfetti("start");
+            setTimeout(() => {
+                loadConfetti("stop");
+            }, maxTimeSec);
+        }
+
         removeVar("didBeatGame");
         // return () => {
         //     cancel = true;
         //     loadConfetti("stop");
         // };
-    }, [trigger, showMoreComps]);
+    }, [trigger, showMoreComps, maxTimeSec]);
 }

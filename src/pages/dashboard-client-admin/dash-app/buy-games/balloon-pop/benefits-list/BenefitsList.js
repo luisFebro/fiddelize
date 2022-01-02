@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useBizData } from "init";
+import copyText from "utils/document/copyText";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import { updateUser } from "api/frequent";
 import getAPI, { setChallTypeData } from "api";
 import showToast from "components/toasts";
@@ -17,9 +19,13 @@ export default function BenefitsList({ challList, loading, setOptionData }) {
         if (!challengesArray.length && challList && challList.length)
             setChallengesArray(challList);
         if (challengesArray && challengesArray.length)
-            setOptionData((prev) => ({ ...prev, updatedOnce: true }));
+            setOptionData((prev) => ({
+                ...prev,
+                beneList: challengesArray,
+                updatedOnce: true,
+            }));
         // eslint-disable-next-line
-    }, [challList, challengesArray]);
+    }, [challList, challengesArray.length]);
 
     const updateLocalList = async (opts = {}) => {
         const {
@@ -78,10 +84,50 @@ export default function BenefitsList({ challList, loading, setOptionData }) {
     const showNewPrizeBtn = () => (
         <div className="container-center my-5">
             <section className="position-relative">
-                <AddNewChallBtn updateLocalList={updateLocalList} />
+                <AddNewChallBtn
+                    itemsCount={challengesArray.length}
+                    updateLocalList={updateLocalList}
+                />
             </section>
         </div>
     );
+
+    const showGameAccess = () => {
+        const gameLink = `https://fiddelize.com/${bizLinkName}/balao`;
+        const showCopyBtn = () => {
+            const handleCopy = () => {
+                copyText(gameLink, {
+                    msg: "Link copiado!",
+                });
+            };
+
+            return (
+                <div
+                    className="container-center position-relative"
+                    style={{ top: -50, zIndex: 100 }}
+                >
+                    <RadiusBtn
+                        size="small"
+                        title="copiar"
+                        onClick={handleCopy}
+                    />
+                </div>
+            );
+        };
+
+        return (
+            <Fragment>
+                <p className="text-normal text-purple text-break mx-3 my-5">
+                    Seus clientes têm acesso aos balões aqui:
+                    <br />
+                    <span className="font-site text-em-0-9 font-weight-bold">
+                        {gameLink}
+                    </span>
+                </p>
+                {showCopyBtn()}
+            </Fragment>
+        );
+    };
 
     return (
         <div className="mt-5">
@@ -95,12 +141,14 @@ export default function BenefitsList({ challList, loading, setOptionData }) {
                     Nenhum benefício adicionado.
                 </p>
             )}
-            <p className={txtStyle}>
-                <span className="text-subtitle font-weight-bold">
-                    {challengesArray.length} benefícios
-                </span>{" "}
-                adicionados:
-            </p>
+            {Boolean(challengesArray.length) && (
+                <p className={txtStyle}>
+                    <span className="text-subtitle font-weight-bold">
+                        {challengesArray.length} benefícios
+                    </span>{" "}
+                    adicionados:
+                </p>
+            )}
             {challengesArray.map((chall, ind) => (
                 <div key={chall.id} className="mt-5">
                     {ind !== 0 && <p className="mb-3" />}
@@ -116,11 +164,7 @@ export default function BenefitsList({ challList, loading, setOptionData }) {
                 </div>
             ))}
             {showNewPrizeBtn()}
-            <p className="text-normal mx-3 my-5">
-                Acesse o jogo de compra via:
-                <br />
-                https://fiddelize.com/{bizLinkName}/estoure
-            </p>
+            {showGameAccess()}
             <BalloonPopFaq />
         </div>
     );

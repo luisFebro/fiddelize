@@ -68,14 +68,14 @@ export default function BalloonPopFaq() {
         },
         {
             title:
-                "Como me certifico que o cliente só estoure apenas uma vez por compra?",
+                "Como me certifico que o cliente só estoure um balão por compra?",
             text: (
                 <Fragment>
                     <p>
                         Por padrão, após o cliente estourar um balão, o
                         benefício fica revelado e fixado na tela mesmo se
                         recarregar e limpar a memória da página durante{" "}
-                        <strong>1 hora</strong> para prevenir múltiplas
+                        <strong>meia hora</strong> para prevenir múltiplas
                         tentativas de estourar outros balões.
                     </p>
                 </Fragment>

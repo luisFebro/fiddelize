@@ -25,6 +25,7 @@ import {
 import {
     AsyncLoginPage,
     AsyncSupport,
+    AsyncBalloonGame,
     // cli-admin
     AsyncDashboardClientAdmin,
     AsyncOrdersAndPay,
@@ -229,6 +230,11 @@ function Website({ location }) {
                     component={AsyncPlayground}
                 />
                 <Route path="/qr" exact component={AsyncQrCodeScanner} />
+                <Route
+                    path="/:bizLinkName/balao"
+                    exact
+                    component={AsyncBalloonGame}
+                />
                 <Route
                     path="/amurreto/altrabot"
                     exact

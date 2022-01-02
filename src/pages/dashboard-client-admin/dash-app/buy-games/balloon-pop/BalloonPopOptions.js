@@ -25,7 +25,8 @@ export default function DiscountBackOptions({
     const GAME = "balloonPop";
     const GAME_BR = "estoure balão";
 
-    const { on, beneList } = optionData;
+    const { on, beneList = [] } = optionData;
+    const isReadyList = beneList.length >= 2;
     // use it to make sure got all important data before activate with the switch
 
     const { userId } = useData();
@@ -111,10 +112,10 @@ export default function DiscountBackOptions({
                             { type: "error" }
                         )
                     }
-                    disableToRight={false}
+                    disableToRight={!isReadyList}
                     disableToRightCallback={() =>
                         showToast(
-                            "Favor, preencha e salve todos os campos abaixo para ativar o jogo",
+                            "Para ativar este jogo, é preciso precisar - pelo menos - 2 tipos de benefícios na lista abaixo. Ex: desconto, brinde, oferta, amostra, etc",
                             { type: "error" }
                         )
                     }

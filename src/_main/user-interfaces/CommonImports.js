@@ -8,6 +8,13 @@ export const AsyncLoginPage = Load({
         ),
 });
 
+export const AsyncBalloonGame = Load({
+    loader: () =>
+        import(
+            "pages/mobile-app/content/bottom-menu-contents/all-games/balloon-pop/BalloonPopGame" /* webpackChunkName: "balloon-game-page-lazy" */
+        ),
+});
+
 // GENERAL
 export const AsyncSupport = Load({
     loader: () =>

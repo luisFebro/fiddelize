@@ -13,6 +13,7 @@ import UnavailableService from "pages/UnavailableService";
 import {
     AsyncLoginPage,
     AsyncSupport,
+    AsyncBalloonGame,
     // cli-admin
     AsyncDashboardClientAdmin,
     AsyncOrdersAndPay,
@@ -188,6 +189,11 @@ function Mobile({ location }) {
                     path="/test/playground"
                     exact
                     component={AsyncPlayground}
+                />
+                <Route
+                    path="/:bizLinkName/balao"
+                    exact
+                    component={AsyncBalloonGame}
                 />
                 <Route
                     path="/amurreto/altrabot"

@@ -207,3 +207,7 @@ export const validateBizLinkName = () =>
 export const countField = (userId, role = "cliente") =>
     `${ROOT}/user/count/field/${userId}?thisRole=${role}`; // PUT
 export const getBuyClubRulesData = () => `${ROOT}/general/buy-club-rules-data`;
+
+// GAMES
+export const getBalloonPopData = () => `${ROOT}/games/balloon-pop/data`;
+// END GAMES

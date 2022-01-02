@@ -45,7 +45,8 @@ function Navbar({ history, location }) {
         locationNow.includes("qr") ||
         locationNow.includes("regras") ||
         locationNow.includes("altrabot") ||
-        locationNow.includes("suporte");
+        locationNow.includes("suporte") ||
+        locationNow.includes("balao");
 
     const showAccessBtn = () => (
         <Link

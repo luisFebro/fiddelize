@@ -3,6 +3,7 @@ import ModalFullContent from "components/modals/ModalFullContent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import LoadableVisible from "components/code-splitting/LoadableComp";
+import showToast from "components/toasts";
 
 const AsyncNewChallContent = LoadableVisible({
     loading: true,
@@ -13,10 +14,17 @@ const AsyncNewChallContent = LoadableVisible({
 });
 
 export default function AddNewChallBtn(props) {
+    const { itemsCount } = props;
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
-        setFullOpen(true);
+        const MAX_LIMIT = 9;
+        if (itemsCount >= MAX_LIMIT)
+            return showToast(
+                `O número máximo de ${MAX_LIMIT} benefícios diferentes já foram adicionados`,
+                { type: "error" }
+            );
+        return setFullOpen(true);
     };
 
     const handleFullClose = () => {
