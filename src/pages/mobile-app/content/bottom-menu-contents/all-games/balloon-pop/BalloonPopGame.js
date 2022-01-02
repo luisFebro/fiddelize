@@ -6,6 +6,7 @@ import usePlayAudio from "hooks/media/usePlayAudio";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import getItems, { setItems, removeItems } from "init/lStorage";
 import { addMinutes, hasPassedDate } from "utils/dates/dateFns";
+import useTxtToSpeech from "hooks/media/useTxtToSpeech";
 import ModalCenter from "./ModalCenter";
 import useAnimateBalloon from "./useAnimateBalloon";
 import Balloon from "./balloon/Balloon";
@@ -15,6 +16,10 @@ export default function BalloonPopGame({ match }) {
 
     const [triggerConfetti, setTriggerConfetti] = useState(false);
     const [pendingBenefit, setPendingBenefit] = useState(null);
+
+    const speaker = useTxtToSpeech(
+        "Clique em cima de um balão para estourar e ganhar um benefício instantâneo!"
+    );
 
     const confettiOptions = useCallback(
         () => ({ trigger: triggerConfetti, maxTimeSec: 25000 }),
@@ -74,7 +79,7 @@ export default function BalloonPopGame({ match }) {
                         backgroundColor: "#000",
                     }}
                 >
-                    Clique e estoure um bolão
+                    Clique para estourar um balão
                 </h1>
             </div>
             {balloonList &&
@@ -84,6 +89,7 @@ export default function BalloonPopGame({ match }) {
                             {...balloon}
                             backColor={backColor}
                             setTriggerConfetti={setTriggerConfetti}
+                            speaker={speaker}
                         />
                     </section>
                 ))}
@@ -106,6 +112,7 @@ function EachBalloon({
     top,
     left,
     setTriggerConfetti,
+    speaker,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -134,6 +141,7 @@ function EachBalloon({
                             backColor,
                         },
                     });
+                    speaker(`Opaaa! Parabéns! Você ganhou ${desc}`);
                 }}
             >
                 <Balloon balloonColor={color} balloonId={getId()} />
