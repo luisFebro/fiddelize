@@ -13,17 +13,26 @@ export const prerenderAudio = async (url, mediaName) => {
     }).catch((err) => console.log(err));
 };
 
+export const usePrerenderAudio = (path, audioName = "audio_") => {
+    useEffect(() => {
+        if (!path || !audioName) return;
+        prerenderAudio(path, audioName);
+    }, [path, audioName]);
+};
+
 // cache and play audio easily and surely after loading a page.
 // mediaElem should be prefix (# id or . class) + componentName + mediaType to avoid conflicts...
 // trigger (bool) condition to play audio
 export default function usePlayAudio(url, mediaElem, options = {}) {
-    let { delay, trigger, multi, autoplay = false, onendedCallback } = options;
+    const { multi, autoplay = false, onendedCallback } = options;
+    let { delay, trigger } = options;
 
     if (!delay) delay = 0;
     if (typeof trigger !== "boolean" && trigger !== null) trigger = true;
 
     const getSingleElem = (audio) => {
         const mediaBtn = document.querySelector(mediaElem);
+        console.log("mediaBtn", mediaBtn);
         console.log(`audio set on ${mediaElem}`);
         if (mediaBtn) mediaBtn.addEventListener("click", () => audio.play());
     };

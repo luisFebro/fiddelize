@@ -1,5 +1,6 @@
 // reference: https://wicg.github.io/speech-api/#tts-section
 import { useEffect } from "react";
+
 let utterance;
 
 // onvoiceschanged to make sure the target selected voice is the one which is running...
@@ -23,16 +24,24 @@ window.speechSynthesis.onvoiceschanged = () => {
 
 export default function useTxtToSpeech(autoplayTxt) {
     function speak(txt) {
+        if (!window.speechSynthesis || !utterance) return;
+
+        // cancel if any audio is currently being played before running current one;
+        cancel();
+
+        utterance.text = txt;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function cancel() {
+        // LESSON: if paused, then even if page is reloaded, the next execution seems not working... Using cancel to clear up all synthetis in the queue.
         if (!window.speechSynthesis) return;
-        if (utterance) {
-            utterance.text = txt;
-            speechSynthesis.speak(utterance);
-        }
+        window.speechSynthesis.cancel();
     }
 
     useEffect(() => {
         if (autoplayTxt) speak(autoplayTxt);
     }, [autoplayTxt]);
 
-    return speak;
+    return { speak, cancel };
 }

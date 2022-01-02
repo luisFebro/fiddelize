@@ -2,11 +2,11 @@ import { Fragment, useState, useEffect, useCallback } from "react";
 import useBackColor from "hooks/useBackColor";
 import getId from "utils/getId";
 import useAPI, { getBalloonPopData } from "api/useAPI";
-import usePlayAudio from "hooks/media/usePlayAudio";
 import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import getItems, { setItems, removeItems } from "init/lStorage";
 import { addMinutes, hasPassedDate } from "utils/dates/dateFns";
 import useTxtToSpeech from "hooks/media/useTxtToSpeech";
+import { usePrerenderAudio, playAudio } from "hooks/media/usePlayAudio";
 import ModalCenter from "./ModalCenter";
 import useAnimateBalloon from "./useAnimateBalloon";
 import Balloon from "./balloon/Balloon";
@@ -14,15 +14,17 @@ import Balloon from "./balloon/Balloon";
 export default function BalloonPopGame({ match }) {
     const bizLinkName = match && match.params.bizLinkName;
 
+    usePrerenderAudio("/sounds/game/balloon-pop.mp3", "audio_balloon-pop-game");
+
     const [triggerConfetti, setTriggerConfetti] = useState(false);
     const [pendingBenefit, setPendingBenefit] = useState(null);
 
-    const speaker = useTxtToSpeech(
+    const { speak } = useTxtToSpeech(
         "Clique em cima de um balão para estourar e ganhar um benefício instantâneo!"
     );
 
     const confettiOptions = useCallback(
-        () => ({ trigger: triggerConfetti, maxTimeSec: 25000 }),
+        () => ({ trigger: triggerConfetti, maxTimeSec: 15000 }),
         [triggerConfetti]
     );
     useAnimateConfetti(confettiOptions());
@@ -43,10 +45,6 @@ export default function BalloonPopGame({ match }) {
         setPendingBenefit,
     });
     useBackColor(`var(--themeBackground--${backColor})`);
-    usePlayAudio("/sounds/game/balloon-pop.mp3", ".balloon-pop--audio", {
-        trigger: backColor,
-    });
-
     useAnimateBalloon(backColor);
 
     // if this returns, the balloons are not animated
@@ -89,7 +87,7 @@ export default function BalloonPopGame({ match }) {
                             {...balloon}
                             backColor={backColor}
                             setTriggerConfetti={setTriggerConfetti}
-                            speaker={speaker}
+                            speak={speak}
                         />
                     </section>
                 ))}
@@ -112,7 +110,7 @@ function EachBalloon({
     top,
     left,
     setTriggerConfetti,
-    speaker,
+    speak,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -132,16 +130,26 @@ function EachBalloon({
             <section
                 className={`balloon-w-${id}`}
                 onClick={() => {
-                    setTimeout(() => setFullOpen(true), 1000);
-                    setTriggerConfetti(true);
-                    setItems("global", {
-                        tempBalloonData: {
-                            expDate: addMinutes(new Date(), 30),
-                            desc,
-                            backColor,
-                        },
-                    });
-                    speaker(`Opaaa! Parabéns! Você ganhou ${desc}`);
+                    (async () => {
+                        await playAudio("audio_balloon-pop-game"),
+                            await Promise.all([
+                                setTimeout(() => setFullOpen(true), 1000),
+                                setTriggerConfetti(true),
+                            ]);
+
+                        window.navigator.vibrate(1000); // 1 second vibration
+                        setItems("global", {
+                            tempBalloonData: {
+                                expDate: addMinutes(new Date(), 30),
+                                desc,
+                                backColor,
+                            },
+                        });
+                        setTimeout(
+                            () => speak(`Opaaa! Parabéns! Você ganhou ${desc}`),
+                            2500
+                        );
+                    })();
                 }}
             >
                 <Balloon balloonColor={color} balloonId={getId()} />
