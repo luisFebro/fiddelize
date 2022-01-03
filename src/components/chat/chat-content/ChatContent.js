@@ -58,6 +58,8 @@ export default function ChatContent() {
         // currInd,
         // dbList,
     } = useContext();
+    console.log("subject", subject);
+
     const { loading } = dataChatList;
 
     const { dbMsgs = [], roomId, dataType } = currChatData;
@@ -161,6 +163,7 @@ export default function ChatContent() {
             from: botMsg ? "Fidda Bot" : chatUserId,
             to: roomId,
             content: {
+                chatTitle: `${chatUserName} - ${subject} (${role})`,
                 msgId: `msg${getId()}`,
                 msg: botMsg || newMsg,
                 msgDate: today,
