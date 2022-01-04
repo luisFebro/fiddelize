@@ -5,6 +5,7 @@ import isSameDay from "date-fns/isSameDay";
 import useAutoresizeableTextarea from "hooks/useAutoresizeableTextarea";
 import useAutoMsgBot from "pages/support/fiddelizeChatBot";
 import getItems, { setItems } from "init/lStorage";
+import getSubjectBr from "components/chat/helpers";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 import MsgSender from "./MsgSender";
@@ -26,7 +27,6 @@ export default function ChatContent() {
             typingShow: false,
             senderName: null,
             roomId: null,
-            sentMsg1: false,
         },
         tempLastFieldMsgs: chatTempLastFieldMsgs || {},
         pushTemp: false, // an random id to store temp lasg filed data
@@ -58,7 +58,6 @@ export default function ChatContent() {
         // currInd,
         // dbList,
     } = useContext();
-    console.log("subject", subject);
 
     const { loading } = dataChatList;
 
@@ -163,11 +162,13 @@ export default function ChatContent() {
             from: botMsg ? "Fidda Bot" : chatUserId,
             to: roomId,
             content: {
-                chatTitle: `${chatUserName} - ${subject} (${role})`,
                 msgId: `msg${getId()}`,
                 msg: botMsg || newMsg,
                 msgDate: today,
                 firstMsgTodayDate,
+                // notif
+                role,
+                chatTitle: `${chatUserName} (${getSubjectBr(subject)})`,
             },
         };
 
@@ -205,19 +206,29 @@ export default function ChatContent() {
         }, 1000);
     };
 
+    const totalBotMsgs = loading
+        ? null
+        : msgList.length &&
+          msgList.filter((m) => m.from === "Fidda Bot").length;
+    const totalHumanMsgs = loading
+        ? null
+        : msgList.length &&
+          msgList.filter((m) => m.from !== "Fidda Bot").length;
+
     useAutoMsgBot({
         subject,
-        activateBot:
+        activateBot: role !== "nucleo-equipe" && totalBotMsgs === 0,
+        activateBot2:
             role !== "nucleo-equipe" &&
-            !loading &&
-            !bot.sentMsg1 &&
-            msgList.length === 0,
+            totalBotMsgs === 1 &&
+            totalHumanMsgs >= 1,
         saveNewMsg,
         setCurrData,
         setData,
         socket,
         userName: chatUserName,
         roomId,
+        role,
     });
 
     const showLockChatMsg = () => (

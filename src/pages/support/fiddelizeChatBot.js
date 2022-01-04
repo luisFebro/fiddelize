@@ -7,9 +7,11 @@ export default function useAutoMsgBot({
     userName,
     subject,
     activateBot = false, // a bot only to introduction msg in version 4.98
+    activateBot2 = false,
     setData,
     roomId,
     setCurrData,
+    role,
 }) {
     const toggleBot = (status = true) => {
         // show in the side panel
@@ -28,7 +30,6 @@ export default function useAutoMsgBot({
             bot: {
                 typingShow: status,
                 senderName: status ? "Fidda Bot" : null,
-                sentMsg1: true,
             },
         }));
     };
@@ -41,10 +42,23 @@ export default function useAutoMsgBot({
         setTimeout(() => {
             toggleBot(false);
 
-            const botMsg = pickBotMsg({ userName, subject, msg: 1 });
+            const botMsg = pickBotMsg({ userName, subject });
             saveNewMsg(botMsg);
         }, 4000);
-    }, [activateBot, roomId]);
+    }, [activateBot, roomId, userName]);
+
+    useEffect(() => {
+        if (!activateBot2) return;
+        setTimeout(() => {
+            toggleBot(true);
+
+            setTimeout(() => {
+                toggleBot(false);
+                const botMsg2 = pickBotMsg2({ role, userName });
+                saveNewMsg(botMsg2);
+            }, 4000);
+        }, 30000);
+    }, [activateBot2, role, userName]);
 }
 
 function pickBotMsg(data) {
@@ -54,6 +68,23 @@ function pickBotMsg(data) {
     const userGreeting = `${greeting}, ${userName}`;
 
     return chooseMsg({ ...data, userGreeting });
+}
+
+function pickBotMsg2(data) {
+    const { role, userName } = data;
+
+    const isUnavailable = !isWorkingHour();
+
+    if (role === "visitante")
+        return `Ok, ${userName}. ${
+            isUnavailable
+                ? "Caso você não receba nenhuma retorno em 15 minutos, "
+                : ""
+        } ${
+            isUnavailable ? "p" : "P"
+        }or favor, informe seu email principal. Mandaremos uma mensagem de retorno o mais breve possível via email.\n\nVocê sempre pode retornar aqui para ver seu histórico de atendimento: https://fiddelize.com.br/suporte.`;
+
+    return `Ok, você receberá uma notificação ou pelo seu email cadastrado assim que te enviar um retorno.\n\nVocê sempre pode retornar aqui para ver seu histórico de atendimento: https://fiddelize.com.br/suporte.`;
 }
 
 // HELPERS

@@ -37,16 +37,26 @@ export function useInitSocket({ namespace, role, userId, name }) {
 
 // save locally and socket - used both in every reconnection and starting right after click on continue button to enter in the support page
 export function startSocketSession(socket, data = {}) {
-    const [chatRoomId, chatUserId, chatUserName, chatRoom] = getItems(
-        "global",
-        ["chatRoomId", "chatUserId", "chatUserName", "chatRoom"]
-    );
+    const [
+        chatRoomId,
+        chatUserId,
+        chatUserName,
+        chatRoom,
+        chatSubject,
+    ] = getItems("global", [
+        "chatRoomId",
+        "chatUserId",
+        "chatUserName",
+        "chatRoom",
+        "chatSubject",
+    ]);
 
     let values = {
         chatRoomId: data.chatRoomId || chatRoomId, // only requires this, but chatUserId is used to keep consistency especially in requests
         chatUserId: data.chatUserId || chatUserId,
         chatUserName: data.chatUserName || chatUserName,
         chatRole: data.chatRole || chatRoom,
+        chatSubject: data.chatSubject || chatSubject,
     };
 
     if (data.role === "nucleo-equipe") {
@@ -55,6 +65,7 @@ export function startSocketSession(socket, data = {}) {
             chatRole: "nucleo-equipe",
             chatUserId: data.userId,
             chatUserName: data.name,
+            chatSubject: "admin",
         };
     }
 

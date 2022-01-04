@@ -25,11 +25,13 @@ const [
     chatHistoryOn,
     storedUserName,
     chatUserId,
+    chatSubject,
 ] = getItems("global", [
     "chatPreventMainPanel",
     "chatHistoryOn",
     "chatUserName",
     "chatUserId",
+    "chatSubject",
 ]);
 const isFiddelizeTeam = loggedRole === "nucleo-equipe";
 
@@ -42,7 +44,7 @@ export const AsyncChat = Load({
 
 export default function Support() {
     const [data, setData] = useState({
-        subject: null,
+        subject: null || chatSubject,
         selected: false,
         success: isFiddelizeTeam || chatPreventMainPanel,
         chatUserName: null,
@@ -82,14 +84,15 @@ export default function Support() {
         const newChatUserName = chatUserName || storedUserName;
 
         // save locally and socket
-        const chatRoom = {
+        const chatRoomData = {
+            chatSubject: subject,
             chatRoomId: newChatRoomId, // only requires this, but chatUserId is used to keep consistency especially in requests
             chatUserId: newChatUserId,
             chatUserName: newChatUserName,
             chatRole: role,
         };
 
-        startSocketSession(socket, chatRoom);
+        startSocketSession(socket, chatRoomData);
 
         const body = {
             roomId: newChatRoomId,
