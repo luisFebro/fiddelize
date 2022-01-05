@@ -5,12 +5,9 @@ import useData from "init";
 import { IS_STAGING } from "api/root";
 import "./_NotifPermissionBanner.scss";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
-import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
-import isOffline from "../../utils/server/isOffline";
+import requestPermission, { showBanner } from "./pushNotifPermission";
 
-const isOnline = !isOffline();
-
-const permissionStatus = showPermissionBanner() && isOnline;
+const permissionStatus = showBanner;
 
 export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     const [backDrop, setBackDrop] = useState(false);
@@ -23,7 +20,6 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
         setShouldRender(false);
         setBackDrop(true);
         await requestPermission({
-            setShouldRender,
             setBackDrop,
             userId,
             role,

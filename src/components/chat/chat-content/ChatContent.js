@@ -20,7 +20,7 @@ const [chatTempLastFieldMsgs, chatDarkMode] = getItems("global", [
 const tempPostMsgs = {}; // tempPostMsgs are all msgs received and sent AFTER the first load. all these messages should be stored in-memory so they will not be lost when switch between chat roomIds
 export default function ChatContent() {
     const [currData, setCurrData] = useState({
-        newMsg: "",
+        newMsg: "", // this is actually an object with msg strin in content.msg
         msgList: [],
         lastMsg: null, // object
         bot: {
@@ -152,16 +152,41 @@ export default function ChatContent() {
 
     const firstMsgTodayDate = checkFirstMsgTodayDate();
 
-    const saveNewMsg = (botMsg, newImg) => {
+    const saveNewMsg = (botMsg, options = {}) => {
+        const {
+            newImg,
+            msgType = undefined,
+            updateBizRooms = true,
+            customerEmail,
+        } = options;
+
         if (!newMsg && !botMsg && !newImg) return;
 
         // need reload chat list to display botMsg
-        if (botMsg) socket.emit("updateBizRooms", { newUserRoomId: roomId }); // to join the user roomId automatically
+        const needUpdateBizRooms = botMsg && updateBizRooms;
+        if (needUpdateBizRooms)
+            socket.emit("updateBizRooms", { newUserRoomId: roomId }); // to join the user roomId automatically
+
+        // for identify when sending automatically an email to the customer
+        const totalStaffMsgs =
+            loading || role !== "nucleo-equipe"
+                ? null
+                : msgList.length &&
+                  msgList.filter(
+                      (m) =>
+                          m.from !== "Fidda Bot" &&
+                          m.content &&
+                          m.content.role === "nucleo-equipe"
+                  ).length;
+
+        // if zero, it means it is the first msg sent by a Fiddelize Staff
+        const triggerNotifyEmail = totalStaffMsgs === 0;
 
         let newMsgTobeEmitted = {
             from: botMsg ? "Fidda Bot" : chatUserId,
             to: roomId,
             content: {
+                msgType,
                 msgId: `msg${getId()}`,
                 msg: botMsg || newMsg,
                 msgDate: today,
@@ -169,6 +194,10 @@ export default function ChatContent() {
                 // notif
                 role,
                 chatTitle: `${chatUserName} (${getSubjectBr(subject)})`,
+            },
+            extra: {
+                triggerNotifyEmail,
+                customerEmail,
             },
         };
 
@@ -206,14 +235,50 @@ export default function ChatContent() {
         }, 1000);
     };
 
+    let lastBotMsg = loading
+        ? null
+        : msgList.length &&
+          msgList.filter((msg) => msg.from === "Fidda Bot").slice(-1)[0]; // returns an empty array if empty filter, and undefined for last item
+    lastBotMsg =
+        lastBotMsg && lastBotMsg.content ? lastBotMsg.content.msg : null;
+
+    // identify whether the last msg is a bot or a human
+    let lastMsgType = msgList.length && msgList.slice(-1)[0];
+    lastMsgType = loading
+        ? null
+        : lastMsgType && lastMsgType.from === "Fidda Bot"
+        ? "bot"
+        : "human";
+
+    let lastCustomerMsg = loading
+        ? null
+        : msgList.length &&
+          msgList
+              .filter(
+                  (msg) =>
+                      msg.from !== "Fidda Bot" &&
+                      msg.content &&
+                      msg.content.role !== "nucleo-equipe"
+              )
+              .slice(-1)[0];
+    lastCustomerMsg =
+        lastCustomerMsg && lastCustomerMsg.content
+            ? lastCustomerMsg.content.msg
+            : null;
+
     const totalBotMsgs = loading
         ? null
         : msgList.length &&
           msgList.filter((m) => m.from === "Fidda Bot").length;
-    const totalHumanMsgs = loading
+    const totalCustomerMsgs = loading
         ? null
         : msgList.length &&
-          msgList.filter((m) => m.from !== "Fidda Bot").length;
+          msgList.filter(
+              (m) =>
+                  m.from !== "Fidda Bot" &&
+                  m.content &&
+                  m.content.role !== "nucleo-equipe"
+          ).length;
 
     useAutoMsgBot({
         subject,
@@ -221,7 +286,8 @@ export default function ChatContent() {
         activateBot2:
             role !== "nucleo-equipe" &&
             totalBotMsgs === 1 &&
-            totalHumanMsgs >= 1,
+            totalCustomerMsgs >= 1,
+        activateBot3: lastBotMsg && lastBotMsg.includes("EMAIL principal"),
         saveNewMsg,
         setCurrData,
         setData,
@@ -229,6 +295,9 @@ export default function ChatContent() {
         userName: chatUserName,
         roomId,
         role,
+        lastBotMsg,
+        lastMsgType,
+        lastCustomerMsg,
     });
 
     const showLockChatMsg = () => (
@@ -255,7 +324,7 @@ export default function ChatContent() {
             <div className="chat__container">
                 <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">
                     <UpperArea />
-                    <ChatBubbles msgList={msgList} />
+                    <ChatBubbles msgList={msgList} saveNewMsg={saveNewMsg} />
                     {isSupportOver && showLockChatMsg()}
                     <MsgSender
                         newMsg={newMsg}

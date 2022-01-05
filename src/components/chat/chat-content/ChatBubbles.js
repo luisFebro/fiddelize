@@ -2,10 +2,11 @@ import { Fragment, useEffect, useState } from "react";
 import { calendar, getLocalHour } from "utils/dates/dateFns";
 import getItems from "init/lStorage";
 import ModalFullContent from "components/modals/ModalFullContent";
+import PushNotifActivate from "./chat-funcs/PushNotifActivate";
 
-const [chatUserId] = getItems("global", ["chatUserId"]);
+const [chatUserId, chatRole] = getItems("global", ["chatUserId", "chatRole"]);
 
-export default function ChatBubbles({ msgList = [] }) {
+export default function ChatBubbles({ msgList = [], saveNewMsg }) {
     return (
         <Fragment>
             <div className="chat__content pt-4 px-3 pb-5">
@@ -14,32 +15,41 @@ export default function ChatBubbles({ msgList = [] }) {
                         ? []
                         : removeObjDuplicate({ list: msgList }).map((data) => {
                               const { from, content } = data;
-                              const { msgId, firstMsgTodayDate } = content;
+                              const {
+                                  msgId,
+                                  msgType,
+                                  firstMsgTodayDate,
+                              } = content;
 
                               return (
                                   <li key={msgId} className="position-relative">
-                                      {from === "Fidda Bot" && (
-                                          <div
-                                              className="position-absolute animated delay-2s fadeInUp"
-                                              style={{
-                                                  top: -10,
-                                                  left: -23,
-                                                  zIndex: 1000,
-                                              }}
-                                          >
-                                              <img
-                                                  width={50}
-                                                  src="/img/icons/fiddelize-fiddabot.svg"
-                                                  alt="altrabot"
-                                              />
-                                          </div>
-                                      )}
+                                      {from === "Fidda Bot" &&
+                                          msgType !== "func" && (
+                                              <div
+                                                  className="position-absolute animated delay-2s fadeInUp"
+                                                  style={{
+                                                      top: -10,
+                                                      left: -23,
+                                                      zIndex: 1000,
+                                                  }}
+                                              >
+                                                  <img
+                                                      width={50}
+                                                      src="/img/icons/fiddelize-fiddabot.svg"
+                                                      alt="altrabot"
+                                                  />
+                                              </div>
+                                          )}
                                       {firstMsgTodayDate && (
                                           <div className="chat__time">
                                               {calendar(firstMsgTodayDate)}
                                           </div>
                                       )}
-                                      <SelectedMsgType data={data} />
+                                      <SelectedMsgType
+                                          data={data}
+                                          saveNewMsg={saveNewMsg}
+                                          msgList={msgList}
+                                      />
                                   </li>
                               );
                           })}
@@ -50,7 +60,7 @@ export default function ChatBubbles({ msgList = [] }) {
 }
 
 // COMP
-function SelectedMsgType({ data }) {
+function SelectedMsgType({ data, saveNewMsg, msgList }) {
     const [openImage, setOpenImagem] = useState(false);
     const { from, content } = data;
 
@@ -60,6 +70,7 @@ function SelectedMsgType({ data }) {
 
     const { msgType, msgDate, msg } = content;
     const isImg = msgType === "img";
+    const isFunc = msgType && msgType === "func";
 
     const bubble = pickBubble({ from });
 
@@ -133,8 +144,19 @@ function SelectedMsgType({ data }) {
             )}
         </div>
     );
+    if (isImg) return img;
 
-    return isImg ? img : text;
+    if (isFunc && msg === "func:pushNotif")
+        return (
+            <PushNotifActivate
+                userId={chatUserId}
+                role={chatRole}
+                saveNewMsg={saveNewMsg}
+                msgList={msgList}
+            />
+        );
+
+    return text;
 }
 
 function FullImg({ src, closeImg }) {

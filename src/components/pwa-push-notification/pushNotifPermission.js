@@ -1,6 +1,6 @@
+import isOffline from "utils/server/isOffline";
 import showToast from "../toasts";
 import subscribeUser from "./subscription";
-
 /*
 TWO TECHNOLOGIES
 Push and notification use different, but complementary, APIs: push is invoked when a server supplies information to a service worker; a notification is the action of a service worker or web page script showing information to a user.
@@ -36,13 +36,64 @@ https://notifications.spec.whatwg.org/
 https://developer.mozilla.org/en-US/docs/Web/API/Notification/requestPermission
 https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
  */
-export function showPermissionBanner() {
+const isOnline = !isOffline();
+
+export const showBanner = showPermissionBanner() && isOnline;
+export const isAlreadyAllowed =
+    showPermissionBanner({ checkPermission: true }) && isOnline;
+/*
+run a check to see whether the promise-based version of Notification.requestPermission() is supported. If it is, we run the promise-based version (supported everywhere except Safari), and if not, we run the older callback-based version (which is supported in Safari).
+https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
+ */
+
+export default async function requestPermission({
+    setBackDrop = () => null,
+    userId,
+    role,
+}) {
+    const defaultData = {
+        userId,
+        role,
+    };
+
+    if (checkNotificationPromise()) {
+        const permission = await Notification.requestPermission().catch(() => {
+            Promise.reject("error");
+        });
+
+        setBackDrop(false);
+
+        await handlePermission({ permission, ...defaultData }).catch(() => {
+            Promise.reject("error");
+        });
+        return permission;
+    }
+
+    // for safari or browsers which does not support promise, but callbacks
+    Notification.requestPermission((permission) => {
+        setBackDrop(false);
+        handlePermission({ permission, ...defaultData });
+        return permission;
+    });
+
+    return false;
+}
+
+// HELPERS
+function showPermissionBanner(options = {}) {
+    const { checkPermission = false } = options;
+
     if (!("Notification" in window)) {
         console.log("This browser does not support notification");
         return false;
     }
 
     const { permission } = Notification;
+
+    if (checkPermission) {
+        // permission default is as the name says, the default unchanged option from browser
+        return permission === "granted";
+    }
 
     if (permission === "default") {
         return true;
@@ -55,44 +106,17 @@ export function showPermissionBanner() {
     return false;
 }
 
-/*
-run a check to see whether the promise-based version of Notification.requestPermission() is supported. If it is, we run the promise-based version (supported everywhere except Safari), and if not, we run the older callback-based version (which is supported in Safari).
-https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
- */
-export default async function requestPermission({ setBackDrop, userId, role }) {
-    const defaultData = {
-        userId,
-        role,
-    };
-
-    if (checkNotificationPromise()) {
-        const permission = await Notification.requestPermission();
-
-        setBackDrop(false);
-
-        await handlePermission({ permission, ...defaultData });
-        return "ok";
-    }
-
-    // for safari or browsers which does not support promise, but callbacks
-    Notification.requestPermission((permission) => {
-        setBackDrop(false);
-        handlePermission({ permission, ...defaultData });
-        return "ok";
-    });
-
-    return false;
-}
-
-// HELPERS
 async function handlePermission({ permission, userId, role }) {
     const isGranted = permission === "granted";
     const isDenied = permission === "denied";
 
     if (isDenied) {
-        showToast("Se precisar ativar depois, vá em ajustes > notificações", {
-            dur: 10000,
-        });
+        showToast(
+            "Você negou acesso às notificações. Para reativar, procure as configurações de permissão de notificação direto do seu navegador.",
+            {
+                dur: 10000,
+            }
+        );
     }
 
     if (!isGranted) return;

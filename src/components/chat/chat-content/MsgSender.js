@@ -153,7 +153,7 @@ export default function MsgSender({
     );
 
     const handleNewImg = (newImgData) => {
-        saveNewMsg(null, newImgData);
+        saveNewMsg(null, { newImg: newImgData });
     };
 
     // bot typing is for the own user and doesn't need verify roomId
