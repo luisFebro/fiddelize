@@ -50,10 +50,12 @@ export default async function requestPermission({
     setBackDrop = () => null,
     userId,
     role,
+    noRegister = false,
 }) {
     const defaultData = {
         userId,
         role,
+        noRegister,
     };
 
     if (checkNotificationPromise()) {
@@ -106,15 +108,15 @@ function showPermissionBanner(options = {}) {
     return false;
 }
 
-async function handlePermission({ permission, userId, role }) {
+async function handlePermission({ permission, userId, role, noRegister }) {
     const isGranted = permission === "granted";
     const isDenied = permission === "denied";
 
     if (isDenied) {
         showToast(
-            "Você negou acesso às notificações. Para reativar, procure as configurações de permissão de notificação direto do seu navegador.",
+            "Você negou acesso às notificações ou está no modo incognato. Para reativar, ajuste a permissão direto do seu navegador ou entre em uma página sem modo incognato.",
             {
-                dur: 10000,
+                dur: 15000,
             }
         );
     }
@@ -123,6 +125,7 @@ async function handlePermission({ permission, userId, role }) {
 
     showToast("Registrando...", { dur: 10000 });
 
+    if (noRegister) return;
     const data = await subscribeUser({
         userId,
         role,

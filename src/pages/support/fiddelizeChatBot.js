@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import getDayGreetingBr from "utils/getDayGreetingBr";
+import getSubjectBr from "components/chat/helpers";
 import isWorkingHour from "./working-hour/isWorkingHour";
 
 export default function useAutoMsgBot({
@@ -16,6 +17,7 @@ export default function useAutoMsgBot({
     lastBotMsg,
     lastMsgType,
     lastCustomerMsg,
+    loggedUserEmail,
 }) {
     const setTypingBot = (status = true) => {
         // show in the side panel
@@ -60,47 +62,72 @@ export default function useAutoMsgBot({
 
     // BOT COMUNICATION REQUEST - email
     useEffect(() => {
-        // check if the nofitication is already available for logged-in or even visitor with an account.
-        if (!msgBot02) return;
-
-        // eslint-disable-next-line
-    }, [msgBot02, userName]);
-
-    useEffect(() => {
-        if (!msgBot02 || !lastMsgType || lastMsgType === "bot") return null;
-        // ig the user has the last attempted as a failure email, then repeat by allow to proceed to register the email.
+        // lastMsgType === "bot" prevents send a message if the last one was a bot msg
+        if (
+            (lastBotMsg && lastBotMsg.includes("Tudo certo")) ||
+            lastMsgType === "bot"
+        )
+            return null;
+        // if the user has the last attempted as a failure email, then repeat by allow to proceed to register the email.
         const isLastEmailInvalid =
             lastBotMsg && lastBotMsg.includes("Ops!!! Parece que");
-        if (isLastEmailInvalid)
-            return checkEmailAndSetMsg({
+        if (isLastEmailInvalid) {
+            checkEmailAndSetMsg({
                 lastCustomerMsg,
                 setTypingBot,
                 saveNewMsg,
                 userName,
+                subject,
             });
+
+            return null;
+        }
+
+        if (!msgBot02) return null;
 
         return checkEmailAndSetMsg({
             lastCustomerMsg,
             setTypingBot,
             saveNewMsg,
             userName,
+            subject,
         });
-    }, [msgBot02, lastMsgType, lastBotMsg, lastCustomerMsg, userName]);
+    }, [msgBot02, lastBotMsg, lastMsgType, lastCustomerMsg, userName, subject]);
 
+    // somehow, it is repeating the message twice
+    const [already, setAlready] = useState(false);
     useEffect(() => {
-        if (!msgBot1) return;
+        if (!msgBot1 || already) return;
 
         setTimeout(() => {
             setTypingBot(true);
 
             setTimeout(() => {
                 setTypingBot(false);
-                const botMsg = pickBotMsg1({ userName, role });
-                saveNewMsg(botMsg);
+                if (role !== "visitante") {
+                    const attachData = {
+                        notifyData: {
+                            customerEmail: loggedUserEmail,
+                            subjectBr: getSubjectBr(subject),
+                        },
+                    };
+
+                    saveNewMsg(
+                        `${getDayGreetingBr()}, ${
+                            userName && userName.cap()
+                        }! Você receberá uma notificação pelo app ou via email cadastrado (${loggedUserEmail}) assim que um atendente humano estiver disponível.`,
+                        attachData
+                    );
+                    setTimeout(() => {
+                        const botMsg = pickBotMsg1({ userName, subject });
+                        saveNewMsg(botMsg);
+                    }, 2000);
+                }
+                setAlready(true);
             }, 4000);
-        }, 4000);
+        }, 500);
         // eslint-disable-next-line
-    }, [msgBot1, role]);
+    }, [msgBot1, already, subject]);
 }
 
 function pickBotMsg01(data) {
@@ -109,41 +136,28 @@ function pickBotMsg01(data) {
     const greeting = getDayGreetingBr();
     const userGreeting = `${greeting}, ${userName && userName.cap()}`;
 
-    return `${userGreeting}! Deseja receber uma notificação assim que um de nossos atendentes humanos estiver disponível?`;
-    // return `Ok, você receberá uma notificação ou pelo seu email cadastrado assim que te enviar um retorno. \n\nVocê sempre pode retornar aqui para acompanhar seus atendimentos: https://fiddelize.com.br/suporte.`;
-    // const isWorkingHour = isWorkingHour();
-
-    // if (role === "visitante")
-    //     return `Ok, ${userName && userName.cap()}. ${
-    //         isWorkingHour
-    //             ? "Caso você não receba nenhuma retorno em 15 minutos, "
-    //             : ""
-    //     } ${
-    //         isUnavailable ? "p" : "P"
-    //     }or favor, informe seu email principal. Mandaremos uma mensagem de retorno o mais breve possível via email.\n\nVocê sempre pode retornar aqui para ver seu histórico de atendimento: https://fiddelize.com.br/suporte.`;
+    return `${userGreeting}! Deseja receber uma notificação via site assim que um de nossos atendentes humanos estiver disponível?`;
 }
 
 function pickBotMsg1(data) {
-    const { userName, role } = data;
+    const { userName, subject } = data;
 
-    const greeting = getDayGreetingBr();
-    const userGreeting =
-        role !== "visitante"
-            ? `${greeting}, ${userName && userName.cap()}`
-            : userName && userName.cap();
-
-    return chooseMsg({ ...data, userGreeting });
+    return chooseMsg({
+        ...data,
+        userName: userName && userName.cap(),
+        subject,
+    });
 }
 
 // HELPERS
-function chooseMsg({ userGreeting, subject }) {
+function chooseMsg({ userName, subject }) {
     // Check if working hours, if not send a message that attendance is not available and will reach out as soon as possible
-    const unavailableMsg = `${userGreeting}, o suporte Fiddelize funciona das 9 às 18 horas de Segunda a Sábado, mas fica à vontade para deixar sua mensagem e responderemos logo.`;
+    const unavailableMsg = `${userName}, o suporte Fiddelize funciona das 9 às 18 horas de Segunda a Sábado, mas fica à vontade para deixar sua mensagem e responderemos logo.`;
     if (!isWorkingHour()) return unavailableMsg;
 
     if (subject === "suggestion")
         return `
-        ${userGreeting}, qual sugestão você tem em mente?
+        Enquanto isso, ${userName}, qual sugestão você tem em mente?
     `;
 
     if (subject === "question")
@@ -153,17 +167,17 @@ function chooseMsg({ userGreeting, subject }) {
 
     if (subject === "usageHelp")
         return `
-        ${userGreeting}, em qual funcionalidade você precisa de ajuda?
+        Enquanto isso, em qual funcionalidade você precisa de ajuda?
     `;
 
     if (subject === "bugReport")
         return `
-        ${userGreeting}, descreva a falha em detalhes ou mande um print/foto explicando o problema. Vamos te ajudar o mais breve possível.
+        Enquanto isso, ${userName}, descreva a falha em detalhes ou mande um print/foto explicando o problema. Vamos te ajudar o mais breve possível.
     `;
 
     if (subject === "others")
         return `
-        ${userGreeting}, qual assunto sobre a Fiddelize você gostaria de conversar?
+        Enquanto isso, ${userName}, qual assunto sobre a Fiddelize você gostaria de conversar?
     `;
 
     return "";
@@ -174,11 +188,11 @@ function checkEmailAndSetMsg({
     setTypingBot,
     saveNewMsg,
     userName,
+    subject,
 }) {
     const isValidEmail = validateEmail(lastCustomerMsg);
     if (!isValidEmail) {
         setTypingBot(true);
-
         setTimeout(() => {
             setTypingBot(false);
             saveNewMsg(
@@ -195,14 +209,20 @@ function checkEmailAndSetMsg({
         const attachData = {
             notifyData: {
                 customerEmail: lastCustomerMsg,
+                subjectBr: getSubjectBr(subject),
             },
         };
         saveNewMsg(
             `Tudo certo, ${
                 userName && userName.cap()
-            }! Você receberá uma notificação ou email assim que um atendente humano estiver disponível.\n\nApós o atendimento, você pode clicar em finalizar para terminar atendimento.`,
+            }! Você receberá uma notificação ou email assim que um atendente humano estiver disponível.`,
             attachData
         );
+
+        setTimeout(() => {
+            const botMsg = pickBotMsg1({ userName, subject });
+            saveNewMsg(botMsg);
+        }, 2000);
     }, 2500);
 
     return null;

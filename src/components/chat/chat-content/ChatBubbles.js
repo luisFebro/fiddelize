@@ -42,7 +42,7 @@ export default function ChatBubbles({ msgList = [], saveNewMsg }) {
                                           )}
                                       {firstMsgTodayDate &&
                                           msgType !== "func" && (
-                                              <div className="chat__time">
+                                              <div className="chat__time text-nowrap">
                                                   {calendar(firstMsgTodayDate)}
                                               </div>
                                           )}

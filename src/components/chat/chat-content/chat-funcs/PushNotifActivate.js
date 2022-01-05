@@ -39,9 +39,8 @@ export default function PushNotifActivate({
 
         setBackDrop(true);
         const permissionData = {
+            noRegister: true, // for this version, this func work only as decorative, applied only for visitors
             setBackDrop,
-            userId,
-            role,
         };
 
         const permissionStatus = await requestPermission(permissionData).catch(
@@ -71,7 +70,7 @@ export default function PushNotifActivate({
                 title="não"
                 marginLeft=" "
                 backgroundColor="var(--mainRed)"
-                onClick={() => setTimeout(() => handlePermission(false), 2500)}
+                onClick={() => setTimeout(() => handlePermission(false), 1000)}
                 position="relative"
                 variant="extended"
                 size="small"

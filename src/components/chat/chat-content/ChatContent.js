@@ -7,15 +7,17 @@ import useAutoMsgBot from "pages/support/fiddelizeChatBot";
 import getItems, { setItems } from "init/lStorage";
 import getSubjectBr from "components/chat/helpers";
 import { isAlreadyAllowed } from "components/pwa-push-notification/pushNotifPermission";
+import useData from "init";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 import MsgSender from "./MsgSender";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const [chatTempLastFieldMsgs, chatDarkMode] = getItems("global", [
+const [chatTempLastFieldMsgs, chatDarkMode, chatRoomId] = getItems("global", [
     "chatTempLastFieldMsgs",
     "chatDarkMode",
+    "chatRoomId",
 ]);
 
 const tempPostMsgs = {}; // tempPostMsgs are all msgs received and sent AFTER the first load. all these messages should be stored in-memory so they will not be lost when switch between chat roomIds
@@ -43,6 +45,8 @@ export default function ChatContent() {
 
     const today = new Date();
 
+    const { email } = useData();
+
     useAutoresizeableTextarea();
 
     const {
@@ -62,7 +66,9 @@ export default function ChatContent() {
 
     const { loading } = dataChatList;
 
-    const { dbMsgs = [], roomId, dataType } = currChatData;
+    let { roomId } = currChatData;
+    const { dbMsgs = [], dataType } = currChatData;
+    roomId = roomId || chatRoomId;
 
     const isSupportOver = dataType && !dataType.isPendingSupport;
 
@@ -158,7 +164,7 @@ export default function ChatContent() {
             newImg,
             msgType = undefined,
             updateBizRooms = true,
-            customerEmail,
+            notifyData,
         } = options;
 
         if (!newMsg && !botMsg && !newImg) return;
@@ -181,7 +187,8 @@ export default function ChatContent() {
                   ).length;
 
         // if zero, it means it is the first msg sent by a Fiddelize Staff
-        const triggerNotifyEmail = totalStaffMsgs === 0;
+        const triggerNotifyEmail =
+            newMsg && role === "nucleo-equipe" && totalStaffMsgs === 0;
 
         let newMsgTobeEmitted = {
             from: botMsg ? "Fidda Bot" : chatUserId,
@@ -198,7 +205,7 @@ export default function ChatContent() {
             },
             extra: {
                 triggerNotifyEmail,
-                customerEmail,
+                notifyData,
             },
         };
 
@@ -244,12 +251,11 @@ export default function ChatContent() {
         lastBotMsg && lastBotMsg.content ? lastBotMsg.content.msg : null;
 
     // identify whether the last msg is a bot or a human
+    const whichMsgType = (isFiddaBot) => (isFiddaBot ? "bot" : "human");
     let lastMsgType = msgList.length && msgList.slice(-1)[0];
     lastMsgType = loading
         ? null
-        : lastMsgType && lastMsgType.from === "Fidda Bot"
-        ? "bot"
-        : "human";
+        : whichMsgType(lastMsgType && lastMsgType.from === "Fidda Bot");
 
     let lastCustomerMsg = loading
         ? null
@@ -271,15 +277,26 @@ export default function ChatContent() {
         ? null
         : msgList.length &&
           msgList.filter((m) => m.from === "Fidda Bot").length;
-    const totalCustomerMsgs = loading
+    // const totalCustomerMsgs = loading
+    //     ? null
+    //     : msgList.length &&
+    //       msgList.filter(
+    //           (m) =>
+    //               m.from !== "Fidda Bot" &&
+    //               m.content &&
+    //               m.content.role !== "nucleo-equipe"
+    //       ).length;
+
+    const alreadyNotifWarning = loading
         ? null
-        : msgList.length &&
-          msgList.filter(
+        : msgList.length
+        ? msgList.some(
               (m) =>
-                  m.from !== "Fidda Bot" &&
-                  m.content &&
-                  m.content.role !== "nucleo-equipe"
-          ).length;
+                  m.content.msg &&
+                  m.content.msg.includes("Você receberá uma notif") &&
+                  m.from === "Fidda Bot"
+          )
+        : false;
 
     const isVisitor = role === "visitante" && !isAlreadyAllowed;
     const isLoggedCustomer = role !== "visitante";
@@ -294,9 +311,8 @@ export default function ChatContent() {
             lastBotMsg.includes("EMAIL principal"),
         msgBot1:
             isLoggedCustomer &&
-            lastBotMsg &&
-            role !== "nucleo-equipe" &&
-            lastBotMsg.includes("uma notificação"),
+            alreadyNotifWarning === false &&
+            role !== "nucleo-equipe",
         saveNewMsg,
         setCurrData,
         setData,
@@ -307,6 +323,7 @@ export default function ChatContent() {
         lastBotMsg,
         lastMsgType,
         lastCustomerMsg,
+        loggedUserEmail: email,
     });
 
     const showLockChatMsg = () => (

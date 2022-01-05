@@ -231,7 +231,7 @@ export default function MsgSender({
                         </svg>
                     </button>
                 </div>
-                {newMsg && showDraftStatus()}
+                {!isSmall && newMsg && showDraftStatus()}
             </div>
         </Fragment>
     );

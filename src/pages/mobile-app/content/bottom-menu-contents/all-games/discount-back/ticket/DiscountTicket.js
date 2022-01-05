@@ -21,7 +21,7 @@ export default function DiscountTicket({
 
     const { bizName, bizLogo } = useBizData();
     const { themePColor, themeSColor } = useContext();
-    const { name, gotOverflowedBenefits, sexLetter, userId } = useData();
+    const { name, gotOverflowedBenefits = {}, sexLetter, userId } = useData();
 
     const mainColor = `var(--themePLight--${themePColor})`;
     const pColor = `var(--themePDark--${themePColor})`;
@@ -41,7 +41,7 @@ export default function DiscountTicket({
             <ButtonFab
                 title="usar valor"
                 onClick={
-                    gotOverflowedBenefits.discountBack
+                    gotOverflowedBenefits && gotOverflowedBenefits.discountBack
                         ? () =>
                               showToast(
                                   "É preciso mais um cartão de compra de qualquer valor para registrar e resgatar este benefício. Obrigada!",
