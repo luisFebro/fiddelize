@@ -40,11 +40,12 @@ export default function ChatBubbles({ msgList = [], saveNewMsg }) {
                                                   />
                                               </div>
                                           )}
-                                      {firstMsgTodayDate && (
-                                          <div className="chat__time">
-                                              {calendar(firstMsgTodayDate)}
-                                          </div>
-                                      )}
+                                      {firstMsgTodayDate &&
+                                          msgType !== "func" && (
+                                              <div className="chat__time">
+                                                  {calendar(firstMsgTodayDate)}
+                                              </div>
+                                          )}
                                       <SelectedMsgType
                                           data={data}
                                           saveNewMsg={saveNewMsg}

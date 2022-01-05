@@ -81,9 +81,7 @@ export default function PushNotifActivate({
                     title="sim"
                     marginLeft=" "
                     backgroundColor="var(--incomeGreen)"
-                    onClick={() =>
-                        setTimeout(() => handlePermission(true), 2000)
-                    }
+                    onClick={() => handlePermission(true)}
                     position="relative"
                     variant="extended"
                     size="small"

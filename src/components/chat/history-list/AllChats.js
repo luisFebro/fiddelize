@@ -133,7 +133,21 @@ export default function AllChats({ isBizTeam }) {
             lastPanelMsg,
             tempLastPanelMsg,
         });
-        const isImg = selectedLastMsg && selectedLastMsg.includes("/image/");
+
+        const isFunc =
+            selectedLastMsg && selectedLastMsg.toString().includes("func:");
+        if (isFunc)
+            selectedLastMsg = (
+                <span
+                    className="position-relative d-inline-block"
+                    style={{ top: -3 }}
+                >
+                    <span className="text-em-1-4">🔧</span>
+                </span>
+            );
+
+        const isImg =
+            selectedLastMsg && selectedLastMsg.toString().includes("/image/");
         if (isImg)
             selectedLastMsg = (
                 <span

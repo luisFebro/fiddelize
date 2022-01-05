@@ -6,6 +6,7 @@ import useAutoresizeableTextarea from "hooks/useAutoresizeableTextarea";
 import useAutoMsgBot from "pages/support/fiddelizeChatBot";
 import getItems, { setItems } from "init/lStorage";
 import getSubjectBr from "components/chat/helpers";
+import { isAlreadyAllowed } from "components/pwa-push-notification/pushNotifPermission";
 import UpperArea from "./UpperArea";
 import ChatBubbles from "./ChatBubbles";
 import MsgSender from "./MsgSender";
@@ -280,14 +281,22 @@ export default function ChatContent() {
                   m.content.role !== "nucleo-equipe"
           ).length;
 
+    const isVisitor = role === "visitante" && !isAlreadyAllowed;
+    const isLoggedCustomer = role !== "visitante";
+
     useAutoMsgBot({
         subject,
-        activateBot: role !== "nucleo-equipe" && totalBotMsgs === 0,
-        activateBot2:
+        msgBot01: isVisitor && role !== "nucleo-equipe" && totalBotMsgs === 0,
+        msgBot02:
+            isVisitor &&
             role !== "nucleo-equipe" &&
-            totalBotMsgs === 1 &&
-            totalCustomerMsgs >= 1,
-        activateBot3: lastBotMsg && lastBotMsg.includes("EMAIL principal"),
+            lastBotMsg &&
+            lastBotMsg.includes("EMAIL principal"),
+        msgBot1:
+            isLoggedCustomer &&
+            lastBotMsg &&
+            role !== "nucleo-equipe" &&
+            lastBotMsg.includes("uma notificação"),
         saveNewMsg,
         setCurrData,
         setData,
