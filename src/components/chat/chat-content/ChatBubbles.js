@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { calendar, getLocalHour } from "utils/dates/dateFns";
 import getItems from "init/lStorage";
 import ModalFullContent from "components/modals/ModalFullContent";
+import parse from "html-react-parser";
 import PushNotifActivate from "./chat-funcs/PushNotifActivate";
 
 const [chatUserId, chatRole] = getItems("global", ["chatUserId", "chatRole"]);
@@ -76,9 +77,10 @@ function SelectedMsgType({ data, saveNewMsg, msgList }) {
     const bubble = pickBubble({ from });
 
     // TYPES
+    const finalTxt = parse(urlify(msg && msg.trim()));
     const text = (
         <div className={`chat__bubble chat__bubble--${bubble} shadow-field`}>
-            {msg && msg.trim()}
+            {finalTxt}
             <span
                 className="chat__bubble--b-time"
                 style={{
@@ -206,6 +208,21 @@ function removeObjDuplicate({ list = [], filterId = "msgId", newObj }) {
                 (item2) => item2.content[filterId] === item1.content[filterId]
             ) === ind // if find the item, returns its ind which should be the same as filter method, then we can remove duplicates.
     );
+}
+
+function urlify(text) {
+    var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+    //var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function (url, b, c) {
+        var url2 = c == "www." ? "http://" + url : url;
+        return (
+            '<a href="' +
+            url2 +
+            '" target="_blank" rel="noopener noreferrer">' +
+            url +
+            "</a>"
+        );
+    });
 }
 
 function pickBubble({ from }) {
