@@ -8,13 +8,16 @@ import useData, { useBizData } from "init";
 import getGameCardData from "pages/dashboard-client-admin/dash-app/buy-games/buy-games-card/getGameCardData";
 import "pages/dashboard-client-admin/dash-app/buy-games/buy-games-card/_Card.scss";
 
+const isSmall = window.Helper.isSmallScreen();
+
 export default function GameCard({ data, closeModal }) {
     const [loading, setLoading] = useState(false);
-    const { userId, adminGame } = useData();
+    const { userId, adminGame, role } = useData();
     const { perc } = adminGame.discountBack;
     const { setCurrGame, currGame } = useContext();
     const { themeBackColor, themePColor, themeSColor, bizName } = useBizData();
     const { gameName, on } = data;
+    const isAdminPanel = role === "cliente-admin";
 
     const isCurrGame = gameName === currGame;
     const isDisabled = !on;
@@ -122,7 +125,12 @@ export default function GameCard({ data, closeModal }) {
         <main
             className="col-6 mx-auto mb-4" // not using  col-md-4  col-lg-3 since it is in a modal, only 2 columns of 6 / 6 from 12
         >
-            <section className="position-relative shadow-babadoo card--root">
+            <section
+                className="position-relative shadow-babadoo card--root"
+                style={{
+                    margin: !isSmall && isAdminPanel ? "0 130px" : undefined,
+                }}
+            >
                 <div className="about-btn position-absolute">
                     {showAboutBtn()}
                 </div>

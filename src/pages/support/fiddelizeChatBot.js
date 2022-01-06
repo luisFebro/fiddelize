@@ -104,25 +104,24 @@ export default function useAutoMsgBot({
 
             setTimeout(() => {
                 setTypingBot(false);
-                if (role !== "visitante") {
-                    const attachData = {
-                        notifyData: {
-                            customerEmail: loggedUserEmail,
-                            subjectBr: getSubjectBr(subject),
-                        },
-                    };
+                const attachData = {
+                    notifyData: {
+                        customerEmail: loggedUserEmail,
+                        subjectBr: getSubjectBr(subject),
+                    },
+                };
 
-                    saveNewMsg(
-                        `${getDayGreetingBr()}, ${
-                            userName && userName.cap()
-                        }! Você receberá uma notificação pelo app ou via email cadastrado (${loggedUserEmail}) assim que um atendente humano estiver disponível.`,
-                        attachData
-                    );
-                    setTimeout(() => {
-                        const botMsg = pickBotMsg1({ userName, subject });
-                        saveNewMsg(botMsg);
-                    }, 2000);
-                }
+                saveNewMsg(
+                    `${getDayGreetingBr()}, ${
+                        userName && userName.cap()
+                    }! Você receberá uma notificação pelo app ou via email cadastrado (${loggedUserEmail}) assim que um atendente humano estiver disponível.`,
+                    attachData
+                );
+                setTimeout(() => {
+                    const botMsg = pickBotMsg1({ userName, subject });
+                    saveNewMsg(botMsg);
+                }, 2000);
+
                 setAlready(true);
             }, 4000);
         }, 500);

@@ -7,7 +7,8 @@ export default function GameList(props) {
     const allGamesList = [];
 
     Object.keys(adminGame).forEach((gameName) => {
-        if (!adminGame || typeof adminGame[gameName].on !== "boolean") return;
+        const dataGame = adminGame[gameName] || {};
+        if (!adminGame || typeof dataGame.on !== "boolean") return;
         allGamesList.push({
             gameName,
             ...adminGame[gameName],
