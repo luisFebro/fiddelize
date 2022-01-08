@@ -32,7 +32,6 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
 
     const getSingleElem = (audio) => {
         const mediaBtn = document.querySelector(mediaElem);
-        console.log("mediaBtn", mediaBtn);
         console.log(`audio set on ${mediaElem}`);
         if (mediaBtn) mediaBtn.addEventListener("click", () => audio.play());
     };

@@ -41,12 +41,14 @@ export default function useAutoMsgBot({
     };
 
     // BOT COMUNICATION REQUEST - push notification
+    const [already01, setAlready01] = useState(false);
     useEffect(() => {
         if (!msgBot01) return;
 
         setTypingBot(true);
 
         setTimeout(() => {
+            if (already01) return;
             setTypingBot(false);
 
             const botMsg = pickBotMsg01({ userName });
@@ -56,9 +58,10 @@ export default function useAutoMsgBot({
                 updateBizRooms: false,
             });
         }, 4000);
+        setAlready01(true);
 
         // eslint-disable-next-line
-    }, [msgBot01, userName, role]);
+    }, [msgBot01, userName, role, already01]);
 
     // BOT COMUNICATION REQUEST - email
     useEffect(() => {
@@ -212,9 +215,7 @@ function checkEmailAndSetMsg({
             },
         };
         saveNewMsg(
-            `Tudo certo, ${
-                userName && userName.cap()
-            }! Você receberá uma notificação ou email assim que um atendente humano estiver disponível.`,
+            `Tudo certo! Você receberá uma notificação ou email assim algum humano estiver disponível.`,
             attachData
         );
 

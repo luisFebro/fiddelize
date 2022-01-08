@@ -75,7 +75,7 @@ export default function DashClients() {
             <ClientsBirthdayMsgBtn />
             <hr className="lazer-purple" />
             <Title
-                title="&#187; Histórico de Clientes"
+                title="&#187; Clientes do seu clube de compras"
                 color="var(--themeP)"
                 margin="mb-0"
             />

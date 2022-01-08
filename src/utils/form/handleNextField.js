@@ -38,7 +38,7 @@ export const handleNextField = (e, currField, options = {}) => {
 
         const elemToDisplay = document.getElementById(nextField);
 
-        elemToDisplay.classList.add("d-block");
+        if (elemToDisplay) elemToDisplay.classList.add("d-block");
         handleFocus(nextValueField, { delay: 500 });
     };
 

@@ -24,7 +24,7 @@ const handleData = (type) => {
         src = "/img/illustrations/empty-recorded-customers.svg";
         alt = "sem clientes cadastrados";
         title =
-            "Seus clientes estão prestes a participar do seu jogo de compras";
+            "Comece a elevar a experiência de compra de seus clientes hoje.";
     }
 
     return {

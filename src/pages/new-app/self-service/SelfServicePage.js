@@ -99,8 +99,8 @@ function SelfServicePage({ location, history }) {
             <p className="text-title">Novo Clube</p>
             <p className="text-white text-normal mx-3 mb-5">
                 {isSmall
-                    ? "Personalize apps do clube com o estilo do seu negócio!"
-                    : "Personalize apps do seu clube"}
+                    ? "Personalize app no estilo do seu negócio!"
+                    : "Personalize app do seu negócio"}
             </p>
         </div>
     );

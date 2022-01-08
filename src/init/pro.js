@@ -13,7 +13,7 @@ export default function usePro(itemName) {
     const isProExpBlock2 = (bizPlanData && bizPlanData.isProExpBlock2) || false; // block all other functionalities after month maintenance (a.k.a RGP - redemption grace period)
     const isProExpBlock1 =
         (bizPlanData && bizPlanData.isProExpBlock1 && !isProExpBlock2) || false; // block register of customer and to know if the a current pro plan is expired
-    const maintenanceExpDate = bizPlanData && bizPlanData.maintenanceExpDate;
+    const maintenanceExpDate = bizPlanData && bizPlanData.credits.expiringDate;
 
     // while isProExpBlock1 is true, keep the register clients blocked, not considering level 2 truthness
     const isMainRegisterFuncBlocked =
@@ -33,10 +33,14 @@ export default function usePro(itemName) {
         return creditItems;
     };
 
-    const finishDate = (bizPlanData && bizPlanData.finishDate) || new Date();
+    const finishDate =
+        maintenanceExpDate ||
+        (bizPlanData && bizPlanData.finishDate) ||
+        new Date();
 
     // when in the level 1 of block, the prior plan should still appear but alongside with a maintenance month badge
     const mainRef = (bizPlanData && bizPlanData.mainRef) || null;
+
     return {
         isPro: isProExpBlock1
             ? true

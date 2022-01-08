@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,12 +9,12 @@ import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
 import { getVars, setVars } from "init/var";
-import { ROOT } from "api/root";
 import showToast from "components/toasts";
-import AutoCompleteSearch from "components/search/AutoCompleteSearch";
 import isKeyPressed from "utils/event/isKeyPressed";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
+// import { ROOT } from "api/root";
+// import AutoCompleteSearch from "components/search/AutoCompleteSearch";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -41,23 +41,21 @@ const getStyles = () => ({
 export default function BizForm({ history }) {
     const [data, setData] = useState({
         bizName: "",
-        field: "",
-        selectedValue: "", // field in the autoselect
+        // field: "",
+        // selectedValue: "", // field in the autoselect
     });
-    const { field, bizName, selectedValue } = data;
+    const { bizName } = data;
 
     useNeedRedirectPage({ history, priorPageId: "doneGamesPanel" });
 
-    useEffect(() => {
-        if (selectedValue)
-            setData((prev) => ({ ...prev, field: selectedValue }));
-    }, [selectedValue]);
+    // useEffect(() => {
+    //     if (selectedValue)
+    //         setData((prev) => ({ ...prev, field: selectedValue }));
+    // }, [selectedValue]);
+    // error options: bizName or field
 
     const styles = getStyles();
-
-    // error options: bizName or field
     const [fieldError, setFieldError] = useState(null);
-    const autocompleteUrl = `${ROOT}/user/pre-register/fields-list?limit=30`;
 
     const showForm = () => (
         <form
@@ -109,23 +107,6 @@ export default function BizForm({ history }) {
                     }}
                 />
             </div>
-            <div id="field2" className="mt-3">
-                Qual ramo de atividade?
-                <AutoCompleteSearch
-                    autocompleteUrl={autocompleteUrl}
-                    setData={setData}
-                    clearOnEscape={false}
-                    clearOnBlur={false}
-                    placeholder=""
-                    openOnFocus={false}
-                    selectOnFocus={false}
-                    searchIcon="map-marked-alt"
-                    noOptionsText="Sem sugestões"
-                    maxHistory={7}
-                    inputId="value2"
-                    txtFont="1em"
-                />
-            </div>
         </form>
     );
 
@@ -133,11 +114,6 @@ export default function BizForm({ history }) {
         if (!bizName) {
             setFieldError("bizName");
             return showToast("Informe nome do seu negócio", { type: "error" });
-        }
-
-        if (!field) {
-            setFieldError("field");
-            return showToast("Informe ramo de atividade.", { type: "error" });
         }
 
         showToast("Salvando...", { dur: 3000 });
@@ -159,7 +135,6 @@ export default function BizForm({ history }) {
             ...priorAdminData,
             bizName,
             bizLinkName,
-            bizField: field,
         };
 
         const finalData = {
@@ -228,7 +203,32 @@ function handleGameUrl({
 }
 // END HELPERS
 
-/*
+/* ARCHIVES
+// const autocompleteUrl = `${ROOT}/user/pre-register/fields-list?limit=30`;
+
+if (!field) {
+    setFieldError("field");
+    return showToast("Informe ramo de atividade.", { type: "error" });
+}
+
+<div id="field2" className="mt-3">
+    Qual ramo de atividade?
+    <AutoCompleteSearch
+        autocompleteUrl={autocompleteUrl}
+        setData={setData}
+        clearOnEscape={false}
+        clearOnBlur={false}
+        placeholder=""
+        openOnFocus={false}
+        selectOnFocus={false}
+        searchIcon="map-marked-alt"
+        noOptionsText="Sem sugestões"
+        maxHistory={7}
+        inputId="value2"
+        txtFont="1em"
+    />
+</div>
+
 <TextField
     required
     onChange={handleChange(setData, data)}

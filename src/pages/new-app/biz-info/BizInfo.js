@@ -7,7 +7,7 @@ export default function BizInfo({ history }) {
     const showTitle = () => (
         <div className="text-center text-white my-4">
             <h1 className="text-title">Novo Clube</h1>
-            <p className="text-white text-normal mx-3 mb-5">
+            <p className="d-none text-white text-normal mx-3 mb-5">
                 Um pouco sobre seu projeto.
             </p>
         </div>

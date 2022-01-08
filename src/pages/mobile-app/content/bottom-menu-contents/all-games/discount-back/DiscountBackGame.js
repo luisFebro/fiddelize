@@ -71,16 +71,22 @@ function useSetGameData({ adminGame, setGameData }) {
 
     useEffect(() => {
         (async () => {
-            const isAppZone = window.location.href.includes("/app");
+            const isFromPlatform = window.location.href.includes(
+                "app/preview?game="
+            );
 
+            // maker here it is referred to first time cli-admin in the website creating the app, their accounts
             const cliDataFromClubMaker = await getVar(
                 "clientAdminData",
                 "pre_register"
             );
-            const discountBackClubMaker =
-                cliDataFromClubMaker && cliDataFromClubMaker.games.discountBack;
 
-            if (discountBackClubMaker && !isAppZone) {
+            const discountBackClubMaker =
+                cliDataFromClubMaker &&
+                cliDataFromClubMaker.games.discountBack &&
+                cliDataFromClubMaker.games.discountBack.challList[0];
+
+            if (discountBackClubMaker && isFromPlatform) {
                 const thisPerc = discountBackClubMaker.perc;
                 const thisTargetPoints = discountBackClubMaker.targetPoints;
                 return setGameData({

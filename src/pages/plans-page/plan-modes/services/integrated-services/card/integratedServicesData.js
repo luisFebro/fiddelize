@@ -24,9 +24,10 @@ const styles = {
 const integratedData = [
     {
         name: `
-            <strong>2 Jogos de compra</strong><br />completos com desafios<br />ilimitados para clientes:<br />
+            <strong>Todas as estratégias de<br/>marketing promocional.</strong><br />Seu negócio tem acesso:<br />
             - Prêmio Alvo;<br />
             - Desconto Retornado;<br />
+            - Estoure Balão;<br />
         `,
         Icon: <SportsEsportsIcon style={styles.muStyle} />,
         customIcon: "",

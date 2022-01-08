@@ -14,7 +14,6 @@ import { Load } from "components/code-splitting/LoadableComp";
 import sendSMS from "hooks/sms/sendSMS";
 import { getUniqueId } from "api/useAPI";
 import { handleFocus } from "utils/form/handleFocus";
-import usePro from "init/pro";
 import getAPI, { encryptPointsLink } from "api";
 import copyText from "utils/document/copyText";
 import RadiusBtn from "components/buttons/RadiusBtn";
@@ -72,7 +71,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />;
 
-    const { isPro } = usePro();
+    // const { isPro } = usePro();
 
     const styles = getStyles();
 
@@ -239,7 +238,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                             needTxtNoWrap
                             title="Enviar"
                             height="60px"
-                            disabled={!isPro}
+                            disabled={false}
                             onClick={() => handleNumberCTA("whatsapp")}
                             backgroundColor="var(--themeSDark--default)"
                             iconMu={<WhatsAppIcon style={muStyle} />}
