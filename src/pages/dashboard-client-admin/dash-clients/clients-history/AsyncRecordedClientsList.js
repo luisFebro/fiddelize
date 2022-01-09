@@ -308,7 +308,7 @@ export default function AsyncRecordedClientsList() {
             />
             {listTotal !== 0 || emptyType === "filter" ? (
                 showSearch()
-            ) : (
+            ) : emptyType === "virgin" ? null : (
                 <p className="my-2 font-weight-bold text-purple text-normal text-center">
                     Preparando histórico...
                 </p>

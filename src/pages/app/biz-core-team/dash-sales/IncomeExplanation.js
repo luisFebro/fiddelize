@@ -12,7 +12,7 @@ export default function IncomeExplanation() {
     useEffect(() => {
         if (primaryAgent === "...") return;
         const splitData = getBizSplitProportion(primaryAgent);
-        setAgentPerc(splitData.perc[agentJob]);
+        setAgentPerc(splitData && splitData.perc && splitData.perc[agentJob]);
     }, [primaryAgent, agentJob]);
 
     const isRep = agentJob === "rep-comercial";

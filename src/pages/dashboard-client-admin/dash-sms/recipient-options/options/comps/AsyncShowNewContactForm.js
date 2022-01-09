@@ -275,7 +275,9 @@ export default function AsyncShowNewContactForm({
                             </span>
                         </MenuItem>
                         <MenuItem value="qrCode">Código QR</MenuItem>
-                        <MenuItem value="number">Celular</MenuItem>
+                        <MenuItem value="number">
+                            Celular (SMS ou Whatsapp)
+                        </MenuItem>
                         <MenuItem value="email">Email</MenuItem>
                         <MenuItem value="copy">Copiar convite</MenuItem>
                     </Select>

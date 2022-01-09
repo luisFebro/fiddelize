@@ -24,6 +24,7 @@ const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
 export default function AddBenefitsBtn({
     needClick = true, // for cli-admin design demo
+    needAdminDefaultTheme = false,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const { themeSColor, benefitsNotif } = useBizData();
@@ -43,7 +44,9 @@ export default function AddBenefitsBtn({
                     size="large"
                     title="BENEFÍCIOS"
                     iconToLeft
-                    backgroundColor={`var(--themeSDark--${themeSColor})`}
+                    backgroundColor={`var(--themeSDark--${
+                        needAdminDefaultTheme ? "default" : themeSColor
+                    })`}
                     onClick={needClick ? handleFullOpen : null}
                     iconMu={PlusIcon}
                     position="relative"

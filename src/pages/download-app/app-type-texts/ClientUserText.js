@@ -57,9 +57,7 @@ export default function ClientUserText({
                         className="d-block text-title"
                         style={{ lineHeight: "50px" }}
                     >
-                        Convite Especial
-                        <br />
-                        para{" "}
+                        Convite do clube de compras para{" "}
                     </span>
                     <div
                         className={`${txtPColor} d-inline-block mt-2 animated bounce repeat-2 delay-3s`}

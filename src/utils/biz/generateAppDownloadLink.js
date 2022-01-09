@@ -9,7 +9,6 @@ export default function generateAppDownloadLink({
     linkId, // staffId
 }) {
     let link;
-    console.log("linkId", linkId);
 
     if (!bizLinkName) return console.log("the param bizLinkName is required");
     const userFirstName = getFirstName(name && name.toLowerCase());

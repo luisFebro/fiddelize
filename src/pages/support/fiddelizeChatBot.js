@@ -215,7 +215,7 @@ function checkEmailAndSetMsg({
             },
         };
         saveNewMsg(
-            `Tudo certo! Você receberá uma notificação ou email assim algum humano estiver disponível.`,
+            `Tudo certo! Você receberá uma notificação ou email assim que algum humano estiver disponível.`,
             attachData
         );
 

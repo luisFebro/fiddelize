@@ -169,7 +169,10 @@ export default function TeamApp({
                 </div>
             </section>
             <section className="mt-4 container-center animated fadeIn delay-1s">
-                <AddBenefitsBtn needClick={!isPreviewMode} />
+                <AddBenefitsBtn
+                    needAdminDefaultTheme={needAdminDefaultTheme}
+                    needClick={!isPreviewMode}
+                />
             </section>
             <style jsx>
                 {`

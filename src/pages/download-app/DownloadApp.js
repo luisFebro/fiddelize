@@ -486,7 +486,7 @@ function handlePwaTitle({ isCliAdmin, isCliMember, isBizTeam, userName }) {
 
     return `<strong>${
         userName ? userName.cap() : "Ei"
-    },<br />baixe nosso app aqui</strong>`;
+    },<br />baixe seu app aqui</strong>`;
 }
 // END HELPERS
 
