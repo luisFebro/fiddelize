@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useData from "init";
@@ -55,16 +55,32 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     // don`t show the notif comp while in staging because it will conflict with current app and update incorrectly to the test env app
     if (IS_STAGING) return <div />;
 
+    const showLaterBtn = () => (
+        <p
+            className="position-absolute text-small text-underline text-white"
+            onClick={() => setShouldRender(false)}
+            style={{ bottom: -15, right: 15 }}
+        >
+            mais tarde
+        </p>
+    );
+
     return (
         <section className={backDrop ? "backdrop-medium" : ""}>
             {shouldRender ? (
-                <div className="notif-permission-banner animated fadeInUp">
-                    <div className="notif-content">
-                        <FontAwesomeIcon icon="bell" className="notif-icon" />
-                        {showTitle()}
+                <section className="position-relative">
+                    <div className="notif-permission-banner animated fadeInUp">
+                        <div className="notif-content">
+                            <FontAwesomeIcon
+                                icon="bell"
+                                className="notif-icon"
+                            />
+                            {showTitle()}
+                        </div>
+                        {showActionBtn()}
+                        {showLaterBtn()}
                     </div>
-                    {showActionBtn()}
-                </div>
+                </section>
             ) : null}
         </section>
     );
