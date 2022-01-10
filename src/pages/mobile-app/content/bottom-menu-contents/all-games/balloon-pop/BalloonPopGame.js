@@ -101,7 +101,7 @@ export default function BalloonPopGame({ match }) {
                         backgroundColor: "#000",
                     }}
                 >
-                    Clique para estourar um balão!!!
+                    Clique para estourar um balão!!
                 </h1>
             </div>
             {balloonList &&
