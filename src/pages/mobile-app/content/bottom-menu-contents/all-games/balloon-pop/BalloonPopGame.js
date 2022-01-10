@@ -6,13 +6,37 @@ import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import getItems, { setItems, removeItems } from "init/lStorage";
 import { addMinutes, hasPassedDate } from "utils/dates/dateFns";
 import useTxtToSpeech from "hooks/media/useTxtToSpeech";
-import { usePrerenderAudio, playAudio } from "hooks/media/usePlayAudio";
+import usePlayAudio, {
+    prerenderAudio,
+    usePrerenderAudio,
+    playAudio,
+} from "hooks/media/usePlayAudio";
 import ModalCenter from "./ModalCenter";
 import useAnimateBalloon from "./useAnimateBalloon";
 import Balloon from "./balloon/Balloon";
 
 export default function BalloonPopGame({ match }) {
     const bizLinkName = match && match.params.bizLinkName;
+
+    const [audioPrerender, setAudioPrerender] = useState(false);
+    const audioName = "audio_pop-balloon-welcome";
+    const audioPath = "/sounds/game/pop-balloon-welcome.mp3";
+
+    useEffect(() => {
+        const runPrerender = async () => {
+            await prerenderAudio(audioPath, audioName);
+            setTimeout(() => {
+                setAudioPrerender(true);
+            }, 3000);
+        };
+
+        runPrerender();
+    }, []);
+
+    usePlayAudio(null, audioName, {
+        autoplay: true,
+        trigger: audioPrerender,
+    });
 
     usePrerenderAudio("/sounds/game/balloon-pop.mp3", "audio_balloon-pop-game");
 
@@ -77,7 +101,7 @@ export default function BalloonPopGame({ match }) {
                         backgroundColor: "#000",
                     }}
                 >
-                    Clique para estourar um balão
+                    Clique para estourar um balão!!
                 </h1>
             </div>
             {balloonList &&
