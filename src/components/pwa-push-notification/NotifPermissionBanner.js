@@ -59,7 +59,7 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
         <p
             className="position-absolute text-small text-underline text-white"
             onClick={() => setShouldRender(false)}
-            style={{ bottom: -15, right: 15 }}
+            style={{ bottom: -10, right: 15 }}
         >
             mais tarde
         </p>

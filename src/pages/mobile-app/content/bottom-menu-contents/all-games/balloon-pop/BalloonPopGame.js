@@ -18,34 +18,32 @@ import Balloon from "./balloon/Balloon";
 export default function BalloonPopGame({ match }) {
     const bizLinkName = match && match.params.bizLinkName;
 
-    const [audioPrerender, setAudioPrerender] = useState(false);
-    const audioName = "audio_pop-balloon-welcome";
-    const audioPath = "/sounds/game/pop-balloon-welcome.mp3";
+    // const [audioPrerender, setAudioPrerender] = useState(false);
+    // const audioName = "audio_pop-balloon-welcome";
+    // const audioPath = "/sounds/game/pop-balloon-welcome.mp3";
 
-    useEffect(() => {
-        const runPrerender = async () => {
-            await prerenderAudio(audioPath, audioName);
-            setTimeout(() => {
-                setAudioPrerender(true);
-            }, 3000);
-        };
+    // useEffect(() => {
+    //     const runPrerender = async () => {
+    //         await prerenderAudio(audioPath, audioName);
+    //         setTimeout(() => {
+    //             setAudioPrerender(true);
+    //         }, 3000);
+    //     };
 
-        runPrerender();
-    }, []);
+    //     runPrerender();
+    // }, []);
 
-    usePlayAudio(null, audioName, {
-        autoplay: true,
-        trigger: audioPrerender,
-    });
+    // usePlayAudio(null, audioName, {
+    //     autoplay: true,
+    //     trigger: audioPrerender,
+    // });
 
-    usePrerenderAudio("/sounds/game/balloon-pop.mp3", "audio_balloon-pop-game");
+    // usePrerenderAudio("/sounds/game/balloon-pop.mp3", "audio_balloon-pop-game");
 
     const [triggerConfetti, setTriggerConfetti] = useState(false);
     const [pendingBenefit, setPendingBenefit] = useState(null);
 
-    const { speak } = useTxtToSpeech(
-        "Clique em cima de um balão para estourar e ganhar um benefício instantâneo!"
-    );
+    const { speak } = useTxtToSpeech();
 
     const confettiOptions = useCallback(
         () => ({ trigger: triggerConfetti, maxTimeSec: 15000 }),
@@ -53,7 +51,7 @@ export default function BalloonPopGame({ match }) {
     );
     useAnimateConfetti(confettiOptions());
 
-    const { data, loading } = useAPI({
+    const { data, loading, isCanceled } = useAPI({
         url: getBalloonPopData(),
         params: {
             bizLinkName,
@@ -80,6 +78,14 @@ export default function BalloonPopGame({ match }) {
     //         </div>
     //     );
     // }
+
+    if (isCanceled) {
+        return (
+            <div className="my-5 mx-3 text-normal text-white text-pill">
+                Problema de conexão. Verifique sua internet e tente novamente.
+            </div>
+        );
+    }
 
     if (!loading && !isGameOn) {
         return (
