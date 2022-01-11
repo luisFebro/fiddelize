@@ -43,5 +43,5 @@ export default function useTxtToSpeech(autoplayTxt) {
         if (autoplayTxt) speak(autoplayTxt);
     }, [autoplayTxt]);
 
-    return { speak, cancel };
+    return { speak, cancel, utterance };
 }

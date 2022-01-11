@@ -145,7 +145,6 @@ export default function useAPI({
             headers: chooseHeader({ token, needAuth }),
             cancelToken: new axios.CancelToken((c) => {
                 cancel = c;
-                setIsCanceled(true);
             }), // n1
         };
 
@@ -155,7 +154,10 @@ export default function useAPI({
                 const response = await axios(config);
                 handleSuccess({ response, stopRequest });
             } catch (e) {
-                if (axios.isCancel(e)) return;
+                if (axios.isCancel(e)) {
+                    setIsCanceled(true);
+                    return;
+                }
                 if (e.response) {
                     const thisStatus = e.response.status;
                     handleError(thisStatus);
