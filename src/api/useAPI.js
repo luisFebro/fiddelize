@@ -41,6 +41,7 @@ export default function useAPI({
     const [loading, setLoading] = useState(true); // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
     const [alreadyReqId, setAlreadyReqId] = useState(null);
     const [error, setError] = useState(false);
+    const [isCanceled, setIsCanceled] = useState(false);
 
     const uify = useAction();
 
@@ -144,6 +145,7 @@ export default function useAPI({
             headers: chooseHeader({ token, needAuth }),
             cancelToken: new axios.CancelToken((c) => {
                 cancel = c;
+                setIsCanceled(true);
             }), // n1
         };
 
@@ -182,7 +184,16 @@ export default function useAPI({
             Oops! Esta parte não funcionou como esperado. Tente recarregar.
         </p>
     );
-    return { data, gotData, loading, setRun, uify, error, ShowError };
+    return {
+        data,
+        gotData,
+        loading,
+        setRun,
+        uify,
+        error,
+        ShowError,
+        isCanceled,
+    };
 }
 
 /* COMMENTS
