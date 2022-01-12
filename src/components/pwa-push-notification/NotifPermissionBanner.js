@@ -9,6 +9,8 @@ import requestPermission, { showBanner } from "./pushNotifPermission";
 
 const permissionStatus = showBanner;
 
+const isSmall = window.Helper.isSmallScreen();
+
 export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     const [backDrop, setBackDrop] = useState(false);
     const [shouldRender, setShouldRender] = useState(permissionStatus);
@@ -59,7 +61,11 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
         <p
             className="position-absolute text-small text-underline text-white"
             onClick={() => setShouldRender(false)}
-            style={{ bottom: -10, right: 15 }}
+            style={
+                isSmall
+                    ? { bottom: -10, right: 15 }
+                    : { bottom: 10, right: 120 }
+            }
         >
             mais tarde
         </p>
