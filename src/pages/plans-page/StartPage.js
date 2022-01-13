@@ -23,15 +23,17 @@ export default function StartPage({
                 />
             </div>
             <div className="text-center">
-                <h1 className="ml-3 text-left font-weight-bold text-subtitle text-white">
-                    <span className="text-hero">{adminName},</span>
-                    <br />
-                    você quem manda!
-                </h1>
+                {adminName && (
+                    <h1 className="ml-3 text-left font-weight-bold text-subtitle text-white">
+                        <span className="text-hero">{adminName},</span>
+                        <br />
+                        você quem manda!
+                    </h1>
+                )}
                 <main className="my-4 mx-3 text-left text-normal text-white">
                     Comece a usar todo potencial dos serviços artesanalmente
-                    criados para te dar super poderes tecnológicos para você
-                    conquistar mais clientes no próximo nível.
+                    criados para seu negócio conquistar clientes no próximo
+                    nível.
                 </main>
             </div>
         </section>
@@ -41,7 +43,10 @@ export default function StartPage({
         currPlan === "all" && (
             <section>
                 {showStartMsg()}
-                <PricingTable setCurrPlan={setCurrPlan} />
+                <PricingTable
+                    setCurrPlan={setCurrPlan}
+                    isFromSite={!adminName}
+                />
                 <p
                     className="m-0 font-italic text-center text-normal mx-3 text-white"
                     style={{
