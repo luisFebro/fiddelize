@@ -52,7 +52,9 @@ export const useReadUser = (userId, role, select, options = {}) => {
     return { data, loading, error };
 };
 
-export const updateUser = async (userId, role, body) => {
+export const updateUser = async (userId, role, body, options = {}) => {
+    const { timeout = 10000, snackbar = {} } = options;
+
     const params = {
         userId,
         role,
@@ -63,6 +65,7 @@ export const updateUser = async (userId, role, body) => {
         url: `${ROOT}/user/update`,
         body,
         params,
+        ...options,
     });
 };
 

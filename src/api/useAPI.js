@@ -111,7 +111,7 @@ export default function useAPI({
     function handleError(status = 200) {
         setAlreadyReqId(null);
         setLoading(false);
-        getSnack(txtFailure, { type: "error" });
+        if (txtFailure) getSnack(txtFailure, { type: "error" });
 
         const gotExpiredToken = status === 401 || status === 403;
 

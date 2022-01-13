@@ -7,6 +7,7 @@ import { updateUser } from "api/frequent";
 import useData, { useBizData } from "init";
 import getGameCardData from "pages/dashboard-client-admin/dash-app/buy-games/buy-games-card/getGameCardData";
 import "pages/dashboard-client-admin/dash-app/buy-games/buy-games-card/_Card.scss";
+import isOffline from "utils/server/isOffline";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -38,8 +39,23 @@ export default function GameCard({ data, closeModal }) {
             backgroundColor={`var(--themeS--${themeSColor})`}
             onClick={async () => {
                 setLoading(true);
-                await updateUser(userId, "cliente", {
-                    "clientUserData.games.currGame": gameName,
+                const options = {
+                    timeout: isOffline ? 1000 : 10000,
+                    snackbar: { txtFailure: isOffline ? null : undefined },
+                };
+
+                await updateUser(
+                    userId,
+                    "cliente",
+                    {
+                        "clientUserData.games.currGame": gameName,
+                    },
+                    options
+                ).catch(() => {
+                    // proceed for offline demo
+                    setCurrGame(gameName);
+                    closeModal();
+                    setLoading(false);
                 });
                 setCurrGame(gameName);
                 closeModal();
