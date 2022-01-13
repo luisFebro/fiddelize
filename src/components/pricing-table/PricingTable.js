@@ -7,7 +7,11 @@ import convertToReal from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SelectPlanBtns from "./select-plan-btns/SelectPlanBtns";
 
-export default function PricingTable({ setCurrPlan, marginTop }) {
+export default function PricingTable({
+    setCurrPlan,
+    marginTop,
+    isFromSite = false,
+}) {
     const [planDur, setPlanDur] = useState("monthly");
     const isYearly = planDur === "yearly";
     const currPlanBr = isYearly ? "ano" : "mês";
@@ -36,7 +40,6 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
     // end credits
 
     const handlePlanDuration = (res) => {
-        console.log("res", res);
         setPlanDur(res);
     };
 
@@ -131,18 +134,20 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                 </ul>
                             </div>
                         </div>
-                        <div className="ptable-footer">
-                            <div className="ptable-action">
-                                <ButtonFab
-                                    title="Ver plano"
-                                    position="relative"
-                                    backgroundColor="#bfac07"
-                                    onClick={() => setCurrPlan("gold")}
-                                    variant="extended"
-                                    size="large"
-                                />
+                        {!isFromSite && (
+                            <div className="ptable-footer">
+                                <div className="ptable-action">
+                                    <ButtonFab
+                                        title="Ver plano"
+                                        position="relative"
+                                        backgroundColor="#bfac07"
+                                        onClick={() => setCurrPlan("gold")}
+                                        variant="extended"
+                                        size="large"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -199,18 +204,20 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                 </ul>
                             </div>
                         </div>
-                        <div className="ptable-footer">
-                            <div className="ptable-action">
-                                <ButtonFab
-                                    title="Ver plano"
-                                    position="relative"
-                                    backgroundColor="rgb(118 111 111)"
-                                    onClick={() => setCurrPlan("silver")}
-                                    variant="extended"
-                                    size="large"
-                                />
+                        {!isFromSite && (
+                            <div className="ptable-footer">
+                                <div className="ptable-action">
+                                    <ButtonFab
+                                        title="Ver plano"
+                                        position="relative"
+                                        backgroundColor="rgb(118 111 111)"
+                                        onClick={() => setCurrPlan("silver")}
+                                        variant="extended"
+                                        size="large"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -268,22 +275,38 @@ export default function PricingTable({ setCurrPlan, marginTop }) {
                                 </ul>
                             </div>
                         </div>
-                        <div className="ptable-footer">
-                            <div className="ptable-action">
-                                <ButtonFab
-                                    title="Ver plano"
-                                    position="relative"
-                                    backgroundColor="#a17f73"
-                                    onClick={() => setCurrPlan("bronze")}
-                                    variant="extended"
-                                    size="large"
-                                />
+                        {!isFromSite && (
+                            <div className="ptable-footer">
+                                <div className="ptable-action">
+                                    <ButtonFab
+                                        title="Ver plano"
+                                        position="relative"
+                                        backgroundColor="#a17f73"
+                                        onClick={() => setCurrPlan("bronze")}
+                                        variant="extended"
+                                        size="large"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
-            <SelectPlanBtns setCurrPlan={setCurrPlan} />
+            {isFromSite && (
+                <div className="my-5 container-center">
+                    <ButtonFab
+                        title="Voltar"
+                        position="relative"
+                        backgroundColor="#bfac07"
+                        onClick={() => {
+                            window.location.href = "https://fiddelize.com";
+                        }}
+                        variant="extended"
+                        size="large"
+                    />
+                </div>
+            )}
+            {!isFromSite && <SelectPlanBtns setCurrPlan={setCurrPlan} />}
             <style jsx>
                 {`
                     .pricing-table {
