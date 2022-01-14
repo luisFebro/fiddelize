@@ -139,10 +139,12 @@ export default function ClientUserAppContent({
                 {showPtsBalance()}
                 <GroupedAppBar />
                 {backBtnForCliAdmin()}
-                <NotifPermissionBanner
-                    title="Receba notificações sobre seus benefícios!"
-                    subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
-                />
+                {!needAppForPreview && (
+                    <NotifPermissionBanner
+                        title="Receba notificações sobre seus benefícios!"
+                        subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
+                    />
+                )}
                 <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
                 {needAppForCliAdmin && showAdminTestMsg()}
             </section>
