@@ -75,7 +75,7 @@ export default function AddPointsContent({ closeModal }) {
                     element={
                         <div className="text-normal text-white">
                             <img
-                                src="/img/app-pts-coin.svg"
+                                src="/img/app-pts-coin.png"
                                 width={100}
                                 height={100}
                                 alt="moeda digital"

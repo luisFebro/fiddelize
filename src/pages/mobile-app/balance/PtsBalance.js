@@ -34,7 +34,7 @@ export default function PtsBalance({ showMoreComps, currPointsRef, txtColor }) {
                                 className="pts-coin"
                                 width={50}
                                 height={50}
-                                src="/img/app-pts-coin.svg"
+                                src="/img/app-pts-coin.png"
                                 alt="moeda digital pts para benefícios"
                             />
                             <style jsx>
