@@ -13,7 +13,8 @@ export default function usePro(itemName) {
     const isProExpBlock2 = (bizPlanData && bizPlanData.isProExpBlock2) || false; // block all other functionalities after month maintenance (a.k.a RGP - redemption grace period)
     const isProExpBlock1 =
         (bizPlanData && bizPlanData.isProExpBlock1 && !isProExpBlock2) || false; // block register of customer and to know if the a current pro plan is expired
-    const maintenanceExpDate = bizPlanData && bizPlanData.credits.expiringDate;
+    const maintenanceExpDate =
+        bizPlanData && bizPlanData.credits && bizPlanData.credits.expiringDate;
 
     // while isProExpBlock1 is true, keep the register clients blocked, not considering level 2 truthness
     const isMainRegisterFuncBlocked =

@@ -13,7 +13,7 @@ const ptsCurrency = (
         <img
             className="mt-3 img-center shadow-babadoo-filter"
             width={100}
-            src="/img/app-pts-coin.svg"
+            src="/img/app-pts-coin.png"
             alt="moeda PTS"
         />
     </Fragment>

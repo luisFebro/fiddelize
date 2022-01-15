@@ -18,8 +18,9 @@ export const AsyncNotificationBadge = Load({
 });
 
 function PlanBadges({ history }) {
-    const { isPro, plan, isProExpBlock1 } = usePro();
+    const { isPro, isProExpBlock1 } = usePro();
     const isFreeTrialUser = !isPro && !isProExpBlock1;
+    const plan = "bronze";
 
     const [itemsCount, loading] = useData(["pendingOrderItemsCount"], "global");
     const gotPendingOrder = !loading && itemsCount > 0;

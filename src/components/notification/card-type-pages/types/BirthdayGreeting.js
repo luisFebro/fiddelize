@@ -28,7 +28,7 @@ export default function BirthdayGreeting({
             <div className="container-center">
                 <img
                     className="pts-coin"
-                    src="/img/app-pts-coin.svg"
+                    src="/img/app-pts-coin.png"
                     alt="moeda PTS"
                     width={100}
                 />
