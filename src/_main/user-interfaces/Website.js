@@ -57,6 +57,9 @@ import {
     // test
     AsyncPlayground,
     AsyncAmurretoAltrabot,
+    // menu-qr
+    AsyncCustomerCatalog,
+    AsyncAdminMenuOrders,
 } from "./CommonImports";
 // END PAGES
 
@@ -239,6 +242,16 @@ function Website({ location }) {
                     path="/amurreto/altrabot"
                     exact
                     component={AsyncAmurretoAltrabot}
+                />
+                <Route
+                    path="/cardapio-qr/cliente/:bizLinkId/:tableId"
+                    exact
+                    component={AsyncCustomerCatalog}
+                />
+                <Route
+                    path="/cardapio-qr/admin/:bizLinkId"
+                    exact
+                    component={AsyncAdminMenuOrders}
                 />
                 <Route component={Default} />
             </Switch>

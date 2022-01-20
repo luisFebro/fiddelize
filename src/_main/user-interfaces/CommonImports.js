@@ -215,3 +215,19 @@ export const AsyncAmurretoAltrabot = Load({
         ),
 });
 // END AMURRETO
+
+// CARDAPIO QR
+export const AsyncCustomerCatalog = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/customer-catalog/CustomerCatalog" /* webpackChunkName: "customer-catalog-lazy" */
+        ),
+});
+
+export const AsyncAdminMenuOrders = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/admin/menu-orders/AdminMenuOrders" /* webpackChunkName: "admin-menu-orders-lazy" */
+        ),
+});
+// END CARDAPIO QR
