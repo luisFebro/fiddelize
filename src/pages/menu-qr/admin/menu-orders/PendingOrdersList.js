@@ -1,13 +1,10 @@
-import { Fragment, useEffect, useState } from "react";
-import SearchField from "components/search/SearchField";
+import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
-import useAPIList, {
-    readBenefitCards,
-    benefitCardsAutocomplete,
-} from "api/useAPIList";
+import useAPIList, { readBenefitCards } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 import PendingCard from "./cards/PendingCard";
+// import SearchField from "components/search/SearchField";
 // import { setItems } from "init/lStorage";
 // import { Load } from "components/code-splitting/LoadableComp";
 // import showToast from "components/toasts";
@@ -16,7 +13,7 @@ import PendingCard from "./cards/PendingCard";
 
 export default function PendingOrdersList() {
     const [skip, setSkip] = useState(0);
-    const [search, setSearch] = useState("");
+    // const [search, setSearch] = useState("");
     const { bizId } = useBizData();
     const { userId } = useData();
 
@@ -24,7 +21,6 @@ export default function PendingOrdersList() {
         type: "pending",
         userId, // for auth
         adminId: bizId,
-        search,
     };
 
     // UPDATE
@@ -33,11 +29,11 @@ export default function PendingOrdersList() {
     useEffect(() => {
         if (runName && runName.includes("PendingOrdersList")) {
             setSkip(0);
-            setSearch("");
+            // setSearch("");
             setRun("runName", null, uify);
         }
         // eslint-disable-next-line
-    }, [runName, search]);
+    }, [runName]);
     // END UPDATE
 
     const {
@@ -58,37 +54,8 @@ export default function PendingOrdersList() {
         params,
         listName: "PendingOrdersList",
         filterId: "customerId", // IMPORTANT: this is to avoid duplication. the default is _id, if not found, it will be loading issue. Set here the actual id of each card
-        trigger: search || runName || true,
+        trigger: runName || true,
     });
-
-    // SEARCH
-    const handleSearch = (entry) => {
-        if (entry === "_cleared") {
-            setSearch("");
-            return;
-        }
-
-        setSkip(0);
-        setSearch(entry);
-    };
-
-    const autocompleteProps = {
-        placeholder: "Procure nome cliente",
-        noOptionsText: "Cliente não encontrado ou sem benefícios pendentes",
-    };
-
-    const showCustomerSearch = () => (
-        <Fragment>
-            <SearchField
-                callback={handleSearch}
-                searchUrl={benefitCardsAutocomplete(bizId, {
-                    isReceived: false,
-                })}
-                autocompleteProps={autocompleteProps}
-            />
-        </Fragment>
-    );
-    // END SEARCH
 
     // INFINITY LOADING LIST
     const detectedCard = useElemDetection({
@@ -125,7 +92,6 @@ export default function PendingOrdersList() {
 
     return (
         <section className="text-purple mx-3">
-            {!needEmptyIllustra && showCustomerSearch()}
             {Boolean(ordersCount) && (
                 <h2 className="my-3 text-normal font-weight-bold text-center">
                     <span className="text-subtitle font-weight-bold">

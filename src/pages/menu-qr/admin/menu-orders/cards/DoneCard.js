@@ -1,105 +1,191 @@
-import { useBizData } from "init";
-import { gameIconsStore, selectBrBenefitType } from "components/biz/GamesBadge";
-import { calendar } from "utils/dates/dateFns";
-import UndoContentBtn from "./undo/UndoContentBtn";
+import { useState } from "react";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import convertToReal from "utils/numbers/convertToReal";
+import { fromNow } from "utils/dates/dateFns";
+import MarkBtn from "./mark-btn/MarkBtn";
+// import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
+// import getItems from "init/lStorage";
+// import { useBizData } from "init";
 
-export default function DoneCard({ data = {} }) {
-    const { beatenGame, customerName } = data;
-    const { game, doneBy, benefitDesc, updatedAt } = beatenGame;
+const truncate = (name, leng) => window.Helper.truncate(name, leng);
+// const [lastDate] = getItems("global", ["lastDatePendingOrderCard"]);
 
-    const { themePColor } = useBizData();
+export default function DoneCard({ data }) {
+    // const { themePColor } = useBizData();
+    const { status = "done" } = data;
 
-    const undoProps = {
-        currPoints: data.currPoints,
-        gender: data.gender,
-        customerId: data.customerId,
-        recordId: data.recordId,
-        customerName,
-        // benefit
-        gameName: game,
-        benefitId: beatenGame.id,
-        currChall: beatenGame.currChall,
-        challTypeId: beatenGame.challTypeId,
-        targetPoints: beatenGame.targetPoints,
-        doneBy,
-        benefitDesc,
+    const { updatedAt = new Date() } = data;
+
+    const dataItems = [
+        {
+            id: "123",
+            qtt: 2,
+            img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
+            desc: "lata guaraná antactica",
+            unitAmount: 8.0,
+        },
+        {
+            id: "456",
+            qtt: 3,
+            img: "/img/test/cardapio-qr/suco-de-uva.jpg",
+            desc: "copos de suco de uva",
+            unitAmount: 5.0,
+        },
+        {
+            id: "789",
+            qtt: 2,
+            img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
+            desc: "sanduba pão árabe misto",
+            unitAmount: 4.0,
+        },
+        {
+            id: "1010",
+            qtt: 3,
+            img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
+            desc: "sanduba x-salada e verduras",
+            unitAmount: 7.0,
+        },
+    ];
+
+    const tableId = "01";
+    const orderAmount =
+        dataItems && dataItems.length
+            ? dataItems.reduce(
+                  (acc, next) => acc + next.qtt * next.unitAmount,
+                  0
+              )
+            : 0;
+    const totalItems =
+        dataItems && dataItems.length
+            ? dataItems.reduce((acc, next) => acc + next.qtt, 0)
+            : 0;
+
+    const showOrderStatus = () => {
+        const statusBr = {
+            done: { txt: "Feito", color: "green" },
+            canceled: { txt: "Cancelado", color: "var(--expenseRed)" },
+            // pending: { txt: "Pendente". color: },
+        };
+
+        return (
+            <div className="order-badge-status--root text-normal text-shadow text-white">
+                <div className="badge">{statusBr[status].txt}</div>
+                <style jsx>
+                    {`
+                        .order-badge-status--root {
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                        }
+
+                        .order-badge-status--root .badge {
+                            padding: 1px 2px;
+                            border-radius: 15px;
+                            background: ${statusBr[status].color};
+                            border: solid 2px white;
+                        }
+                    `}
+                </style>
+            </div>
+        );
     };
 
-    const showStatusBadge = () => (
-        <section className="done-card-status position-absolute">
-            <section className="d-flex">
-                <div className="container-center">
-                    <p className="badge text-pill">Aplicado</p>
-                </div>
-                <UndoContentBtn {...undoProps} />
-            </section>
+    const showUpdatedAt = () => (
+        <p className="mt-2 text-white text-small">
+            Atualizado em: {fromNow(updatedAt)}
+        </p>
+    );
+
+    return (
+        <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
+            {showOrderStatus()}
+            <h2 className="text-subtitle font-weight-bold">
+                ID MESA: {tableId}
+            </h2>
+            <h2 className="text-normal font-weight-bold">
+                Valor Total:
+                <span
+                    className="ml-3 hightlight text-pill"
+                    style={{
+                        backgroundColor: "#5e5b5b",
+                    }}
+                >
+                    R$ {convertToReal(orderAmount, { needFraction: true })}
+                </span>
+            </h2>
+            <p className="m-0 text-normal">
+                Descrição ({totalItems} {totalItems === 1 ? "item" : "itens"}):
+            </p>
+            <ItemsDesc data={dataItems} />
+            {showUpdatedAt()}
             <style jsx>
                 {`
-                    .done-card-status {
-                        bottom: 10px;
-                        right: -15px;
+                    .card--root {
+                        padding: 8px 12px;
+                        background: grey;
+                        border-radius: 15px;
                     }
 
-                    .done-card-status .badge {
-                        background: var(--incomeGreen);
+                    .card--root .benefits-area svg {
+                        font-size: 35px;
                     }
                 `}
             </style>
         </section>
     );
+}
+
+function ItemsDesc({ data }) {
+    const [moreItensBtnShow, setMoreItensShow] = useState(false);
+
+    const showItem = (dt) => (
+        <div className="mt-1 d-flex align-items-center text-white text-normal">
+            <span className="text-em-1-2 mr-1">{dt.qtt}x</span>
+            <img
+                src={dt.img}
+                width={50}
+                style={{
+                    maxHeight: 60,
+                }}
+                alt={dt.desc}
+            />
+            <span className="d-table ml-2 text-white text-small d-inline-block">
+                {truncate(dt.desc, 50)}
+                <span
+                    className="d-block ml-1 px-1"
+                    style={{ background: "#5e5b5b" }}
+                >
+                    R$ {convertToReal(dt.qtt * dt.unitAmount)}{" "}
+                    <span className="text-small">
+                        (R$ {convertToReal(dt.unitAmount)} uni.)
+                    </span>
+                </span>
+            </span>
+        </div>
+    );
+
+    const listLeng = data && data.length;
+    const showMoreBtn = !moreItensBtnShow && listLeng >= 2;
 
     return (
-        <section className="benefit-card--root mb-4 position-relative text-normal text-white text-shadow">
-            <h2
-                className="text-subtitle font-weight-bold"
-                style={{ lineHeight: "25px" }}
-            >
-                {customerName && customerName.cap()}
-                <span className="d-inline-block m-0 ml-2 text-normal">
-                    recebeu:
-                </span>
-            </h2>
-            <section className="d-flex my-2">
-                <div className="container-center-col">
-                    {gameIconsStore[game]}
-                    <span className="font-weight-bold text-small">
-                        {selectBrBenefitType(game)}
-                    </span>
+        <section>
+            {data.length &&
+                data
+                    .map((item) => <span key={item.id}>{showItem(item)}</span>)
+                    .slice(0, showMoreBtn ? 1 : listLeng)}
+            {showMoreBtn && (
+                <div className="container-center my-2">
+                    <ButtonFab
+                        title="mostrar mais"
+                        titleSize="small"
+                        backgroundColor="var(--themeSDark)"
+                        onClick={() => setMoreItensShow(true)}
+                        position="relative"
+                        variant="extended"
+                        size="small"
+                    />
                 </div>
-                <div className="benefit-desc px-2 position-relative text-normal ml-3">
-                    {benefitDesc}
-                </div>
-            </section>
-            <div className="text-small">
-                <strong>feito por:</strong>
-                <br />
-                {doneBy}
-                <strong className="mt-1 d-block">{calendar(updatedAt)}</strong>
-            </div>
-            {showStatusBadge()}
-            <style jsx>
-                {`
-                    .benefit-card--root {
-                        padding: 8px 12px;
-                        background: var(--themePDark--${themePColor});
-                        border-radius: 15px;
-                    }
-
-                    .benefit-card--root svg {
-                        font-size: 35px;
-                    }
-
-                    .benefit-card--root .benefit-desc {
-                        line-height: 25px;
-                        background: var(--mainWhite);
-                        color: var(--themePDark--${themePColor});
-                        text-shadow: none;
-                        border-radius: 15px;
-                        padding: 5px 0 5px 5px;
-                        box-shadow: inset -0.1em -0.1em 0.2em grey;
-                    }
-                `}
-            </style>
+            )}
         </section>
     );
 }

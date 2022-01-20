@@ -2,23 +2,21 @@ import { useState, useEffect } from "react";
 import "flickity/dist/flickity.css";
 // jquery module is required to run this path
 import Flickity from "flickity";
-import "./CarouselCard.scss";
 
 const isSmall = window.Helper.isSmallScreen();
 
 export default function CarouselCard({
     CardList,
-    style,
-    currIconInd,
-    setOpenModal,
     size,
+    multi = false, // for itialize multiple carousel in the same page
+    // style,
+    // currIconInd,
+    // setOpenModal,
 }) {
-    const [flkty, setFlkty] = useState(null);
+    const [, setFlkty] = useState(null);
 
     useEffect(() => {
-        const carouselElem2 = document.querySelector(".main-carousel");
-
-        const flkty = new Flickity(carouselElem2, {
+        const options = {
             // options
             cellAlign: "center",
             wrapAround: true,
@@ -34,23 +32,119 @@ export default function CarouselCard({
                     console.log("Flickity ready");
                 },
             },
-        });
+        };
 
+        if (multi) {
+            const galleryCarousels = document.querySelectorAll(
+                ".main-carousel"
+            );
+            let i;
+            let len;
+            for (i = 0, len = galleryCarousels.length; i < len; i++) {
+                const thisCarousel = galleryCarousels[i];
+                // eslint-disable-next-line
+                new Flickity(thisCarousel, options);
+            }
+            return;
+        }
+
+        const carouselElem2 = document.querySelector(".main-carousel");
+
+        const flkty = new Flickity(carouselElem2, options);
         setFlkty(flkty);
-    }, []);
+    }, [multi]);
 
     return (
         <section
             id="carouselCard--root"
             className="mb-5 container-center-max-width-500"
         >
-            <div
-                className={`carousel--root ${
-                    size === "compact" ? "compact" : ""
-                } my-2 text-white`}
-            >
+            <div className={`carousel--root ${size || ""} my-2 text-white`}>
                 <div className="main-carousel">{CardList}</div>
             </div>
+            <style jsx>
+                {`
+                    .carousel--root {
+                        /*background: var(--mainWhite);*/
+                        height: 440px;
+                        box-shadow: rgba(0, 0, 0, 0.35) 0px 31px 120px -6px;
+                    }
+
+                    .flickity-viewport {
+                        height: 440px !important;
+                    }
+
+                    .carousel-cell {
+                        box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
+                        width: 62%;
+                        margin: 5px;
+                        padding: 10px;
+                        height: 420px;
+                        background: var(--mainWhite);
+                        color: var(--mainPurple);
+                        cursor: pointer;
+                        border: none;
+                        text-align: center;
+                        border-radius: 15px;
+                    }
+
+                    .carousel--root.medium {
+                        height: 300px;
+                    }
+                    .carousel--root.medium .flickity-viewport {
+                        height: 300px !important;
+                    }
+
+                    .carousel--root.medium .carousel-cell {
+                        height: 275px;
+                    }
+
+                    .carousel--root.compact {
+                        height: 260px;
+                    }
+                    .carousel--root.compact .flickity-viewport {
+                        height: 260px !important;
+                    }
+
+                    .carousel--root.compact .carousel-cell {
+                        height: 235px;
+                    }
+
+                    .card-icons {
+                        font-size: 60px;
+                    }
+
+                    .flickity-button {
+                        background-color: var(--themeSDark);
+                    }
+                    .flickity-button:hover {
+                        background-color: var(--themeSDark);
+                    }
+
+                    .flickity-prev-next-button {
+                        width: 54px;
+                    }
+
+                    .flickity-prev-next-button .arrow {
+                        fill: var(--mainWhite);
+                        height: 20px;
+                    }
+                    .flickity-prev-next-button.no-svg {
+                        fill: var(--themeS);
+                    }
+
+                    .is-selected {
+                        background-color: var(
+                            --lightPurple
+                        ) !important; /* var(--lightPurple) */
+                    }
+
+                    .is-selected p,
+                    .is-selected div {
+                        color: #fff !important;
+                    }
+                `}
+            </style>
         </section>
     );
 }

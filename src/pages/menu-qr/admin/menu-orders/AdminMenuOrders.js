@@ -2,8 +2,18 @@ import { useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ModalFullContent from "components/modals/ModalFullContent";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+
+const PlusIcon = (
+    <AddCircleOutlineIcon
+        style={{
+            transform: "scale(1.5)",
+            color: "#fff",
+            filter: "drop-shadow(.1px .1px .9px grey)",
+        }}
+    />
+);
 
 const AsyncPendingOrdersList = Load({
     loader: () =>
@@ -51,23 +61,13 @@ export default function AdminMenuOrders({ match }) {
         </div>
     );
 
-    const showTitleAndSub = () => (
+    const showTitle = () => (
         <div className="text-center text-purple mx-3">
             {showLogo()}
             <h1 className="text-subtitle text-purple font-weight-bold">
                 Pedidos {isPending ? "Pendentes" : "Realizados"}
             </h1>
         </div>
-    );
-
-    const PlusIcon = (
-        <AddCircleOutlineIcon
-            style={{
-                transform: "scale(1.5)",
-                color: "#fff",
-                filter: "drop-shadow(.1px .1px .9px grey)",
-            }}
-        />
     );
 
     const showCTAs = () => (
@@ -108,7 +108,7 @@ export default function AdminMenuOrders({ match }) {
 
     return (
         <section>
-            {showTitleAndSub()}
+            {showTitle()}
             {isPending ? <AsyncPendingOrdersList /> : <AsyncDoneOrdersList />}
             {showCTAs()}
             {fullOpen && (

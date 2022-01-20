@@ -1,51 +1,56 @@
 import { useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 import convertToReal from "utils/numbers/convertToReal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fromNow } from "utils/dates/dateFns";
+import MarkBtn from "./mark-btn/MarkBtn";
+// import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 // import getItems from "init/lStorage";
 // import { useBizData } from "init";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 // const [lastDate] = getItems("global", ["lastDatePendingOrderCard"]);
 
+const dataItemsEx = [
+    {
+        id: "123",
+        qtt: 2,
+        img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
+        desc: "lata guaraná antactica",
+        unitAmount: 8.0,
+    },
+    {
+        id: "456",
+        qtt: 3,
+        img: "/img/test/cardapio-qr/suco-de-uva.jpg",
+        desc: "copos de suco de uva",
+        unitAmount: 5.0,
+    },
+    {
+        id: "789",
+        qtt: 2,
+        img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
+        desc: "sanduba pão árabe misto",
+        unitAmount: 4.0,
+    },
+    {
+        id: "1010",
+        qtt: 3,
+        img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
+        desc: "sanduba x-salada e verduras",
+        unitAmount: 7.0,
+    },
+];
+
 export default function PendingCard({ data }) {
-    const orderDbUpdatedAt = new Date();
     // const { themePColor } = useBizData();
     const themePColor = "default";
 
-    const dataItems = [
-        {
-            id: "123",
-            qtt: 2,
-            img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
-            desc: "lata guaraná antactica",
-            unitAmount: 8.0,
-        },
-        {
-            id: "456",
-            qtt: 3,
-            img: "/img/test/cardapio-qr/suco-de-uva.jpg",
-            desc: "copos de suco de uva",
-            unitAmount: 5.0,
-        },
-        {
-            id: "789",
-            qtt: 2,
-            img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
-            desc: "sanduba pão árabe misto",
-            unitAmount: 4.0,
-        },
-        {
-            id: "1010",
-            qtt: 3,
-            img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
-            desc: "sanduba x-salada e verduras",
-            unitAmount: 7.0,
-        },
-    ];
+    const {
+        orderId = "01",
+        dataItems = dataItemsEx,
+        updatedAt = new Date(),
+    } = data;
 
-    const tableId = "01";
     const orderAmount =
         dataItems && dataItems.length
             ? dataItems.reduce(
@@ -58,34 +63,19 @@ export default function PendingCard({ data }) {
             ? dataItems.reduce((acc, next) => acc + next.qtt, 0)
             : 0;
 
-    const showMarkDoneBtn = () => (
-        <ButtonFab
-            title="Marcar"
-            iconFontAwesome={
-                <FontAwesomeIcon
-                    icon="check"
-                    style={{
-                        fontSize: "20px",
-                        filter: "drop-shadow(.5px .5px 1.5px grey)",
-                        color: "white",
-                    }}
-                />
-            }
-            backgroundColor="var(--themeSDark)"
-            onClick={null}
-            position="absolute"
-            top={5}
-            right={5}
-            variant="extended"
-            size="medium"
-        />
+    const showMarkDoneBtn = () => <MarkBtn />;
+
+    const showUpdatedAt = () => (
+        <p className="mt-2 text-white text-small">
+            Atualizado em: {fromNow(updatedAt)}
+        </p>
     );
 
     return (
         <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
             <h2 className="text-subtitle font-weight-bold">
-                ID MESA: {tableId}
+                ID MESA: {orderId}
             </h2>
             <h2 className="text-normal font-weight-bold">
                 Valor Total:
@@ -97,6 +87,7 @@ export default function PendingCard({ data }) {
                 Descrição ({totalItems} {totalItems === 1 ? "item" : "itens"}):
             </p>
             <ItemsDesc data={dataItems} />
+            {showUpdatedAt()}
             <style jsx>
                 {`
                     .card--root {
