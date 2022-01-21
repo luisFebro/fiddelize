@@ -1,6 +1,4 @@
-import DeleteButton from "components/buttons/DeleteButton";
-import { Fragment, useState } from "react";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { useState, useEffect } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,17 +6,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function ProductCard({ card }) {
+export default function ProductCard({ card, itemData }) {
+    const { handleItem, orderList } = itemData;
+
     const [data, setData] = useState({
         added: false,
-        qtt: 1,
+        qtt: 0,
     });
     const { added, qtt } = data;
-    const totalAmount = card.unitAmount * qtt;
+    const itemDesc = card.desc;
+    const totalAmount = card.unitAmount * (qtt || 1); // always 1 if zero to get the initial unit value to show to customer for reference
+
+    useEffect(() => {
+        const foundItem = orderList.find(
+            (item) => item.name === itemDesc && item.count >= 1
+        );
+        if (itemDesc && foundItem) {
+            setData((prev) => ({
+                added: true,
+                qtt: foundItem.count,
+            }));
+        }
+    }, [itemDesc]);
 
     const showImg = () => (
         <section className="mb-2 container-center">
-            <img width="150px" height="150px" src={card.img} alt={card.desc} />
+            <img width="150px" height="150px" src={card.img} alt={itemDesc} />
         </section>
     );
 
@@ -41,60 +54,6 @@ export default function ProductCard({ card }) {
         </section>
     );
 
-    const handleAddClick = () => {
-        setData((prev) => ({ ...prev, added: true }));
-        // showToast("Adicionado com sucesso!", { dur: 3000, type: "success" })
-    };
-
-    const showAddBtn = () => (
-        <Fragment>
-            {!added ? (
-                <div
-                    className="position-absolute"
-                    style={{
-                        bottom: "10px",
-                        right: "10px",
-                    }}
-                >
-                    <ButtonFab
-                        size="large"
-                        backgroundColor="var(--themeSDark)"
-                        onClick={handleAddClick}
-                        position="relative"
-                        iconMu={
-                            <AddShoppingCartIcon
-                                style={{
-                                    transform: "scale(1.5)",
-                                    zIndex: 1,
-                                }}
-                            />
-                        }
-                    />
-                </div>
-            ) : (
-                <div
-                    className="position-absolute"
-                    style={{
-                        bottom: "10px",
-                        right: "10px",
-                    }}
-                >
-                    <DeleteButton
-                        onClick={() =>
-                            setData((prev) => ({
-                                ...prev,
-                                qtt: 1,
-                                added: false,
-                            }))
-                        }
-                        transform="scale(1.5)"
-                        size="medium"
-                    />
-                </div>
-            )}
-        </Fragment>
-    );
-
     return (
         <section key={card.id} className="carousel-cell no-outline">
             {added && showAddedBadge()}
@@ -106,14 +65,14 @@ export default function ProductCard({ card }) {
                         minHeight: 50,
                     }}
                 >
-                    {truncate(card.desc, 40)}
+                    {truncate(itemDesc, 40)}
                 </p>
                 <p className="d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
                     R$ {convertToReal(totalAmount)}{" "}
                     {qtt > 1 ? (
                         <span className="text-em-0-9">
                             {" "}
-                            > R$ {convertToReal(card.unitAmount)} (cada)
+                            &gt; R$ {convertToReal(card.unitAmount)} (cada)
                         </span>
                     ) : (
                         ""
@@ -122,13 +81,28 @@ export default function ProductCard({ card }) {
                 <div className="d-flex">
                     <ButtonFab
                         size="small"
-                        backgroundColor="var(--themeSDark)"
-                        onClick={() =>
+                        backgroundColor={
+                            qtt <= 0 ? "grey" : "var(--expenseRed)"
+                        }
+                        onClick={() => {
+                            const newCount = qtt - 1;
+                            const newAmount = totalAmount - newCount;
+                            const item = {
+                                name: itemDesc,
+                                count: newCount,
+                                amount: newAmount,
+                                img: card.img,
+                            };
+
+                            if (newCount === 0) handleItem("remove", itemDesc);
+                            else handleItem("update", { item });
+
                             setData((prev) => ({
                                 ...prev,
-                                qtt: prev.qtt <= 1 ? 1 : (prev.qtt -= 1),
-                            }))
-                        }
+                                qtt: prev.qtt <= 0 ? 0 : (prev.qtt -= 1),
+                                added: prev.qtt <= 0 ? false : true,
+                            }));
+                        }}
                         position="relative"
                         iconMu={
                             <FontAwesomeIcon
@@ -143,23 +117,36 @@ export default function ProductCard({ card }) {
                     <ButtonFab
                         size="small"
                         backgroundColor="var(--themeSDark)"
-                        onClick={() =>
-                            setData((prev) => ({
-                                ...prev,
-                                qtt: (prev.qtt += 1),
-                            }))
-                        }
+                        onClick={() => {
+                            setData((prev) => {
+                                const newCount = prev.qtt + 1;
+                                const newAmount = card.unitAmount * newCount;
+
+                                const item = {
+                                    name: itemDesc,
+                                    count: newCount,
+                                    amount: newAmount,
+                                    img: card.img,
+                                };
+                                handleItem("update", { item });
+
+                                return {
+                                    ...prev,
+                                    qtt: newCount,
+                                    added: true,
+                                };
+                            });
+                        }}
                         position="relative"
                         iconMu={
                             <FontAwesomeIcon
                                 icon="plus"
-                                style={{ fontSize: 15 }}
+                                style={{ fontSize: 25 }}
                             />
                         }
                     />
                 </div>
             </section>
-            {showAddBtn()}
         </section>
     );
 }

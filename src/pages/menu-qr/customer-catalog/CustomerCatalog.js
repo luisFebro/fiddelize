@@ -1,16 +1,66 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import QrCode from "components/QrCode";
 import CarouselCard from "components/carousels/CarouselCard";
+import { Load } from "components/code-splitting/LoadableComp";
+import showToast from "components/toasts";
+import useBackColor from "hooks/useBackColor";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ProductCard from "./ProductCard";
+import {
+    updateItem,
+    removeItem,
+    useOrderTotal,
+} from "./helpers/customerOrderMethods";
+
+export const AsyncOrdersPage = Load({
+    loader: () =>
+        import(
+            "./orders-page/OrdersPage" /* webpackChunkName: "orders-page-lazy" */
+        ),
+});
 
 export default function CustomerCatalog({ match }) {
-    const tableId = match && match.params && match.params.tableId;
+    const [nextPage, setNextPage] = useState(false);
+    const [data, setData] = useState({
+        orderCount: 0,
+        orderAmount: 0,
+        orderList: [],
+    });
+    const { orderList, orderAmount, orderCount } = data;
+
+    useScrollUp();
+    useBackColor("var(--themeBackground--default");
+
+    const handleItem = (action, payload) => {
+        const actions = ["update", "remove"];
+        if (!actions.includes(action))
+            throw new Error(`Invalid action. Only ${actions}`);
+        const isUpdate = action === "update";
+
+        if (isUpdate) updateItem({ ...payload, setData });
+        else removeItem({ itemName: payload, setData });
+    };
+    useOrderTotal({ orderCount, orderList, setData });
+
+    const itemData = {
+        handleItem,
+        orderList,
+    };
+
+    const handleNextPage = () => {
+        if (!orderAmount)
+            return showToast("Menu Vazio! Por favor, selecione algum item.");
+        return setNextPage(true);
+    };
+
+    const orderId = match && match.params && match.params.orderId;
     const bizLinkId = match && match.params && match.params.bizLinkId;
     const bizLogo = "/img/test/restaurant.jpg";
     const width = 110;
     const height = 110;
     const url = match && match.url;
-    const isQrDisplay = tableId === "qr";
+    const isQrDisplay = orderId === "qr";
     // show either qr code to be scanned or the product catalog
 
     const showLogo = () => (
@@ -57,14 +107,31 @@ export default function CustomerCatalog({ match }) {
                     {showQrCode()}
                 </Fragment>
             ) : (
-                <DigitalMenu />
+                <Fragment>
+                    {!nextPage ? (
+                        <DigitalMenu
+                            handleNextPage={handleNextPage}
+                            orderAmount={orderAmount}
+                            orderCount={orderCount}
+                            itemData={itemData}
+                        />
+                    ) : (
+                        <AsyncOrdersPage
+                            setNextPage={setNextPage}
+                            setData={setData}
+                            itemList={orderList}
+                            itemsCount={orderCount}
+                            investAmount={orderAmount}
+                        />
+                    )}
+                </Fragment>
             )}
         </section>
     );
 }
 
 // COMP
-function DigitalMenu() {
+function DigitalMenu({ handleNextPage, orderAmount, orderCount, itemData }) {
     const allCategories = ["bebidas", "sanduíches", "gerais"];
     const dataProducts = [
         {
@@ -119,16 +186,18 @@ function DigitalMenu() {
     ];
 
     const showCatalog = () => (
-        <section className="">
+        <section>
             {allCategories.map((cat) => {
                 const filteredCategory =
                     dataProducts.filter((item) => item.category === cat) || [];
                 if (!filteredCategory.length) return <div />;
 
-                const ThisCardList = <CardList dataList={filteredCategory} />;
+                const ThisCardList = (
+                    <CardList dataList={filteredCategory} itemData={itemData} />
+                );
 
                 return (
-                    <section className="" key={cat}>
+                    <section key={cat}>
                         <h2
                             className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
                             style={{
@@ -144,6 +213,11 @@ function DigitalMenu() {
                                 multi
                             />
                         </div>
+                        <TotalInvest
+                            orderAmount={orderAmount}
+                            orderCount={orderCount}
+                        />
+                        <ContinueBtn onClick={handleNextPage} />
                     </section>
                 );
             })}
@@ -153,21 +227,26 @@ function DigitalMenu() {
     return (
         <section>
             <h1 className="font-weight-bold text-subtitle text-white text-center">
-                Cardápio Digital
+                Menu Digital
+                <p className="mx-3 text-normal text-em-1-0">
+                    Para adicionar um novo item, basta clicar no botão de mais.
+                    Bom apetite!
+                </p>
             </h1>
             {showCatalog()}
+            <div style={{ marginBottom: 150 }} />
         </section>
     );
 }
 
 // COMP
-function CardList({ dataList = [] }) {
+function CardList({ dataList = [], itemData }) {
     return (
         <Fragment>
             {dataList.length &&
                 dataList.map((card) => (
                     <Fragment key={card.id}>
-                        <ProductCard card={card} />
+                        <ProductCard card={card} itemData={itemData} />
                     </Fragment>
                 ))}
         </Fragment>

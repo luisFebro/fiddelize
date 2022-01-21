@@ -244,12 +244,12 @@ function Website({ location }) {
                     component={AsyncAmurretoAltrabot}
                 />
                 <Route
-                    path="/cardapio-qr/cli/:bizLinkId/:tableId"
+                    path="/:bizLinkId/menu/c/:orderId"
                     exact
                     component={AsyncCustomerCatalog}
                 />
                 <Route
-                    path="/cardapio-qr/admin/:bizLinkId"
+                    path="/:bizLinkId/menu/admin"
                     exact
                     component={AsyncAdminMenuOrders}
                 />
