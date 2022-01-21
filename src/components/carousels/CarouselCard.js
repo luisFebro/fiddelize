@@ -88,6 +88,17 @@ export default function CarouselCard({
                         border-radius: 15px;
                     }
 
+                    .carousel--root.large {
+                        height: 350px;
+                    }
+                    .carousel--root.large .flickity-viewport {
+                        height: 350px !important;
+                    }
+
+                    .carousel--root.large .carousel-cell {
+                        height: 325px;
+                    }
+
                     .carousel--root.medium {
                         height: 300px;
                     }
