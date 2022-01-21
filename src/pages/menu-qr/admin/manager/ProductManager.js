@@ -86,7 +86,7 @@ export default function ProductManager() {
             category: "sanduíches",
             availableQtt: 15,
             img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
-            desc: "sanduba x-salada muito top fs l fdal fdsa l fdsal fsal ls",
+            desc: "sanduba x-salada muito top",
             unitAmount: 5,
         },
         {
@@ -113,19 +113,12 @@ export default function ProductManager() {
                         <h2 className="d-table text-pill ml-3 text-normal text-purple font-weight-bold">
                             {cat}
                         </h2>
-                        <div className="show-case-products">
+                        <div>
                             <CarouselCard
                                 CardList={ThisCardList}
                                 size="medium"
                                 multi
                             />
-                            <style jsx>
-                                {`
-                                    .show-case-products {
-                                        min-height: 170px;
-                                    }
-                                `}
-                            </style>
                         </div>
                     </section>
                 );
@@ -154,7 +147,7 @@ const CardList = ({ dataList = [] }) => (
                             width="150px"
                             height="150px"
                             src={card.img}
-                            alt="categorias de pagamento"
+                            alt={card.desc}
                         />
                     </section>
                 );
@@ -188,6 +181,7 @@ const CardList = ({ dataList = [] }) => (
                                 Preço Uni.: R$ {convertToReal(card.unitAmount)}
                             </p>
                         </section>
+                        {showEditBtn()}
                     </section>
                 );
             })}
