@@ -23,6 +23,7 @@ export default function ProductCard({ card, itemData }) {
         );
         if (itemDesc && foundItem) {
             setData((prev) => ({
+                ...prev,
                 added: true,
                 qtt: foundItem.count,
             }));
@@ -80,11 +81,15 @@ export default function ProductCard({ card, itemData }) {
                 </p>
                 <div className="d-flex">
                     <ButtonFab
+                        disabled={qtt === 0}
                         size="small"
                         backgroundColor={
                             qtt <= 0 ? "grey" : "var(--expenseRed)"
                         }
                         onClick={() => {
+                            const isZeroQtt = qtt === 0;
+                            if (isZeroQtt) return;
+
                             const newCount = qtt - 1;
                             const newAmount = totalAmount - newCount;
                             const item = {
