@@ -1,10 +1,22 @@
+import { useEffect } from "react";
+import { removeItems } from "init/lStorage";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import Card from "@material-ui/core/Card";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import convertToReal from "utils/numbers/convertToReal";
 import ProgressTrack from "./ProgressTrack";
 
-export default function OrderSuccess({ setNextPage, setDefault }) {
+const isSmall = window.Helper.isSmallScreen();
+
+export default function OrderSuccess({ allDataItem, setNextPage, setDefault }) {
     // 3 stages of order: queue, preparing, done
-    const currStage = "queue";
+    const currStage = "done";
+
+    useEffect(() => {
+        if (currStage === "done")
+            removeItems("global", ["digitalMenuData", "digitalMenuCurrPage"]);
+    }, [currStage]);
 
     return (
         <section className="text-shadow">
@@ -12,6 +24,7 @@ export default function OrderSuccess({ setNextPage, setDefault }) {
                 {getDayGreetingBr()}!
             </h2>
             <ProgressTrack stage={currStage} />
+            <MyOrder allDataItem={allDataItem} />
             {currStage === "done" ? (
                 <div className="my-5 container-center">
                     <ButtonFab
@@ -35,6 +48,75 @@ export default function OrderSuccess({ setNextPage, setDefault }) {
 }
 
 // COMP
+function MyOrder({ allDataItem }) {
+    const { orderList = [], orderAmount, orderCount } = allDataItem;
+
+    const showTitle = () => (
+        <h2 className="text-subtitle text-center font-weight-bold my-3">
+            Meu pedido
+        </h2>
+    );
+
+    const showList = () => (
+        <section className="ml-4 mr-2 text-purple text-normal">
+            {orderList.length &&
+                orderList.map((item) => (
+                    <section className="mt-3" key={item.name}>
+                        <FontAwesomeIcon
+                            icon="check"
+                            className="mr-3"
+                            style={{
+                                fontSize: "25px",
+                            }}
+                        />
+                        <span className="font-weight-bold">{item.count} x</span>{" "}
+                        {item.name} por{" "}
+                        <span className="font-weight-bold">
+                            {convertToReal(item.amount, { moneySign: true })}
+                        </span>
+                    </section>
+                ))}
+            <hr className="lazer-purple" />
+            <p className="text-subtitle font-weight-bold">
+                Totais:
+                <br />
+                <span className="text-normal">{orderCount} itens</span>
+                <br />
+                <span className="text-normal">
+                    Valor final:{" "}
+                    <span
+                        className="text-pill"
+                        style={{ backgroundColor: "green" }}
+                    >
+                        {convertToReal(orderAmount, { moneySign: true })}
+                    </span>
+                </span>
+            </p>
+            <p className="mt-2 text-center text-em-0-9 font-weight-bold text-grey">
+                Agradecemos sua preferência!
+            </p>
+        </section>
+    );
+
+    return (
+        <Card
+            className="my-5 card-elevation"
+            style={{
+                margin: "auto",
+                width: "90%",
+                maxWidth: isSmall ? "" : 360,
+                textShadow: "none",
+            }}
+            elevation={undefined}
+        >
+            <section className="text-normal text-purple">
+                {showTitle()}
+                {showList()}
+            </section>
+        </Card>
+    );
+}
+
 function NotifActivationZone() {
     return (
         <section className="text-white">

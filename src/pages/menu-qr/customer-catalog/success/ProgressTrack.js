@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 export default function ProgressTrack({ stage }) {
     const showProgressMsg = () => {
@@ -66,6 +66,17 @@ export default function ProgressTrack({ stage }) {
 // COMP
 //
 function TrackArea({ stage }) {
+    const [allowWave, setAllowWave] = useState(true);
+
+    useEffect(() => {
+        setAllowWave(true);
+        const runWave = setTimeout(() => setAllowWave(false), 10000);
+
+        return () => {
+            clearTimeout(runWave);
+        };
+    }, [stage]);
+
     return (
         <div className="track-area--root">
             <span
@@ -73,7 +84,7 @@ function TrackArea({ stage }) {
                     ["queue", "preparing", "done"].includes(stage)
                         ? "paint-track spot-one"
                         : ""
-                } ${stage === "queue" ? "pulse-waves" : ""}`}
+                } ${stage === "queue" && allowWave ? "pulse-waves" : ""}`}
             >
                 <p>Fila</p>
             </span>
@@ -89,7 +100,7 @@ function TrackArea({ stage }) {
                     ["preparing", "done"].includes(stage)
                         ? "paint-track spot-two"
                         : ""
-                } ${stage === "preparing" ? "pulse-waves" : ""}`}
+                } ${stage === "preparing" && allowWave ? "pulse-waves" : ""}`}
             >
                 <p>Preparo</p>
             </span>
@@ -101,7 +112,7 @@ function TrackArea({ stage }) {
             <span
                 className={`circle ${
                     stage === "done" ? "paint-track spot-three" : ""
-                } ${stage === "done" ? "pulse-waves" : ""}`}
+                } ${stage === "done" && allowWave ? "pulse-waves" : ""}`}
             >
                 <p>Feito</p>
             </span>
@@ -111,7 +122,7 @@ function TrackArea({ stage }) {
                         position: relative;
                         display: flex;
                         align-items: center;
-                        margin: 50px 10px 0px;
+                        margin: 50px 20px 0px;
                     }
 
                     .track-area--root .circle {
@@ -129,7 +140,7 @@ function TrackArea({ stage }) {
                     .track-area--root span p {
                         position: relative;
                         top: -45px;
-                        left: -15px;
+                        left: -10px;
                         white-space: nowrap;
                         size: 15px;
                     }
@@ -191,9 +202,10 @@ function TrackArea({ stage }) {
 
 // HELPERS
 function getSelectedMsg(stage) {
-    if (stage === "queue") return "Seu pedido foi recebido e logo fica pronto.";
+    if (stage === "queue")
+        return "Seu pedido foi recebido e logo será preparado.";
     if (stage === "preparing") return "Estamos preparando seu pedido agora!";
     // done
-    return "Opa! Pedido pronto e já está a caminho. Bom apetite!";
+    return "Opa! Pedido pronto e a caminho. Bom apetite!";
 }
 // END HELPERS

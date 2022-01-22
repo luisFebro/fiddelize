@@ -1,10 +1,13 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import QrCode from "components/QrCode";
 import CarouselCard from "components/carousels/CarouselCard";
 import { Load } from "components/code-splitting/LoadableComp";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
+import getItems, { setItems } from "init/lStorage";
+import useAPI, { getUserIdByName } from "api/useAPI";
+import getId from "utils/getId";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ProductCard from "./ProductCard";
 import {
@@ -27,6 +30,12 @@ export const AsyncOrderSuccess = Load({
         ),
 });
 
+const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
+    "digitalMenuData",
+    "digitalMenuCurrPage",
+]);
+const randomId = getId();
+
 export default function CustomerCatalog({ match }) {
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
@@ -35,6 +44,35 @@ export default function CustomerCatalog({ match }) {
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
+
+    const placeId = match && match.params && match.params.placeId;
+    const bizLinkName = match && match.params && match.params.bizLinkId;
+    const bizLogo = "/img/test/restaurant.jpg";
+    const width = 110;
+    const height = 110;
+    const url = match && match.url;
+    const isQrDisplay = placeId === "qr";
+    // show either qr code to be scanned or the product catalog
+
+    const params = {
+        role: "cliente-admin",
+        bizLinkName,
+        // only for request auth
+        nT: true,
+        _id: randomId,
+    };
+
+    const { data: adminId, gotError } = useAPI({
+        url: getUserIdByName(),
+        params,
+    });
+
+    useEffect(() => {
+        if (!digitalMenuCurrPage) return;
+
+        setNextPage(digitalMenuCurrPage);
+        setData(digitalMenuData);
+    }, [digitalMenuCurrPage]);
 
     const setDefault = () => {
         setData((prev) => ({
@@ -46,7 +84,7 @@ export default function CustomerCatalog({ match }) {
     };
 
     useScrollUp();
-    useBackColor("var(--themeBackground--default");
+    useBackColor("var(--themeBackground--default)");
 
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
@@ -65,19 +103,25 @@ export default function CustomerCatalog({ match }) {
     };
 
     const handleNextPage = () => {
+        // even not id, at least allow to save data and keep current page
+        setItems("global", {
+            digitalMenuData: data,
+            digitalMenuCurrPage: "menu",
+        });
+        if (gotError)
+            return showToast(
+                "Uma informação não foi carregada. Reinicie a página e verifique sua conexão."
+            );
+
         if (!orderAmount)
             return showToast("Menu Vazio! Por favor, selecione algum item.");
+
+        setItems("global", {
+            digitalMenuData: data,
+            digitalMenuCurrPage: "orders",
+        });
         return setNextPage("orders");
     };
-
-    const orderId = match && match.params && match.params.orderId;
-    const bizLinkId = match && match.params && match.params.bizLinkId;
-    const bizLogo = "/img/test/restaurant.jpg";
-    const width = 110;
-    const height = 110;
-    const url = match && match.url;
-    const isQrDisplay = orderId === "qr";
-    // show either qr code to be scanned or the product catalog
 
     const showLogo = () => (
         <div className="mt-2 mb-3 container-center">
@@ -85,8 +129,8 @@ export default function CustomerCatalog({ match }) {
                 src={bizLogo}
                 width={width}
                 height={height}
-                title={`logo da ${bizLinkId}`}
-                alt={`logo empresa ${bizLinkId}`}
+                title={`logo da ${bizLinkName}`}
+                alt={`logo empresa ${bizLinkName}`}
             />
         </div>
     );
@@ -139,12 +183,15 @@ export default function CustomerCatalog({ match }) {
                             itemList={orderList}
                             itemsCount={orderCount}
                             investAmount={orderAmount}
+                            adminId={adminId}
+                            placeId={placeId}
                         />
                     )}
                     {nextPage === "success" && (
                         <AsyncOrderSuccess
                             setNextPage={setNextPage}
                             setDefault={setDefault}
+                            allDataItem={data}
                         />
                     )}
                 </Fragment>

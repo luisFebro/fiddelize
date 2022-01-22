@@ -8,7 +8,7 @@ import showToast from "components/toasts";
 const headCells = [
     { id: "quantity", numeric: false, disablePadding: false, label: "Qtde." },
     { id: "img", isImg: true, disablePadding: false, label: "" },
-    { id: "service", numeric: false, disablePadding: false, label: "Serviço" },
+    { id: "service", numeric: false, disablePadding: false, label: "Item" },
     {
         id: "finalValue",
         numeric: false,

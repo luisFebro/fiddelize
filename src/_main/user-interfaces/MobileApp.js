@@ -204,7 +204,7 @@ function Mobile({ location }) {
                     component={AsyncAmurretoAltrabot}
                 />
                 <Route
-                    path="/:bizLinkId/menu/c/:orderId"
+                    path="/:bizLinkId/menu/c/:placeId"
                     exact
                     component={AsyncCustomerCatalog}
                 />
