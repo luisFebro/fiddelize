@@ -35,7 +35,7 @@ const Footer = ({ location }) => {
         locationNow.includes("baixe-app") ||
         locationNow.includes("/t/app") ||
         locationNow.includes("altrabot") ||
-        locationNow.includes("cardapio-qr");
+        locationNow.includes("menu");
 
     const showAboutColumn = () => (
         <section className="col-md-4">

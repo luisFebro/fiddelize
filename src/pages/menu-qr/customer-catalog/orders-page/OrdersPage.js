@@ -31,7 +31,7 @@ export default function OrdersPage({
             <ButtonFab
                 title="Confirmar e Pedir"
                 backgroundColor="var(--themeSDark--default)"
-                onClick={null}
+                onClick={() => setNextPage("success")}
                 position="relative"
                 variant="extended"
                 size="large"

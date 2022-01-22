@@ -53,7 +53,7 @@ export default function CartRace({
                 {msg && didUserScroll && (
                     <Fragment>
                         <QuantStatus completePerc={completePerc} />
-                        <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 $ text-small text-center text-purple text-shadow">
+                        <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 text-small text-center text-purple text-shadow">
                             {parse(msg)}
                         </p>
                     </Fragment>

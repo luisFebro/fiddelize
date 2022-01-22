@@ -20,14 +20,30 @@ export const AsyncOrdersPage = Load({
         ),
 });
 
+export const AsyncOrderSuccess = Load({
+    loader: () =>
+        import(
+            "./success/OrderSuccess" /* webpackChunkName: "order-success-lazy" */
+        ),
+});
+
 export default function CustomerCatalog({ match }) {
-    const [nextPage, setNextPage] = useState(false);
+    const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
         orderCount: 0,
         orderAmount: 0,
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
+
+    const setDefault = () => {
+        setData((prev) => ({
+            ...prev,
+            orderCount: 0,
+            orderAmount: 0,
+            orderList: [],
+        }));
+    };
 
     useScrollUp();
     useBackColor("var(--themeBackground--default");
@@ -51,7 +67,7 @@ export default function CustomerCatalog({ match }) {
     const handleNextPage = () => {
         if (!orderAmount)
             return showToast("Menu Vazio! Por favor, selecione algum item.");
-        return setNextPage(true);
+        return setNextPage("orders");
     };
 
     const orderId = match && match.params && match.params.orderId;
@@ -64,7 +80,7 @@ export default function CustomerCatalog({ match }) {
     // show either qr code to be scanned or the product catalog
 
     const showLogo = () => (
-        <div className="mt-5 mb-3 container-center">
+        <div className="mt-2 mb-3 container-center">
             <img
                 src={bizLogo}
                 width={width}
@@ -108,20 +124,27 @@ export default function CustomerCatalog({ match }) {
                 </Fragment>
             ) : (
                 <Fragment>
-                    {!nextPage ? (
+                    {nextPage === "menu" && (
                         <DigitalMenu
                             handleNextPage={handleNextPage}
                             orderAmount={orderAmount}
                             orderCount={orderCount}
                             itemData={itemData}
                         />
-                    ) : (
+                    )}
+                    {nextPage === "orders" && (
                         <AsyncOrdersPage
                             setNextPage={setNextPage}
                             setData={setData}
                             itemList={orderList}
                             itemsCount={orderCount}
                             investAmount={orderAmount}
+                        />
+                    )}
+                    {nextPage === "success" && (
+                        <AsyncOrderSuccess
+                            setNextPage={setNextPage}
+                            setDefault={setDefault}
                         />
                     )}
                 </Fragment>
