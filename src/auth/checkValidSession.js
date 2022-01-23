@@ -28,7 +28,7 @@ export async function runSessionCheck() {
 }
 
 // HELPERS
-export function arePublicPages() {
+function arePublicPages() {
     const isWebsitePage = websitePages.some((pg) =>
         window.location.href.includes(pg)
     );

@@ -16,9 +16,6 @@ export default function ModalYesNo({
     marginCTA,
     needIndex = true,
     needBackBtn = false,
-    needCTAs = true,
-    yesBtnColor = "var(--mainRed)",
-    yesBtnIcon = "times",
 }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
     // LESSON: for critical data handling, the button should be permanent disabled
@@ -52,12 +49,9 @@ export default function ModalYesNo({
                                 setFullOpen(false);
                             }}
                             iconFontAwesome={
-                                <FontAwesomeIcon
-                                    icon={yesBtnIcon}
-                                    style={faStyle}
-                                />
+                                <FontAwesomeIcon icon="times" style={faStyle} />
                             }
-                            backgroundColor={yesBtnColor}
+                            backgroundColor="var(--mainRed)"
                         />
                     </div>
                 </section>
@@ -98,7 +92,7 @@ export default function ModalYesNo({
             {showTitle()}
             {showSubTitle()}
             {contentComp}
-            {needCTAs && showActionBtns()}
+            {showActionBtns()}
         </Dialog>
     );
 }

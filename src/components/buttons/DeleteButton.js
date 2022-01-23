@@ -30,14 +30,13 @@ export default function DeleteButton({
     bottom,
     onClick,
     transform = "scale(1.2)",
-    size = "small",
 }) {
     const classes = useStyles();
 
     return (
         <Fab
             onClick={onClick}
-            size={size}
+            size="small"
             style={{
                 position: position || "relative",
                 top,

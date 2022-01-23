@@ -144,7 +144,9 @@ export const getXpScoreChartData = (userId) =>
     `${ROOT}/reviews/xp-score-chart?userId=${userId}`;
 
 // CHAT, SUPPORT AND REAL TIME
-export const startSupport = () => `${ROOT}/support/start`; // POST
+export const startSupport = () =>
+    // POST
+    `${ROOT}/support/start`;
 
 export const readSupportHistory = () =>
     // GET
@@ -209,12 +211,3 @@ export const getBuyClubRulesData = () => `${ROOT}/general/buy-club-rules-data`;
 // GAMES
 export const getBalloonPopData = () => `${ROOT}/games/balloon-pop/data`;
 // END GAMES
-
-// PROCESS SOLUTIONS
-// digital menu
-export const updateCustomerOrder = () =>
-    `${ROOT}/process-solutions/digital-menu/customer-order`; // POST
-
-export const readMenuOrderList = () =>
-    `${ROOT}/process-solutions/digital-menu/menu-order-list`; // POST
-// end digital menu

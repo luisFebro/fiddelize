@@ -15,32 +15,21 @@ valuesArray={[
 
 // warning: if inside a modal, verify the zIndex in case of not appearing the popup menu. set needIndex={false} to ModalFullContent if this is the case...;
 export default function SelectField({
-    title = "selecione:",
+    title = "",
     valuesArray,
     rootClassName,
     handleValue,
-    defaultValue, // if there is a constant back and forth change
-    firstDefault = false, // first item default
 }) {
     const [data, setData] = useState({
         selected: "",
     });
     const { selected } = data;
 
-    const firstVal =
-        defaultValue ||
-        (valuesArray && valuesArray.length && valuesArray[0].val);
-    const isDefaultValue = Boolean(defaultValue);
+    useEffect(() => {
+        setData((prev) => ({ ...prev, selected: title }));
+    }, [title]);
 
     useEffect(() => {
-        setData((prev) => ({
-            ...prev,
-            selected: isDefaultValue || firstDefault ? firstVal : title,
-        }));
-    }, [title, isDefaultValue, firstDefault, firstVal]);
-
-    useEffect(() => {
-        // IMPORTANT: the first selected value is actually the showVal, afterwards it is val (original val)
         if (typeof handleValue === "function") handleValue(selected);
         // eslint-disable-next-line
     }, [selected]);
