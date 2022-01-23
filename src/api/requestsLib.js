@@ -214,4 +214,7 @@ export const getBalloonPopData = () => `${ROOT}/games/balloon-pop/data`;
 // digital menu
 export const createCustomerOrder = () =>
     `${ROOT}/process-solutions/digital-menu/customer-order`; // POST
+
+export const readMenuOrderList = () =>
+    `${ROOT}/process-solutions/digital-menu/menu-order-list`; // POST
 // end digital menu

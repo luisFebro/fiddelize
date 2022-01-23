@@ -10,60 +10,19 @@ import MarkBtn from "./mark-btn/MarkBtn";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 // const [lastDate] = getItems("global", ["lastDatePendingOrderCard"]);
 
-const dataItemsEx = [
-    {
-        id: "123",
-        qtt: 2,
-        img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
-        desc: "lata guaraná antactica",
-        unitAmount: 8.0,
-    },
-    {
-        id: "456",
-        qtt: 3,
-        img: "/img/test/cardapio-qr/suco-de-uva.jpg",
-        desc: "copos de suco de uva",
-        unitAmount: 5.0,
-    },
-    {
-        id: "789",
-        qtt: 2,
-        img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
-        desc: "sanduba pão árabe misto",
-        unitAmount: 4.0,
-    },
-    {
-        id: "1010",
-        qtt: 3,
-        img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
-        desc: "sanduba x-salada e verduras",
-        unitAmount: 7.0,
-    },
-];
-
-export default function PendingCard({ data }) {
+export default function PendingCard({ data, socket }) {
     // const { themePColor } = useBizData();
     const themePColor = "default";
 
-    const {
-        orderId = "01",
-        dataItems = dataItemsEx,
-        updatedAt = new Date(),
-    } = data;
+    const adminId = data && data.adminId;
+    const orderData = data && data.order;
+    const dataItems = orderData && data.order.orderList;
+    const placeId = orderData && orderData.placeId;
+    const updatedAt = data && data.updatedAt;
+    const totalCount = orderData && orderData.totalCount;
+    const totalAmount = orderData && orderData.totalAmount;
 
-    const orderAmount =
-        dataItems && dataItems.length
-            ? dataItems.reduce(
-                  (acc, next) => acc + next.qtt * next.unitAmount,
-                  0
-              )
-            : 0;
-    const totalItems =
-        dataItems && dataItems.length
-            ? dataItems.reduce((acc, next) => acc + next.qtt, 0)
-            : 0;
-
-    const showMarkDoneBtn = () => <MarkBtn />;
+    const showMarkDoneBtn = () => <MarkBtn socket={socket} adminId={adminId} />;
 
     const showUpdatedAt = () => (
         <p className="mt-2 text-white text-small">
@@ -75,16 +34,16 @@ export default function PendingCard({ data }) {
         <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
             <h2 className="text-subtitle font-weight-bold">
-                ID MESA: {orderId}
+                ID MESA: {placeId}
             </h2>
             <h2 className="text-normal font-weight-bold">
                 Valor Total:
                 <span className="ml-3 hightlight text-pill">
-                    R$ {convertToReal(orderAmount, { needFraction: true })}
+                    R$ {convertToReal(totalAmount, { needFraction: true })}
                 </span>
             </h2>
             <p className="m-0 text-normal">
-                Descrição ({totalItems} {totalItems === 1 ? "item" : "itens"}):
+                Descrição ({totalCount} {totalCount === 1 ? "item" : "itens"}):
             </p>
             <ItemsDesc data={dataItems} />
             {showUpdatedAt()}
@@ -110,24 +69,24 @@ function ItemsDesc({ data }) {
 
     const showItem = (dt) => (
         <div className="mt-1 d-flex align-items-center text-white text-normal">
-            <span className="text-em-1-2 mr-1">{dt.qtt}x</span>
+            <span className="text-em-1-2 mr-1">{dt.count}x</span>
             <img
                 src={dt.img}
                 width={50}
                 style={{
                     maxHeight: 60,
                 }}
-                alt={dt.desc}
+                alt={dt.name}
             />
             <span className="d-table ml-2 text-white text-small d-inline-block">
-                {truncate(dt.desc, 50)}
+                {truncate(dt.name, 50)}
                 <span
                     className="d-block ml-1 px-1"
                     style={{ background: "var(--themePLight)" }}
                 >
-                    R$ {convertToReal(dt.qtt * dt.unitAmount)}{" "}
+                    R$ {convertToReal(dt.amount)}{" "}
                     <span className="text-small">
-                        (R$ {convertToReal(dt.unitAmount)} uni.)
+                        (R$ {convertToReal(dt.amount / dt.count)} uni.)
                     </span>
                 </span>
             </span>
@@ -141,7 +100,7 @@ function ItemsDesc({ data }) {
         <section>
             {data.length &&
                 data
-                    .map((item) => <span key={item.id}>{showItem(item)}</span>)
+                    .map((item) => <span key={item._id}>{showItem(item)}</span>)
                     .slice(0, showMoreBtn ? 3 : listLeng)}
             {showMoreBtn && (
                 <div className="container-center my-2">

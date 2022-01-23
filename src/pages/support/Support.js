@@ -10,7 +10,7 @@ import showToast from "components/toasts";
 import {
     useInitSocket,
     startSocketSession,
-} from "components/chat/socket/initSocket";
+} from "components/socket/initSocket";
 import { Load } from "components/code-splitting/LoadableComp";
 import getSubjectBr from "components/chat/helpers";
 import getId from "utils/getId";

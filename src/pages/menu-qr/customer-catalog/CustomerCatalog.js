@@ -6,8 +6,6 @@ import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import getItems, { setItems } from "init/lStorage";
-import useAPI, { getUserIdByName } from "api/useAPI";
-import getId from "utils/getId";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ProductCard from "./ProductCard";
 import {
@@ -34,9 +32,14 @@ const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
     "digitalMenuData",
     "digitalMenuCurrPage",
 ]);
-const randomId = getId();
 
-export default function CustomerCatalog({ match }) {
+export default function CustomerCatalog({
+    adminId,
+    placeId,
+    bizLinkName,
+    url,
+    socket,
+}) {
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
         orderCount: 0,
@@ -45,27 +48,11 @@ export default function CustomerCatalog({ match }) {
     });
     const { orderList, orderAmount, orderCount } = data;
 
-    const placeId = match && match.params && match.params.placeId;
-    const bizLinkName = match && match.params && match.params.bizLinkId;
     const bizLogo = "/img/test/restaurant.jpg";
     const width = 110;
     const height = 110;
-    const url = match && match.url;
     const isQrDisplay = placeId === "qr";
     // show either qr code to be scanned or the product catalog
-
-    const params = {
-        role: "cliente-admin",
-        bizLinkName,
-        // only for request auth
-        nT: true,
-        _id: randomId,
-    };
-
-    const { data: adminId, gotError } = useAPI({
-        url: getUserIdByName(),
-        params,
-    });
 
     useEffect(() => {
         if (!digitalMenuCurrPage) return;
@@ -108,7 +95,7 @@ export default function CustomerCatalog({ match }) {
             digitalMenuData: data,
             digitalMenuCurrPage: "menu",
         });
-        if (gotError)
+        if (!adminId)
             return showToast(
                 "Uma informação não foi carregada. Reinicie a página e verifique sua conexão."
             );
@@ -185,6 +172,7 @@ export default function CustomerCatalog({ match }) {
                             investAmount={orderAmount}
                             adminId={adminId}
                             placeId={placeId}
+                            socket={socket}
                         />
                     )}
                     {nextPage === "success" && (
@@ -192,6 +180,7 @@ export default function CustomerCatalog({ match }) {
                             setNextPage={setNextPage}
                             setDefault={setDefault}
                             allDataItem={data}
+                            socket={socket}
                         />
                     )}
                 </Fragment>

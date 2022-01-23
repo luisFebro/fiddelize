@@ -10,7 +10,7 @@ import useAPIList, { readSupportHistory } from "api/useAPIList";
 import useRun, { setRun, useAction } from "global-data/ui";
 import getId from "utils/getId";
 import RadiusBtn from "components/buttons/RadiusBtn";
-import useUpdateChatList from "./socket/socketListeners";
+import useUpdateChatList from "../socket/socketListeners";
 import useGlobal from "./useGlobal";
 import HistoryChatList from "./history-list/HistoryChatList";
 import UserInfoCard from "./UserInfoCard";

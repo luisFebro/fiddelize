@@ -4,16 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SelectField from "components/fields/SelectField";
 import ModalYesNo from "components/modals/ModalYesNo";
 
-export default function MarkBtn() {
+export default function MarkBtn({ socket, adminId }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
-        markOpt: "done",
+        markOpt: "queue",
     });
     const { markOpt } = data;
-    console.log("markOpt", markOpt);
 
     const runYes = async () => {
         // save data here
+        const socketData = { newStage: markOpt, adminId };
+        if (socket) socket.emit("updateCustomerOrderStage", socketData);
         setData((prev) => ({ ...prev, markOpt: null }));
         // showToast(`Assunto ${subject} finalizado com sucesso!`, {
         //     type: "success",
@@ -22,9 +23,10 @@ export default function MarkBtn() {
 
     const showSelect = () => {
         const valuesArray = [
+            { val: "queue", showVal: "Fila" },
+            { val: "preparing", showVal: "Preparando" },
             { val: "done", showVal: "Feito" },
             { val: "canceled", showVal: "Cancelado" },
-            // { val: "pending", showVal: "Pendente" },
         ];
 
         const handleSelected = (select) => {
@@ -50,26 +52,37 @@ export default function MarkBtn() {
 
     return (
         <Fragment>
-            <ButtonFab
-                title="Marcar"
-                iconFontAwesome={
-                    <FontAwesomeIcon
-                        icon="check"
-                        style={{
-                            fontSize: "20px",
-                            filter: "drop-shadow(.5px .5px 1.5px grey)",
-                            color: "white",
-                        }}
-                    />
-                }
-                backgroundColor="var(--themeSDark)"
-                onClick={() => setFullOpen(true)}
-                position="absolute"
-                top={5}
-                right={5}
-                variant="extended"
-                size="medium"
-            />
+            <div className="position-relative">
+                <p
+                    className="text-pill position-absolute text-white text-shadow text-em-0-8"
+                    style={{
+                        top: -15,
+                        right: 10,
+                    }}
+                >
+                    Estágio: {handleStage(markOpt)}
+                </p>
+                <ButtonFab
+                    title="Marcar"
+                    iconFontAwesome={
+                        <FontAwesomeIcon
+                            icon="check"
+                            style={{
+                                fontSize: "20px",
+                                filter: "drop-shadow(.5px .5px 1.5px grey)",
+                                color: "white",
+                            }}
+                        />
+                    }
+                    backgroundColor="var(--themeSDark)"
+                    onClick={() => setFullOpen(true)}
+                    position="absolute"
+                    top={15}
+                    right={5}
+                    variant="extended"
+                    size="medium"
+                />
+            </div>
             {fullOpen && (
                 <ModalYesNo
                     title="Marcar pedido como:"
@@ -88,3 +101,11 @@ export default function MarkBtn() {
         </Fragment>
     );
 }
+
+// HELPERS
+function handleStage(stage) {
+    if (stage === "queue") return "Fila";
+    if (stage === "preparing") return "Preparando"; // if curr is preparing which means the next ready to be selected
+    return "Feito";
+}
+// END HELPERS

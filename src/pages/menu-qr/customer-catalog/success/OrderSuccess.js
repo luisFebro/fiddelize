@@ -9,13 +9,26 @@ import ProgressTrack from "./ProgressTrack";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function OrderSuccess({ allDataItem, setNextPage, setDefault }) {
+export default function OrderSuccess({
+    allDataItem,
+    setNextPage,
+    setDefault,
+    socket,
+}) {
     // 3 stages of order: queue, preparing, done
-    const currStage = "done";
+    const currStage = "queue";
+
+    const disconnected = socket && socket.disconnected;
+    useEffect(() => {
+        if (disconnected) socket.connect();
+        // eslint-disable-next-line
+    }, [disconnected]);
 
     useEffect(() => {
-        if (currStage === "done")
+        if (currStage === "done") {
+            socket.disconnect();
             removeItems("global", ["digitalMenuData", "digitalMenuCurrPage"]);
+        }
     }, [currStage]);
 
     return (
