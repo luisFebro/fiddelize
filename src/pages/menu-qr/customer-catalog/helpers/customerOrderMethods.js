@@ -44,7 +44,7 @@ export function updateItem(payload) {
         return {
             ...prev,
             orderList: [...clearedList, item],
-            currService: serviceName,
+            // currService: serviceName,
         };
     });
 }
@@ -63,7 +63,7 @@ export function removeItem(payload) {
         return {
             ...prev,
             orderList: clearedList,
-            currService: itemName,
+            // currService: itemName,
         };
     });
 }

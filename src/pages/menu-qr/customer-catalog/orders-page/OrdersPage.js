@@ -1,7 +1,6 @@
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { setItems } from "init/lStorage";
-import getAPI, { createCustomerOrder } from "api";
 import showToast from "components/toasts";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
@@ -17,6 +16,7 @@ export default function OrdersPage({
     investAmount,
     adminId,
     placeId,
+    customerId,
     socket,
 }) {
     useScrollUp();
@@ -42,7 +42,7 @@ export default function OrdersPage({
                     const body = {
                         adminId,
                         placeId,
-                        customerId: null, // only for future update where user can access their account
+                        customerId,
                         order: {
                             stage: "queue",
                             totalCount: itemsCount,
@@ -51,16 +51,17 @@ export default function OrdersPage({
                         },
                     };
 
-                    showToast("Enviando pedido...", { dur: 4000 });
+                    showToast("Enviando pedido...", { dur: 2000 });
 
-                    await getAPI({
-                        method: "post",
-                        url: createCustomerOrder(),
-                        auth: false,
-                        body,
-                    }).catch(console.log); // err => showToast("Algo deu errado.", { type: "error" })
-
-                    if (socket) socket.emit("updateAdminList", { adminId });
+                    if (socket) {
+                        socket.emit("updateCustomerOrder", {
+                            adminId,
+                            placeId,
+                            customerId,
+                            body,
+                        });
+                        socket.emit("updateAdminList");
+                    }
 
                     setItems("global", {
                         digitalMenuData: {

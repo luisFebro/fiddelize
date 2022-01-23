@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { removeItems } from "init/lStorage";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
@@ -15,14 +15,20 @@ export default function OrderSuccess({
     setDefault,
     socket,
 }) {
+    const [currStage, setCurrStage] = useState("queue");
     // 3 stages of order: queue, preparing, done
-    const currStage = "queue";
 
     const disconnected = socket && socket.disconnected;
     useEffect(() => {
         if (disconnected) socket.connect();
         // eslint-disable-next-line
     }, [disconnected]);
+
+    useEffect(() => {
+        socket.on("setNewOrderStage", ({ newStage }) => {
+            setCurrStage(newStage);
+        });
+    }, [socket]);
 
     useEffect(() => {
         if (currStage === "done") {
@@ -134,11 +140,11 @@ function NotifActivationZone() {
     return (
         <section className="text-white">
             <p className="text-normal mx-3 my-5 text-center">
-                Quer ser notificado quando pedido ficar pronto?
+                Quer ser notificado em tempo real sobre seu pedido?
             </p>
             <div className="mt-3 container-center">
                 <ButtonFab
-                    title="Ativar notificações"
+                    title="Ativar notificação"
                     color="var(--mainWhite)"
                     onClick={null}
                     backgroundColor="var(--themeSDark--default)"

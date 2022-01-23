@@ -148,7 +148,7 @@ function TrackArea({ stage }) {
                     .track-area--root .line {
                         display: block;
                         width: 110%;
-                        height: 20px;
+                        height: 10px;
                         background: grey;
                         border-radius: "50% 50%";
                     }

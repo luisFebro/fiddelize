@@ -3,30 +3,20 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SelectField from "components/fields/SelectField";
 import ModalYesNo from "components/modals/ModalYesNo";
+import showToast from "components/toasts";
 
-export default function MarkBtn({ socket, adminId }) {
+export default function MarkBtn({ socket, adminId, placeId, customerId }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
         markOpt: "queue",
     });
     const { markOpt } = data;
 
-    const runYes = async () => {
-        // save data here
-        const socketData = { newStage: markOpt, adminId };
-        if (socket) socket.emit("updateCustomerOrderStage", socketData);
-        setData((prev) => ({ ...prev, markOpt: null }));
-        // showToast(`Assunto ${subject} finalizado com sucesso!`, {
-        //     type: "success",
-        // });
-    };
-
     const showSelect = () => {
         const valuesArray = [
             { val: "queue", showVal: "Fila" },
-            { val: "preparing", showVal: "Preparando" },
+            { val: "preparing", showVal: "Preparo" },
             { val: "done", showVal: "Feito" },
-            { val: "canceled", showVal: "Cancelado" },
         ];
 
         const handleSelected = (select) => {
@@ -36,6 +26,24 @@ export default function MarkBtn({ socket, adminId }) {
                 ...prev,
                 markOpt: select,
             }));
+
+            const isDone = select === "done";
+            if (isDone)
+                showToast(`Pedido do lugar ${placeId} movido para feito`, {
+                    dur: 3000,
+                    type: "success",
+                });
+            const socketData = {
+                adminId,
+                placeId,
+                customerId,
+                body: { "order.stage": select },
+            };
+            if (socket) {
+                socket.emit("updateCustomerOrder", socketData);
+                if (isDone) socket.emit("updateAdminList");
+            }
+            if (select !== markOpt) setFullOpen(false);
         };
 
         return (
@@ -44,7 +52,7 @@ export default function MarkBtn({ socket, adminId }) {
                     valuesArray={valuesArray}
                     handleValue={handleSelected}
                     needSetTitle={false}
-                    firstDefault
+                    defaultValue={markOpt}
                 />
             </div>
         );
@@ -52,16 +60,13 @@ export default function MarkBtn({ socket, adminId }) {
 
     return (
         <Fragment>
-            <div className="position-relative">
-                <p
-                    className="text-pill position-absolute text-white text-shadow text-em-0-8"
-                    style={{
-                        top: -15,
-                        right: 10,
-                    }}
-                >
-                    Estágio: {handleStage(markOpt)}
-                </p>
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: -20,
+                    right: 5,
+                }}
+            >
                 <ButtonFab
                     title="Marcar"
                     iconFontAwesome={
@@ -76,26 +81,33 @@ export default function MarkBtn({ socket, adminId }) {
                     }
                     backgroundColor="var(--themeSDark)"
                     onClick={() => setFullOpen(true)}
-                    position="absolute"
-                    top={15}
-                    right={5}
+                    position="relative"
                     variant="extended"
                     size="medium"
                 />
             </div>
+            <p
+                className="text-pill position-absolute text-white text-shadow text-em-0-8"
+                style={{
+                    bottom: -25,
+                    right: 160,
+                    backgroundColor: selectStageColor(markOpt),
+                }}
+            >
+                Estágio: {handleStage(markOpt)}
+            </p>
             {fullOpen && (
                 <ModalYesNo
-                    title="Marcar pedido como:"
+                    title="Marcar estágio pedido como:"
                     subTitle=""
                     fullOpen={fullOpen}
                     setFullOpen={setFullOpen}
-                    actionFunc={runYes}
+                    actionFunc={null}
                     needIndex={false}
+                    needCTAs={false}
                     contentComp={
                         <div className="container-center">{showSelect()}</div>
                     }
-                    yesBtnColor="green"
-                    yesBtnIcon="check"
                 />
             )}
         </Fragment>
@@ -105,7 +117,12 @@ export default function MarkBtn({ socket, adminId }) {
 // HELPERS
 function handleStage(stage) {
     if (stage === "queue") return "Fila";
-    if (stage === "preparing") return "Preparando"; // if curr is preparing which means the next ready to be selected
+    if (stage === "preparing") return "Preparo"; // if curr is preparing which means the next ready to be selected
     return "Feito";
+}
+function selectStageColor(stage) {
+    if (stage === "queue") return "#87870a";
+    if (stage === "preparing") return "orange"; // if curr is preparing which means the next ready to be selected
+    return "green";
 }
 // END HELPERS

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
-import useAPIList, { readBenefitCards } from "api/useAPIList";
+import useAPIList, { readMenuOrderList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 import DoneCard from "./cards/DoneCard";
@@ -14,13 +14,13 @@ import DoneOrdersFilter from "./DoneOrdersFilter";
 
 export default function DoneOrdersList() {
     const [skip, setSkip] = useState(0);
-    const [filter, setFilter] = useState(false);
     const { bizId } = useBizData();
     const { userId } = useData();
+    // const [filter, setFilter] = useState(false);
     // const [search, setSearch] = useState("");
 
     const params = {
-        type: "pending",
+        type: "done",
         userId, // for auth
         adminId: bizId,
     };
@@ -51,7 +51,7 @@ export default function DoneOrdersList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readBenefitCards(),
+        url: readMenuOrderList(),
         skip,
         params,
         listName: "DoneOrdersList",
@@ -60,22 +60,22 @@ export default function DoneOrdersList() {
     });
 
     // FILTER
-    const showFilter = () => {
-        const handlePeriodFilter = (dataFilter) => {
-            setFilter(dataFilter.selected);
-        };
+    // const showFilter = () => {
+    //     const handlePeriodFilter = (dataFilter) => {
+    //         setFilter(dataFilter.selected);
+    //     };
 
-        return (
-            <DoneOrdersFilter
-                gotData
-                show
-                offlineKey="selectedPeriodFilter_doneOrdersList"
-                listTotal={ordersCount}
-                handlePeriodFilter={handlePeriodFilter}
-                loading={loading}
-            />
-        );
-    };
+    //     return (
+    //         <DoneOrdersFilter
+    //             gotData
+    //             show
+    //             offlineKey="selectedPeriodFilter_doneOrdersList"
+    //             listTotal={ordersCount}
+    //             handlePeriodFilter={handlePeriodFilter}
+    //             loading={loading}
+    //         />
+    //     );
+    // };
     // END FILTER
 
     // INFINITY LOADING LIST
@@ -113,7 +113,7 @@ export default function DoneOrdersList() {
 
     return (
         <section className="text-purple mx-3">
-            {!needEmptyIllustra && showFilter()}
+            {/*{!needEmptyIllustra && showFilter()}*/}
             {Boolean(ordersCount) && (
                 <h2 className="my-3 text-normal font-weight-bold text-center">
                     <span className="text-subtitle font-weight-bold">

@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import useAPI, { getUserIdByName } from "api/useAPI";
 import getId from "utils/getId";
@@ -20,7 +20,7 @@ export const AsyncAdminMenuOrders = Load({
         ),
 });
 
-export default function RealtimeOrders({ match }) {
+export default function RealtimeOrders({ match, location }) {
     const isAdmin = match.url && match.url.includes("admin");
     const isCustomer = !isAdmin;
 
@@ -30,6 +30,13 @@ export default function RealtimeOrders({ match }) {
     // for customer
     const placeId = match && match.params && match.params.placeId;
     const url = match && match.url;
+    const gotCliId = location && location.search.includes("cliId");
+
+    useEffect(() => {
+        if (window.history.replaceState && !gotCliId) {
+            window.history.replaceState({}, "cliId", `?cliId=${randomId}`);
+        }
+    }, [gotCliId]);
 
     const params = {
         role: "cliente-admin",
@@ -56,8 +63,10 @@ export default function RealtimeOrders({ match }) {
         <Fragment>
             {isCustomer && (
                 <AsyncCustomerCatalog
-                    bizLinkName={bizLinkName}
                     placeId={placeId}
+                    adminId={adminId}
+                    customerId={randomId}
+                    bizLinkName={bizLinkName}
                     url={url}
                     socket={socket}
                 />

@@ -43,7 +43,7 @@ export const ReturnBtn = ({ setNextPage }) => (
         <ButtonFab
             position="relative"
             size="small"
-            onClick={() => setNextPage(false)}
+            onClick={() => setNextPage("menu")}
             color="var(--mainWhite)"
             backgroundColor="var(--themeSDark)"
             iconFontAwesome={

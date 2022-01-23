@@ -16,6 +16,7 @@ export default function ModalYesNo({
     marginCTA,
     needIndex = true,
     needBackBtn = false,
+    needCTAs = true,
     yesBtnColor = "var(--mainRed)",
     yesBtnIcon = "times",
 }) {
@@ -97,7 +98,7 @@ export default function ModalYesNo({
             {showTitle()}
             {showSubTitle()}
             {contentComp}
-            {showActionBtns()}
+            {needCTAs && showActionBtns()}
         </Dialog>
     );
 }

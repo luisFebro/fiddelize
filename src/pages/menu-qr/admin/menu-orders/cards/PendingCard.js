@@ -17,12 +17,20 @@ export default function PendingCard({ data, socket }) {
     const adminId = data && data.adminId;
     const orderData = data && data.order;
     const dataItems = orderData && data.order.orderList;
-    const placeId = orderData && orderData.placeId;
+    const customerId = data && data.customerId;
+    const placeId = data && data.placeId;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;
     const totalAmount = orderData && orderData.totalAmount;
 
-    const showMarkDoneBtn = () => <MarkBtn socket={socket} adminId={adminId} />;
+    const showMarkDoneBtn = () => (
+        <MarkBtn
+            socket={socket}
+            adminId={adminId}
+            customerId={customerId}
+            placeId={placeId}
+        />
+    );
 
     const showUpdatedAt = () => (
         <p className="mt-2 text-white text-small">
@@ -34,7 +42,7 @@ export default function PendingCard({ data, socket }) {
         <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
             <h2 className="text-subtitle font-weight-bold">
-                ID MESA: {placeId}
+                ID lugar: <span className="text-pill">{placeId}</span>
             </h2>
             <h2 className="text-normal font-weight-bold">
                 Valor Total:

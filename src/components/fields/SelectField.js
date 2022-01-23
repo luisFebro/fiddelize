@@ -19,6 +19,7 @@ export default function SelectField({
     valuesArray,
     rootClassName,
     handleValue,
+    defaultValue, // if there is a constant back and forth change
     firstDefault = false, // first item default
 }) {
     const [data, setData] = useState({
@@ -26,13 +27,17 @@ export default function SelectField({
     });
     const { selected } = data;
 
-    const firstVal = valuesArray && valuesArray.length && valuesArray[0].val;
+    const firstVal =
+        defaultValue ||
+        (valuesArray && valuesArray.length && valuesArray[0].val);
+    const isDefaultValue = Boolean(defaultValue);
+
     useEffect(() => {
         setData((prev) => ({
             ...prev,
-            selected: firstDefault ? firstVal : title,
+            selected: isDefaultValue || firstDefault ? firstVal : title,
         }));
-    }, [title, firstDefault, firstVal]);
+    }, [title, isDefaultValue, firstDefault, firstVal]);
 
     useEffect(() => {
         // IMPORTANT: the first selected value is actually the showVal, afterwards it is val (original val)

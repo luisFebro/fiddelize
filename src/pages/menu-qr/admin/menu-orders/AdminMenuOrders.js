@@ -80,7 +80,7 @@ export default function AdminMenuOrders({ bizLinkName, socket }) {
             style={{
                 position: "fixed",
                 bottom: 14,
-                right: 14,
+                left: 14,
             }}
         >
             <div className="container-center">

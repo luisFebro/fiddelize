@@ -36,6 +36,7 @@ const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
 export default function CustomerCatalog({
     adminId,
     placeId,
+    customerId,
     bizLinkName,
     url,
     socket,
@@ -47,6 +48,7 @@ export default function CustomerCatalog({
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
+    console.log("orderList", orderList);
 
     const bizLogo = "/img/test/restaurant.jpg";
     const width = 110;
@@ -57,8 +59,8 @@ export default function CustomerCatalog({
     useEffect(() => {
         if (!digitalMenuCurrPage) return;
 
-        setNextPage(digitalMenuCurrPage);
         setData(digitalMenuData);
+        setNextPage(digitalMenuCurrPage);
     }, [digitalMenuCurrPage]);
 
     const setDefault = () => {
@@ -172,6 +174,7 @@ export default function CustomerCatalog({
                             investAmount={orderAmount}
                             adminId={adminId}
                             placeId={placeId}
+                            customerId={customerId}
                             socket={socket}
                         />
                     )}
@@ -194,52 +197,52 @@ function DigitalMenu({ handleNextPage, orderAmount, orderCount, itemData }) {
     const allCategories = ["bebidas", "sanduíches", "gerais"];
     const dataProducts = [
         {
-            id: "123",
+            itemId: "123",
             category: "bebidas",
             availableQtt: 10,
             img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
-            desc: "lata guaraná antactica",
+            name: "lata guaraná antactica",
             unitAmount: 8.0,
         },
         {
-            id: "123fsf",
+            itemId: "123fsf",
             category: "bebidas",
             availableQtt: 10,
             img: "/img/test/cardapio-qr/suco-de-uva.jpg",
-            desc: "suco de uva",
+            name: "suco de uva",
             unitAmount: 5,
         },
         {
-            id: "123fsq232f",
+            itemId: "123fsq232f",
             category: "bebidas",
             availableQtt: 30,
             img: "/img/test/cardapio-qr/coca.jpg",
-            desc:
+            name:
                 "coca-cola ma bebida muito gelada, gelada mesmo meu deus, precisa beber essa bebida miraculosa    ",
             unitAmount: 8,
         },
         {
-            id: "123fsq232f",
+            itemId: "123fsq232f",
             category: "sanduíches",
             availableQtt: 3,
             img: "/img/test/cardapio-qr/kikao.jpg",
-            desc: "kikão com palha",
+            name: "kikão com palha",
             unitAmount: 5,
         },
         {
-            id: "12321233",
+            itemId: "12321233",
             category: "sanduíches",
             availableQtt: 15,
             img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
-            desc: "sanduba x-salada muito top",
+            name: "sanduba x-salada muito top",
             unitAmount: 5,
         },
         {
-            id: "12321233132",
+            itemId: "12321233132",
+            name: "sanduba pão árabe",
             category: "sanduíches",
             availableQtt: 5,
             img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
-            desc: "sanduba pão árabe",
             unitAmount: 5,
         },
     ];
@@ -304,7 +307,7 @@ function CardList({ dataList = [], itemData }) {
         <Fragment>
             {dataList.length &&
                 dataList.map((card) => (
-                    <Fragment key={card.id}>
+                    <Fragment key={card.itemId}>
                         <ProductCard card={card} itemData={itemData} />
                     </Fragment>
                 ))}

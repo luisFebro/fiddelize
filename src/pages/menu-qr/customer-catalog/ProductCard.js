@@ -12,23 +12,30 @@ export default function ProductCard({ card, itemData }) {
     const [data, setData] = useState({
         added: false,
         qtt: 0,
+        totalAmount: 0,
     });
-    const { added, qtt } = data;
-    const itemDesc = card.desc;
-    const totalAmount = card.unitAmount * (qtt || 1); // always 1 if zero to get the initial unit value to show to customer for reference
+    const { added, qtt, totalAmount } = data;
+    const itemDesc = card.name;
 
     useEffect(() => {
         const foundItem = orderList.find(
             (item) => item.name === itemDesc && item.count >= 1
         );
+
         if (itemDesc && foundItem) {
             setData((prev) => ({
                 ...prev,
                 added: true,
                 qtt: foundItem.count,
+                totalAmount: card.unitAmount * foundItem.count || 1,
+            }));
+        } else {
+            setData((prev) => ({
+                ...prev,
+                totalAmount: card.unitAmount * 1,
             }));
         }
-    }, [itemDesc]);
+    }, [itemDesc, orderList]);
 
     const showImg = () => (
         <section className="mb-2 container-center">
@@ -56,7 +63,7 @@ export default function ProductCard({ card, itemData }) {
     );
 
     return (
-        <section key={card.id} className="carousel-cell no-outline">
+        <section key={card.itemId} className="carousel-cell no-outline">
             {added && showAddedBadge()}
             {showImg()}
             <section className="text-left">
@@ -91,11 +98,12 @@ export default function ProductCard({ card, itemData }) {
                             if (isZeroQtt) return;
 
                             const newCount = qtt - 1;
-                            const newAmount = totalAmount - newCount;
+                            const newAmount = card.unitAmount * newCount;
                             const item = {
                                 name: itemDesc,
                                 count: newCount,
                                 amount: newAmount,
+                                unitAmount: card.unitAmount,
                                 img: card.img,
                             };
 
@@ -104,8 +112,9 @@ export default function ProductCard({ card, itemData }) {
 
                             setData((prev) => ({
                                 ...prev,
-                                qtt: prev.qtt <= 0 ? 0 : (prev.qtt -= 1),
-                                added: prev.qtt <= 0 ? false : true,
+                                qtt: newCount <= 0 ? 0 : newCount,
+                                added: newCount <= 0 ? false : true,
+                                totalAmount: newAmount,
                             }));
                         }}
                         position="relative"
@@ -132,6 +141,7 @@ export default function ProductCard({ card, itemData }) {
                                     count: newCount,
                                     amount: newAmount,
                                     img: card.img,
+                                    unitAmount: card.unitAmount,
                                 };
                                 handleItem("update", { item });
 
@@ -139,6 +149,7 @@ export default function ProductCard({ card, itemData }) {
                                     ...prev,
                                     qtt: newCount,
                                     added: true,
+                                    totalAmount: newAmount,
                                 };
                             });
                         }}
