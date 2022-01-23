@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useData, { useBizData } from "init";
-import useAPIList, { readBenefitCards } from "api/useAPIList";
+import useAPIList, { readMenuOrderList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 import PendingCard from "./cards/PendingCard";
@@ -11,7 +11,7 @@ import PendingCard from "./cards/PendingCard";
 
 // setItems("global", { lastDatePendingOrderCard: new Date() });
 
-export default function PendingOrdersList() {
+export default function PendingOrdersList({ socket }) {
     const [skip, setSkip] = useState(0);
     // const [search, setSearch] = useState("");
     const { bizId } = useBizData();
@@ -49,11 +49,11 @@ export default function PendingOrdersList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readBenefitCards(),
+        url: readMenuOrderList(),
         skip,
         params,
         listName: "PendingOrdersList",
-        filterId: "customerId", // IMPORTANT: this is to avoid duplication. the default is _id, if not found, it will be loading issue. Set here the actual id of each card
+        filterId: "_id", // IMPORTANT: this is to avoid duplication. the default is _id, if not found, it will be loading issue. Set here the actual id of each card
         trigger: runName || true,
     });
 
@@ -64,7 +64,7 @@ export default function PendingOrdersList() {
         setSkip,
         isOffline,
     });
-    const showCard = (data) => <PendingCard data={data} />;
+    const showCard = (data) => <PendingCard data={data} socket={socket} />;
 
     const listMap = list.map((data, ind) =>
         checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
