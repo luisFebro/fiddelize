@@ -32,6 +32,7 @@ export const websitePages = [
     "/novo-clube",
     "/app/preview", //app/preview is the preview for building app in website
     "/qr",
+    "/menu",
 ];
 
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser

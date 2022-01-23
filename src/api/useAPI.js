@@ -9,6 +9,7 @@ import disconnect from "auth/disconnect";
 import showToast from "components/toasts";
 import { setRun, useAction } from "global-data/ui";
 import { useOfflineData } from "hooks/storage/useOfflineListData";
+import { arePublicPages } from "auth/checkValidSession";
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
@@ -115,7 +116,7 @@ export default function useAPI({
 
         const gotExpiredToken = status === 401 || status === 403;
 
-        if (gotExpiredToken) {
+        if (gotExpiredToken && !arePublicPages()) {
             (async () => {
                 await disconnect();
                 showToast("Sua sessão terminou.");
@@ -195,6 +196,7 @@ export default function useAPI({
         error,
         ShowError,
         isCanceled,
+        gotError: error || isCanceled,
     };
 }
 
