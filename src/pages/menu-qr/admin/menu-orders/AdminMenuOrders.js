@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
@@ -36,15 +36,20 @@ const AsyncProductManager = Load({
         ),
 });
 
-export default function AdminMenuOrders({ match }) {
+export default function AdminMenuOrders({ bizLinkName, socket }) {
     useBackColor("var(--mainWhite)");
     const [fullOpen, setFullOpen] = useState(false);
     const [content, setContent] = useState("pendingOrders");
     const isPending = content === "pendingOrders";
 
+    const disconnected = socket && socket.disconnected;
+    useEffect(() => {
+        if (disconnected) socket.connect();
+        // eslint-disable-next-line
+    }, [disconnected]);
+
     const themeSColor = "default";
 
-    const bizLinkId = match && match.params && match.params.bizLinkId;
     const bizLogo = "/img/test/restaurant.jpg";
     const width = 110;
     const height = 110;
@@ -55,8 +60,8 @@ export default function AdminMenuOrders({ match }) {
                 src={bizLogo}
                 width={width}
                 height={height}
-                title={`logo da ${bizLinkId}`}
-                alt={`logo empresa ${bizLinkId}`}
+                title={`logo da ${bizLinkName}`}
+                alt={`logo empresa ${bizLinkName}`}
             />
         </div>
     );
@@ -109,7 +114,11 @@ export default function AdminMenuOrders({ match }) {
     return (
         <section>
             {showTitle()}
-            {isPending ? <AsyncPendingOrdersList /> : <AsyncDoneOrdersList />}
+            {isPending ? (
+                <AsyncPendingOrdersList socket={socket} />
+            ) : (
+                <AsyncDoneOrdersList />
+            )}
             {showCTAs()}
             {fullOpen && (
                 <ModalFullContent

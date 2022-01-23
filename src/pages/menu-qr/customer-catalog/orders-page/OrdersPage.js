@@ -17,6 +17,7 @@ export default function OrdersPage({
     investAmount,
     adminId,
     placeId,
+    socket,
 }) {
     useScrollUp();
 
@@ -44,8 +45,8 @@ export default function OrdersPage({
                         customerId: null, // only for future update where user can access their account
                         order: {
                             stage: "queue",
-                            count: itemsCount,
-                            amount: investAmount,
+                            totalCount: itemsCount,
+                            totalAmount: investAmount,
                             orderList: itemList,
                         },
                     };
@@ -58,6 +59,8 @@ export default function OrdersPage({
                         auth: false,
                         body,
                     }).catch(console.log); // err => showToast("Algo deu errado.", { type: "error" })
+
+                    if (socket) socket.emit("updateAdminList", { adminId });
 
                     setItems("global", {
                         digitalMenuData: {
