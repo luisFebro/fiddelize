@@ -37,7 +37,7 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                 adminId,
                 placeId,
                 customerId,
-                body: { "order.stage": select },
+                "order.stage": select,
             };
             if (socket) {
                 socket.emit("updateCustomerOrder", socketData);

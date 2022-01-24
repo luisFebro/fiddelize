@@ -40,9 +40,9 @@ export default function OrdersPage({
                 backgroundColor="var(--themeSDark--default)"
                 onClick={async () => {
                     const body = {
-                        adminId,
-                        placeId,
                         customerId,
+                        placeId,
+                        adminId,
                         order: {
                             stage: "queue",
                             totalCount: itemsCount,
@@ -54,12 +54,7 @@ export default function OrdersPage({
                     showToast("Enviando pedido...", { dur: 2000 });
 
                     if (socket) {
-                        socket.emit("updateCustomerOrder", {
-                            adminId,
-                            placeId,
-                            customerId,
-                            body,
-                        });
+                        socket.emit("updateCustomerOrder", body);
                         socket.emit("updateAdminList");
                     }
 
