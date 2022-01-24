@@ -13,16 +13,17 @@ export const AsyncCustomerCatalog = Load({
         ),
 });
 
-export const AsyncAdminMenuOrders = Load({
+export const AsyncMainMenuAdmin = Load({
     loader: () =>
         import(
-            "./admin/menu-orders/AdminMenuOrders" /* webpackChunkName: "admin-menu-orders-lazy" */
+            "./admin/MainMenuAdmin" /* webpackChunkName: "main-menu-admin-lazy" */
         ),
 });
 
 export default function RealtimeOrders({ match, location }) {
     const [mainData, setMainData] = useState({
         isUsedLink: false,
+        // loaded: false,
     });
     const { isUsedLink } = mainData;
 
@@ -39,10 +40,10 @@ export default function RealtimeOrders({ match, location }) {
     const cliId = location && location.search.replace("?cliId=", "");
 
     useEffect(() => {
-        if (window.history.replaceState && !gotCliId) {
+        if (window.history.replaceState && !gotCliId && !isAdmin) {
             window.history.replaceState({}, "cliId", `?cliId=${randomId}`);
         }
-    }, [gotCliId]);
+    }, [gotCliId, isAdmin]);
 
     const params = {
         role: "cliente-admin",
@@ -66,17 +67,19 @@ export default function RealtimeOrders({ match, location }) {
     });
 
     useEffect(() => {
-        if (!socket) return;
+        if (!socket || !placeId || !adminId) return;
         socket.connect();
         const ids = { adminId, customerId: cliId, placeId };
         socket.emit("readCustomerSingleOrder", {
             ids,
             isCurrStage: true,
             field: "order.stage",
+            onlySender: true,
         });
         socket.on("updateCurrStage", ({ currStage }) => {
             if (currStage)
                 setMainData((prev) => ({ ...prev, isUsedLink: true }));
+            else setMainData((prev) => ({ ...prev }));
         });
     }, [adminId, cliId, placeId, socket]);
 
@@ -94,7 +97,7 @@ export default function RealtimeOrders({ match, location }) {
                 />
             )}
             {isAdmin && (
-                <AsyncAdminMenuOrders
+                <AsyncMainMenuAdmin
                     adminId={adminId}
                     bizLinkName={bizLinkName}
                     socket={socket}

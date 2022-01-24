@@ -48,6 +48,16 @@ export default function ProgressTrack({ stage }) {
                     />
                 </div>
             )}
+            {stage === "canceled" && (
+                <div className="container-center animated rubberBand repeat-2">
+                    <img
+                        width={100}
+                        height={100}
+                        src="/img/icons/digital-menu/canceled.svg"
+                        alt="Cancelado"
+                    />
+                </div>
+            )}
         </Fragment>
     );
 
@@ -205,6 +215,7 @@ function getSelectedMsg(stage) {
     if (stage === "queue")
         return "Seu pedido foi recebido e logo será preparado.";
     if (stage === "preparing") return "Estamos preparando seu pedido agora!";
+    if (stage === "canceled") return "Pedido foi cancelado";
     // done
     return "Opa! Pedido pronto e a caminho. Bom apetite!";
 }

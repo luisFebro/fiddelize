@@ -21,6 +21,7 @@ export default function SelectField({
     handleValue,
     defaultValue, // if there is a constant back and forth change
     firstDefault = false, // first item default
+    zIndex = 20000,
 }) {
     const [data, setData] = useState({
         selected: "",
@@ -82,6 +83,9 @@ export default function SelectField({
                     .MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu {
                         font-size: 1.2rem;
                         color: var(--themeP);
+                    }
+                    .MuiPopover-root {
+                        z-index: ${zIndex} !important;
                     }
                 `}
             </style>

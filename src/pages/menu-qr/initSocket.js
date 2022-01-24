@@ -18,7 +18,7 @@ export function useInitSocket({ namespace, role, roomId, adminId }) {
     const [socketData, setSocketData] = useState(null);
 
     useEffect(() => {
-        if (!adminId) return;
+        if (!adminId) return null;
         const socket = getInitSocket({ namespace });
 
         startSocketSession(socket, {

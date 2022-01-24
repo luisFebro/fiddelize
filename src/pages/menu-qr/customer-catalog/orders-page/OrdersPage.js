@@ -1,7 +1,6 @@
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { setItems } from "init/lStorage";
-import showToast from "components/toasts";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
 
@@ -51,11 +50,10 @@ export default function OrdersPage({
                         },
                     };
 
-                    showToast("Enviando pedido...", { dur: 2000 });
-
                     if (socket) {
                         socket.emit("updateCustomerOrder", body);
                         socket.emit("updateAdminList");
+                        socket.emit("getAdminListCount", { adminId });
                     }
 
                     setItems("global", {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { removeItems } from "init/lStorage";
+import { Fragment, useEffect, useState } from "react";
+import { setItems } from "init/lStorage";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Card from "@material-ui/core/Card";
@@ -11,13 +11,7 @@ import ProgressTrack from "./ProgressTrack";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function OrderSuccess({
-    allDataItem,
-    setNextPage,
-    setDefault,
-    socket,
-    ids,
-}) {
+export default function OrderSuccess({ allDataItem, socket, ids }) {
     const [currStage, setCurrStage] = useState("queue");
     const [openCancel, setOpenCancel] = useState(false);
     // 3 stages of order: queue, preparing, done
@@ -40,18 +34,27 @@ export default function OrderSuccess({
             ids,
             isCurrStage: true,
             field: "order.stage",
+            onlySender: true,
         });
         socket.on("updateCurrStage", ({ currStage }) => {
             setCurrStage(currStage);
         });
     }, [socket]);
 
-    const finishOrder = () => {
+    const finishOrder = (isCancel) => {
         socket.disconnect();
-        removeItems("global", ["digitalMenuData", "digitalMenuCurrPage"]);
-        setNextPage("menu");
-        setDefault();
+        setItems("global", {
+            digitalMenuCurrPage: "menu",
+        });
+        if (isCancel) {
+            showToast("Pedido cancelado com sucesso!", { type: "success" });
+            setCurrStage("canceled");
+        }
     };
+
+    useEffect(() => {
+        if (currStage === "done") finishOrder();
+    }, [currStage]);
 
     const showCancelBtn = () => (
         <div className="mx-3 d-flex justify-content-end">
@@ -69,6 +72,22 @@ export default function OrderSuccess({
         </div>
     );
 
+    const showEndZone = () => {
+        if (currStage === "canceled") return <div />;
+
+        return (
+            <Fragment>
+                {currStage === "done" ? (
+                    <div className="mx-3 my-5 text-white text-subtitle font-weight-bold text-center">
+                        Agradecemos sua preferência e volte sempre!
+                    </div>
+                ) : (
+                    <NotifActivationZone />
+                )}
+            </Fragment>
+        );
+    };
+
     if (currStage === null) {
         return (
             <div className="my-5 text-white font-weight-bold text-subtitle text-center">
@@ -77,6 +96,7 @@ export default function OrderSuccess({
         );
     }
 
+    const allowCancelStages = ["queue", "preparing"];
     return (
         <section className="text-shadow">
             <h2 className="mt-3 text-center text-subtitle text-white font-weight-bold">
@@ -86,14 +106,8 @@ export default function OrderSuccess({
             {allDataItem && allDataItem.orderCount && (
                 <MyOrder allDataItem={allDataItem} />
             )}
-            {currStage !== "done" && showCancelBtn()}
-            {currStage === "done" ? (
-                <div className="mx-3 my-5 text-white text-subtitle font-weight-bold text-center">
-                    Agradecemos sua preferência e volte sempre!
-                </div>
-            ) : (
-                <NotifActivationZone />
-            )}
+            {allowCancelStages.includes(currStage) && showCancelBtn()}
+            {showEndZone()}
             <div style={{ marginBottom: 150 }} />
             {openCancel && (
                 <ModalYesNo
@@ -102,7 +116,6 @@ export default function OrderSuccess({
                     fullOpen={openCancel}
                     setFullOpen={setOpenCancel}
                     actionFunc={() => {
-                        showToast("Cancelando pedido...", { dur: 3000 });
                         // set canceled to db order
                         const dataCancel = {
                             ...ids,
@@ -113,11 +126,7 @@ export default function OrderSuccess({
                             socket.emit("updateAdminList");
                         }
 
-                        showToast("Pedido Cancelado", {
-                            dur: 3000,
-                            type: "success",
-                        });
-                        return finishOrder();
+                        return finishOrder(true);
                     }}
                 />
             )}

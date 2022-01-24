@@ -103,7 +103,7 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                     fullOpen={fullOpen}
                     setFullOpen={setFullOpen}
                     actionFunc={null}
-                    needIndex={false}
+                    needIndex
                     needCTAs={false}
                     contentComp={
                         <div className="container-center">{showSelect()}</div>

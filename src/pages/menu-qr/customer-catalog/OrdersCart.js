@@ -5,6 +5,7 @@ import animateCSS from "utils/animateCSS";
 import convertToReal from "utils/numbers/convertToReal";
 import NotificationBadge from "components/badges/NotificationBadge";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import DeleteButton from "components/buttons/DeleteButton";
 // import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -86,7 +87,7 @@ export const ContinueBtn = ({ onClick }) => {
     );
 };
 
-export const TotalInvest = ({ orderAmount, orderCount }) => {
+export const TotalInvest = ({ orderAmount, orderCount, setDefault }) => {
     const styles = getStyles();
     const totalCartRef = useRef();
 
@@ -118,10 +119,27 @@ export const TotalInvest = ({ orderAmount, orderCount }) => {
         </NotificationBadge>
     );
 
+    const showDeleteBtn = () => (
+        <div
+            className="animated fadeInUp delay-2s position-absolute"
+            style={{
+                top: -60,
+                left: 0,
+            }}
+        >
+            <DeleteButton
+                onClick={() => {
+                    setDefault();
+                }}
+            />
+        </div>
+    );
+
     return (
         <Fragment>
             <div style={styles.clipPathBottom} />
             <section className="position-fixed d-flex" style={{ bottom: 0 }}>
+                {Boolean(orderCount) && showDeleteBtn()}
                 {showCart()}
                 <div className="text-subtitle text-white font-weight-bold">
                     <span

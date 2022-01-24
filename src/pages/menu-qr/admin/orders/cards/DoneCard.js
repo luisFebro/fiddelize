@@ -28,7 +28,12 @@ export default function DoneCard({ data }) {
 
         return (
             <div className="order-badge-status--root text-normal text-shadow text-white">
-                <div className="badge">{statusBr[status].txt}</div>
+                <div
+                    className="badge"
+                    style={{ background: statusBr[status].color }}
+                >
+                    {statusBr[status].txt}
+                </div>
                 <style jsx>
                     {`
                         .order-badge-status--root {
@@ -40,7 +45,6 @@ export default function DoneCard({ data }) {
                         .order-badge-status--root .badge {
                             padding: 1px 2px;
                             border-radius: 15px;
-                            background: ${statusBr[status].color};
                             border: solid 2px white;
                         }
                     `}
@@ -59,7 +63,7 @@ export default function DoneCard({ data }) {
         <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
             {showOrderStatus()}
             <h2 className="text-subtitle font-weight-bold">
-                ID LUGAR: {placeId}
+                ID lugar: {placeId}
             </h2>
             <h2 className="text-normal font-weight-bold">
                 Valor Total:

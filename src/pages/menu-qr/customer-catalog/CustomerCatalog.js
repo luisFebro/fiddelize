@@ -5,7 +5,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
-import getItems, { setItems } from "init/lStorage";
+import getItems, { setItems, removeItems } from "init/lStorage";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ProductCard from "./ProductCard";
 import {
@@ -62,24 +62,24 @@ export default function CustomerCatalog({
         customerId,
     };
 
+    const gotSavedMenuData = digitalMenuData && digitalMenuData.orderCount;
     useEffect(() => {
-        if (isUsedLink) setNextPage("success");
-    }, [isUsedLink]);
+        if (gotSavedMenuData) setData(digitalMenuData);
+        // if it is a used link, then remain in the menu page and ignore local db
+        if (digitalMenuCurrPage === "orders") return setNextPage("orders");
+        if (!isUsedLink) setNextPage("menu");
+        else setNextPage("success");
+    }, [gotSavedMenuData, isUsedLink]);
 
-    useEffect(() => {
-        if (!digitalMenuCurrPage) return;
-
-        setData(digitalMenuData);
-        setNextPage(digitalMenuCurrPage);
-    }, [digitalMenuCurrPage]);
-
-    const setDefault = () => {
-        setData((prev) => ({
+    const setDefault = async () => {
+        await setData((prev) => ({
             ...prev,
             orderCount: 0,
             orderAmount: 0,
             orderList: [],
         }));
+        removeItems("global", ["digitalMenuData", "digitalMenuCurrPage"]);
+        if (window) window.location.reload();
     };
 
     useScrollUp();
@@ -155,6 +155,19 @@ export default function CustomerCatalog({
         );
     };
 
+    // if(!loaded) {
+    //     return(
+    //         <p
+    //             className="mx-3 text-center text-white text-shadow text-subtitle"
+    //             style={{
+    //                 margin: "150px 0"
+    //             }}
+    //         >
+    //             Carregando Menu Digital...
+    //         </p>
+    //     )
+    // }
+
     return (
         <section>
             {showLogo()}
@@ -173,6 +186,7 @@ export default function CustomerCatalog({
                             orderAmount={orderAmount}
                             orderCount={orderCount}
                             itemData={itemData}
+                            setDefault={setDefault}
                         />
                     )}
                     {nextPage === "orders" && (
@@ -190,8 +204,6 @@ export default function CustomerCatalog({
                     )}
                     {nextPage === "success" && (
                         <AsyncOrderSuccess
-                            setNextPage={setNextPage}
-                            setDefault={setDefault}
                             allDataItem={data}
                             socket={socket}
                             ids={ids}
@@ -204,7 +216,13 @@ export default function CustomerCatalog({
 }
 
 // COMP
-function DigitalMenu({ handleNextPage, orderAmount, orderCount, itemData }) {
+function DigitalMenu({
+    setDefault,
+    handleNextPage,
+    orderAmount,
+    orderCount,
+    itemData,
+}) {
     const allCategories = ["bebidas", "sanduíches", "gerais"];
     const dataProducts = [
         {
@@ -289,6 +307,7 @@ function DigitalMenu({ handleNextPage, orderAmount, orderCount, itemData }) {
                         <TotalInvest
                             orderAmount={orderAmount}
                             orderCount={orderCount}
+                            setDefault={setDefault}
                         />
                         <ContinueBtn onClick={handleNextPage} />
                     </section>

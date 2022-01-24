@@ -2,18 +2,6 @@ import { useEffect, useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
-import ModalFullContent from "components/modals/ModalFullContent";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-
-const PlusIcon = (
-    <AddCircleOutlineIcon
-        style={{
-            transform: "scale(1.5)",
-            color: "#fff",
-            filter: "drop-shadow(.1px .1px .9px grey)",
-        }}
-    />
-);
 
 const AsyncPendingOrdersList = Load({
     loader: () =>
@@ -29,16 +17,8 @@ const AsyncDoneOrdersList = Load({
         ),
 });
 
-const AsyncProductManager = Load({
-    loader: () =>
-        import(
-            "../manager/ProductManager" /* webpackChunkName: "product-manager-page-lazy" */
-        ),
-});
-
-export default function AdminMenuOrders({ bizLinkName, socket }) {
+export default function Orders({ bizLinkName, socket }) {
     useBackColor("var(--mainWhite)");
-    const [fullOpen, setFullOpen] = useState(false);
     const [content, setContent] = useState("pendingOrders");
     const isPending = content === "pendingOrders";
 
@@ -94,22 +74,9 @@ export default function AdminMenuOrders({ bizLinkName, socket }) {
                     position="relative"
                     variant="extended"
                 />
-                <div className="ml-3">
-                    <ButtonFab
-                        size="large"
-                        backgroundColor={`var(--themeSDark--${themeSColor})`}
-                        onClick={() => setFullOpen(true)}
-                        position="relative"
-                        iconMu={PlusIcon}
-                    />
-                </div>
             </div>
         </section>
     );
-
-    const handleFullClose = () => {
-        setFullOpen(false);
-    };
 
     return (
         <section>
@@ -120,13 +87,6 @@ export default function AdminMenuOrders({ bizLinkName, socket }) {
                 <AsyncDoneOrdersList />
             )}
             {showCTAs()}
-            {fullOpen && (
-                <ModalFullContent
-                    contentComp={<AsyncProductManager />}
-                    fullOpen={fullOpen}
-                    setFullOpen={handleFullClose}
-                />
-            )}
         </section>
     );
 }
