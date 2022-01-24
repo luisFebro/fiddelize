@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import useAPI, { getUserIdByName } from "api/useAPI";
 import getId from "utils/getId";
@@ -21,6 +21,11 @@ export const AsyncAdminMenuOrders = Load({
 });
 
 export default function RealtimeOrders({ match, location }) {
+    const [mainData, setMainData] = useState({
+        isUsedLink: false,
+    });
+    const { isUsedLink } = mainData;
+
     const isAdmin = match.url && match.url.includes("admin");
     const isCustomer = !isAdmin;
 
@@ -31,6 +36,7 @@ export default function RealtimeOrders({ match, location }) {
     const placeId = match && match.params && match.params.placeId;
     const url = match && match.url;
     const gotCliId = location && location.search.includes("cliId");
+    const cliId = location && location.search.replace("?cliId=", "");
 
     useEffect(() => {
         if (window.history.replaceState && !gotCliId) {
@@ -59,16 +65,32 @@ export default function RealtimeOrders({ match, location }) {
         adminId,
     });
 
+    useEffect(() => {
+        if (!socket) return;
+        socket.connect();
+        const ids = { adminId, customerId: cliId, placeId };
+        socket.emit("readCustomerSingleOrder", {
+            ids,
+            isCurrStage: true,
+            field: "order.stage",
+        });
+        socket.on("updateCurrStage", ({ currStage }) => {
+            if (currStage)
+                setMainData((prev) => ({ ...prev, isUsedLink: true }));
+        });
+    }, [adminId, cliId, placeId, socket]);
+
     return (
         <Fragment>
             {isCustomer && (
                 <AsyncCustomerCatalog
                     placeId={placeId}
                     adminId={adminId}
-                    customerId={randomId}
+                    customerId={gotCliId ? cliId : randomId}
                     bizLinkName={bizLinkName}
                     url={url}
                     socket={socket}
+                    isUsedLink={isUsedLink}
                 />
             )}
             {isAdmin && (

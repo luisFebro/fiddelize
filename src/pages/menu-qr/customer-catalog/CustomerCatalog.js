@@ -40,6 +40,7 @@ export default function CustomerCatalog({
     bizLinkName,
     url,
     socket,
+    isUsedLink,
 }) {
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
@@ -48,13 +49,22 @@ export default function CustomerCatalog({
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
-    console.log("orderList", orderList);
 
     const bizLogo = "/img/test/restaurant.jpg";
     const width = 110;
     const height = 110;
     const isQrDisplay = placeId === "qr";
     // show either qr code to be scanned or the product catalog
+
+    const ids = {
+        adminId,
+        placeId,
+        customerId,
+    };
+
+    useEffect(() => {
+        if (isUsedLink) setNextPage("success");
+    }, [isUsedLink]);
 
     useEffect(() => {
         if (!digitalMenuCurrPage) return;
@@ -184,6 +194,7 @@ export default function CustomerCatalog({
                             setDefault={setDefault}
                             allDataItem={data}
                             socket={socket}
+                            ids={ids}
                         />
                     )}
                 </Fragment>
@@ -283,6 +294,9 @@ function DigitalMenu({ handleNextPage, orderAmount, orderCount, itemData }) {
                     </section>
                 );
             })}
+            <p className="text-white my-5 text-normal text-center font-weight-bold">
+                Isso é tudo.
+            </p>
         </section>
     );
 
