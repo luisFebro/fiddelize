@@ -8,6 +8,7 @@ import convertToReal from "utils/numbers/convertToReal";
 import showToast from "components/toasts";
 import ModalYesNo from "components/modals/ModalYesNo";
 import ProgressTrack from "./ProgressTrack";
+import NotifActivationZone from "./notif/NotifActivationZone";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -82,7 +83,7 @@ export default function OrderSuccess({ allDataItem, socket, ids }) {
                         Agradecemos sua preferência e volte sempre!
                     </div>
                 ) : (
-                    <NotifActivationZone />
+                    <NotifActivationZone ids={ids} socket={socket} />
                 )}
             </Fragment>
         );
@@ -199,26 +200,6 @@ function MyOrder({ allDataItem }) {
                 {showList()}
             </section>
         </Card>
-    );
-}
-
-function NotifActivationZone() {
-    return (
-        <section className="text-white">
-            <p className="text-normal mx-3 my-5 text-center">
-                Quer ser notificado em tempo real sobre seu pedido?
-            </p>
-            <div className="mt-3 container-center">
-                <ButtonFab
-                    title="Ativar notificação"
-                    color="var(--mainWhite)"
-                    onClick={null}
-                    backgroundColor="var(--themeSDark--default)"
-                    variant="extended"
-                    size="large"
-                />
-            </div>
-        </section>
     );
 }
 // END COMP

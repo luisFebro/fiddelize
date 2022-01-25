@@ -40,7 +40,10 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                 "order.stage": select,
             };
             if (socket) {
-                socket.emit("updateCustomerOrder", socketData);
+                const notifData = {
+                    stage: select,
+                };
+                socket.emit("updateCustomerOrder", socketData, notifData);
                 if (isDone) socket.emit("updateAdminList");
             }
             if (select !== markOpt) setFullOpen(false);

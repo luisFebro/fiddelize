@@ -15,6 +15,7 @@ export default function Field({
     // onChange,
     error,
     placeholder,
+    autoFocus = false,
     autoComplete = "off",
     variant = "outlined",
     enterCallback = () => null,
@@ -60,6 +61,7 @@ export default function Field({
                 rows={multiline ? rows : undefined}
                 fullWidth={width ? false : fullWidth}
                 maxLength={maxLength}
+                autoFocus={autoFocus}
             />
             <style jsx>
                 {`

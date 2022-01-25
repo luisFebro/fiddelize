@@ -33,6 +33,11 @@ export default function MainMenuAdmin(compData) {
     const { socket, adminId } = compData;
 
     useEffect(() => {
+        // if clicked on this option, clear all notifications
+        if (fullOpen === "Pedidos") setPendingOrdersCount(0);
+    }, [fullOpen]);
+
+    useEffect(() => {
         if (!socket || !adminId) return;
         const disconnected = socket && socket.disconnected;
         if (disconnected) socket.connect();
