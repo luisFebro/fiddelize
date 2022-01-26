@@ -7,21 +7,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const AsyncAdminMenuOrders = Load({
     loader: () =>
         import(
-            "./orders/Orders.js" /* webpackChunkName: "admin-orders-lazy" */
+            "./orders/Orders.js" /* webpackChunkName: "menu-admin-page-lazy" */
         ),
 });
 
 const AsyncProductManager = Load({
     loader: () =>
         import(
-            "./product/ProductManager" /* webpackChunkName: "product-manager-page-lazy" */
+            "./product/ProductManager" /* webpackChunkName: "menu-admin-page-lazy" */
         ),
 });
 
 const AsyncAdvertise = Load({
     loader: () =>
         import(
-            "./advertise/Advertise" /* webpackChunkName: "advertise-page-lazy" */
+            "./advertise/Advertise" /* webpackChunkName: "menu-admin-page-lazy" */
+        ),
+});
+
+const AsyncAnalysis = Load({
+    loader: () =>
+        import(
+            "./analysis/Analysis" /* webpackChunkName: "menu-admin-page-lazy" */
         ),
 });
 
@@ -86,7 +93,7 @@ function selectComp(comp, compData) {
             />
         );
     if (comp === "Divulgação") return <AsyncAdvertise />;
-    if (comp === "Ajustes") return null; // <AsyncTweaks />
+    if (comp === "Análise") return <AsyncAnalysis />; // <AsyncTweaks />
 
     return null;
 }
@@ -103,8 +110,8 @@ function MenuList({ setFullOpen, pendingOrdersCount = 0 }) {
             title: "Pedidos",
         },
         {
-            icon: <FontAwesomeIcon icon="cogs" />,
-            title: "Ajustes",
+            icon: <FontAwesomeIcon icon="chart-pie" />,
+            title: "Análise",
         },
         {
             icon: <FontAwesomeIcon icon="bullhorn" />,
@@ -149,6 +156,7 @@ function MenuList({ setFullOpen, pendingOrdersCount = 0 }) {
                     <div
                         key={opt.title}
                         className="col-2 mx-auto mb-4 card position-relative"
+                        style={{ cursor: "pointer" }}
                         onClick={() => setFullOpen(opt.title)}
                     >
                         {opt.title === "Pedidos" &&

@@ -245,12 +245,17 @@ function Website({ location }) {
                     component={AsyncAmurretoAltrabot}
                 />
                 <Route
-                    path="/:bizLinkId/menu/c/:placeId"
+                    path="/:bizLinkId/menu"
                     exact
                     component={AsyncRealtimeOrders}
                 />
                 <Route
-                    path="/:bizLinkId/menu/admin"
+                    path="/:bizLinkId/menu/:placeId"
+                    exact
+                    component={AsyncRealtimeOrders}
+                />
+                <Route
+                    path="/:bizLinkId/menu/p/admin"
                     exact
                     component={AsyncRealtimeOrders}
                 />

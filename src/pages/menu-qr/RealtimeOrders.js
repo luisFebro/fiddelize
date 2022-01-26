@@ -34,10 +34,13 @@ export default function RealtimeOrders({ match, location }) {
     const bizLinkName = match && match.params && match.params.bizLinkId;
 
     // for customer
-    const placeId = match && match.params && match.params.placeId;
     const url = match && match.url;
     const gotCliId = location && location.search.includes("cliId");
     const cliId = location && location.search.replace("?cliId=", "");
+    const placeId =
+        (match && match.params && match.params.placeId) ||
+        `online${cliId || randomId}`;
+    const isOnline = placeId && placeId.includes("online");
 
     useEffect(() => {
         if (window.history.replaceState && !gotCliId && !isAdmin) {
@@ -94,6 +97,7 @@ export default function RealtimeOrders({ match, location }) {
                     url={url}
                     socket={socket}
                     isUsedLink={isUsedLink}
+                    isOnline={isOnline}
                 />
             )}
             {isAdmin && (

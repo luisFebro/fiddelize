@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import SelectField from "components/fields/SelectField";
 import QrCode from "components/QrCode";
+import Card from "@material-ui/core/Card";
+import ShareSocialMediaButtons from "components/buttons/ShareSocialMediaButtons";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import copyText from "utils/document/copyText";
 import { useBizData } from "init";
 
 export default function Advertise() {
@@ -18,8 +22,11 @@ export default function Advertise() {
     const height = 110;
 
     useEffect(() => {
-        const thisData = markOpt || markOptPlaceId;
-        if (thisData && thisData.includes("Selecione")) return;
+        if (
+            (markOpt && markOpt.includes("Selecione")) ||
+            (markOptPlaceId && markOptPlaceId.includes("Selecione"))
+        )
+            return;
         if (markOpt === "online" || markOptPlaceId)
             setData((prev) => ({ ...prev, comp: "adPanel" }));
     }, [markOpt, markOptPlaceId]);
@@ -36,6 +43,7 @@ export default function Advertise() {
             {comp === "adPanel" && (
                 <AdPanel
                     setData={setData}
+                    markOpt={markOpt}
                     markOptPlaceId={markOptPlaceId}
                     bizLogo={bizLogo}
                     width={width}
@@ -170,54 +178,120 @@ function Main({ setData, markOpt, markOptPlaceId }) {
     );
 }
 
-function AdPanel({ markOptPlaceId, bizLogo, width, height, setData }) {
+function AdPanel({ markOptPlaceId, markOpt, bizLogo, width, height, setData }) {
     const { bizLinkName } = useBizData();
+    const isLocal = markOpt === "local";
+    const getUrl = () =>
+        isLocal
+            ? `${bizLinkName}/menu/${markOptPlaceId}`
+            : `${bizLinkName}/menu`;
 
-    const getUrl = () => `${bizLinkName}/menu/c/${markOptPlaceId || "online"}`;
-
-    const url = getUrl();
-    console.log("url", url);
+    const url = `https://fiddelize.com.br/${getUrl()}`;
 
     const showLogo = () => (
-        <div className="mt-2 mb-3 container-center">
-            <img
-                src={bizLogo}
-                width={width}
-                height={height}
-                title="logo"
-                alt="logo"
-            />
-        </div>
+        <Fragment>
+            <div className="mt-2 mb-3 container-center">
+                <img
+                    src={bizLogo}
+                    width={width}
+                    height={height}
+                    title="logo"
+                    alt="logo"
+                />
+            </div>
+            <h2 className="text-center font-weight-bold text-subtitle">
+                {isLocal ? "Local" : "Online"}
+            </h2>
+        </Fragment>
     );
 
-    const showQrCode = () => {
+    // FUTURE UPDATES: QrCode for online sharing should generate a print screen from a custom page and option to share it right after that. (see Whatsapp)
+    const showLocal = () => {
         const imageSettings = {
             src: bizLogo,
         };
 
-        const imageSquare = true; // bizLogo && bizLogo.includes("h_100,w_100");
+        const imageSquare = bizLogo && bizLogo.includes("h_100,w_100");
 
         return (
-            <section className="mb-5 container-center">
-                <div className="qr-container">
-                    <QrCode
-                        value={`https:/fiddelize.com.br/${url}`}
-                        fgColor="var(--themeP--purple)"
-                        imageSettings={imageSettings}
-                        imageSquare={imageSquare}
-                    />
-                </div>
-            </section>
+            <Fragment>
+                <section className="mb-2 container-center">
+                    <div className="qr-container">
+                        <QrCode
+                            value={`https:/fiddelize.com.br/${url}`}
+                            fgColor="var(--themeP--purple)"
+                            imageSettings={imageSettings}
+                            imageSquare={imageSquare}
+                        />
+                    </div>
+                </section>
+                <p className="font-site text-em-0-8 text-break my-3">{url}</p>
+            </Fragment>
         );
     };
+
+    function Online() {
+        const showCopyBtn = () => {
+            const handleCopy = () => {
+                copyText(url, {
+                    msg: "Link copiado!",
+                });
+            };
+
+            return (
+                <div className="ml-3 d-inline-block" style={{ zIndex: 100 }}>
+                    <RadiusBtn
+                        size="extra-small"
+                        title="copiar"
+                        onClick={handleCopy}
+                    />
+                </div>
+            );
+        };
+
+        const sharingData = {
+            titleShare: "",
+            pageImg: "",
+            pageTitle: "Link para baixar app admin",
+            pageDescription: url,
+            pageURL: url,
+        };
+
+        const shareArea = () => (
+            <section className="container-center mx-2">
+                <Card
+                    style={{
+                        maxWidth: 350,
+                        width: "100%",
+                        backgroundColor: "var(--mainWhite)",
+                    }}
+                    className="align-self-center pb-4 card-elevation"
+                >
+                    <ShareSocialMediaButtons
+                        config={{ size: 50, radius: 50 }}
+                        data={sharingData}
+                    />
+                </Card>
+            </section>
+        );
+
+        return (
+            <Fragment>
+                <p className="font-site text-em-0-8 text-break my-3">
+                    {url} {showCopyBtn()}
+                </p>
+                {shareArea()}
+            </Fragment>
+        );
+    }
 
     return (
         <Fragment>
             {showLogo()}
-            <h1 className="font-weight-bold mt-5 text-subtitle text-white text-center">
-                Peça seu pedido:
+            <h1 className="mt-2 text-subtitle text-white text-center">
+                {isLocal ? "Peça seu pedido:" : "Compartilhe seu menu digital:"}
             </h1>
-            {showQrCode()}
+            {isLocal ? showLocal() : <Online />}
             <div className="container-center my-5">
                 <ButtonFab
                     title="Gerar novo"

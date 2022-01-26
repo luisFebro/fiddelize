@@ -19,15 +19,6 @@ export default function NotifActivationZone({ socket, ids }) {
     });
     const { email, success } = data;
 
-    useEffect(() => {
-        if (digitalMenuEmail)
-            setData((prev) => ({
-                ...prev,
-                email: digitalMenuEmail,
-                success: true,
-            }));
-    }, [digitalMenuEmail]);
-
     const updateDbEmail = (thisData) => {
         const dataEmail = {
             ...ids,
@@ -35,6 +26,17 @@ export default function NotifActivationZone({ socket, ids }) {
         };
         if (socket) socket.emit("updateCustomerOrder", dataEmail);
     };
+
+    useEffect(() => {
+        if (digitalMenuEmail) {
+            setData((prev) => ({
+                ...prev,
+                email: digitalMenuEmail,
+                success: true,
+            }));
+            updateDbEmail(digitalMenuEmail);
+        }
+    }, [digitalMenuEmail]);
 
     const toggleCustomerEmail = () => {
         if (success || digitalMenuEmail) {

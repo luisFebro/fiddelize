@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import convertToReal from "utils/numbers/convertToReal";
 import { fromNow } from "utils/dates/dateFns";
+import ExternalOrderDataBtn from "./external-order-data/ExternalOrderDataBtn";
 // import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 // import getItems from "init/lStorage";
 // import { useBizData } from "init";
@@ -16,6 +17,9 @@ export default function DoneCard({ data }) {
     const status = orderData && orderData.stage;
     const dataItems = orderData && data.order.orderList;
     const placeId = data && data.placeId;
+    const customerName = data && data.customerName;
+    const customerPhone = data && data.customerPhone;
+    const customerAddress = data && data.customerAddress;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;
     const totalAmount = orderData && orderData.totalAmount;
@@ -59,11 +63,26 @@ export default function DoneCard({ data }) {
         </p>
     );
 
+    const isOnline = placeId && placeId.includes("online");
+    const dataOnline = {
+        customerName,
+        customerPhone,
+        customerAddress,
+    };
+
     return (
         <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
             {showOrderStatus()}
             <h2 className="text-subtitle font-weight-bold">
-                ID lugar: {placeId}
+                ID lugar:{" "}
+                <span className="position-relative">
+                    <Fragment>
+                        {placeId}
+                        {isOnline && (
+                            <ExternalOrderDataBtn dataOnline={dataOnline} />
+                        )}
+                    </Fragment>
+                </span>
             </h2>
             <h2 className="text-normal font-weight-bold">
                 Valor Total:

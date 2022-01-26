@@ -1,15 +1,9 @@
-import PropTypes from "prop-types";
+import { Fragment } from "react";
 import useRun from "global-data/ui";
 import Dialog from "@material-ui/core/Dialog";
 import CloseButton from "../buttons/CloseButton";
 import RadiusBtn from "../buttons/RadiusBtn";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
-
-ModalFullContent.propTypes = {
-    contentComp: PropTypes.node,
-    setFullOpen: PropTypes.func,
-    style: PropTypes.object,
-};
 
 const handleZIndex = (needIndex) => {
     if (typeof needIndex === "number") return needIndex;
@@ -29,6 +23,7 @@ const getStyles = ({ needIndex }) => ({
 export default function ModalFullContent({
     contentComp,
     fullOpen,
+    fullScreen = true,
     setFullOpen,
     animatedClass,
     exitBtn,
@@ -37,6 +32,7 @@ export default function ModalFullContent({
     backgroundColor,
     maxWidth = "500px",
     overflowY = undefined,
+    needCloseBtn = true,
     // style,
 }) {
     const { runName } = useRun();
@@ -65,7 +61,7 @@ export default function ModalFullContent({
             maxWidth="md"
             fullWidth
             style={styles.root}
-            fullScreen
+            fullScreen={fullScreen}
             open={handleOpen()}
             aria-labelledby="form-dialog-title"
             className={`${animatedClass || ""}`}
@@ -83,12 +79,16 @@ export default function ModalFullContent({
                     size="extra-small"
                 />
             ) : (
-                <CloseButton
-                    onClick={setFullOpen}
-                    size="40px"
-                    top="10px"
-                    right="10px"
-                />
+                <Fragment>
+                    {needCloseBtn && (
+                        <CloseButton
+                            onClick={setFullOpen}
+                            size="40px"
+                            top="10px"
+                            right="10px"
+                        />
+                    )}
+                </Fragment>
             )}
 
             {showBackBtn && (

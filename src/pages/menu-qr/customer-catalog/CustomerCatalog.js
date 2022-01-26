@@ -1,11 +1,12 @@
 import { Fragment, useState, useEffect } from "react";
-import QrCode from "components/QrCode";
+import { useBizData } from "init";
 import CarouselCard from "components/carousels/CarouselCard";
 import { Load } from "components/code-splitting/LoadableComp";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import getItems, { setItems, removeItems } from "init/lStorage";
+import removeImgFormat from "utils/biz/removeImgFormat";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ProductCard from "./ProductCard";
 import {
@@ -28,6 +29,13 @@ export const AsyncOrderSuccess = Load({
         ),
 });
 
+export const AsyncExternalOrderForm = Load({
+    loader: () =>
+        import(
+            "./external-order-form/ExternalOrderForm" /* webpackChunkName: "external-order-comp-lazy" */
+        ),
+});
+
 const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
     "digitalMenuData",
     "digitalMenuCurrPage",
@@ -38,23 +46,31 @@ export default function CustomerCatalog({
     placeId,
     customerId,
     bizLinkName,
-    url,
     socket,
     isUsedLink,
+    isOnline,
+    // url,
 }) {
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
         orderCount: 0,
         orderAmount: 0,
         orderList: [],
+        customerName: "",
+        customerPhone: "",
+        customerAddress: "",
     });
-    const { orderList, orderAmount, orderCount } = data;
+    const {
+        orderList,
+        orderAmount,
+        orderCount,
+        customerName,
+        customerPhone,
+        customerAddress,
+    } = data;
 
-    const bizLogo = "/img/test/restaurant.jpg";
-    const width = 110;
-    const height = 110;
-    const isQrDisplay = placeId === "qr";
-    // show either qr code to be scanned or the product catalog
+    const { bizLogo } = useBizData();
+    const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 
     const ids = {
         adminId,
@@ -125,7 +141,7 @@ export default function CustomerCatalog({
     const showLogo = () => (
         <div className="mt-2 mb-3 container-center">
             <img
-                src={bizLogo}
+                src={thisbizLogo}
                 width={width}
                 height={height}
                 title={`logo da ${bizLinkName}`}
@@ -133,27 +149,6 @@ export default function CustomerCatalog({
             />
         </div>
     );
-
-    const showQrCode = () => {
-        const imageSettings = {
-            src: bizLogo,
-        };
-
-        const imageSquare = true; // bizLogo && bizLogo.includes("h_100,w_100");
-
-        return (
-            <section className="mb-5 container-center">
-                <div className="qr-container">
-                    <QrCode
-                        value={`https:/fiddelize.com.br/${url}`}
-                        fgColor="var(--themeP--purple)"
-                        imageSettings={imageSettings}
-                        imageSquare={imageSquare}
-                    />
-                </div>
-            </section>
-        );
-    };
 
     // if(!loaded) {
     //     return(
@@ -168,49 +163,48 @@ export default function CustomerCatalog({
     //     )
     // }
 
+    const showPages = () => (
+        <Fragment>
+            {nextPage === "menu" && (
+                <DigitalMenu
+                    handleNextPage={handleNextPage}
+                    orderAmount={orderAmount}
+                    orderCount={orderCount}
+                    itemData={itemData}
+                    setDefault={setDefault}
+                />
+            )}
+            {nextPage === "orders" && (
+                <AsyncOrdersPage
+                    setNextPage={setNextPage}
+                    setData={setData}
+                    itemList={orderList}
+                    itemsCount={orderCount}
+                    investAmount={orderAmount}
+                    adminId={adminId}
+                    placeId={placeId}
+                    customerId={customerId}
+                    socket={socket}
+                    customerName={customerName}
+                    customerPhone={customerPhone}
+                    customerAddress={customerAddress}
+                />
+            )}
+            {nextPage === "success" && (
+                <AsyncOrderSuccess
+                    allDataItem={data}
+                    socket={socket}
+                    ids={ids}
+                />
+            )}
+        </Fragment>
+    );
+
     return (
         <section>
             {showLogo()}
-            {isQrDisplay ? (
-                <Fragment>
-                    <h1 className="font-weight-bold mt-5 text-subtitle text-white text-center">
-                        Peça seu pedido:
-                    </h1>
-                    {showQrCode()}
-                </Fragment>
-            ) : (
-                <Fragment>
-                    {nextPage === "menu" && (
-                        <DigitalMenu
-                            handleNextPage={handleNextPage}
-                            orderAmount={orderAmount}
-                            orderCount={orderCount}
-                            itemData={itemData}
-                            setDefault={setDefault}
-                        />
-                    )}
-                    {nextPage === "orders" && (
-                        <AsyncOrdersPage
-                            setNextPage={setNextPage}
-                            setData={setData}
-                            itemList={orderList}
-                            itemsCount={orderCount}
-                            investAmount={orderAmount}
-                            adminId={adminId}
-                            placeId={placeId}
-                            customerId={customerId}
-                            socket={socket}
-                        />
-                    )}
-                    {nextPage === "success" && (
-                        <AsyncOrderSuccess
-                            allDataItem={data}
-                            socket={socket}
-                            ids={ids}
-                        />
-                    )}
-                </Fragment>
-            )}
+            {showPages()}
+            {isOnline && <AsyncExternalOrderForm setMainData={setData} />}
         </section>
     );
 }

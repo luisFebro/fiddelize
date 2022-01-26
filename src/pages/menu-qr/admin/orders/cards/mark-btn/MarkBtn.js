@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SelectField from "components/fields/SelectField";
 import ModalYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
+import { useBizData } from "init";
 
 export default function MarkBtn({ socket, adminId, placeId, customerId }) {
     const [fullOpen, setFullOpen] = useState(false);
@@ -11,6 +12,7 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
         markOpt: "queue",
     });
     const { markOpt } = data;
+    const { bizLogo, bizLinkName } = useBizData();
 
     const showSelect = () => {
         const valuesArray = [
@@ -40,9 +42,20 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                 "order.stage": select,
             };
             if (socket) {
+                const emailCond = Boolean(
+                    select === "preparing" || select === "done"
+                );
+
+                const isOnline = placeId && placeId.includes("online");
                 const notifData = {
-                    stage: select,
+                    url: isOnline
+                        ? `/${bizLinkName}/menu?cliId=${customerId}`
+                        : `/${bizLinkName}/menu/${placeId}?cliId=${customerId}`,
+                    bizLogo,
+                    needEmail: emailCond,
                 };
+
+                if (isOnline) socket.emit("joinRoom", placeId);
                 socket.emit("updateCustomerOrder", socketData, notifData);
                 if (isDone) socket.emit("updateAdminList");
             }

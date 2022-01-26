@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { setItems } from "init/lStorage";
@@ -16,6 +17,9 @@ export default function OrdersPage({
     adminId,
     placeId,
     customerId,
+    customerName,
+    customerPhone,
+    customerAddress,
     socket,
 }) {
     useScrollUp();
@@ -32,6 +36,7 @@ export default function OrdersPage({
         </div>
     );
 
+    const isOnline = Boolean(customerName);
     const showDoneOrderBtn = () => (
         <section className="container-center mt-3">
             <ButtonFab
@@ -40,7 +45,10 @@ export default function OrdersPage({
                 onClick={async () => {
                     const body = {
                         customerId,
-                        placeId,
+                        customerName,
+                        customerPhone,
+                        customerAddress,
+                        placeId: isOnline ? "online" : placeId,
                         adminId,
                         order: {
                             stage: "queue",

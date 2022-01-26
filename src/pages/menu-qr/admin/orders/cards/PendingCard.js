@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import convertToReal from "utils/numbers/convertToReal";
 import { fromNow } from "utils/dates/dateFns";
+import ExternalOrderDataBtn from "./external-order-data/ExternalOrderDataBtn";
 import MarkBtn from "./mark-btn/MarkBtn";
 // import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
 // import getItems from "init/lStorage";
@@ -18,6 +19,9 @@ export default function PendingCard({ data, socket }) {
     const orderData = data && data.order;
     const dataItems = orderData && data.order.orderList;
     const customerId = data && data.customerId;
+    const customerName = data && data.customerName;
+    const customerPhone = data && data.customerPhone;
+    const customerAddress = data && data.customerAddress;
     const placeId = data && data.placeId;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;
@@ -38,11 +42,26 @@ export default function PendingCard({ data, socket }) {
         </p>
     );
 
+    const isOnline = placeId && placeId.includes("online");
+    const dataOnline = {
+        customerName,
+        customerPhone,
+        customerAddress,
+    };
+
     return (
         <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
             <h2 className="text-subtitle font-weight-bold">
-                ID lugar: <span className="text-pill">{placeId}</span>
+                ID lugar:{" "}
+                <span className="text-pill position-relative">
+                    <Fragment>
+                        {placeId}
+                        {isOnline && (
+                            <ExternalOrderDataBtn dataOnline={dataOnline} />
+                        )}
+                    </Fragment>
+                </span>
             </h2>
             <h2 className="text-normal font-weight-bold">
                 Valor Total:
