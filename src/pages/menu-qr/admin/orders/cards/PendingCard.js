@@ -50,13 +50,13 @@ export default function PendingCard({ data, socket }) {
     };
 
     return (
-        <section className="card--root mb-4 position-relative text-normal text-white text-shadow">
+        <section className="card--root mb-5 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
             <h2 className="text-subtitle font-weight-bold">
                 ID lugar:{" "}
                 <span className="text-pill position-relative">
                     <Fragment>
-                        {placeId}
+                        {isOnline ? "online" : placeId}
                         {isOnline && (
                             <ExternalOrderDataBtn dataOnline={dataOnline} />
                         )}

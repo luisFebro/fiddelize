@@ -29,13 +29,6 @@ export const AsyncOrderSuccess = Load({
         ),
 });
 
-export const AsyncExternalOrderForm = Load({
-    loader: () =>
-        import(
-            "./external-order-form/ExternalOrderForm" /* webpackChunkName: "external-order-comp-lazy" */
-        ),
-});
-
 const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
     "digitalMenuData",
     "digitalMenuCurrPage",
@@ -56,18 +49,8 @@ export default function CustomerCatalog({
         orderCount: 0,
         orderAmount: 0,
         orderList: [],
-        customerName: "",
-        customerPhone: "",
-        customerAddress: "",
     });
-    const {
-        orderList,
-        orderAmount,
-        orderCount,
-        customerName,
-        customerPhone,
-        customerAddress,
-    } = data;
+    const { orderList, orderAmount, orderCount } = data;
 
     const { bizLogo } = useBizData();
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
@@ -172,12 +155,13 @@ export default function CustomerCatalog({
                     orderCount={orderCount}
                     itemData={itemData}
                     setDefault={setDefault}
+                    isOnline={isOnline}
                 />
             )}
             {nextPage === "orders" && (
                 <AsyncOrdersPage
                     setNextPage={setNextPage}
-                    setData={setData}
+                    setCatalogData={setData}
                     itemList={orderList}
                     itemsCount={orderCount}
                     investAmount={orderAmount}
@@ -185,9 +169,7 @@ export default function CustomerCatalog({
                     placeId={placeId}
                     customerId={customerId}
                     socket={socket}
-                    customerName={customerName}
-                    customerPhone={customerPhone}
-                    customerAddress={customerAddress}
+                    isOnline={isOnline}
                 />
             )}
             {nextPage === "success" && (
@@ -204,7 +186,6 @@ export default function CustomerCatalog({
         <section>
             {showLogo()}
             {showPages()}
-            {isOnline && <AsyncExternalOrderForm setMainData={setData} />}
         </section>
     );
 }
@@ -216,6 +197,7 @@ function DigitalMenu({
     orderAmount,
     orderCount,
     itemData,
+    isOnline,
 }) {
     const allCategories = ["bebidas", "sanduíches", "gerais"];
     const dataProducts = [
@@ -317,7 +299,17 @@ function DigitalMenu({
         <section>
             <h1 className="font-weight-bold text-subtitle text-white text-center">
                 Menu Digital
-                <p className="mx-3 text-normal text-em-1-0">
+                {!isOnline && (
+                    <div className="container-center">
+                        <span
+                            className="text-em-1-0 d-block text-pill"
+                            style={{ backgroundColor: "var(--themePDark)" }}
+                        >
+                            Local
+                        </span>
+                    </div>
+                )}
+                <p className="my-2 mx-3 text-normal text-em-1-0">
                     Para adicionar um novo item, basta clicar no botão de mais.
                     Bom apetite!
                 </p>

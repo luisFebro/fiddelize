@@ -44,6 +44,7 @@ const [
 export default function ExternalOrderForm({
     sColor = "default",
     isDelivery = true,
+    runSuccessOrder,
     setMainData,
 }) {
     const [comp, setComp] = useState("main");
@@ -109,6 +110,12 @@ export default function ExternalOrderForm({
                     "digitalMenuCustomerAddress",
                 ]);
 
+            runSuccessOrder({
+                customerName: name,
+                customerPhone: phone,
+                customerAddress,
+            });
+
             return setFullOpen(false);
         };
 
@@ -140,7 +147,7 @@ export default function ExternalOrderForm({
     const showCTA = () => (
         <div className="mt-3 mb-5 container-center">
             <ButtonFab
-                title="Acessar Menu"
+                title="Concluir pedido"
                 backgroundColor={`var(--themeSDark--${sColor})`}
                 onClick={saveOrder}
                 position="relative"
@@ -338,7 +345,6 @@ export default function ExternalOrderForm({
                     contentComp={
                         comp === "data" ? showFilledData() : showForm()
                     }
-                    needCloseBtn={false}
                     fullOpen={fullOpen}
                     fullScreen={false}
                     setFullOpen={setFullOpen}

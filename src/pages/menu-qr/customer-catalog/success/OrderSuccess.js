@@ -109,7 +109,6 @@ export default function OrderSuccess({ allDataItem, socket, ids }) {
             )}
             {allowCancelStages.includes(currStage) && showCancelBtn()}
             {showEndZone()}
-            <div style={{ marginBottom: 150 }} />
             {openCancel && (
                 <ModalYesNo
                     title="Tem certeza que deseja cancelar seu pedido atual?"
@@ -131,6 +130,7 @@ export default function OrderSuccess({ allDataItem, socket, ids }) {
                     }}
                 />
             )}
+            <div style={{ marginBottom: 150 }} />
         </section>
     );
 }

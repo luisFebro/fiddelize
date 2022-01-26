@@ -77,7 +77,7 @@ export default function DoneCard({ data }) {
                 ID lugar:{" "}
                 <span className="position-relative">
                     <Fragment>
-                        {placeId}
+                        {isOnline ? "online" : placeId}
                         {isOnline && (
                             <ExternalOrderDataBtn dataOnline={dataOnline} />
                         )}
@@ -147,14 +147,14 @@ function ItemsDesc({ data }) {
     );
 
     const listLeng = data && data.length;
-    const showMoreBtn = !moreItensBtnShow && listLeng >= 2;
+    const showMoreBtn = !moreItensBtnShow && listLeng >= 3;
 
     return (
         <section>
             {data.length &&
                 data
                     .map((item) => <span key={item._id}>{showItem(item)}</span>)
-                    .slice(0, showMoreBtn ? 1 : listLeng)}
+                    .slice(0, showMoreBtn ? 2 : listLeng)}
             {showMoreBtn && (
                 <div className="container-center my-2">
                     <ButtonFab

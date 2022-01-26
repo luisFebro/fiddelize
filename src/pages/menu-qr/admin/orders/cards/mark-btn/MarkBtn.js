@@ -31,7 +31,7 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
 
             const isDone = select === "done";
             if (isDone)
-                showToast(`Pedido do lugar ${placeId} movido para feito`, {
+                showToast(`Pedido finalizado e movido para feito`, {
                     dur: 3000,
                     type: "success",
                 });

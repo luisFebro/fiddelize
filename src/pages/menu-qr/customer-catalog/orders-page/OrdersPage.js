@@ -2,14 +2,19 @@ import { useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { setItems } from "init/lStorage";
+import { Load } from "components/code-splitting/LoadableComp";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
 
-// import useBackColor from "hooks/useBackColor";
-// import { useState } from "react";
+export const AsyncExternalOrderForm = Load({
+    loader: () =>
+        import(
+            "../external-order-form/ExternalOrderForm" /* webpackChunkName: "external-order-comp-lazy" */
+        ),
+});
 
 export default function OrdersPage({
-    setData,
+    setCatalogData,
     setNextPage,
     itemList,
     itemsCount,
@@ -17,12 +22,14 @@ export default function OrdersPage({
     adminId,
     placeId,
     customerId,
-    customerName,
-    customerPhone,
-    customerAddress,
     socket,
+    isOnline,
 }) {
     useScrollUp();
+    const [data, setData] = useState({
+        openExternalOrder: false,
+    });
+    const { openExternalOrder } = data;
 
     const showTitle = () => (
         <div className="my-3">
@@ -36,43 +43,53 @@ export default function OrdersPage({
         </div>
     );
 
-    const isOnline = Boolean(customerName);
+    const runSuccessOrder = (dataOrder = {}) => {
+        const { customerName, customerPhone, customerAddress } = dataOrder;
+
+        const body = {
+            customerId,
+            customerName,
+            customerPhone,
+            customerAddress,
+            placeId,
+            adminId,
+            order: {
+                stage: "queue",
+                totalCount: itemsCount,
+                totalAmount: investAmount,
+                orderList: itemList,
+            },
+        };
+
+        if (socket) {
+            socket.emit("updateCustomerOrder", body);
+            socket.emit("updateAdminList");
+            socket.emit("getAdminListCount", { adminId });
+        }
+
+        setItems("global", {
+            digitalMenuData: {
+                orderCount: itemsCount,
+                orderAmount: investAmount,
+                orderList: itemList,
+            },
+            digitalMenuCurrPage: "success",
+        });
+        setNextPage("success");
+    };
+
     const showDoneOrderBtn = () => (
         <section className="container-center mt-3">
             <ButtonFab
                 title="Confirmar e Pedir"
                 backgroundColor="var(--themeSDark--default)"
-                onClick={async () => {
-                    const body = {
-                        customerId,
-                        customerName,
-                        customerPhone,
-                        customerAddress,
-                        placeId: isOnline ? "online" : placeId,
-                        adminId,
-                        order: {
-                            stage: "queue",
-                            totalCount: itemsCount,
-                            totalAmount: investAmount,
-                            orderList: itemList,
-                        },
-                    };
-
-                    if (socket) {
-                        socket.emit("updateCustomerOrder", body);
-                        socket.emit("updateAdminList");
-                        socket.emit("getAdminListCount", { adminId });
-                    }
-
-                    setItems("global", {
-                        digitalMenuData: {
-                            orderCount: itemsCount,
-                            orderAmount: investAmount,
-                            orderList: itemList,
-                        },
-                        digitalMenuCurrPage: "success",
-                    });
-                    setNextPage("success");
+                onClick={() => {
+                    if (isOnline)
+                        return setData((prev) => ({
+                            ...prev,
+                            openExternalOrder: true,
+                        }));
+                    return runSuccessOrder();
                 }}
                 position="relative"
                 variant="extended"
@@ -86,7 +103,7 @@ export default function OrdersPage({
             <ReturnBtn setNextPage={setNextPage} />
             {showTitle()}
             <OrdersMenuTable
-                setData={setData}
+                setData={setCatalogData}
                 investAmount={investAmount}
                 itemList={itemList}
                 itemsCount={itemsCount}
@@ -94,6 +111,12 @@ export default function OrdersPage({
                 setNextPage={setNextPage}
             />
             {showDoneOrderBtn()}
+            {isOnline && openExternalOrder && (
+                <AsyncExternalOrderForm
+                    setMainData={setData}
+                    runSuccessOrder={runSuccessOrder}
+                />
+            )}
             <div style={{ marginBottom: 150 }} />
         </section>
     );
