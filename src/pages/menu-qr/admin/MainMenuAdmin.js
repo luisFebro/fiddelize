@@ -11,10 +11,10 @@ export const AsyncAdminMenuOrders = Load({
         ),
 });
 
-const AsyncProductManager = Load({
+const AsyncItemManager = Load({
     loader: () =>
         import(
-            "./product/ProductManager" /* webpackChunkName: "menu-admin-page-lazy" */
+            "./items/ItemManager" /* webpackChunkName: "item-manager-page-lazy" */
         ),
 });
 
@@ -83,7 +83,7 @@ export default function MainMenuAdmin(compData) {
 function selectComp(comp, compData) {
     const { adminId, bizLinkName, socket } = compData;
 
-    if (comp === "Produtos") return <AsyncProductManager />;
+    if (comp === "Itens") return <AsyncItemManager />;
     if (comp === "Pedidos")
         return (
             <AsyncAdminMenuOrders
@@ -103,7 +103,7 @@ function MenuList({ setFullOpen, pendingOrdersCount = 0 }) {
     const list = [
         {
             icon: <FontAwesomeIcon icon="store" />,
-            title: "Produtos",
+            title: "Itens",
         },
         {
             icon: <FontAwesomeIcon icon="file-contract" />,

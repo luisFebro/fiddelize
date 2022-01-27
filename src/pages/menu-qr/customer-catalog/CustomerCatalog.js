@@ -207,7 +207,7 @@ function DigitalMenu({
             availableQtt: 10,
             img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
             name: "lata guaraná antactica",
-            unitAmount: 8.0,
+            price: 8.0,
         },
         {
             itemId: "123fsf",
@@ -215,7 +215,7 @@ function DigitalMenu({
             availableQtt: 10,
             img: "/img/test/cardapio-qr/suco-de-uva.jpg",
             name: "suco de uva",
-            unitAmount: 5,
+            price: 5,
         },
         {
             itemId: "123fsq232f",
@@ -224,7 +224,7 @@ function DigitalMenu({
             img: "/img/test/cardapio-qr/coca.jpg",
             name:
                 "coca-cola ma bebida muito gelada, gelada mesmo meu deus, precisa beber essa bebida miraculosa    ",
-            unitAmount: 8,
+            price: 8,
         },
         {
             itemId: "123fsq232f",
@@ -232,7 +232,7 @@ function DigitalMenu({
             availableQtt: 3,
             img: "/img/test/cardapio-qr/kikao.jpg",
             name: "kikão com palha",
-            unitAmount: 5,
+            price: 5,
         },
         {
             itemId: "12321233",
@@ -240,7 +240,7 @@ function DigitalMenu({
             availableQtt: 15,
             img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
             name: "sanduba x-salada muito top",
-            unitAmount: 5,
+            price: 5,
         },
         {
             itemId: "12321233132",
@@ -248,7 +248,7 @@ function DigitalMenu({
             category: "sanduíches",
             availableQtt: 5,
             img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
-            unitAmount: 5,
+            price: 5,
         },
     ];
 
@@ -277,6 +277,7 @@ function DigitalMenu({
                             <CarouselCard
                                 CardList={ThisCardList}
                                 size="large"
+                                lazyLoad
                                 multi
                             />
                         </div>

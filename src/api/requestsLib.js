@@ -172,6 +172,7 @@ export const updateImages = (userId) =>
 export const setTargetPrizeImg = () => `${ROOT}/media/image/target-prize`; // POST
 export const setChatSupportImg = () => `${ROOT}/media/image/chat-support`; // POST
 export const setBizReceiptImg = () => `${ROOT}/media/image/biz-receipt`; // POST
+export const setImgToProvider = () => `${ROOT}/media/image/provider`;
 
 // PUSH NOTIFICATIONS
 export const subscribePushNotif = () => `${ROOT}/push-notification/subscribe`; // POST
@@ -217,4 +218,7 @@ export const updateCustomerOrder = () =>
 
 export const readMenuOrderList = () =>
     `${ROOT}/process-solutions/digital-menu/menu-order-list`; // POST
+
+export const updateAdminItem = () =>
+    `${ROOT}/process-solutions/digital-menu/admin-item`; // POST
 // end digital menu

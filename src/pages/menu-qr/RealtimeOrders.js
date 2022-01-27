@@ -82,7 +82,6 @@ export default function RealtimeOrders({ match, location }) {
         socket.on("updateCurrStage", ({ currStage }) => {
             if (currStage)
                 setMainData((prev) => ({ ...prev, isUsedLink: true }));
-            else setMainData((prev) => ({ ...prev }));
         });
     }, [adminId, cliId, placeId, socket]);
 
