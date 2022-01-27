@@ -8,6 +8,7 @@ import ShareSocialMediaButtons from "components/buttons/ShareSocialMediaButtons"
 import RadiusBtn from "components/buttons/RadiusBtn";
 import copyText from "utils/document/copyText";
 import { useBizData } from "init";
+import removeImgFormat from "utils/biz/removeImgFormat";
 
 export default function Advertise() {
     const [data, setData] = useState({
@@ -17,9 +18,8 @@ export default function Advertise() {
     });
     const { comp, markOpt, markOptPlaceId } = data;
 
-    const bizLogo = "/img/test/restaurant.jpg";
-    const width = 110;
-    const height = 110;
+    const { bizLogo } = useBizData();
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     useEffect(() => {
         if (
@@ -45,7 +45,7 @@ export default function Advertise() {
                     setData={setData}
                     markOpt={markOpt}
                     markOptPlaceId={markOptPlaceId}
-                    bizLogo={bizLogo}
+                    bizLogo={thisBizLogo}
                     width={width}
                     height={height}
                 />

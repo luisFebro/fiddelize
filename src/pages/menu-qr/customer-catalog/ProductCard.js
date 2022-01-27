@@ -27,19 +27,25 @@ export default function ProductCard({ card, itemData }) {
                 ...prev,
                 added: true,
                 qtt: foundItem.count,
-                totalAmount: card.unitAmount * foundItem.count || 1,
+                totalAmount: card.price * foundItem.count || 1,
             }));
         } else {
             setData((prev) => ({
                 ...prev,
-                totalAmount: card.unitAmount * 1,
+                totalAmount: card.price * 1,
             }));
         }
     }, [itemDesc, orderList]);
 
     const showImg = () => (
         <section className="mb-2 container-center">
-            <img width="150px" height="150px" src={card.img} alt={itemDesc} />
+            <img
+                data-flickity-lazyload={card.img}
+                className="carousel-cell-image"
+                width="150px"
+                height="150px"
+                alt={itemDesc}
+            />
         </section>
     );
 
@@ -80,7 +86,7 @@ export default function ProductCard({ card, itemData }) {
                     {qtt > 1 ? (
                         <span className="text-em-0-9">
                             {" "}
-                            &gt; R$ {convertToReal(card.unitAmount)} (cada)
+                            &gt; R$ {convertToReal(card.price)} (cada)
                         </span>
                     ) : (
                         ""
@@ -98,12 +104,12 @@ export default function ProductCard({ card, itemData }) {
                             if (isZeroQtt) return;
 
                             const newCount = qtt - 1;
-                            const newAmount = card.unitAmount * newCount;
+                            const newAmount = card.price * newCount;
                             const item = {
                                 name: itemDesc,
                                 count: newCount,
                                 amount: newAmount,
-                                unitAmount: card.unitAmount,
+                                price: card.price,
                                 img: card.img,
                             };
 
@@ -134,14 +140,14 @@ export default function ProductCard({ card, itemData }) {
                         onClick={() => {
                             setData((prev) => {
                                 const newCount = prev.qtt + 1;
-                                const newAmount = card.unitAmount * newCount;
+                                const newAmount = card.price * newCount;
 
                                 const item = {
                                     name: itemDesc,
                                     count: newCount,
                                     amount: newAmount,
                                     img: card.img,
-                                    unitAmount: card.unitAmount,
+                                    price: card.price,
                                 };
                                 handleItem("update", { item });
 

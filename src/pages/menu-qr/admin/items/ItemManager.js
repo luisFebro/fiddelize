@@ -1,9 +1,9 @@
 import { Fragment } from "react";
-import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CarouselCard from "components/carousels/CarouselCard";
 import convertToReal from "utils/numbers/convertToReal";
 import EditButton from "components/buttons/EditButton";
+import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
 // import getId from "utils/getId";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -22,7 +22,7 @@ export default function ProductManager() {
     const showTitle = () => (
         <div className="mt-5 mb-3 text-center text-purple mx-3">
             <h1 className="text-subtitle text-purple font-weight-bold">
-                Gerenciador de produtos
+                Gerenciador de itens
             </h1>
         </div>
     );
@@ -30,25 +30,9 @@ export default function ProductManager() {
     const showAddZone = () => (
         <section className="add-zone--root">
             <div className="field">
-                <ButtonFab
-                    size="large"
-                    title="adicionar produto"
-                    backgroundColor="var(--themeSDark)"
-                    onClick={null}
-                    position="relative"
-                    variant="extended"
-                    iconMu={PlusIcon}
-                />
+                <ItemHandlerBtn PlusIcon={PlusIcon} type="item" />
                 <div className="mt-3" />
-                <ButtonFab
-                    size="large"
-                    title="adicionar categoria"
-                    backgroundColor="var(--themeSDark)"
-                    onClick={null}
-                    position="relative"
-                    variant="extended"
-                    iconMu={PlusIcon}
-                />
+                <ItemHandlerBtn PlusIcon={PlusIcon} type="category" />
             </div>
             <style jsx>
                 {`
@@ -63,7 +47,7 @@ export default function ProductManager() {
         </section>
     );
 
-    const allCategories = ["bebidas", "sanduíches", "gerais"];
+    const allCategories = ["bebidas", "sanduíches"];
     const dataProducts = [
         {
             id: "123",
@@ -71,7 +55,7 @@ export default function ProductManager() {
             availableQtt: 10,
             img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
             desc: "lata guaraná antactica",
-            unitAmount: 8.0,
+            price: 8.0,
         },
         {
             id: "123fsf",
@@ -79,7 +63,7 @@ export default function ProductManager() {
             availableQtt: 10,
             img: "/img/test/cardapio-qr/suco-de-uva.jpg",
             desc: "suco de uva",
-            unitAmount: 5,
+            price: 5,
         },
         {
             id: "12321233",
@@ -87,7 +71,7 @@ export default function ProductManager() {
             availableQtt: 15,
             img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
             desc: "sanduba x-salada muito top",
-            unitAmount: 5,
+            price: 5,
         },
         {
             id: "12321233132(((",
@@ -95,7 +79,23 @@ export default function ProductManager() {
             availableQtt: 5,
             img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
             desc: "sanduba pão árabe",
-            unitAmount: 5,
+            price: 5,
+        },
+        {
+            id: "12321233132(((",
+            category: "bebidas",
+            availableQtt: 2,
+            img: "/img/test/cardapio-qr/acai-copo.jpg",
+            desc: "Açai copo",
+            price: 10,
+        },
+        {
+            id: "12321233132(((",
+            category: "bebidas",
+            availableQtt: 20,
+            img: "/img/test/cardapio-qr/guarana_antartica.jpg",
+            desc: "Antactica em lata",
+            price: 8,
         },
     ];
 
@@ -118,6 +118,7 @@ export default function ProductManager() {
                                 CardList={ThisCardList}
                                 size="medium"
                                 multi
+                                lazyLoad
                             />
                         </div>
                     </section>
@@ -144,9 +145,10 @@ const CardList = ({ dataList = [] }) => (
                 const ShowImg = () => (
                     <section className="mb-2 container-center">
                         <img
-                            width="150px"
-                            height="150px"
-                            src={card.img}
+                            data-flickity-lazyload={card.img}
+                            className="carousel-cell-image"
+                            width="170px"
+                            height="170px"
                             alt={card.desc}
                         />
                     </section>
@@ -178,7 +180,7 @@ const CardList = ({ dataList = [] }) => (
                                 {truncate(card.desc, 50)}
                             </p>
                             <p className="d-table text-small text-em-1-1 text-pill">
-                                Preço Uni.: R$ {convertToReal(card.unitAmount)}
+                                Preço Uni.: R$ {convertToReal(card.price)}
                             </p>
                         </section>
                         {showEditBtn()}

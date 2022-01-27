@@ -9,6 +9,7 @@ export default function CarouselCard({
     CardList,
     size,
     multi = false, // for itialize multiple carousel in the same page
+    lazyLoad = false,
     // style,
     // currIconInd,
     // setOpenModal,
@@ -18,6 +19,7 @@ export default function CarouselCard({
     useEffect(() => {
         const options = {
             // options
+            lazyLoad, // n1
             cellAlign: "center",
             wrapAround: true,
             freeScroll: false, // if true, this produces an awkward alignment of cards when dragging them
@@ -59,7 +61,11 @@ export default function CarouselCard({
             id="carouselCard--root"
             className="mb-5 container-center-max-width-500"
         >
-            <div className={`carousel--root ${size || ""} my-2 text-white`}>
+            <div
+                className={`carousel--root ${lazyLoad ? "lazy-load" : ""} ${
+                    size || ""
+                } my-2 text-white`}
+            >
                 <div className="main-carousel">{CardList}</div>
             </div>
             <style jsx>
@@ -154,8 +160,33 @@ export default function CarouselCard({
                     .is-selected div {
                         color: #fff !important;
                     }
+
+                    .lazy-load .carousel-cell-image {
+                        display: block;
+                        max-height: 100%;
+                        margin: 0 auto;
+                        max-width: 100%;
+                        opacity: 0;
+                        -webkit-transition: opacity 0.4s;
+                        transition: opacity 0.4s;
+                    }
+
+                    /* fade in lazy loaded image */
+                    .lazy-load .carousel-cell-image.flickity-lazyloaded,
+                    .lazy-load .carousel-cell-image.flickity-lazyerror {
+                        opacity: 1;
+                    }
                 `}
             </style>
         </section>
     );
 }
+
+/* COMMENTS
+n1:
+lazyLoad: 2
+// load images in selected slide
+// and next 2 slides
+// and previous 2 slides
+// total: 5 images are loaded including the current one.
+*/
