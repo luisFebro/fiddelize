@@ -30,7 +30,7 @@ export const websitePages = [
     "/termos-de-uso",
     "/privacidade",
     "/novo-clube",
-    "/app/preview", //app/preview is the preview for building app in website
+    "/app/preview", // app/preview is the preview for building app in website
     "/qr",
     "/menu",
 ];

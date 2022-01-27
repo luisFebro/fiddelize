@@ -5,6 +5,7 @@ import authenticate from "auth/authenticate";
 import NumericKeyboard from "components/keyboards/NumericKeyboard";
 import isThisApp from "utils/window/isThisApp";
 import useData, { useBizData } from "init";
+import { setVars } from "init/var";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import getColor from "styles/txt";
@@ -167,6 +168,12 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         }
 
         const allIdsOn = isBizTeam ? userId : userId && bizId;
+        if (!isBizTeam && userId && !bizId) {
+            // without it, it will not enter even if password is correctly
+            return setVars({ rememberAccess: false, role: null }, "user").then(
+                () => (window.location.href = "/app")
+            );
+        }
 
         if (allIdsOn && completedFill && success) {
             (async () => {

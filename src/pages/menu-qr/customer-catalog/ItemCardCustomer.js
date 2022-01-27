@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function ProductCard({ card, itemData }) {
+export default function ItemCardCustomer({ card, itemData }) {
     const { handleItem, orderList } = itemData;
 
     const [data, setData] = useState({
@@ -15,11 +15,11 @@ export default function ProductCard({ card, itemData }) {
         totalAmount: 0,
     });
     const { added, qtt, totalAmount } = data;
-    const itemDesc = card.name;
+    const itemDesc = card.adName;
 
     useEffect(() => {
         const foundItem = orderList.find(
-            (item) => item.name === itemDesc && item.count >= 1
+            (item) => item.adName === itemDesc && item.count >= 1
         );
 
         if (itemDesc && foundItem) {
@@ -82,7 +82,7 @@ export default function ProductCard({ card, itemData }) {
                     {truncate(itemDesc, 40)}
                 </p>
                 <p className="d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
-                    R$ {convertToReal(totalAmount)}{" "}
+                    R$ {convertToReal(totalAmount, { needFraction: true })}{" "}
                     {qtt > 1 ? (
                         <span className="text-em-0-9">
                             {" "}
@@ -106,7 +106,7 @@ export default function ProductCard({ card, itemData }) {
                             const newCount = qtt - 1;
                             const newAmount = card.price * newCount;
                             const item = {
-                                name: itemDesc,
+                                adName: itemDesc,
                                 count: newCount,
                                 amount: newAmount,
                                 price: card.price,
@@ -143,7 +143,7 @@ export default function ProductCard({ card, itemData }) {
                                 const newAmount = card.price * newCount;
 
                                 const item = {
-                                    name: itemDesc,
+                                    adName: itemDesc,
                                     count: newCount,
                                     amount: newAmount,
                                     img: card.img,

@@ -8,7 +8,7 @@ import EditButton from "components/buttons/EditButton";
 import DeleteButton from "components/buttons/DeleteButton";
 import moneyMaskBr from "utils/validation/masks/moneyMaskBr";
 import { convertToDollar } from "utils/numbers/convertToReal";
-import getAPI, { updateAdminItem } from "api";
+import getId from "utils/getId";
 import { useBizData } from "init";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -32,6 +32,7 @@ export default function NewItemForm({
     setData,
     data,
     handleFullClose,
+    updateItem,
 }) {
     const [comp, setComp] = useState("main");
     const { name, price, img, errorName, errorPrice } = data;
@@ -45,7 +46,7 @@ export default function NewItemForm({
     };
     const saveItem = async () => {
         if (!img) {
-            return showToast("Insira image do item", { type: "error" });
+            return showToast("Insira imagem do item", { type: "error" });
         }
 
         if (!name) {
@@ -57,25 +58,28 @@ export default function NewItemForm({
             switchError({ errorPrice: true });
             return showToast("Informe preço", { type: "error" });
         }
-
         const priceToDB = convertToDollar(formattedValue);
-        await getAPI({
-            method: "post",
-            url: updateAdminItem(),
-            body: {
-                adName: name,
-                img,
-                adminId: bizId, // from cliAdmin registration
-                price: priceToDB,
-            },
-        });
 
-        handleFullClose();
+        const randomId = getId();
+        const newItem = {
+            _id: randomId,
+            category: "_general",
+            adName: name,
+            img,
+            adminId: bizId, // from cliAdmin registration
+            price: priceToDB,
+        };
+
+        const dataStatus = updateItem("add", { newItem });
+        const status = dataStatus && dataStatus.status;
+        const txt = dataStatus && dataStatus.txt;
+        if (!status) return showToast(txt, { type: "error" });
+        return handleFullClose();
     };
 
     const showFloatCTA = () => (
         <div
-            className="position-fixed"
+            className="position-fixed animated fadeInUp delay-2s"
             style={{
                 bottom: 15,
                 right: 15,
@@ -130,7 +134,7 @@ export default function NewItemForm({
                     />
                 </div>
                 <div id="field2" className="mx-2 mt-3">
-                    Preço:
+                    Preço R$:
                     <TextField
                         required
                         margin="dense"
@@ -173,7 +177,7 @@ export default function NewItemForm({
                         <p className="font-italic">{name}</p>
                     </div>
                     <div className="mt-3">
-                        Preço:
+                        Preço R$:
                         <p className="font-italic">{price}</p>
                     </div>
                     <div className="container-center">

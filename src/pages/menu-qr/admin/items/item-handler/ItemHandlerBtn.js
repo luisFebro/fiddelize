@@ -22,6 +22,7 @@ const AsyncAddCategory = LoadableVisible({
 export default function ItemHandlerBtn({
     PlusIcon,
     type = "item", // or category
+    updateItem,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -35,18 +36,22 @@ export default function ItemHandlerBtn({
 
     const Comp =
         type === "item" ? (
-            <AsyncAddItem handleFullClose={handleFullClose} />
+            <AsyncAddItem
+                updateItem={updateItem}
+                handleFullClose={handleFullClose}
+            />
         ) : (
-            <AsyncAddCategory handleFullClose={handleFullClose} />
+            <AsyncAddCategory
+                updateItem={updateItem}
+                handleFullClose={handleFullClose}
+            />
         );
 
     return (
         <section>
             <ButtonFab
                 size="large"
-                title={
-                    type === "item" ? "adicionar item" : "adicionar categoria"
-                }
+                title={type === "item" ? "novo item" : "nova categoria"}
                 backgroundColor="var(--themeSDark)"
                 onClick={handleFullOpen}
                 position="relative"
@@ -58,6 +63,7 @@ export default function ItemHandlerBtn({
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 backgroundColor="var(--themePDark)"
+                fullScreen={type === "item"}
                 needIndex
             />
         </section>

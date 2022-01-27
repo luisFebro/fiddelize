@@ -8,7 +8,7 @@ import useScrollUp from "hooks/scroll/useScrollUp";
 import getItems, { setItems, removeItems } from "init/lStorage";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
-import ProductCard from "./ProductCard";
+import ItemCardCustomer from "./ItemCardCustomer";
 import {
     updateItem,
     removeItem,
@@ -202,49 +202,49 @@ function DigitalMenu({
     const allCategories = ["bebidas", "sanduíches", "gerais"];
     const dataProducts = [
         {
-            itemId: "123",
+            _id: "123",
             category: "bebidas",
             availableQtt: 10,
             img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
-            name: "lata guaraná antactica",
+            adName: "lata guaraná antactica",
             price: 8.0,
         },
         {
-            itemId: "123fsf",
+            _id: "123fsf",
             category: "bebidas",
             availableQtt: 10,
             img: "/img/test/cardapio-qr/suco-de-uva.jpg",
-            name: "suco de uva",
+            adName: "suco de uva",
             price: 5,
         },
         {
-            itemId: "123fsq232f",
+            _id: "123fsq232f",
             category: "bebidas",
             availableQtt: 30,
             img: "/img/test/cardapio-qr/coca.jpg",
-            name:
+            adName:
                 "coca-cola ma bebida muito gelada, gelada mesmo meu deus, precisa beber essa bebida miraculosa    ",
             price: 8,
         },
         {
-            itemId: "123fsq232f",
+            _id: "123fsq232f",
             category: "sanduíches",
             availableQtt: 3,
             img: "/img/test/cardapio-qr/kikao.jpg",
-            name: "kikão com palha",
+            adName: "kikão com palha",
             price: 5,
         },
         {
-            itemId: "12321233",
+            _id: "12321233",
             category: "sanduíches",
             availableQtt: 15,
             img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
-            name: "sanduba x-salada muito top",
+            adName: "sanduba x-salada muito top",
             price: 5,
         },
         {
-            itemId: "12321233132",
-            name: "sanduba pão árabe",
+            _id: "12321233132",
+            adName: "sanduba pão árabe",
             category: "sanduíches",
             availableQtt: 5,
             img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
@@ -260,7 +260,10 @@ function DigitalMenu({
                 if (!filteredCategory.length) return <div />;
 
                 const ThisCardList = (
-                    <CardList dataList={filteredCategory} itemData={itemData} />
+                    <CarouselList
+                        dataList={filteredCategory}
+                        itemData={itemData}
+                    />
                 );
 
                 return (
@@ -312,7 +315,6 @@ function DigitalMenu({
                 )}
                 <p className="my-2 mx-3 text-normal text-em-1-0">
                     Para adicionar um novo item, basta clicar no botão de mais.
-                    Bom apetite!
                 </p>
             </h1>
             {showCatalog()}
@@ -322,13 +324,13 @@ function DigitalMenu({
 }
 
 // COMP
-function CardList({ dataList = [], itemData }) {
+function CarouselList({ dataList = [], itemData }) {
     return (
         <Fragment>
             {dataList.length &&
                 dataList.map((card) => (
-                    <Fragment key={card.itemId}>
-                        <ProductCard card={card} itemData={itemData} />
+                    <Fragment key={card._id}>
+                        <ItemCardCustomer card={card} itemData={itemData} />
                     </Fragment>
                 ))}
         </Fragment>

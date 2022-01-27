@@ -2,11 +2,11 @@ import { useState } from "react";
 import NewItemForm from "./items/NewItemForm";
 import ImgHandler from "./img/ImgHandler";
 
-export default function AddItemContent({ handleFullClose }) {
+export default function AddItemContent({ handleFullClose, updateItem }) {
     const [data, setData] = useState({
         img: null,
-        name: "",
-        price: "",
+        adName: null,
+        price: null,
         errorName: false,
         errorPrice: false,
     });
@@ -25,6 +25,7 @@ export default function AddItemContent({ handleFullClose }) {
             <NewItemForm
                 setData={setData}
                 handleFullClose={handleFullClose}
+                updateItem={updateItem}
                 data={data}
             />
         </section>

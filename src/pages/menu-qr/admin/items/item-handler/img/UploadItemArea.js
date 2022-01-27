@@ -149,7 +149,12 @@ export default function UploadItemArea({
             />
             <label
                 className="container-center-col position-relative"
-                style={{ width: "100%", padding: 100, zIndex: 1000 }}
+                style={{
+                    cursor: "pointer",
+                    width: "100%",
+                    padding: 100,
+                    zIndex: 1000,
+                }}
                 htmlFor="uploaded-file"
             >
                 <AddAPhotoIcon

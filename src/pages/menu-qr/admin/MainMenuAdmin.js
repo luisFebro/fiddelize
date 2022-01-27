@@ -11,10 +11,10 @@ export const AsyncAdminMenuOrders = Load({
         ),
 });
 
-const AsyncItemManager = Load({
+const AsyncAdminCatalog = Load({
     loader: () =>
         import(
-            "./items/ItemManager" /* webpackChunkName: "item-manager-page-lazy" */
+            "./items/AdminCatalog" /* webpackChunkName: "admin-catalog-page-lazy" */
         ),
 });
 
@@ -83,7 +83,7 @@ export default function MainMenuAdmin(compData) {
 function selectComp(comp, compData) {
     const { adminId, bizLinkName, socket } = compData;
 
-    if (comp === "Itens") return <AsyncItemManager />;
+    if (comp === "Itens") return <AsyncAdminCatalog />;
     if (comp === "Pedidos")
         return (
             <AsyncAdminMenuOrders

@@ -33,6 +33,12 @@ export function arePublicPages() {
         window.location.href.includes(pg)
     );
 
+    const exceptionList = ["/menu/p/admin"];
+    const isException = exceptionList.some((pg) =>
+        window.location.href.includes(pg)
+    );
+    if (isException) return false;
+
     const result =
         window.location.href.pathname === "/" ||
         window.location.href.indexOf("acesso") >= 0 ||
@@ -48,6 +54,7 @@ function isPrivatePage() {
         "/t/app/nucleo-equipe",
         "/cliente-admin/painel-de-controle",
         "/t/app/equipe",
+        "/menu/p/admin",
     ];
 
     return privatePages.some((pg) => window.location.href.includes(pg));
