@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
 import getItems, { setItems } from "init/lStorage";
-import convertToReal from "utils/numbers/convertToReal";
+// import convertToReal from "utils/numbers/convertToReal";
 import showToast from "components/toasts";
 import getAPI, { updateAdminItem } from "api";
 import useData from "init";
@@ -14,6 +14,8 @@ const [digitalMenuCategories, digitalMenuItemList] = getItems("global", [
 ]);
 
 export default function AdminCatalog() {
+    const [f, setF] = useState(null);
+    console.log("f", f);
     const [menuData, setMenuData] = useState({
         allCategories:
             digitalMenuCategories && digitalMenuCategories.length
@@ -61,23 +63,23 @@ export default function AdminCatalog() {
                     digitalMenuItemList: thisNewItem,
                 });
 
-                window.location.reload();
-                // there is an issue after insert an eleme to flickty
-                // return({
-                //     ...prev,
-                //     allCategories: thisNewCategory,
-                //     itemList: thisNewItem,
-                // })
+                if (f) f.destroy();
+
+                return {
+                    ...prev,
+                    allCategories: thisNewCategory,
+                    itemList: thisNewItem,
+                };
             });
         }
 
-        getAPI({
-            method: "post",
-            url: updateAdminItem(),
-            body: { ...newItem, _id: undefined }, // throw error if _id is another ID other than body
-        }).then(() => {
-            showToast("Item salvo!", { type: "success" });
-        });
+        // getAPI({
+        //     method: "post",
+        //     url: updateAdminItem(),
+        //     body: { ...newItem, _id: undefined }, // throw error if _id is another ID other than body
+        // }).then(() => {
+        //     showToast("Item salvo!", { type: "success" });
+        // });
 
         return { status: true };
     };
@@ -100,6 +102,7 @@ export default function AdminCatalog() {
                     <MenuList
                         allCategories={allCategories}
                         itemList={itemList}
+                        setF={setF}
                     />
                 </Fragment>
             ) : (
@@ -124,7 +127,7 @@ export default function AdminCatalog() {
     );
 }
 
-function MenuList({ allCategories, itemList }) {
+function MenuList({ allCategories, itemList, setF }) {
     return (
         <section className="">
             {allCategories.map((cat) => {
@@ -147,6 +150,9 @@ function MenuList({ allCategories, itemList }) {
                                 size="medium"
                                 multi
                                 lazyLoad
+                                trigger={itemList.length}
+                                pageDots
+                                setOuterFlkty={setF}
                             />
                         </div>
                     </section>

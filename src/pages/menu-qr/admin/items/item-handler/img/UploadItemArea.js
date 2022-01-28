@@ -80,7 +80,21 @@ export default function UploadItemArea({
         }
         // End Validation
 
-        const img = await getAPI({
+        setUploadedPic(true);
+        setLoading(false);
+
+        if (typeof callback !== "function") return null;
+
+        const picName = imgDataList && imgDataList.name;
+
+        callback({
+            img: URL.createObjectURL(imgDataList),
+            loading,
+            picName,
+            uploadedPic: true,
+        });
+
+        await getAPI({
             method: "post",
             url: urlFunc(),
             body: handleDataForm(),
@@ -96,20 +110,6 @@ export default function UploadItemArea({
                 picName: null,
                 uploadedPic: false,
             });
-        });
-
-        setUploadedPic(true);
-        setLoading(false);
-
-        if (typeof callback !== "function") return null;
-
-        const picName = imgDataList && imgDataList.name;
-
-        return callback({
-            img,
-            loading,
-            picName,
-            uploadedPic: true,
         });
     };
 

@@ -62,7 +62,9 @@ export default function ItemHandlerBtn({
                 contentComp={Comp}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
-                backgroundColor="var(--themePDark)"
+                backgroundColor={
+                    type === "item" ? "var(--themePDark)" : "transparent"
+                }
                 fullScreen={type === "item"}
                 needIndex
             />
