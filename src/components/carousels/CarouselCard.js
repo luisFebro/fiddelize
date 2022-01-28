@@ -10,32 +10,35 @@ export default function CarouselCard({
     size,
     multi = false, // for itialize multiple carousel in the same page
     lazyLoad = false,
+    pageDots = false,
+    trigger,
+    setOuterFlkty,
     // style,
     // currIconInd,
     // setOpenModal,
 }) {
-    const [, setFlkty] = useState(null);
+    const [flktyData, setFlkty] = useState(null);
 
-    useEffect(() => {
-        const options = {
-            // options
-            lazyLoad, // n1
-            cellAlign: "center",
-            wrapAround: true,
-            freeScroll: false, // if true, this produces an awkward alignment of cards when dragging them
-            pageDots: false,
-            prevNextButtons: !isSmall, //
-            friction: 0.28, // default: 0.28
-            dragThreshold: 3, // default: 3
-            percentagePosition: false, // default: true;
-            selectedAttraction: 0.1, // default: 0.025
-            on: {
-                ready() {
-                    console.log("Flickity ready");
-                },
+    const options = {
+        // options
+        lazyLoad, // n1
+        cellAlign: "center",
+        wrapAround: true,
+        freeScroll: false, // if true, this produces an awkward alignment of cards when dragging them
+        pageDots,
+        prevNextButtons: !isSmall, //
+        friction: 0.28, // default: 0.28
+        dragThreshold: 3, // default: 3
+        percentagePosition: false, // default: true;
+        selectedAttraction: 0.1, // default: 0.025
+        on: {
+            ready() {
+                console.log("Flickity ready");
             },
-        };
+        },
+    };
 
+    const startFlickity = (multi) => {
         if (multi) {
             const galleryCarousels = document.querySelectorAll(
                 ".main-carousel"
@@ -44,8 +47,8 @@ export default function CarouselCard({
             let len;
             for (i = 0, len = galleryCarousels.length; i < len; i++) {
                 const thisCarousel = galleryCarousels[i];
-                // eslint-disable-next-line
-                new Flickity(thisCarousel, options);
+                const fkcktMulti = new Flickity(thisCarousel, options);
+                if (i === 0) setFlkty(fkcktMulti);
             }
             return;
         }
@@ -54,7 +57,19 @@ export default function CarouselCard({
 
         const flkty = new Flickity(carouselElem2, options);
         setFlkty(flkty);
-    }, [multi]);
+    };
+
+    useEffect(() => {
+        if (typeof setOuterFlkty === "function") {
+            if (flktyData) {
+                flktyData.select(0);
+            }
+            setOuterFlkty(flktyData);
+            startFlickity(multi);
+        }
+
+        startFlickity(multi);
+    }, [multi, trigger, flktyData]);
 
     return (
         <section
