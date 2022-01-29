@@ -21,6 +21,7 @@ export default function CloseButton({
     right,
     bottom,
     position,
+    zIndex = 1500,
 }) {
     const styles = {
         closeBtn: {
@@ -29,10 +30,10 @@ export default function CloseButton({
             left,
             right,
             bottom,
+            zIndex,
             fontSize: size || "1.9em",
             color: color || "var(--mainWhite)",
             cursor: "pointer",
-            zIndex: 1500,
             filter: "drop-shadow(0.001em 0.1em 0.1em grey)",
         },
     };

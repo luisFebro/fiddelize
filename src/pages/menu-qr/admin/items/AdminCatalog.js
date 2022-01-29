@@ -5,6 +5,10 @@ import getItems, { setItems } from "init/lStorage";
 import showToast from "components/toasts";
 import getAPI, { updateAdminItem } from "api";
 import useData from "init";
+import { Provider } from "context";
+import getId from "utils/getId";
+import { removeImg } from "./item-handler/img/UploadItemArea";
+import useGlobalData from "./useGlobalData";
 import ItemManager from "./ItemManager";
 import ItemCardAdmin from "./ItemCardAdmin";
 
@@ -15,7 +19,7 @@ const [digitalMenuCategories, digitalMenuItemList] = getItems("global", [
 
 export default function AdminCatalog() {
     const [f, setF] = useState(null);
-    console.log("f", f);
+
     const [menuData, setMenuData] = useState({
         allCategories:
             digitalMenuCategories && digitalMenuCategories.length
@@ -26,17 +30,18 @@ export default function AdminCatalog() {
                 ? digitalMenuItemList
                 : [],
     });
-    const { allCategories, itemList } = menuData;
+    const { allCategories, itemList = [] } = menuData;
     const { sexLetter } = useData();
 
     const updateItem = (type, options = {}) => {
-        const { newItem, newCategory } = options;
+        const { newItem, newCategory, oldCategory, removalImg } = options;
 
         if (type === "add") {
             if (newItem) {
-                const duplicateFound = itemList.find(
-                    (item) => item.adName === newItem.adName
-                );
+                const duplicateFound =
+                    itemList.length &&
+                    itemList.find((item) => item.adName === newItem.adName);
+
                 if (duplicateFound)
                     return {
                         status: false,
@@ -44,8 +49,12 @@ export default function AdminCatalog() {
                     };
             }
 
-            const handleField = (name, field, newData) =>
-                newData ? [newData, ...field] : field;
+            const maxItems = 10;
+            const handleField = (name, priorFields, newData) =>
+                newData
+                    ? [newData, ...priorFields].slice(0, maxItems)
+                    : priorFields;
+
             setMenuData((prev) => {
                 const thisNewCategory = handleField(
                     "allCategories",
@@ -73,13 +82,82 @@ export default function AdminCatalog() {
             });
         }
 
-        // getAPI({
-        //     method: "post",
-        //     url: updateAdminItem(),
-        //     body: { ...newItem, _id: undefined }, // throw error if _id is another ID other than body
-        // }).then(() => {
-        //     showToast("Item salvo!", { type: "success" });
-        // });
+        if (type === "update") {
+            const whichUpdate = newItem ? "item" : "category";
+            const isItem = whichUpdate === "item";
+
+            const renewItem = () =>
+                itemList.map((item) => {
+                    if (item.itemId === newItem.itemId) return newItem;
+                    return item;
+                });
+
+            const renewCategory = () =>
+                allCategories.map((cat) => {
+                    if (cat === oldCategory) return newCategory;
+                    return cat;
+                });
+
+            let renewalData = false;
+            if (isItem) renewalData = renewItem();
+            else renewalData = renewCategory();
+
+            setMenuData((prev) => {
+                const thisNewCategory = !isItem
+                    ? renewalData
+                    : prev.allCategories;
+                const thisNewItem = isItem ? renewalData : prev.itemList;
+
+                setItems("global", {
+                    digitalMenuCategories: thisNewCategory,
+                    digitalMenuItemList: thisNewItem,
+                });
+
+                if (f) f.destroy();
+
+                return {
+                    ...prev,
+                    allCategories: thisNewCategory,
+                    itemList: thisNewItem,
+                };
+            });
+        }
+
+        const isDelete = type === "delete";
+        if (isDelete) {
+            setMenuData(async (prev) => {
+                const leftItems = prev.itemList.filter(
+                    (item) => !newItem.removalItemIds.includes(item.itemId)
+                );
+
+                setItems("global", {
+                    digitalMenuItemList: leftItems,
+                });
+
+                await removeImg(removalImg);
+
+                if (f) f.destroy();
+
+                return {
+                    ...prev,
+                    itemList: leftItems,
+                    // allCategories: thisNewCategory,
+                };
+            });
+        }
+
+        getAPI({
+            method: "post",
+            url: updateAdminItem(),
+            body: { ...newItem, _id: undefined }, // throw error if _id is another ID other than body
+        }).then(() => {
+            const handleMsg = () => {
+                if (isDelete) return "Item removido!";
+                if (type === "update") return "Item atualizado!";
+                return "Item salvo!";
+            };
+            showToast(handleMsg(), { type: "success" });
+        });
 
         return { status: true };
     };
@@ -92,10 +170,14 @@ export default function AdminCatalog() {
         </div>
     );
 
+    const store = useGlobalData({
+        updateItem,
+    });
+
     return (
-        <Fragment>
+        <Provider store={store}>
             {showTitle()}
-            <ItemManager updateItem={updateItem} />
+            <ItemManager />
             {itemList.length ? (
                 <Fragment>
                     <div className="mt-5" />
@@ -123,11 +205,13 @@ export default function AdminCatalog() {
                 </main>
             )}
             <div style={{ marginBottom: 150 }} />
-        </Fragment>
+        </Provider>
     );
 }
 
 function MenuList({ allCategories, itemList, setF }) {
+    const triggerCarousel = getId();
+
     return (
         <section className="">
             {allCategories.map((cat) => {
@@ -150,9 +234,10 @@ function MenuList({ allCategories, itemList, setF }) {
                                 size="medium"
                                 multi
                                 lazyLoad
-                                trigger={itemList.length}
+                                trigger={triggerCarousel}
                                 pageDots
-                                setOuterFlkty={setF}
+                                fullscreen
+                                setOuterFlickity={setF}
                             />
                         </div>
                     </section>

@@ -1,15 +1,14 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "utils/form/use-state/handleChange";
 import showToast from "components/toasts";
-import Card from "@material-ui/core/Card";
-import EditButton from "components/buttons/EditButton";
 import DeleteButton from "components/buttons/DeleteButton";
 import moneyMaskBr from "utils/validation/masks/moneyMaskBr";
 import { convertToDollar } from "utils/numbers/convertToReal";
 import getId from "utils/getId";
 import { useBizData } from "init";
+import useContext from "context";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -32,14 +31,16 @@ export default function NewItemForm({
     setData,
     data,
     handleFullClose,
-    updateItem,
+    isEditBtn,
 }) {
-    const [comp, setComp] = useState("main");
-    const { name, price, img, errorName, errorPrice } = data;
-    const { bizId } = useBizData();
+    const { itemId, adName, price, img, errorAdName, errorPrice } = data;
+    const { bizId, bizLinkName } = useBizData();
+    const { updateItem } = useContext();
 
     const styles = getStyles();
     const formattedValue = moneyMaskBr(price);
+    const randomId = getId();
+    const foundItemId = itemId || `item${randomId}`;
 
     const switchError = (error) => {
         setData((prev) => ({ ...prev, ...error }));
@@ -49,8 +50,8 @@ export default function NewItemForm({
             return showToast("Insira imagem do item", { type: "error" });
         }
 
-        if (!name) {
-            switchError({ errorName: true });
+        if (!adName) {
+            switchError({ errorAdName: true });
             return showToast("Informe nome item", { type: "error" });
         }
 
@@ -60,17 +61,18 @@ export default function NewItemForm({
         }
         const priceToDB = convertToDollar(formattedValue);
 
-        const randomId = getId();
         const newItem = {
             _id: randomId,
+            itemId: foundItemId,
             category: "_general",
-            adName: name,
+            adName,
             img,
             adminId: bizId, // from cliAdmin registration
             price: priceToDB,
         };
 
-        const dataStatus = updateItem("add", { newItem });
+        const action = isEditBtn ? "update" : "add";
+        const dataStatus = updateItem(action, { newItem });
         const status = dataStatus && dataStatus.status;
         const txt = dataStatus && dataStatus.txt;
         if (!status) return showToast(txt, { type: "error" });
@@ -85,14 +87,38 @@ export default function NewItemForm({
                 right: 15,
             }}
         >
-            <ButtonFab
-                title="Salvar"
-                backgroundColor={`var(--themeSDark--${sColor})`}
-                onClick={saveItem}
-                position="relative"
-                variant="extended"
-                size="large"
-            />
+            <section className="container-center">
+                <DeleteButton
+                    position="relative"
+                    bottom={0}
+                    right={0}
+                    transform="scale(1.1)"
+                    onClick={() => {
+                        updateItem("delete", {
+                            newItem: {
+                                bizId,
+                                type: "delete",
+                                removalItemIds: [foundItemId],
+                            },
+                            removalImg: {
+                                savedImg: img,
+                                folder: `digital-menu/${bizLinkName}`,
+                            },
+                        });
+                        handleFullClose();
+                    }}
+                />
+                <div className="ml-2">
+                    <ButtonFab
+                        title={isEditBtn ? "Atualizar" : "Salvar"}
+                        backgroundColor={`var(--themeSDark--${sColor})`}
+                        onClick={saveItem}
+                        position="relative"
+                        variant="extended"
+                        size="large"
+                    />
+                </div>
+            </section>
         </div>
     );
 
@@ -108,22 +134,22 @@ export default function NewItemForm({
                 className="text-p text-normal py-3"
                 onFocus={() =>
                     switchError({
-                        errorName: false,
+                        errorAdName: false,
                         errorPrice: false,
                     })
                 }
             >
                 <div id="field1" className="mx-2 mt-3">
-                    Nome Divulgação:
+                    <span className="font-weight-bold">Nome Divulgação:</span>
                     <TextField
                         autoFocus
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
-                        error={errorName}
-                        name="name"
+                        error={errorAdName}
+                        name="adName"
                         variant="standard"
-                        value={name}
+                        value={adName}
                         type="text"
                         autoComplete="off"
                         fullWidth
@@ -134,7 +160,7 @@ export default function NewItemForm({
                     />
                 </div>
                 <div id="field2" className="mx-2 mt-3">
-                    Preço R$:
+                    <span className="font-weight-bold">Preço R$:</span>
                     <TextField
                         required
                         margin="dense"
@@ -156,62 +182,9 @@ export default function NewItemForm({
         </Fragment>
     );
 
-    const showFilledData = () => (
-        <section
-            style={{
-                overflowY: "scroll",
-            }}
-        >
-            <Card
-                className="mb-3"
-                style={{
-                    margin: "auto",
-                    boxShadow: "0 31px 120px -6px rgba(0, 0, 0, 0.35)",
-                    width: "90%",
-                    // maxWidth: isSmall ? "" : 360,
-                }}
-            >
-                <main className="mx-3 text-p text-normal position-relative">
-                    <div className="mt-3">
-                        Nome Divulgação:
-                        <p className="font-italic">{name}</p>
-                    </div>
-                    <div className="mt-3">
-                        Preço R$:
-                        <p className="font-italic">{price}</p>
-                    </div>
-                    <div className="container-center">
-                        <EditButton
-                            position="relative"
-                            bottom={0}
-                            right={0}
-                            transform="scale(0.9)"
-                            onClick={() => {
-                                setComp("main");
-                            }}
-                        />
-                        <div className="ml-1">
-                            <DeleteButton
-                                position="relative"
-                                bottom={0}
-                                right={0}
-                                transform="scale(1.1)"
-                                onClick={() => {
-                                    setDefault();
-                                    setComp("main");
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <div style={{ marginBottom: 100 }} />
-                </main>
-            </Card>
-        </section>
-    );
-
     return (
         <section>
-            {comp === "data" ? showFilledData() : showForm()}
+            {showForm()}
             {showFloatCTA()}
         </section>
     );

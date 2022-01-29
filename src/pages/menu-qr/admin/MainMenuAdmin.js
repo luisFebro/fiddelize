@@ -58,7 +58,7 @@ export default function MainMenuAdmin(compData) {
     return (
         <section>
             <h2 className="text-center font-weight-bold text-purple text-subtitle my-3">
-                Menu Admin Principal
+                Menu Principal (Admin)
             </h2>
             <MenuList
                 setFullOpen={setFullOpen}
@@ -69,6 +69,7 @@ export default function MainMenuAdmin(compData) {
                     contentComp={selectComp(fullOpen, compData)}
                     fullOpen={fullOpen}
                     setFullOpen={setFullOpen}
+                    closeButtonZIndex={fullOpen === "Itens" ? null : 1500}
                     backgroundColor={
                         fullOpen === "Divulgação"
                             ? "var(--themePDark)"

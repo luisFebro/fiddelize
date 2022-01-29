@@ -59,7 +59,7 @@ export default function NewCategoryForm({ handleFullClose, updateItem }) {
                 }
             >
                 <div id="field1" className="mx-2 mt-3">
-                    Nome Categoria:
+                    <span className="font-weight-bold">Nome Categoria:</span>
                     <TextField
                         autoFocus
                         required

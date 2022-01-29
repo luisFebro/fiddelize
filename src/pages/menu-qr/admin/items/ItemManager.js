@@ -12,21 +12,13 @@ const PlusIcon = (
     />
 );
 
-export default function ItemManager({ updateItem }) {
+export default function ItemManager() {
     return (
         <section className="add-zone--root">
             <div className="field">
-                <ItemHandlerBtn
-                    updateItem={updateItem}
-                    PlusIcon={PlusIcon}
-                    type="item"
-                />
+                <ItemHandlerBtn PlusIcon={PlusIcon} type="item" />
                 <div className="mt-3" />
-                <ItemHandlerBtn
-                    updateItem={updateItem}
-                    PlusIcon={PlusIcon}
-                    type="category"
-                />
+                <ItemHandlerBtn PlusIcon={PlusIcon} type="category" />
             </div>
             <style jsx>
                 {`

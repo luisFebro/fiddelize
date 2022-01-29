@@ -33,6 +33,7 @@ export default function ModalFullContent({
     maxWidth = "500px",
     overflowY = undefined,
     needCloseBtn = true,
+    closeButtonZIndex = 1500,
     // style,
 }) {
     const { runName } = useRun();
@@ -86,6 +87,7 @@ export default function ModalFullContent({
                             size="40px"
                             top="10px"
                             right="10px"
+                            zIndex={closeButtonZIndex}
                         />
                     )}
                 </Fragment>

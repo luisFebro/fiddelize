@@ -2,12 +2,10 @@ import { useState, useEffect, Fragment } from "react";
 import showToast from "components/toasts";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import useData from "init";
-import Spinner from "components/loadingIndicators/Spinner";
 import getAPI, { setImgToProvider } from "api";
-import DeleteButton from "components/buttons/DeleteButton";
+import RadiusBtn from "components/buttons/RadiusBtn";
 
 export default function UploadItemArea({
-    setMainData,
     savedImg,
     isMultiple = false,
     body = {},
@@ -27,6 +25,7 @@ export default function UploadItemArea({
     }, [alreadyUploaded]);
 
     const handleMediaChange = async (e) => {
+        setUploadedPic(false);
         setLoading(true);
 
         // multiple photos not implemented
@@ -56,13 +55,6 @@ export default function UploadItemArea({
                 `A imagem ${imgDataList.name.cap()} possui mais de 3 MB permitido. Por favor, escolha arquivo menor.`,
                 { type: "error" }
             );
-
-        if (uploadedPic && !body.targetImg) {
-            return showToast(
-                "Algo deu errado ao remover a foto. Feche esta tela e entre novamente.",
-                { type: "error" }
-            );
-        }
 
         const allowedTypes = [
             "image/png",
@@ -94,7 +86,7 @@ export default function UploadItemArea({
             uploadedPic: true,
         });
 
-        await getAPI({
+        const ultimateImg = await getAPI({
             method: "post",
             url: urlFunc(),
             body: handleDataForm(),
@@ -111,36 +103,21 @@ export default function UploadItemArea({
                 uploadedPic: false,
             });
         });
+
+        callback({
+            img: ultimateImg,
+            loading,
+            picName,
+            uploadedPic: true,
+        });
     };
 
     const showAddImgArea = () => (
         <section className="container-center-col" style={{ minHeight: 250 }}>
             <input
                 accept="image/*"
-                onChange={uploadedPic ? undefined : handleMediaChange}
-                onClick={
-                    uploadedPic
-                        ? async () => {
-                              setLoading(true);
-
-                              await removeImg({ ...body, urlFunc, userId });
-
-                              setUploadedPic(false);
-                              setLoading(false);
-
-                              showToast("Foto removida com sucesso", {
-                                  type: "success",
-                              });
-
-                              return callback({
-                                  img: null,
-                                  loading: false,
-                                  picName: null,
-                                  uploadedPic: false,
-                              });
-                          }
-                        : undefined
-                }
+                onChange={handleMediaChange}
+                onClick={undefined}
                 name="file"
                 style={{ display: "none" }}
                 id="uploaded-file"
@@ -186,33 +163,34 @@ export default function UploadItemArea({
                     right: 10,
                 }}
             >
-                <DeleteButton
-                    onClick={() => {
-                        removeImg({ folder: body.folder, savedImg });
+                <RadiusBtn
+                    position="relative"
+                    backgroundColor="var(--mainRed)"
+                    title="remover imagem"
+                    size="extra-small"
+                    fontSize="15px"
+                    onClick={async () => {
+                        if (savedImg && savedImg.includes("blob")) return;
+                        await removeImg({ folder: body.folder, savedImg });
                         showToast("Imagem removida", { type: "success" });
-                        setMainData((prev) => ({
-                            ...prev,
+
+                        callback({
                             img: null,
-                        }));
+                            loading: false,
+                            picName: null,
+                            uploadedPic: false,
+                        });
                     }}
                 />
             </section>
         </section>
     );
 
-    if (loading) {
-        return (
-            <section className="container-center" style={{ minHeight: 250 }}>
-                <Spinner size="large" />
-            </section>
-        );
-    }
-
     return <Fragment>{savedImg ? showSavedImg() : showAddImgArea()}</Fragment>;
 }
 
 // HELPERS
-async function removeImg(data) {
+export async function removeImg(data) {
     return await getAPI({
         method: "post",
         url: setImgToProvider(),

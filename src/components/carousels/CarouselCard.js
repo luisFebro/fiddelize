@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "flickity/dist/flickity.css";
+import "flickity-fullscreen";
 // jquery module is required to run this path
 import Flickity from "flickity";
 
@@ -11,8 +12,9 @@ export default function CarouselCard({
     multi = false, // for itialize multiple carousel in the same page
     lazyLoad = false,
     pageDots = false,
+    fullscreen,
     trigger,
-    setOuterFlkty,
+    setOuterFlickity,
     // style,
     // currIconInd,
     // setOpenModal,
@@ -22,10 +24,11 @@ export default function CarouselCard({
     const options = {
         // options
         lazyLoad, // n1
+        pageDots,
+        fullscreen, // flkty.viewFullscreen(); || flkty.exitFullscreen(); || flkty.toggleFullscreen();
         cellAlign: "center",
         wrapAround: true,
         freeScroll: false, // if true, this produces an awkward alignment of cards when dragging them
-        pageDots,
         prevNextButtons: !isSmall, //
         friction: 0.28, // default: 0.28
         dragThreshold: 3, // default: 3
@@ -60,12 +63,12 @@ export default function CarouselCard({
     };
 
     useEffect(() => {
-        if (typeof setOuterFlkty === "function") {
+        if (typeof setOuterFlickity === "function") {
             if (flktyData) {
                 flktyData.select(0);
+                setOuterFlickity(flktyData);
             }
-            setOuterFlkty(flktyData);
-            startFlickity(multi);
+            return startFlickity(multi);
         }
 
         startFlickity(multi);
@@ -176,6 +179,7 @@ export default function CarouselCard({
                         color: #fff !important;
                     }
 
+                    /* lazy load */
                     .lazy-load .carousel-cell-image {
                         display: block;
                         max-height: 100%;
@@ -186,10 +190,113 @@ export default function CarouselCard({
                         transition: opacity 0.4s;
                     }
 
-                    /* fade in lazy loaded image */
+                    /* fade in lazy effect */
                     .lazy-load .carousel-cell-image.flickity-lazyloaded,
                     .lazy-load .carousel-cell-image.flickity-lazyerror {
                         opacity: 1;
+                    }
+
+                    /* fullscreen */
+                    .main-carousel.is-fullscreen .carousel-cell,
+                    .main-carousel.is-fullscreen .flickity-viewport {
+                        height: 100% !important;
+                    }
+
+                    .flickity-enabled.is-fullscreen {
+                        position: fixed;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: hsla(0, 0%, 0%, 0.9);
+                        padding-bottom: 35px;
+                        z-index: 1;
+                    }
+
+                    .flickity-enabled.is-fullscreen .flickity-page-dots {
+                        bottom: 10px;
+                    }
+
+                    .flickity-enabled.is-fullscreen .flickity-page-dots .dot {
+                        background: white;
+                    }
+
+                    /* prevent page scrolling when flickity is fullscreen */
+                    html.is-flickity-fullscreen {
+                        overflow: hidden;
+                    }
+
+                    /* ---- flickity-fullscreen-button ---- */
+
+                    .flickity-fullscreen-button {
+                        display: fixed;
+                        z-index: 2;
+                        right: 10px;
+                        top: 10px;
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 4px;
+                    }
+
+                    /* right-to-left */
+                    .flickity-rtl .flickity-fullscreen-button {
+                        right: auto;
+                        left: 10px;
+                    }
+
+                    .flickity-fullscreen-button-exit {
+                        display: none;
+                    }
+
+                    .flickity-enabled.is-fullscreen
+                        .flickity-fullscreen-button-exit {
+                        display: block;
+                    }
+                    .flickity-enabled.is-fullscreen
+                        .flickity-fullscreen-button-view {
+                        display: none;
+                    }
+
+                    .flickity-fullscreen-button .flickity-button-icon {
+                        position: absolute;
+                        width: 16px;
+                        height: 16px;
+                        left: 4px;
+                        top: 4px;
+                    }
+
+                    .flickity-enabled.is-fullscreen .carousel-cell {
+                        width: 100%; /* full width */
+                        height: 200px;
+                        background: transparent !important;
+                    }
+
+                    .flickity-enabled.is-fullscreen .carousel-cell .desc {
+                        position: absolute;
+                        bottom: -10px;
+                    }
+
+                    .flickity-enabled.is-fullscreen .carousel-cell .desc > p {
+                        color: var(--mainWhite);
+                        text-shadow: 1px 3px 5px black;
+                        border-radius: 15px;
+                    }
+
+                    .flickity-enabled.is-fullscreen .carousel-cell section img {
+                        display: block;
+                        max-width: 100%;
+                        max-height: 100%;
+                        position: absolute;
+                        //margin: auto;
+                        //overflow: auto;
+                        top: 0;
+                        right: 0;
+                        left: 0;
+                        bottom: 0;
+                        -o-object-fit: contain;
+                        object-fit: contain;
+                        width: 100% !important;
+                        height: 100% !important;
                     }
                 `}
             </style>

@@ -9,20 +9,19 @@ export default function ImgHandler({ setData, savedImg }) {
     const [targetImg, setTargetImg] = useState(null);
     const { bizLinkName } = useBizData();
 
-    const handleUpload = (result) => {
+    const handleUploadCallback = (result) => {
         const removedImg = !result.uploadedPic;
         setTargetImg(removedImg ? null : result.img);
 
-        if (removedImg) setData(null);
+        if (removedImg) setData((prev) => ({ ...prev, img: null }));
         else setData((prev) => ({ ...prev, img: result.img }));
     };
 
     return (
         <UploadItemArea
-            setMainData={setData}
             savedImg={savedImg}
             loadingMsg="Adicionando..."
-            callback={handleUpload}
+            callback={handleUploadCallback}
             urlFunc={setImgToProvider}
             body={{
                 targetImg, // only for remove mode
