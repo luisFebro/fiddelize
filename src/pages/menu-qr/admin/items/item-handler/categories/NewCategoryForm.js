@@ -3,7 +3,15 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "utils/form/use-state/handleChange";
 import showToast from "components/toasts";
-// import { useBizData } from "init";
+import { Load } from "components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
+
+const AsyncItemList = Load({
+    loader: () =>
+        import(
+            "../../item-list/ItemListContent" /* webpackChunkName: "item-list-page-lazy" */
+        ),
+});
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -21,7 +29,8 @@ const getStyles = () => ({
     },
 });
 
-export default function NewCategoryForm({ handleFullClose, updateItem }) {
+export default function NewCategoryForm({ handleFullClose }) {
+    const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
         category: null,
         errorCategory: false,
@@ -37,9 +46,8 @@ export default function NewCategoryForm({ handleFullClose, updateItem }) {
         if (!category) {
             return showToast("Insira o nome da categoria", { type: "error" });
         }
-        showToast("Categoria Salva!", { type: "success" });
-        handleFullClose();
-        // SUCCESS CATEGORY
+
+        setFullOpen(true);
     };
 
     const showForm = () => (
@@ -89,6 +97,21 @@ export default function NewCategoryForm({ handleFullClose, updateItem }) {
                     />
                 </section>
             </form>
+            {fullOpen && (
+                <ModalFullContent
+                    contentComp={
+                        <AsyncItemList
+                            category={category}
+                            isAddCategory
+                            setFullOpen={setFullOpen}
+                            closeCategoryForm={handleFullClose}
+                        />
+                    }
+                    fullOpen={fullOpen}
+                    setFullOpen={setFullOpen}
+                    zIndex={3000}
+                />
+            )}
         </Fragment>
     );
 

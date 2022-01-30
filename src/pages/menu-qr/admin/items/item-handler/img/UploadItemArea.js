@@ -79,12 +79,14 @@ export default function UploadItemArea({
 
         const picName = imgDataList && imgDataList.name;
 
-        callback({
-            img: URL.createObjectURL(imgDataList),
-            loading,
-            picName,
-            uploadedPic: true,
-        });
+        if (!savedImg) {
+            callback({
+                img: URL.createObjectURL(imgDataList),
+                loading,
+                picName,
+                uploadedPic: true,
+            });
+        }
 
         const ultimateImg = await getAPI({
             method: "post",
@@ -109,13 +111,14 @@ export default function UploadItemArea({
             loading,
             picName,
             uploadedPic: true,
+            finishedUpload: true,
         });
     };
 
     const showAddImgArea = () => (
         <section className="container-center-col" style={{ minHeight: 250 }}>
             <input
-                accept="image/*"
+                accept="image/*;capture=camera"
                 onChange={handleMediaChange}
                 onClick={undefined}
                 name="file"
@@ -199,6 +202,7 @@ export async function removeImg(data) {
             img: data.savedImg,
             folder: data.folder, // folder to be stored in the provider
         },
+        timeoutMsgOn: false,
         fullCatch: true,
     });
 }

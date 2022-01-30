@@ -10,8 +10,9 @@ export default function AddItemContent({ card, isEditBtn, handleFullClose }) {
         price: null,
         errorAdName: false,
         errorPrice: false,
+        finishedUpload: false,
     });
-    const { img } = data;
+    const { img, finishedUpload } = data;
 
     // handle card data from ItemCardAdmin for edit
     useEffect(() => {

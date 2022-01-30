@@ -14,7 +14,12 @@ export default function ImgHandler({ setData, savedImg }) {
         setTargetImg(removedImg ? null : result.img);
 
         if (removedImg) setData((prev) => ({ ...prev, img: null }));
-        else setData((prev) => ({ ...prev, img: result.img }));
+        else
+            setData((prev) => ({
+                ...prev,
+                img: result.img,
+                finishedUpload: result.finishedUpload,
+            }));
     };
 
     return (

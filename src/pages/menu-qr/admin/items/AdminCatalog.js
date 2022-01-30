@@ -11,6 +11,7 @@ import { removeImg } from "./item-handler/img/UploadItemArea";
 import useGlobalData from "./useGlobalData";
 import ItemManager from "./ItemManager";
 import ItemCardAdmin from "./ItemCardAdmin";
+import ItemListBtn from "./item-list/ItemListBtn";
 
 const [digitalMenuCategories, digitalMenuItemList] = getItems("global", [
     "digitalMenuCategories",
@@ -34,7 +35,13 @@ export default function AdminCatalog() {
     const { sexLetter } = useData();
 
     const updateItem = (type, options = {}) => {
-        const { newItem, newCategory, oldCategory, removalImg } = options;
+        const {
+            newItem,
+            catItemIdListUpdate,
+            newCategory,
+            oldCategory,
+            removalImg,
+        } = options;
 
         if (type === "add") {
             if (newItem) {
@@ -49,11 +56,8 @@ export default function AdminCatalog() {
                     };
             }
 
-            const maxItems = 10;
             const handleField = (name, priorFields, newData) =>
-                newData
-                    ? [newData, ...priorFields].slice(0, maxItems)
-                    : priorFields;
+                newData ? [newData, ...priorFields] : priorFields;
 
             setMenuData((prev) => {
                 const thisNewCategory = handleField(
@@ -72,6 +76,9 @@ export default function AdminCatalog() {
                     digitalMenuItemList: thisNewItem,
                 });
 
+                // only need to be added locally here and update handle both local and db
+                if (newCategory) return prev;
+
                 if (f) f.destroy();
 
                 return {
@@ -80,9 +87,37 @@ export default function AdminCatalog() {
                     itemList: thisNewItem,
                 };
             });
+
+            if (newCategory) return null;
         }
 
         if (type === "update") {
+            if (catItemIdListUpdate) {
+                setMenuData((prev) => {
+                    const newCatList = prev.itemList.map((item) => {
+                        const needChangeCategory = catItemIdListUpdate.includes(
+                            item.itemId
+                        );
+                        if (needChangeCategory)
+                            return { ...item, category: newCategory };
+                        return item;
+                    });
+
+                    setItems("global", {
+                        digitalMenuItemList: newCatList,
+                    });
+
+                    if (f) f.destroy();
+
+                    return {
+                        ...prev,
+                        itemList: newCatList,
+                    };
+                });
+
+                return updateInDb({ newItem, type, catItemIdListUpdate });
+            }
+
             const whichUpdate = newItem ? "item" : "category";
             const isItem = whichUpdate === "item";
 
@@ -123,9 +158,8 @@ export default function AdminCatalog() {
             });
         }
 
-        const isDelete = type === "delete";
-        if (isDelete) {
-            setMenuData(async (prev) => {
+        if (type === "delete") {
+            setMenuData((prev) => {
                 const leftItems = prev.itemList.filter(
                     (item) => !newItem.removalItemIds.includes(item.itemId)
                 );
@@ -134,32 +168,24 @@ export default function AdminCatalog() {
                     digitalMenuItemList: leftItems,
                 });
 
-                await removeImg(removalImg);
-
                 if (f) f.destroy();
+
+                /*
+                removalImg: {
+                    savedImg: img, // string or an array of string with img urls
+                    folder: `digital-menu/${bizLinkName}`,
+                }
+                 */
+                if (removalImg) removeImg(removalImg);
 
                 return {
                     ...prev,
                     itemList: leftItems,
-                    // allCategories: thisNewCategory,
                 };
             });
         }
 
-        getAPI({
-            method: "post",
-            url: updateAdminItem(),
-            body: { ...newItem, _id: undefined }, // throw error if _id is another ID other than body
-        }).then(() => {
-            const handleMsg = () => {
-                if (isDelete) return "Item removido!";
-                if (type === "update") return "Item atualizado!";
-                return "Item salvo!";
-            };
-            showToast(handleMsg(), { type: "success" });
-        });
-
-        return { status: true };
+        return updateInDb({ newItem, type });
     };
 
     const showTitle = () => (
@@ -172,6 +198,7 @@ export default function AdminCatalog() {
 
     const store = useGlobalData({
         updateItem,
+        menuData,
     });
 
     return (
@@ -210,7 +237,7 @@ export default function AdminCatalog() {
 }
 
 function MenuList({ allCategories, itemList, setF }) {
-    const triggerCarousel = getId();
+    const randomId = getId();
 
     return (
         <section className="">
@@ -225,16 +252,21 @@ function MenuList({ allCategories, itemList, setF }) {
 
                 return (
                     <section className="" key={cat}>
-                        <h2 className="d-table text-pill ml-3 text-normal text-purple font-weight-bold">
-                            {cat === "_general" ? "gerais" : cat}
-                        </h2>
+                        <div className="d-flex justify-content-between">
+                            <h2 className="d-table text-pill ml-3 text-normal text-purple font-weight-bold">
+                                {cat === "_general" ? "gerais" : cat}
+                            </h2>
+                            <div className="mr-3">
+                                <ItemListBtn category={cat} />
+                            </div>
+                        </div>
                         <div>
                             <CarouselCard
                                 CardList={ThisCarouselList}
                                 size="medium"
                                 multi
                                 lazyLoad
-                                trigger={triggerCarousel}
+                                trigger={randomId}
                                 pageDots
                                 fullscreen
                                 setOuterFlickity={setF}
@@ -259,3 +291,24 @@ const CarouselList = ({ dataList = [] }) => (
     </Fragment>
 );
 // END COMP
+
+// HELPERS
+function updateInDb({ newItem, type, catItemIdListUpdate }) {
+    getAPI({
+        method: "post",
+        url: updateAdminItem(),
+        body: { ...newItem, _id: undefined }, // throw error if _id is another ID other than body
+    }).then(() => {
+        const handleMsg = () => {
+            if (catItemIdListUpdate) return "categoria criada";
+            if (type === "delete") return "excluído com sucesso";
+            if (type === "update") return "Item atualizado";
+            return "Item salvo";
+        };
+        showToast(handleMsg(), { type: "success" });
+    });
+
+    return { status: true };
+}
+
+// END HELPERS

@@ -33,7 +33,15 @@ export default function NewItemForm({
     handleFullClose,
     isEditBtn,
 }) {
-    const { itemId, adName, price, img, errorAdName, errorPrice } = data;
+    const {
+        finishedUpload,
+        itemId,
+        adName,
+        price,
+        img,
+        errorAdName,
+        errorPrice,
+    } = data;
     const { bizId, bizLinkName } = useBizData();
     const { updateItem } = useContext();
 
@@ -46,9 +54,12 @@ export default function NewItemForm({
         setData((prev) => ({ ...prev, ...error }));
     };
     const saveItem = async () => {
-        if (!img) {
-            return showToast("Insira imagem do item", { type: "error" });
-        }
+        if (!finishedUpload)
+            return showToast(
+                "Tente novamente. Caso persista, tente atualizar a foto",
+                { type: "error" }
+            );
+        if (!img) return showToast("Insira imagem do item", { type: "error" });
 
         if (!adName) {
             switchError({ errorAdName: true });
@@ -81,33 +92,36 @@ export default function NewItemForm({
 
     const showFloatCTA = () => (
         <div
-            className="position-fixed animated fadeInUp delay-2s"
+            className="position-fixed animated fadeInUp delay-1s"
             style={{
                 bottom: 15,
                 right: 15,
             }}
         >
             <section className="container-center">
-                <DeleteButton
-                    position="relative"
-                    bottom={0}
-                    right={0}
-                    transform="scale(1.1)"
-                    onClick={() => {
-                        updateItem("delete", {
-                            newItem: {
-                                bizId,
-                                type: "delete",
-                                removalItemIds: [foundItemId],
-                            },
-                            removalImg: {
-                                savedImg: img,
-                                folder: `digital-menu/${bizLinkName}`,
-                            },
-                        });
-                        handleFullClose();
-                    }}
-                />
+                {isEditBtn && (
+                    <DeleteButton
+                        position="relative"
+                        bottom={0}
+                        right={0}
+                        transform="scale(1.1)"
+                        onClick={() => {
+                            updateItem("delete", {
+                                newItem: {
+                                    bizId,
+                                    adminId: bizId,
+                                    type: "delete",
+                                    removalItemIds: [foundItemId],
+                                },
+                                removalImg: {
+                                    savedImg: img,
+                                    folder: `digital-menu/${bizLinkName}`,
+                                },
+                            });
+                            handleFullClose();
+                        }}
+                    />
+                )}
                 <div className="ml-2">
                     <ButtonFab
                         title={isEditBtn ? "Atualizar" : "Salvar"}

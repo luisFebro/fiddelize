@@ -1,6 +1,5 @@
 import convertToReal from "utils/numbers/convertToReal";
 import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
-// import showToast from "components/toasts";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
