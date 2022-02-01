@@ -213,11 +213,14 @@ export const getBalloonPopData = () => `${ROOT}/games/balloon-pop/data`;
 
 // PROCESS SOLUTIONS
 // digital menu
+export const readMenuOrderList = () =>
+    `${ROOT}/process-solutions/digital-menu/menu-order-list`; // GET
+
+export const readMainItemList = () =>
+    `${ROOT}/process-solutions/digital-menu/main-item-list`; // GET
+
 export const updateCustomerOrder = () =>
     `${ROOT}/process-solutions/digital-menu/customer-order`; // POST
-
-export const readMenuOrderList = () =>
-    `${ROOT}/process-solutions/digital-menu/menu-order-list`; // POST
 
 export const updateAdminItem = () =>
     `${ROOT}/process-solutions/digital-menu/admin-item`; // POST

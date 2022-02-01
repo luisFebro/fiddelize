@@ -4,6 +4,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { useBizData } from "init";
 import useContext from "context";
 import showToast from "components/toasts";
+import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
 import ItemCard from "./ItemCard";
 
 export default function ItemListContent({
@@ -19,11 +20,17 @@ export default function ItemListContent({
     const { bizId, bizLinkName } = useBizData();
     const { updateItem, menuData = {} } = useContext();
 
-    let { itemList } = menuData;
+    let { itemList, allCategories } = menuData;
+    const carouselInd =
+        category === null
+            ? 0
+            : allCategories && allCategories.indexOf(category);
 
     itemList = isAddCategory
         ? itemList
         : itemList.filter((item) => item.category === category);
+
+    itemList = removeObjDuplicate(itemList);
 
     const totalSelected = selectionList.length;
     const tapHoldOn = Boolean(totalSelected);
@@ -101,6 +108,7 @@ export default function ItemListContent({
                                 },
                                 newCategory: category && category.toLowerCase(),
                                 catItemIdListUpdate: selectionList,
+                                carouselInd,
                             });
                             if (typeof setFullOpen === "function")
                                 setFullOpen(false);
@@ -144,6 +152,7 @@ export default function ItemListContent({
                                             savedImg: getRemovalImgs(),
                                             folder: `digital-menu/${bizLinkName}`,
                                         },
+                                        // removalCategory: category,
                                     });
 
                                     setFullOpen(false);

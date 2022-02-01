@@ -1,7 +1,6 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
 import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
-import PropTypes from "prop-types";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 import useOfflineListData from "hooks/storage/useOfflineListData";
 import getFirstName from "utils/string/getFirstName";
@@ -30,14 +29,6 @@ const {
 {loading && <ShowLoading />}
 {error && <ShowError />}
  */
-
-useAPIList.propTypes = {
-    url: PropTypes.string.isRequired,
-    method: PropTypes.oneOf(["get", "post", "delete", "update"]),
-    params: PropTypes.object, // e.g { q: query, page: pageNumber } the same as ?q=${query}&page=${pageNumber}
-    body: PropTypes.object, // body is the data to be sent as the request body - Only applicable for request methods 'PUT', 'POST', 'DELETE , and 'PATCH'
-    timeout: PropTypes.number, // `timeout` specifies the number of milliseconds before the request times out. -- If the request takes longer than `timeout`, the request will be aborted.
-};
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -90,17 +81,19 @@ export default function useAPIList({
     let emptyType = "virgin";
     // END IMPORTABLE VARIABLES
 
+    let moreData = null;
     if (content) {
         // most common content needs
         const extractedData = extractStrData(content);
         if (extractedData.emptyType) emptyType = extractedData.emptyType;
+        moreData = extractedData;
     }
 
     const thisList = list;
     const { isOffline, offlineList } = useOfflineListData({
         listName,
         list: thisList,
-        trigger: offlineBtn && !ignore,
+        trigger: listName && offlineBtn && !ignore,
     });
 
     useEffect(() => {
@@ -177,6 +170,7 @@ export default function useAPIList({
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         if (skip === 0 && !updateFirstChunkOnly) return;
+        if (skip > limit) return;
 
         const stopRequest = setTimeout(() => {
             cancel();
@@ -388,6 +382,7 @@ export default function useAPIList({
         content,
         gotData: Boolean(gotListItems),
         extractStrData,
+        moreData: moreData && moreData.content, // from content field
     };
 }
 

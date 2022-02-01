@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import EditButton from "components/buttons/EditButton";
-import showToast from "components/toasts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Checkbox from "@material-ui/core/Checkbox";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
+// import showToast from "components/toasts";
+
+const AsyncAddItemContent = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/admin/items/item-handler/AddItemContent.js" /* webpackChunkName: "add-item-content-lazy" */
+        ),
+});
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
@@ -41,6 +50,7 @@ function onLongPress(elementId, callback) {
 }
 
 export default function ItemCard({ isAddCategory = true, data, setDataList }) {
+    const [fullOpen, setFullOpen] = useState(false);
     const [selected, setSelected] = useState(false);
     const { itemId, img, adName, price } = data;
 
@@ -134,13 +144,23 @@ export default function ItemCard({ isAddCategory = true, data, setDataList }) {
                     className="position-absolute"
                     style={{ bottom: 10, right: 10 }}
                 >
-                    <EditButton
-                        zIndex={1}
-                        onClick={() => showToast("I AM THE EDIT BTN")}
-                    />
+                    <EditButton zIndex={1} onClick={() => setFullOpen(true)} />
                 </div>
             )}
             {selected && !isAddCategory && showSelectedItemCheckIcon()}
+            {fullOpen && (
+                <ModalFullContent
+                    contentComp={
+                        <AsyncAddItemContent
+                            card={data}
+                            isEditBtn
+                            handleFullClose={() => setFullOpen(false)}
+                        />
+                    }
+                    fullOpen={fullOpen}
+                    setFullOpen={setFullOpen}
+                />
+            )}
             <style jsx>
                 {`
                     .item-card--root {
