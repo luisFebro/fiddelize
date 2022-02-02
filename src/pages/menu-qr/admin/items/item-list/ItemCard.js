@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import EditButton from "components/buttons/EditButton";
+import DeleteButton from "components/buttons/DeleteButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Checkbox from "@material-ui/core/Checkbox";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+import showToast from "components/toasts";
 // import showToast from "components/toasts";
 
 const AsyncAddItemContent = Load({
@@ -49,12 +51,24 @@ function onLongPress(elementId, callback) {
     }
 }
 
-export default function ItemCard({ isAddCategory = true, data, setDataList }) {
+function ItemCard(
+    { alreadySelected, isAddCategory = true, data, setDataList },
+    ref
+) {
     const [fullOpen, setFullOpen] = useState(false);
     const [selected, setSelected] = useState(false);
-    const { itemId, img, adName, price } = data;
+    const { category, itemId, img, adName, price } = data;
+
+    const checkAlreadySelected = isAddCategory && alreadySelected;
+    useEffect(() => {
+        if (checkAlreadySelected) setSelected(true);
+    }, [checkAlreadySelected]);
 
     const updateList = () => {
+        if (checkAlreadySelected && category === "_general")
+            return showToast(
+                "Categoria Gerais é a opção padrão. Items nesta categoria só podem ser movidos para outras categorias"
+            );
         setDataList((prev) => {
             const foundItemAlready = prev.selectionList.find(
                 (currId) => currId === itemId
@@ -110,8 +124,42 @@ export default function ItemCard({ isAddCategory = true, data, setDataList }) {
         />
     );
 
+    const showCategoryBadge = () => (
+        <div
+            className="position-absolute font-site"
+            style={{
+                bottom: -40,
+                right: 50,
+            }}
+        >
+            <div className="d-flex">
+                <div className="category-badge">
+                    <p className="text-nowrap text-shadow">
+                        {truncate(category, 10)}
+                    </p>
+                </div>
+                <div className="mr-1">
+                    <DeleteButton onClick={null} />
+                </div>
+            </div>
+            <style jsx>
+                {`
+                    .category-badge {
+                        padding: 0px;
+                    }
+
+                    .category-badge p {
+                        font-size: 20px;
+                        padding: 2px;
+                    }
+                `}
+            </style>
+        </div>
+    );
+
     return (
         <section
+            ref={ref}
             className="item-card--root mt-3 text-white position-relative"
             id={itemId}
             style={{
@@ -119,6 +167,7 @@ export default function ItemCard({ isAddCategory = true, data, setDataList }) {
             }}
             onClick={() => isAddCategory && updateList()}
         >
+            {isAddCategory && category !== "_general" && showCategoryBadge()}
             <div className="d-flex container align-items-center">
                 {isAddCategory && showCheckBox()}
                 <div className="img-container">
@@ -126,7 +175,7 @@ export default function ItemCard({ isAddCategory = true, data, setDataList }) {
                 </div>
                 <div className="text-left ml-3 text-normal">
                     <p
-                        className="mx-2 mb-1 text-em-0-7 line-height-25"
+                        className="mx-2 mb-1 text-em-0-9 line-height-25"
                         style={{
                             minHeight: 30,
                         }}
@@ -180,3 +229,5 @@ export default function ItemCard({ isAddCategory = true, data, setDataList }) {
         </section>
     );
 }
+
+export default forwardRef(ItemCard);

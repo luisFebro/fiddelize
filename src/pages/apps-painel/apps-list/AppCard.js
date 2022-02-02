@@ -9,8 +9,8 @@ import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
 import { useBizData } from "init";
 import Skeleton from "components/multimedia/Skeleton";
 import showToast from "components/toasts";
-import handleOpenApp from "./helpers/appAccessAlgorithm";
 import { useAction } from "global-data/ui";
+import handleOpenApp from "./helpers/appAccessAlgorithm";
 //
 
 const handleAppType = (role) => {

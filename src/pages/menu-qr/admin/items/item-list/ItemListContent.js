@@ -1,11 +1,15 @@
-import { useState, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import DeleteButton from "components/buttons/DeleteButton";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import { useBizData } from "init";
 import useContext from "context";
 import showToast from "components/toasts";
 import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
+import { checkDetectedElem } from "api/useElemDetection";
+import useMainList from "../useMainList";
 import ItemCard from "./ItemCard";
+import EditCategoryTitle from "./EditCategoryTitle";
 
 export default function ItemListContent({
     category,
@@ -14,49 +18,34 @@ export default function ItemListContent({
     closeCategoryForm = () => null,
 }) {
     const [dataList, setDataList] = useState({
+        type: isAddCategory ? "addCat" : "showCat",
         selectionList: [],
+        ultimateList: [], // itemList + db loaded list
     });
-    const { selectionList } = dataList;
+    const { selectionList, type } = dataList;
+    let { ultimateList } = dataList;
+    const isAddCat = type === "addCat";
+    const isShowCat = type === "showCat";
+
     const { bizId, bizLinkName } = useBizData();
     const { updateItem, menuData = {} } = useContext();
 
-    let { itemList, allCategories } = menuData;
+    const { itemList } = menuData;
+
+    useEffect(() => {
+        setDataList((prev) => ({ ...prev, ultimateList: itemList }));
+    }, [itemList, type]);
+
+    const { allCategories } = menuData;
     const carouselInd =
         category === null
             ? 0
             : allCategories && allCategories.indexOf(category);
 
-    itemList = isAddCategory
-        ? itemList
-        : itemList.filter((item) => item.category === category);
-
-    itemList = removeObjDuplicate(itemList);
-
     const totalSelected = selectionList.length;
     const tapHoldOn = Boolean(totalSelected);
 
     const catTitle = category === "_general" ? "gerais" : category;
-
-    const showTitle = () => {
-        const thisCat = catTitle && catTitle.cap();
-        if (isAddCategory) {
-            return (
-                <h2 className="text-normal text-purple">
-                    Selecione itens para categoria:{" "}
-                    <span className="text-subtitle font-weight-bold">
-                        {thisCat}
-                    </span>
-                </h2>
-            );
-        }
-        return (
-            <h2 className="text-subtitle text-purple font-weight-bold">
-                {thisCat}
-            </h2>
-        );
-    };
-
-    const ultimateList = itemList; // or db list goes here
 
     const showTapAndHoldOptions = () => (
         <section
@@ -75,7 +64,7 @@ export default function ItemListContent({
                 <p className="mt-3">
                     {totalSelected} {totalSelected === 1 ? "item" : "itens"}
                 </p>
-                {isAddCategory ? (
+                {isAddCat ? (
                     <ButtonFab
                         title="salvar"
                         backgroundColor="var(--themeSDark)"
@@ -132,8 +121,8 @@ export default function ItemListContent({
 
                                     const getRemovalImgs = () => {
                                         const imgs = [];
-
-                                        itemList.forEach((item) => {
+                                        if (!ultimateList.length) return null;
+                                        ultimateList.forEach((item) => {
                                             if (
                                                 selectionList.includes(
                                                     item.itemId
@@ -152,7 +141,6 @@ export default function ItemListContent({
                                             savedImg: getRemovalImgs(),
                                             folder: `digital-menu/${bizLinkName}`,
                                         },
-                                        // removalCategory: category,
                                     });
 
                                     setFullOpen(false);
@@ -166,18 +154,124 @@ export default function ItemListContent({
         </section>
     );
 
+    // LIST
+    const {
+        detectedCard,
+        showSearchField,
+        dataList: payloadAPIList,
+        // setDbLoaded,
+        // dbLoaded,
+    } = useMainList({ category, limit: 10, isCategoryList: true });
+
+    const {
+        list,
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        moreData,
+        ShowOverMsg,
+        // listTotal,
+        // isOffline,
+        // hasMore,
+        // isPlural,
+    } = payloadAPIList;
+    // END LIST
+
+    const showEditCategory = () => (
+        <div
+            className="container-center"
+            style={{
+                zIndex: 10000,
+            }}
+        >
+            <RadiusBtn
+                title="editar categoria"
+                backgroundColor="var(--themeSDark)"
+                onClick={() =>
+                    setDataList((prev) => ({ ...prev, type: "addCat" }))
+                }
+                position="relative"
+                size="small"
+            />
+        </div>
+    );
+
+    const showTitle = () => {
+        const thisCat = catTitle && catTitle.cap();
+        if (isAddCat) {
+            return (
+                <EditCategoryTitle
+                    updateItem={updateItem}
+                    thisCat={thisCat && thisCat.toLowerCase()}
+                    setFullOpen={setFullOpen}
+                />
+            );
+        }
+
+        return (
+            <h2 className="text-subtitle text-purple font-weight-bold">
+                {thisCat}
+                {isShowCat && showEditCategory()}
+            </h2>
+        );
+    };
+
+    ultimateList = isAddCat
+        ? ultimateList
+        : ultimateList.filter((item) => item.category === category);
+
+    ultimateList = removeObjDuplicate(ultimateList);
+
+    const dbCategories = moreData && JSON.parse(moreData);
+
+    useEffect(() => {
+        // update list when user scroll by detecting the size of it.
+        if (dbCategories) {
+            setDataList((prev) => ({
+                ...prev,
+                ultimateList: list,
+                allCategories: dbCategories,
+            }));
+        }
+        // insert dbCategories ccauses max depth error
+        // eslint-disable-next-line
+    }, [list.length]);
+
+    const gotData = ultimateList && Boolean(ultimateList.length);
+
     return (
         <section className="mx-3 text-center my-5 text-white text-hero">
             {showTitle()}
-            {ultimateList.map((item) => (
-                <Fragment key={item.itemId}>
-                    <ItemCard
-                        isAddCategory={isAddCategory}
-                        data={item}
-                        setDataList={setDataList}
-                    />
-                </Fragment>
-            ))}
+            {ultimateList.map((item, ind) =>
+                checkDetectedElem({
+                    list: dataList,
+                    ind,
+                    indFromLast: 2,
+                }) ? (
+                    <Fragment key={item.itemId}>
+                        <ItemCard
+                            ref={detectedCard}
+                            isAddCategory={isAddCat}
+                            data={item}
+                            setDataList={setDataList}
+                            alreadySelected={item.category === category}
+                        />
+                    </Fragment>
+                ) : (
+                    <Fragment key={item.itemId}>
+                        <ItemCard
+                            isAddCategory={isAddCat}
+                            data={item}
+                            setDataList={setDataList}
+                            alreadySelected={item.category === category}
+                        />
+                    </Fragment>
+                )
+            )}
+            {loading && <ShowLoadingSkeleton height="85%" />}
+            {error && <ShowError />}
+            {gotData && <ShowOverMsg />}
             {tapHoldOn && showTapAndHoldOptions()}
             <p className="my-3 main-font text-small font-weight-bold mx-3 text-grey">
                 clique e segure um ou mais itens para mais opções

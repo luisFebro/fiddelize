@@ -33,13 +33,12 @@ export default function AdminCatalog() {
         const {
             newItem,
             catItemIdListUpdate,
+            updateCategory,
             newCategory,
             oldCategory,
             removalImg,
             carouselInd = 0,
         } = options;
-        console.log("flickity", flickity);
-        console.log("carouselInd", carouselInd);
 
         const handleCarousel = () => {
             if (!flickity) return null;
@@ -125,7 +124,10 @@ export default function AdminCatalog() {
                 return updateInDb({ newItem, type, catItemIdListUpdate });
             }
 
-            const whichUpdate = newItem ? "item" : "category";
+            const whichUpdate =
+                newItem && Boolean(newItem.categoryUpdate)
+                    ? "category"
+                    : "item";
             const isItem = whichUpdate === "item";
 
             const renewItem = () =>
@@ -224,6 +226,7 @@ export default function AdminCatalog() {
     const store = useGlobalData({
         updateItem,
         menuData,
+        setMenuData,
     });
 
     // LIST
@@ -311,6 +314,7 @@ export default function AdminCatalog() {
 
     return (
         <Provider store={store}>
+            <div id="mainAdminCatalog" />
             {showTitle()}
             <ItemManager />
             {!needEmptyIllustra && <div className="mt-5" />}
@@ -320,6 +324,7 @@ export default function AdminCatalog() {
                 setFlickity={setFlickity}
                 detectedCard={detectedCard}
                 randomId={randomId}
+                flickity={flickity}
             />
             {loading && <ShowLoadingSkeleton />}
             {!gotData && showIllustration()}
@@ -336,6 +341,7 @@ function MenuList({
     detectedCard,
     itemList,
     setFlickity,
+    flickity,
 }) {
     return (
         <section>
@@ -356,6 +362,8 @@ function MenuList({
                             dataList={ultimateList}
                             detectedCard={detectedCard}
                             carouselInd={carouselInd}
+                            flickity={flickity}
+                            category={cat}
                         />
                     );
 
@@ -393,7 +401,13 @@ function MenuList({
 }
 
 // COMP
-const CarouselList = ({ dataList = [], detectedCard, carouselInd }) => (
+const CarouselList = ({
+    dataList = [],
+    detectedCard,
+    carouselInd,
+    flickity,
+    category,
+}) => (
     <Fragment>
         {dataList.length &&
             dataList
@@ -407,14 +421,16 @@ const CarouselList = ({ dataList = [], detectedCard, carouselInd }) => (
                             <ItemCardAdmin
                                 ref={detectedCard}
                                 card={card}
-                                carouselInd={carouselInd}
+                                flickity={flickity}
+                                category={category}
                             />
                         </Fragment>
                     ) : (
                         <Fragment key={card._id}>
                             <ItemCardAdmin
                                 card={card}
-                                carouselInd={carouselInd}
+                                flickity={flickity}
+                                category={category}
                             />
                         </Fragment>
                     )

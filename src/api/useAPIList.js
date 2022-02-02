@@ -50,6 +50,7 @@ export default function useAPIList({
     needAuth = true,
     filterId = "_id",
     disableDupFilter = false, // disable equal matching filter
+    heightSkeleton,
 }) {
     const [data, setData] = useState({
         list: [],
@@ -232,21 +233,25 @@ export default function useAPIList({
     };
 
     const ShowLoading = ({ size = "small" }) => <ShowLoadingComp size={size} />; // n2
-    const ShowLoadingSkeleton = () => (
-        <section
-            className={isSmall ? "mx-2" : ""}
-            style={{
-                maxWidth: 500,
-                margin: "0 auto",
-            }}
-        >
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
-        </section>
-    );
+    const ShowLoadingSkeleton = (options = {}) => {
+        const { height } = options;
+
+        return (
+            <section
+                className={isSmall ? "mx-2" : ""}
+                style={{
+                    maxWidth: 500,
+                    margin: "0 auto",
+                }}
+            >
+                <Skeleton height={height} />
+                <Skeleton height={height} />
+                <Skeleton height={height} />
+                <Skeleton height={height} />
+                <Skeleton height={height} />
+            </section>
+        );
+    };
 
     const ShowError = () => (
         <section>

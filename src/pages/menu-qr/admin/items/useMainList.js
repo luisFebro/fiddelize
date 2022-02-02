@@ -8,7 +8,9 @@ import useAPIList, {
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 
-export default function useMainList() {
+export default function useMainList(options = {}) {
+    const { limit = 5, category } = options;
+
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
     const [dbLoaded, setDbLoaded] = useState(false);
@@ -19,6 +21,7 @@ export default function useMainList() {
         userId, // for auth
         adminId: bizId,
         search,
+        category,
     };
 
     // UPDATE
@@ -37,7 +40,7 @@ export default function useMainList() {
     const dataList = useAPIList({
         url: readMainItemList(),
         skip,
-        limit: 5,
+        limit,
         params,
         disableDupFilter: true,
         trigger: dbLoaded ? false : search || runName || true, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
