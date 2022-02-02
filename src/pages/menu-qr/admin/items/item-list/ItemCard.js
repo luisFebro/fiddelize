@@ -60,16 +60,29 @@ function ItemCard(
     const { category, itemId, img, adName, price } = data;
 
     const checkAlreadySelected = isAddCategory && alreadySelected;
-    useEffect(() => {
-        if (checkAlreadySelected) setSelected(true);
-    }, [checkAlreadySelected]);
 
-    const updateList = () => {
-        if (checkAlreadySelected && category === "_general")
+    const updateList = (options = {}) => {
+        const { passAlreadySelected, clicked } = options;
+
+        if (
+            !passAlreadySelected &&
+            checkAlreadySelected &&
+            category === "_general"
+        )
             return showToast(
-                "Categoria Gerais é a opção padrão. Items nesta categoria só podem ser movidos para outras categorias"
+                "Categoria gerais é a opção padrão. Items nesta categoria só podem ser movidos para outras categorias"
             );
         setDataList((prev) => {
+            // handle default list if unchecked for already selected item
+            let newGeneralList = [];
+            if (clicked) {
+                const priorGeneralList = prev.generalList;
+                const needGeneral = clicked && selected && alreadySelected; // clicked and still selected before unclicked
+                newGeneralList = needGeneral
+                    ? [...priorGeneralList, itemId]
+                    : priorGeneralList.filter((currId) => currId !== itemId);
+            }
+
             const foundItemAlready = prev.selectionList.find(
                 (currId) => currId === itemId
             );
@@ -80,10 +93,25 @@ function ItemCard(
 
             setSelected((prevSele) => !prevSele);
             if (foundItemAlready)
-                return { ...prev, selectionList: removeSelectionList() };
-            return { ...prev, selectionList: addSelectionList() };
+                return {
+                    ...prev,
+                    selectionList: removeSelectionList(),
+                    generalList: newGeneralList,
+                };
+            return {
+                ...prev,
+                selectionList: addSelectionList(),
+                generalList: newGeneralList,
+            };
         });
     };
+
+    useEffect(() => {
+        if (checkAlreadySelected) {
+            // when loaded, insert to the list the already added items
+            updateList({ passAlreadySelected: true });
+        }
+    }, [checkAlreadySelected]);
 
     useEffect(() => {
         if (isAddCategory) return;
@@ -116,7 +144,7 @@ function ItemCard(
             checked={selected}
             onClick={(e) => {
                 e.stopPropagation();
-                updateList();
+                updateList({ clicked: true });
             }}
             onChange={null}
             color="primary"
@@ -138,7 +166,7 @@ function ItemCard(
                         {truncate(category, 10)}
                     </p>
                 </div>
-                <div className="mr-1">
+                <div className="mr-1 d-none">
                     <DeleteButton onClick={null} />
                 </div>
             </div>
@@ -149,7 +177,7 @@ function ItemCard(
                     }
 
                     .category-badge p {
-                        font-size: 20px;
+                        font-size: 14px;
                         padding: 2px;
                     }
                 `}

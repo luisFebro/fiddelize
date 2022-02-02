@@ -20,9 +20,10 @@ export default function ItemListContent({
     const [dataList, setDataList] = useState({
         type: isAddCategory ? "addCat" : "showCat",
         selectionList: [],
-        ultimateList: [], // itemList + db loaded list
+        ultimateList: [], // db loaded list
+        generalList: [], // list to track unmarked items if priorly selected so that we can set to _general category
     });
-    const { selectionList, type } = dataList;
+    const { selectionList, generalList, type } = dataList;
     let { ultimateList } = dataList;
     const isAddCat = type === "addCat";
     const isShowCat = type === "showCat";
@@ -79,6 +80,7 @@ export default function ItemListContent({
                                 adminId: bizId,
                                 type: "updateMany",
                                 updateItemIds: selectionList,
+                                updateGeneralItemIds: generalList,
                                 updateQuery: {
                                     category:
                                         category && category.toLowerCase(),
@@ -157,11 +159,10 @@ export default function ItemListContent({
     // LIST
     const {
         detectedCard,
-        showSearchField,
         dataList: payloadAPIList,
         // setDbLoaded,
         // dbLoaded,
-    } = useMainList({ category, limit: 10, isCategoryList: true });
+    } = useMainList({ category: isAddCategory ? undefined : category });
 
     const {
         list,
@@ -170,7 +171,7 @@ export default function ItemListContent({
         error,
         ShowError,
         moreData,
-        ShowOverMsg,
+        // ShowOverMsg,
         // listTotal,
         // isOffline,
         // hasMore,
@@ -247,7 +248,7 @@ export default function ItemListContent({
                 checkDetectedElem({
                     list: dataList,
                     ind,
-                    indFromLast: 2,
+                    indFromLast: 3,
                 }) ? (
                     <Fragment key={item.itemId}>
                         <ItemCard
@@ -271,7 +272,6 @@ export default function ItemListContent({
             )}
             {loading && <ShowLoadingSkeleton height="85%" />}
             {error && <ShowError />}
-            {gotData && <ShowOverMsg />}
             {tapHoldOn && showTapAndHoldOptions()}
             <p className="my-3 main-font text-small font-weight-bold mx-3 text-grey">
                 clique e segure um ou mais itens para mais opções

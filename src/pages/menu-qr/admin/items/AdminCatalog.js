@@ -33,20 +33,21 @@ export default function AdminCatalog() {
         const {
             newItem,
             catItemIdListUpdate,
-            updateCategory,
             newCategory,
             oldCategory,
             removalImg,
-            carouselInd = 0,
+            carouselInd,
         } = options;
+        console.log("carouselInd", carouselInd);
+        console.log("flickity", flickity);
 
-        const handleCarousel = () => {
+        const handleCarousel = (ind) => {
             if (!flickity) return null;
-            return carouselInd === -1 || !flickity[carouselInd]
+            return ind === -1 || !flickity[ind]
                 ? flickity[flickity.length - 1]
-                : flickity[carouselInd];
+                : flickity[ind];
         };
-        const selectedFlickity = handleCarousel();
+        const selectedFlickity = carouselInd && handleCarousel(carouselInd);
 
         if (type === "add") {
             if (newItem) {
@@ -65,11 +66,17 @@ export default function AdminCatalog() {
                 newData ? [newData, ...priorFields] : priorFields;
 
             setMenuData((prev) => {
-                const thisNewCategory = handleField(
+                // if already has a category, return the the current list
+                if (newCategory && allCategories.includes(newCategory))
+                    return prev;
+
+                let thisNewCategory = handleField(
                     "allCategories",
                     prev.allCategories,
                     newCategory
                 );
+                thisNewCategory = [...new Set(thisNewCategory)];
+
                 const thisNewItem = handleField(
                     "itemList",
                     prev.itemList,
@@ -111,13 +118,17 @@ export default function AdminCatalog() {
                     setItems("global", {
                         digitalMenuItemList: newCatList,
                     });
-
-                    if (selectedFlickity) selectedFlickity.destroy();
+                    // for multiple category update, it is required to destroy all to change carousels position
+                    if (selectedFlickity) {
+                        flickity.forEach((fl) => fl.destroy());
+                    }
 
                     return {
                         ...prev,
                         itemList: newCatList,
-                        allCategories: [newCategory, ...prev.allCategories],
+                        allCategories: [
+                            ...new Set([newCategory, ...prev.allCategories]),
+                        ],
                     };
                 });
 
@@ -130,11 +141,22 @@ export default function AdminCatalog() {
                     : "item";
             const isItem = whichUpdate === "item";
 
-            const renewItem = () =>
+            const renewItem = () => {
                 itemList.map((item) => {
+                    // update unmarked items
+                    const generalListIds =
+                        newItem && newItem.updateGeneralItemIds;
+                    console.log("generalListIds", generalListIds);
+                    if (generalListIds && generalListIds.length) {
+                        console.log("item.itemId", item.itemId);
+                        if (generalListIds.includes(item.itemId))
+                            return { ...item, category: "_general" };
+                    }
+
                     if (item.itemId === newItem.itemId) return newItem;
                     return item;
                 });
+            };
 
             const renewCategory = () =>
                 allCategories.map((cat) => {
@@ -147,11 +169,11 @@ export default function AdminCatalog() {
             else renewalData = renewCategory();
 
             setMenuData((prev) => {
-                const thisNewCategory = !isItem
+                let thisNewCategory = !isItem
                     ? renewalData
                     : prev.allCategories;
                 const thisNewItem = isItem ? renewalData : prev.itemList;
-
+                thisNewCategory = [...new Set(thisNewCategory)];
                 setItems("global", {
                     digitalMenuCategories: thisNewCategory,
                     digitalMenuItemList: thisNewItem,
@@ -186,23 +208,6 @@ export default function AdminCatalog() {
                 }
                  */
                 if (removalImg) removeImg(removalImg);
-
-                // let currCats = null;
-                // if(removalCategory) {
-                //     const categoryStillOn = prev.allCategories.filter(c => c === removalCategory);
-                //     console.log("categoryStillOn", categoryStillOn);
-                //     if(!categoryStillOn && categoryStillOn.length === 1) {
-                //         currCats = prev.allCategories;
-                //         console.log("currCats", currCats);
-                //         const indRemovalCat = currCats.indexOf(removalCategory);
-                //         currCats.shift(indRemovalCat, 1);
-                //         console.log("currCats", currCats);
-
-                //         setItems("global", {
-                //             digitalMenuCategories: currCats,
-                //         })
-                //     }
-                // }
 
                 return {
                     ...prev,
@@ -314,9 +319,9 @@ export default function AdminCatalog() {
 
     return (
         <Provider store={store}>
-            <div id="mainAdminCatalog" />
             {showTitle()}
             <ItemManager />
+            {showSearchField()}
             {!needEmptyIllustra && <div className="mt-5" />}
             <MenuList
                 allCategories={allCategories}
@@ -330,7 +335,7 @@ export default function AdminCatalog() {
             {!gotData && showIllustration()}
             {error && <ShowError />}
             {gotData && <ShowOverMsg />}
-            <div style={{ marginBottom: 100 }} />
+            <div style={{ marginBottom: 150 }} />
         </Provider>
     );
 }
@@ -363,7 +368,6 @@ function MenuList({
                             detectedCard={detectedCard}
                             carouselInd={carouselInd}
                             flickity={flickity}
-                            category={cat}
                         />
                     );
 
@@ -406,7 +410,6 @@ const CarouselList = ({
     detectedCard,
     carouselInd,
     flickity,
-    category,
 }) => (
     <Fragment>
         {dataList.length &&
@@ -415,14 +418,14 @@ const CarouselList = ({
                     checkDetectedElem({
                         list: dataList,
                         ind,
-                        indFromLast: 2,
+                        indFromLast: 3,
                     }) ? (
                         <Fragment key={card._id}>
                             <ItemCardAdmin
                                 ref={detectedCard}
                                 card={card}
                                 flickity={flickity}
-                                category={category}
+                                carouselInd={carouselInd}
                             />
                         </Fragment>
                     ) : (
@@ -430,7 +433,7 @@ const CarouselList = ({
                             <ItemCardAdmin
                                 card={card}
                                 flickity={flickity}
-                                category={category}
+                                carouselInd={carouselInd}
                             />
                         </Fragment>
                     )

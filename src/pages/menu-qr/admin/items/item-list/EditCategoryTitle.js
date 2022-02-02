@@ -41,7 +41,7 @@ export default function EditCategoryTitle({ thisCat = "", updateItem }) {
                 <Fragment>
                     <span className="text-subtitle font-weight-bold">
                         {category}{" "}
-                        {thisCat !== "Gerais" && (
+                        {thisCat !== "gerais" && thisCat !== "Gerais" && (
                             <EditButton
                                 onClick={() =>
                                     setData((prev) => ({

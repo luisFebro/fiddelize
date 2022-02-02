@@ -235,7 +235,7 @@ export default function CarouselCard({
 
                     .flickity-fullscreen-button {
                         display: fixed;
-                        z-index: 2;
+                        //z-index: 2;
                         right: 10px;
                         top: 10px;
                         width: 28px;

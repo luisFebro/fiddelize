@@ -3,13 +3,13 @@ import SearchField from "components/search/SearchField";
 import useData, { useBizData } from "init";
 import useAPIList, {
     readMainItemList,
-    // benefitCardsAutocomplete,
+    benefitCardsAutocomplete,
 } from "api/useAPIList";
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 
 export default function useMainList(options = {}) {
-    const { limit = 5, category } = options;
+    const { limit = 15, category } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -36,14 +36,14 @@ export default function useMainList(options = {}) {
         // eslint-disable-next-line
     }, [runName, search]);
     // END UPDATE
-
+    const trigger = dbLoaded ? false : search || runName || true;
     const dataList = useAPIList({
         url: readMainItemList(),
         skip,
         limit,
         params,
         disableDupFilter: true,
-        trigger: dbLoaded ? false : search || runName || true, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
+        trigger, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
         // listName: "DoneBenefitsList", // for offline list only
     });
 
@@ -64,12 +64,12 @@ export default function useMainList(options = {}) {
     };
 
     const showSearchField = () => (
-        <section className="animated fadeInUp">
+        <section className="mt-2 animated fadeInUp">
             <SearchField
                 callback={handleSearch}
-                // searchUrl={benefitCardsAutocomplete(bizId, {
-                // isReceived: true,
-                // })}
+                searchUrl={benefitCardsAutocomplete(bizId, {
+                    isReceived: true,
+                })}
                 autocompleteProps={autocompleteProps}
             />
         </section>
