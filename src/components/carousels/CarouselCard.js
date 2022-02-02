@@ -14,12 +14,14 @@ export default function CarouselCard({
     pageDots = false,
     fullscreen,
     trigger,
+    // for multiple carousels
     setOuterFlickity,
+    carouselInd = 0,
     // style,
     // currIconInd,
     // setOpenModal,
 }) {
-    const [flktyData, setFlkty] = useState(null);
+    const [flktyList, setFlktyList] = useState([]);
 
     const options = {
         // options
@@ -41,34 +43,37 @@ export default function CarouselCard({
         },
     };
 
-    const startFlickity = (multi) => {
+    const startFlickity = () => {
         if (multi) {
             const galleryCarousels = document.querySelectorAll(
                 ".main-carousel"
             );
             let i;
             let len;
+            const allCreatedCarousels = [];
             for (i = 0, len = galleryCarousels.length; i < len; i++) {
                 const thisCarousel = galleryCarousels[i];
                 const fkcktMulti = new Flickity(thisCarousel, options);
-                if (i === 0) setFlkty(fkcktMulti);
+                allCreatedCarousels.push(fkcktMulti);
             }
-            return;
+
+            return setFlktyList(allCreatedCarousels);
         }
 
         const carouselElem2 = document.querySelector(".main-carousel");
 
         const flkty = new Flickity(carouselElem2, options);
-        setFlkty(flkty);
+        setFlktyList([flkty]);
     };
+
+    const flktyData = flktyList[carouselInd];
 
     useEffect(() => {
         if (typeof setOuterFlickity === "function") {
             if (flktyData) {
                 flktyData.select(0);
-                setOuterFlickity(flktyData);
+                setOuterFlickity(flktyList);
             }
-            return startFlickity(multi);
         }
 
         startFlickity(multi);

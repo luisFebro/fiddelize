@@ -33,7 +33,7 @@ export function arePublicPages() {
         window.location.href.includes(pg)
     );
 
-    const exceptionList = ["/menu/p/admin"];
+    const exceptionList = ["/menu/p/admin", "/menu/admin"];
     const isException = exceptionList.some((pg) =>
         window.location.href.includes(pg)
     );
