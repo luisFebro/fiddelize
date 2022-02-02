@@ -44,7 +44,8 @@ export default function convertToReal(number, options = {}) {
     return res; // n2
 }
 
-export const convertToDollar = (str) => {
+export const convertToDollar = (str, options = {}) => {
+    const { needFraction = false } = options;
     if (!str) return console.log("No number string");
 
     if (typeof str !== "string") {
@@ -53,7 +54,7 @@ export const convertToDollar = (str) => {
 
     const formatted = str.replace(/\./gi, "").replace(/\,/gi, ".");
 
-    return Number(formatted);
+    return needFraction ? Number(formatted).toFixed(2) : Number(formatted);
 };
 
 /* COMMENTS

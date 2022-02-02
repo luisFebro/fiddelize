@@ -59,6 +59,7 @@ export default function RealtimeOrders({ match, location }) {
     const { data: adminId } = useAPI({
         url: getUserIdByName(),
         params,
+        trigger: !isAdmin,
     });
 
     // activate socket here

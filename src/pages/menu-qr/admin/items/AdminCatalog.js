@@ -1,47 +1,52 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
-import getItems, { setItems } from "init/lStorage";
-// import convertToReal from "utils/numbers/convertToReal";
-import showToast from "components/toasts";
+import { setItems } from "init/lStorage";
 import getAPI, { updateAdminItem } from "api";
 import useData from "init";
 import { Provider } from "context";
 import getId from "utils/getId";
+import { checkDetectedElem } from "api/useElemDetection";
+import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
+import useMainList from "./useMainList";
 import { removeImg } from "./item-handler/img/UploadItemArea";
 import useGlobalData from "./useGlobalData";
 import ItemManager from "./ItemManager";
 import ItemCardAdmin from "./ItemCardAdmin";
 import ItemListBtn from "./item-list/ItemListBtn";
-
-const [digitalMenuCategories, digitalMenuItemList] = getItems("global", [
-    "digitalMenuCategories",
-    "digitalMenuItemList",
-]);
+// import convertToReal from "utils/numbers/convertToReal";
+// import showToast from "components/toasts";
 
 export default function AdminCatalog() {
-    const [f, setF] = useState(null);
+    const [flickity, setFlickity] = useState(null);
+    const [randomId, setRandomId] = useState(null);
 
     const [menuData, setMenuData] = useState({
-        allCategories:
-            digitalMenuCategories && digitalMenuCategories.length
-                ? digitalMenuCategories
-                : ["_general"],
-        itemList:
-            digitalMenuItemList && digitalMenuItemList.length
-                ? digitalMenuItemList
-                : [],
+        allCategories: ["_general"],
+        itemList: [],
     });
     const { allCategories, itemList = [] } = menuData;
     const { sexLetter } = useData();
 
     const updateItem = (type, options = {}) => {
+        setRandomId(getId());
+
         const {
             newItem,
             catItemIdListUpdate,
+            updateCategory,
             newCategory,
             oldCategory,
             removalImg,
+            carouselInd = 0,
         } = options;
+
+        const handleCarousel = () => {
+            if (!flickity) return null;
+            return carouselInd === -1 || !flickity[carouselInd]
+                ? flickity[flickity.length - 1]
+                : flickity[carouselInd];
+        };
+        const selectedFlickity = handleCarousel();
 
         if (type === "add") {
             if (newItem) {
@@ -79,7 +84,7 @@ export default function AdminCatalog() {
                 // only need to be added locally here and update handle both local and db
                 if (newCategory) return prev;
 
-                if (f) f.destroy();
+                if (selectedFlickity) selectedFlickity.destroy();
 
                 return {
                     ...prev,
@@ -107,18 +112,22 @@ export default function AdminCatalog() {
                         digitalMenuItemList: newCatList,
                     });
 
-                    if (f) f.destroy();
+                    if (selectedFlickity) selectedFlickity.destroy();
 
                     return {
                         ...prev,
                         itemList: newCatList,
+                        allCategories: [newCategory, ...prev.allCategories],
                     };
                 });
 
                 return updateInDb({ newItem, type, catItemIdListUpdate });
             }
 
-            const whichUpdate = newItem ? "item" : "category";
+            const whichUpdate =
+                newItem && Boolean(newItem.categoryUpdate)
+                    ? "category"
+                    : "item";
             const isItem = whichUpdate === "item";
 
             const renewItem = () =>
@@ -148,7 +157,7 @@ export default function AdminCatalog() {
                     digitalMenuItemList: thisNewItem,
                 });
 
-                if (f) f.destroy();
+                if (selectedFlickity) selectedFlickity.destroy();
 
                 return {
                     ...prev,
@@ -168,7 +177,7 @@ export default function AdminCatalog() {
                     digitalMenuItemList: leftItems,
                 });
 
-                if (f) f.destroy();
+                if (selectedFlickity) selectedFlickity.destroy();
 
                 /*
                 removalImg: {
@@ -178,9 +187,27 @@ export default function AdminCatalog() {
                  */
                 if (removalImg) removeImg(removalImg);
 
+                // let currCats = null;
+                // if(removalCategory) {
+                //     const categoryStillOn = prev.allCategories.filter(c => c === removalCategory);
+                //     console.log("categoryStillOn", categoryStillOn);
+                //     if(!categoryStillOn && categoryStillOn.length === 1) {
+                //         currCats = prev.allCategories;
+                //         console.log("currCats", currCats);
+                //         const indRemovalCat = currCats.indexOf(removalCategory);
+                //         currCats.shift(indRemovalCat, 1);
+                //         console.log("currCats", currCats);
+
+                //         setItems("global", {
+                //             digitalMenuCategories: currCats,
+                //         })
+                //     }
+                // }
+
                 return {
                     ...prev,
                     itemList: leftItems,
+                    // allCategories: currCats || prev.allCategories,
                 };
             });
         }
@@ -199,95 +226,216 @@ export default function AdminCatalog() {
     const store = useGlobalData({
         updateItem,
         menuData,
+        setMenuData,
     });
+
+    // LIST
+    const {
+        skip,
+        detectedCard,
+        showSearchField,
+        dataList,
+        setDbLoaded,
+        dbLoaded,
+    } = useMainList();
+
+    const {
+        list = [],
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        moreData,
+        needEmptyIllustra,
+        ShowOverMsg,
+        // listTotal,
+        // isOffline,
+        // hasMore,
+        // isPlural,
+    } = dataList;
+    // END LIST
+
+    const dbCategories = moreData && JSON.parse(moreData);
+
+    useEffect(() => {
+        const needUpdateLStorage = !dbLoaded && dbCategories;
+        if (needUpdateLStorage) {
+            setItems("global", {
+                digitalMenuCategories: dbCategories,
+                digitalMenuItemList: list,
+            });
+            setDbLoaded(true);
+        }
+        // eslint-disable-next-line
+    }, [dbCategories, dbLoaded]);
+
+    useEffect(() => {
+        // update list when user scroll by detecting the size of it.
+        if (dbCategories) {
+            const handleCarousel = () => {
+                if (!flickity) return null;
+                return skip === -1 || !flickity[skip]
+                    ? flickity[flickity.length - 1]
+                    : flickity[skip];
+            };
+
+            const selectedFlickity = handleCarousel();
+            if (selectedFlickity) {
+                selectedFlickity.destroy();
+                setRandomId(getId());
+            }
+
+            setMenuData((prev) => ({
+                ...prev,
+                itemList: list,
+                allCategories: dbCategories,
+            }));
+        }
+        // insert dbCategories ccauses max depth error
+    }, [list.length]);
+
+    const showIllustration = () => (
+        <main>
+            <img
+                className="img-center"
+                src={`/img/illustrations/${
+                    sexLetter === "o" ? "empty-cart" : "empty-woman-card"
+                }.svg`}
+                width={300}
+                alt="sem itens"
+            />
+            <h2 className="text-subtitle text-grey text-center my-5 font-weight-bold">
+                Sem Itens
+            </h2>
+        </main>
+    );
+
+    const gotData = itemList && Boolean(itemList.length);
 
     return (
         <Provider store={store}>
+            <div id="mainAdminCatalog" />
             {showTitle()}
             <ItemManager />
-            {itemList.length ? (
-                <Fragment>
-                    <div className="mt-5" />
-                    <MenuList
-                        allCategories={allCategories}
-                        itemList={itemList}
-                        setF={setF}
-                    />
-                </Fragment>
-            ) : (
-                <main>
-                    <img
-                        className="img-center"
-                        src={`/img/illustrations/${
-                            sexLetter === "o"
-                                ? "empty-cart"
-                                : "empty-woman-card"
-                        }.svg`}
-                        width={300}
-                        alt="sem itens"
-                    />
-                    <h2 className="text-subtitle text-grey text-center my-5 font-weight-bold">
-                        Sem Itens
-                    </h2>
-                </main>
-            )}
-            <div style={{ marginBottom: 150 }} />
+            {!needEmptyIllustra && <div className="mt-5" />}
+            <MenuList
+                allCategories={allCategories}
+                itemList={itemList}
+                setFlickity={setFlickity}
+                detectedCard={detectedCard}
+                randomId={randomId}
+                flickity={flickity}
+            />
+            {loading && <ShowLoadingSkeleton />}
+            {!gotData && showIllustration()}
+            {error && <ShowError />}
+            {gotData && <ShowOverMsg />}
+            <div style={{ marginBottom: 100 }} />
         </Provider>
     );
 }
 
-function MenuList({ allCategories, itemList, setF }) {
-    const randomId = getId();
-
+function MenuList({
+    randomId,
+    allCategories,
+    detectedCard,
+    itemList,
+    setFlickity,
+    flickity,
+}) {
     return (
-        <section className="">
-            {allCategories.map((cat) => {
-                const filteredCategory =
-                    itemList.filter((item) => item.category === cat) || [];
-                if (!filteredCategory.length) return <div />;
+        <section>
+            {Boolean(allCategories.length) &&
+                allCategories.map((cat, ind) => {
+                    const carouselInd = ind;
 
-                const ThisCarouselList = (
-                    <CarouselList dataList={filteredCategory} />
-                );
+                    const filteredCategory =
+                        itemList.filter((item) => item.category === cat) || [];
+                    if (!filteredCategory.length) return <div />;
 
-                return (
-                    <section className="" key={cat}>
-                        <div className="d-flex justify-content-between">
-                            <h2 className="d-table text-pill ml-3 text-normal text-purple font-weight-bold">
-                                {cat === "_general" ? "gerais" : cat}
-                            </h2>
-                            <div className="mr-3">
-                                <ItemListBtn category={cat} />
+                    const ultimateList = removeObjDuplicate(filteredCategory, {
+                        filterId: "_id",
+                    });
+
+                    const ThisCarouselList = (
+                        <CarouselList
+                            dataList={ultimateList}
+                            detectedCard={detectedCard}
+                            carouselInd={carouselInd}
+                            flickity={flickity}
+                            category={cat}
+                        />
+                    );
+
+                    return (
+                        <section className="" key={cat}>
+                            <div className="d-flex justify-content-between">
+                                <h2 className="d-table text-pill ml-3 text-normal text-purple font-weight-bold">
+                                    {cat === "_general" ? "gerais" : cat}
+                                </h2>
+                                <div className="mr-3">
+                                    <ItemListBtn
+                                        category={cat}
+                                        carouselInd={carouselInd}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <CarouselCard
-                                CardList={ThisCarouselList}
-                                size="medium"
-                                multi
-                                lazyLoad
-                                trigger={randomId}
-                                pageDots
-                                fullscreen
-                                setOuterFlickity={setF}
-                            />
-                        </div>
-                    </section>
-                );
-            })}
+                            <div>
+                                <CarouselCard
+                                    CardList={ThisCarouselList}
+                                    size="medium"
+                                    multi
+                                    lazyLoad
+                                    trigger={randomId}
+                                    pageDots
+                                    fullscreen
+                                    setOuterFlickity={setFlickity}
+                                    carouselInd={carouselInd}
+                                />
+                            </div>
+                        </section>
+                    );
+                })}
         </section>
     );
 }
 
 // COMP
-const CarouselList = ({ dataList = [] }) => (
+const CarouselList = ({
+    dataList = [],
+    detectedCard,
+    carouselInd,
+    flickity,
+    category,
+}) => (
     <Fragment>
         {dataList.length &&
-            dataList.map((card) => (
-                <Fragment key={card._id}>
-                    <ItemCardAdmin card={card} />
-                </Fragment>
-            ))}
+            dataList
+                .map((card, ind) =>
+                    checkDetectedElem({
+                        list: dataList,
+                        ind,
+                        indFromLast: 2,
+                    }) ? (
+                        <Fragment key={card._id}>
+                            <ItemCardAdmin
+                                ref={detectedCard}
+                                card={card}
+                                flickity={flickity}
+                                category={category}
+                            />
+                        </Fragment>
+                    ) : (
+                        <Fragment key={card._id}>
+                            <ItemCardAdmin
+                                card={card}
+                                flickity={flickity}
+                                category={category}
+                            />
+                        </Fragment>
+                    )
+                )
+                .slice(0, 5)}
     </Fragment>
 );
 // END COMP
@@ -305,7 +453,7 @@ function updateInDb({ newItem, type, catItemIdListUpdate }) {
             if (type === "update") return "Item atualizado";
             return "Item salvo";
         };
-        showToast(handleMsg(), { type: "success" });
+        console.log(handleMsg());
     });
 
     return { status: true };

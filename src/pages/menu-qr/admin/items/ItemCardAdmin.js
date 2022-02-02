@@ -1,11 +1,15 @@
+import { forwardRef } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function ItemCardAdmin({ card }) {
+function ItemCardAdmin({ card, flickity }, ref) {
     const showImg = () => (
-        <section className="mb-2 container-center-col">
+        <section
+            className="mb-2 container-center-col"
+            onClick={() => flickity && flickity[0].viewFullscreen()}
+        >
             <img
                 data-flickity-lazyload={card.img}
                 className="carousel-cell-image"
@@ -17,7 +21,7 @@ export default function ItemCardAdmin({ card }) {
     );
 
     return (
-        <section key={card._id} className="carousel-cell no-outline">
+        <section ref={ref} key={card._id} className="carousel-cell no-outline">
             {showImg()}
             <section className="text-left">
                 <div className="desc">
@@ -43,3 +47,5 @@ export default function ItemCardAdmin({ card }) {
         </section>
     );
 }
+
+export default forwardRef(ItemCardAdmin);

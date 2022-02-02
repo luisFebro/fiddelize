@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 import useBackColor from "hooks/useBackColor";
+import { useBizData } from "init";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AsyncAdminMenuOrders = Load({
@@ -36,8 +37,11 @@ export default function MainMenuAdmin(compData) {
     const [fullOpen, setFullOpen] = useState("");
     const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
     useBackColor("var(--mainWhite)");
+    const { bizId } = useBizData();
 
-    const { socket, adminId } = compData;
+    const { socket } = compData;
+    let { adminId } = compData;
+    adminId = bizId || adminId;
 
     useEffect(() => {
         // if clicked on this option, clear all notifications
