@@ -5,8 +5,8 @@ import DeleteButton from "components/buttons/DeleteButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Checkbox from "@material-ui/core/Checkbox";
 import ModalFullContent from "components/modals/ModalFullContent";
-import { Load } from "components/code-splitting/LoadableComp";
 import showToast from "components/toasts";
+import { Load } from "components/code-splitting/LoadableComp";
 // import showToast from "components/toasts";
 
 const AsyncAddItemContent = Load({

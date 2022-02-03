@@ -79,6 +79,7 @@ export default function MainMenuAdmin(compData) {
                             ? "var(--themePDark)"
                             : "var(--mainWhite)"
                     }
+                    needIndex={fullOpen !== "Itens"}
                 />
             )}
         </section>

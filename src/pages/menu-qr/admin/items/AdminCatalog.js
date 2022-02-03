@@ -7,6 +7,8 @@ import { Provider } from "context";
 import getId from "utils/getId";
 import { checkDetectedElem } from "api/useElemDetection";
 import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
 import useMainList from "./useMainList";
 import { removeImg } from "./item-handler/img/UploadItemArea";
 import useGlobalData from "./useGlobalData";
@@ -16,9 +18,19 @@ import ItemListBtn from "./item-list/ItemListBtn";
 // import convertToReal from "utils/numbers/convertToReal";
 // import showToast from "components/toasts";
 
+// import showToast from "components/toasts";
+
+const AsyncShowItemContent = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/admin/items/item-handler/AddItemContent.js" /* webpackChunkName: "add-item-content-lazy" */
+        ),
+});
+
 export default function AdminCatalog() {
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
+    const [showSingleItem, setShowSingleItem] = useState(false);
 
     const [menuData, setMenuData] = useState({
         allCategories: ["_general"],
@@ -242,7 +254,12 @@ export default function AdminCatalog() {
         dataList,
         setDbLoaded,
         dbLoaded,
+        search,
     } = useMainList();
+
+    useEffect(() => {
+        if (search) setShowSingleItem(true);
+    }, [search]);
 
     const {
         list = [],
@@ -332,10 +349,18 @@ export default function AdminCatalog() {
                 flickity={flickity}
             />
             {loading && <ShowLoadingSkeleton />}
-            {!gotData && showIllustration()}
+            {!loading && !gotData && showIllustration()}
             {error && <ShowError />}
             {gotData && <ShowOverMsg />}
             <div style={{ marginBottom: 150 }} />
+            {showSingleItem && (
+                <ModalFullContent
+                    contentComp={<AsyncShowItemContent itemSearch={search} />}
+                    fullOpen={showSingleItem}
+                    setFullOpen={setShowSingleItem}
+                    backgroundColor="var(--themePDark)"
+                />
+            )}
         </Provider>
     );
 }
