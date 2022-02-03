@@ -49,6 +49,7 @@ export default function AdminCatalog() {
             oldCategory,
             removalImg,
             carouselInd,
+            isEdit,
         } = options;
         console.log("carouselInd", carouselInd);
         console.log("flickity", flickity);
@@ -67,7 +68,7 @@ export default function AdminCatalog() {
                     itemList.length &&
                     itemList.find((item) => item.adName === newItem.adName);
 
-                if (duplicateFound)
+                if (!isEdit && duplicateFound)
                     return {
                         status: false,
                         txt: "Já tem um item com este nome",
@@ -355,7 +356,12 @@ export default function AdminCatalog() {
             <div style={{ marginBottom: 150 }} />
             {showSingleItem && (
                 <ModalFullContent
-                    contentComp={<AsyncShowItemContent itemSearch={search} />}
+                    contentComp={
+                        <AsyncShowItemContent
+                            itemSearch={search}
+                            handleFullClose={setShowSingleItem}
+                        />
+                    }
                     fullOpen={showSingleItem}
                     setFullOpen={setShowSingleItem}
                     backgroundColor="var(--themePDark)"

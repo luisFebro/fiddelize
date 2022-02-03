@@ -5,7 +5,7 @@ import UploadItemArea from "./UploadItemArea";
 // import getId from "utils/getId";
 
 // const randomId = getId();
-export default function ImgHandler({ setData, savedImg }) {
+export default function ImgHandler({ setData, savedImg, isShowItem }) {
     const [targetImg, setTargetImg] = useState(null);
     const { bizLinkName } = useBizData();
 
@@ -36,6 +36,7 @@ export default function ImgHandler({ setData, savedImg }) {
                 backup: false,
             }}
             alreadyUploaded={Boolean(targetImg)}
+            isShowItem={isShowItem}
         />
     );
 }

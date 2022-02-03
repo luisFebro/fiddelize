@@ -68,6 +68,7 @@ function handlePickedValuesHistory(pickedValue, options = {}) {
     });
 }
 
+// future: find a way to show suggestions for a query not matched with it, but have a list of data related to it like when user search for a category and a list of items from that category is shown up.
 export default function AutoCompleteSearch({
     autocompleteUrl,
     setData,

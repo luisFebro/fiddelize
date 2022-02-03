@@ -286,11 +286,15 @@ export default function ExternalOrderForm({
                 </p>
                 <main className="mx-3 text-p text-normal position-relative">
                     <div className="mt-3">
-                        <PersonIcon /> Nome:
+                        <span className="font-weight-bold">
+                            <PersonIcon /> Nome:
+                        </span>
                         <p className="font-italic">{digitalMenuName}</p>
                     </div>
                     <div className="mt-3">
-                        <PhoneIphoneIcon /> Celular/Whatsapp:
+                        <span className="font-weight-bold">
+                            <PhoneIphoneIcon /> Celular/Whatsapp:
+                        </span>
                         <p className="font-italic">{digitalMenuPhone}</p>
                     </div>
                     <div className="mt-3">

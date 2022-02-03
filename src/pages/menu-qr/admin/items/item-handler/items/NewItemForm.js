@@ -32,6 +32,7 @@ export default function NewItemForm({
     data,
     handleFullClose,
     isEditBtn,
+    isShowItem,
 }) {
     const {
         _id,
@@ -65,7 +66,12 @@ export default function NewItemForm({
         if (!img) return showToast("Insira imagem do item", { type: "error" });
         const isBlob = img.includes("blob");
         // finishedUpload is undefined for updating
-        if ((!finishedUpload && !isEditBtn) || isBlob)
+        const handlePhotoError = () => {
+            if (isShowItem) return false;
+            return (!finishedUpload && !isEditBtn) || isBlob;
+        };
+
+        if (handlePhotoError())
             return showToast(
                 "Tente novamente. Caso persista, tente atualizar ou trocar a foto",
                 { type: "error" }
@@ -93,7 +99,7 @@ export default function NewItemForm({
             createdAt: new Date(),
         };
 
-        const action = isEditBtn ? "update" : "add";
+        const action = isEditBtn || isShowItem ? "update" : "add";
         const dataStatus = updateItem(action, { newItem, carouselInd });
         const status = dataStatus && dataStatus.status;
         const txt = dataStatus && dataStatus.txt;

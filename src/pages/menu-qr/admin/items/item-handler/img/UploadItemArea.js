@@ -12,6 +12,7 @@ export default function UploadItemArea({
     callback,
     alreadyUploaded = false,
     urlFunc = () => null, // url request path from api
+    isShowItem,
     // loadingMsg = "Salvando...",
     // selectMsg = "Selecione foto",
     // removeMsg = "Remover",
@@ -159,33 +160,35 @@ export default function UploadItemArea({
                 width="100%"
                 alt="imagem"
             />
-            <section
-                className="position-absolute"
-                style={{
-                    bottom: 10,
-                    right: 10,
-                }}
-            >
-                <RadiusBtn
-                    position="relative"
-                    backgroundColor="var(--mainRed)"
-                    title="remover imagem"
-                    size="extra-small"
-                    fontSize="15px"
-                    onClick={async () => {
-                        if (savedImg && savedImg.includes("blob")) return;
-                        await removeImg({ folder: body.folder, savedImg });
-                        showToast("Imagem removida", { type: "success" });
-
-                        callback({
-                            img: null,
-                            loading: false,
-                            picName: null,
-                            uploadedPic: false,
-                        });
+            {!isShowItem && (
+                <section
+                    className="position-absolute"
+                    style={{
+                        bottom: 10,
+                        right: 10,
                     }}
-                />
-            </section>
+                >
+                    <RadiusBtn
+                        position="relative"
+                        backgroundColor="var(--mainRed)"
+                        title="remover imagem"
+                        size="extra-small"
+                        fontSize="15px"
+                        onClick={async () => {
+                            if (savedImg && savedImg.includes("blob")) return;
+                            await removeImg({ folder: body.folder, savedImg });
+                            showToast("Imagem removida", { type: "success" });
+
+                            callback({
+                                img: null,
+                                loading: false,
+                                picName: null,
+                                uploadedPic: false,
+                            });
+                        }}
+                    />
+                </section>
+            )}
         </section>
     );
 
