@@ -7,6 +7,7 @@ export default function SearchField({
     searchUrl,
     callback,
     autocompleteProps,
+    showImgs,
 }) {
     if (!searchUrl || !callback)
         throw new Error("Missing searchUrl or callback which are required");
@@ -32,6 +33,7 @@ export default function SearchField({
             selectOnFocus={false}
             noOptionsText="Não cadastrado"
             maxHistory={7}
+            showImgs={showImgs}
             {...autocompleteProps}
         />
     );

@@ -3,7 +3,7 @@ import SearchField from "components/search/SearchField";
 import useData, { useBizData } from "init";
 import useAPIList, {
     readMainItemList,
-    benefitCardsAutocomplete,
+    digitalMenuAutocomplete,
 } from "api/useAPIList";
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
@@ -37,6 +37,7 @@ export default function useMainList(options = {}) {
     }, [runName, search]);
     // END UPDATE
     const trigger = dbLoaded ? false : search || runName || true;
+
     const dataList = useAPIList({
         url: readMainItemList(),
         skip,
@@ -64,13 +65,12 @@ export default function useMainList(options = {}) {
     };
 
     const showSearchField = () => (
-        <section className="mt-2 animated fadeInUp">
+        <section className="mt-2">
             <SearchField
                 callback={handleSearch}
-                searchUrl={benefitCardsAutocomplete(bizId, {
-                    isReceived: true,
-                })}
+                searchUrl={digitalMenuAutocomplete(bizId, { limit: 5 })}
                 autocompleteProps={autocompleteProps}
+                showImgs
             />
         </section>
     );
@@ -116,5 +116,6 @@ export default function useMainList(options = {}) {
         dataList,
         setDbLoaded,
         dbLoaded,
+        search,
     };
 }
