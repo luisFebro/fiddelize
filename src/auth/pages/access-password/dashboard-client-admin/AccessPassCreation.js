@@ -81,7 +81,6 @@ function AccessPassCreation({
                     cliMembersPass,
                 };
 
-                if (newPswdCond) showToast("Criando...");
                 // LESSON: do not destruct await with catch. otherwise when catch returns will throw an error of data's undefined.
                 const msg = await getAPI({
                     method: "post",

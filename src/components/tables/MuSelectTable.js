@@ -18,8 +18,8 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import DeleteButton from "components/buttons/DeleteButton";
-import ButtonFab from "../buttons/material-ui/ButtonFab";
 import convertToReal from "utils/numbers/convertToReal";
+import ButtonFab from "../buttons/material-ui/ButtonFab";
 
 const MyTableCell = withStyles({
     root: {
@@ -117,6 +117,7 @@ export default function MuSelectTable({
     marginBottom,
     deleteBtns = false, // option to delete a row
     callbackDeleteBtns,
+    needRestoreBtn = true,
 }) {
     const classes = useStyles({ marginBottom });
     const [order, setOrder] = React.useState("asc");
@@ -210,6 +211,7 @@ export default function MuSelectTable({
         setSelected,
         selected,
         setRestoreBtn,
+        needRestoreBtn,
     };
     return (
         <div className={classes.root}>
@@ -445,6 +447,7 @@ const ShowTableBody = ({
     deleteBtns,
     callbackDeleteBtns,
     setRestoreBtn,
+    needRestoreBtn,
 }) => {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -475,6 +478,17 @@ const ShowTableBody = ({
                     return getStatusColor(rowData[head.id]);
                 if (head.id === "name") return rowData[head.id].cap();
                 if (head.numeric) return convertToReal(rowData[head.id]);
+                if (head.isImg)
+                    return (
+                        <div className="mr-1">
+                            <img
+                                src={rowData[head.id]}
+                                width={70}
+                                height={70}
+                                alt={rowData[head.service]}
+                            />
+                        </div>
+                    );
 
                 return rowData[head.id];
             };
@@ -537,7 +551,8 @@ const ShowTableBody = ({
                                     <DeleteButton
                                         onClick={() => {
                                             callbackDeleteBtns(index);
-                                            setRestoreBtn(true);
+                                            if (needRestoreBtn)
+                                                setRestoreBtn(true);
                                         }}
                                     />
                                 </MyTableCell>

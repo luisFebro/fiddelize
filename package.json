@@ -19,6 +19,7 @@
         "date-fns": "^2.14.0",
         "file-saver": "^2.0.5",
         "flickity": "^2.2.1",
+        "flickity-fullscreen": "^1.1.1",
         "html-react-parser": "^0.10.0",
         "jquery": "^3.5.0",
         "localforage": "^1.7.3",

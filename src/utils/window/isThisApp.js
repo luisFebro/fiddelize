@@ -30,8 +30,11 @@ export const websitePages = [
     "/termos-de-uso",
     "/privacidade",
     "/novo-clube",
-    "/app/preview", //app/preview is the preview for building app in website
+    "/app/preview", // app/preview is the preview for building app in website
     "/qr",
+    "/menu",
+    "/nucleo-equipe/cadastro/pagseguro",
+    "/cadastro/senha",
 ];
 
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser

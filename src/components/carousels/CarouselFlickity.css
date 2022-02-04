@@ -1,22 +1,20 @@
 .carousel--root {
-  /*background: var(--mainWhite);*/
-  max-width: 400px;
-  height: 200px;
+    /*background: var(--mainWhite);*/
+    max-width: 400px;
+    height: 200px;
 }
 
-
-
 .carousel-cell {
-  box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
-  width: 50%;
-  height: 180px;
-  margin: 10px;
-  background: var(--mainWhite);
-  color: var(--mainPurple);
-  cursor: pointer;
-  border: none;
-  text-align: center;
-  border-radius: 15px;
+    box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
+    width: 50%;
+    height: 180px;
+    margin: 10px;
+    background: var(--mainWhite);
+    color: var(--mainPurple);
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    border-radius: 15px;
 }
 
 .card-icons {
@@ -35,15 +33,20 @@
 }
 
 .flickity-prev-next-button .arrow {
-  fill: var(--mainWhite);
+    fill: var(--mainWhite);
 }
 .flickity-prev-next-button.no-svg {
-  fill: var(--themeS);
+    fill: var(--themeS);
 }
 
 .is-selected {
-  background-color: var(--lightPurple) !important; /* var(--lightPurple) */
-  color: var(--mainWhite) !important;
+    background-color: var(--lightPurple) !important; /* var(--lightPurple) */
+    color: var(--mainWhite) !important;
+}
+
+/*fullscreen*/
+.carousel.is-fullscreen .carousel-cell {
+    height: 100%;
 }
 
 /* cell number */

@@ -15,6 +15,7 @@ import useToken, { chooseHeader } from "auth/useToken";
 import disconnect from "auth/disconnect";
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
+const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 const getStyles = ({ fieldBack, themeColor, txtFont, formWidth }) => ({
     asyncAutoSearch: {
@@ -67,6 +68,7 @@ function handlePickedValuesHistory(pickedValue, options = {}) {
     });
 }
 
+// future: find a way to show suggestions for a query not matched with it, but have a list of data related to it like when user search for a category and a list of items from that category is shown up.
 export default function AutoCompleteSearch({
     autocompleteUrl,
     setData,
@@ -93,6 +95,7 @@ export default function AutoCompleteSearch({
     disable,
     searchIcon = undefined, // fa icon name
     inputId = undefined, // id for working with focus
+    showImgs = false,
 }) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -100,6 +103,7 @@ export default function AutoCompleteSearch({
     const [searchChange, setSearchChange] = useState("");
     const [loading, setLoading] = useState(false);
     const [needHistory, setNeedHistory] = useState(true);
+    const [imgList, setImgList] = useState(null);
 
     const didUserStartTyping = Boolean(searchChange.length);
 
@@ -179,11 +183,26 @@ export default function AutoCompleteSearch({
                 clearTimeout(stopRequest);
                 setNeedHistory(false);
 
-                if (active && Array.isArray(response.data)) {
-                    if (response.data.length === 0) {
+                const responseData = showImgs
+                    ? response.data
+                    : Array.isArray(response.data);
+
+                if (active && responseData) {
+                    let targetData = response.data;
+                    if (showImgs) {
+                        targetData = targetData && targetData.names;
+                        const thisImgs = response.data && response.data.imgs;
+                        const imgsData = targetData.map((thisName, ind) => ({
+                            id: thisName,
+                            img: thisImgs[ind],
+                        }));
+                        setImgList(imgsData);
+                    }
+
+                    if (targetData.length === 0) {
                         getValuesHistory();
                     } else {
-                        if (didUserStartTyping) setOptions(response.data);
+                        if (didUserStartTyping) setOptions(targetData);
                     }
                 }
 
@@ -266,24 +285,48 @@ export default function AutoCompleteSearch({
             autoSelect={autoSelect}
             autoComplete
             openOnFocus={openOnFocus}
-            renderOption={(option) => (
-                <div className="text-em-1-4 font-site">
-                    {needHistory ? (
-                        <FontAwesomeIcon
-                            icon="history"
-                            className="text-light-purple"
-                        />
-                    ) : (
-                        <FontAwesomeIcon
-                            icon="search"
-                            className="text-light-purple"
-                        />
-                    )}{" "}
-                    {searchChange
-                        ? highlightSearchResult(option, searchChange)
-                        : option}
-                </div>
-            )}
+            renderOption={(option) => {
+                const ultimateQuery = truncate(option, 40);
+                const showImg = () => {
+                    const foundImg = imgList.find((img) => img.id === option);
+                    const ultimateImg = foundImg && foundImg.img;
+
+                    return (
+                        <Fragment>
+                            {showImgs && (
+                                <div className="d-inline-block ml-3">
+                                    <img
+                                        width={70}
+                                        height={70}
+                                        src={ultimateImg || "/img/error.png"}
+                                        alt="foto item"
+                                    />
+                                </div>
+                            )}
+                        </Fragment>
+                    );
+                };
+
+                return (
+                    <div className="text-em-1-4 font-site">
+                        {needHistory ? (
+                            <FontAwesomeIcon
+                                icon="history"
+                                className="text-light-purple"
+                            />
+                        ) : (
+                            <FontAwesomeIcon
+                                icon="search"
+                                className="text-light-purple"
+                            />
+                        )}{" "}
+                        {searchChange
+                            ? highlightSearchResult(ultimateQuery, searchChange)
+                            : ultimateQuery}
+                        {showImgs && showImg()}
+                    </div>
+                );
+            }}
             renderInput={(params) => (
                 <TextField
                     {...params}

@@ -31,27 +31,29 @@ export default function IncomeExplanation() {
                     padding: "0 20px",
                 }}
             >
-                <h2 className="my-3 text-subtitle font-weight-bold text-center">
-                    Seus ganhos
-                </h2>
-                <p>
-                    Você ganha toda vez que seu cliente faz um investimento de
-                    serviços da Fiddelize de qualquer valor.
-                </p>
-                <p>
-                    Sua <strong>margem de ganhos</strong> como{" "}
-                    <strong>
-                        {isRep ? "representante comercial" : agentJob}
-                    </strong>{" "}
-                    é de{" "}
-                    <span
-                        className="text-pill text-shadow"
-                        style={{ backgroundColor: "grey" }}
-                    >
-                        {agentPerc}%
-                    </span>{" "}
-                    para cada transação dos seus clientes.
-                </p>
+                <section className="d-none">
+                    <h2 className="my-3 text-subtitle font-weight-bold text-center">
+                        Seus ganhos
+                    </h2>
+                    <p>
+                        Você ganha toda vez que seu cliente faz um investimento
+                        de serviços da Fiddelize de qualquer valor.
+                    </p>
+                    <p>
+                        Sua <strong>margem de ganhos</strong> como{" "}
+                        <strong>
+                            {isRep ? "representante comercial" : agentJob}
+                        </strong>{" "}
+                        é de{" "}
+                        <span
+                            className="text-pill text-shadow"
+                            style={{ backgroundColor: "grey" }}
+                        >
+                            {agentPerc}%
+                        </span>{" "}
+                        para cada transação dos seus clientes.
+                    </p>
+                </section>
                 <h2 className="my-3 text-subtitle font-weight-bold text-center">
                     Tipos de Rendas
                 </h2>
@@ -97,7 +99,7 @@ export default function IncomeExplanation() {
     const showDialogBtn = () => (
         <section className="mt-5 container-center">
             <ButtonFab
-                title="ganhos e rendas"
+                title="tipos de rendas"
                 backgroundColor="var(--themeSDark--default)"
                 onClick={() => setIncomeTypesOn(true)}
                 position="relative"

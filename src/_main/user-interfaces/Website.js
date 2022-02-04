@@ -57,6 +57,10 @@ import {
     // test
     AsyncPlayground,
     AsyncAmurretoAltrabot,
+    // menu-qr
+    AsyncRealtimeOrders,
+    AsyncCustomerCatalog,
+    AsyncAdminMenuOrders,
 } from "./CommonImports";
 // END PAGES
 
@@ -239,6 +243,21 @@ function Website({ location }) {
                     path="/amurreto/altrabot"
                     exact
                     component={AsyncAmurretoAltrabot}
+                />
+                <Route
+                    path="/:bizLinkId/menu"
+                    exact
+                    component={AsyncRealtimeOrders}
+                />
+                <Route
+                    path="/:bizLinkId/menu/:placeId"
+                    exact
+                    component={AsyncRealtimeOrders}
+                />
+                <Route
+                    path="/:bizLinkId/menu/p/admin"
+                    exact
+                    component={AsyncRealtimeOrders}
                 />
                 <Route component={Default} />
             </Switch>

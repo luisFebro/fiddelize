@@ -144,9 +144,7 @@ export const getXpScoreChartData = (userId) =>
     `${ROOT}/reviews/xp-score-chart?userId=${userId}`;
 
 // CHAT, SUPPORT AND REAL TIME
-export const startSupport = () =>
-    // POST
-    `${ROOT}/support/start`;
+export const startSupport = () => `${ROOT}/support/start`; // POST
 
 export const readSupportHistory = () =>
     // GET
@@ -174,6 +172,7 @@ export const updateImages = (userId) =>
 export const setTargetPrizeImg = () => `${ROOT}/media/image/target-prize`; // POST
 export const setChatSupportImg = () => `${ROOT}/media/image/chat-support`; // POST
 export const setBizReceiptImg = () => `${ROOT}/media/image/biz-receipt`; // POST
+export const setImgToProvider = () => `${ROOT}/media/image/provider`;
 
 // PUSH NOTIFICATIONS
 export const subscribePushNotif = () => `${ROOT}/push-notification/subscribe`; // POST
@@ -211,3 +210,21 @@ export const getBuyClubRulesData = () => `${ROOT}/general/buy-club-rules-data`;
 // GAMES
 export const getBalloonPopData = () => `${ROOT}/games/balloon-pop/data`;
 // END GAMES
+
+// PROCESS SOLUTIONS
+// digital menu
+export const readMenuOrderList = () =>
+    `${ROOT}/process-solutions/digital-menu/menu-order-list`; // GET
+
+export const readMainItemList = () =>
+    `${ROOT}/process-solutions/digital-menu/main-item-list`; // GET
+
+export const updateCustomerOrder = () =>
+    `${ROOT}/process-solutions/digital-menu/customer-order`; // POST
+
+export const updateAdminItem = () =>
+    `${ROOT}/process-solutions/digital-menu/admin-item`; // POST
+
+export const digitalMenuAutocomplete = (bizId, { limit = 5 }) =>
+    `${ROOT}/process-solutions/digital-menu/search/autocomplete?adminId=${bizId}&limit=${limit}`; // GET
+// end digital menu

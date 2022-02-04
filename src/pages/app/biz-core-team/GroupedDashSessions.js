@@ -10,10 +10,10 @@ import NotificationBadge from "components/badges/NotificationBadge";
 import useAPI, { readSupportRecentData } from "api/useAPI";
 import DashSales from "./dash-sales/DashSales";
 
-const AsyncDashCRM = LoadableVisible({
-    loader: () =>
-        import("./dash-crm/DashCRM" /* webpackChunkName: "crm-session-lazy" */),
-});
+// const AsyncDashCRM = LoadableVisible({
+//     loader: () =>
+//         import("./dash-crm/DashCRM" /* webpackChunkName: "crm-session-lazy" */),
+// });
 
 const AsyncSupportCenter = LoadableVisible({
     loader: () =>
@@ -26,39 +26,48 @@ const muStyle = {
     fontSize: 35,
 };
 
-const getData = ({ isDev, pendingSubjectCount }) => [
-    {
-        tabLabel: "Ganhos",
-        tabIcon: <MonetizationOnIcon style={muStyle} />,
-        tabContentPanel: <DashSales />,
-    },
-    {
-        tabLabel: "Suporte",
-        tabIcon: (
-            <div className="position-relative">
-                <NotificationBadge
-                    animationName=" "
-                    badgeValue={pendingSubjectCount}
-                    badgeInvisible={false}
-                    backgroundColor="var(--mainRed)"
-                    borderColor="var(--themePLight--red)"
-                    top={20}
-                    right={-25}
-                    fontSize="17px"
-                    padding="15px"
-                >
-                    <Icon type="support" fill="grey" />
-                </NotificationBadge>
-            </div>
-        ),
-        tabContentPanel: isDev ? <AsyncSupportCenter /> : null,
-    },
-    {
-        tabLabel: "Clientes",
-        tabIcon: <ContactPhoneIcon style={muStyle} />,
-        tabContentPanel: <AsyncDashCRM />,
-    },
-];
+const getData = ({ isDev, pendingSubjectCount }) =>
+    isDev
+        ? [
+              {
+                  tabLabel: "Ganhos",
+                  tabIcon: <MonetizationOnIcon style={muStyle} />,
+                  tabContentPanel: <DashSales />,
+              },
+              {
+                  tabLabel: "Suporte",
+                  tabIcon: (
+                      <div className="position-relative">
+                          <NotificationBadge
+                              animationName=" "
+                              badgeValue={pendingSubjectCount}
+                              badgeInvisible={false}
+                              backgroundColor="var(--mainRed)"
+                              borderColor="var(--themePLight--red)"
+                              top={20}
+                              right={-25}
+                              fontSize="17px"
+                              padding="15px"
+                          >
+                              <Icon type="support" fill="grey" />
+                          </NotificationBadge>
+                      </div>
+                  ),
+                  tabContentPanel: <AsyncSupportCenter />,
+              },
+              // {
+              //     tabLabel: "Clientes",
+              //     tabIcon: <ContactPhoneIcon style={muStyle} />,
+              //     tabContentPanel: <AsyncDashCRM />,
+              // },
+          ]
+        : [
+              {
+                  tabLabel: "Ganhos",
+                  tabIcon: <MonetizationOnIcon style={muStyle} />,
+                  tabContentPanel: <DashSales />,
+              },
+          ];
 
 export default function GroupedDashSessions() {
     const { agentJob, userId } = useData();

@@ -12,6 +12,7 @@ export async function runSessionCheck() {
     const isLoggedIn = Boolean(token);
 
     // redirect users logout in whatever private page
+    console.log("rePublicPages()", arePublicPages());
     if (arePublicPages()) return;
 
     if (isPrivatePage() || !isLoggedIn) {
@@ -28,10 +29,16 @@ export async function runSessionCheck() {
 }
 
 // HELPERS
-function arePublicPages() {
+export function arePublicPages() {
     const isWebsitePage = websitePages.some((pg) =>
         window.location.href.includes(pg)
     );
+
+    const exceptionList = ["/menu/p/admin", "/menu/admin"];
+    const isException = exceptionList.some((pg) =>
+        window.location.href.includes(pg)
+    );
+    if (isException) return false;
 
     const result =
         window.location.href.pathname === "/" ||
@@ -48,6 +55,7 @@ function isPrivatePage() {
         "/t/app/nucleo-equipe",
         "/cliente-admin/painel-de-controle",
         "/t/app/equipe",
+        "/menu/p/admin",
     ];
 
     return privatePages.some((pg) => window.location.href.includes(pg));

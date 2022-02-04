@@ -26,6 +26,7 @@ import { dateFnsUtils, ptBRLocale } from "utils/dates/dateFns";
 import { handleNextField } from "utils/form/kit";
 import getFilterDate from "utils/dates/getFilterDate";
 import { CLIENT_URL } from "config/clientUrl";
+import getVar from "init/var";
 import Title from "../Title";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
@@ -67,8 +68,6 @@ function AsyncRegisterBizTeam({
         themePColor,
         themeSColor,
         themeBackColor,
-        bizLogo,
-        bizName,
         // bizLinkName,
     } = useBizData();
 
@@ -106,19 +105,21 @@ function AsyncRegisterBizTeam({
 
     const [primaryAgent] = useData(["primaryAgent"]);
 
-    const isReady = bizLogo && bizName && primaryAgent !== "...";
+    const isReady = primaryAgent !== "...";
 
     useEffect(() => {
         if (isReady) {
+            // this timeout is used because the data is not set otherwise. The reason is unknown.
             setTimeout(() => {
-                // this timeout is used because the data is not set otherwise. The reason is unknown.
-                setData((prev) => ({
-                    ...prev,
-                    bizTeamData: {
-                        ...data.bizTeamData,
-                        primaryAgent: primaryAgent || "fiddelize",
-                    },
-                }));
+                setData((prev) => {
+                    return {
+                        ...prev,
+                        bizTeamData: {
+                            ...data.bizTeamData,
+                            primaryAgent: primaryAgent || "fiddelize",
+                        },
+                    };
+                });
             }, 4000);
         }
     }, [isReady, primaryAgent]);
