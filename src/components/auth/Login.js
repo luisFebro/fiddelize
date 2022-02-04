@@ -10,6 +10,7 @@ import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "api/frequent";
 import { removeVar, getVars, removeVars } from "init/var";
 import getColor from "styles/txt";
+import { setVar } from "init/var";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";
 import Title from "../Title";
@@ -142,7 +143,9 @@ export async function signInUserData(cpfValue, options = {}) {
 
         if (!pswd) {
             // redirect user to password page
-            return history.push("/t/app/nucleo-equipe/cadastro/senha");
+            setVar({ donePswd: false }).then(() => {
+                return history.push("/t/app/nucleo-equipe/cadastro/senha");
+            });
         }
         if (!publicKey) {
             // redirect user to pagseguro agent registration

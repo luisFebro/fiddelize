@@ -5,7 +5,7 @@ import useBackColor from "hooks/useBackColor";
 import useData from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
-import { IS_DEV } from "config/clientUrl";
+// import { IS_DEV } from "config/clientUrl";
 import GroupedDashSessions from "./GroupedDashSessions";
 import ShareLink from "./share-link/ShareLink";
 import BizTeamNavbar from "./navbar/BizTeamNavbar";
@@ -46,8 +46,7 @@ export default function BizTeamApp({ history }) {
 }
 
 function CabinButton({ agentJob, history }) {
-    const needBtn =
-        IS_DEV || agentJob === "rep-comercial" || agentJob === "dev";
+    const needBtn = agentJob === "dev"; // agentJob === "rep-comercial"
 
     return (
         <section

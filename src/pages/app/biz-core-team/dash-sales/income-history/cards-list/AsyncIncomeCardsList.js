@@ -190,8 +190,8 @@ export default function AsyncCardsList() {
                 className="img-fluid margin-auto-90"
                 src="/img/illustrations/empty-fiddelize-invest.svg"
                 offline
-                alt="sem rendas de clientes"
-                title="Sem rendas de clientes."
+                alt="Sem transações"
+                title="Sem transações"
             />
         </section>
     );

@@ -56,21 +56,14 @@ export default function BizTeamText({
                 </span>
             </p>
             <div className="mx-2">
-                <p>Baixe o app da Fiddelize para começar a ganhar dinheiro.</p>
-                <p className="mt-5 download-app--txt">
-                    Você ganha tanto com vendas passivas e ativas.
-                </p>
-                <p className="download-app--txt" style={styles.margin}>
+                <p>Baixe o app da Fiddelize para entrar na equipe comercial.</p>
+                <p className="d-none download-app--txt" style={styles.margin}>
                     Seus ganhos são de {isBizRep ? "45" : "30"}% por cada
                     transação de pagamento dos seus clientes. Não somente a
                     primeira!
                 </p>
                 <p className="download-app--txt" style={styles.margin}>
-                    Você recebe no mesmo dia caso o seu cliente pague com PIX,
-                    ou até 15 dias com outros meios de pagamentos.
-                </p>
-                <p className="download-app--txt" style={styles.margin}>
-                    Comece a sua missão! Baixe o seu app logo a baixo.
+                    Baixe o seu app logo a baixo.
                 </p>
                 {showMainScrollArray()}
             </div>

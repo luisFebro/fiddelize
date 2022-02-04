@@ -12,6 +12,7 @@ export async function runSessionCheck() {
     const isLoggedIn = Boolean(token);
 
     // redirect users logout in whatever private page
+    console.log("rePublicPages()", arePublicPages());
     if (arePublicPages()) return;
 
     if (isPrivatePage() || !isLoggedIn) {

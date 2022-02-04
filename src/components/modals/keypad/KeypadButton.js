@@ -25,7 +25,7 @@ export default function KeypadButton({
 }) {
     const [open, setOpen] = useState(false);
 
-    usePlayAudio("/sounds/high-tech.mp3", "#keypadButtonAudio");
+    // usePlayAudio("/sounds/high-tech.mp3", "#keypadButtonAudio");
     const ready = useDelay(3000);
 
     const onOpen = () => {
@@ -39,7 +39,7 @@ export default function KeypadButton({
     return (
         <Fragment>
             <ButtonMulti
-                id="keypadButtonAudio"
+                // id="keypadButtonAudio"
                 onClick={onOpen}
                 color="var(--mainWhite)"
                 backgroundColor={backgroundColor || "var(--themeSDark)"}

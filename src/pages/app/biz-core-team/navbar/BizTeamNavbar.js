@@ -6,9 +6,9 @@ import Img from "components/Img";
 import ButtonMenu from "components/buttons/material-ui/button-menu/ButtonMenu";
 import disconnect from "auth/disconnect";
 import useData from "init";
-import { IS_DEV } from "config/clientUrl";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+// import { IS_DEV } from "config/clientUrl";
 import "./_BizTeamNavbar.scss";
 
 const AsyncNotifyUsersContent = Load({
@@ -27,7 +27,7 @@ export const menuIconStyle = {
 function BizTeamNavbar({ history }) {
     const [agentJob] = useData(["agentJob"]);
     const [notifyUsers, setNotifyUsers] = useState(false);
-    const isDev = IS_DEV || agentJob === "dev";
+    const isDev = agentJob === "dev";
 
     const showMoreOptionsBtn = () => {
         const optArray = [

@@ -248,8 +248,7 @@ function ClientMobileApp({ location, history }) {
                     "Acumule pontos. Supere Metas. Ganhe benefícios em jogos de compra feito para você!"}
                 {isCliMember &&
                     "Adicione pontos e clientes para o clube de compras em segundos."}
-                {isBizTeam &&
-                    "Faça parte do time da Fiddelize e comece a ganhar dinheiro."}
+                {isBizTeam && "Faça parte do time da Fiddelize."}
             </p>
             <CompLoader
                 width={200}

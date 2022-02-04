@@ -56,13 +56,8 @@ function AgentRedirect() {
             {showTitle()}
             <section>
                 <p className="text-normal">
-                    {firstName}, o seu dinheiro das suas vendas são depositados
-                    de <strong>forma automática</strong> na sua conta do
-                    Pagseguro.
-                </p>
-                <p className="text-normal">
-                    Você precisa <strong>autorizar a Fiddelize</strong> para
-                    fazer os depósitos na sua conta.
+                    Conecte-se com o Pagseguro para acompanhar e receber os
+                    valores das vendas.
                 </p>
                 <p className="text-normal">
                     Acesse logo abaixo o seu{" "}
@@ -122,3 +117,16 @@ function GatewaySuccess({ history }) {
         </section>
     );
 }
+
+/*
+<p className="text-normal">
+    {firstName}, o seu dinheiro das suas vendas são depositados
+    de <strong>forma automática</strong> na sua conta do
+    Pagseguro.
+</p>
+<p className="text-normal">
+    Você precisa <strong>autorizar a Fiddelize</strong> para
+    fazer os depósitos na sua conta.
+</p>
+
+ */

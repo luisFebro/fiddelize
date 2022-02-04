@@ -33,7 +33,7 @@ export default function DetectedApp({
                     <h2 className="text-title font-weight-bold text-center">
                         App detectado
                     </h2>
-                    <p className="text-normal font-weight-bold text-left">
+                    <p className="mx-3 text-normal font-weight-bold text-left">
                         O app de {bizName && bizName.cap()} está na Fiddelize.
                         Parece que já foi baixado no seu dispositivo.
                     </p>
@@ -45,7 +45,7 @@ export default function DetectedApp({
                             alt="app fiddelize no dispositivo"
                         />
                     </div>
-                    <p className="mt-3 animated fadeIn text-normal font-weight-bold text-left">
+                    <p className="mx-4 mt-3 animated fadeIn text-normal font-weight-bold text-left">
                         Instale novos apps usando apenas seu CPF via App
                         Instantâneo.
                     </p>
