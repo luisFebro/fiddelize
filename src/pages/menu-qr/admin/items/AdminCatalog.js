@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
-import { setItems } from "init/lStorage";
 import getAPI, { updateAdminItem } from "api";
 import useData from "init";
 import { Provider } from "context";
@@ -15,6 +14,7 @@ import useGlobalData from "./useGlobalData";
 import ItemManager from "./ItemManager";
 import ItemCardAdmin from "./ItemCardAdmin";
 import ItemListBtn from "./item-list/ItemListBtn";
+// import { setItems } from "init/lStorage";
 // import convertToReal from "utils/numbers/convertToReal";
 // import showToast from "components/toasts";
 
@@ -37,6 +37,7 @@ export default function AdminCatalog() {
         itemList: [],
     });
     const { allCategories, itemList = [] } = menuData;
+    console.log("allCategories", allCategories);
     const { sexLetter } = useData();
 
     const updateItem = (type, options = {}) => {
@@ -96,11 +97,6 @@ export default function AdminCatalog() {
                     newItem
                 );
 
-                setItems("global", {
-                    digitalMenuCategories: thisNewCategory,
-                    digitalMenuItemList: thisNewItem,
-                });
-
                 // only need to be added locally here and update handle both local and db
                 if (newCategory) return prev;
 
@@ -128,13 +124,9 @@ export default function AdminCatalog() {
                         return item;
                     });
 
-                    setItems("global", {
-                        digitalMenuItemList: newCatList,
-                    });
                     // for multiple category update, it is required to destroy all to change carousels position
-                    if (selectedFlickity) {
+                    if (selectedFlickity)
                         flickity.forEach((fl) => fl.destroy());
-                    }
 
                     return {
                         ...prev,
@@ -155,13 +147,11 @@ export default function AdminCatalog() {
             const isItem = whichUpdate === "item";
 
             const renewItem = () => {
-                itemList.map((item) => {
+                return itemList.map((item) => {
                     // update unmarked items
                     const generalListIds =
                         newItem && newItem.updateGeneralItemIds;
-                    console.log("generalListIds", generalListIds);
                     if (generalListIds && generalListIds.length) {
-                        console.log("item.itemId", item.itemId);
                         if (generalListIds.includes(item.itemId))
                             return { ...item, category: "_general" };
                     }
@@ -187,10 +177,6 @@ export default function AdminCatalog() {
                     : prev.allCategories;
                 const thisNewItem = isItem ? renewalData : prev.itemList;
                 thisNewCategory = [...new Set(thisNewCategory)];
-                setItems("global", {
-                    digitalMenuCategories: thisNewCategory,
-                    digitalMenuItemList: thisNewItem,
-                });
 
                 if (selectedFlickity) selectedFlickity.destroy();
 
@@ -207,10 +193,6 @@ export default function AdminCatalog() {
                 const leftItems = prev.itemList.filter(
                     (item) => !newItem.removalItemIds.includes(item.itemId)
                 );
-
-                setItems("global", {
-                    digitalMenuItemList: leftItems,
-                });
 
                 if (selectedFlickity) selectedFlickity.destroy();
 
@@ -282,13 +264,7 @@ export default function AdminCatalog() {
 
     useEffect(() => {
         const needUpdateLStorage = !dbLoaded && dbCategories;
-        if (needUpdateLStorage) {
-            setItems("global", {
-                digitalMenuCategories: dbCategories,
-                digitalMenuItemList: list,
-            });
-            setDbLoaded(true);
-        }
+        if (needUpdateLStorage) setDbLoaded(true);
         // eslint-disable-next-line
     }, [dbCategories, dbLoaded]);
 
