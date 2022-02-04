@@ -5,10 +5,15 @@ import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 function ItemCardAdmin({ card, flickity, carouselInd }, ref) {
+    console.log("carouselInd", carouselInd);
     const showImg = () => (
         <section
             className="mb-2 container-center-col"
-            onClick={() => flickity && flickity[carouselInd].viewFullscreen()}
+            onClick={() =>
+                flickity &&
+                flickity[carouselInd] &&
+                flickity[carouselInd].viewFullscreen()
+            }
         >
             <img
                 data-flickity-lazyload={card.img}
