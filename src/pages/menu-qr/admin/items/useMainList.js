@@ -62,7 +62,6 @@ export default function useMainList(options = {}) {
     const autocompleteProps = {
         placeholder: "Procure um item",
         noOptionsText: "Item não encontrado",
-        clearOnBlur: false,
     };
 
     const showSearchField = () => (

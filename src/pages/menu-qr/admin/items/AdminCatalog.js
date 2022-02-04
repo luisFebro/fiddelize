@@ -37,7 +37,6 @@ export default function AdminCatalog() {
         itemList: [],
     });
     const { allCategories, itemList = [] } = menuData;
-    console.log("allCategories", allCategories);
     const { sexLetter } = useData();
 
     const updateItem = (type, options = {}) => {

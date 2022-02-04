@@ -179,6 +179,7 @@ export default function AutoCompleteSearch({
         async function doRequest() {
             try {
                 const response = await axios(config);
+                console.log("response AutoCompleteSearch.js", response);
 
                 clearTimeout(stopRequest);
                 setNeedHistory(false);

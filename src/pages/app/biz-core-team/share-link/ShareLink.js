@@ -9,7 +9,7 @@ export default function ShareLink() {
     useEffect(() => {
         (async () => {
             const memberId = await getVar("uniqueLinkId", "user");
-            const thisLink = `fiddelize.com.br/de/${memberId}`;
+            // const thisLink = `fiddelize.com.br/de/${memberId}`;
             // setLink(thisLink);
         })();
     }, []);

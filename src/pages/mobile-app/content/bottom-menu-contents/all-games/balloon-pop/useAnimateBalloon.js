@@ -6,9 +6,10 @@ export default function useAnimateBalloon(backColor) {
     useEffect(() => {
         // Main
         const svgList = document.querySelectorAll("svg");
-        svgList.forEach((svg) => setNewAnimation(svg));
+        if (svgList) svgList.forEach((svg) => setNewAnimation(svg));
 
-        function setNewAnimation(svg) {
+        function setNewAnimation(svg = {}) {
+            if (svg === null) svg = {};
             const balloon = svg.querySelector(".balloon");
             const headGroup = svg.querySelector(".balloon__head-group");
             const effect = svg.querySelector(".balloon__effect");

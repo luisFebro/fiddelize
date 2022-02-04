@@ -2,8 +2,8 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.10.30";
-const updateDescription = "cardapio qr pt27";
+const latestVersion = "v5.10.50";
+const updateDescription = "cardapio qr pt28";
 /* HISTORY
 chat 2.0 with Fidda Bot training pt4
 balloonPop game pt5 and new email
