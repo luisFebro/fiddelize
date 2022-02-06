@@ -1,7 +1,7 @@
-import useBackColor from "../../../../hooks/useBackColor";
+import useBackColor from "hooks/useBackColor";
+import ReturnBtn from "components/buttons/ReturnBtn";
+import useScrollUp from "hooks/scroll/useScrollUp";
 import GroupedDashSessions from "./GroupedDashSessions";
-import ReturnBtn from "../../../../components/buttons/ReturnBtn";
-import useScrollUp from "../../../../hooks/scroll/useScrollUp";
 
 export default function Cabin({ history }) {
     useScrollUp();

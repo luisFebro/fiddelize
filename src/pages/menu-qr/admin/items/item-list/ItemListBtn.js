@@ -3,10 +3,10 @@ import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
 import RadiusBtn from "components/buttons/RadiusBtn";
 
-const AsyncItemListContent = Load({
+const AsyncCategoryList = Load({
     loader: () =>
         import(
-            "./ItemListContent" /* webpackChunkName: "item-list-content-lazy" */
+            "./CategoryList" /* webpackChunkName: "item-list-content-lazy" */
         ),
 });
 
@@ -32,7 +32,7 @@ export default function ItemListBtn({ sColor = "default", category }) {
             />
             <ModalFullContent
                 contentComp={
-                    <AsyncItemListContent
+                    <AsyncCategoryList
                         category={category}
                         setFullOpen={handleFullClose}
                     />

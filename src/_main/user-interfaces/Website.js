@@ -59,8 +59,6 @@ import {
     AsyncAmurretoAltrabot,
     // menu-qr
     AsyncRealtimeOrders,
-    AsyncCustomerCatalog,
-    AsyncAdminMenuOrders,
 } from "./CommonImports";
 // END PAGES
 
