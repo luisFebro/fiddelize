@@ -1,52 +1,97 @@
 import { useState, useEffect, Fragment } from "react";
-import DeleteButton from "components/buttons/DeleteButton";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import RadiusBtn from "components/buttons/RadiusBtn";
-import { useBizData } from "init";
-import useContext from "context";
+import DeleteButton from "components/buttons/DeleteButton";
+import useData, { useBizData } from "init";
+// import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
+import useAPIList, { readMainItemList } from "api/useAPIList";
+import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
+import useRun, { setRun, useAction } from "global-data/ui";
 import showToast from "components/toasts";
-import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
-import { checkDetectedElem } from "api/useElemDetection";
-import useMainList from "../useMainList";
+import useContext from "context";
+import getId from "utils/getId";
 import ItemCard from "./ItemCard";
-import EditCategoryTitle from "./EditCategoryTitle";
+// import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
-export default function ItemListContent({
+export default function FinalList({
     category,
-    isAddCategory = false,
-    setFullOpen = () => null,
-    closeCategoryForm = () => null,
+    updateItem,
+    isAddCat,
+    setFullOpen,
+    closeCategoryForm,
 }) {
     const [dataList, setDataList] = useState({
-        type: isAddCategory ? "addCat" : "showCat",
         selectionList: [],
-        ultimateList: [], // db loaded list
         generalList: [], // list to track unmarked items if priorly selected so that we can set to _general category
     });
-    const { selectionList, generalList, type } = dataList;
-    let { ultimateList } = dataList;
-    const isAddCat = type === "addCat";
-    const isShowCat = type === "showCat";
+    const { selectionList, generalList } = dataList;
+    const { updateAdminCatalog } = useContext();
+    const limit = 10;
 
+    const [skip, setSkip] = useState(0);
+    const [search, setSearch] = useState("");
     const { bizId, bizLinkName } = useBizData();
-    const { updateItem, menuData = {} } = useContext();
+    const { userId } = useData();
 
-    const { itemList } = menuData;
+    const params = {
+        userId, // for auth
+        adminId: bizId,
+        search,
+        category: isAddCat ? undefined : category,
+    };
+
+    // UPDATE
+    const { runName } = useRun(); // for update list from other comps
+    const uify = useAction();
+    useEffect(() => {
+        if (runName && runName.includes("CategoryList")) {
+            setSkip(0);
+            setSearch("");
+            setRun("runName", null, uify);
+        }
+        // eslint-disable-next-line
+    }, [runName, search]);
+    // END UPDATE
+
+    // UPDATE LIST
+    const updateCategoryList = () =>
+        setRun("runName", `CategoryList${getId()}`, uify);
 
     useEffect(() => {
-        setDataList((prev) => ({ ...prev, ultimateList: itemList }));
-    }, [itemList, type]);
+        if (isAddCat) updateCategoryList();
+    }, [isAddCat]);
 
-    const { allCategories } = menuData;
+    const {
+        list = [],
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        moreData,
+        isOffline,
+        hasMore,
+        // ShowOverMsg,
+        // listTotal,
+        // isPlural,
+    } = useAPIList({
+        url: readMainItemList(),
+        skip,
+        limit,
+        params,
+        // disableDupFilter: true,
+        trigger: search || runName || true, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
+        listName: "OnlyCategoryList", // for offline list only
+    });
+
+    const dbCategories = moreData && JSON.parse(moreData);
     const carouselInd =
-        category === null
-            ? 0
-            : allCategories && allCategories.indexOf(category);
+        category === null ? 0 : dbCategories && dbCategories.indexOf(category);
 
     const totalSelected = selectionList.length;
     const tapHoldOn = Boolean(totalSelected);
 
-    const catTitle = category === "_general" ? "gerais" : category;
+    // useEffect(() => {
+    //     setDataList((prev) => ({ ...prev, ultimateList: itemList }));
+    // }, [itemList, type]);
 
     const showTapAndHoldOptions = () => (
         <section
@@ -101,9 +146,9 @@ export default function ItemListContent({
                                 catItemIdListUpdate: selectionList,
                                 carouselInd,
                             });
-                            if (typeof setFullOpen === "function")
-                                setFullOpen(false);
-                            return closeCategoryForm();
+
+                            updateAdminCatalog();
+                            setFullOpen(false);
                         }}
                         position="relative"
                         variant="extended"
@@ -123,8 +168,8 @@ export default function ItemListContent({
 
                                     const getRemovalImgs = () => {
                                         const imgs = [];
-                                        if (!ultimateList.length) return null;
-                                        ultimateList.forEach((item) => {
+                                        if (!list.length) return null;
+                                        list.forEach((item) => {
                                             if (
                                                 selectionList.includes(
                                                     item.itemId
@@ -156,99 +201,21 @@ export default function ItemListContent({
         </section>
     );
 
-    // LIST
-    const {
-        detectedCard,
-        dataList: payloadAPIList,
-        // setDbLoaded,
-        // dbLoaded,
-    } = useMainList({ category: isAddCategory ? undefined : category });
-
-    const {
-        list,
+    // INFINITY LOADING LIST
+    const detectedCard = useElemDetection({
         loading,
-        ShowLoadingSkeleton,
-        error,
-        ShowError,
-        moreData,
-        // ShowOverMsg,
-        // listTotal,
-        // isOffline,
-        // hasMore,
-        // isPlural,
-    } = payloadAPIList;
-    // END LIST
-
-    const showEditCategory = () => (
-        <div
-            className="container-center"
-            style={{
-                zIndex: 10000,
-            }}
-        >
-            <RadiusBtn
-                title="editar categoria"
-                backgroundColor="var(--themeSDark)"
-                onClick={() =>
-                    setDataList((prev) => ({ ...prev, type: "addCat" }))
-                }
-                position="relative"
-                size="small"
-            />
-        </div>
-    );
-
-    const showTitle = () => {
-        const thisCat = catTitle && catTitle.cap();
-        if (isAddCat) {
-            return (
-                <EditCategoryTitle
-                    updateItem={updateItem}
-                    thisCat={thisCat && thisCat.toLowerCase()}
-                    setFullOpen={setFullOpen}
-                />
-            );
-        }
-
-        return (
-            <h2 className="text-subtitle text-purple font-weight-bold">
-                {thisCat}
-                {isShowCat && showEditCategory()}
-            </h2>
-        );
-    };
-
-    ultimateList = isAddCat
-        ? ultimateList
-        : ultimateList.filter((item) => item.category === category);
-
-    ultimateList = removeObjDuplicate(ultimateList);
-
-    const dbCategories = moreData && JSON.parse(moreData);
-
-    useEffect(() => {
-        // update list when user scroll by detecting the size of it.
-        if (dbCategories) {
-            setDataList((prev) => ({
-                ...prev,
-                ultimateList: list,
-                allCategories: dbCategories,
-            }));
-        }
-        // insert dbCategories ccauses max depth error
-        // eslint-disable-next-line
-    }, [list.length]);
-
-    const gotData = ultimateList && Boolean(ultimateList.length);
+        hasMore,
+        isOffline,
+        setSkip,
+    });
 
     return (
-        <section className="mx-3 text-center my-5 text-white text-hero">
-            {showTitle()}
-            {ultimateList.map((item, ind) =>
+        <section>
+            {list.map((item, ind) =>
                 checkDetectedElem({
-                    list: dataList,
+                    list,
                     ind,
-                    indFromLast: 3,
+                    indFromLast: 2,
                 }) ? (
                     <Fragment key={item.itemId}>
                         <ItemCard
@@ -280,11 +247,3 @@ export default function ItemListContent({
         </section>
     );
 }
-
-/*
-// set future updates to hide items
-<DeleteButton
-    onClick={null}
-/>
-
- */

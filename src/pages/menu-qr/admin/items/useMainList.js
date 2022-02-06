@@ -7,13 +7,13 @@ import useAPIList, {
 } from "api/useAPIList";
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
+import getId from "utils/getId";
 
 export default function useMainList(options = {}) {
-    const { limit = 15, category } = options;
+    const { limit = 15, flickity } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
-    const [dbLoaded, setDbLoaded] = useState(false);
     const { bizId } = useBizData();
     const { userId } = useData();
 
@@ -21,14 +21,13 @@ export default function useMainList(options = {}) {
         userId, // for auth
         adminId: bizId,
         search,
-        category,
     };
 
     // UPDATE
     const { runName } = useRun(); // for update list from other comps
     const uify = useAction();
     useEffect(() => {
-        if (runName && runName.includes("useMainList")) {
+        if (runName && runName.includes("AdminCatalog")) {
             setSkip(0);
             setSearch("");
             setRun("runName", null, uify);
@@ -36,17 +35,24 @@ export default function useMainList(options = {}) {
         // eslint-disable-next-line
     }, [runName, search]);
     // END UPDATE
-    const trigger = dbLoaded ? false : search || runName || true;
+    const trigger = search || runName || true;
 
     const dataList = useAPIList({
         url: readMainItemList(),
         skip,
         limit,
         params,
-        disableDupFilter: true,
         trigger, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
         // listName: "DoneBenefitsList", // for offline list only
     });
+
+    // UPDATE LIST
+    const updateAdminCatalog = () => {
+        if (flickity) {
+            flickity.forEach((fl) => fl.destroy());
+            setRun("runName", `AdminCatalog${getId()}`, uify);
+        }
+    };
 
     // SEARCH
     const handleSearch = (entry) => {
@@ -114,8 +120,7 @@ export default function useMainList(options = {}) {
         detectedCard,
         showSearchField,
         dataList,
-        setDbLoaded,
-        dbLoaded,
         search,
+        updateAdminCatalog,
     };
 }

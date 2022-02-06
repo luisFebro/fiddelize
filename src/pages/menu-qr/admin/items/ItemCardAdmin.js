@@ -5,7 +5,6 @@ import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 function ItemCardAdmin({ card, flickity, carouselInd }, ref) {
-    console.log("carouselInd", carouselInd);
     const showImg = () => (
         <section
             className="mb-2 container-center-col"

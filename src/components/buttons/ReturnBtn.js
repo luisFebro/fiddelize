@@ -1,9 +1,9 @@
 // Choose this over BackBtn
 import { Link, withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonFab, { faStyle } from "./material-ui/ButtonFab";
 import { useBizData } from "init";
 import { setRun, useAction } from "global-data/ui";
+import ButtonFab, { faStyle } from "./material-ui/ButtonFab";
 import RedirectLink from "../RedirectLink";
 
 function ReturnBtn({
@@ -15,6 +15,7 @@ function ReturnBtn({
     btnColor = "default",
     toTab,
     style = { top: 15, left: 15 },
+    zIndex,
 }) {
     const { bizLinkName } = useBizData();
 
@@ -38,6 +39,7 @@ function ReturnBtn({
                             style={{ ...faStyle, fontSize: "20px" }}
                         />
                     }
+                    zIndex={zIndex}
                 />
             </RedirectLink>
         );

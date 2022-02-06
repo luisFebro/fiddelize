@@ -6,10 +6,10 @@ import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 
-const AsyncItemList = Load({
+const AsyncCategoryList = Load({
     loader: () =>
         import(
-            "../../item-list/ItemListContent" /* webpackChunkName: "item-list-page-lazy" */
+            "../../item-list/CategoryList" /* webpackChunkName: "item-list-page-lazy" */
         ),
 });
 
@@ -100,7 +100,7 @@ export default function NewCategoryForm({ handleFullClose }) {
             {fullOpen && (
                 <ModalFullContent
                     contentComp={
-                        <AsyncItemList
+                        <AsyncCategoryList
                             category={category}
                             isAddCategory
                             setFullOpen={setFullOpen}

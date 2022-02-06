@@ -1,29 +1,35 @@
 import { Fragment, useEffect, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
 import getAPI, { updateAdminItem } from "api";
-import useData from "init";
-import { Provider } from "context";
+import useData, { useBizData } from "init";
+import useContext, { Provider } from "context";
 import getId from "utils/getId";
 import { checkDetectedElem } from "api/useElemDetection";
-import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
+// import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import useMainList from "./useMainList";
 import { removeImg } from "./item-handler/img/UploadItemArea";
 import useGlobalData from "./useGlobalData";
 import ItemManager from "./ItemManager";
 import ItemCardAdmin from "./ItemCardAdmin";
-import ItemListBtn from "./item-list/ItemListBtn";
 // import { setItems } from "init/lStorage";
 // import convertToReal from "utils/numbers/convertToReal";
 // import showToast from "components/toasts";
 
 // import showToast from "components/toasts";
-
 const AsyncShowItemContent = Load({
     loader: () =>
         import(
             "pages/menu-qr/admin/items/item-handler/AddItemContent.js" /* webpackChunkName: "add-item-content-lazy" */
+        ),
+});
+
+const AsyncCategoryList = Load({
+    loader: () =>
+        import(
+            "./item-list/CategoryList" /* webpackChunkName: "category-list-content-lazy" */
         ),
 });
 
@@ -44,172 +50,170 @@ export default function AdminCatalog() {
 
         const {
             newItem,
-            catItemIdListUpdate,
-            newCategory,
-            oldCategory,
-            removalImg,
-            carouselInd,
-            isEdit,
+            // catItemIdListUpdate,
+            // newCategory,
+            // oldCategory,
+            // removalImg,
+            // carouselInd,
+            // isEdit,
         } = options;
-        console.log("carouselInd", carouselInd);
-        console.log("flickity", flickity);
 
-        const handleCarousel = (ind) => {
-            if (!flickity) return null;
-            return ind === -1 || !flickity[ind]
-                ? flickity[flickity.length - 1]
-                : flickity[ind];
-        };
-        const selectedFlickity = carouselInd && handleCarousel(carouselInd);
+        // const handleCarousel = (ind) => {
+        //     if (!flickity) return null;
+        //     return ind === -1 || !flickity[ind]
+        //         ? flickity[flickity.length - 1]
+        //         : flickity[ind];
+        // };
+        // const selectedFlickity = carouselInd && handleCarousel(carouselInd);
 
-        if (type === "add") {
-            if (newItem) {
-                const duplicateFound =
-                    itemList.length &&
-                    itemList.find((item) => item.adName === newItem.adName);
+        // if (type === "add") {
+        //     if (newItem) {
+        //         const duplicateFound =
+        //             itemList.length &&
+        //             itemList.find((item) => item.adName === newItem.adName);
 
-                if (!isEdit && duplicateFound)
-                    return {
-                        status: false,
-                        txt: "Já tem um item com este nome",
-                    };
-            }
+        //         if (!isEdit && duplicateFound)
+        //             return {
+        //                 status: false,
+        //                 txt: "Já tem um item com este nome",
+        //             };
+        //     }
 
-            const handleField = (name, priorFields, newData) =>
-                newData ? [newData, ...priorFields] : priorFields;
+        //     const handleField = (name, priorFields, newData) =>
+        //         newData ? [newData, ...priorFields] : priorFields;
 
-            setMenuData((prev) => {
-                // if already has a category, return the the current list
-                if (newCategory && allCategories.includes(newCategory))
-                    return prev;
+        //     setMenuData((prev) => {
+        //         // if already has a category, return the the current list
+        //         if (newCategory && allCategories.includes(newCategory))
+        //             return prev;
 
-                let thisNewCategory = handleField(
-                    "allCategories",
-                    prev.allCategories,
-                    newCategory
-                );
-                thisNewCategory = [...new Set(thisNewCategory)];
+        //         let thisNewCategory = handleField(
+        //             "allCategories",
+        //             prev.allCategories,
+        //             newCategory
+        //         );
+        //         thisNewCategory = [...new Set(thisNewCategory)];
 
-                const thisNewItem = handleField(
-                    "itemList",
-                    prev.itemList,
-                    newItem
-                );
+        //         const thisNewItem = handleField(
+        //             "itemList",
+        //             prev.itemList,
+        //             newItem
+        //         );
 
-                // only need to be added locally here and update handle both local and db
-                if (newCategory) return prev;
+        //         // only need to be added locally here and update handle both local and db
+        //         if (newCategory) return prev;
 
-                if (selectedFlickity) selectedFlickity.destroy();
+        //         if (selectedFlickity) selectedFlickity.destroy();
 
-                return {
-                    ...prev,
-                    allCategories: thisNewCategory,
-                    itemList: thisNewItem,
-                };
-            });
+        //         return {
+        //             ...prev,
+        //             allCategories: thisNewCategory,
+        //             itemList: thisNewItem,
+        //         };
+        //     });
 
-            if (newCategory) return null;
-        }
+        //     if (newCategory) return null;
+        // }
 
-        if (type === "update") {
-            if (catItemIdListUpdate) {
-                setMenuData((prev) => {
-                    const newCatList = prev.itemList.map((item) => {
-                        const needChangeCategory = catItemIdListUpdate.includes(
-                            item.itemId
-                        );
-                        if (needChangeCategory)
-                            return { ...item, category: newCategory };
-                        return item;
-                    });
+        // if (type === "update") {
+        //     if (catItemIdListUpdate) {
+        //         setMenuData((prev) => {
+        //             const newCatList = prev.itemList.map((item) => {
+        //                 const needChangeCategory = catItemIdListUpdate.includes(
+        //                     item.itemId
+        //                 );
+        //                 if (needChangeCategory)
+        //                     return { ...item, category: newCategory };
+        //                 return item;
+        //             });
 
-                    // for multiple category update, it is required to destroy all to change carousels position
-                    if (selectedFlickity)
-                        flickity.forEach((fl) => fl.destroy());
+        //             // for multiple category update, it is required to destroy all to change carousels position
+        //             if (selectedFlickity)
+        //                 flickity.forEach((fl) => fl.destroy());
 
-                    return {
-                        ...prev,
-                        itemList: newCatList,
-                        allCategories: [
-                            ...new Set([newCategory, ...prev.allCategories]),
-                        ],
-                    };
-                });
+        //             return {
+        //                 ...prev,
+        //                 itemList: newCatList,
+        //                 allCategories: [
+        //                     ...new Set([newCategory, ...prev.allCategories]),
+        //                 ],
+        //             };
+        //         });
 
-                return updateInDb({ newItem, type, catItemIdListUpdate });
-            }
+        //         return updateInDb({ newItem, type, catItemIdListUpdate });
+        //     }
 
-            const whichUpdate =
-                newItem && Boolean(newItem.categoryUpdate)
-                    ? "category"
-                    : "item";
-            const isItem = whichUpdate === "item";
+        //     const whichUpdate =
+        //         newItem && Boolean(newItem.categoryUpdate)
+        //             ? "category"
+        //             : "item";
+        //     const isItem = whichUpdate === "item";
 
-            const renewItem = () => {
-                return itemList.map((item) => {
-                    // update unmarked items
-                    const generalListIds =
-                        newItem && newItem.updateGeneralItemIds;
-                    if (generalListIds && generalListIds.length) {
-                        if (generalListIds.includes(item.itemId))
-                            return { ...item, category: "_general" };
-                    }
+        //     const renewItem = () => {
+        //         return itemList.map((item) => {
+        //             // update unmarked items
+        //             const generalListIds =
+        //                 newItem && newItem.updateGeneralItemIds;
+        //             if (generalListIds && generalListIds.length) {
+        //                 if (generalListIds.includes(item.itemId))
+        //                     return { ...item, category: "_general" };
+        //             }
 
-                    if (item.itemId === newItem.itemId) return newItem;
-                    return item;
-                });
-            };
+        //             if (item.itemId === newItem.itemId) return newItem;
+        //             return item;
+        //         });
+        //     };
 
-            const renewCategory = () =>
-                allCategories.map((cat) => {
-                    if (cat === oldCategory) return newCategory;
-                    return cat;
-                });
+        //     const renewCategory = () =>
+        //         allCategories.map((cat) => {
+        //             if (cat === oldCategory) return newCategory;
+        //             return cat;
+        //         });
 
-            let renewalData = false;
-            if (isItem) renewalData = renewItem();
-            else renewalData = renewCategory();
+        //     let renewalData = false;
+        //     if (isItem) renewalData = renewItem();
+        //     else renewalData = renewCategory();
 
-            setMenuData((prev) => {
-                let thisNewCategory = !isItem
-                    ? renewalData
-                    : prev.allCategories;
-                const thisNewItem = isItem ? renewalData : prev.itemList;
-                thisNewCategory = [...new Set(thisNewCategory)];
+        //     setMenuData((prev) => {
+        //         let thisNewCategory = !isItem
+        //             ? renewalData
+        //             : prev.allCategories;
+        //         const thisNewItem = isItem ? renewalData : prev.itemList;
+        //         thisNewCategory = [...new Set(thisNewCategory)];
 
-                if (selectedFlickity) selectedFlickity.destroy();
+        //         if (selectedFlickity) selectedFlickity.destroy();
 
-                return {
-                    ...prev,
-                    allCategories: thisNewCategory,
-                    itemList: thisNewItem,
-                };
-            });
-        }
+        //         return {
+        //             ...prev,
+        //             allCategories: thisNewCategory,
+        //             itemList: thisNewItem,
+        //         };
+        //     });
+        // }
 
-        if (type === "delete") {
-            setMenuData((prev) => {
-                const leftItems = prev.itemList.filter(
-                    (item) => !newItem.removalItemIds.includes(item.itemId)
-                );
+        // if (type === "delete") {
+        //     setMenuData((prev) => {
+        //         const leftItems = prev.itemList.filter(
+        //             (item) => !newItem.removalItemIds.includes(item.itemId)
+        //         );
 
-                if (selectedFlickity) selectedFlickity.destroy();
+        //         if (selectedFlickity) selectedFlickity.destroy();
 
-                /*
-                removalImg: {
-                    savedImg: img, // string or an array of string with img urls
-                    folder: `digital-menu/${bizLinkName}`,
-                }
-                 */
-                if (removalImg) removeImg(removalImg);
+        //         /*
+        //         removalImg: {
+        //             savedImg: img, // string or an array of string with img urls
+        //             folder: `digital-menu/${bizLinkName}`,
+        //         }
+        //          */
+        //         if (removalImg) removeImg(removalImg);
 
-                return {
-                    ...prev,
-                    itemList: leftItems,
-                    // allCategories: currCats || prev.allCategories,
-                };
-            });
-        }
+        //         return {
+        //             ...prev,
+        //             itemList: leftItems,
+        //             // allCategories: currCats || prev.allCategories,
+        //         };
+        //     });
+        // }
 
         return updateInDb({ newItem, type });
     };
@@ -222,22 +226,22 @@ export default function AdminCatalog() {
         </div>
     );
 
-    const store = useGlobalData({
-        updateItem,
-        menuData,
-        setMenuData,
-    });
-
     // LIST
     const {
         skip,
         detectedCard,
         showSearchField,
         dataList,
-        setDbLoaded,
-        dbLoaded,
         search,
-    } = useMainList();
+        updateAdminCatalog,
+    } = useMainList({ flickity });
+
+    const store = useGlobalData({
+        updateItem,
+        menuData,
+        setMenuData,
+        updateAdminCatalog,
+    });
 
     useEffect(() => {
         if (search) setShowSingleItem(true);
@@ -260,12 +264,6 @@ export default function AdminCatalog() {
     // END LIST
 
     const dbCategories = moreData && JSON.parse(moreData);
-
-    useEffect(() => {
-        const needUpdateLStorage = !dbLoaded && dbCategories;
-        if (needUpdateLStorage) setDbLoaded(true);
-        // eslint-disable-next-line
-    }, [dbCategories, dbLoaded]);
 
     useEffect(() => {
         // update list when user scroll by detecting the size of it.
@@ -354,6 +352,10 @@ function MenuList({
     setFlickity,
     flickity,
 }) {
+    const { updateItem = () => null, menuData = {} } = useContext();
+    const [showCategoryList, setShowCategoryList] = useState(false);
+    console.log("showCategoryList", showCategoryList);
+
     return (
         <section>
             {Boolean(allCategories.length) &&
@@ -364,9 +366,12 @@ function MenuList({
                         itemList.filter((item) => item.category === cat) || [];
                     if (!filteredCategory.length) return <div />;
 
-                    const ultimateList = removeObjDuplicate(filteredCategory, {
+                    const ultimateList = filteredCategory;
+                    {
+                        /*const ultimateList = removeObjDuplicate(filteredCategory, {
                         filterId: "_id",
-                    });
+                    });*/
+                    }
 
                     const ThisCarouselList = (
                         <CarouselList
@@ -384,9 +389,12 @@ function MenuList({
                                     {cat === "_general" ? "gerais" : cat}
                                 </h2>
                                 <div className="mr-3">
-                                    <ItemListBtn
-                                        category={cat}
-                                        carouselInd={carouselInd}
+                                    <RadiusBtn
+                                        title="ver todos"
+                                        backgroundColor="var(--themeSDark)"
+                                        onClick={() => setShowCategoryList(ind)}
+                                        position="relative"
+                                        size="extra-small"
                                     />
                                 </div>
                             </div>
@@ -403,6 +411,20 @@ function MenuList({
                                     carouselInd={carouselInd}
                                 />
                             </div>
+                            {showCategoryList === ind && (
+                                <ModalFullContent
+                                    contentComp={
+                                        <AsyncCategoryList
+                                            category={cat}
+                                            updateItem={updateItem}
+                                            setFullOpen={setShowCategoryList}
+                                        />
+                                    }
+                                    fullOpen={showCategoryList === ind}
+                                    setFullOpen={setShowCategoryList}
+                                    backgroundColor="var(--mainWhite)"
+                                />
+                            )}
                         </section>
                     );
                 })}

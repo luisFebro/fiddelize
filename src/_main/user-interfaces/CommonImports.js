@@ -216,11 +216,11 @@ export const AsyncAmurretoAltrabot = Load({
 });
 // END AMURRETO
 
-// CARDAPIO QR
+// MENU QR
 export const AsyncRealtimeOrders = Load({
     loader: () =>
         import(
             "pages/menu-qr/RealtimeOrders" /* webpackChunkName: "real-time-orders-lazy" */
         ),
 });
-// END CARDAPIO QR
+// END MENU QR
