@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RadiusBtn from "components/buttons/RadiusBtn";
+import useContext from "context";
 import EditCategoryTitle from "./EditCategoryTitle";
 import FinalList from "./FinalList";
 // import { useBizData } from "init";
@@ -7,18 +8,22 @@ import FinalList from "./FinalList";
 
 export default function CategoryList({
     category,
-    updateItem,
     setFullOpen = () => null,
     closeCategoryForm = () => null,
     isAddCategory = false,
     // menuData,
 }) {
     const [dataList, setDataList] = useState({
-        type: isAddCategory ? "addCat" : "onlyCat",
+        type: "onlyCat",
     });
     const { type } = dataList;
     const isAddCat = type === "addCat";
     const isCatOnly = type === "onlyCat";
+    const { updateItem } = useContext();
+
+    useEffect(() => {
+        if (isAddCategory) setDataList((prev) => ({ ...prev, type: "addCat" }));
+    }, [isAddCategory]);
 
     const catTitle = category === "_general" ? "gerais" : category;
 

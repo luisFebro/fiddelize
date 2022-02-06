@@ -15,6 +15,7 @@ export default function AddItemContent({
     handleFullClose = () => null,
 }) {
     const [mode, setMode] = useState("main"); // "show"
+
     const isShowItem = Boolean(itemSearch);
     const { bizId } = useBizData();
 

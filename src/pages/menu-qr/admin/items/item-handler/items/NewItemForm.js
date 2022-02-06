@@ -30,7 +30,7 @@ export default function NewItemForm({
     sColor = "default",
     setData,
     data,
-    handleFullClose,
+    // handleFullClose,
     isEditBtn,
     isShowItem,
 }) {
@@ -103,8 +103,8 @@ export default function NewItemForm({
         const dataStatus = updateItem(action, { newItem, carouselInd });
         const status = dataStatus && dataStatus.status;
         const txt = dataStatus && dataStatus.txt;
-        if (!status) return showToast(txt, { type: "error" });
-        return handleFullClose();
+        if (txt && !status) return showToast(txt, { type: "error" });
+        // return handleFullClose();
     };
 
     const showFloatCTA = () => (
@@ -136,7 +136,7 @@ export default function NewItemForm({
                                 },
                                 carouselInd,
                             });
-                            handleFullClose();
+                            // handleFullClose();
                         }}
                     />
                 )}

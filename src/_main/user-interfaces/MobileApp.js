@@ -45,6 +45,7 @@ import {
     AsyncAmurretoAltrabot,
     // menu-qr
     AsyncRealtimeOrders,
+    AsyncAdminCatalog,
 } from "./CommonImports";
 // END PAGES
 
@@ -216,6 +217,11 @@ function Mobile({ location }) {
                     path="/:bizLinkId/menu/p/admin"
                     exact
                     component={AsyncRealtimeOrders}
+                />
+                <Route
+                    path="/:bizLinkId/menu/p/admin/items"
+                    exact
+                    component={AsyncAdminCatalog}
                 />
                 <Route component={Default} />
             </Switch>

@@ -7,10 +7,9 @@ import useAPIList, {
 } from "api/useAPIList";
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
-import getId from "utils/getId";
 
 export default function useMainList(options = {}) {
-    const { limit = 15, flickity } = options;
+    const { limit = 15 } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -43,16 +42,8 @@ export default function useMainList(options = {}) {
         limit,
         params,
         trigger, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
-        // listName: "DoneBenefitsList", // for offline list only
+        listName: "AdminCatalogList", // for offline list only
     });
-
-    // UPDATE LIST
-    const updateAdminCatalog = () => {
-        if (flickity) {
-            flickity.forEach((fl) => fl.destroy());
-            setRun("runName", `AdminCatalog${getId()}`, uify);
-        }
-    };
 
     // SEARCH
     const handleSearch = (entry) => {
@@ -121,6 +112,18 @@ export default function useMainList(options = {}) {
         showSearchField,
         dataList,
         search,
-        updateAdminCatalog,
     };
 }
+
+/*
+
+// UPDATE LIST
+const updateAdminCatalog = () => {
+    if (flickity) {
+        flickity.forEach((fl) => fl.destroy());
+        setRun("runName", `AdminCatalog${getId()}`, uify);
+        updateCarousel();
+    }
+};
+
+ */

@@ -29,6 +29,7 @@ export default function EditCategoryTitle({ thisCat = "", updateItem }) {
             },
             newCategory: category,
             oldCategory: thisCat,
+            needReload: false,
         });
     };
 

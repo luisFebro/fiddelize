@@ -52,14 +52,14 @@ function onLongPress(elementId, callback) {
 }
 
 function ItemCard(
-    { alreadySelected, isAddCategory = true, data, setDataList },
+    { selectedCategory, isAddCategory = true, data, setDataList },
     ref
 ) {
     const [fullOpen, setFullOpen] = useState(false);
     const [selected, setSelected] = useState(false);
     const { category, itemId, img, adName, price } = data;
 
-    const checkAlreadySelected = isAddCategory && alreadySelected;
+    const checkAlreadySelected = isAddCategory && selectedCategory === category;
 
     const updateList = (options = {}) => {
         const { passAlreadySelected, clicked } = options;
@@ -83,15 +83,27 @@ function ItemCard(
                     : priorGeneralList.filter((currId) => currId !== itemId);
             }
 
-            const foundItemAlready = prev.selectionList.find(
-                (currId) => currId === itemId
-            );
+            const foundItemAlready =
+                prev && prev.selectionList.includes(itemId);
 
             const addSelectionList = () => [...prev.selectionList, itemId];
             const removeSelectionList = () =>
                 prev.selectionList.filter((currId) => currId !== itemId);
 
-            setSelected((prevSele) => !prevSele);
+            // make sure the already selected is added and only once
+            if (passAlreadySelected && checkAlreadySelected) {
+                setSelected(true);
+                return {
+                    ...prev,
+                    selectionList: foundItemAlready
+                        ? prev.selectionList
+                        : addSelectionList(),
+                    generalList: newGeneralList,
+                };
+            } else {
+                setSelected((prevSele) => !prevSele);
+            }
+
             if (foundItemAlready)
                 return {
                     ...prev,
@@ -107,10 +119,7 @@ function ItemCard(
     };
 
     useEffect(() => {
-        if (checkAlreadySelected) {
-            // when loaded, insert to the list the already added items
-            updateList({ passAlreadySelected: true });
-        }
+        if (checkAlreadySelected) updateList({ passAlreadySelected: true });
     }, [checkAlreadySelected]);
 
     useEffect(() => {
@@ -163,7 +172,10 @@ function ItemCard(
             <div className="d-flex">
                 <div className="category-badge">
                     <p className="text-nowrap text-shadow">
-                        {truncate(category, 10)}
+                        {truncate(
+                            category === "_general" ? "gerais" : category,
+                            10
+                        )}
                     </p>
                 </div>
                 <div className="mr-1 d-none">
@@ -195,7 +207,7 @@ function ItemCard(
             }}
             onClick={() => isAddCategory && updateList()}
         >
-            {isAddCategory && category !== "_general" && showCategoryBadge()}
+            {isAddCategory && showCategoryBadge()}
             <div className="d-flex container align-items-center">
                 {isAddCategory && showCheckBox()}
                 <div className="img-container">
@@ -236,6 +248,7 @@ function ItemCard(
                     }
                     fullOpen={fullOpen}
                     setFullOpen={setFullOpen}
+                    backgroundColor="var(--themePDark)"
                 />
             )}
             <style jsx>

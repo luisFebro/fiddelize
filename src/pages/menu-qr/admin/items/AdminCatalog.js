@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
 import getAPI, { updateAdminItem } from "api";
-import useData, { useBizData } from "init";
+import useData from "init";
 import useContext, { Provider } from "context";
 import getId from "utils/getId";
 import { checkDetectedElem } from "api/useElemDetection";
@@ -9,6 +9,9 @@ import { checkDetectedElem } from "api/useElemDetection";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
 import RadiusBtn from "components/buttons/RadiusBtn";
+import ReturnBtn from "components/buttons/ReturnBtn";
+import useBackColor from "hooks/useBackColor";
+import showToast from "components/toasts";
 import useMainList from "./useMainList";
 import { removeImg } from "./item-handler/img/UploadItemArea";
 import useGlobalData from "./useGlobalData";
@@ -16,9 +19,7 @@ import ItemManager from "./ItemManager";
 import ItemCardAdmin from "./ItemCardAdmin";
 // import { setItems } from "init/lStorage";
 // import convertToReal from "utils/numbers/convertToReal";
-// import showToast from "components/toasts";
 
-// import showToast from "components/toasts";
 const AsyncShowItemContent = Load({
     loader: () =>
         import(
@@ -33,30 +34,38 @@ const AsyncCategoryList = Load({
         ),
 });
 
+// LESSON: With carousels, it should be reload the page since there is an error to removeChild
 export default function AdminCatalog() {
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
     const [showSingleItem, setShowSingleItem] = useState(false);
 
+    useBackColor("var(--mainWhite)");
+
     const [menuData, setMenuData] = useState({
         allCategories: ["_general"],
         itemList: [],
     });
-    const { allCategories, itemList = [] } = menuData;
     const { sexLetter } = useData();
+    // const { allCategories, itemList = [] } = menuData;
+
+    const updateCarousel = () => setRandomId(getId());
 
     const updateItem = (type, options = {}) => {
-        setRandomId(getId());
+        // updateCarousel();
 
         const {
             newItem,
-            // catItemIdListUpdate,
+            removalImg,
+            catItemIdListUpdate,
+            needReload = true,
             // newCategory,
             // oldCategory,
-            // removalImg,
             // carouselInd,
             // isEdit,
         } = options;
+
+        if (needReload) showToast("Fazendo atualizações...");
 
         // const handleCarousel = (ind) => {
         //     if (!flickity) return null;
@@ -191,31 +200,37 @@ export default function AdminCatalog() {
         //     });
         // }
 
-        // if (type === "delete") {
-        //     setMenuData((prev) => {
-        //         const leftItems = prev.itemList.filter(
-        //             (item) => !newItem.removalItemIds.includes(item.itemId)
-        //         );
+        if (type === "delete") {
+            // setMenuData((prev) => {
+            //     const leftItems = prev.itemList.filter(
+            //         (item) => !newItem.removalItemIds.includes(item.itemId)
+            //     );
+            //     if (selectedFlickity) selectedFlickity.destroy();
+            // example data
+            //     // removalImg: {
+            //     //     savedImg: img, // string or an array of string with img urls
+            //     //     folder: `digital-menu/${bizLinkName}`,
+            //     // }
+            //     if (removalImg) removeImg(removalImg);
+            //     return {
+            //         ...prev,
+            //         itemList: leftItems,
+            //         // allCategories: currCats || prev.allCategories,
+            //     };
+            // });
+        }
 
-        //         if (selectedFlickity) selectedFlickity.destroy();
+        const handleImg = async () => {
+            if (!removalImg) return null;
+            return await removeImg(removalImg);
+        };
 
-        //         /*
-        //         removalImg: {
-        //             savedImg: img, // string or an array of string with img urls
-        //             folder: `digital-menu/${bizLinkName}`,
-        //         }
-        //          */
-        //         if (removalImg) removeImg(removalImg);
-
-        //         return {
-        //             ...prev,
-        //             itemList: leftItems,
-        //             // allCategories: currCats || prev.allCategories,
-        //         };
-        //     });
-        // }
-
-        return updateInDb({ newItem, type });
+        return Promise.all([
+            updateInDb({ newItem, type, catItemIdListUpdate }),
+            handleImg(),
+        ]).then(() => {
+            if (needReload) window.location.reload();
+        });
     };
 
     const showTitle = () => (
@@ -234,7 +249,7 @@ export default function AdminCatalog() {
         dataList,
         search,
         updateAdminCatalog,
-    } = useMainList({ flickity });
+    } = useMainList();
 
     const store = useGlobalData({
         updateItem,
@@ -256,29 +271,29 @@ export default function AdminCatalog() {
         moreData,
         needEmptyIllustra,
         ShowOverMsg,
-        // listTotal,
+        listTotal,
         // isOffline,
         // hasMore,
         // isPlural,
     } = dataList;
     // END LIST
 
-    const dbCategories = moreData && JSON.parse(moreData);
+    const dbCategories = moreData ? JSON.parse(moreData) : [];
 
     useEffect(() => {
         // update list when user scroll by detecting the size of it.
         if (dbCategories) {
-            const handleCarousel = () => {
-                if (!flickity) return null;
-                return skip === -1 || !flickity[skip]
-                    ? flickity[flickity.length - 1]
-                    : flickity[skip];
-            };
+            // const handleCarousel = () => {
+            //     if (!flickity) return null;
+            //     return skip === -1 || !flickity[skip]
+            //         ? flickity[flickity.length - 1]
+            //         : flickity[skip];
+            // };
 
-            const selectedFlickity = handleCarousel();
-            if (selectedFlickity) {
-                selectedFlickity.destroy();
-                setRandomId(getId());
+            // const selectedFlickity = handleCarousel();
+            if (flickity) {
+                flickity.forEach((f) => f.destroy());
+                updateCarousel();
             }
 
             setMenuData((prev) => ({
@@ -306,17 +321,25 @@ export default function AdminCatalog() {
         </main>
     );
 
-    const gotData = itemList && Boolean(itemList.length);
+    const gotData = list && Boolean(list.length);
+
+    const handleTotal = () =>
+        listTotal > 1 ? `${listTotal} itens` : `${listTotal} item`;
 
     return (
         <Provider store={store}>
             {showTitle()}
+            <ReturnBtn />
             <ItemManager />
             {showSearchField()}
             {!needEmptyIllustra && <div className="mt-5" />}
+            <p className="mx-3 text-purple text-normal">
+                <span className="font-weight-bold mr-2">total:</span>
+                {loading ? "..." : handleTotal()}
+            </p>
             <MenuList
-                allCategories={allCategories}
-                itemList={itemList}
+                allCategories={dbCategories}
+                itemList={list}
                 setFlickity={setFlickity}
                 detectedCard={detectedCard}
                 randomId={randomId}
@@ -352,9 +375,7 @@ function MenuList({
     setFlickity,
     flickity,
 }) {
-    const { updateItem = () => null, menuData = {} } = useContext();
     const [showCategoryList, setShowCategoryList] = useState(false);
-    console.log("showCategoryList", showCategoryList);
 
     return (
         <section>
@@ -416,7 +437,6 @@ function MenuList({
                                     contentComp={
                                         <AsyncCategoryList
                                             category={cat}
-                                            updateItem={updateItem}
                                             setFullOpen={setShowCategoryList}
                                         />
                                     }
@@ -472,7 +492,7 @@ const CarouselList = ({
 // END COMP
 
 // HELPERS
-function updateInDb({ newItem, type, catItemIdListUpdate }) {
+async function updateInDb({ newItem, type, catItemIdListUpdate }) {
     getAPI({
         method: "post",
         url: updateAdminItem(),

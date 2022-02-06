@@ -1,99 +1,52 @@
 import { useState, useEffect, Fragment } from "react";
-import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import DeleteButton from "components/buttons/DeleteButton";
-import useData, { useBizData } from "init";
-// import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
-import useAPIList, { readMainItemList } from "api/useAPIList";
-import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
-import useRun, { setRun, useAction } from "global-data/ui";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import { useBizData } from "init";
+import useContext from "context";
 import showToast from "components/toasts";
-// import useContext from "context";
-import getId from "utils/getId";
+import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
+import { checkDetectedElem } from "api/useElemDetection";
+import useMainList from "../useMainList";
 import ItemCard from "./ItemCard";
-// import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import EditCategoryTitle from "./EditCategoryTitle";
 
-export default function FinalList({
+export default function ItemListContent({
     category,
-    updateItem,
-    isAddCat,
-    setFullOpen,
-    closeCategoryForm,
+    isAddCategory = false,
+    setFullOpen = () => null,
+    // closeCategoryForm = () => null,
 }) {
-    const [trigger, setTrigger] = useState(false);
     const [dataList, setDataList] = useState({
+        type: isAddCategory ? "addCat" : "showCat",
         selectionList: [],
+        ultimateList: [], // db loaded list
         generalList: [], // list to track unmarked items if priorly selected so that we can set to _general category
     });
-    const { selectionList, generalList } = dataList;
-    // const { updateAdminCatalog } = useContext();
-    const limit = 10;
+    const { selectionList, generalList, type } = dataList;
+    let { ultimateList } = dataList;
+    const isAddCat = type === "addCat";
+    const isShowCat = type === "showCat";
 
-    const [skip, setSkip] = useState(0);
     const { bizId, bizLinkName } = useBizData();
-    const { userId } = useData();
+    const { updateItem, menuData = {} } = useContext();
 
-    const params = {
-        userId, // for auth
-        adminId: bizId,
-        category: isAddCat ? undefined : category,
-        isEditCategory: true,
-    };
-
-    // UPDATE
-    const { runName } = useRun(); // for update list from other comps
-    const uify = useAction();
-    useEffect(() => {
-        if (runName && runName.includes("CategoryList")) {
-            setSkip(0);
-            setRun("runName", null, uify);
-        }
-        // eslint-disable-next-line
-    }, [runName]);
-    // END UPDATE
-
-    // UPDATE LIST
-    // const updateCategoryList = () =>
-    //     setRun("runName", `CategoryList${getId()}`, uify);
+    const { itemList } = menuData;
 
     useEffect(() => {
-        if (isAddCat) {
-            setSkip(0);
-            setTrigger(getId());
-        }
-    }, [isAddCat]);
+        setDataList((prev) => ({ ...prev, ultimateList: itemList }));
+    }, [itemList, type]);
 
-    const {
-        list = [],
-        loading,
-        ShowLoadingSkeleton,
-        error,
-        ShowError,
-        moreData,
-        isOffline,
-        hasMore,
-        // ShowOverMsg,
-        // listTotal,
-        // isPlural,
-    } = useAPIList({
-        url: readMainItemList(),
-        skip,
-        limit,
-        params,
-        // disableDupFilter: true,
-        trigger: trigger || runName || true,
-        listName: "CategoryList", // for offline list only
-    });
-
-    const dbCategories = moreData && JSON.parse(moreData);
+    const { allCategories } = menuData;
     const carouselInd =
-        category === null ? 0 : dbCategories && dbCategories.indexOf(category);
+        category === null
+            ? 0
+            : allCategories && allCategories.indexOf(category);
 
     const totalSelected = selectionList.length;
     const tapHoldOn = Boolean(totalSelected);
 
-    // useEffect(() => {
-    //     setDataList((prev) => ({ ...prev, ultimateList: itemList }));
-    // }, [itemList, type]);
+    const catTitle = category === "_general" ? "gerais" : category;
 
     const showTapAndHoldOptions = () => (
         <section
@@ -134,10 +87,10 @@ export default function FinalList({
                                 },
                             };
 
-                            // updateItem("add", {
-                            //     newCategory: category && category.toLowerCase(),
-                            //     needReload: false,
-                            // });
+                            updateItem("add", {
+                                newCategory: category && category.toLowerCase(),
+                            });
+
                             return updateItem("update", {
                                 adminId: bizId,
                                 newItem,
@@ -150,8 +103,10 @@ export default function FinalList({
                                 carouselInd,
                             });
 
-                            // updateAdminCatalog();
-                            // setFullOpen(false);
+                            // if (typeof setFullOpen === "function")
+                            //     setFullOpen(false);
+                            // closeCategoryForm();
+                            // return ;
                         }}
                         position="relative"
                         variant="extended"
@@ -171,8 +126,8 @@ export default function FinalList({
 
                                     const getRemovalImgs = () => {
                                         const imgs = [];
-                                        if (!list.length) return null;
-                                        list.forEach((item) => {
+                                        if (!ultimateList.length) return null;
+                                        ultimateList.forEach((item) => {
                                             if (
                                                 selectionList.includes(
                                                     item.itemId
@@ -192,7 +147,6 @@ export default function FinalList({
                                             folder: `digital-menu/${bizLinkName}`,
                                         },
                                     });
-
                                     // setFullOpen(false);
                                     // return closeCategoryForm();
                                 }}
@@ -204,21 +158,99 @@ export default function FinalList({
         </section>
     );
 
-    // INFINITY LOADING LIST
-    const detectedCard = useElemDetection({
+    // LIST
+    const {
+        detectedCard,
+        dataList: payloadAPIList,
+        // setDbLoaded,
+        // dbLoaded,
+    } = useMainList({ category: isAddCategory ? undefined : category });
+
+    const {
+        list,
         loading,
-        hasMore,
-        isOffline,
-        setSkip,
-    });
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        moreData,
+        // ShowOverMsg,
+        // listTotal,
+        // isOffline,
+        // hasMore,
+        // isPlural,
+    } = payloadAPIList;
+    // END LIST
+
+    const showEditCategory = () => (
+        <div
+            className="container-center"
+            style={{
+                zIndex: 10000,
+            }}
+        >
+            <RadiusBtn
+                title="editar categoria"
+                backgroundColor="var(--themeSDark)"
+                onClick={() =>
+                    setDataList((prev) => ({ ...prev, type: "addCat" }))
+                }
+                position="relative"
+                size="small"
+            />
+        </div>
+    );
+
+    const showTitle = () => {
+        const thisCat = catTitle && catTitle.cap();
+        if (isAddCat) {
+            return (
+                <EditCategoryTitle
+                    updateItem={updateItem}
+                    thisCat={thisCat && thisCat.toLowerCase()}
+                    setFullOpen={setFullOpen}
+                />
+            );
+        }
+
+        return (
+            <h2 className="text-subtitle text-purple font-weight-bold">
+                {thisCat}
+                {isShowCat && showEditCategory()}
+            </h2>
+        );
+    };
+
+    ultimateList = isAddCat
+        ? ultimateList
+        : ultimateList.filter((item) => item.category === category);
+
+    ultimateList = removeObjDuplicate(ultimateList);
+
+    const dbCategories = moreData && JSON.parse(moreData);
+
+    useEffect(() => {
+        // update list when user scroll by detecting the size of it.
+        if (dbCategories) {
+            setDataList((prev) => ({
+                ...prev,
+                ultimateList: list,
+                allCategories: dbCategories,
+            }));
+        }
+        // insert dbCategories ccauses max depth error
+        // eslint-disable-next-line
+    }, [list.length]);
+
+    const gotData = ultimateList && Boolean(ultimateList.length);
 
     return (
-        <section>
-            {list.map((item, ind) =>
+        <section className="mx-3 text-center my-5 text-white text-hero">
+            {showTitle()}
+            {ultimateList.map((item, ind) =>
                 checkDetectedElem({
-                    list,
+                    list: dataList,
                     ind,
-                    indFromLast: 2,
+                    indFromLast: 3,
                 }) ? (
                     <Fragment key={item.itemId}>
                         <ItemCard
@@ -226,7 +258,7 @@ export default function FinalList({
                             isAddCategory={isAddCat}
                             data={item}
                             setDataList={setDataList}
-                            selectedCategory={category}
+                            alreadySelected={item.category === category}
                         />
                     </Fragment>
                 ) : (
@@ -235,7 +267,7 @@ export default function FinalList({
                             isAddCategory={isAddCat}
                             data={item}
                             setDataList={setDataList}
-                            selectedCategory={category}
+                            alreadySelected={item.category === category}
                         />
                     </Fragment>
                 )
@@ -250,3 +282,11 @@ export default function FinalList({
         </section>
     );
 }
+
+/*
+// set future updates to hide items
+<DeleteButton
+    onClick={null}
+/>
+
+ */

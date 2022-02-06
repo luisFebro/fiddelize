@@ -3,6 +3,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
+import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AsyncAdminMenuOrders = Load({
@@ -12,12 +13,13 @@ export const AsyncAdminMenuOrders = Load({
         ),
 });
 
-const AsyncAdminCatalog = Load({
-    loader: () =>
-        import(
-            "./items/AdminCatalog" /* webpackChunkName: "admin-catalog-page-lazy" */
-        ),
-});
+// it has its own page
+// const AsyncAdminCatalog = Load({
+//     loader: () =>
+//         import(
+//             "./items/AdminCatalog" /* webpackChunkName: "admin-catalog-page-lazy" */
+//         ),
+// });
 
 const AsyncAdvertise = Load({
     loader: () =>
@@ -37,11 +39,13 @@ export default function MainMenuAdmin(compData) {
     const [fullOpen, setFullOpen] = useState("");
     const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
     useBackColor("var(--mainWhite)");
-    const { bizId } = useBizData();
+    const { bizId, bizLinkName } = useBizData();
 
     const { socket } = compData;
     let { adminId } = compData;
     adminId = bizId || adminId;
+
+    const history = useHistory();
 
     useEffect(() => {
         // if clicked on this option, clear all notifications
@@ -67,6 +71,8 @@ export default function MainMenuAdmin(compData) {
             <MenuList
                 setFullOpen={setFullOpen}
                 pendingOrdersCount={pendingOrdersCount}
+                bizLinkName={bizLinkName}
+                history={history}
             />
             {fullOpen && (
                 <ModalFullContent
@@ -89,7 +95,7 @@ export default function MainMenuAdmin(compData) {
 function selectComp(comp, compData) {
     const { adminId, bizLinkName, socket } = compData;
 
-    if (comp === "Itens") return <AsyncAdminCatalog />;
+    if (comp === "Itens") return null;
     if (comp === "Pedidos")
         return (
             <AsyncAdminMenuOrders
@@ -105,7 +111,12 @@ function selectComp(comp, compData) {
 }
 
 // COMPS
-function MenuList({ setFullOpen, pendingOrdersCount = 0 }) {
+function MenuList({
+    history,
+    setFullOpen,
+    pendingOrdersCount = 0,
+    bizLinkName,
+}) {
     const list = [
         {
             icon: <FontAwesomeIcon icon="store" />,
@@ -163,7 +174,13 @@ function MenuList({ setFullOpen, pendingOrdersCount = 0 }) {
                         key={opt.title}
                         className="col-2 mx-auto mb-4 card position-relative"
                         style={{ cursor: "pointer" }}
-                        onClick={() => setFullOpen(opt.title)}
+                        onClick={() => {
+                            if (opt.title === "Itens")
+                                return history.push(
+                                    `/${bizLinkName}/menu/p/admin/items`
+                                );
+                            setFullOpen(opt.title);
+                        }}
                     >
                         {opt.title === "Pedidos" &&
                             pendingOrdersCount >= 1 &&

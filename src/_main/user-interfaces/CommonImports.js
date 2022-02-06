@@ -223,4 +223,11 @@ export const AsyncRealtimeOrders = Load({
             "pages/menu-qr/RealtimeOrders" /* webpackChunkName: "real-time-orders-lazy" */
         ),
 });
+
+export const AsyncAdminCatalog = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/admin/items/AdminCatalog" /* webpackChunkName: "admin-catalog-lazy" */
+        ),
+});
 // END MENU QR

@@ -42,7 +42,7 @@ export default function NewCategoryForm({ handleFullClose }) {
     const switchError = (error) => {
         setData((prev) => ({ ...prev, ...error }));
     };
-    const saveCategory = async () => {
+    const addCategory = async () => {
         if (!category) {
             return showToast("Insira o nome da categoria", { type: "error" });
         }
@@ -88,9 +88,9 @@ export default function NewCategoryForm({ handleFullClose }) {
                 </div>
                 <section className="container-center my-3">
                     <ButtonFab
-                        title="salvar"
+                        title="adicionar"
                         backgroundColor="var(--themeSDark"
-                        onClick={saveCategory}
+                        onClick={addCategory}
                         position="relative"
                         variant="extended"
                         size="large"
@@ -130,7 +130,7 @@ const showFloatCTA = () => (
             <ButtonFab
                 title="Salvar"
                 backgroundColor={`var(--themeSDark--${sColor})`}
-                onClick={saveCategory}
+                onClick={addCategory}
                 position="relative"
                 variant="extended"
                 size="large"
