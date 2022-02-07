@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function ItemCardCustomer({ card, itemData }) {
+function ItemCardCustomer({ card, itemData }, ref) {
     const { handleItem, orderList } = itemData;
 
     const [data, setData] = useState({
@@ -69,7 +69,11 @@ export default function ItemCardCustomer({ card, itemData }) {
     );
 
     return (
-        <section key={card.itemId} className="carousel-cell no-outline">
+        <section
+            ref={ref}
+            key={card.itemId}
+            className="carousel-cell no-outline"
+        >
             {added && showAddedBadge()}
             {showImg()}
             <section className="text-left">
@@ -172,3 +176,5 @@ export default function ItemCardCustomer({ card, itemData }) {
         </section>
     );
 }
+
+export default forwardRef(ItemCardCustomer);

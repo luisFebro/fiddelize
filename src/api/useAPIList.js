@@ -341,26 +341,30 @@ export default function useAPIList({
         </Fragment>
     );
 
-    const ShowOverMsg = () => (
-        <Fragment>
-            {!hasMore && readyShowElems && (
-                <p
-                    className="text-normal text-center font-weight-bold text-purple"
-                    style={{
-                        margin: "70px 0 100px",
-                    }}
-                >
-                    Isso é tudo{`, ${userName}.` || "."}
-                </p>
-            )}
+    const ShowOverMsg = (options = {}) => {
+        const { txtColor = "text-purple" } = options;
 
-            {isOffline && (
-                <p className="my-5 text-normal text-center font-weight-bold text-purple">
-                    Isso é tudo guardado offline.
-                </p>
-            )}
-        </Fragment>
-    );
+        return (
+            <Fragment>
+                {!hasMore && readyShowElems && (
+                    <p
+                        className={`${txtColor} text-normal text-center font-weight-bold text-shadow`}
+                        style={{
+                            margin: "70px 0 100px",
+                        }}
+                    >
+                        Isso é tudo{`, ${userName}.` || "."}
+                    </p>
+                )}
+
+                {isOffline && (
+                    <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                        Isso é tudo guardado offline.
+                    </p>
+                )}
+            </Fragment>
+        );
+    };
 
     const isOffList = offlineBtn;
     error = error || isOffline;

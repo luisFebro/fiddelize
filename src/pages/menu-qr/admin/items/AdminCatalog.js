@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
 import getAPI, { updateAdminItem } from "api";
 import useData from "init";
-import useContext, { Provider } from "context";
+import { Provider } from "context";
 import getId from "utils/getId";
 import { checkDetectedElem } from "api/useElemDetection";
 // import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
@@ -23,7 +23,7 @@ import ItemCardAdmin from "./ItemCardAdmin";
 const AsyncShowItemContent = Load({
     loader: () =>
         import(
-            "pages/menu-qr/admin/items/item-handler/AddItemContent.js" /* webpackChunkName: "add-item-content-lazy" */
+            "pages/menu-qr/admin/items/item-handler/AddItemContent" /* webpackChunkName: "add-item-content-lazy" */
         ),
 });
 
@@ -200,25 +200,25 @@ export default function AdminCatalog() {
         //     });
         // }
 
-        if (type === "delete") {
-            // setMenuData((prev) => {
-            //     const leftItems = prev.itemList.filter(
-            //         (item) => !newItem.removalItemIds.includes(item.itemId)
-            //     );
-            //     if (selectedFlickity) selectedFlickity.destroy();
-            // example data
-            //     // removalImg: {
-            //     //     savedImg: img, // string or an array of string with img urls
-            //     //     folder: `digital-menu/${bizLinkName}`,
-            //     // }
-            //     if (removalImg) removeImg(removalImg);
-            //     return {
-            //         ...prev,
-            //         itemList: leftItems,
-            //         // allCategories: currCats || prev.allCategories,
-            //     };
-            // });
-        }
+        // if (type === "delete") {
+        // setMenuData((prev) => {
+        //     const leftItems = prev.itemList.filter(
+        //         (item) => !newItem.removalItemIds.includes(item.itemId)
+        //     );
+        //     if (selectedFlickity) selectedFlickity.destroy();
+        // example data
+        //     // removalImg: {
+        //     //     savedImg: img, // string or an array of string with img urls
+        //     //     folder: `digital-menu/${bizLinkName}`,
+        //     // }
+        //     if (removalImg) removeImg(removalImg);
+        //     return {
+        //         ...prev,
+        //         itemList: leftItems,
+        //         // allCategories: currCats || prev.allCategories,
+        //     };
+        // });
+        // }
 
         const handleImg = async () => {
             if (!removalImg) return null;
@@ -243,7 +243,7 @@ export default function AdminCatalog() {
 
     // LIST
     const {
-        skip,
+        // skip,
         detectedCard,
         showSearchField,
         dataList,
@@ -348,7 +348,7 @@ export default function AdminCatalog() {
             {loading && <ShowLoadingSkeleton />}
             {!loading && !gotData && showIllustration()}
             {error && <ShowError />}
-            {gotData && <ShowOverMsg />}
+            {gotData && <ShowOverMsg txtColor="text-white" />}
             <div style={{ marginBottom: 150 }} />
             {showSingleItem && (
                 <ModalFullContent
@@ -388,11 +388,6 @@ function MenuList({
                     if (!filteredCategory.length) return <div />;
 
                     const ultimateList = filteredCategory;
-                    {
-                        /*const ultimateList = removeObjDuplicate(filteredCategory, {
-                        filterId: "_id",
-                    });*/
-                    }
 
                     const ThisCarouselList = (
                         <CarouselList
@@ -460,7 +455,7 @@ const CarouselList = ({
     flickity,
 }) => (
     <Fragment>
-        {dataList.length &&
+        {Boolean(dataList.length) &&
             dataList
                 .map((card, ind) =>
                     checkDetectedElem({
