@@ -1,12 +1,15 @@
 import { Fragment, useState, useEffect } from "react";
 import { useBizData } from "init";
 import CarouselCard from "components/carousels/CarouselCard";
-import { Load } from "components/code-splitting/LoadableComp";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import getItems, { setItems, removeItems } from "init/lStorage";
+import { checkDetectedElem } from "api/useElemDetection";
+import useMainList from "pages/menu-qr/admin/items/useMainList";
 import removeImgFormat from "utils/biz/removeImgFormat";
+import { Load } from "components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
 import {
@@ -14,6 +17,13 @@ import {
     removeItem,
     useOrderTotal,
 } from "./helpers/customerOrderMethods";
+
+const AsyncShowItemContent = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/admin/items/item-handler/AddItemContent" /* webpackChunkName: "add-item-content-lazy" */
+        ),
+});
 
 export const AsyncOrdersPage = Load({
     loader: () =>
@@ -156,6 +166,7 @@ export default function CustomerCatalog({
                     itemData={itemData}
                     setDefault={setDefault}
                     isOnline={isOnline}
+                    adminId={adminId}
                 />
             )}
             {nextPage === "orders" && (
@@ -198,106 +209,107 @@ function DigitalMenu({
     orderCount,
     itemData,
     isOnline,
+    adminId,
 }) {
-    const allCategories = ["bebidas", "sanduíches", "gerais"];
-    const dataProducts = [
-        {
-            _id: "123",
-            category: "bebidas",
-            availableQtt: 10,
-            img: "/img/test/cardapio-qr/lata-guarana-antactica.jpg",
-            adName: "lata guaraná antactica",
-            price: 8.0,
-        },
-        {
-            _id: "123fsf",
-            category: "bebidas",
-            availableQtt: 10,
-            img: "/img/test/cardapio-qr/suco-de-uva.jpg",
-            adName: "suco de uva",
-            price: 5,
-        },
-        {
-            _id: "123fsq232f",
-            category: "bebidas",
-            availableQtt: 30,
-            img: "/img/test/cardapio-qr/coca.jpg",
-            adName:
-                "coca-cola ma bebida muito gelada, gelada mesmo meu deus, precisa beber essa bebida miraculosa    ",
-            price: 8,
-        },
-        {
-            _id: "123fsq232f",
-            category: "sanduíches",
-            availableQtt: 3,
-            img: "/img/test/cardapio-qr/kikao.jpg",
-            adName: "kikão com palha",
-            price: 5,
-        },
-        {
-            _id: "12321233",
-            category: "sanduíches",
-            availableQtt: 15,
-            img: "/img/test/cardapio-qr/sanduba-x-salada-verduras.jpg",
-            adName: "sanduba x-salada muito top",
-            price: 5,
-        },
-        {
-            _id: "12321233132",
-            adName: "sanduba pão árabe",
-            category: "sanduíches",
-            availableQtt: 5,
-            img: "/img/test/cardapio-qr/sanduba-pao-arabe-misto.png",
-            price: 5,
-        },
-    ];
+    const [showSingleItem, setShowSingleItem] = useState(false);
 
-    const showCatalog = () => (
-        <section>
-            {allCategories.map((cat) => {
-                const filteredCategory =
-                    dataProducts.filter((item) => item.category === cat) || [];
-                if (!filteredCategory.length) return <div />;
+    // LIST
+    const {
+        detectedCard,
+        showSearchField,
+        dataList,
+        search,
+        updateAdminCatalog,
+    } = useMainList({ adminId });
 
-                const ThisCardList = (
-                    <CarouselList
-                        dataList={filteredCategory}
-                        itemData={itemData}
-                    />
-                );
+    useEffect(() => {
+        if (search) setShowSingleItem(true);
+    }, [search]);
 
-                return (
-                    <section key={cat}>
-                        <h2
-                            className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
-                            style={{
-                                backgroundColor: "var(--themePDark)",
-                            }}
-                        >
-                            {cat}
-                        </h2>
-                        <div>
-                            <CarouselCard
-                                CardList={ThisCardList}
-                                size="large"
-                                lazyLoad
-                                multi
+    const {
+        list = [],
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        moreData,
+        ShowOverMsg,
+        // needEmptyIllustra,
+        // listTotal,
+        // isOffline,
+        // hasMore,
+        // isPlural,
+    } = dataList;
+    // END LIST
+
+    const allCategories = moreData ? JSON.parse(moreData) : [];
+    const dataProducts = list;
+
+    function MenuList() {
+        return (
+            <section>
+                {Boolean(allCategories.length) &&
+                    allCategories.map((cat) => {
+                        const filteredCategory =
+                            dataProducts.filter(
+                                (item) => item.category === cat
+                            ) || [];
+                        if (!filteredCategory.length) return <div />;
+
+                        const ThisCardList = (
+                            <CarouselList
+                                dataList={filteredCategory}
+                                itemData={itemData}
+                                detectedCard={detectedCard}
                             />
-                        </div>
-                        <TotalInvest
-                            orderAmount={orderAmount}
-                            orderCount={orderCount}
-                            setDefault={setDefault}
-                        />
-                        <ContinueBtn onClick={handleNextPage} />
-                    </section>
-                );
-            })}
-            <p className="text-white my-5 text-normal text-center font-weight-bold">
-                Isso é tudo.
-            </p>
-        </section>
+                        );
+
+                        return (
+                            <section key={cat}>
+                                <h2
+                                    className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
+                                    style={{
+                                        backgroundColor: "var(--themePDark)",
+                                    }}
+                                >
+                                    {cat}
+                                </h2>
+                                <div>
+                                    <CarouselCard
+                                        CardList={ThisCardList}
+                                        size="large"
+                                        lazyLoad
+                                        multi
+                                    />
+                                </div>
+                                <TotalInvest
+                                    orderAmount={orderAmount}
+                                    orderCount={orderCount}
+                                    setDefault={setDefault}
+                                />
+                                <ContinueBtn onClick={handleNextPage} />
+                            </section>
+                        );
+                    })}
+            </section>
+        );
+    }
+
+    const showIllustration = () => (
+        <main>
+            <img
+                className="img-center"
+                src="/img/illustrations/empty-woman-card.svg"
+                width={300}
+                alt="sem itens"
+            />
+            <h2 className="text-subtitle text-grey text-center my-5 font-weight-bold">
+                Sem Itens
+            </h2>
+        </main>
     );
+
+    const gotData = list && Boolean(list.length);
 
     return (
         <section>
@@ -317,22 +329,55 @@ function DigitalMenu({
                     Para adicionar um novo item, basta clicar no botão de mais.
                 </p>
             </h1>
-            {showCatalog()}
+            {showSearchField()}
+            <br />
+            <MenuList />
+            {loading && <ShowLoadingSkeleton />}
+            {!loading && !gotData && showIllustration()}
+            {error && <ShowError />}
+            {gotData && <ShowOverMsg txtColor="text-white" />}
             <div style={{ marginBottom: 150 }} />
+            {showSingleItem && (
+                <ModalFullContent
+                    contentComp={
+                        <AsyncShowItemContent
+                            itemSearch={search}
+                            handleFullClose={setShowSingleItem}
+                        />
+                    }
+                    fullOpen={showSingleItem}
+                    setFullOpen={setShowSingleItem}
+                    backgroundColor="var(--themePDark)"
+                />
+            )}
         </section>
     );
 }
 
 // COMP
-function CarouselList({ dataList = [], itemData }) {
+function CarouselList({ dataList = [], itemData, detectedCard }) {
     return (
         <Fragment>
             {dataList.length &&
-                dataList.map((card) => (
-                    <Fragment key={card._id}>
-                        <ItemCardCustomer card={card} itemData={itemData} />
-                    </Fragment>
-                ))}
+                dataList.map((card, ind) =>
+                    checkDetectedElem({
+                        list: dataList,
+                        ind,
+                        indFromLast: 3,
+                    }) ? (
+                        <Fragment key={card._id}>
+                            <ItemCardCustomer
+                                ref={detectedCard}
+                                card={card}
+                                itemData={itemData}
+                            />
+                        </Fragment>
+                    ) : (
+                        <Fragment key={card._id}>
+                            <ItemCardCustomer card={card} itemData={itemData} />
+                        </Fragment>
+                    )
+                )}
         </Fragment>
     );
 }

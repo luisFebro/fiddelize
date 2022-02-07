@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import SearchField from "components/search/SearchField";
-import useData, { useBizData } from "init";
+import { useBizData } from "init";
 import useAPIList, {
     readMainItemList,
     digitalMenuAutocomplete,
@@ -9,16 +9,17 @@ import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 
 export default function useMainList(options = {}) {
-    const { limit = 15 } = options;
+    // adminId only for customer catalog
+    const { limit = 15, adminId } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
     const { bizId } = useBizData();
-    const { userId } = useData();
+    // const { userId } = useData();
 
     const params = {
-        userId, // for auth
-        adminId: bizId,
+        // userId, // for auth
+        adminId: adminId || bizId,
         search,
     };
 
@@ -42,7 +43,7 @@ export default function useMainList(options = {}) {
         limit,
         params,
         trigger, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
-        listName: "AdminCatalogList", // for offline list only
+        listName: "MenuDigitalList", // for offline list only
     });
 
     // SEARCH
