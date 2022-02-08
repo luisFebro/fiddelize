@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { useBizData } from "init";
+import { Provider } from "context";
 import CarouselCard from "components/carousels/CarouselCard";
 import showToast from "components/toasts";
 import useBackColor from "hooks/useBackColor";
@@ -11,6 +12,7 @@ import removeImgFormat from "utils/biz/removeImgFormat";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 import getId from "utils/getId";
+import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
 import {
@@ -19,10 +21,10 @@ import {
     useOrderTotal,
 } from "./helpers/customerOrderMethods";
 
-const AsyncShowItemContent = Load({
+const AsyncShowSingleItem = Load({
     loader: () =>
         import(
-            "pages/menu-qr/admin/items/item-handler/AddItemContent" /* webpackChunkName: "add-item-content-lazy" */
+            "./item-handler/ShowSingleItem" /* webpackChunkName: "show-single-item-lazy" */
         ),
 });
 
@@ -106,11 +108,10 @@ export default function CustomerCatalog({
     };
     useOrderTotal({ orderCount, orderList, setData });
 
-    const itemData = false;
-    // const itemData = {
-    //     handleItem,
-    //     orderList,
-    // };
+    const itemData = {
+        handleItem,
+        orderList,
+    };
 
     const handleNextPage = () => {
         // even not id, at least allow to save data and keep current page
@@ -165,7 +166,6 @@ export default function CustomerCatalog({
                     handleNextPage={handleNextPage}
                     orderAmount={orderAmount}
                     orderCount={orderCount}
-                    itemData={itemData}
                     setDefault={setDefault}
                     isOnline={isOnline}
                     adminId={adminId}
@@ -195,11 +195,15 @@ export default function CustomerCatalog({
         </Fragment>
     );
 
+    const store = useGlobalData({
+        itemData,
+    });
+
     return (
-        <section>
+        <Provider store={store}>
             {showLogo()}
             {showPages()}
-        </section>
+        </Provider>
     );
 }
 
@@ -209,11 +213,9 @@ function DigitalMenu({
     handleNextPage,
     orderAmount,
     orderCount,
-    itemData,
     isOnline,
     adminId,
 }) {
-    const [showSingleItem, setShowSingleItem] = useState(false);
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
 
@@ -227,10 +229,6 @@ function DigitalMenu({
         search,
         // updateAdminCatalog,
     } = useMainList({ adminId });
-
-    useEffect(() => {
-        if (search) setShowSingleItem(true);
-    }, [search]);
 
     const {
         list = [],
@@ -276,7 +274,6 @@ function DigitalMenu({
                     const ThisCardList = (
                         <CarouselList
                             dataList={filteredCategory}
-                            itemData={itemData}
                             detectedCard={detectedCard}
                             flickity={flickity}
                             carouselInd={carouselInd}
@@ -304,7 +301,7 @@ function DigitalMenu({
                                     fullscreen
                                     setOuterFlickity={setFlickity}
                                     carouselInd={carouselInd}
-                                    pageDotsColor="#fff"
+                                    pageDotsColor="#b59e9e"
                                 />
                             </div>
                             <TotalInvest
@@ -335,6 +332,11 @@ function DigitalMenu({
 
     const gotData = list && Boolean(list.length);
 
+    const [showSingleItem, setShowSingleItem] = useState(false);
+    useEffect(() => {
+        if (search) setShowSingleItem(true);
+    }, [search]);
+
     return (
         <section>
             <h1 className="font-weight-bold text-subtitle text-white text-center">
@@ -364,7 +366,8 @@ function DigitalMenu({
             {showSingleItem && (
                 <ModalFullContent
                     contentComp={
-                        <AsyncShowItemContent
+                        <AsyncShowSingleItem
+                            adminId={adminId}
                             itemSearch={search}
                             handleFullClose={setShowSingleItem}
                         />
@@ -384,13 +387,7 @@ function DigitalMenu({
 
 // COMP
 const CarouselList = (props) => {
-    const {
-        dataList = [],
-        itemData,
-        detectedCard,
-        flickity,
-        carouselInd,
-    } = props;
+    const { dataList = [], detectedCard, flickity, carouselInd } = props;
 
     return (
         <Fragment>
@@ -405,7 +402,6 @@ const CarouselList = (props) => {
                             <ItemCardCustomer
                                 ref={detectedCard}
                                 card={card}
-                                itemData={itemData}
                                 flickity={flickity}
                                 carouselInd={carouselInd}
                             />
@@ -414,7 +410,6 @@ const CarouselList = (props) => {
                         <Fragment key={card._id}>
                             <ItemCardCustomer
                                 card={card}
-                                itemData={itemData}
                                 flickity={flickity}
                                 carouselInd={carouselInd}
                             />

@@ -132,14 +132,15 @@ export default function useAPIList({
 
         const { listTotal, chunksTotal, content } = response.data;
         if (IS_DEV) console.log("listType", listType);
+        console.log("listTotal", listTotal);
 
-        setData({
-            ...data,
-            list: listType,
+        setData((prev) => ({
+            ...prev,
+            list: handledListUnion, // listType is causing removeChild error
             listTotal,
             chunksTotal,
             content,
-        });
+        }));
 
         const hasCards = listTotal > skip;
         const firstCards = listTotal <= limit;

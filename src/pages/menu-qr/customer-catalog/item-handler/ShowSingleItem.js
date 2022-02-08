@@ -1,24 +1,20 @@
 import { useState, useEffect } from "react";
 import getAPI, { readMainItemList } from "api";
-import EditButton from "components/buttons/EditButton";
-import { useBizData } from "init";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import Card from "@material-ui/core/Card";
 import convertToReal from "utils/numbers/convertToReal";
+import useContext from "context";
 import Spinner from "components/loadingIndicators/Spinner";
-import NewItemForm from "./items/NewItemForm";
+import showToast from "components/toasts";
+import { MinusPlusBtns } from "../ItemCardCustomer";
 import ImgHandler from "./img/ImgHandler";
 
-export default function AddItemContent({
-    card,
-    isEditBtn,
+export default function ShowSingleItem({
+    sColor = "default",
     itemSearch,
     handleFullClose = () => null,
+    adminId,
 }) {
-    const [mode, setMode] = useState("main"); // "show"
-
-    const isShowItem = Boolean(itemSearch);
-    const { bizId } = useBizData();
-
     const [data, setData] = useState({
         _id: null,
         itemId: null,
@@ -29,14 +25,17 @@ export default function AddItemContent({
         errorAdName: false,
         errorPrice: false,
         finishedUpload: false,
+        // minus plus btn
+        added: false,
+        qtt: 0,
+        totalAmount: 0,
     });
-    const { img, adName, price, category } = data;
+
+    const { handleItem } = useContext();
+    console.log("handleItem", handleItem);
+    const { img, adName, price, category, added, qtt, totalAmount } = data;
 
     const [loadingShowItem, setLoadingShowItem] = useState(false);
-
-    useEffect(() => {
-        if (isShowItem) setMode("show");
-    }, [isShowItem]);
 
     const handleCardData = (thisCard) =>
         setData((prev) => ({
@@ -55,8 +54,7 @@ export default function AddItemContent({
         setLoadingShowItem(true);
 
         const params = {
-            // userId, // for auth
-            adminId: bizId,
+            adminId,
             search: itemSearch,
             skip: 0,
             limit: 1,
@@ -76,23 +74,42 @@ export default function AddItemContent({
             .catch(() => setLoadingShowItem(false));
     }, [itemSearch]);
 
-    // handle card data from ItemCardAdmin for edit
-    useEffect(() => {
-        if (!card) return;
-        handleCardData(card);
-    }, [card]);
-
-    const handleTitle = () => {
-        if (isShowItem) return "Detalhes do Item";
-        return isEditBtn ? "Edição de Item" : "Adicione Novo Item";
-    };
     const showTitle = () => (
         <h2 className="my-4 text-subtitle text-white text-shadow text-center font-weight-bold">
-            {handleTitle()}
+            Detalhes do Item
         </h2>
     );
 
-    const showData = () => (
+    const saveItem = () => {
+        showToast("item saved");
+        handleFullClose();
+        return null;
+    };
+
+    const showFloatCTA = () => (
+        <div
+            className="position-fixed animated fadeInUp delay-1s"
+            style={{
+                bottom: 15,
+                right: 15,
+            }}
+        >
+            <section className="container-center">
+                <div className="ml-2">
+                    <ButtonFab
+                        title="Salvar"
+                        backgroundColor={`var(--themeSDark--${sColor})`}
+                        onClick={saveItem}
+                        position="relative"
+                        variant="extended"
+                        size="large"
+                    />
+                </div>
+            </section>
+        </div>
+    );
+
+    const showCardInfo = () => (
         <section
             style={{
                 overflowY: "scroll",
@@ -129,20 +146,30 @@ export default function AddItemContent({
                             {category === "_general" ? "gerais" : category}
                         </p>
                     </div>
-                    <div className="d-flex justify-content-end mr-3">
-                        <EditButton
-                            position="relative"
-                            bottom={0}
-                            right={0}
-                            transform="scale(0.9)"
-                            onClick={() => {
-                                setMode("main");
-                            }}
-                        />
-                    </div>
                     <div style={{ marginBottom: 50 }} />
                 </main>
             </Card>
+        </section>
+    );
+
+    const showMinusPlusBtns = () => (
+        <section
+            className="position-absolute"
+            style={{
+                bottom: 10,
+                left: 10,
+            }}
+        >
+            <MinusPlusBtns
+                qtt={10}
+                handleItem={handleItem}
+                setData={setData}
+                card={{
+                    adName: "teste",
+                    price: 15,
+                    img: "teste.png",
+                }}
+            />
         </section>
     );
 
@@ -154,23 +181,11 @@ export default function AddItemContent({
                     <Spinner size="large" />
                 </div>
             ) : (
-                <ImgHandler
-                    setData={setData}
-                    savedImg={img}
-                    isShowItem={isShowItem}
-                />
+                <ImgHandler setData={setData} savedImg={img} isShowItem />
             )}
-            {mode === "main" ? (
-                <NewItemForm
-                    setData={setData}
-                    handleFullClose={handleFullClose}
-                    data={data}
-                    isEditBtn={isEditBtn}
-                    isShowItem={isShowItem}
-                />
-            ) : (
-                showData()
-            )}
+            {showCardInfo()}
+            {showFloatCTA()}
+            {showMinusPlusBtns()}
         </section>
     );
 }

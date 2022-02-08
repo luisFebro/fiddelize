@@ -15,10 +15,8 @@ export default function useMainList(options = {}) {
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
     const { bizId } = useBizData();
-    // const { userId } = useData();
 
     const params = {
-        // userId, // for auth
         adminId: adminId || bizId,
         search,
     };
