@@ -163,9 +163,8 @@ export default function RegisterBonusCoins() {
             {showMoreTxt && (
                 <p className="text-normal text-grey">
                     Todos os seus clientes recebem automaticamente certa quantia
-                    em moeda PTS ao se cadastrarem. Valores comuns estão de 5
-                    PTS a 30 PTS (real tem mesmo valor que PTS), você define o
-                    valor de acordo com sua estratégia comercial.
+                    em moeda PTS ao se cadastrarem. Você define o valor de
+                    acordo com sua estratégia comercial.
                 </p>
             )}
             <section className="py-5">

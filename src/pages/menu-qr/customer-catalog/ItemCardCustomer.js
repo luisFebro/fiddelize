@@ -6,8 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-function ItemCardCustomer({ card, itemData }, ref) {
-    const { handleItem, orderList } = itemData;
+function ItemCardCustomer({ card, itemData, flickity, carouselInd }, ref) {
+    const { handleItem } = itemData; // orderList
+    const orderList = false; //[{ adName: true, count: 0 }];
 
     const [data, setData] = useState({
         added: false,
@@ -18,9 +19,10 @@ function ItemCardCustomer({ card, itemData }, ref) {
     const itemDesc = card.adName;
 
     useEffect(() => {
-        const foundItem = orderList.find(
-            (item) => item.adName === itemDesc && item.count >= 1
-        );
+        const foundItem = false;
+        // const foundItem = orderList.find(
+        //     (item) => item.adName === itemDesc && item.count >= 1
+        // );
 
         if (itemDesc && foundItem) {
             setData((prev) => ({
@@ -38,7 +40,14 @@ function ItemCardCustomer({ card, itemData }, ref) {
     }, [itemDesc, orderList]);
 
     const showImg = () => (
-        <section className="mb-2 container-center">
+        <section
+            className="mb-2 container-center"
+            onClick={() => {
+                flickity &&
+                    flickity[carouselInd] &&
+                    flickity[carouselInd].viewFullscreen();
+            }}
+        >
             <img
                 data-flickity-lazyload={card.img}
                 className="carousel-cell-image"
@@ -76,9 +85,9 @@ function ItemCardCustomer({ card, itemData }, ref) {
         >
             {added && showAddedBadge()}
             {showImg()}
-            <section className="text-left">
+            <section className="desc text-left">
                 <p
-                    className="mb-1 text-em-1-1"
+                    className="mb-1 m-0 text-em-1-1"
                     style={{
                         minHeight: 50,
                     }}
@@ -177,4 +186,7 @@ function ItemCardCustomer({ card, itemData }, ref) {
     );
 }
 
+/*
+As per React Official Docs, By default React will only shallowly compare complex objects in the props object. If you want control over the comparison, you can also provide a custom comparison function as the second argument.
+ */
 export default forwardRef(ItemCardCustomer);

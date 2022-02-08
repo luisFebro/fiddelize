@@ -39,6 +39,7 @@ export default function AdminCatalog() {
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
     const [showSingleItem, setShowSingleItem] = useState(false);
+    const updateCarousel = () => setRandomId(getId());
 
     useBackColor("var(--mainWhite)");
 
@@ -48,8 +49,6 @@ export default function AdminCatalog() {
     });
     const { sexLetter } = useData();
     // const { allCategories, itemList = [] } = menuData;
-
-    const updateCarousel = () => setRandomId(getId());
 
     const updateItem = (type, options = {}) => {
         // updateCarousel();
@@ -296,11 +295,11 @@ export default function AdminCatalog() {
                 updateCarousel();
             }
 
-            setMenuData((prev) => ({
-                ...prev,
-                itemList: list,
-                allCategories: dbCategories,
-            }));
+            // setMenuData((prev) => ({
+            //     ...prev,
+            //     itemList: list,
+            //     allCategories: dbCategories,
+            // }));
         }
         // insert dbCategories ccauses max depth error
     }, [list.length]);

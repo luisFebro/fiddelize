@@ -10,6 +10,7 @@ import useMainList from "pages/menu-qr/admin/items/useMainList";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
+import getId from "utils/getId";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
 import {
@@ -105,10 +106,11 @@ export default function CustomerCatalog({
     };
     useOrderTotal({ orderCount, orderList, setData });
 
-    const itemData = {
-        handleItem,
-        orderList,
-    };
+    const itemData = false;
+    // const itemData = {
+    //     handleItem,
+    //     orderList,
+    // };
 
     const handleNextPage = () => {
         // even not id, at least allow to save data and keep current page
@@ -212,6 +214,10 @@ function DigitalMenu({
     adminId,
 }) {
     const [showSingleItem, setShowSingleItem] = useState(false);
+    const [flickity, setFlickity] = useState(null);
+    const [randomId, setRandomId] = useState(null);
+
+    const updateCarousel = () => setRandomId(getId());
 
     // LIST
     const {
@@ -219,7 +225,7 @@ function DigitalMenu({
         showSearchField,
         dataList,
         search,
-        updateAdminCatalog,
+        // updateAdminCatalog,
     } = useMainList({ adminId });
 
     useEffect(() => {
@@ -240,60 +246,78 @@ function DigitalMenu({
         // hasMore,
         // isPlural,
     } = dataList;
-    // END LIST
 
     const allCategories = moreData ? JSON.parse(moreData) : [];
     const dataProducts = list;
 
-    function MenuList() {
-        return (
-            <section>
-                {Boolean(allCategories.length) &&
-                    allCategories.map((cat) => {
-                        const filteredCategory =
-                            dataProducts.filter(
-                                (item) => item.category === cat
-                            ) || [];
-                        if (!filteredCategory.length) return <div />;
+    useEffect(() => {
+        // update list when user scroll by detecting the size of it.
+        if (allCategories) {
+            if (flickity) {
+                flickity.forEach((f) => f.destroy());
+                updateCarousel();
+            }
+        }
+        // insert dbCategories causes max depth error
+    }, [list.length]);
+    // END LIST
 
-                        const ThisCardList = (
-                            <CarouselList
-                                dataList={filteredCategory}
-                                itemData={itemData}
-                                detectedCard={detectedCard}
-                            />
-                        );
+    const showList = () => (
+        <section>
+            {Boolean(allCategories.length) &&
+                allCategories.map((cat, ind) => {
+                    const carouselInd = ind;
 
-                        return (
-                            <section key={cat}>
-                                <h2
-                                    className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
-                                    style={{
-                                        backgroundColor: "var(--themePDark)",
-                                    }}
-                                >
-                                    {cat}
-                                </h2>
-                                <div>
-                                    <CarouselCard
-                                        CardList={ThisCardList}
-                                        size="large"
-                                        lazyLoad
-                                        multi
-                                    />
-                                </div>
-                                <TotalInvest
-                                    orderAmount={orderAmount}
-                                    orderCount={orderCount}
-                                    setDefault={setDefault}
+                    const filteredCategory =
+                        dataProducts.filter((item) => item.category === cat) ||
+                        [];
+                    if (!filteredCategory.length) return <div />;
+
+                    const ThisCardList = (
+                        <CarouselList
+                            dataList={filteredCategory}
+                            itemData={itemData}
+                            detectedCard={detectedCard}
+                            flickity={flickity}
+                            carouselInd={carouselInd}
+                        />
+                    );
+
+                    return (
+                        <section key={cat}>
+                            <h2
+                                className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
+                                style={{
+                                    backgroundColor: "var(--themePDark)",
+                                }}
+                            >
+                                {cat}
+                            </h2>
+                            <div>
+                                <CarouselCard
+                                    CardList={ThisCardList}
+                                    size="large"
+                                    multi
+                                    lazyLoad
+                                    trigger={randomId}
+                                    pageDots
+                                    fullscreen
+                                    setOuterFlickity={setFlickity}
+                                    carouselInd={carouselInd}
+                                    pageDotsColor="#fff"
                                 />
-                                <ContinueBtn onClick={handleNextPage} />
-                            </section>
-                        );
-                    })}
-            </section>
-        );
-    }
+                            </div>
+                            <TotalInvest
+                                orderAmount={orderAmount}
+                                orderCount={orderCount}
+                                setDefault={setDefault}
+                            />
+                            <ContinueBtn onClick={handleNextPage} />
+                        </section>
+                    );
+                })}
+        </section>
+    );
 
     const showIllustration = () => (
         <main>
@@ -331,7 +355,7 @@ function DigitalMenu({
             </h1>
             {showSearchField()}
             <br />
-            <MenuList />
+            {showList()}
             {loading && <ShowLoadingSkeleton />}
             {!loading && !gotData && showIllustration()}
             {error && <ShowError />}
@@ -354,8 +378,20 @@ function DigitalMenu({
     );
 }
 
+// function areEqual(prevProps, nextProps) {
+//     return prevProps.dataList.length === nextProps.dataList.length && prevProps.carouselInd === nextProps.carouselInd;
+// }
+
 // COMP
-function CarouselList({ dataList = [], itemData, detectedCard }) {
+const CarouselList = (props) => {
+    const {
+        dataList = [],
+        itemData,
+        detectedCard,
+        flickity,
+        carouselInd,
+    } = props;
+
     return (
         <Fragment>
             {dataList.length &&
@@ -370,15 +406,24 @@ function CarouselList({ dataList = [], itemData, detectedCard }) {
                                 ref={detectedCard}
                                 card={card}
                                 itemData={itemData}
+                                flickity={flickity}
+                                carouselInd={carouselInd}
                             />
                         </Fragment>
                     ) : (
                         <Fragment key={card._id}>
-                            <ItemCardCustomer card={card} itemData={itemData} />
+                            <ItemCardCustomer
+                                card={card}
+                                itemData={itemData}
+                                flickity={flickity}
+                                carouselInd={carouselInd}
+                            />
                         </Fragment>
                     )
                 )}
         </Fragment>
     );
-}
+};
+
+CarouselList.displayName = "CarouselList";
 // END COMP

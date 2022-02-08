@@ -17,6 +17,7 @@ export default function CarouselCard({
     // for multiple carousels
     setOuterFlickity,
     carouselInd = 0,
+    pageDotsColor = "#333",
     // style,
     // currIconInd,
     // setOpenModal,
@@ -215,7 +216,7 @@ export default function CarouselCard({
                         height: 100%;
                         background: hsla(0, 0%, 0%, 0.9);
                         padding-bottom: 35px;
-                        z-index: 1;
+                        z-index: 2000;
                     }
 
                     .flickity-enabled.is-fullscreen .flickity-page-dots {
@@ -303,6 +304,13 @@ export default function CarouselCard({
                         width: 100% !important;
                         height: 100% !important;
                     }
+                `}
+            </style>
+            <style>
+                {`
+                        .flickity-page-dots .dot {
+                            background: ${pageDotsColor};
+                        }
                 `}
             </style>
         </section>
