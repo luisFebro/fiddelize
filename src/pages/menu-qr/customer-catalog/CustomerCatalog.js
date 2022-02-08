@@ -370,6 +370,7 @@ function DigitalMenu({
                             adminId={adminId}
                             itemSearch={search}
                             handleFullClose={setShowSingleItem}
+                            marginBottom={100}
                         />
                     }
                     fullOpen={showSingleItem}

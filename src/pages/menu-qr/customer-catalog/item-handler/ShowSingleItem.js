@@ -5,7 +5,6 @@ import Card from "@material-ui/core/Card";
 import convertToReal from "utils/numbers/convertToReal";
 import useContext from "context";
 import Spinner from "components/loadingIndicators/Spinner";
-import showToast from "components/toasts";
 import { MinusPlusBtns } from "../ItemCardCustomer";
 import ImgHandler from "./img/ImgHandler";
 
@@ -14,6 +13,7 @@ export default function ShowSingleItem({
     itemSearch,
     handleFullClose = () => null,
     adminId,
+    marginBottom = 50,
 }) {
     const [data, setData] = useState({
         _id: null,
@@ -31,8 +31,9 @@ export default function ShowSingleItem({
         totalAmount: 0,
     });
 
-    const { handleItem } = useContext();
-    console.log("handleItem", handleItem);
+    const { itemData } = useContext();
+    const { handleItem } = itemData;
+
     const { img, adName, price, category, added, qtt, totalAmount } = data;
 
     const [loadingShowItem, setLoadingShowItem] = useState(false);
@@ -81,7 +82,6 @@ export default function ShowSingleItem({
     );
 
     const saveItem = () => {
-        showToast("item saved");
         handleFullClose();
         return null;
     };
@@ -97,7 +97,7 @@ export default function ShowSingleItem({
             <section className="container-center">
                 <div className="ml-2">
                     <ButtonFab
-                        title="Salvar"
+                        title="Adicionar"
                         backgroundColor={`var(--themeSDark--${sColor})`}
                         onClick={saveItem}
                         position="relative"
@@ -146,7 +146,7 @@ export default function ShowSingleItem({
                             {category === "_general" ? "gerais" : category}
                         </p>
                     </div>
-                    <div style={{ marginBottom: 50 }} />
+                    <div style={{ marginBottom }} />
                 </main>
             </Card>
         </section>
@@ -154,21 +154,18 @@ export default function ShowSingleItem({
 
     const showMinusPlusBtns = () => (
         <section
-            className="position-absolute"
+            className="position-fixed"
             style={{
                 bottom: 10,
                 left: 10,
             }}
         >
             <MinusPlusBtns
-                qtt={10}
+                qtt={qtt}
                 handleItem={handleItem}
                 setData={setData}
-                card={{
-                    adName: "teste",
-                    price: 15,
-                    img: "teste.png",
-                }}
+                card={data}
+                textShadow={false}
             />
         </section>
     );

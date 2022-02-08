@@ -116,7 +116,13 @@ function ItemCardCustomer({ card, flickity, carouselInd }, ref) {
     );
 }
 
-export function MinusPlusBtns({ qtt, card, handleItem, setData }) {
+export function MinusPlusBtns({
+    textShadow = true,
+    qtt,
+    card,
+    handleItem,
+    setData,
+}) {
     return (
         <div className="d-flex">
             <ButtonFab
@@ -152,7 +158,11 @@ export function MinusPlusBtns({ qtt, card, handleItem, setData }) {
                     <FontAwesomeIcon icon="minus" style={{ fontSize: 15 }} />
                 }
             />
-            <p className="d-table text-shadow text-subtitle text-em-1-8 mx-2">
+            <p
+                className={`d-table ${
+                    textShadow ? "text-shadow" : ""
+                } text-subtitle text-em-1-8 mx-2`}
+            >
                 {qtt} x
             </p>
             <ButtonFab
