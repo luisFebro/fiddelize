@@ -360,7 +360,7 @@ export default function useAPIList({
                             margin: "70px 0 100px",
                         }}
                     >
-                        Isso é tudo{`, ${userName}.` || "."}
+                        Isso é tudo{`${userName ? `${userName}.` : "."}`}
                     </p>
                 )}
 
