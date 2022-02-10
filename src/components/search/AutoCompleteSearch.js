@@ -96,6 +96,7 @@ export default function AutoCompleteSearch({
     searchIcon = undefined, // fa icon name
     inputId = undefined, // id for working with focus
     showImgs = false,
+    clearField, // clear field programmaticaly
 }) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -104,6 +105,7 @@ export default function AutoCompleteSearch({
     const [loading, setLoading] = useState(false);
     const [needHistory, setNeedHistory] = useState(true);
     const [imgList, setImgList] = useState(null);
+    console.log("searchChange", searchChange);
 
     const didUserStartTyping = Boolean(searchChange.length);
 
@@ -179,7 +181,6 @@ export default function AutoCompleteSearch({
         async function doRequest() {
             try {
                 const response = await axios(config);
-                console.log("response AutoCompleteSearch.js", response);
 
                 clearTimeout(stopRequest);
                 setNeedHistory(false);
@@ -340,6 +341,7 @@ export default function AutoCompleteSearch({
                     variant="outlined"
                     InputProps={{
                         ...params.InputProps,
+                        value: clearField ? "" : undefined,
                         id: inputId,
                         type: "search",
                         style: {

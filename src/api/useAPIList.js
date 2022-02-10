@@ -51,6 +51,7 @@ export default function useAPIList({
     filterId = "_id",
     disableDupFilter = false, // disable equal matching filter
     heightSkeleton,
+    needHandledListUnion = false, // avoid need removeChild error
 }) {
     const [data, setData] = useState({
         list: [],
@@ -120,6 +121,7 @@ export default function useAPIList({
 
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
+
         const handledListUnion = disableDupFilter
             ? [...list, ...response.data.list]
             : [...list, ...response.data.list].filter(
@@ -128,15 +130,19 @@ export default function useAPIList({
                       ind
               );
 
-        const listType = updateOnly ? response.data.list : handledListUnion; // allow only unique objects by comparing their ids
+        const handleListType = () => {
+            if (needHandledListUnion) return handledListUnion;
+            return updateOnly ? [...response.data.list] : handledListUnion;
+        };
+
+        const listType = handleListType(); // allow only unique objects by comparing their ids
 
         const { listTotal, chunksTotal, content } = response.data;
         if (IS_DEV) console.log("listType", listType);
-        console.log("listTotal", listTotal);
 
         setData((prev) => ({
             ...prev,
-            list: handledListUnion, // listType is causing removeChild error
+            list: listType, // listType is causing removeChild error
             listTotal,
             chunksTotal,
             content,
@@ -349,7 +355,7 @@ export default function useAPIList({
             <Fragment>
                 {!hasMore && readyShowElems && (
                     <p
-                        className={`${txtColor} text-normal text-center font-weight-bold text-shadow`}
+                        className={`${txtColor} text-normal text-center font-weight-bold`}
                         style={{
                             margin: "70px 0 100px",
                         }}

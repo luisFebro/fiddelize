@@ -122,7 +122,7 @@ function getOrderTableList(orderList = [], options = {}) {
     );
 
     const newList = orderList.map((item) => {
-        const { count, name, img } = item;
+        const { count, adName, img } = item;
         let { amount } = item;
         amount = convertToReal(amount, {
             moneySign: true,
@@ -132,7 +132,7 @@ function getOrderTableList(orderList = [], options = {}) {
         const serviceElem = (
             <span className="d-inline-block" style={{ width: 250 }}>
                 {handleServiceName({
-                    serv: name,
+                    serv: adName,
                     count,
                 })}
             </span>

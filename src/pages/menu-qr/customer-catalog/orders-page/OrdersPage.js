@@ -37,7 +37,7 @@ export default function OrdersPage({
                 Meu Pedido
                 <br />
                 <span className="d-block text-center font-weight-bold position-relative mx-3 text-normal">
-                    Confira os items adicionados.
+                    Confira os itens adicionados.
                 </span>
             </p>
         </div>

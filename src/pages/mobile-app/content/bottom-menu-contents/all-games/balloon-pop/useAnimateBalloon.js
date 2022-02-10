@@ -127,7 +127,7 @@ export default function useAnimateBalloon(backColor) {
                         transformer(tail)
                             .translate(0, getSinY(24, 90, n))
                             .update();
-                        svg.style.opacity = opacity;
+                        if (svg) svg.style.opacity = opacity;
                     }),
                     false,
                     600
@@ -220,9 +220,13 @@ function createTransformer() {
 }
 
 function getBaseRatio(svg) {
-    const baseWidth = svg.viewBox.baseVal.width;
-    const baseHeight = svg.viewBox.baseVal.height;
-    const { width, height } = svg.getBoundingClientRect();
+    const baseWidth = svg && svg.viewBox.baseVal.width;
+    const baseHeight = svg && svg.viewBox.baseVal.height;
+    const dataBounding = svg.getBoundingClientRect();
+
+    const width = dataBounding && dataBounding.width;
+    const height = dataBounding && dataBounding.height;
+
     return {
         x: baseWidth / width,
         y: baseHeight / height,
@@ -231,8 +235,8 @@ function getBaseRatio(svg) {
 
 function getOriginPosition(element, xOffset, yOffset, ratio, svg) {
     const { left, top, width, height } = element.getBoundingClientRect();
-    const baseLeft = svg.getBoundingClientRect().left;
-    const baseTop = svg.getBoundingClientRect().top;
+    const baseLeft = svg && svg.getBoundingClientRect().left;
+    const baseTop = svg && svg.getBoundingClientRect().top;
     const x = (left - baseLeft) * ratio.x;
     const y = (top - baseTop) * ratio.y;
     return {

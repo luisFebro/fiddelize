@@ -7,10 +7,11 @@ import useAPIList, {
 } from "api/useAPIList";
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
+// import getId from "utils/getId";
 
 export default function useMainList(options = {}) {
     // adminId only for customer catalog
-    const { limit = 15, adminId } = options;
+    const { limit = 15, adminId, needHandledListUnion = false } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -42,7 +43,18 @@ export default function useMainList(options = {}) {
         params,
         trigger, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
         listName: "MenuDigitalList", // for offline list only
+        needHandledListUnion,
     });
+
+    // const updateAdminCatalog = () => {
+    //     setSkip(0);
+    //     setSearch("");
+    //     // setRun("runName", `AdminCatalog${getId()}`, uify);
+    //     // if (flickity) {
+    //     //     flickity.forEach((fl) => fl.destroy());
+    //     //     updateCarousel();
+    //     // }
+    // };
 
     // SEARCH
     const handleSearch = (entry) => {
@@ -55,9 +67,18 @@ export default function useMainList(options = {}) {
         setSearch(entry);
     };
 
+    // const [clearField, setClearField] = useState(false);
+
+    // const runClearField = () => {
+    //     setClearField(true);
+    //     setSkip(0);
+    //     setSearch("");
+    // }
+
     const autocompleteProps = {
         placeholder: "Procure um item",
         noOptionsText: "Item não encontrado",
+        clearField: true,
     };
 
     const showSearchField = () => (
@@ -111,18 +132,6 @@ export default function useMainList(options = {}) {
         showSearchField,
         dataList,
         search,
+        // updateAdminCatalog,
     };
 }
-
-/*
-
-// UPDATE LIST
-const updateAdminCatalog = () => {
-    if (flickity) {
-        flickity.forEach((fl) => fl.destroy());
-        setRun("runName", `AdminCatalog${getId()}`, uify);
-        updateCarousel();
-    }
-};
-
- */

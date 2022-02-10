@@ -13,7 +13,7 @@ count: Number(totalPackage),
 amount: Number(inv),
 */
 
-export function useOrderTotal({ orderCount, orderList = [], setData }) {
+export function useOrderTotal({ orderList = [], setData }) {
     useEffect(() => {
         const amount = orderList.reduce((acc, next) => acc + next.amount, 0);
         const count = orderList.reduce((acc, next) => acc + next.count, 0);
@@ -33,12 +33,12 @@ export function updateItem(payload) {
     const { item, setData } = payload;
 
     setData((prev) => {
-        const serviceName = item.name;
+        const serviceName = item.adName;
         const prevList = prev.orderList;
 
         // update item by removing any prior added item to insert new one
         const clearedList = prevList.filter(
-            (priorItem) => priorItem.name !== serviceName
+            (priorItem) => priorItem.adName !== serviceName
         );
 
         return {
@@ -57,7 +57,7 @@ export function removeItem(payload) {
 
         // same logic for updating above, but for removal purpose.
         const clearedList = prevList.filter(
-            (priorItem) => priorItem.name !== itemName
+            (priorItem) => priorItem.adName !== itemName
         );
 
         return {

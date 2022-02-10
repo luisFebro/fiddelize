@@ -7,11 +7,11 @@ import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import getItems, { setItems, removeItems } from "init/lStorage";
 import { checkDetectedElem } from "api/useElemDetection";
-import useMainList from "pages/menu-qr/admin/items/useMainList";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 import getId from "utils/getId";
+import useMainList from "../admin/items/useMainList";
 import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
@@ -64,8 +64,13 @@ export default function CustomerCatalog({
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
+    console.log("orderCount", orderCount);
+    console.log("orderAmount", orderAmount);
+    console.log("orderList", orderList);
 
     const { bizLogo } = useBizData();
+    // biz logo should be fetched with adminId when page is laoded
+
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 
     const ids = {
@@ -228,7 +233,7 @@ function DigitalMenu({
         dataList,
         search,
         // updateAdminCatalog,
-    } = useMainList({ adminId });
+    } = useMainList({ adminId, needHandledListUnion: true });
 
     const {
         list = [],
@@ -371,6 +376,7 @@ function DigitalMenu({
                             itemSearch={search}
                             handleFullClose={setShowSingleItem}
                             marginBottom={100}
+                            // updateCatalog={updateAdminCatalog}
                         />
                     }
                     fullOpen={showSingleItem}

@@ -101,7 +101,8 @@ export default function AsyncPix({ modalData }) {
         });
     };
 
-    const pixKey = "24289c41-0b0d-485c-a3bf-ff00ca54b4b4";
+    // nubank
+    const pixKey = "c247d064-9f0f-4e92-95b6-0a3ab04c83fa";
     const queryDesc = itemDescription ? `&d=${itemDescription}` : "";
     const showMainData = () => (
         <section className="animated fadeInUp delay-1s text-center">

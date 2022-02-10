@@ -7,7 +7,8 @@ import convertToReal from "utils/numbers/convertToReal";
 export default function Pix({ location }) {
     const value = getQueryByName("v", location.search);
     const desc = getQueryByName("d", location.search);
-    const pixKey = "targetPrize24289c41-0b0d-485c-a3bf-ff00ca54b4b4"; // 5e8b0bfc8c616719b01abc9c
+    // nubank
+    const pixKey = "c247d064-9f0f-4e92-95b6-0a3ab04c83fa"; // 5e8b0bfc8c616719b01abc9c
 
     const investAmount = convertToReal(value, {
         moneySign: true,

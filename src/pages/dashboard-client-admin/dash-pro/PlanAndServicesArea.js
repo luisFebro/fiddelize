@@ -6,7 +6,7 @@ export default function PlanAndServicesArea({ isPro, plan, period }) {
         <section className="my-5">
             <div className="text-subtitle font-weight-bold text-purple">
                 Versão {isPro ? "Pro" : "Atual"}:
-                <span className="d-block d-flex text-em-1-7 text-relative">
+                <span className="d-block-inline d-flex text-em-1-7 text-relative">
                     {isPro ? "Plano" : ""}
                     <div
                         className={`ml-3 position-relative ${

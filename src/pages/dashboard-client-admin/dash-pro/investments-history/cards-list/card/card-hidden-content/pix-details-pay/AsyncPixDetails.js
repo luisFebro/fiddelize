@@ -6,7 +6,7 @@ import convertToReal from "utils/numbers/convertToReal";
 import "./_Pix.scss";
 
 export default function AsyncPixDetails({ itemAmount }) {
-    const pixKey = "24289c41-0b0d-485c-a3bf-ff00ca54b4b4";
+    const pixKey = "c247d064-9f0f-4e92-95b6-0a3ab04c83fa";
     const investAmount = convertToReal(itemAmount, {
         moneySign: true,
         needFraction: true,
