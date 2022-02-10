@@ -7,6 +7,7 @@ import useAPIList, { readMainItemList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 import showToast from "components/toasts";
+
 // import useContext from "context";
 import getId from "utils/getId";
 import ItemCard from "./ItemCard";
@@ -18,6 +19,7 @@ export default function FinalList({
     isAddCat,
     setFullOpen,
     closeCategoryForm,
+    isCustomerCatalog,
 }) {
     const [trigger, setTrigger] = useState(false);
     const [dataList, setDataList] = useState({
@@ -71,7 +73,7 @@ export default function FinalList({
         moreData,
         isOffline,
         hasMore,
-        // ShowOverMsg,
+        ShowOverMsg,
         // listTotal,
         // isPlural,
     } = useAPIList({
@@ -227,6 +229,7 @@ export default function FinalList({
                             data={item}
                             setDataList={setDataList}
                             selectedCategory={category}
+                            isCustomerCatalog={isCustomerCatalog}
                         />
                     </Fragment>
                 ) : (
@@ -236,16 +239,20 @@ export default function FinalList({
                             data={item}
                             setDataList={setDataList}
                             selectedCategory={category}
+                            isCustomerCatalog={isCustomerCatalog}
                         />
                     </Fragment>
                 )
             )}
             {loading && <ShowLoadingSkeleton height="85%" />}
             {error && <ShowError />}
-            {tapHoldOn && showTapAndHoldOptions()}
-            <p className="my-3 main-font text-small font-weight-bold mx-3 text-grey">
-                clique e segure um ou mais itens para mais opções
-            </p>
+            {isCustomerCatalog && <ShowOverMsg />}
+            {!isCustomerCatalog && tapHoldOn && showTapAndHoldOptions()}
+            {!isCustomerCatalog && (
+                <p className="my-3 main-font text-small font-weight-bold mx-3 text-grey">
+                    clique e segure um ou mais itens para mais opções
+                </p>
+            )}
             <div style={{ marginBottom: 150 }} />
         </section>
     );

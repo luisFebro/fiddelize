@@ -11,6 +11,7 @@ import removeImgFormat from "utils/biz/removeImgFormat";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 import getId from "utils/getId";
+import RadiusBtn from "components/buttons/RadiusBtn";
 import useMainList from "../admin/items/useMainList";
 import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
@@ -42,6 +43,13 @@ export const AsyncOrderSuccess = Load({
         ),
 });
 
+const AsyncCategoryList = Load({
+    loader: () =>
+        import(
+            "pages/menu-qr/admin/items/item-list/CategoryList" /* webpackChunkName: "category-list-content-lazy" */
+        ),
+});
+
 const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
     "digitalMenuData",
     "digitalMenuCurrPage",
@@ -64,9 +72,6 @@ export default function CustomerCatalog({
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
-    console.log("orderCount", orderCount);
-    console.log("orderAmount", orderAmount);
-    console.log("orderList", orderList);
 
     const { bizLogo } = useBizData();
     // biz logo should be fetched with adminId when page is laoded
@@ -112,11 +117,6 @@ export default function CustomerCatalog({
         else removeItem({ itemName: payload, setData });
     };
     useOrderTotal({ orderCount, orderList, setData });
-
-    const itemData = {
-        handleItem,
-        orderList,
-    };
 
     const handleNextPage = () => {
         // even not id, at least allow to save data and keep current page
@@ -200,6 +200,11 @@ export default function CustomerCatalog({
         </Fragment>
     );
 
+    const itemData = {
+        handleItem,
+        orderList,
+    };
+
     const store = useGlobalData({
         itemData,
     });
@@ -221,6 +226,7 @@ function DigitalMenu({
     isOnline,
     adminId,
 }) {
+    const [showCategoryList, setShowCategoryList] = useState(null);
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
 
@@ -287,14 +293,25 @@ function DigitalMenu({
 
                     return (
                         <section key={cat}>
-                            <h2
-                                className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
-                                style={{
-                                    backgroundColor: "var(--themePDark)",
-                                }}
-                            >
-                                {cat}
-                            </h2>
+                            <div className="d-flex justify-content-between">
+                                <h2
+                                    className="d-table text-pill ml-3 text-normal text-purple font-weight-bold"
+                                    style={{
+                                        backgroundColor: "var(--themePDark)",
+                                    }}
+                                >
+                                    {cat === "_general" ? "gerais" : cat}
+                                </h2>
+                                <div className="mr-3">
+                                    <RadiusBtn
+                                        title="ver todos"
+                                        backgroundColor="var(--themeSDark)"
+                                        onClick={() => setShowCategoryList(ind)}
+                                        position="relative"
+                                        size="extra-small"
+                                    />
+                                </div>
+                            </div>
                             <div>
                                 <CarouselCard
                                     CardList={ThisCardList}
@@ -315,6 +332,20 @@ function DigitalMenu({
                                 setDefault={setDefault}
                             />
                             <ContinueBtn onClick={handleNextPage} />
+                            {showCategoryList === ind && (
+                                <ModalFullContent
+                                    contentComp={
+                                        <AsyncCategoryList
+                                            category={cat}
+                                            setFullOpen={setShowCategoryList}
+                                            isCustomerCatalog
+                                        />
+                                    }
+                                    fullOpen={showCategoryList === ind}
+                                    setFullOpen={setShowCategoryList}
+                                    backgroundColor="var(--mainWhite)"
+                                />
+                            )}
                         </section>
                     );
                 })}

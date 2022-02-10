@@ -105,7 +105,6 @@ export default function AutoCompleteSearch({
     const [loading, setLoading] = useState(false);
     const [needHistory, setNeedHistory] = useState(true);
     const [imgList, setImgList] = useState(null);
-    console.log("searchChange", searchChange);
 
     const didUserStartTyping = Boolean(searchChange.length);
 

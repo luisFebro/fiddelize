@@ -161,8 +161,8 @@ export default function ShowSingleItem({
             }}
         >
             <MinusPlusBtns
-                qtt={qtt}
                 handleItem={handleItem}
+                qtt={qtt}
                 setData={setData}
                 card={data}
                 textShadow={false}

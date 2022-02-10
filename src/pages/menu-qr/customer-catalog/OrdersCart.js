@@ -15,7 +15,7 @@ const getStyles = () => ({
         position: "fixed",
         bottom: 15,
         right: 15,
-        zIndex: 100,
+        zIndex: 4000,
     },
     clipPathBottom: {
         bottom: 0,
@@ -26,6 +26,7 @@ const getStyles = () => ({
         webPackClipPath: `ellipse(${
             isSmall ? "49% 13%" : "40% 17%"
         } at 13% 96%)`,
+        zIndex: 4000,
     },
     muStyle: {
         transform: "scale(1.7)",
@@ -138,7 +139,10 @@ export const TotalInvest = ({ orderAmount, orderCount, setDefault }) => {
     return (
         <Fragment>
             <div style={styles.clipPathBottom} />
-            <section className="position-fixed d-flex" style={{ bottom: 0 }}>
+            <section
+                className="position-fixed d-flex"
+                style={{ bottom: 0, zIndex: 4000 }}
+            >
                 {Boolean(orderCount) && showDeleteBtn()}
                 {showCart()}
                 <div className="text-subtitle text-white font-weight-bold">

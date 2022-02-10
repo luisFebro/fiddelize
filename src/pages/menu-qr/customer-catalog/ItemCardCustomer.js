@@ -94,12 +94,12 @@ function ItemCardCustomer({ card, flickity, carouselInd }, ref) {
                 >
                     {truncate(itemDesc, 40)}
                 </p>
-                <p className="d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
+                <p className="position-relative d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
                     R$ {convertToReal(totalAmount, { needFraction: true })}{" "}
                     {qtt > 1 ? (
-                        <span className="text-em-0-9">
+                        <span className="text-em-0-7 d-block-inline">
                             {" "}
-                            &gt; R$ {convertToReal(card.price)} (cada)
+                            &gt; R$ {convertToReal(card.price)} uni.
                         </span>
                     ) : (
                         ""

@@ -2,8 +2,8 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.13.0";
-const updateDescription = "menu digital pt37";
+const latestVersion = "v5.13.30";
+const updateDescription = "menu digital pt38";
 /* HISTORY
 chat 2.0 with Fidda Bot training pt4
 balloonPop game pt5 and new email

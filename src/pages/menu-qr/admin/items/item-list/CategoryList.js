@@ -11,6 +11,7 @@ export default function CategoryList({
     setFullOpen = () => null,
     closeCategoryForm = () => null,
     isAddCategory = false,
+    isCustomerCatalog = false,
     // menuData,
 }) {
     const [dataList, setDataList] = useState({
@@ -87,7 +88,7 @@ export default function CategoryList({
     return (
         <section className="mx-3 text-center my-5 text-white text-hero">
             {showTitle()}
-            {isCatOnly && showEditCategory()}
+            {!isCustomerCatalog && isCatOnly && showEditCategory()}
             <FinalList
                 category={category}
                 setDataList={setDataList}
@@ -95,6 +96,7 @@ export default function CategoryList({
                 isAddCat={isAddCat}
                 setFullOpen={setFullOpen}
                 closeCategoryForm={closeCategoryForm}
+                isCustomerCatalog={isCustomerCatalog}
             />
         </section>
     );

@@ -1,7 +1,8 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState, Fragment } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import EditButton from "components/buttons/EditButton";
 import DeleteButton from "components/buttons/DeleteButton";
+import useContext from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Checkbox from "@material-ui/core/Checkbox";
 import ModalFullContent from "components/modals/ModalFullContent";
@@ -15,6 +16,15 @@ const AsyncAddItemContent = Load({
             "pages/menu-qr/admin/items/item-handler/AddItemContent.js" /* webpackChunkName: "add-item-content-lazy" */
         ),
 });
+
+const AsyncMinusPlusBtns = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "./MinusPlusBtns" /* webpackChunkName: "minus-plus-btns-lazy" */
+        ),
+});
+//
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
@@ -52,12 +62,25 @@ function onLongPress(elementId, callback) {
 }
 
 function ItemCard(
-    { selectedCategory, isAddCategory = true, data, setDataList },
+    {
+        isCustomerCatalog,
+        selectedCategory,
+        isAddCategory = true,
+        data,
+        setDataList,
+    },
     ref
 ) {
     const [fullOpen, setFullOpen] = useState(false);
     const [selected, setSelected] = useState(false);
     const { category, itemId, img, adName, price } = data;
+    const [btnsData, setBtnsData] = useState({
+        qtt: 0,
+    });
+    const { qtt } = btnsData;
+
+    const { itemData } = useContext();
+    const { handleItem } = itemData;
 
     const checkAlreadySelected = isAddCategory && selectedCategory === category;
 
@@ -77,7 +100,7 @@ function ItemCard(
             let newGeneralList = [];
             if (clicked) {
                 const priorGeneralList = prev.generalList;
-                const needGeneral = clicked && selected && alreadySelected; // clicked and still selected before unclicked
+                const needGeneral = clicked && selected; // && alreadySelected; // clicked and still selected before unclicked
                 newGeneralList = needGeneral
                     ? [...priorGeneralList, itemId]
                     : priorGeneralList.filter((currId) => currId !== itemId);
@@ -197,6 +220,31 @@ function ItemCard(
         </div>
     );
 
+    const handlePrice = () => (
+        <Fragment>
+            {isCustomerCatalog ? (
+                <p className="position-relative d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
+                    R${" "}
+                    {convertToReal(qtt ? price * qtt : price, {
+                        needFraction: true,
+                    })}{" "}
+                    {qtt > 1 ? (
+                        <span className="text-em-0-7 d-block-inline">
+                            {" "}
+                            &gt; R$ {convertToReal(price)} uni.
+                        </span>
+                    ) : (
+                        ""
+                    )}
+                </p>
+            ) : (
+                <p className="d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
+                    R$ {convertToReal(price, { needFraction: true })}
+                </p>
+            )}
+        </Fragment>
+    );
+
     return (
         <section
             ref={ref}
@@ -222,19 +270,35 @@ function ItemCard(
                     >
                         {truncate(adName, 60)}
                     </p>
-
-                    <p className="d-table text-normal text-shadow text-em-1-3 text-pill text-nowrap">
-                        R$ {convertToReal(price, { needFraction: true })}
-                    </p>
+                    {handlePrice()}
                 </div>
             </div>
             {!isAddCategory && (
-                <div
-                    className="position-absolute"
-                    style={{ bottom: 10, right: 10 }}
-                >
-                    <EditButton zIndex={1} onClick={() => setFullOpen(true)} />
-                </div>
+                <Fragment>
+                    {isCustomerCatalog ? (
+                        <div
+                            className="position-absolute text-white"
+                            style={{ bottom: -18, right: 10 }}
+                        >
+                            <AsyncMinusPlusBtns
+                                handleItem={handleItem}
+                                qtt={qtt}
+                                setData={setBtnsData}
+                                card={data}
+                            />
+                        </div>
+                    ) : (
+                        <div
+                            className="position-absolute"
+                            style={{ bottom: 10, right: 10 }}
+                        >
+                            <EditButton
+                                zIndex={1}
+                                onClick={() => setFullOpen(true)}
+                            />
+                        </div>
+                    )}
+                </Fragment>
             )}
             {selected && !isAddCategory && showSelectedItemCheckIcon()}
             {fullOpen && (

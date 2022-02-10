@@ -216,7 +216,7 @@ export default function CarouselCard({
                         height: 100%;
                         background: hsla(0, 0%, 0%, 0.9);
                         padding-bottom: 35px;
-                        z-index: 2000;
+                        z-index: 6000 !important;
                     }
 
                     .flickity-enabled.is-fullscreen .flickity-page-dots {
