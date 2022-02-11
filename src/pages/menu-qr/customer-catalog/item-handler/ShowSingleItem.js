@@ -7,6 +7,7 @@ import useContext from "context";
 import Spinner from "components/loadingIndicators/Spinner";
 import { MinusPlusBtns } from "../ItemCardCustomer";
 import ImgHandler from "./img/ImgHandler";
+// import getId from "utils/getId";
 
 export default function ShowSingleItem({
     sColor = "default",
@@ -14,6 +15,7 @@ export default function ShowSingleItem({
     handleFullClose = () => null,
     adminId,
     marginBottom = 50,
+    updateAdminCatalog,
 }) {
     const [data, setData] = useState({
         _id: null,
@@ -34,7 +36,15 @@ export default function ShowSingleItem({
     const { itemData } = useContext();
     const { handleItem } = itemData;
 
-    const { img, adName, price, category, added, qtt, totalAmount } = data;
+    const {
+        img,
+        adName,
+        price,
+        category,
+        qtt,
+        // added,
+        // totalAmount
+    } = data;
 
     const [loadingShowItem, setLoadingShowItem] = useState(false);
 
@@ -48,6 +58,10 @@ export default function ShowSingleItem({
             adName: thisCard.adName,
             price: thisCard.price && thisCard.price.toFixed(2),
         }));
+
+    useEffect(() => {
+        updateAdminCatalog();
+    }, []);
 
     useEffect(() => {
         if (!itemSearch) return;

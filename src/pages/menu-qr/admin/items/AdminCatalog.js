@@ -39,6 +39,8 @@ export default function AdminCatalog() {
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
     const [showSingleItem, setShowSingleItem] = useState(false);
+    const [priorList, setPriorList] = useState([]);
+
     const updateCarousel = () => setRandomId(getId());
 
     useBackColor("var(--mainWhite)");
@@ -301,6 +303,10 @@ export default function AdminCatalog() {
             //     allCategories: dbCategories,
             // }));
         }
+
+        if (list.length && !priorList.length) {
+            setPriorList(list);
+        }
         // insert dbCategories ccauses max depth error
     }, [list.length]);
 
@@ -325,6 +331,9 @@ export default function AdminCatalog() {
     const handleTotal = () =>
         listTotal > 1 ? `${listTotal} itens` : `${listTotal} item`;
 
+    // the list should has the same or higher length, otherwise it will throw an error with removeChild // e.g fickity for react: https://github.com/yaodingyd/react-flickity-component#readme
+    const dataItems = list.length < priorList.length ? priorList : list;
+
     return (
         <Provider store={store}>
             {showTitle()}
@@ -338,7 +347,7 @@ export default function AdminCatalog() {
             </p>
             <MenuList
                 allCategories={dbCategories}
-                itemList={list}
+                itemList={dataItems}
                 setFlickity={setFlickity}
                 detectedCard={detectedCard}
                 randomId={randomId}
@@ -480,7 +489,7 @@ const CarouselList = ({
                         </Fragment>
                     )
                 )
-                .slice(0, 5)}
+                .slice(0, 3)}
     </Fragment>
 );
 // END COMP
