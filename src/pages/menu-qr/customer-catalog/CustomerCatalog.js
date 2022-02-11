@@ -323,7 +323,7 @@ function DigitalMenu({
                                     CardList={ThisCardList}
                                     size="large"
                                     multi
-                                    lazyLoad
+                                    // lazyLoad
                                     trigger={randomId}
                                     pageDots
                                     fullscreen
@@ -462,7 +462,7 @@ const CarouselList = (props) => {
                             </Fragment>
                         )
                     )
-                    .slice(0, 3)}
+                    .slice(0, 5)}
         </Fragment>
     );
 };

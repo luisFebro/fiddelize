@@ -49,7 +49,8 @@ function ItemCardCustomer({ card, flickity, carouselInd }, ref) {
             }}
         >
             <img
-                data-flickity-lazyload={card.img}
+                // data-flickity-lazyload={card.img}
+                src={card.img}
                 className="carousel-cell-image"
                 width="150px"
                 height="150px"

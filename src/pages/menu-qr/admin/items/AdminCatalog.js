@@ -356,7 +356,7 @@ export default function AdminCatalog() {
             {loading && <ShowLoadingSkeleton />}
             {!loading && !gotData && showIllustration()}
             {error && <ShowError />}
-            {gotData && <ShowOverMsg txtColor="text-white" />}
+            {gotData && <ShowOverMsg txtColor="text-purple" />}
             <div style={{ marginBottom: 150 }} />
             {showSingleItem && (
                 <ModalFullContent
@@ -427,7 +427,7 @@ function MenuList({
                                     CardList={ThisCarouselList}
                                     size="medium"
                                     multi
-                                    lazyLoad
+                                    // lazyLoad
                                     trigger={randomId}
                                     pageDots
                                     fullscreen
@@ -489,7 +489,7 @@ const CarouselList = ({
                         </Fragment>
                     )
                 )
-                .slice(0, 3)}
+                .slice(0, 5)}
     </Fragment>
 );
 // END COMP

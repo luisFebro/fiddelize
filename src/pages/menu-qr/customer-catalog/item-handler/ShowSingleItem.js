@@ -34,7 +34,7 @@ export default function ShowSingleItem({
     });
 
     const { itemData } = useContext();
-    const { handleItem } = itemData;
+    const handleItem = itemData && itemData.handleItem;
 
     const {
         img,
@@ -46,7 +46,7 @@ export default function ShowSingleItem({
         // totalAmount
     } = data;
 
-    const [loadingShowItem, setLoadingShowItem] = useState(false);
+    const [loadingShowItem, setLoadingShowItem] = useState(itemSearch);
 
     const handleCardData = (thisCard) =>
         setData((prev) => ({

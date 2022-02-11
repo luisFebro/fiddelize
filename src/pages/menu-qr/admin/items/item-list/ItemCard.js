@@ -80,7 +80,7 @@ function ItemCard(
     const { qtt } = btnsData;
 
     const { itemData } = useContext();
-    const { handleItem } = itemData;
+    const handleItem = itemData && itemData.handleItem;
 
     const checkAlreadySelected = isAddCategory && selectedCategory === category;
 

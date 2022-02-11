@@ -28,7 +28,7 @@ export default function FinalList({
     });
     const { selectionList, generalList } = dataList;
     // const { updateAdminCatalog } = useContext();
-    const limit = 10;
+    const limit = 15;
 
     const [skip, setSkip] = useState(0);
     const { bizId, bizLinkName } = useBizData();
