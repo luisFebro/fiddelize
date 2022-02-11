@@ -51,7 +51,6 @@ export default function useAPIList({
     filterId = "_id",
     disableDupFilter = false, // disable equal matching filter
     heightSkeleton,
-    needHandledListUnion = false, // avoid need removeChild error
 }) {
     const [data, setData] = useState({
         list: [],
@@ -122,31 +121,24 @@ export default function useAPIList({
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
 
-        const handledListUnion = disableDupFilter
-            ? [...list, ...response.data.list]
-            : [...list, ...response.data.list].filter(
-                  (val, ind, arr) =>
-                      arr.findIndex((t) => t[filterId] === val[filterId]) ===
-                      ind
-              );
+        setData((prev) => {
+            const handledListUnion = disableDupFilter
+                ? [...prev.list, ...response.data.list]
+                : [...prev.list, ...response.data.list].filter(
+                      (val, ind, arr) =>
+                          arr.findIndex(
+                              (t) => t[filterId] === val[filterId]
+                          ) === ind
+                  );
 
-        const handleListType = () => {
-            if (needHandledListUnion) return handledListUnion;
-            return updateOnly ? [...response.data.list] : handledListUnion;
-        };
-
-        const listType = handleListType(); // allow only unique objects by comparing their ids
-
-        const { listTotal, chunksTotal, content } = response.data;
-        if (IS_DEV) console.log("listType", listType);
-
-        setData((prev) => ({
-            ...prev,
-            list: listType, // listType is causing removeChild error
-            listTotal,
-            chunksTotal,
-            content,
-        }));
+            return {
+                ...prev,
+                list: updateOnly ? response.data.list : handledListUnion,
+                listTotal: response.data.listTotal,
+                chunksTotal: response.data.chunksTotal,
+                content: response.data.content,
+            };
+        });
 
         const hasCards = listTotal > skip;
         const firstCards = listTotal <= limit;

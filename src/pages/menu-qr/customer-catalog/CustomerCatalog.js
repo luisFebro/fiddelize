@@ -229,6 +229,7 @@ function DigitalMenu({
     const [showCategoryList, setShowCategoryList] = useState(null);
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
+    const [priorList, setPriorList] = useState([]);
 
     const updateCarousel = () => setRandomId(getId());
 
@@ -238,8 +239,8 @@ function DigitalMenu({
         showSearchField,
         dataList,
         search,
-        // updateAdminCatalog,
-    } = useMainList({ adminId, needHandledListUnion: true });
+        updateAdminCatalog,
+    } = useMainList({ adminId });
 
     const {
         list = [],
@@ -257,7 +258,6 @@ function DigitalMenu({
     } = dataList;
 
     const allCategories = moreData ? JSON.parse(moreData) : [];
-    const dataProducts = list;
 
     useEffect(() => {
         // update list when user scroll by detecting the size of it.
@@ -267,9 +267,16 @@ function DigitalMenu({
                 updateCarousel();
             }
         }
+
+        if (list.length && !priorList.length) {
+            setPriorList(list);
+        }
         // insert dbCategories causes max depth error
     }, [list.length]);
     // END LIST
+
+    // the list should has the same or higher length, otherwise it will throw an error with removeChild // e.g fickity for react: https://github.com/yaodingyd/react-flickity-component#readme
+    const dataItems = list.length < priorList.length ? priorList : list;
 
     const showList = () => (
         <section>
@@ -278,16 +285,15 @@ function DigitalMenu({
                     const carouselInd = ind;
 
                     const filteredCategory =
-                        dataProducts.filter((item) => item.category === cat) ||
-                        [];
+                        dataItems.filter((item) => item.category === cat) || [];
                     if (!filteredCategory.length) return <div />;
 
                     const ThisCardList = (
                         <CarouselList
                             dataList={filteredCategory}
                             detectedCard={detectedCard}
-                            flickity={flickity}
                             carouselInd={carouselInd}
+                            flickity={flickity}
                         />
                     );
 
@@ -407,12 +413,13 @@ function DigitalMenu({
                             itemSearch={search}
                             handleFullClose={setShowSingleItem}
                             marginBottom={100}
-                            // updateCatalog={updateAdminCatalog}
+                            updateAdminCatalog={updateAdminCatalog}
                         />
                     }
                     fullOpen={showSingleItem}
                     setFullOpen={setShowSingleItem}
                     backgroundColor="var(--themePDark)"
+                    needIndex={6000}
                 />
             )}
         </section>
@@ -430,30 +437,32 @@ const CarouselList = (props) => {
     return (
         <Fragment>
             {dataList.length &&
-                dataList.map((card, ind) =>
-                    checkDetectedElem({
-                        list: dataList,
-                        ind,
-                        indFromLast: 3,
-                    }) ? (
-                        <Fragment key={card._id}>
-                            <ItemCardCustomer
-                                ref={detectedCard}
-                                card={card}
-                                flickity={flickity}
-                                carouselInd={carouselInd}
-                            />
-                        </Fragment>
-                    ) : (
-                        <Fragment key={card._id}>
-                            <ItemCardCustomer
-                                card={card}
-                                flickity={flickity}
-                                carouselInd={carouselInd}
-                            />
-                        </Fragment>
+                dataList
+                    .map((card, ind) =>
+                        checkDetectedElem({
+                            list: dataList,
+                            ind,
+                            indFromLast: 3,
+                        }) ? (
+                            <Fragment key={card._id}>
+                                <ItemCardCustomer
+                                    ref={detectedCard}
+                                    card={card}
+                                    flickity={flickity}
+                                    carouselInd={carouselInd}
+                                />
+                            </Fragment>
+                        ) : (
+                            <Fragment key={card._id}>
+                                <ItemCardCustomer
+                                    card={card}
+                                    flickity={flickity}
+                                    carouselInd={carouselInd}
+                                />
+                            </Fragment>
+                        )
                     )
-                )}
+                    .slice(0, 3)}
         </Fragment>
     );
 };

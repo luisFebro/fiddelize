@@ -119,6 +119,11 @@ export default function AutoCompleteSearch({
             selectedValue: pickedValue || "_cleared",
         }));
         handlePickedValuesHistory(pickedValue, { offlineKey, maxHistory });
+
+        // clear the field right away when selected item
+        if (clearField) {
+            setSearchChange("");
+        }
     };
 
     const onSearchChange = (e) => {
@@ -340,7 +345,6 @@ export default function AutoCompleteSearch({
                     variant="outlined"
                     InputProps={{
                         ...params.InputProps,
-                        value: clearField ? "" : undefined,
                         id: inputId,
                         type: "search",
                         style: {
@@ -379,6 +383,7 @@ export default function AutoCompleteSearch({
                     }}
                 />
             )}
+            value={searchChange}
         />
     );
 }

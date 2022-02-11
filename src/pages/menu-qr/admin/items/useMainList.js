@@ -7,11 +7,11 @@ import useAPIList, {
 } from "api/useAPIList";
 import useElemDetection from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
-// import getId from "utils/getId";
+import getId from "utils/getId";
 
 export default function useMainList(options = {}) {
     // adminId only for customer catalog
-    const { limit = 15, adminId, needHandledListUnion = false } = options;
+    const { limit = 15, adminId } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -43,18 +43,11 @@ export default function useMainList(options = {}) {
         params,
         trigger, // search shoulb be the first, otherwise it will not trigger if other static value is in front.
         listName: "MenuDigitalList", // for offline list only
-        needHandledListUnion,
     });
 
-    // const updateAdminCatalog = () => {
-    //     setSkip(0);
-    //     setSearch("");
-    //     // setRun("runName", `AdminCatalog${getId()}`, uify);
-    //     // if (flickity) {
-    //     //     flickity.forEach((fl) => fl.destroy());
-    //     //     updateCarousel();
-    //     // }
-    // };
+    const updateAdminCatalog = () => {
+        setRun("runName", `AdminCatalog${getId()}`, uify);
+    };
 
     // SEARCH
     const handleSearch = (entry) => {
@@ -132,6 +125,6 @@ export default function useMainList(options = {}) {
         showSearchField,
         dataList,
         search,
-        // updateAdminCatalog,
+        updateAdminCatalog,
     };
 }
