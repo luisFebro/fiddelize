@@ -12,6 +12,10 @@ export const useNeedRedirectPage = ({ history, priorPageId }) => {
                 "pre_register"
             );
 
+            const continueVerificationOnly = ["targetPrize", "discountBack"];
+            const needVerify = continueVerificationOnly.includes(selectedGame);
+            if (!needVerify) return;
+
             const isTargetGame = selectedGame === "targetPrize";
             if (!isTargetGame) {
                 // the icon page is only for target game, so all other games should skip direct to admin register page here.

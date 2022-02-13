@@ -11,6 +11,7 @@ import ButtonMulti, {
 import { getVars, setVars } from "init/var";
 import showToast from "components/toasts";
 import isKeyPressed from "utils/event/isKeyPressed";
+import { useLocation } from "react-router-dom";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 // import { ROOT } from "api/root";
@@ -45,6 +46,10 @@ export default function BizForm({ history }) {
         // selectedValue: "", // field in the autoselect
     });
     const { bizName } = data;
+
+    const { search } = useLocation();
+    // for digital menu - even if the user skip the custom, it is still required to inform biz name before custom app panel
+    const needCustomApp = search && search.includes("customApp=1");
 
     useNeedRedirectPage({ history, priorPageId: "doneGamesPanel" });
 
@@ -139,6 +144,7 @@ export default function BizForm({ history }) {
 
         const finalData = {
             doneBizInfo: true,
+            doneSSRatingIcon: needCustomApp, // for digital menu
             clientAdminData: newData,
         };
         await setVars(finalData, "pre_register");
@@ -149,6 +155,8 @@ export default function BizForm({ history }) {
             bizName,
             targetPoints,
             prizeDesc,
+            // only for digital menu
+            needCustomApp,
         });
 
         history.push(gameUrl);
@@ -196,7 +204,15 @@ function handleGameUrl({
     bizName,
     targetPoints,
     prizeDesc,
+    needCustomApp,
 }) {
+    if (game === "digitalMenu") {
+        if (needCustomApp)
+            return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}`;
+        // no need to custom app
+        return `/${bizLinkName}/novo-clube/cadastro-admin`;
+    }
+
     if (game === "targetPrize")
         return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana&g=${game}`;
     return `/${bizLinkName}/novo-clube/self-service?nome-cliente=Ana&g=${game}`;

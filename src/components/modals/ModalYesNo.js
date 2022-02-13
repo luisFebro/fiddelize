@@ -19,6 +19,7 @@ export default function ModalYesNo({
     needCTAs = true,
     yesBtnColor = "var(--mainRed)",
     yesBtnIcon = "times",
+    noTitle = "NÃO",
 }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
     // LESSON: for critical data handling, the button should be permanent disabled
@@ -39,7 +40,7 @@ export default function ModalYesNo({
                         } d-flex justify-content-center`}
                     >
                         <ButtonMulti
-                            title="NÃO"
+                            title={noTitle}
                             onClick={() => setFullOpen(false)}
                             variant="link"
                         />

@@ -1,7 +1,7 @@
 import { useState, Fragment } from "react";
 import RadiusBtn from "components/buttons/RadiusBtn";
-import { Load } from "components/code-splitting/LoadableComp";
 import showToast from "components/toasts";
+import { Load } from "components/code-splitting/LoadableComp";
 
 const AsyncModalYesNo = Load({
     loader: () =>
