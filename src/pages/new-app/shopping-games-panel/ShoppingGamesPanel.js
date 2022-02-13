@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
 import { gameIconsStore, gameBrNameStore } from "components/biz/GamesBadge";
@@ -21,8 +21,17 @@ export const AsyncDiscountBackPanel = Load({
         ),
 });
 
+const AsyncConfirmOrSkipPanel = Load({
+    loader: () =>
+        import(
+            "components/modals/ModalYesNo" /* webpackChunkName: "confirm-or-skip-panel-lazy" */
+        ),
+});
+
 export default function ShoppingGamesPanel({ history }) {
-    const selectedGame = getQueryByName("g");
+    const [skipPanelOpen, setSkipPanelOpen] = useState(true);
+    const selectedStrategy = getQueryByName("g");
+    const isDigitalMenu = selectedStrategy === "digitalMenu";
 
     useScrollUp();
 
@@ -42,9 +51,9 @@ export default function ShoppingGamesPanel({ history }) {
             </span>
             <h2 className="container-center">
                 <span className="shopping-games-title text-subtitle font-weight-bold text-pill">
-                    {gameIconsStore[selectedGame]}
+                    {gameIconsStore[selectedStrategy]}
                     <span className="ml-3 d-inline-block">
-                        {gameBrNameStore[selectedGame]}
+                        {gameBrNameStore[selectedStrategy]}
                     </span>
                 </span>
                 <style jsx>
@@ -59,15 +68,54 @@ export default function ShoppingGamesPanel({ history }) {
         </Fragment>
     );
 
+    const runCustomApp = async () => {
+        if (isDigitalMenu) {
+            const data = {
+                game: "digitalMenu",
+                doneGamesPanel: true,
+            };
+
+            await setVars(data, "pre_register");
+            return history.push("/novo-clube/info-negocio?customApp=1");
+        }
+
+        return setSkipPanelOpen(false);
+    };
+
+    const runSkipCallback = async () => {
+        const data = {
+            game: "digitalMenu",
+            doneGamesPanel: true,
+        };
+
+        await setVars(data, "pre_register");
+    };
+
     return (
         <Fragment>
-            {showTitle()}
-            {showGameTitle()}
-            {selectedGame === "targetPrize" && (
+            {!isDigitalMenu && showTitle()}
+            {!isDigitalMenu && showGameTitle()}
+            {selectedStrategy === "targetPrize" && (
                 <AsyncTargetPrizePanel history={history} />
             )}
-            {selectedGame === "discountBack" && (
+            {selectedStrategy === "discountBack" && (
                 <AsyncDiscountBackPanel history={history} />
+            )}
+            {isDigitalMenu && (
+                <Fragment>
+                    <AsyncConfirmOrSkipPanel
+                        title="Deseja personalizar app agora?" // editar valores para outros estratégia
+                        subTitle="<span>Pulando, você edita valores e o estilo dos apps direto do seu painel de controle.</span>"
+                        fullOpen={skipPanelOpen}
+                        setFullOpen={setSkipPanelOpen}
+                        actionFunc={runCustomApp}
+                        yesBtnColor="var(--incomeGreen)"
+                        yesBtnIcon="check"
+                        noTitle="pular"
+                        noCallback={runSkipCallback}
+                    />
+                    <div style={{ marginBottom: 150 }} />
+                </Fragment>
             )}
         </Fragment>
     );

@@ -114,7 +114,6 @@ function GoalForm({ history, bizName }) {
             },
             "pre_register"
         );
-
         // it should reloads here so that data can readable in the next component
         window.location.href = "/novo-clube/info-negocio";
     };

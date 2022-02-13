@@ -113,7 +113,7 @@ function Website({ location }) {
                 />
                 <Route path="/baixe-app" exact component={AsyncDownloadApp} />
                 <Route
-                    path="/novo-clube/painel-jogos-compra"
+                    path="/novo-clube/painel-estrategia"
                     exact
                     component={AsyncShoppingGamesPanel}
                 />
