@@ -18,6 +18,8 @@ export const gameBrNameStore = {
     discountBack: "Desconto Retornado",
     topCustomers: "Clientes Tops",
     raffleTicket: "Bilhete Premiado",
+    // buy flow
+    digitalMenu: "Menu Digital",
 };
 
 export const selectBrBenefitType = (game) => {

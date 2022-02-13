@@ -6,6 +6,7 @@ import getQueryByName from "utils/string/getQueryByName";
 import { useAction } from "global-data/ui";
 import { setDefaultData } from "init/setInitData";
 import { setVars, removeStore } from "init/var";
+import getId from "utils/getId";
 
 export const AsyncTargetPrizePanel = Load({
     loader: () =>
@@ -40,7 +41,7 @@ export default function ShoppingGamesPanel({ history }) {
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
-            <h1 className="text-title">Novo Clube</h1>
+            <h1 className="text-title">Novo App</h1>
         </div>
     );
 
@@ -73,6 +74,13 @@ export default function ShoppingGamesPanel({ history }) {
             const data = {
                 game: "digitalMenu",
                 doneGamesPanel: true,
+                clientAdminData: {
+                    games: {
+                        [selectedStrategy]: {
+                            on: true,
+                        },
+                    },
+                },
             };
 
             await setVars(data, "pre_register");
@@ -83,12 +91,22 @@ export default function ShoppingGamesPanel({ history }) {
     };
 
     const runSkipCallback = async () => {
-        const data = {
+        const defaultData = {
             game: "digitalMenu",
+            clientAdminData: {
+                bizLogo: "/img/official-logo-name.png",
+                themeBackColor: "default",
+                themePColor: "default",
+                themeSColor: "default",
+                games: handleDefaultGame(selectedStrategy),
+            },
             doneGamesPanel: true,
+            doneSSTheming: true,
         };
 
-        await setVars(data, "pre_register");
+        await setVars(defaultData, "pre_register");
+
+        return history.push("/novo-clube/info-negocio");
     };
 
     return (
@@ -101,22 +119,20 @@ export default function ShoppingGamesPanel({ history }) {
             {selectedStrategy === "discountBack" && (
                 <AsyncDiscountBackPanel history={history} />
             )}
-            {isDigitalMenu && (
-                <Fragment>
-                    <AsyncConfirmOrSkipPanel
-                        title="Deseja personalizar app agora?" // editar valores para outros estratégia
-                        subTitle="<span>Pulando, você edita valores e o estilo dos apps direto do seu painel de controle.</span>"
-                        fullOpen={skipPanelOpen}
-                        setFullOpen={setSkipPanelOpen}
-                        actionFunc={runCustomApp}
-                        yesBtnColor="var(--incomeGreen)"
-                        yesBtnIcon="check"
-                        noTitle="pular"
-                        noCallback={runSkipCallback}
-                    />
-                    <div style={{ marginBottom: 150 }} />
-                </Fragment>
-            )}
+            <AsyncConfirmOrSkipPanel
+                title={`Deseja personalizar app agora (${
+                    selectedStrategy === "targetPrize" ? 3 : 2
+                } etapas)?`} // editar valores para outros estratégia
+                subTitle={`<span>Caso pule, você pode personalizar app no seu painel de controle.</span>`}
+                fullOpen={skipPanelOpen}
+                setFullOpen={setSkipPanelOpen}
+                actionFunc={runCustomApp}
+                yesBtnColor="var(--incomeGreen)"
+                yesBtnIcon="check"
+                noTitle="pular"
+                noCallback={runSkipCallback}
+            />
+            <div style={{ marginBottom: 150 }} />
         </Fragment>
     );
 }
@@ -144,6 +160,49 @@ function useSetDefaultData(uify) {
     }, [uify]);
 }
 // END HOOKS
+
+// helpers
+function handleDefaultGame(selectedStrategy) {
+    if (selectedStrategy === "discountBack") {
+        return {
+            discountBack: {
+                on: true,
+                challList: [
+                    {
+                        id: getId(),
+                        targetPoints: 100,
+                        targetMoney: 5,
+                        perc: 5,
+                    },
+                ],
+            },
+        };
+    }
+
+    if (selectedStrategy === "targetPrize") {
+        return {
+            targetPrize: {
+                on: true,
+                // object data for challList array
+                challList: [
+                    {
+                        id: getId(),
+                        targetPoints: 300,
+                        prizeDesc: "Item Exemplo",
+                        milestoneIcon: "star",
+                    },
+                ],
+            },
+        };
+    }
+
+    return {
+        [selectedStrategy]: {
+            on: true,
+        },
+    };
+}
+// end helpers
 
 /* ARCHIVES
 useAnimateElem(".intro-page--txt", { animaIn: "fadeInUp", speed: "slow" });

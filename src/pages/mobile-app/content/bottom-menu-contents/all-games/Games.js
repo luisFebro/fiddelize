@@ -32,11 +32,19 @@ export default function Games() {
     const currGame = handleCurrGame({ isPreviewMode, game, gameClubPreview });
 
     const { userGame } = useData();
-    if (!userGame && !isPreviewMode) return <div />;
+    const pointGames = ["targetPrize", "discountBack"];
+    const arePointGames = pointGames.includes(pointGames);
 
     const { icon, nameBr } = getGameData(currGame, userGame);
     let { challN = 1 } = getGameData(currGame, userGame);
     challN = isPreviewMode ? 1 : challN;
+
+    if ((!userGame && !isPreviewMode) || !arePointGames)
+        return (
+            <p className="text-center py-5 text-subtitle text-shadow text-white">
+                Nunhum jogo com pontos ativado.
+            </p>
+        );
 
     const showTitle = () => (
         <section className="animated fadeIn py-4">

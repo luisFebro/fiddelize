@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
+import { useLocation } from "react-router-dom";
 import "../style.scss";
 import useRun from "global-data/ui";
 import { getVars } from "init/var";
@@ -39,7 +40,11 @@ export default function AppPickersHandler({
     const { runName } = useRun();
     const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
     const [nextDisabled, setNextDisabled] = useState(true);
+
+    // only target game has the third step to customize icons. Others need to skip it.
     const isTargetGame = selectedGame === "targetPrize";
+    const { search } = useLocation();
+    const isNoDemo = search && search.includes("noDemo=1");
 
     useEffect(() => {
         (async () => {
@@ -138,6 +143,7 @@ export default function AppPickersHandler({
                     bizName={bizName}
                     bizLinkName={bizLinkName}
                     setLogoUrlPreview={setLogoUrlPreview}
+                    isNoDemo={isNoDemo}
                 />
                 {currNumber === 2 && (
                     <AsyncPickTheming
@@ -155,17 +161,19 @@ export default function AppPickersHandler({
                     />
                 )}
             </div>
-            <AppPreview
-                clientName={clientName}
-                logoUrlPreview={logoUrlPreview}
-                colorP={colorP}
-                colorS={colorS}
-                colorBack={colorBack}
-                currPoints={currPoints}
-                targetPoints={targetPoints}
-                prizeDesc={prizeDesc}
-                game={selectedGame}
-            />
+            {!isNoDemo && (
+                <AppPreview
+                    clientName={clientName}
+                    logoUrlPreview={logoUrlPreview}
+                    colorP={colorP}
+                    colorS={colorS}
+                    colorBack={colorBack}
+                    currPoints={currPoints}
+                    targetPoints={targetPoints}
+                    prizeDesc={prizeDesc}
+                    game={selectedGame}
+                />
+            )}
             {isSmall && (
                 <div className="container-center">
                     <ButtonMulti

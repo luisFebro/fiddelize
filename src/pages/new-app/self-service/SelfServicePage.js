@@ -96,7 +96,7 @@ function SelfServicePage({ location, history }) {
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
-            <p className="text-title">Novo Clube</p>
+            <p className="text-title">Novo App</p>
             <p className="text-white text-normal mx-3 mb-5">
                 {isSmall
                     ? "Personalize app no estilo do seu negócio!"

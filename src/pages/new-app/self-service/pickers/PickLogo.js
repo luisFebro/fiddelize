@@ -15,6 +15,7 @@ import { deleteImage } from "utils/storage/lForage";
 import { useBizData } from "init";
 import getVar, { setVars } from "init/var";
 import scrollIntoView from "utils/document/scrollIntoView";
+import removeImgFormat from "utils/biz/removeImgFormat";
 import ShowActionBtns from "./ShowActionBtns";
 
 PickLogo.propTypes = {
@@ -31,7 +32,7 @@ const setLogo = async ({ generatedImg, setLogoUrlPreview }) => {
         },
         "pre_register"
     );
-    setLogoUrlPreview && setLogoUrlPreview(generatedImg);
+    if (setLogoUrlPreview) setLogoUrlPreview(generatedImg);
 };
 
 export default function PickLogo({
@@ -41,6 +42,7 @@ export default function PickLogo({
     bizLinkName,
     setLogoUrlPreview,
     isFromDash = false,
+    isNoDemo = false,
 }) {
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
@@ -183,7 +185,7 @@ export default function PickLogo({
             });
         });
 
-        if (!isFromDash) {
+        if (!isNoDemo && !isFromDash) {
             (async () => {
                 await setLogo({
                     generatedImg,
@@ -320,6 +322,7 @@ export default function PickLogo({
             </div>
         );
 
+    const { newImg, width, height } = removeImgFormat(tempImgUrl && tempImgUrl);
     const showLogoUploadingArea = () => (
         <section className="text-normal text-white container-center">
             <Card
@@ -347,6 +350,16 @@ export default function PickLogo({
                     </p>
                 </section>
                 <section>{showCurrLogoForDash()}</section>
+                {isNoDemo && tempImgUrl && (
+                    <section className="container-center my-3">
+                        <img
+                            src={newImg}
+                            width={width}
+                            height={height}
+                            alt="logo"
+                        />
+                    </section>
+                )}
                 <section className="container-center">
                     {showUploadingBtn()}
                 </section>

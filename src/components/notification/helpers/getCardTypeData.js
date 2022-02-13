@@ -194,9 +194,7 @@ function handleWelcome({ role, userFirstName, bizName, genderLetter }) {
     const isHe = genderLetter === "o";
 
     if (role === "cliente-admin")
-        return `${userFirstName}, boas-vindas ao seu primeiro dia do seu clube de compras onde você é ${
-            isHe ? "o super-herói" : "a super-heroína"
-        } na missão de conquistar mais compras de seus clientes.`;
+        return `${userFirstName}, boas-vindas ao seu primeiro dia do seu clube de compras.`;
     if (role === "cliente-membro")
         return `${userFirstName}, agora você está dentro! Um app prático para seu trabalho.`;
     if (role === "cliente")

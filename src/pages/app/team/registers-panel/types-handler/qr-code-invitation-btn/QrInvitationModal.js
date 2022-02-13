@@ -37,9 +37,10 @@ export default function QrInvitationModal({
     isNewMember = false,
     isAdminQuickPromote = false,
 }) {
-    const imageSquare = img && img.includes("h_100,w_100");
+    const isFiddelize = img && img.includes("logo-name");
+    const imageSquare = isFiddelize ? true : img && img.includes("h_100,w_100");
     const imageSettings = {
-        src: img,
+        src: isFiddelize ? "/img/icon.png" : img,
     };
 
     const selectedFgColor = handleFgColor(fgColor);

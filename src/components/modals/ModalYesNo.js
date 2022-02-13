@@ -20,6 +20,7 @@ export default function ModalYesNo({
     yesBtnColor = "var(--mainRed)",
     yesBtnIcon = "times",
     noTitle = "NÃO",
+    noCallback,
 }) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
     // LESSON: for critical data handling, the button should be permanent disabled
@@ -41,7 +42,12 @@ export default function ModalYesNo({
                     >
                         <ButtonMulti
                             title={noTitle}
-                            onClick={() => setFullOpen(false)}
+                            onClick={() => {
+                                if (typeof noCallback === "function") {
+                                    noCallback();
+                                }
+                                setFullOpen(false);
+                            }}
                             variant="link"
                         />
                         <ButtonMulti

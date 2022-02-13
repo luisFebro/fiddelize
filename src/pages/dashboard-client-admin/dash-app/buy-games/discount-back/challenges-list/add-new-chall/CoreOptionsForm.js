@@ -94,7 +94,7 @@ export default function CoreOptionsForm({
                         Por exemplo, na frase: acumule 100 PTS, ganhe 10% de desconto. 100 PTS é a sua meta em pontos.
                         <br />
                         <br />
-                        1 PTS tem o mesmo valor que R$ 1 em compras. E o valor real que o cliente recebe é o valor do vale desconto.
+                        1 PTS tem o mesmo valor que R$ 1 em compras. E o valor líquido que o cliente recebe é o valor do vale desconto.
                     `}
                     mode="tooltip"
                     animated={false}

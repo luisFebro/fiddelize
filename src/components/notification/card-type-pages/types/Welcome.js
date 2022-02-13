@@ -32,7 +32,7 @@ function Welcome({
     const showCliAdminContent = () =>
         role === "cliente-admin" && (
             <section className={textStyle}>
-                <div className="my-5">
+                <div className="d-none my-5">
                     <img
                         src={`/img/illustrations/notifs/${
                             sexLetter === "o" ? "hero-guy" : "hero-girl"
@@ -85,11 +85,6 @@ function Welcome({
                     trazer ainda mais valor, benefícios e uma experiência
                     refinada para seus clientes usando tecnologia.
                 </p>
-                <em>
-                    Certo, {userName}. Agora vamos desvendar seus novos
-                    super-poderes tecnológicos no mundo real das compras. Pront
-                    {sexLetter}?
-                </em>
             </section>
         );
 

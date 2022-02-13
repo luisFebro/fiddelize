@@ -49,7 +49,9 @@ export default function BizForm({ history }) {
 
     const { search } = useLocation();
     // for digital menu - even if the user skip the custom, it is still required to inform biz name before custom app panel
-    const needCustomApp = search && search.includes("customApp=1");
+    // if needCustomerApp is true, it means requires customize otherwise skip to admin register
+    const needCustomApp =
+        search && search.includes("customApp=1") ? true : false;
 
     useNeedRedirectPage({ history, priorPageId: "doneGamesPanel" });
 
@@ -130,12 +132,6 @@ export default function BizForm({ history }) {
         );
         const games = priorAdminData && priorAdminData.games;
 
-        // target prize game only required data for this game since it will be inserted as query string. Other games should be using local forage directly in the component game.
-        const targetPoints =
-            games.targetPrize && games.targetPrize.challList[0].targetPoints;
-        const prizeDesc =
-            games.targetPrize && games.targetPrize.challList[0].prizeDesc;
-
         const newData = {
             ...priorAdminData,
             bizName,
@@ -144,7 +140,7 @@ export default function BizForm({ history }) {
 
         const finalData = {
             doneBizInfo: true,
-            doneSSRatingIcon: needCustomApp, // for digital menu
+            doneSSRatingIcon: needCustomApp, // for digital menu or other strategies which doesn't include the first strategy (targetPrize and discountBack)
             clientAdminData: newData,
         };
         await setVars(finalData, "pre_register");
@@ -153,8 +149,7 @@ export default function BizForm({ history }) {
             game: selectedGame,
             bizLinkName,
             bizName,
-            targetPoints,
-            prizeDesc,
+            games,
             // only for digital menu
             needCustomApp,
         });
@@ -198,20 +193,23 @@ async function generateUltimateBizCode(bizName) {
     return finalDashedName;
 }
 
-function handleGameUrl({
-    game,
-    bizLinkName,
-    bizName,
-    targetPoints,
-    prizeDesc,
-    needCustomApp,
-}) {
+function handleGameUrl({ game, bizLinkName, bizName, needCustomApp, games }) {
     if (game === "digitalMenu") {
         if (needCustomApp)
-            return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}`;
+            return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}?noDemo=1`;
         // no need to custom app
         return `/${bizLinkName}/novo-clube/cadastro-admin`;
     }
+
+    // target prize game only required data for this game since it will be inserted as query string. Other games should be using local forage directly in the component game.
+    const targetPoints =
+        !needCustomApp &&
+        games.targetPrize &&
+        games.targetPrize.challList[0].targetPoints;
+    const prizeDesc =
+        !needCustomApp &&
+        games.targetPrize &&
+        games.targetPrize.challList[0].prizeDesc;
 
     if (game === "targetPrize")
         return `/${bizLinkName}/novo-clube/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${prizeDesc}&nome-cliente=Ana&g=${game}`;
