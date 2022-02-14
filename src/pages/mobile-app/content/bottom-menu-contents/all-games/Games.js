@@ -33,7 +33,7 @@ export default function Games() {
 
     const { userGame } = useData();
     const pointGames = ["targetPrize", "discountBack"];
-    const arePointGames = pointGames.includes(pointGames);
+    const arePointGames = pointGames.includes(currGame);
 
     const { icon, nameBr } = getGameData(currGame, userGame);
     let { challN = 1 } = getGameData(currGame, userGame);
