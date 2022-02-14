@@ -69,7 +69,7 @@ export default function BuyGamesCard(props) {
                 style={{
                     color: isDisabled
                         ? "#808080cf"
-                        : `var(--themeSDark--${themePColor})`,
+                        : `var(--themePDark--${themePColor})`,
                 }}
             >
                 {nameBr}
@@ -100,7 +100,7 @@ export default function BuyGamesCard(props) {
                 <div
                     className="img-container p-4 p-sm-3"
                     style={{
-                        background: `var(--themeSLight--${themeBackColor})`,
+                        background: `var(--themePLight--default)`,
                     }}
                 >
                     {icon}

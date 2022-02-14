@@ -80,6 +80,9 @@ export default function ShoppingGamesPanel({ history }) {
                             on: true,
                         },
                     },
+                    digitalMenu: {
+                        interface: isDigitalMenu ? true : undefined,
+                    },
                 },
             };
 
@@ -99,6 +102,9 @@ export default function ShoppingGamesPanel({ history }) {
                 themePColor: "default",
                 themeSColor: "default",
                 games: handleDefaultGame(selectedStrategy),
+                digitalMenu: {
+                    interface: isDigitalMenu ? true : undefined,
+                },
             },
             doneGamesPanel: true,
             doneSSTheming: true,
@@ -123,7 +129,7 @@ export default function ShoppingGamesPanel({ history }) {
                 title={`Deseja personalizar app agora (${
                     selectedStrategy === "targetPrize" ? 3 : 2
                 } etapas)?`} // editar valores para outros estratégia
-                subTitle={`<span>Caso pule, você pode personalizar app no seu painel de controle.</span>`}
+                subTitle="<span>Caso pule, você pode personalizar app no seu painel de controle.</span>"
                 fullOpen={skipPanelOpen}
                 setFullOpen={setSkipPanelOpen}
                 actionFunc={runCustomApp}

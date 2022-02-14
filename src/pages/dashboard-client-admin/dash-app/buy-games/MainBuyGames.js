@@ -23,7 +23,7 @@ export const AsyncBalloonPopOptions = Load({
         ),
 });
 
-export default function MainBuyGames() {
+export default function MainBuyGames({ isDigitalMenu = false }) {
     const [comp, setComp] = useState({
         name: "",
         props: {},
@@ -32,7 +32,13 @@ export default function MainBuyGames() {
 
     return (
         <section>
-            {!name && <BuyGamesList setComp={setComp} {...props} />}
+            {!name && (
+                <BuyGamesList
+                    isDigitalMenu={isDigitalMenu}
+                    setComp={setComp}
+                    {...props}
+                />
+            )}
             {name === "targetPrize" && (
                 <AsyncTargetPrizeOptions setComp={setComp} {...props} />
             )}

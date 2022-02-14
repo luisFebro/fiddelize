@@ -1,8 +1,8 @@
 import { Fragment, useState, useEffect } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import { Link } from "react-router-dom";
 import useDetectScrollUp from "hooks/scroll/useDetectScrollUp";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { Link } from "react-router-dom";
 import usePro from "init/pro";
 import DashSectionTitle from "../../DashSectionTitle";
 import InvestHistory from "./investments-history/InvestHistory";

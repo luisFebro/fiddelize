@@ -10,7 +10,7 @@ export default function PlansPage({ location }) {
     // skip the start page
     const needStore =
         (isPro && !isProExpBlock1) ||
-        (isPro && location.search && location.search.includes("store=1"));
+        (location.search && location.search.includes("store=1"));
     const [currPlan, setCurrPlan] = useState(needStore ? "bronze" : "all");
 
     const { bizName, bizLogo } = useBizData();

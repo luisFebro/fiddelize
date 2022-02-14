@@ -67,7 +67,7 @@ export default function BalloonPopGame({ match }) {
         setPendingBenefit,
     });
     useBackColor(`var(--themeBackground--${backColor})`);
-    useAnimateBalloon(backColor);
+    useAnimateBalloon(backColor, loading);
 
     // if this returns, the balloons are not animated
     // if(loading) {
@@ -93,7 +93,8 @@ export default function BalloonPopGame({ match }) {
                 style={{ marginTop: 150, backgroundColor: "var(--mainDark)" }}
                 className="text-normal text-pill text-white text-center"
             >
-                No momento, este jogo está desativado
+                No momento, este jogo de compra não está disponível ou
+                desativado.
             </div>
         );
     }

@@ -19,8 +19,10 @@ const faStyle = {
     color: "white",
 };
 
-export default function ShowMainPanels() {
-    const configList = [
+export default function ShowMainPanels(options = {}) {
+    const { isDigitalMenu = false } = options;
+
+    let configList = [
         {
             id: 0,
             name: "Design<br />Geral",
@@ -46,6 +48,23 @@ export default function ShowMainPanels() {
             hiddenContent: <AsyncBuyClubRules />,
         },
     ];
+
+    if (isDigitalMenu) {
+        configList = [
+            {
+                id: 0,
+                name: "Design<br />Geral",
+                leftIcon: <FontAwesomeIcon icon="palette" />,
+                hiddenContent: <AppDesign />,
+            },
+            {
+                id: 1,
+                name: "Jogos<br />de Compra",
+                leftIcon: <FontAwesomeIcon icon="gamepad" />,
+                hiddenContent: <MainBuyGames isDigitalMenu={isDigitalMenu} />,
+            },
+        ];
+    }
 
     const handleMainHeading = (config) => (
         <section className="card-main-heading--root">

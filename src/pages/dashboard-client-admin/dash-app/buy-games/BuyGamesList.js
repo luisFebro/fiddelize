@@ -4,7 +4,7 @@ import { useReadUser } from "api/frequent";
 import BuyGamesCard from "./buy-games-card/BuyGamesCard";
 import GeneralTweaksBtn from "./_general-tweaks/GeneralTweaksBtn";
 
-export default function BuyGamesList({ setComp }) {
+export default function BuyGamesList({ setComp, isDigitalMenu }) {
     const [triggerList, setTriggerList] = useState("");
     const { userId } = useData();
     const allGamesList = [];
@@ -29,7 +29,13 @@ export default function BuyGamesList({ setComp }) {
     let allAvailableGamesCount = 0;
     const gamesFromDb = data && data.clientAdminData.games;
     Object.keys(gamesFromDb).forEach((gameName) => {
-        if (!gamesFromDb || typeof gamesFromDb[gameName].on !== "boolean")
+        const onlyAllowed = ["targetPrize", "discountBack", "balloonPop"];
+        const isAllowedGame = onlyAllowed.includes(gameName);
+        if (
+            !isAllowedGame ||
+            !gamesFromDb ||
+            typeof gamesFromDb[gameName].on !== "boolean"
+        )
             return;
         if (gamesFromDb[gameName].on) allAvailableGamesCount += 1;
         allGamesList.push({
@@ -38,8 +44,28 @@ export default function BuyGamesList({ setComp }) {
         });
     });
 
-    // cli-admin is not allowed to disable all games.
-    const needBlockDisableNextGame = allAvailableGamesCount === 1;
+    const showSubtitle = () => {
+        if (isDigitalMenu) {
+            return (
+                <p
+                    className="text-grey text-normal text-sm-left text-center"
+                    style={{ fontWeight: "normal" }}
+                >
+                    Ofereça benefício no seu menu digital
+                </p>
+            );
+        }
+
+        return (
+            <p
+                className="text-grey text-normal text-sm-left text-center"
+                style={{ fontWeight: "normal" }}
+            >
+                você pode ativar um ou mais jogos e oferecer diferentes
+                benefícios aos seus clientes
+            </p>
+        );
+    };
 
     return (
         <section className="hidden-content--root text-normal">
@@ -49,13 +75,7 @@ export default function BuyGamesList({ setComp }) {
             <h2 className="my-5 font-weight-bold text-subtitle text-center text-purple">
                 Galeria de Jogos
                 <br />
-                <p
-                    className="text-grey text-normal text-sm-left text-center"
-                    style={{ fontWeight: "normal" }}
-                >
-                    você pode ativar um ou mais jogos e oferecer diferentes
-                    benefícios aos seus clientes
-                </p>
+                {showSubtitle()}
             </h2>
             <section className="container">
                 <div className="row">
@@ -66,9 +86,6 @@ export default function BuyGamesList({ setComp }) {
                                 setTriggerList={setTriggerList}
                                 loading={loading}
                                 setComp={setComp}
-                                needBlockDisableNextGame={
-                                    needBlockDisableNextGame
-                                }
                             />
                         </Fragment>
                     ))}

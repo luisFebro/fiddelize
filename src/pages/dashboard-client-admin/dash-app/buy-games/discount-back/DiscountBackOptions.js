@@ -15,7 +15,6 @@ export default function DiscountBackOptions({
     loading,
     setTriggerList,
     gameData,
-    needBlockDisableNextGame = false,
 }) {
     const [optionData, setOptionData] = useState({
         updatedOnce: false, // make sure user saved data before activating game
@@ -23,6 +22,7 @@ export default function DiscountBackOptions({
         challList: [],
     });
     const GAME = "discountBack";
+    const needBlockDisableNextGame = false; // it is always false because cli-admin now can select buy flow solutions. Their customers will have no game available in the game session, though
 
     const { on, updatedOnce, challList } = optionData;
     // use it to make sure got all important data before activate with the switch
@@ -115,7 +115,7 @@ export default function DiscountBackOptions({
                     disableToRight={!updatedOnce}
                     disableToRightCallback={() =>
                         showToast(
-                            "Favor, preencha e salve todos os campos abaixo para ativar o jogo",
+                            "Adicione, pelo menos, um desafio para ativar Desconto Retornado.",
                             { type: "error" }
                         )
                     }

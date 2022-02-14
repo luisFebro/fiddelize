@@ -15,6 +15,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons/faCheckCircle";
 import { faCircle } from "@fortawesome/free-solid-svg-icons/faCircle";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs"; // tech support, setting
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog"; // tweaks, setting
 import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
 import { faCrown } from "@fortawesome/free-solid-svg-icons/faCrown";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons/faDatabase"; // security copies
@@ -119,6 +120,7 @@ library.add(
     faCircle,
     faClock,
     faCogs,
+    faCog,
     faComment,
     faCrown,
     faDatabase,

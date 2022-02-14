@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function useAnimateBalloon(backColor) {
+export default function useAnimateBalloon(backColor, loading) {
     const backC = backColor;
 
     useEffect(() => {
@@ -88,53 +88,54 @@ export default function useAnimateBalloon(backColor) {
                 9000
             );
 
-            head.addEventListener("click", () => {
-                head.style.display = "none";
-                bouncer.stop();
-                tilter.stop();
-                step(
-                    outexpo((n) => {
-                        const opacity = 1 - n;
-                        const scale = 1 - n * 0.4;
-                        transformer(brokenPiece1).scale(scale).update();
-                        transformer(brokenPiece2)
-                            .translate(24 * n, getSinY(24, 32, n))
-                            .scale(scale)
-                            .update();
-                        transformer(brokenPiece3)
-                            .translate(24 * n, getSinY(24, -6, n))
-                            .scale(scale)
-                            .update();
-                        transformer(brokenPiece4)
-                            .translate(14 * n, getSinY(24, -90, n))
-                            .scale(scale)
-                            .update();
-                        transformer(brokenPiece5)
-                            .translate(-24 * n, getSinY(-24, 75, n))
-                            .scale(scale)
-                            .update();
-                        transformer(brokenPiece6)
-                            .translate(-24 * n, getSinY(-24, 0, n))
-                            .scale(scale)
-                            .update();
-                        transformer(brokenPiece7)
-                            .translate(-24 * n, getSinY(-24, -32, n))
-                            .scale(scale)
-                            .update();
-                        transformer(effect)
-                            .scale(0.5 + n * 0.5)
-                            .update();
-                        transformer(tail)
-                            .translate(0, getSinY(24, 90, n))
-                            .update();
-                        if (svg) svg.style.opacity = opacity;
-                    }),
-                    false,
-                    600
-                );
-            });
+            if (head)
+                head.addEventListener("click", () => {
+                    head.style.display = "none";
+                    bouncer.stop();
+                    tilter.stop();
+                    step(
+                        outexpo((n) => {
+                            const opacity = 1 - n;
+                            const scale = 1 - n * 0.4;
+                            transformer(brokenPiece1).scale(scale).update();
+                            transformer(brokenPiece2)
+                                .translate(24 * n, getSinY(24, 32, n))
+                                .scale(scale)
+                                .update();
+                            transformer(brokenPiece3)
+                                .translate(24 * n, getSinY(24, -6, n))
+                                .scale(scale)
+                                .update();
+                            transformer(brokenPiece4)
+                                .translate(14 * n, getSinY(24, -90, n))
+                                .scale(scale)
+                                .update();
+                            transformer(brokenPiece5)
+                                .translate(-24 * n, getSinY(-24, 75, n))
+                                .scale(scale)
+                                .update();
+                            transformer(brokenPiece6)
+                                .translate(-24 * n, getSinY(-24, 0, n))
+                                .scale(scale)
+                                .update();
+                            transformer(brokenPiece7)
+                                .translate(-24 * n, getSinY(-24, -32, n))
+                                .scale(scale)
+                                .update();
+                            transformer(effect)
+                                .scale(0.5 + n * 0.5)
+                                .update();
+                            transformer(tail)
+                                .translate(0, getSinY(24, 90, n))
+                                .update();
+                            if (svg) svg.style.opacity = opacity;
+                        }),
+                        false,
+                        600
+                    );
+                });
         }
-    }, [backC]);
+    }, [backC, loading]);
 }
 
 // HELPERS
@@ -186,6 +187,7 @@ function step(callback, loop, duration) {
 function createTransformer() {
     const cache = [];
     return function (element) {
+        if (!element) element = {};
         let transformer = cache.find((t) => t._element === element);
         if (transformer) {
             return transformer;
@@ -211,7 +213,8 @@ function createTransformer() {
             },
             update() {
                 const { _scale, _translateX, _translateY, _rotate } = this;
-                this._element.style.transform = `translate(${_translateX}px, ${_translateY}px) scale(${_scale}) rotate(${_rotate}deg)`;
+                if (this._element && this._element.style)
+                    this._element.style.transform = `translate(${_translateX}px, ${_translateY}px) scale(${_scale}) rotate(${_rotate}deg)`;
             },
         };
         cache.push(transformer);
@@ -233,8 +236,11 @@ function getBaseRatio(svg) {
     };
 }
 
-function getOriginPosition(element, xOffset, yOffset, ratio, svg) {
-    const { left, top, width, height } = element.getBoundingClientRect();
+function getOriginPosition(element, xOffset, yOffset, ratio, svg = {}) {
+    if (svg === null) svg = {};
+
+    const dataElem = element ? element.getBoundingClientRect() : {};
+    const { left, top, width, height } = dataElem;
     const baseLeft = svg && svg.getBoundingClientRect().left;
     const baseTop = svg && svg.getBoundingClientRect().top;
     const x = (left - baseLeft) * ratio.x;
@@ -246,7 +252,8 @@ function getOriginPosition(element, xOffset, yOffset, ratio, svg) {
 }
 
 function setOriginPosition(element, position) {
-    element.style.transformOrigin = `${position.x}px ${position.y}px`;
+    if (element)
+        element.style.transformOrigin = `${position.x}px ${position.y}px`;
 }
 
 function getSinY(x, degree, progress) {

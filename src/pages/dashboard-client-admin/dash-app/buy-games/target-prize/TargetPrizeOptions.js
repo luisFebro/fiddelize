@@ -105,7 +105,7 @@ export default function TargetPrizeOptions({
                     disableToRight={!updatedOnce}
                     disableToRightCallback={() =>
                         showToast(
-                            "Favor, preencha e salve todos os dados abaixo para ativar o jogo",
+                            "Adicione, pelo menos, um desafio para ativar Prêmio Alvo.",
                             { type: "error" }
                         )
                     }

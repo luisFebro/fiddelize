@@ -8,8 +8,9 @@ export default function ShowQA() {
             text: (
                 <Fragment>
                     <p>
-                        Desafio é <strong>toda edição</strong> de um jogo de
-                        compra onde o cliente tem uma meta em PTS a ser
+                        Na Fiddelize, desafio é{" "}
+                        <strong>toda edição ou versão</strong> de um jogo de
+                        compra onde o cliente tem uma meta em PTS (pontos) a ser
                         alcançada e recebe um benefício como prêmio ou desconto
                         ao concluir o desafio.
                     </p>

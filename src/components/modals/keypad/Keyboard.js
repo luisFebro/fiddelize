@@ -5,7 +5,7 @@ import usePlayAudio from "../../../hooks/media/usePlayAudio";
 import animateCSS from "../../../utils/animateCSS";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 
-const isSmall = window.Helper.isSmallScreen();
+// const isSmall = window.Helper.isSmallScreen();
 
 Keyboard.propTypes = {
     keyboardType: PropTypes.oneOf(["numeric", "cpf"]).isRequired,

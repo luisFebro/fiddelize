@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
+import ReturnBtn from "components/buttons/ReturnBtn";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
 import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TweaksBtn from "./tweaks/TweaksBtn";
 
 export const AsyncAdminMenuOrders = Load({
     loader: () =>
@@ -38,6 +40,7 @@ const AsyncAnalysis = Load({
 export default function MainMenuAdmin(compData) {
     const [fullOpen, setFullOpen] = useState("");
     const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
+
     useBackColor("var(--mainWhite)");
     const { bizId, bizLinkName } = useBizData();
 
@@ -65,8 +68,18 @@ export default function MainMenuAdmin(compData) {
 
     return (
         <section>
-            <h2 className="text-center font-weight-bold text-purple text-subtitle my-3">
-                Menu Principal (Admin)
+            <ReturnBtn onClick={() => history.push("/app")} icon="arrow-left" />
+            <h2
+                style={{ left: 15, top: 10 }}
+                className="m-0 position-relative text-center font-weight-bold text-purple text-subtitle mb-3"
+            >
+                Painel de Controle
+                <img
+                    height={120}
+                    width={70}
+                    src="/img/icons/digital-menu/digital-menu-icon.svg"
+                    alt="logo menu"
+                />
             </h2>
             <MenuList
                 setFullOpen={setFullOpen}
@@ -186,7 +199,7 @@ function MenuList({
                             pendingOrdersCount >= 1 &&
                             showNotifBadge()}
                         <div className="icon-wrapper">{opt.icon}</div>
-                        <p className="pt-3 text-normal text-white pb-5 font-weight-bold">
+                        <p className="pt-3 text-normal text-white font-weight-bold">
                             {opt.title}
                         </p>
                     </div>
@@ -194,12 +207,13 @@ function MenuList({
                 <style jsx>
                     {`
                         .choose-options-area {
-                            margin-top: 20px;
+                            position: relative;
+                            top: -20px;
                         }
 
                         .choose-options-area .card {
                             width: 150px;
-                            height: 200px;
+                            height: 180px;
                             padding: 10px;
                             border-radius: 25px;
                             background: var(--themePDark);
@@ -218,6 +232,14 @@ function MenuList({
                     `}
                 </style>
             </section>
+            <div
+                className="position-relative container-center"
+                style={{
+                    top: -15,
+                }}
+            >
+                <TweaksBtn />
+            </div>
         </section>
     );
 }
