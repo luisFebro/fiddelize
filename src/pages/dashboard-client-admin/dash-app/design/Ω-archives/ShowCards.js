@@ -5,6 +5,10 @@ import useAuth from "auth/useAuth";
 import { translateColorToPtBr } from "global-data/uiColors";
 import useImg, { Img } from "hooks/media/useImg";
 import removeImgFormat from "utils/biz/removeImgFormat";
+import Card from "@material-ui/core/Card";
+import ButtonMulti, {
+    faStyle,
+} from "components/buttons/material-ui/ButtonMulti";
 import OptionCard from "./OptionCard";
 import "./style.scss";
 
@@ -13,66 +17,6 @@ export default function ShowCards({ setOpenComp }) {
     const { milestoneIcon } = adminGame.targetPrize;
 
     const { bizLogo, themePColor, themeSColor, themeBackColor } = useBizData();
-
-    const isAuth = useAuth();
-
-    const [url, setUrl] = useState({
-        logoBiz: "",
-        logoFid: "",
-    });
-
-    const logoBiz = useImg(url.logoBiz, {
-        trigger: url.logoBiz,
-        coll: "logos",
-        key: "app_biz_logo",
-    });
-    const logoFid = useImg(url.logoFid, {
-        trigger: url.logoFid,
-        coll: "logos",
-        key: "app_fiddelize_logo",
-    });
-    const logoSrc = logoBiz || logoFid;
-
-    const needClientLogo = bizLogo || isAuth;
-
-    const handleLogoSrc = () => {
-        if (needClientLogo) {
-            const { newImg: thisbizLogo } = removeImgFormat(bizLogo);
-            return setUrl({ ...url, logoBiz: thisbizLogo });
-        }
-        return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
-    };
-
-    useEffect(() => {
-        handleLogoSrc();
-    }, [needClientLogo]);
-
-    const logoContent = () => {
-        const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
-
-        return (
-            <div className="container-center">
-                {bizLogo ? (
-                    <Img
-                        src={logoSrc}
-                        alt="logo negócio"
-                        className="animated zoomIn slow shadow-elevation"
-                        style={{
-                            position: "relative",
-                            margin: "15px 0",
-                            boxShadow: "0 30px 40px 8px rgba(0, 0, 0, 0.35)",
-                        }}
-                        width={isSquared ? 100 : 190}
-                        height={isSquared ? 100 : 85}
-                    />
-                ) : (
-                    <p className="text-normal font-weight-bold text-center text-purple">
-                        Sem logo
-                    </p>
-                )}
-            </div>
-        );
-    };
 
     const colorContent = React.useCallback(() => {
         const colorP = themePColor;
@@ -164,11 +108,7 @@ export default function ShowCards({ setOpenComp }) {
             id="cards"
             className="container-center justify-content-around my-5"
         >
-            <OptionCard
-                title="Logo App<br />Atual:"
-                mainContent={logoContent()}
-                onBtnClick={() => setOpenComp("logo")}
-            />
+            <EditLogo />
             <OptionCard
                 title="Cores do<br />App:"
                 mainContent={colorContent()}
@@ -178,6 +118,103 @@ export default function ShowCards({ setOpenComp }) {
     );
 }
 
+function EditLogo() {
+    const { bizLogo } = useBizData();
+    const isAuth = useAuth();
+
+    const [url, setUrl] = useState({
+        logoBiz: "",
+        logoFid: "",
+    });
+
+    const logoBiz = useImg(url.logoBiz, {
+        trigger: url.logoBiz,
+        coll: "logos",
+        key: "app_biz_logo",
+    });
+    const logoFid = useImg(url.logoFid, {
+        trigger: url.logoFid,
+        coll: "logos",
+        key: "app_fiddelize_logo",
+    });
+    const logoSrc = logoBiz || logoFid;
+
+    const needClientLogo = bizLogo || isAuth;
+
+    const handleLogoSrc = () => {
+        if (needClientLogo) {
+            const { newImg: thisbizLogo } = removeImgFormat(bizLogo);
+            return setUrl({ ...url, logoBiz: thisbizLogo });
+        }
+        return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
+    };
+
+    useEffect(() => {
+        handleLogoSrc();
+    }, [needClientLogo]);
+
+    const logoContent = () => {
+        const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
+
+        return (
+            <div className="container-center">
+                {bizLogo ? (
+                    <Img
+                        src={logoSrc}
+                        alt="logo negócio"
+                        className="animated zoomIn slow shadow-elevation"
+                        style={{
+                            position: "relative",
+                            margin: "15px 0",
+                            boxShadow: "0 30px 40px 8px rgba(0, 0, 0, 0.35)",
+                        }}
+                        width={isSquared ? 100 : 190}
+                        height={isSquared ? 100 : 85}
+                    />
+                ) : (
+                    <p className="text-normal font-weight-bold text-center text-purple">
+                        Sem logo
+                    </p>
+                )}
+            </div>
+        );
+    };
+
+    return (
+        <Card
+            className="animated shadow-elevation p-4 mt-5"
+            style={{
+                width: "100%",
+                maxWidth: 305,
+                height: 430,
+                backgroundColor: "var(--mainWhite)",
+                boxShadow: "0 31px 120px -6px rgba(0, 0, 0, 0.35)",
+            }}
+        >
+            <p className="text-center text-subtitle font-weight-bold text-purple">
+                Logo App
+                <br />
+                Atual:
+            </p>
+            <section style={{ minHeight: 210 }} className="container-center">
+                {logoContent}
+            </section>
+            <div className="container-center">
+                <ButtonMulti
+                    onClick={onBtnClick}
+                    title="Trocar"
+                    color="var(--mainWhite)"
+                    backgroundColor="var(--themeSDark)"
+                    backColorOnHover="var(--themeSDark)"
+                    textTransform="uppercase"
+                    iconFontAwesome={
+                        <FontAwesomeIcon icon="sync-alt" style={faStyle} />
+                    }
+                />
+            </div>
+        </Card>
+    );
+}
 /*
 
 <OptionCard

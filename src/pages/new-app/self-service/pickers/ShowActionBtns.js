@@ -20,6 +20,20 @@ ShowActionBtns.propTypes = {
     titleAfterOk: PropTypes.string,
 };
 
+export const updateDashColor = async ({
+    bizId,
+    objToSend,
+    uify,
+    titleAfterOk = "Palheta de cores salva",
+}) => {
+    // showToast(titleBeforeOk);
+    await updateUser(bizId, "cliente-admin", objToSend, {
+        uify,
+    }).catch((err) => showToast(err, { type: "error" }));
+
+    showToast(titleAfterOk, { type: "success" });
+};
+
 export default function ShowActionBtns({
     objToSend,
     titleBeforeOk = "Salvando Item",

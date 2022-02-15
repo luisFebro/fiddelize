@@ -1,12 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import DeleteButton from "components/buttons/DeleteButton";
+import CustomButton from "components/buttons/CustomButton";
 import useData, { useBizData } from "init";
 // import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
 import useAPIList, { readMainItemList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 import showToast from "components/toasts";
+import RemovalConfirmBtn from "./RemovalConfirmBtn";
 
 // import useContext from "context";
 import getId from "utils/getId";
@@ -161,43 +162,30 @@ export default function FinalList({
                     />
                 ) : (
                     <div className="d-flex">
+                        <CustomButton
+                            onClick={() => {
+                                const newItem = {
+                                    // this newItem is being used here exclusively for sending data to DB
+                                    adminId: bizId,
+                                    type: "delete",
+                                    hideItemIds: selectionList,
+                                };
+
+                                return updateItem("update", {
+                                    newItem,
+                                });
+
+                                // setFullOpen(false);
+                                // return closeCategoryForm();
+                            }}
+                        />
                         <div className="ml-2">
-                            <DeleteButton
-                                onClick={() => {
-                                    const newItem = {
-                                        // this newItem is being used here exclusively for sending data to DB
-                                        adminId: bizId,
-                                        type: "delete",
-                                        removalItemIds: selectionList,
-                                    };
-
-                                    const getRemovalImgs = () => {
-                                        const imgs = [];
-                                        if (!list.length) return null;
-                                        list.forEach((item) => {
-                                            if (
-                                                selectionList.includes(
-                                                    item.itemId
-                                                )
-                                            ) {
-                                                imgs.push(item.img);
-                                            }
-                                        });
-
-                                        return imgs;
-                                    };
-
-                                    return updateItem("delete", {
-                                        newItem,
-                                        removalImg: {
-                                            savedImg: getRemovalImgs(),
-                                            folder: `digital-menu/${bizLinkName}`,
-                                        },
-                                    });
-
-                                    // setFullOpen(false);
-                                    // return closeCategoryForm();
-                                }}
+                            <RemovalConfirmBtn
+                                dbItemlist={list}
+                                updateItem={updateItem}
+                                bizId={bizId}
+                                selectionList={selectionList}
+                                bizLinkName={selectionList}
                             />
                         </div>
                     </div>

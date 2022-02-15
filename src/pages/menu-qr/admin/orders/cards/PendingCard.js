@@ -22,6 +22,7 @@ export default function PendingCard({ data, socket }) {
     const customerName = data && data.customerName;
     const customerPhone = data && data.customerPhone;
     const customerAddress = data && data.customerAddress;
+    const customerNote = data && data.customerNote;
     const placeId = data && data.placeId;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;
@@ -52,7 +53,7 @@ export default function PendingCard({ data, socket }) {
     return (
         <section className="card--root mb-5 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
-            <h2 className="text-subtitle font-weight-bold">
+            <h2 className="text-normal font-weight-bold">
                 ID lugar:{" "}
                 <span className="text-pill position-relative">
                     <Fragment>
@@ -63,16 +64,23 @@ export default function PendingCard({ data, socket }) {
                     </Fragment>
                 </span>
             </h2>
-            <h2 className="text-normal font-weight-bold">
+            <p className="m-0 text-normal">
+                &#8226; Pedido ({totalCount}{" "}
+                {totalCount === 1 ? "item" : "itens"}):
+            </p>
+            <ItemsDesc data={dataItems} />
+            <h2 className="my-2 text-normal text-center">
                 Valor Total:
                 <span className="ml-3 hightlight text-pill">
                     R$ {convertToReal(totalAmount, { needFraction: true })}
                 </span>
             </h2>
-            <p className="m-0 text-normal">
-                Descrição ({totalCount} {totalCount === 1 ? "item" : "itens"}):
-            </p>
-            <ItemsDesc data={dataItems} />
+            <h2 className="text-normal my-3">
+                &#8226; Nota do cliente:
+                <span className="d-block text-em-0-8 hightlight text-pill font-italic">
+                    &quot;{customerNote || "nenhuma"}&quot;
+                </span>
+            </h2>
             {showUpdatedAt()}
             <style jsx>
                 {`

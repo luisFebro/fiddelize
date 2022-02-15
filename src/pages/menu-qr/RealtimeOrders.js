@@ -51,16 +51,29 @@ export default function RealtimeOrders({ match, location }) {
     const params = {
         role: "cliente-admin",
         bizLinkName,
+        withSelect: isCustomer
+            ? "clientAdminData.bizLogo clientAdminData.themeBackColor clientAdminData.themeSColor clientAdminData.themePColor"
+            : undefined,
         // only for request auth
         nT: true,
         _id: randomId,
     };
 
-    const { data: adminId } = useAPI({
+    const { data, loading: loadingBizData } = useAPI({
         url: getUserIdByName(),
         params,
         trigger: !isAdmin,
     });
+
+    const adminId = data && data._id;
+    const bizLogo =
+        data && data.clientAdminData && data.clientAdminData.bizLogo;
+    const backColor =
+        data && data.clientAdminData && data.clientAdminData.themeBackColor;
+    const pColor =
+        data && data.clientAdminData && data.clientAdminData.themePColor;
+    const sColor =
+        data && data.clientAdminData && data.clientAdminData.themeSColor;
 
     // activate socket here
     const socket = useInitSocket({
@@ -86,6 +99,16 @@ export default function RealtimeOrders({ match, location }) {
         });
     }, [adminId, cliId, placeId, socket]);
 
+    if (!loadingBizData && isCustomer && !adminId) {
+        return (
+            <div style={{ marginTop: 300 }}>
+                <p className="text-center text-subtitle text-white font-weight-bold text-shadow">
+                    Loja não encontrada
+                </p>
+            </div>
+        );
+    }
+
     return (
         <Fragment>
             {isCustomer && (
@@ -98,6 +121,10 @@ export default function RealtimeOrders({ match, location }) {
                     socket={socket}
                     isUsedLink={isUsedLink}
                     isOnline={isOnline}
+                    bizLogo={bizLogo}
+                    sColor={sColor}
+                    pColor={pColor}
+                    backColor={backColor}
                 />
             )}
             {isAdmin && (

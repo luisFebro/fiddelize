@@ -1,10 +1,10 @@
 import Card from "@material-ui/core/Card";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import parse from "html-react-parser";
 import PropTypes from "prop-types";
+import parse from "html-react-parser";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 OptionCard.propTypes = {
     title: PropTypes.string,

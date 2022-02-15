@@ -16,7 +16,7 @@ import { useBizData } from "init";
 import getVar, { setVars } from "init/var";
 import scrollIntoView from "utils/document/scrollIntoView";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import ShowActionBtns from "./ShowActionBtns";
+// import ShowActionBtns from "./ShowActionBtns";
 
 PickLogo.propTypes = {
     step: PropTypes.number,
@@ -55,7 +55,6 @@ export default function PickLogo({
     });
 
     const { sizeSquare, sizeRect } = data;
-    const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
     const { bizLogo } = useBizData();
     const uify = useAction();
@@ -209,7 +208,6 @@ export default function PickLogo({
                 showToast("Nova logo salva. Alterando no app...", {
                     type: "success",
                 });
-                setNeedUpdateBtn(true);
                 commonActions();
                 updateUI(
                     "bizData",
@@ -374,13 +372,6 @@ export default function PickLogo({
                 </section>
                 {showEditArea()}
             </Card>
-            {isFromDash && (
-                <ShowActionBtns
-                    needUpdateBtn={needUpdateBtn}
-                    titleBeforeOk="Salvando nova palheta de cores..."
-                    titleAfterOk="Palheta de cores salva."
-                />
-            )}
         </section>
     );
 
@@ -408,6 +399,14 @@ export default function PickLogo({
 n1: THe user`s generated link is updated on the backend, no need to do it on frontend.
 */
 /* ARCHIVES
+{isFromDash && (
+    <ShowActionBtns
+        needUpdateBtn={needUpdateBtn}
+        titleBeforeOk="Salvando nova palheta de cores..."
+        titleAfterOk="Palheta de cores salva."
+    />
+)}
+
  const [effectShadow, setEffectShadow] = useState(false);
 const [effectBgRemoval, setEffectBgRemoval] = useState(false);
 

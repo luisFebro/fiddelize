@@ -14,8 +14,9 @@ import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import { useBizData } from "init";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import scrollIntoView from "utils/document/scrollIntoView";
+import { useAction } from "global-data/ui";
 
-import ShowActionBtns from "./ShowActionBtns";
+import { updateDashColor } from "./ShowActionBtns";
 
 PickTheming.propTypes = {
     step: PropTypes.number,
@@ -49,10 +50,10 @@ export default function PickTheming({
         secondaryColorBr,
         backColorBr,
         currColorModal,
-        needUpdateBtn,
         hexValuePrimary,
         hexValueSecondary,
         hexBackValue,
+        // needUpdateBtn,
     } = data;
 
     const needHideCheckBox = Boolean(
@@ -61,7 +62,7 @@ export default function PickTheming({
 
     const goNext = () => setNextDisabled(false);
 
-    const { themePColor, themeSColor, themeBackColor } = useBizData();
+    const { bizId, themePColor, themeSColor, themeBackColor } = useBizData();
     useEffect(() => {
         if (isFromDash) {
             const primaryCond =
@@ -127,7 +128,7 @@ export default function PickTheming({
     };
     const showBackColorBtn = () =>
         primaryColorBr !== "padrão" && (
-            <div className="flex-column animated zoomIn mt-3">
+            <div className="flex-column mt-3">
                 <p className="m-0 text-purple text-center text-normal font-weight-bold">
                     {isFromDash ? "Fundo" : "Cor de Fundo"}
                 </p>
@@ -192,7 +193,7 @@ export default function PickTheming({
                     </p>
                 </section>
                 <section className="container-center justify-content-around my-3">
-                    <div className={`flex-column mt-3`}>
+                    <div className="flex-column mt-3">
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">
                             Principal
                         </p>
@@ -213,7 +214,7 @@ export default function PickTheming({
                             </span>
                         </div>
                     </div>
-                    <div className={`flex-column mt-3`}>
+                    <div className="flex-column mt-3">
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">
                             Secundária
                         </p>
@@ -234,8 +235,11 @@ export default function PickTheming({
                             </span>
                         </div>
                     </div>
-                    {showBackColorBtn()}
                 </section>
+                {showBackColorBtn()}
+                <p className="mt-3 font-site text-em-0-7 text-purple mx-3 ">
+                    Clique sobre a cor para mudar
+                </p>
                 <section
                     style={{
                         display:
@@ -272,24 +276,6 @@ export default function PickTheming({
                     </p>
                 )}
                 {showThemingArea()}
-                {isFromDash && (
-                    <ShowActionBtns
-                        needUpdateBtn={needUpdateBtn}
-                        objToSend={{
-                            "clientAdminData.themePColor": translateColorToEng(
-                                primaryColorBr
-                            ),
-                            "clientAdminData.themeSColor": translateColorToEng(
-                                secondaryColorBr
-                            ),
-                            "clientAdminData.themeBackColor": translateColorToEng(
-                                backColorBr
-                            ),
-                        }}
-                        titleBeforeOk="Salvando nova palheta de cores..."
-                        titleAfterOk="Palheta de cores salva."
-                    />
-                )}
                 <ModalFullContent
                     contentComp={
                         <ColorPicker
@@ -302,6 +288,7 @@ export default function PickTheming({
                             theme={theme}
                             setTheme={setTheme}
                             isFromDash={isFromDash}
+                            bizId={bizId}
                         />
                     }
                     fullOpen={fullOpen}
@@ -323,7 +310,10 @@ const ColorPicker = ({
     theme,
     setTheme,
     isFromDash,
+    bizId,
 }) => {
+    const uify = useAction();
+
     const isPrimary = whichColorModal === "Principal";
     const isBackground = whichColorModal === "de Fundo";
     const dontNeedShowColor = (loopColor) => {
@@ -379,13 +369,45 @@ const ColorPicker = ({
                                         const hexValue = e.currentTarget.value;
 
                                         setFullOpen(false);
+                                        /*
+                                        objToSend={{
+                                            "clientAdminData.themePColor": translateColorToEng(
+                                                primaryColorBr
+                                            ),
+                                            "clientAdminData.themeSColor": translateColorToEng(
+                                                secondaryColorBr
+                                            ),
+                                            "clientAdminData.themeBackColor": translateColorToEng(
+                                                backColorBr
+                                            ),
+                                        }}
+                                        titleBeforeOk="Salvando nova palheta de cores..."
+                                        titleAfterOk="Palheta de cores salva."
 
+                                        await updateUser(bizId, "cliente-admin", objToSend, {
+                                            uify,
+                                        }).catch((err) => showToast(err, { type: "error" }));
+
+                                        showToast(titleAfterOk, { type: "success" });
+                                         */
                                         if (isPrimary) {
                                             setData({
                                                 ...data,
                                                 primaryColorBr: brColorName,
                                                 hexValuePrimary: hexValue,
                                             });
+
+                                            if (isFromDash)
+                                                updateDashColor({
+                                                    bizId,
+                                                    objToSend: {
+                                                        "clientAdminData.themePColor": translateColorToEng(
+                                                            brColorName
+                                                        ),
+                                                    },
+                                                    uify,
+                                                });
+
                                             if (!isFromDash) {
                                                 setTheme({
                                                     ...theme,
@@ -406,7 +428,19 @@ const ColorPicker = ({
                                                 backColorBr: brColorName,
                                                 hexBackValue: hexValue,
                                             });
-                                            !isFromDash &&
+
+                                            if (isFromDash)
+                                                updateDashColor({
+                                                    bizId,
+                                                    objToSend: {
+                                                        "clientAdminData.themeBackColor": translateColorToEng(
+                                                            brColorName
+                                                        ),
+                                                    },
+                                                    uify,
+                                                });
+
+                                            if (!isFromDash)
                                                 setTheme({
                                                     ...theme,
                                                     colorBack: colorName,
@@ -417,7 +451,18 @@ const ColorPicker = ({
                                                 secondaryColorBr: brColorName,
                                                 hexValueSecondary: hexValue,
                                             });
-                                            !isFromDash &&
+                                            if (isFromDash)
+                                                updateDashColor({
+                                                    bizId,
+                                                    objToSend: {
+                                                        "clientAdminData.themeSColor": translateColorToEng(
+                                                            brColorName
+                                                        ),
+                                                    },
+                                                    uify,
+                                                });
+
+                                            if (!isFromDash)
                                                 setTheme({
                                                     ...theme,
                                                     colorS: colorName,
@@ -437,3 +482,24 @@ const ColorPicker = ({
         </div>
     );
 };
+
+/* ARCHIVES
+{isFromDash && (
+    <ShowActionBtns
+        needUpdateBtn={needUpdateBtn}
+        objToSend={{
+            "clientAdminData.themePColor": translateColorToEng(
+                primaryColorBr
+            ),
+            "clientAdminData.themeSColor": translateColorToEng(
+                secondaryColorBr
+            ),
+            "clientAdminData.themeBackColor": translateColorToEng(
+                backColorBr
+            ),
+        }}
+        titleBeforeOk="Salvando nova palheta de cores..."
+        titleAfterOk="Palheta de cores salva."
+    />
+)}
+ */

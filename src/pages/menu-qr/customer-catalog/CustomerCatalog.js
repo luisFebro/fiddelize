@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { useBizData } from "init";
 import { Provider } from "context";
 import CarouselCard from "components/carousels/CarouselCard";
 import showToast from "components/toasts";
@@ -16,7 +15,7 @@ import useMainList from "../admin/items/useMainList";
 import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
-import CustomerArea from "./CustomerArea";
+import CustomerAccess from "./customer-access/CustomerAccess";
 import {
     updateItem,
     removeItem,
@@ -64,6 +63,10 @@ export default function CustomerCatalog({
     socket,
     isUsedLink,
     isOnline,
+    bizLogo = "/img/error.png",
+    sColor = "default",
+    pColor = "default",
+    backColor = "default",
     // url,
 }) {
     const [nextPage, setNextPage] = useState("menu");
@@ -73,8 +76,6 @@ export default function CustomerCatalog({
         orderList: [],
     });
     const { orderList, orderAmount, orderCount } = data;
-
-    const { bizLogo } = useBizData();
     // biz logo should be fetched with adminId when page is laoded
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
@@ -85,9 +86,12 @@ export default function CustomerCatalog({
         customerId,
     };
 
-    const gotSavedMenuData = digitalMenuData && digitalMenuData.orderCount;
+    const gotSavedMenuData =
+        digitalMenuData &&
+        digitalMenuData[bizLinkName] &&
+        digitalMenuData[bizLinkName].orderCount;
     useEffect(() => {
-        if (gotSavedMenuData) setData(digitalMenuData);
+        if (gotSavedMenuData) setData(digitalMenuData[bizLinkName]);
         // if it is a used link, then remain in the menu page and ignore local db
         if (digitalMenuCurrPage === "orders") return setNextPage("orders");
         if (!isUsedLink) setNextPage("menu");
@@ -106,7 +110,7 @@ export default function CustomerCatalog({
     };
 
     useScrollUp();
-    useBackColor("var(--themeBackground--default)");
+    useBackColor(`var(--themeBackground--${backColor})`);
 
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
@@ -122,7 +126,9 @@ export default function CustomerCatalog({
     const handleNextPage = () => {
         // even not id, at least allow to save data and keep current page
         setItems("global", {
-            digitalMenuData: data,
+            digitalMenuData: {
+                [bizLinkName]: data,
+            },
             digitalMenuCurrPage: "menu",
         });
         if (!adminId)
@@ -134,7 +140,9 @@ export default function CustomerCatalog({
             return showToast("Menu Vazio! Por favor, selecione algum item.");
 
         setItems("global", {
-            digitalMenuData: data,
+            digitalMenuData: {
+                [bizLinkName]: data,
+            },
             digitalMenuCurrPage: "orders",
         });
         return setNextPage("orders");
@@ -208,6 +216,11 @@ export default function CustomerCatalog({
 
     const store = useGlobalData({
         itemData,
+        sColor,
+        pColor,
+        backColor,
+        bizLogo,
+        bizLinkName,
     });
 
     return (
@@ -394,7 +407,7 @@ function DigitalMenu({
                         </span>
                     </div>
                 )}
-                <CustomerArea />
+                <CustomerAccess />
             </h1>
             {showSearchField()}
             <br />

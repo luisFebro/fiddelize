@@ -1,8 +1,10 @@
 import { useState } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import CommentField from "components/fields/CommentField";
 import { setItems } from "init/lStorage";
 import { Load } from "components/code-splitting/LoadableComp";
+import useContext from "context";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
 
@@ -26,6 +28,8 @@ export default function OrdersPage({
     isOnline,
 }) {
     useScrollUp();
+    const { bizLinkName } = useContext();
+    const [customerNote, setCustomerNote] = useState("");
     const [data, setData] = useState({
         openExternalOrder: false,
     });
@@ -51,6 +55,7 @@ export default function OrdersPage({
             customerName,
             customerPhone,
             customerAddress,
+            customerNote,
             placeId,
             adminId,
             order: {
@@ -69,14 +74,32 @@ export default function OrdersPage({
 
         setItems("global", {
             digitalMenuData: {
-                orderCount: itemsCount,
-                orderAmount: investAmount,
-                orderList: itemList,
+                [bizLinkName]: {
+                    orderCount: itemsCount,
+                    orderAmount: investAmount,
+                    orderList: itemList,
+                },
             },
             digitalMenuCurrPage: "success",
         });
         setNextPage("success");
     };
+
+    const showCustomerNote = () => (
+        <div className="mt-5">
+            <h2 className="text-normal mx-3 text-white">
+                Alguma observação do pedido? (opcional)
+            </h2>
+            <CommentField
+                setValue={setCustomerNote}
+                value={customerNote}
+                placeholder=""
+                rows={2}
+                maxLen={200}
+                maxLenColor="white"
+            />
+        </div>
+    );
 
     const showDoneOrderBtn = () => (
         <section className="container-center mt-3">
@@ -110,6 +133,7 @@ export default function OrdersPage({
                 removeVar={() => null}
                 setNextPage={setNextPage}
             />
+            {showCustomerNote()}
             {showDoneOrderBtn()}
             {isOnline && openExternalOrder && (
                 <AsyncExternalOrderForm

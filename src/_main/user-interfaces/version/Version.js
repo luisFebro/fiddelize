@@ -2,9 +2,9 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.15.30";
+const latestVersion = "v5.16.0";
 const updateDescription =
-    "menu digital - biz app split menu for digital menu pt46";
+    "menu digital - biz app split menu for digital menu pt47";
 /* HISTORY
 chat 2.0 with Fidda Bot training pt4
 balloonPop game pt5 and new email

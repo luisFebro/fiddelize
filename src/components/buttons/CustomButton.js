@@ -1,6 +1,8 @@
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
-import DeleteIcon from "@material-ui/icons/Delete";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import animateCSS from "../../utils/animateCSS";
 
 const useStyles = makeStyles((theme) => ({
     fab: {
@@ -14,7 +16,7 @@ const muStyle = {
     color: "#fff",
 };
 
-export default function DeleteButton({
+export default function CustomButton({
     position,
     top,
     right,
@@ -23,6 +25,7 @@ export default function DeleteButton({
     onClick,
     transform = "scale(1.2)",
     size = "small",
+    backgroundColor = "grey",
 }) {
     const classes = useStyles();
 
@@ -38,12 +41,12 @@ export default function DeleteButton({
                 bottom,
                 outline: "none",
                 color: "var(--mainWhite)",
-                backgroundColor: "var(--expenseRed)",
+                backgroundColor,
             }}
-            aria-label="Botão deletar"
+            aria-label="Botão"
             className={classes.fab}
         >
-            <DeleteIcon style={{ ...muStyle, transform }} />
+            <VisibilityOffIcon style={{ ...muStyle, transform }} />
         </Fab>
     );
 }

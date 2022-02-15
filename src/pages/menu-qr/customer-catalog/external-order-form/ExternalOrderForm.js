@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import TextField from "@material-ui/core/TextField";
+import Card from "@material-ui/core/Card";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
@@ -9,7 +10,6 @@ import handleChange from "utils/form/use-state/handleChange";
 import ModalFullContent from "components/modals/ModalFullContent";
 import showToast from "components/toasts";
 import CheckBoxForm from "components/CheckBoxForm";
-import Card from "@material-ui/core/Card";
 import getItems, { setItems, removeItems } from "init/lStorage";
 import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
 import EditButton from "components/buttons/EditButton";
