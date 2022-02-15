@@ -16,6 +16,7 @@ import useMainList from "../admin/items/useMainList";
 import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
+import CustomerArea from "./CustomerArea";
 import {
     updateItem,
     removeItem,
@@ -393,9 +394,7 @@ function DigitalMenu({
                         </span>
                     </div>
                 )}
-                <p className="my-2 mx-3 text-normal text-em-1-0">
-                    Para adicionar um novo item, basta clicar no botão de mais.
-                </p>
+                <CustomerArea />
             </h1>
             {showSearchField()}
             <br />
