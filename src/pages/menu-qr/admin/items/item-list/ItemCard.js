@@ -73,7 +73,7 @@ function ItemCard(
 ) {
     const [fullOpen, setFullOpen] = useState(false);
     const [selected, setSelected] = useState(false);
-    const { category, itemId, img, adName, price } = data;
+    const { category, itemId, img, adName, price, isHidden = true } = data;
     const [btnsData, setBtnsData] = useState({
         qtt: 0,
     });
@@ -258,7 +258,12 @@ function ItemCard(
             {isAddCategory && showCategoryBadge()}
             <div className="d-flex container align-items-center">
                 {isAddCategory && showCheckBox()}
-                <div className="img-container">
+                <div
+                    className="img-container"
+                    style={{
+                        opacity: isHidden ? 0.5 : 1,
+                    }}
+                >
                     <img width={100} height={100} src={img} alt={adName} />
                 </div>
                 <div className="text-left ml-3 text-normal">

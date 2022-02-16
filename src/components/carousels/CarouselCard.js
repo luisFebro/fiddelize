@@ -264,7 +264,7 @@ export default function CarouselCard({
                     }
 
                     .flickity-fullscreen-button .flickity-button-icon {
-                        position: absolute;
+                        position: absolute !important;
                         width: 16px;
                         height: 16px;
                         left: 4px;
