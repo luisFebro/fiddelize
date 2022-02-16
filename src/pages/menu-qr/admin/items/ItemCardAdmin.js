@@ -1,10 +1,13 @@
 import { forwardRef } from "react";
 import convertToReal from "utils/numbers/convertToReal";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 function ItemCardAdmin({ card, flickity, carouselInd }, ref) {
+    const isHidden = (card && card.isHidden) || true;
+
     const showImg = () => (
         <section
             className="mb-2 container-center-col"
@@ -17,11 +20,30 @@ function ItemCardAdmin({ card, flickity, carouselInd }, ref) {
             <img
                 // data-flickity-lazyload={card.img}
                 src={card.img}
+                style={{
+                    opacity: isHidden ? 0.5 : 1,
+                }}
                 className="carousel-cell-image"
                 width="150px"
                 height="150px"
                 alt={card.adName}
             />
+            {isHidden && (
+                <div
+                    className="position-absolute"
+                    style={{
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                    }}
+                >
+                    <VisibilityOffIcon
+                        style={{
+                            fontSize: 40,
+                            color: "var(--mainWhite)",
+                        }}
+                    />
+                </div>
+            )}
         </section>
     );
 
