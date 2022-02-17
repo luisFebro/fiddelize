@@ -216,6 +216,7 @@ export default function CustomerCatalog({
 
     const store = useGlobalData({
         itemData,
+        adminId,
         sColor,
         pColor,
         backColor,

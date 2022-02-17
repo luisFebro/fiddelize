@@ -72,7 +72,7 @@ export default function ItemHandlerBtn({
                     type === "item" ? "var(--themePDark)" : "transparent"
                 }
                 fullScreen={type === "item"}
-                needIndex
+                needIndex={type === "item" ? 11000 : 3000} // need 11000 to open edit options when fullscreen
             />
         </section>
     );

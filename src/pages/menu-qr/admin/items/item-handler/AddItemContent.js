@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import getAPI, { readMainItemList } from "api";
 import EditButton from "components/buttons/EditButton";
-import { useBizData } from "init";
 import Card from "@material-ui/core/Card";
 import convertToReal from "utils/numbers/convertToReal";
 import Spinner from "components/loadingIndicators/Spinner";
+import useContext from "context";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import { updateHideItems } from "pages/menu-qr/admin/items/item-list/HideConfirmBtn";
 import NewItemForm from "./items/NewItemForm";
 import ImgHandler from "./img/ImgHandler";
 
@@ -15,9 +18,9 @@ export default function AddItemContent({
     handleFullClose = () => null,
 }) {
     const [mode, setMode] = useState("main"); // "show"
+    const { adminId, isAdmin, updateItem } = useContext();
 
     const isShowItem = Boolean(itemSearch);
-    const { bizId } = useBizData();
 
     const [data, setData] = useState({
         _id: null,
@@ -25,12 +28,13 @@ export default function AddItemContent({
         img: null,
         adName: null,
         price: null,
+        isHidden: card && card.isHidden,
         category: null,
         errorAdName: false,
         errorPrice: false,
         finishedUpload: false,
     });
-    const { img, adName, price, category } = data;
+    const { itemId, img, adName, price, category, isHidden } = data;
 
     const [loadingShowItem, setLoadingShowItem] = useState(false);
 
@@ -47,6 +51,7 @@ export default function AddItemContent({
             img: thisCard.img,
             adName: thisCard.adName,
             price: thisCard.price && thisCard.price.toFixed(2),
+            isHidden: thisCard.isHidden,
         }));
 
     useEffect(() => {
@@ -56,7 +61,8 @@ export default function AddItemContent({
 
         const params = {
             // userId, // for auth
-            adminId: bizId,
+            adminId,
+            isAdmin: isAdmin ? "1" : undefined,
             search: itemSearch,
             skip: 0,
             limit: 1,
@@ -146,6 +152,47 @@ export default function AddItemContent({
         </section>
     );
 
+    const showAdminVisibilityItemInfo = () => (
+        <section className="hidden-item-area">
+            <div className="py-2 mx-2 d-flex align-items-center justify-content-center">
+                <div className="mr-2">
+                    <VisibilityOffIcon
+                        style={{ color: "var(--mainWhite)", fontSize: 30 }}
+                    />
+                </div>
+                <span className="font-site text-em-1 text-shadow text-white">
+                    Este item está escondido e não aparece para seus clientes no
+                    menu digital.
+                </span>
+                <div className="container-center">
+                    <RadiusBtn
+                        position="relative"
+                        backgroundColor="var(--incomeGreen)"
+                        title="tornar disponível"
+                        size="extra-small"
+                        fontSize="15px"
+                        onClick={async () => {
+                            await updateHideItems({
+                                updateItem,
+                                bizId: adminId,
+                                needHide: false,
+                                selectionList: [itemId],
+                            });
+                        }}
+                    />
+                </div>
+            </div>
+            <style jsx>
+                {`
+                    .hidden-item-area {
+                        background: grey;
+                        min-height: 50px;
+                    }
+                `}
+            </style>
+        </section>
+    );
+
     return (
         <section>
             {showTitle()}
@@ -154,11 +201,14 @@ export default function AddItemContent({
                     <Spinner size="large" />
                 </div>
             ) : (
-                <ImgHandler
-                    setData={setData}
-                    savedImg={img}
-                    isShowItem={isShowItem}
-                />
+                <Fragment>
+                    <ImgHandler
+                        setData={setData}
+                        savedImg={img}
+                        isShowItem={isShowItem}
+                    />
+                    {isHidden && showAdminVisibilityItemInfo()}
+                </Fragment>
             )}
             {mode === "main" ? (
                 <NewItemForm

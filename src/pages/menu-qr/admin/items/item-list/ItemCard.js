@@ -1,13 +1,14 @@
 import { forwardRef, useEffect, useState, Fragment } from "react";
 import convertToReal from "utils/numbers/convertToReal";
 import EditButton from "components/buttons/EditButton";
-import DeleteButton from "components/buttons/DeleteButton";
 import useContext from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Checkbox from "@material-ui/core/Checkbox";
 import ModalFullContent from "components/modals/ModalFullContent";
 import showToast from "components/toasts";
 import { Load } from "components/code-splitting/LoadableComp";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+// import DeleteButton from "components/buttons/DeleteButton";
 // import showToast from "components/toasts";
 
 const AsyncAddItemContent = Load({
@@ -73,7 +74,7 @@ function ItemCard(
 ) {
     const [fullOpen, setFullOpen] = useState(false);
     const [selected, setSelected] = useState(false);
-    const { category, itemId, img, adName, price, isHidden = true } = data;
+    const { category, itemId, img, adName, price, isHidden = false } = data;
     const [btnsData, setBtnsData] = useState({
         qtt: 0,
     });
@@ -113,6 +114,14 @@ function ItemCard(
             const removeSelectionList = () =>
                 prev.selectionList.filter((currId) => currId !== itemId);
 
+            const addHideList = () => [...prev.hideList, isHidden];
+            const removeHideList = () => {
+                let newHideList = prev.hideList;
+                const firstFoundInd = newHideList.indexOf(isHidden);
+                newHideList.splice(firstFoundInd, 1);
+                return newHideList;
+            };
+
             // make sure the already selected is added and only once
             if (passAlreadySelected && checkAlreadySelected) {
                 setSelected(true);
@@ -121,6 +130,9 @@ function ItemCard(
                     selectionList: foundItemAlready
                         ? prev.selectionList
                         : addSelectionList(),
+                    hideList: foundItemAlready
+                        ? prev.hideList
+                        : removeHideList(),
                     generalList: newGeneralList,
                 };
             } else {
@@ -131,11 +143,13 @@ function ItemCard(
                 return {
                     ...prev,
                     selectionList: removeSelectionList(),
+                    hideList: removeHideList(),
                     generalList: newGeneralList,
                 };
             return {
                 ...prev,
                 selectionList: addSelectionList(),
+                hideList: addHideList(),
                 generalList: newGeneralList,
             };
         });
@@ -201,9 +215,6 @@ function ItemCard(
                         )}
                     </p>
                 </div>
-                <div className="mr-1 d-none">
-                    <DeleteButton onClick={null} />
-                </div>
             </div>
             <style jsx>
                 {`
@@ -259,12 +270,28 @@ function ItemCard(
             <div className="d-flex container align-items-center">
                 {isAddCategory && showCheckBox()}
                 <div
-                    className="img-container"
+                    className="position-relative img-container"
                     style={{
                         opacity: isHidden ? 0.5 : 1,
                     }}
                 >
                     <img width={100} height={100} src={img} alt={adName} />
+                    {true && (
+                        <div
+                            className="position-absolute"
+                            style={{
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                            }}
+                        >
+                            <VisibilityOffIcon
+                                style={{
+                                    fontSize: 40,
+                                    color: "var(--mainWhite)",
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className="text-left ml-3 text-normal">
                     <p
@@ -341,3 +368,9 @@ function ItemCard(
 }
 
 export default forwardRef(ItemCard);
+
+/*
+<div className="mr-1 d-none">
+    <DeleteButton onClick={null} />
+</div>
+ */

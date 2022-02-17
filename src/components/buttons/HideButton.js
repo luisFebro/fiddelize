@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import animateCSS from "../../utils/animateCSS";
 
@@ -16,7 +17,7 @@ const muStyle = {
     color: "#fff",
 };
 
-export default function CustomButton({
+export default function HideButton({
     position,
     top,
     right,
@@ -26,6 +27,7 @@ export default function CustomButton({
     transform = "scale(1.2)",
     size = "small",
     backgroundColor = "grey",
+    iconHidden = true,
 }) {
     const classes = useStyles();
 
@@ -46,7 +48,11 @@ export default function CustomButton({
             aria-label="Botão"
             className={classes.fab}
         >
-            <VisibilityOffIcon style={{ ...muStyle, transform }} />
+            {iconHidden ? (
+                <VisibilityOffIcon style={{ ...muStyle, transform }} />
+            ) : (
+                <VisibilityIcon style={{ ...muStyle, transform }} />
+            )}
         </Fab>
     );
 }

@@ -76,6 +76,7 @@ export default function OrdersTableContent({
                     (acc, next) => Number(acc) + Number(next.amount),
                     0
                 );
+                console.log("newMainList FUCK", newMainList);
 
                 return {
                     ...priorMainData,

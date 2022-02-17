@@ -149,7 +149,7 @@ function MyOrder({ allDataItem }) {
         <section className="ml-4 mr-2 text-purple text-normal">
             {orderList.length &&
                 orderList.map((item) => (
-                    <section className="mt-3" key={item.name}>
+                    <section className="mt-3" key={item.adName}>
                         <FontAwesomeIcon
                             icon="check"
                             className="mr-3"
@@ -158,7 +158,7 @@ function MyOrder({ allDataItem }) {
                             }}
                         />
                         <span className="font-weight-bold">{item.count} x</span>{" "}
-                        {item.name} por{" "}
+                        {item.adName} por{" "}
                         <span className="font-weight-bold">
                             {convertToReal(item.amount, { moneySign: true })}
                         </span>

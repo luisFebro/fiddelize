@@ -6,7 +6,7 @@ import ItemHandlerBtn from "./item-handler/ItemHandlerBtn";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 function ItemCardAdmin({ card, flickity, carouselInd }, ref) {
-    const isHidden = (card && card.isHidden) || true;
+    const isHidden = card && card.isHidden;
 
     const showImg = () => (
         <section

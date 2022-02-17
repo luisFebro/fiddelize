@@ -5,8 +5,10 @@ import SelectField from "components/fields/SelectField";
 import ModalYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
 import { useBizData } from "init";
+import CancelOrderBtn from "./CancelOrderBtn";
 
-export default function MarkBtn({ socket, adminId, placeId, customerId }) {
+export default function MarkBtn(props) {
+    const { socket, adminId, placeId, customerId } = props;
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
         markOpt: "queue",
@@ -29,37 +31,41 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                 markOpt: select,
             }));
 
-            const isDone = select === "done";
-            if (isDone)
-                showToast(`Pedido finalizado e movido para feito`, {
-                    dur: 3000,
-                    type: "success",
-                });
+            if (!socket) return console.log("No socket!");
+
             const socketData = {
                 adminId,
                 placeId,
                 customerId,
                 "order.stage": select,
             };
-            if (socket) {
-                const emailCond = Boolean(
-                    select === "preparing" || select === "done"
-                );
 
-                const isOnline = placeId && placeId.includes("online");
-                const notifData = {
-                    url: isOnline
-                        ? `/${bizLinkName}/menu?cliId=${customerId}`
-                        : `/${bizLinkName}/menu/${placeId}?cliId=${customerId}`,
-                    bizLogo,
-                    needEmail: emailCond,
-                };
+            const emailCond = Boolean(
+                select === "preparing" || select === "done"
+            );
 
-                if (isOnline) socket.emit("joinRoom", placeId);
-                socket.emit("updateCustomerOrder", socketData, notifData);
-                if (isDone) socket.emit("updateAdminList");
+            const isOnline = placeId && placeId.includes("online");
+            const notifData = {
+                url: isOnline
+                    ? `/${bizLinkName}/menu?cliId=${customerId}`
+                    : `/${bizLinkName}/menu/${placeId}?cliId=${customerId}`,
+                bizLogo,
+                needEmail: emailCond,
+            };
+            if (isOnline) socket.emit("joinRoom", placeId);
+            socket.emit("updateCustomerOrder", socketData, notifData);
+
+            const isDone = select === "done";
+            if (isDone) {
+                socket.emit("updateAdminList");
+                showToast(`Pedido finalizado e movido para feito`, {
+                    dur: 3000,
+                    type: "success",
+                });
             }
+
             if (select !== markOpt) setFullOpen(false);
+            return null;
         };
 
         return (
@@ -72,6 +78,11 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                 />
             </div>
         );
+    };
+
+    const cancelData = {
+        // socket and ids
+        ...props,
     };
 
     return (
@@ -122,7 +133,27 @@ export default function MarkBtn({ socket, adminId, placeId, customerId }) {
                     needIndex
                     needCTAs={false}
                     contentComp={
-                        <div className="container-center">{showSelect()}</div>
+                        <div>
+                            <div className="container-center">
+                                {showSelect()}
+                            </div>
+                            <div className="mt-5 ml-3 d-flex justify-content-start">
+                                <CancelOrderBtn
+                                    closeOrderModal={() => setFullOpen(false)}
+                                    cancelData={cancelData}
+                                />
+                            </div>
+                            <div className="mt-2 ml-3 mb-3 d-flex justify-content-start">
+                                <ButtonFab
+                                    title="Voltar"
+                                    backgroundColor="var(--themeSDark)"
+                                    onClick={() => setFullOpen(false)}
+                                    position="relative"
+                                    variant="extended"
+                                    size="small"
+                                />
+                            </div>
+                        </div>
                     }
                 />
             )}

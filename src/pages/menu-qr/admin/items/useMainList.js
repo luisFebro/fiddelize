@@ -11,7 +11,7 @@ import getId from "utils/getId";
 
 export default function useMainList(options = {}) {
     // adminId only for customer catalog
-    const { limit = 15, adminId } = options;
+    const { limit = 15, adminId, isAdmin } = options;
 
     const [skip, setSkip] = useState(0);
     const [search, setSearch] = useState("");
@@ -20,6 +20,7 @@ export default function useMainList(options = {}) {
     const params = {
         adminId: adminId || bizId,
         search,
+        isAdmin: isAdmin ? "1" : undefined,
     };
 
     // UPDATE
@@ -78,7 +79,10 @@ export default function useMainList(options = {}) {
         <section className="mt-2">
             <SearchField
                 callback={handleSearch}
-                searchUrl={digitalMenuAutocomplete(bizId, { limit: 5 })}
+                searchUrl={digitalMenuAutocomplete(bizId, {
+                    limit: 5,
+                    isAdmin,
+                })}
                 autocompleteProps={autocompleteProps}
                 showImgs
             />

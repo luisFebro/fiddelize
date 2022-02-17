@@ -21,6 +21,7 @@ export default function Analysis() {
                     Quais produtos vendem mais no mes? (Grafico de porcentagem)
                 </p>
                 <p>Quais produtos estão quase acabando ou sem estoque?</p>
+                <p>List of logged-in customers</p>
             </section>
         </Fragment>
     );

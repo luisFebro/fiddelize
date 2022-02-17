@@ -1,16 +1,17 @@
 import { useState, useEffect, Fragment } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import CustomButton from "components/buttons/CustomButton";
+import HideButton from "components/buttons/HideButton";
 import useData, { useBizData } from "init";
 // import removeObjDuplicate from "utils/arrays/removeObjDuplicate";
 import useAPIList, { readMainItemList } from "api/useAPIList";
 import useElemDetection, { checkDetectedElem } from "api/useElemDetection";
 import useRun, { setRun, useAction } from "global-data/ui";
 import showToast from "components/toasts";
+import getId from "utils/getId";
 import RemovalConfirmBtn from "./RemovalConfirmBtn";
+import HideConfirmBtn from "./HideConfirmBtn";
 
 // import useContext from "context";
-import getId from "utils/getId";
 import ItemCard from "./ItemCard";
 // import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
@@ -26,8 +27,9 @@ export default function FinalList({
     const [dataList, setDataList] = useState({
         selectionList: [],
         generalList: [], // list to track unmarked items if priorly selected so that we can set to _general category
+        hideList: [], // track all hide cond state to decide whether hide or show items
     });
-    const { selectionList, generalList } = dataList;
+    const { selectionList, generalList, hideList } = dataList;
     // const { updateAdminCatalog } = useContext();
     const limit = 15;
 
@@ -97,6 +99,12 @@ export default function FinalList({
     // useEffect(() => {
     //     setDataList((prev) => ({ ...prev, ultimateList: itemList }));
     // }, [itemList, type]);
+    const checkHideCond = () => {
+        const needVisible = hideList.every((item) => item === true);
+        return !needVisible;
+    };
+
+    const needHide = checkHideCond();
 
     const showTapAndHoldOptions = () => (
         <section
@@ -162,22 +170,11 @@ export default function FinalList({
                     />
                 ) : (
                     <div className="d-flex">
-                        <CustomButton
-                            onClick={() => {
-                                const newItem = {
-                                    // this newItem is being used here exclusively for sending data to DB
-                                    adminId: bizId,
-                                    type: "delete",
-                                    hideItemIds: selectionList,
-                                };
-
-                                return updateItem("update", {
-                                    newItem,
-                                });
-
-                                // setFullOpen(false);
-                                // return closeCategoryForm();
-                            }}
+                        <HideConfirmBtn
+                            updateItem={updateItem}
+                            bizId={bizId}
+                            selectionList={selectionList}
+                            needHide={needHide}
                         />
                         <div className="ml-2">
                             <RemovalConfirmBtn
@@ -185,7 +182,7 @@ export default function FinalList({
                                 updateItem={updateItem}
                                 bizId={bizId}
                                 selectionList={selectionList}
-                                bizLinkName={selectionList}
+                                bizLinkName={bizLinkName}
                             />
                         </div>
                     </div>

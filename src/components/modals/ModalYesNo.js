@@ -17,6 +17,7 @@ export default function ModalYesNo({
     needIndex = true,
     needBackBtn = false,
     needCTAs = true,
+    yesTitle = "SIM",
     yesBtnColor = "var(--mainRed)",
     yesBtnIcon = "times",
     noTitle = "NÃO",
@@ -51,7 +52,7 @@ export default function ModalYesNo({
                             variant="link"
                         />
                         <ButtonMulti
-                            title="SIM"
+                            title={yesTitle}
                             disabled={!!isYesBtnDisabled}
                             onClick={() => {
                                 actionFunc();

@@ -62,10 +62,11 @@ export default function RealtimeOrders({ match, location }) {
     const { data, loading: loadingBizData } = useAPI({
         url: getUserIdByName(),
         params,
-        trigger: !isAdmin,
+        trigger: true,
+        // trigger: !isAdmin, // isAdmin is required for both admin and client menus otherwise socket won`t work properly.
     });
 
-    const adminId = data && data._id;
+    const adminId = isAdmin ? data : data && data._id; // withSelect returns {} and without it, a string.
     const bizLogo =
         data && data.clientAdminData && data.clientAdminData.bizLogo;
     const backColor =

@@ -225,8 +225,8 @@ export const updateCustomerOrder = () =>
 export const updateAdminItem = () =>
     `${ROOT}/process-solutions/digital-menu/admin-item`; // POST
 
-export const digitalMenuAutocomplete = (bizId, { limit = 5 }) =>
+export const digitalMenuAutocomplete = (bizId, { limit = 5, isAdmin }) =>
     `${ROOT}/process-solutions/digital-menu/search/autocomplete?adminId=${
         bizId || "5e8b0bfc8c616719b01abc9c"
-    }&limit=${limit}`; // GET
+    }&limit=${limit}${isAdmin ? "&isAdmin=1" : ""}`; // GET
 // end digital menu

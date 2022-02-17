@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import convertToReal from "utils/numbers/convertToReal";
 import { fromNow } from "utils/dates/dateFns";
+import parse from "html-react-parser";
 import ExternalOrderDataBtn from "./external-order-data/ExternalOrderDataBtn";
 import MarkBtn from "./mark-btn/MarkBtn";
 // import NewCardPill, { checkCardNew } from "components/pills/NewCardPill";
@@ -69,7 +70,7 @@ export default function PendingCard({ data, socket }) {
                 {totalCount === 1 ? "item" : "itens"}):
             </p>
             <ItemsDesc data={dataItems} />
-            <h2 className="my-2 text-normal text-center">
+            <h2 className="mt-2 my-2 text-normal text-center">
                 Valor Total:
                 <span className="ml-3 hightlight text-pill">
                     R$ {convertToReal(totalAmount, { needFraction: true })}
@@ -77,9 +78,15 @@ export default function PendingCard({ data, socket }) {
             </h2>
             <h2 className="text-normal my-3">
                 &#8226; Nota do cliente:
-                <span className="d-block text-em-0-8 hightlight text-pill font-italic">
-                    &quot;{customerNote || "nenhuma"}&quot;
-                </span>
+                <p
+                    className={`d-table text-em-0-8 ${
+                        customerNote ? "hightlight text-pill font-italic" : ""
+                    }`}
+                >
+                    {customerNote
+                        ? parse(`&quot;${customerNote}&quot;`)
+                        : "nenhuma"}
+                </p>
             </h2>
             {showUpdatedAt()}
             <style jsx>
@@ -111,10 +118,10 @@ function ItemsDesc({ data }) {
                 style={{
                     maxHeight: 60,
                 }}
-                alt={dt.name}
+                alt={dt.adName}
             />
             <span className="d-table ml-2 text-white text-small d-inline-block">
-                {truncate(dt.name, 50)}
+                {truncate(dt.adName, 50)}
                 <span
                     className="d-block ml-1 px-1"
                     style={{ background: "var(--themePLight)" }}

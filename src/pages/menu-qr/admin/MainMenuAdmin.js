@@ -42,11 +42,9 @@ export default function MainMenuAdmin(compData) {
     const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
 
     useBackColor("var(--mainWhite)");
-    const { bizId, bizLinkName } = useBizData();
+    const { bizLinkName } = useBizData();
 
-    const { socket } = compData;
-    let { adminId } = compData;
-    adminId = bizId || adminId;
+    const { adminId, socket } = compData;
 
     const history = useHistory();
 

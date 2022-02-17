@@ -197,6 +197,11 @@ export default function AutoCompleteSearch({
                     let targetData = response.data;
                     if (showImgs) {
                         targetData = targetData && targetData.names;
+                        if (targetData && !targetData.length) {
+                            setOptions(targetData);
+                            return setLoading(false);
+                        }
+
                         const thisImgs = response.data && response.data.imgs;
                         const imgsData = targetData.map((thisName, ind) => ({
                             id: thisName,

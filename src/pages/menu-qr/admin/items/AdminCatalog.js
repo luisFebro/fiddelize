@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import CarouselCard from "components/carousels/CarouselCard";
 import getAPI, { updateAdminItem } from "api";
-import useData from "init";
+import useData, { useBizData } from "init";
 import { Provider } from "context";
 import getId from "utils/getId";
 import { checkDetectedElem } from "api/useElemDetection";
@@ -35,7 +35,7 @@ const AsyncCategoryList = Load({
 });
 
 // LESSON: With carousels, it should be reload the page since there is an error to removeChild
-export default function AdminCatalog() {
+export default function AdminCatalog({ adminId }) {
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
     const [showSingleItem, setShowSingleItem] = useState(false);
@@ -237,7 +237,7 @@ export default function AdminCatalog() {
     const showTitle = () => (
         <div className="mt-5 mb-3 text-center text-purple mx-3">
             <h1 className="text-subtitle text-purple font-weight-bold">
-                Menu Digital (Admin)
+                Menu Digital
             </h1>
         </div>
     );
@@ -250,9 +250,11 @@ export default function AdminCatalog() {
         dataList,
         search,
         updateAdminCatalog,
-    } = useMainList();
+    } = useMainList({ isAdmin: true });
 
     const store = useGlobalData({
+        isAdmin: true,
+        adminId,
         updateItem,
         menuData,
         setMenuData,
