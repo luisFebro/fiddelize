@@ -15,14 +15,6 @@ export const AsyncAdminMenuOrders = Load({
         ),
 });
 
-// it has its own page
-// const AsyncAdminCatalog = Load({
-//     loader: () =>
-//         import(
-//             "./items/AdminCatalog" /* webpackChunkName: "admin-catalog-page-lazy" */
-//         ),
-// });
-
 const AsyncAdvertise = Load({
     loader: () =>
         import(

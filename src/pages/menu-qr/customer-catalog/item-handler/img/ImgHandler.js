@@ -11,13 +11,15 @@ export default function ImgHandler({ setData, savedImg, isShowItem }) {
 
     const handleUploadCallback = (result) => {
         const removedImg = !result.uploadedPic;
-        setTargetImg(removedImg ? null : result.img);
+        const imgName = `${bizLinkName}-${result.img}`;
+
+        setTargetImg(removedImg ? null : imgName);
 
         if (removedImg) setData((prev) => ({ ...prev, img: null }));
         else
             setData((prev) => ({
                 ...prev,
-                img: result.img,
+                img: imgName,
                 finishedUpload: result.finishedUpload,
             }));
     };
@@ -28,13 +30,7 @@ export default function ImgHandler({ setData, savedImg, isShowItem }) {
             loadingMsg="Adicionando..."
             callback={handleUploadCallback}
             urlFunc={setImgToProvider}
-            body={{
-                targetImg, // only for remove mode
-                folder: `digital-menu/${bizLinkName}`, // folder to be stored in the provider, add / for subfolders. When remove an img, the folders remain intact
-                nameId: "dMenu",
-                tags: "cliente-admin",
-                backup: false,
-            }}
+            body={{}}
             alreadyUploaded={Boolean(targetImg)}
             isShowItem={isShowItem}
         />

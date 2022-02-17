@@ -45,7 +45,7 @@ export default function NewItemForm({
         errorAdName,
         errorPrice,
     } = data;
-    const { bizId, bizLinkName } = useBizData();
+    const { bizId } = useBizData();
     const { menuData, updateItem } = useContext();
     const { allCategories } = menuData;
     const carouselInd =
@@ -132,7 +132,7 @@ export default function NewItemForm({
                                 },
                                 removalImg: {
                                     savedImg: img,
-                                    folder: `digital-menu/${bizLinkName}`,
+                                    folder: "digital-menu",
                                 },
                                 carouselInd,
                             });

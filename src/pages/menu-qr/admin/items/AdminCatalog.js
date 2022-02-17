@@ -35,7 +35,7 @@ const AsyncCategoryList = Load({
 });
 
 // LESSON: With carousels, it should be reload the page since there is an error to removeChild
-export default function AdminCatalog({ adminId }) {
+export default function AdminCatalog() {
     const [flickity, setFlickity] = useState(null);
     const [randomId, setRandomId] = useState(null);
     const [showSingleItem, setShowSingleItem] = useState(false);
@@ -50,6 +50,7 @@ export default function AdminCatalog({ adminId }) {
         itemList: [],
     });
     const { sexLetter } = useData();
+    const { bizId } = useBizData();
     // const { allCategories, itemList = [] } = menuData;
 
     const updateItem = (type, options = {}) => {
@@ -254,7 +255,7 @@ export default function AdminCatalog({ adminId }) {
 
     const store = useGlobalData({
         isAdmin: true,
-        adminId,
+        adminId: bizId,
         updateItem,
         menuData,
         setMenuData,

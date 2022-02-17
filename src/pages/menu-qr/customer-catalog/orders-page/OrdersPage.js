@@ -28,7 +28,8 @@ export default function OrdersPage({
     isOnline,
 }) {
     useScrollUp();
-    const { bizLinkName } = useContext();
+    const { bizLinkName, loginData } = useContext();
+    const customerEmail = loginData && loginData.email;
     const [customerNote, setCustomerNote] = useState("");
     const [data, setData] = useState({
         openExternalOrder: false,
@@ -56,6 +57,7 @@ export default function OrdersPage({
             customerPhone,
             customerAddress,
             customerNote,
+            customerEmail,
             placeId,
             adminId,
             order: {

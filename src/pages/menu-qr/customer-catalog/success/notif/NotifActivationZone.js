@@ -9,15 +9,16 @@ import EditButton from "components/buttons/EditButton";
 
 // save email in the DB
 
-const [digitalMenuEmail] = getItems("global", ["digitalMenuEmail"]);
+const [loginData] = getItems("global", ["digitalMenuLogin"]);
 
-export default function NotifActivationZone({ socket, ids }) {
+export default function NotifActivationZone({ socket, ids, bizLinkName }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
         email: null,
         success: false,
     });
     const { email, success } = data;
+    const digitalMenuLogin = loginData[bizLinkName];
 
     const updateDbEmail = (thisData) => {
         const dataEmail = {
@@ -28,23 +29,23 @@ export default function NotifActivationZone({ socket, ids }) {
     };
 
     useEffect(() => {
-        if (digitalMenuEmail) {
+        if (digitalMenuLogin) {
             setData((prev) => ({
                 ...prev,
-                email: digitalMenuEmail,
+                email: digitalMenuLogin,
                 success: true,
             }));
-            updateDbEmail(digitalMenuEmail);
+            updateDbEmail(digitalMenuLogin);
         }
-    }, [digitalMenuEmail]);
+    }, [digitalMenuLogin]);
 
     const toggleCustomerEmail = () => {
-        if (success || digitalMenuEmail) {
+        if (success || digitalMenuLogin) {
             // remove email in the DB
             updateDbEmail(null);
             setData((prev) => ({ ...prev, email: null, success: false }));
             setFullOpen(false);
-            removeItems("global", ["digitalMenuEmail"]);
+            removeItems("global", ["digitalMenuLogin"]);
             return showToast("Notificação desativada e email removido", {
                 type: "success",
             });
@@ -57,7 +58,7 @@ export default function NotifActivationZone({ socket, ids }) {
             });
 
         updateDbEmail(email);
-        setItems("global", { digitalMenuEmail: email });
+        setItems("global", { digitalMenuLogin: email });
         setData({ email, success: true });
         setFullOpen(false);
         showToast("Notificação ativada", { type: "success" });
@@ -125,9 +126,9 @@ export default function NotifActivationZone({ socket, ids }) {
     const showEmailOnZone = () => (
         <section className="position-relative mx-3 text-normal text-center text-white text-shadow my-5">
             <h2 className="text-subtitle">Ativado notificação para:</h2>
-            <p className="font-weight-bold">{email || digitalMenuEmail}</p>
+            <p className="font-weight-bold">{email || digitalMenuLogin}</p>
             <div
-                className="position-absolute"
+                className="d-none position-absolute"
                 style={{
                     bottom: "-30px",
                     right: "10px",

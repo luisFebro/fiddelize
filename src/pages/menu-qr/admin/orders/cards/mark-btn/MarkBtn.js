@@ -8,7 +8,14 @@ import { useBizData } from "init";
 import CancelOrderBtn from "./CancelOrderBtn";
 
 export default function MarkBtn(props) {
-    const { socket, adminId, placeId, customerId } = props;
+    const {
+        customerEmail,
+        dataItems,
+        socket,
+        adminId,
+        placeId,
+        customerId,
+    } = props;
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
         markOpt: "queue",
@@ -24,14 +31,13 @@ export default function MarkBtn(props) {
         ];
 
         const handleSelected = (select) => {
-            if (!select) return;
+            if (!select) return null;
+            if (!socket) return console.log("No socket!");
 
             setData((prev) => ({
                 ...prev,
                 markOpt: select,
             }));
-
-            if (!socket) return console.log("No socket!");
 
             const socketData = {
                 adminId,
@@ -58,6 +64,13 @@ export default function MarkBtn(props) {
             const isDone = select === "done";
             if (isDone) {
                 socket.emit("updateAdminList");
+
+                const customerOrder = {
+                    adminId,
+                    email: customerEmail,
+                    orderList: dataItems,
+                };
+                socket.emit("saveCustomerOrder", customerOrder);
                 showToast(`Pedido finalizado e movido para feito`, {
                     dur: 3000,
                     type: "success",

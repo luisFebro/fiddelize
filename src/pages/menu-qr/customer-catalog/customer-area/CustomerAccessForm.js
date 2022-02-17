@@ -7,7 +7,9 @@ import EmailIcon from "@material-ui/icons/Email";
 import validateEmail from "utils/validation/validateEmail";
 import showToast from "components/toasts";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import useContext from "context";
 import { setItems } from "init/lStorage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const getStyles = () => ({
     fieldForm: {
@@ -18,20 +20,35 @@ const getStyles = () => ({
     },
 });
 
-export default function CustomerAccessForm({ closeModal, data, setData }) {
-    const { email, errorEmail, bizLogo, sColor, bizLinkName } = data;
+export default function CustomerAccessForm({ closeModal }) {
+    const {
+        bizName,
+        adminId,
+        socket,
+        needBenefit = false,
+        loginData,
+        bizLogo,
+        pColor,
+        sColor,
+        bizLinkName,
+        setMainData,
+        mainData,
+    } = useContext();
+    const { email, errorEmail } = loginData;
 
     const styles = getStyles();
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 
     const switchError = (error) => {
-        setData((prev) => ({ ...prev, ...error }));
+        setMainData((prev) => ({ ...prev, ...error }));
     };
 
     const handleAccess = () => {
         if (!email)
-            return showToast("Informe email para acesso", { type: "error" });
+            return showToast("Você precisa de um email para acessar", {
+                type: "error",
+            });
 
         if (!validateEmail(email))
             return showToast("Formato de e-mail inválido.", { type: "error" });
@@ -42,11 +59,18 @@ export default function CustomerAccessForm({ closeModal, data, setData }) {
             },
         });
         // save db
-        closeModal();
+        if (socket) {
+            socket.emit("newCustomerRegister", { bizName, adminId, email });
+            setMainData((prev) => ({
+                ...prev,
+                loginOk: true,
+            }));
+            closeModal();
+        }
     };
 
     const showLogo = () => (
-        <div className="my-5 text-purple animated fadeInUp">
+        <div className="mt-1 mb-2 text-purple">
             <img
                 src={thisbizLogo}
                 className="img-center shadow-babadoo"
@@ -56,9 +80,32 @@ export default function CustomerAccessForm({ closeModal, data, setData }) {
                 alt="logo"
             />
             <h1 className="font-weight-bold text-subtitle text-center">
-                Acesso
+                Acesso Menu
             </h1>
         </div>
+    );
+
+    const showAdvantagesArea = () => (
+        <section className="advantages-area mb-3">
+            <p className="m-0 font-site text-em-0-8 text-left text-white text-shadow">
+                <FontAwesomeIcon icon="bell" /> Seja notificado do seu pedido!
+            </p>
+            {needBenefit && (
+                <p className="font-site text-em-0-8 text-left text-white text-shadow">
+                    <FontAwesomeIcon icon="trophy" /> Acumule 100 pontos nos
+                    pedidos e ganhe desconto de R$ 10
+                </p>
+            )}
+            <style jsx>
+                {`
+                    .advantages-area {
+                        background: var(--themeP--${pColor});
+                        padding: 10px;
+                        border-radius: 15px;
+                    }
+                `}
+            </style>
+        </section>
     );
 
     return (
@@ -73,13 +120,14 @@ export default function CustomerAccessForm({ closeModal, data, setData }) {
                 }
             >
                 {showLogo()}
+                {showAdvantagesArea()}
                 <div id="field1" className="">
                     Seu email:
                     <TextField
                         autoFocus
                         required
                         margin="dense"
-                        onChange={handleChange(setData, data)}
+                        onChange={handleChange(setMainData, mainData)}
                         error={errorEmail}
                         name="email"
                         variant="standard"
@@ -99,7 +147,7 @@ export default function CustomerAccessForm({ closeModal, data, setData }) {
                     />
                 </div>
             </form>
-            <div className="my-4 mx-3 container-center">
+            <div className="mt-2 mb-4 mx-3 container-center">
                 <ButtonFab
                     size="medium"
                     title="Acessar"

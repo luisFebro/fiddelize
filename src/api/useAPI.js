@@ -168,6 +168,8 @@ export default function useAPI({
                             e.response.data
                         )}. STATUS: ${thisStatus}`
                     );
+                } else {
+                    setError(true);
                 }
             }
         }

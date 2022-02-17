@@ -52,14 +52,14 @@ export default function RealtimeOrders({ match, location }) {
         role: "cliente-admin",
         bizLinkName,
         withSelect: isCustomer
-            ? "clientAdminData.bizLogo clientAdminData.themeBackColor clientAdminData.themeSColor clientAdminData.themePColor"
+            ? "clientAdminData.bizLogo clientAdminData.bizName clientAdminData.themeBackColor clientAdminData.themeSColor clientAdminData.themePColor"
             : undefined,
         // only for request auth
         nT: true,
         _id: randomId,
     };
 
-    const { data, loading: loadingBizData } = useAPI({
+    const { data, loading: loadingBizData, error, isCanceled } = useAPI({
         url: getUserIdByName(),
         params,
         trigger: true,
@@ -67,6 +67,9 @@ export default function RealtimeOrders({ match, location }) {
     });
 
     const adminId = isAdmin ? data : data && data._id; // withSelect returns {} and without it, a string.
+
+    const bizName =
+        data && data.clientAdminData && data.clientAdminData.bizName;
     const bizLogo =
         data && data.clientAdminData && data.clientAdminData.bizLogo;
     const backColor =
@@ -104,7 +107,9 @@ export default function RealtimeOrders({ match, location }) {
         return (
             <div style={{ marginTop: 300 }}>
                 <p className="text-center text-subtitle text-white font-weight-bold text-shadow">
-                    Loja não encontrada
+                    {error
+                        ? "Ocorreu um erro na sua conexão. Tente recarregar novamente"
+                        : "Loja não encontrada"}
                 </p>
             </div>
         );
@@ -126,6 +131,8 @@ export default function RealtimeOrders({ match, location }) {
                     sColor={sColor}
                     pColor={pColor}
                     backColor={backColor}
+                    bizName={bizName}
+                    loadingMainData={loadingBizData}
                 />
             )}
             {isAdmin && (

@@ -15,7 +15,7 @@ import useMainList from "../admin/items/useMainList";
 import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
 import ItemCardCustomer from "./ItemCardCustomer";
-import CustomerAccess from "./customer-access/CustomerAccess";
+import CustomerArea from "./customer-area/CustomerArea";
 import {
     updateItem,
     removeItem,
@@ -50,9 +50,14 @@ const AsyncCategoryList = Load({
         ),
 });
 
-const [digitalMenuData, digitalMenuCurrPage] = getItems("global", [
+const [
+    digitalMenuData,
+    digitalMenuCurrPage,
+    digitalMenuLogin,
+] = getItems("global", [
     "digitalMenuData",
     "digitalMenuCurrPage",
+    "digitalMenuLogin",
 ]);
 
 export default function CustomerCatalog({
@@ -67,15 +72,26 @@ export default function CustomerCatalog({
     sColor = "default",
     pColor = "default",
     backColor = "default",
+    bizName,
+    loadingMainData,
     // url,
 }) {
+    const login = digitalMenuLogin && digitalMenuLogin[bizLinkName];
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
         orderCount: 0,
         orderAmount: 0,
         orderList: [],
+        // login
+        loginOk: Boolean(login) || false,
+        email: login,
+        errorEmail: false,
     });
-    const { orderList, orderAmount, orderCount } = data;
+    const { orderList, orderAmount, orderCount, errorEmail, loginOk } = data;
+    let { email } = data;
+    // loginOk and email gets undefined when initializes
+    email = email || login;
+    const isConnected = Boolean(loginOk || login); //loginOk && Boolean(email);
     // biz logo should be fetched with adminId when page is laoded
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
@@ -84,6 +100,12 @@ export default function CustomerCatalog({
         adminId,
         placeId,
         customerId,
+    };
+
+    const loginData = {
+        isConnected,
+        email,
+        errorEmail,
     };
 
     const gotSavedMenuData =
@@ -110,7 +132,7 @@ export default function CustomerCatalog({
     };
 
     useScrollUp();
-    useBackColor(`var(--themeBackground--${backColor})`);
+    useBackColor(`var(--themeBackground--${backColor || "default"})`);
 
     const handleItem = (action, payload) => {
         const actions = ["update", "remove"];
@@ -149,15 +171,33 @@ export default function CustomerCatalog({
     };
 
     const showLogo = () => (
-        <div className="mt-2 mb-3 container-center">
-            <img
-                src={thisbizLogo}
-                width={width}
-                height={height}
-                title={`logo da ${bizLinkName}`}
-                alt={`logo empresa ${bizLinkName}`}
-            />
-        </div>
+        <Fragment>
+            <div className="mt-2 container-center">
+                <img
+                    src={thisbizLogo}
+                    width={width}
+                    height={height}
+                    title={`logo da ${bizLinkName}`}
+                    alt={`logo empresa ${bizLinkName}`}
+                />
+            </div>
+            <div className="mb-2 container-center">
+                <p
+                    style={{ top: -10, zIndex: -1 }}
+                    className="m-0 position-relative biz-name-cli-digital-area text-subtitle text-white text-shadow text-center"
+                >
+                    {bizName}
+                    <style jsx>
+                        {`
+                            .biz-name-cli-digital-area {
+                                padding: 5px;
+                                background: var(--themePDark--${pColor});
+                            }
+                        `}
+                    </style>
+                </p>
+            </div>
+        </Fragment>
     );
 
     // if(!loaded) {
@@ -183,6 +223,7 @@ export default function CustomerCatalog({
                     setDefault={setDefault}
                     isOnline={isOnline}
                     adminId={adminId}
+                    isConnected={isConnected}
                 />
             )}
             {nextPage === "orders" && (
@@ -204,6 +245,7 @@ export default function CustomerCatalog({
                     allDataItem={data}
                     socket={socket}
                     ids={ids}
+                    bizLinkName={bizLinkName}
                 />
             )}
         </Fragment>
@@ -216,12 +258,18 @@ export default function CustomerCatalog({
 
     const store = useGlobalData({
         itemData,
+        loginData,
+        setMainData: setData,
+        mainData: data,
         adminId,
         sColor,
         pColor,
         backColor,
+        bizName,
         bizLogo,
         bizLinkName,
+        socket,
+        loadingMainData,
     });
 
     return (
@@ -240,6 +288,7 @@ function DigitalMenu({
     orderCount,
     isOnline,
     adminId,
+    isConnected,
 }) {
     const [showCategoryList, setShowCategoryList] = useState(null);
     const [flickity, setFlickity] = useState(null);
@@ -347,12 +396,16 @@ function DigitalMenu({
                                     pageDotsColor="#b59e9e"
                                 />
                             </div>
-                            <TotalInvest
-                                orderAmount={orderAmount}
-                                orderCount={orderCount}
-                                setDefault={setDefault}
-                            />
-                            <ContinueBtn onClick={handleNextPage} />
+                            {isConnected && (
+                                <section className="animated-fadeInUp">
+                                    <TotalInvest
+                                        orderAmount={orderAmount}
+                                        orderCount={orderCount}
+                                        setDefault={setDefault}
+                                    />
+                                    <ContinueBtn onClick={handleNextPage} />
+                                </section>
+                            )}
                             {showCategoryList === ind && (
                                 <ModalFullContent
                                     contentComp={
@@ -396,20 +449,7 @@ function DigitalMenu({
 
     return (
         <section>
-            <h1 className="font-weight-bold text-subtitle text-white text-center">
-                Menu Digital
-                {!isOnline && (
-                    <div className="container-center">
-                        <span
-                            className="text-em-1-0 d-block text-pill"
-                            style={{ backgroundColor: "var(--themePDark)" }}
-                        >
-                            Local
-                        </span>
-                    </div>
-                )}
-                <CustomerAccess />
-            </h1>
+            <CustomerArea isOnline={isOnline} />
             {showSearchField()}
             <br />
             {showList()}

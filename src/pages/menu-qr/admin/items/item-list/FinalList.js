@@ -39,6 +39,7 @@ export default function FinalList({
 
     const params = {
         userId, // for auth
+        isAdmin: 1,
         adminId: bizId,
         category: isAddCat ? undefined : category,
         isEditCategory: true,

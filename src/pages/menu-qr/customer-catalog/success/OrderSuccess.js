@@ -12,7 +12,12 @@ import NotifActivationZone from "./notif/NotifActivationZone";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function OrderSuccess({ allDataItem, socket, ids }) {
+export default function OrderSuccess({
+    allDataItem,
+    socket,
+    ids,
+    bizLinkName,
+}) {
     const [currStage, setCurrStage] = useState("queue");
     const [openCancel, setOpenCancel] = useState(false);
     // 3 stages of order: queue, preparing, done
@@ -83,7 +88,11 @@ export default function OrderSuccess({ allDataItem, socket, ids }) {
                         Agradecemos sua preferência e volte sempre!
                     </div>
                 ) : (
-                    <NotifActivationZone ids={ids} socket={socket} />
+                    <NotifActivationZone
+                        ids={ids}
+                        socket={socket}
+                        bizLinkName={bizLinkName}
+                    />
                 )}
             </Fragment>
         );

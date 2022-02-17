@@ -269,23 +269,28 @@ function ItemCard(
             {isAddCategory && showCategoryBadge()}
             <div className="d-flex container align-items-center">
                 {isAddCategory && showCheckBox()}
-                <div
-                    className="position-relative img-container"
-                    style={{
-                        opacity: isHidden ? 0.5 : 1,
-                    }}
-                >
-                    <img width={100} height={100} src={img} alt={adName} />
-                    {true && (
+                <div className="position-relative img-container">
+                    <img
+                        width={100}
+                        height={100}
+                        src={img}
+                        alt={adName}
+                        style={{
+                            opacity: isHidden ? 0.5 : 1,
+                        }}
+                    />
+                    {isHidden && (
                         <div
                             className="position-absolute"
                             style={{
+                                top: "50%",
                                 left: "50%",
-                                transform: "translateX(-50%)",
+                                transform: "translate(-50%, -50%)",
                             }}
                         >
                             <VisibilityOffIcon
                                 style={{
+                                    zIndex: 15000,
                                     fontSize: 40,
                                     color: "var(--mainWhite)",
                                 }}

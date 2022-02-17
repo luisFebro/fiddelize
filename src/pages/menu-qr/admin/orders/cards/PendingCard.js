@@ -23,6 +23,7 @@ export default function PendingCard({ data, socket }) {
     const customerName = data && data.customerName;
     const customerPhone = data && data.customerPhone;
     const customerAddress = data && data.customerAddress;
+    const customerEmail = data && data.customerEmail;
     const customerNote = data && data.customerNote;
     const placeId = data && data.placeId;
     const updatedAt = data && data.updatedAt;
@@ -35,6 +36,8 @@ export default function PendingCard({ data, socket }) {
             adminId={adminId}
             customerId={customerId}
             placeId={placeId}
+            dataItems={dataItems}
+            customerEmail={customerEmail}
         />
     );
 
