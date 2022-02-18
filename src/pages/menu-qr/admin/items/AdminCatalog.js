@@ -211,7 +211,7 @@ export default function AdminCatalog() {
         // example data
         //     // removalImg: {
         //     //     savedImg: img, // string or an array of string with img urls
-        //     //     folder: `digital-menu/${bizLinkName}`,
+        //     //     folder: `digital-menu`,
         //     // }
         //     if (removalImg) removeImg(removalImg);
         //     return {
@@ -238,7 +238,7 @@ export default function AdminCatalog() {
     const showTitle = () => (
         <div className="mt-5 mb-3 text-center text-purple mx-3">
             <h1 className="text-subtitle text-purple font-weight-bold">
-                Menu Digital
+                Itens do Menu
             </h1>
         </div>
     );

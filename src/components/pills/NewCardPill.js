@@ -1,5 +1,5 @@
 import { isAfter } from "utils/dates/dateFns";
-
+// novo badge
 export const checkCardNew = ({
     targetDate,
     lastDate, // lastCheckedDate,

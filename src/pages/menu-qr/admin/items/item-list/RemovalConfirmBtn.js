@@ -50,7 +50,7 @@ export default function RemovalConfirmBtn({
             newItem,
             removalImg: {
                 savedImg: getRemovalImgs(),
-                folder: `digital-menu/${bizLinkName}`,
+                folder: "digital-menu",
             },
         });
     };

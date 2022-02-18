@@ -32,7 +32,9 @@ export default function GatewayAndCTAs({
                     } font-weight-bold`}
                 >
                     <strong className="text-normal font-weight-bold">
-                        {getFirstName(fullName)}, escolha painel:
+                        {isSessionOver
+                            ? "Sessão por:"
+                            : `${getFirstName(fullName)}, escolha opção:`}
                     </strong>
                     <br />
                 </span>
@@ -61,7 +63,7 @@ export default function GatewayAndCTAs({
                             to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                         >
                             <RadiusBtn
-                                title="marketing"
+                                title="painel"
                                 backgroundColor={`var(--themeSDark--${themeSColor})`}
                             />
                         </RedirectLink>

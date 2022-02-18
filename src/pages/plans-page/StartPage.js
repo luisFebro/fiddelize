@@ -47,16 +47,21 @@ export default function StartPage({
                     setCurrPlan={setCurrPlan}
                     isFromSite={!adminName}
                 />
-                <p
-                    className="m-0 font-italic text-center text-normal mx-3 text-white"
-                    style={{
-                        padding: "100px 0",
-                    }}
-                >
-                    Agradecemos seu interesse em investir na sua clientela com
-                    os serviços da Fiddelize!
-                </p>
             </section>
         )
     );
 }
+
+/* ARCHIVES
+
+<p
+    className="m-0 font-italic text-center text-normal mx-3 text-white"
+    style={{
+        padding: "100px 0",
+    }}
+>
+    Agradecemos seu interesse em investir na sua clientela com
+    os serviços da Fiddelize!
+</p>
+
+ */

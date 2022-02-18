@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
-import ReturnBtn from "components/buttons/ReturnBtn";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
 import { useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TweaksBtn from "./tweaks/TweaksBtn";
+// import ReturnBtn from "components/buttons/ReturnBtn";
 
 export const AsyncAdminMenuOrders = Load({
     loader: () =>
@@ -58,12 +58,22 @@ export default function MainMenuAdmin(compData) {
 
     return (
         <section>
-            <ReturnBtn onClick={() => history.push("/app")} icon="arrow-left" />
             <h2
-                style={{ left: 15, top: 10 }}
-                className="m-0 position-relative text-center font-weight-bold text-purple text-subtitle mb-3"
+                style={{ left: 15, top: -10 }}
+                className="m-0 position-relative mb-3 container-center"
             >
-                Painel de Controle
+                <span className="position-relative text-center font-weight-bold text-purple text-subtitle">
+                    Menu Digital
+                    <span
+                        className="position-absolute text-normal text-purple font-weight-bold"
+                        style={{
+                            bottom: -24,
+                            right: 0,
+                        }}
+                    >
+                        beta
+                    </span>
+                </span>
                 <img
                     height={120}
                     width={70}
@@ -235,7 +245,7 @@ function MenuList({
 }
 
 /*
-
+<ReturnBtn onClick={() => history.push("/app")} icon="arrow-left" />
 <section
     key={opt.title}
     className="shadow-babadoo"

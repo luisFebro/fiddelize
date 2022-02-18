@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import ServicesGallery from "./gallery/ServicesGallery";
+import ExtraServicesGallery from "./gallery/ExtraServicesGallery";
 import AddSMS from "./AddSMS";
 
 export default function ExtraServices({ orderList, handleItem, period }) {
@@ -14,7 +14,7 @@ export default function ExtraServices({ orderList, handleItem, period }) {
             <AddSMS orderList={orderList} handleItem={handleItem} top={-80} />
             <div style={{ marginBottom: 100 }} />
 
-            <ServicesGallery handleItem={handleItem} period={period} />
+            <ExtraServicesGallery handleItem={handleItem} period={period} />
         </Fragment>
     );
 }

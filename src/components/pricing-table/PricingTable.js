@@ -50,7 +50,10 @@ export default function PricingTable({
                 {getStatusIcon("on")} Gestão completa da moeda digital PTS e
                 benefícios
             </li>
-            <li>{getStatusIcon("on")} 2 Jogos de compra</li>
+            <li>
+                {getStatusIcon("on")} Todas estratégias de marketing promocional
+                (jogos de compra)
+            </li>
         </Fragment>
     );
 
