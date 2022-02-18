@@ -9,6 +9,7 @@ import showToast from "components/toasts";
 import ModalYesNo from "components/modals/ModalYesNo";
 import ProgressTrack from "./ProgressTrack";
 import NotifActivationZone from "./notif/NotifActivationZone";
+// import useContext from "context";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -51,6 +52,7 @@ export default function OrderSuccess({
         socket.disconnect();
         setItems("global", {
             digitalMenuCurrPage: "menu",
+            digitalMenuData: {},
         });
         if (isCancel) {
             showToast("Pedido cancelado com sucesso!", { type: "success" });
