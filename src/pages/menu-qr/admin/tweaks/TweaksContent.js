@@ -23,28 +23,6 @@ export default function TweaksContent() {
         </div>
     );
 
-    const showProBtn = () => (
-        <div
-            className="position-fixed animated fadeInUp"
-            style={{ bottom: 15, right: 15 }}
-        >
-            <Link
-                to="/planos?cliente-admin=1&store=1"
-                className="no-text-decoration"
-            >
-                <ButtonFab
-                    title="Atualize Plano"
-                    backgroundColor="var(--niceUiYellow)"
-                    onClick={null}
-                    position="relative"
-                    variant="extended"
-                    size="large"
-                    iconMu={PlusIcon}
-                />
-            </Link>
-        </div>
-    );
-
     return (
         <section>
             {showTitle()}
@@ -83,7 +61,32 @@ export default function TweaksContent() {
                     `}
                 </style>
             </main>
-            {showProBtn()}
         </section>
     );
 }
+
+/*
+
+const showProBtn = () => (
+    <div
+        className="position-fixed animated fadeInUp"
+        style={{ bottom: 15, right: 15 }}
+    >
+        <Link
+            to="/planos?cliente-admin=1&store=1"
+            className="no-text-decoration"
+        >
+            <ButtonFab
+                title="Atualize Plano"
+                backgroundColor="var(--niceUiYellow)"
+                onClick={null}
+                position="relative"
+                variant="extended"
+                size="large"
+                iconMu={PlusIcon}
+            />
+        </Link>
+    </div>
+);
+{showProBtn()}
+ */

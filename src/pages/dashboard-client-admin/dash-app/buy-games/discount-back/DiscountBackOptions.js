@@ -7,6 +7,7 @@ import showToast from "components/toasts";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn.js";
 import getId from "utils/getId";
 import useData from "init";
+import AddNewChallContent from "pages/dashboard-client-admin/dash-app/buy-games/discount-back/challenges-list/add-new-chall/AddNewChallContent";
 import ChallengesList from "./challenges-list/ChallengesList";
 import ShowQA from "../target-prize/challenges-list/ShowQA";
 
@@ -15,6 +16,7 @@ export default function DiscountBackOptions({
     loading,
     setTriggerList,
     gameData,
+    isDigitalMenu = false,
 }) {
     const [optionData, setOptionData] = useState({
         updatedOnce: false, // make sure user saved data before activating game
@@ -79,11 +81,17 @@ export default function DiscountBackOptions({
             const isTruthy = res && res.includes("true");
 
             const dataToSend = {
-                [`clientAdminData.games.${GAME}.on`]: isTruthy,
+                [`clientAdminData.${
+                    isDigitalMenu ? "onlineGames" : "games"
+                }.${GAME}.on`]: isTruthy,
             };
 
             await updateUser(userId, "cliente-admin", dataToSend);
-            setOptionData((prev) => ({ ...prev, on: isTruthy }));
+            setOptionData((prev) => ({
+                ...prev,
+                on: isTruthy,
+                updatedOnce: isDigitalMenu ? true : prev.updatedOnce,
+            }));
             const selectedMsg = `Jogo DESCONTO RETORNADO está agora ${
                 isTruthy ? "ATIVADO" : "DESATIVADO"
             } para todos seus clientes`;
@@ -125,6 +133,7 @@ export default function DiscountBackOptions({
         );
     };
 
+    // Digital Menu allows only one challenge
     const showChallengesList = () => (
         <Fragment>
             <div className="container-center">
@@ -159,8 +168,16 @@ export default function DiscountBackOptions({
             {showGameTitle()}
             {showControlOptions()}
             <hr className="lazer-purple" />
-            {showChallengesList()}
-            <ShowQA />
+            {isDigitalMenu ? (
+                <section>
+                    <AddNewChallContent isDigitalMenu={isDigitalMenu} />
+                </section>
+            ) : (
+                <Fragment>
+                    {showChallengesList()}
+                    <ShowQA />
+                </Fragment>
+            )}
         </section>
     );
 }

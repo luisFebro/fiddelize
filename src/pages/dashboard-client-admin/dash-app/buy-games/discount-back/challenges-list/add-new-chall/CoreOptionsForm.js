@@ -13,10 +13,11 @@ export default function CoreOptionsForm({
     perc, // required
     targetMoney, // required
     setData, // required
-    isPlatform = false,
     userId, // only cli-admin dashboard
     history, // only for platform to continue new club creation
     callback,
+    isPlatform = false,
+    isDigitalMenu = false,
 }) {
     const GAME = "discountBack";
 
@@ -74,9 +75,30 @@ export default function CoreOptionsForm({
         return null;
     };
 
+    const handleTweaksCond = () => {
+        if (isDigitalMenu) return false;
+        return !isPlatform;
+    };
+
+    const handleCompsCond = (type) => {
+        if (type === "onClick") {
+            if (isPlatform) return handleUpdateFromSite;
+            return callback;
+        }
+
+        if (type === "title") {
+            if (isDigitalMenu) return "atualizar";
+            return isPlatform ? "continuar" : "adicionar";
+        }
+
+        // icon
+        if (isDigitalMenu) return "check";
+        return isPlatform ? "arrow-right" : "plus";
+    };
+
     return (
         <form className="text-normal my-5 discount-back-form text-shadow">
-            {!isPlatform && (
+            {handleTweaksCond() && (
                 <h2 className="text-center text-subtitle font-weight-bold my-3">
                     Ajustes Principais
                 </h2>
@@ -178,12 +200,10 @@ export default function CoreOptionsForm({
             <div className="container-center mb-4 mt-5">
                 <ButtonFab
                     position="relative"
-                    onClick={isPlatform ? handleUpdateFromSite : callback}
-                    title={isPlatform ? "continuar" : "adicionar"}
+                    onClick={handleCompsCond("onClick")}
+                    title={handleCompsCond("title")}
                     iconFontAwesome={
-                        <FontAwesomeIcon
-                            icon={isPlatform ? "arrow-right" : "plus"}
-                        />
+                        <FontAwesomeIcon icon={handleCompsCond("icon")} />
                     }
                     variant="extended"
                     width="90%"

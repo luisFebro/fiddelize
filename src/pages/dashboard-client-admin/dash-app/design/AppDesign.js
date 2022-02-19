@@ -2,11 +2,14 @@ import ShowLogoComp from "./ShowLogoComp";
 import ShowColorsComp from "./ShowColorsComp";
 // import ShowCards from "./ShowCards";
 
-export default function AppDesign() {
+export default function AppDesign({ isDigitalMenu = false }) {
     return (
         <section className="hidden-content--root">
-            <ShowLogoComp />
-            <ShowColorsComp />
+            <p className="d-none">
+                Mudanças no design altera tanto apps e menu digital
+            </p>
+            <ShowLogoComp isDigitalMenu={isDigitalMenu} />
+            <ShowColorsComp isDigitalMenu={isDigitalMenu} />
         </section>
     );
 }

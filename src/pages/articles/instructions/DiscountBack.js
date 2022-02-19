@@ -36,7 +36,7 @@ const Body = ({ picClass, rootPath }) => {
                 A tática pode ser usado na prática e encontrada em abordagens de
                 marketing como: &quot;
                 <span className="font-italic">
-                    a cada R$ 100 em compras, ganhe 5% de desconto
+                    a cada 100 pontos em compras, ganhe vale desconto de R$10
                 </span>
                 &quot;. Usamos essa abordagem como base para simplificar a ideia
                 do jogo por ser popular no marketing.
@@ -50,8 +50,8 @@ const Body = ({ picClass, rootPath }) => {
             <p>
                 O <strong>objetivo</strong> do desconto retornado é que os
                 clientes fiquem interessados em retornar a comprar porque
-                receberão desconto ao acumular um determinado percentual a cada
-                compra que poderão usar como desconto em suas próximas compras.
+                receberão desconto ao acumular pontos a cada compra que poderão
+                usar como desconto em suas próximas compras.
             </p>
             <p>
                 Na Fiddelize, colocamos o jogo no próximo nível por empoderar
@@ -60,7 +60,9 @@ const Body = ({ picClass, rootPath }) => {
                 Além de oferecer funcionalidades exclusivas para os clientes com
                 direito a <strong>comprovante</strong> com código QR
                 personalizado, <strong>cartão de compra</strong> e{" "}
-                <strong>vale desconto digital</strong>.
+                <strong>vale desconto digital</strong>. Vale notar que essas
+                funcionalidades não estão disponíveis no menu digital porque os
+                pontos e benefícios já são automatizados nos pedidos.
             </p>
             <ShowPicture
                 imgContainerClass={picClass}
@@ -74,18 +76,13 @@ const Body = ({ picClass, rootPath }) => {
             <p>
                 Assim como os demais jogos da Fiddelize, seus clientes recebem{" "}
                 <strong>moedas digitais a cada compra</strong> chamadas de PTS
-                (pronúncia: pítis) que sempre tem o mesmo valor que o real para
-                manter a simplicidade e clareza na conversão.
+                (pronúncia: pítis) que sempre tem o mesmo valor que o real na
+                hora de pontuar os clientes nas compras. E, alcançando a meta,
+                recebem o valor de desconto em reais estipulado pela loja.
             </p>
             <p>
-                No jogo de compra desconto retorno, a quantidade de moeda PTS do
-                cliente é automaticamente convertida para gerar o vale desconto
-                baseado em um percentual acumulativo definido pelo seu negócio
-                indo nas opções do jogo.
-            </p>
-            <p>
-                A moeda PTS foi fundamentada em várias camadas de segurança
-                incluindo{" "}
+                A moeda PTS foi fundamentada em algumas camadas essencias de
+                segurança incluindo{" "}
                 <strong>
                     criptografia com AES256, chaves de sessão, proteção de rotas
                     e sistema de autorização

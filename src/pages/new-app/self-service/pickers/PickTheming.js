@@ -163,7 +163,7 @@ export default function PickTheming({
             className="animated bounce text-center font-weight-bold text-small text-purple mb-3"
             style={{ display: "none" }}
         >
-            Aplicando nova cor ao app...
+            Aplicando nova cor...
         </div>
     );
 
@@ -256,7 +256,7 @@ export default function PickTheming({
                     className="animated  font-weight-bold text-small text-center text-purple"
                     style={{ display: "none", animationIterationCount: 2 }}
                 >
-                    Aplicando nova cor ao app...
+                    Aplicando nova cor na sua conta...
                 </section>
             </Card>
         </section>
@@ -268,7 +268,7 @@ export default function PickTheming({
             <div>
                 {isFromDash ? (
                     <p className="text-normal text-purple text-center">
-                        • Escolha aqui outras cores para o app:
+                        • Escolha aqui as cores do seu negócio:
                     </p>
                 ) : (
                     <p className="text-normal text-white text-shadow text-center">

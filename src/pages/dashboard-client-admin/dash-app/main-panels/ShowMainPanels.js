@@ -55,7 +55,7 @@ export default function ShowMainPanels(options = {}) {
                 id: 0,
                 name: "Design<br />Geral",
                 leftIcon: <FontAwesomeIcon icon="palette" />,
-                hiddenContent: <AppDesign />,
+                hiddenContent: <AppDesign isDigitalMenu={isDigitalMenu} />,
             },
             {
                 id: 1,

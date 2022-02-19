@@ -43,7 +43,11 @@ export default function MainBuyGames({ isDigitalMenu = false }) {
                 <AsyncTargetPrizeOptions setComp={setComp} {...props} />
             )}
             {name === "discountBack" && (
-                <AsyncDiscountBackOptions setComp={setComp} {...props} />
+                <AsyncDiscountBackOptions
+                    setComp={setComp}
+                    isDigitalMenu={isDigitalMenu}
+                    {...props}
+                />
             )}
             {name === "balloonPop" && (
                 <AsyncBalloonPopOptions setComp={setComp} {...props} />

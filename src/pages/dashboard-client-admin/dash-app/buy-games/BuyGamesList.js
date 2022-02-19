@@ -29,7 +29,11 @@ export default function BuyGamesList({ setComp, isDigitalMenu }) {
     let allAvailableGamesCount = 0;
     const gamesFromDb = data && data.clientAdminData.games;
     Object.keys(gamesFromDb).forEach((gameName) => {
-        const onlyAllowed = ["targetPrize", "discountBack", "balloonPop"];
+        const onlyOnlineGames = ["discountBack"];
+
+        const onlyAllowed = isDigitalMenu
+            ? onlyOnlineGames
+            : ["targetPrize", "discountBack", "balloonPop"];
         const isAllowedGame = onlyAllowed.includes(gameName);
         if (
             !isAllowedGame ||
@@ -51,7 +55,8 @@ export default function BuyGamesList({ setComp, isDigitalMenu }) {
                     className="text-grey text-normal text-sm-left text-center"
                     style={{ fontWeight: "normal" }}
                 >
-                    Ofereça benefício no seu menu digital
+                    Ofereça benefícios automatizados nos pedidos dos clientes.
+                    Eles participam direto do seu menu digital.
                 </p>
             );
         }
@@ -69,9 +74,11 @@ export default function BuyGamesList({ setComp, isDigitalMenu }) {
 
     return (
         <section className="hidden-content--root text-normal">
-            <div className="my-5 container-center">
-                <GeneralTweaksBtn />
-            </div>
+            {!isDigitalMenu && (
+                <div className="my-5 container-center">
+                    <GeneralTweaksBtn />
+                </div>
+            )}
             <h2 className="my-5 font-weight-bold text-subtitle text-center text-purple">
                 Galeria de Jogos
                 <br />

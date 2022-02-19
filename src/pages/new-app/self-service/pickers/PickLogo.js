@@ -205,7 +205,7 @@ export default function PickLogo({
 
         if (isFromDash) {
             deleteImage("logos", "app_biz_logo").then(() => {
-                showToast("Nova logo salva. Alterando no app...", {
+                showToast(`Nova logo salva. Fazendo alterações...`, {
                     type: "success",
                 });
                 commonActions();
@@ -287,7 +287,7 @@ export default function PickLogo({
                 style={{ display: gotPic ? "block" : "none" }}
                 className="animated bounce text-center font-weight-bold text-small text-purple mb-3"
             >
-                Enviando para app. Processando...
+                Enviando para o app. Processando...
             </div>
         );
 
@@ -382,7 +382,7 @@ export default function PickLogo({
             <div>
                 {isFromDash ? (
                     <p className="text-purple text-normal text-center">
-                        • Envie nova logo do App:
+                        • Envie sua logo:
                     </p>
                 ) : (
                     <p className="text-normal text-white text-shadow text-center">
