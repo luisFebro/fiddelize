@@ -12,7 +12,7 @@ import MarkBtn from "./mark-btn/MarkBtn";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 // const [lastDate] = getItems("global", ["lastDatePendingOrderCard"]);
 
-export default function PendingCard({ data, socket }) {
+export default function PendingCard({ onlineGames, data, socket }) {
     // const { themePColor } = useBizData();
     const themePColor = "default";
 
@@ -23,6 +23,7 @@ export default function PendingCard({ data, socket }) {
     const customerName = data && data.customerName;
     const customerPhone = data && data.customerPhone;
     const customerAddress = data && data.customerAddress;
+    const customerPoints = data && data.customerPoints;
     const customerEmail = data && data.customerEmail;
     const customerNote = data && data.customerNote;
     const placeId = data && data.placeId;
@@ -38,6 +39,8 @@ export default function PendingCard({ data, socket }) {
             placeId={placeId}
             dataItems={dataItems}
             customerEmail={customerEmail}
+            totalAmount={totalAmount}
+            customerPoints={customerPoints}
         />
     );
 
@@ -54,6 +57,30 @@ export default function PendingCard({ data, socket }) {
         customerAddress,
     };
 
+    // THIS DATA SHOULD BE TRANSFERED FROM SUCCESS PAGE FROM CUSTOMER
+    const currGame = onlineGames && onlineGames.currGame;
+    let accumulativePoints = 0;
+    const didBeatGame = true;
+    const needDiscountCoupon = currGame === "discountBack" && didBeatGame;
+    const targetPoints = 100;
+    const targetMoney = 20;
+
+    if (currGame === "descountBack") {
+        accumulativePoints = totalAmount + customerPoints;
+        // const targetPoints = adminGame && adminGame.targetPoints;
+        // const customerCurrPoints = adminGame && adminGame.customerPoints || 0; // zero here is required to avoid undefined and cause error in the accumulated amount when the user has no purchases priorly
+        // const accumulatedPoints = Number(customerCurrPoints) + Number(totalAmount);
+        // const didBeatGame = accumulatedPoints >= targetPoints;
+    }
+
+    const handleTotalOrder = () => {
+        if (needDiscountCoupon) {
+            return totalAmount - targetMoney;
+        }
+
+        return totalAmount;
+    };
+
     return (
         <section className="card--root mb-5 position-relative text-normal text-white text-shadow">
             {showMarkDoneBtn()}
@@ -68,15 +95,38 @@ export default function PendingCard({ data, socket }) {
                     </Fragment>
                 </span>
             </h2>
-            <p className="m-0 text-normal">
+            <h2 className="font-site text-em-0-9 font-weight-bold">
+                Cliente:{" "}
+                <span className="position-relative text-break">
+                    {truncate(customerEmail, 25)}
+                </span>
+            </h2>
+            <p className="m-0 mt-3 text-normal">
                 &#8226; Pedido ({totalCount}{" "}
                 {totalCount === 1 ? "item" : "itens"}):
             </p>
-            <ItemsDesc data={dataItems} />
+            <ItemsDesc data={dataItems} onlineGames={onlineGames} />
+            {needDiscountCoupon && (
+                <p className="my-3 text-pill text-center text-normal font-weight-bold">
+                    Vale desconto de
+                    <br />
+                    <span
+                        className="text-pill text-shadow"
+                        style={{ background: "var(--themePLight)" }}
+                    >
+                        R$ {convertToReal(targetMoney)}
+                    </span>{" "}
+                    aplicado
+                    <p className="text-em-0-7 font-site font-weight-bold">
+                        cliente bateu a meta de {targetPoints} pontos.
+                    </p>
+                </p>
+            )}
             <h2 className="mt-2 my-2 text-normal text-center">
                 Valor Total:
                 <span className="ml-3 hightlight text-pill">
-                    R$ {convertToReal(totalAmount, { needFraction: true })}
+                    R${" "}
+                    {convertToReal(handleTotalOrder(), { needFraction: true })}
                 </span>
             </h2>
             <h2 className="text-normal my-3">

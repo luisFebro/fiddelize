@@ -8,6 +8,7 @@ import { useVar } from "init/var";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
 import useData from "init";
+import { Load } from "components/code-splitting/LoadableComp";
 import GreetingAndNotific from "./GreetingAndNotific";
 import useGlobal from "./useGlobal";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";

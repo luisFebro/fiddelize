@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import CommentField from "components/fields/CommentField";
 import { setItems } from "init/lStorage";
 import { Load } from "components/code-splitting/LoadableComp";
 import useContext from "context";
+import { getCustomerGameData } from "pages/menu-qr/customer-catalog/customer-area/customer-panel/CustomerPanelContent";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
 
@@ -28,13 +29,26 @@ export default function OrdersPage({
     isOnline,
 }) {
     useScrollUp();
-    const { bizLinkName, loginData } = useContext();
+    const { currGame, bizLinkName, loginData } = useContext();
     const customerEmail = loginData && loginData.email;
     const [customerNote, setCustomerNote] = useState("");
+    const [customerPoints, setCustomerPoints] = useState(0);
+
     const [data, setData] = useState({
         openExternalOrder: false,
     });
     const { openExternalOrder } = data;
+
+    useEffect(() => {
+        if (!socket || !currGame) return;
+        getCustomerGameData({
+            socket,
+            adminId,
+            email: customerEmail,
+            currGame,
+            callback: (data) => setCustomerPoints(data && data.currPoints),
+        });
+    }, [adminId, customerEmail]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -58,6 +72,7 @@ export default function OrdersPage({
             customerAddress,
             customerNote,
             customerEmail,
+            customerPoints,
             placeId,
             adminId,
             order: {

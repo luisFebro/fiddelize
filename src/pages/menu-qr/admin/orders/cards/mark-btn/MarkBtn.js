@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SelectField from "components/fields/SelectField";
 import ModalYesNo from "components/modals/ModalYesNo";
 import showToast from "components/toasts";
+import { readUser } from "api/frequent";
 import { useBizData } from "init";
 import CancelOrderBtn from "./CancelOrderBtn";
 
@@ -15,6 +16,8 @@ export default function MarkBtn(props) {
         adminId,
         placeId,
         customerId,
+        totalAmount,
+        customerPoints,
     } = props;
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
@@ -30,7 +33,7 @@ export default function MarkBtn(props) {
             { val: "done", showVal: "Feito" },
         ];
 
-        const handleSelected = (select) => {
+        const handleSelected = async (select) => {
             if (!select) return null;
             if (!socket) return console.log("No socket!");
 
@@ -65,10 +68,37 @@ export default function MarkBtn(props) {
             if (isDone) {
                 socket.emit("updateAdminList");
 
+                const dataAdmin = await readUser(
+                    adminId,
+                    "cliente-admin",
+                    "clientAdminData.onlineGames"
+                );
+                // if no game is available, returns null or undefined
+                const onlineGames =
+                    dataAdmin && dataAdmin.clientAdminData.onlineGames;
+                const currGame = onlineGames && onlineGames.currGame;
+                const isDiscountBack = currGame === "discountBack";
+
+                let adminGame = null;
+                if (isDiscountBack) {
+                    const thisCoreData =
+                        onlineGames &&
+                        onlineGames.discountBack &&
+                        onlineGames.discountBack.challList &&
+                        onlineGames.discountBack.challList[0];
+                    adminGame = {
+                        ...thisCoreData,
+                        customerPoints,
+                    };
+                }
+
                 const customerOrder = {
                     adminId,
                     email: customerEmail,
                     orderList: dataItems,
+                    totalAmount,
+                    currGame,
+                    adminGame,
                 };
                 socket.emit("saveCustomerOrder", customerOrder);
                 showToast(`Pedido finalizado e movido para feito`, {

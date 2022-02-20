@@ -52,7 +52,7 @@ export default function RealtimeOrders({ match, location }) {
         role: "cliente-admin",
         bizLinkName,
         withSelect: isCustomer
-            ? "clientAdminData.bizLogo clientAdminData.bizName clientAdminData.themeBackColor clientAdminData.themeSColor clientAdminData.themePColor"
+            ? "clientAdminData.bizLogo clientAdminData.bizName clientAdminData.themeBackColor clientAdminData.themeSColor clientAdminData.themePColor clientAdminData.onlineGames"
             : undefined,
         // only for request auth
         nT: true,
@@ -67,17 +67,14 @@ export default function RealtimeOrders({ match, location }) {
     });
 
     const adminId = isAdmin ? data : data && data._id; // withSelect returns {} and without it, a string.
-
-    const bizName =
-        data && data.clientAdminData && data.clientAdminData.bizName;
-    const bizLogo =
-        data && data.clientAdminData && data.clientAdminData.bizLogo;
-    const backColor =
-        data && data.clientAdminData && data.clientAdminData.themeBackColor;
-    const pColor =
-        data && data.clientAdminData && data.clientAdminData.themePColor;
-    const sColor =
-        data && data.clientAdminData && data.clientAdminData.themeSColor;
+    const cliAdmin = data && data.clientAdminData && data.clientAdminData;
+    const bizName = cliAdmin && cliAdmin.bizName;
+    const bizLogo = cliAdmin && cliAdmin.bizLogo;
+    const backColor = cliAdmin && cliAdmin.themeBackColor;
+    const pColor = cliAdmin && cliAdmin.themePColor;
+    const sColor = cliAdmin && cliAdmin.themeSColor;
+    const currGame =
+        cliAdmin && cliAdmin.onlineGames && cliAdmin.onlineGames.currGame;
 
     // activate socket here
     const socket = useInitSocket({
@@ -133,6 +130,7 @@ export default function RealtimeOrders({ match, location }) {
                     backColor={backColor}
                     bizName={bizName}
                     loadingMainData={loadingBizData}
+                    currGame={currGame}
                 />
             )}
             {isAdmin && (

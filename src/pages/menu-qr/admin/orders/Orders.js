@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import { Load } from "components/code-splitting/LoadableComp";
 import useBackColor from "hooks/useBackColor";
+import { readUser } from "api/frequent";
 
 const AsyncPendingOrdersList = Load({
     loader: () =>
@@ -17,9 +18,10 @@ const AsyncDoneOrdersList = Load({
         ),
 });
 
-export default function Orders({ bizLinkName, socket }) {
+export default function Orders({ adminId, bizLinkName, socket }) {
     useBackColor("var(--mainWhite)");
     const [content, setContent] = useState("pendingOrders");
+    const [onlineGames, setOnlineGames] = useState(null);
     const isPending = content === "pendingOrders";
 
     const disconnected = socket && socket.disconnected;
@@ -27,6 +29,16 @@ export default function Orders({ bizLinkName, socket }) {
         if (disconnected) socket.connect();
         // eslint-disable-next-line
     }, [disconnected]);
+
+    useEffect(() => {
+        readUser(adminId, "cliente-admin", "clientAdminData.onlineGames").then(
+            (dataAdmin) => {
+                const thisOnlineGames =
+                    dataAdmin && dataAdmin.clientAdminData.onlineGames;
+                if (thisOnlineGames) setOnlineGames(thisOnlineGames);
+            }
+        );
+    }, [adminId]);
 
     const themeSColor = "default";
 
@@ -82,7 +94,10 @@ export default function Orders({ bizLinkName, socket }) {
         <section>
             {showTitle()}
             {isPending ? (
-                <AsyncPendingOrdersList socket={socket} />
+                <AsyncPendingOrdersList
+                    socket={socket}
+                    onlineGames={onlineGames}
+                />
             ) : (
                 <AsyncDoneOrdersList />
             )}

@@ -21,6 +21,9 @@ export default function DoneCard({ data }) {
     const customerName = data && data.customerName;
     const customerPhone = data && data.customerPhone;
     const customerAddress = data && data.customerAddress;
+    const customerEmail = data && data.customerEmail;
+    // amount of points of any online game that offers that. The user use it in a single game, regardless if game changes
+    const customerPoints = data && data.customerPoints;
     const customerNote = data && data.customerNote;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;
@@ -86,7 +89,13 @@ export default function DoneCard({ data }) {
                     </Fragment>
                 </span>
             </h2>
-            <p className="m-0 text-normal">
+            <h2 className="font-site text-em-0-9 font-weight-bold">
+                Cliente:{" "}
+                <span className="position-relative text-break">
+                    {truncate(customerEmail, 25)}
+                </span>
+            </h2>
+            <p className="m-0 mt-3 text-normal">
                 &#8226; Pedido ({totalCount}{" "}
                 {totalCount === 1 ? "item" : "itens"}):
             </p>

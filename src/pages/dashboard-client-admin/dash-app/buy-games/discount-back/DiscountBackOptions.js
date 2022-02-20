@@ -6,7 +6,7 @@ import { updateUser } from "api/frequent";
 import showToast from "components/toasts";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn.js";
 import getId from "utils/getId";
-import useData from "init";
+import useData, { useBizData } from "init";
 import AddNewChallContent from "pages/dashboard-client-admin/dash-app/buy-games/discount-back/challenges-list/add-new-chall/AddNewChallContent";
 import ChallengesList from "./challenges-list/ChallengesList";
 import ShowQA from "../target-prize/challenges-list/ShowQA";
@@ -18,9 +18,34 @@ export default function DiscountBackOptions({
     gameData,
     isDigitalMenu = false,
 }) {
+    const { onlineGames } = useBizData();
+
+    const handleStatusDigitalMenu = (type) => {
+        const statusGameOnline =
+            onlineGames &&
+            onlineGames.discountBack &&
+            onlineGames.discountBack.on;
+
+        if (type === "on") {
+            return statusGameOnline;
+        }
+
+        if (type === "updatedOnce") {
+            if (statusGameOnline) return true;
+            const challList =
+                onlineGames &&
+                onlineGames.discountBack &&
+                onlineGames.discountBack.challList;
+            if (challList && challList.length) return true;
+            return false;
+        }
+    };
+
     const [optionData, setOptionData] = useState({
-        updatedOnce: false, // make sure user saved data before activating game
-        on: null,
+        updatedOnce: isDigitalMenu
+            ? handleStatusDigitalMenu("updatedOnce")
+            : false, // make sure user saved data before activating game
+        on: isDigitalMenu ? handleStatusDigitalMenu("on") : null,
         challList: [],
     });
     const GAME = "discountBack";
@@ -32,7 +57,7 @@ export default function DiscountBackOptions({
     const { userId } = useData();
 
     useEffect(() => {
-        if (!gameData) return;
+        if (!gameData || isDigitalMenu) return;
 
         const { on: thisOn, challList: list } = gameData;
 
@@ -41,7 +66,7 @@ export default function DiscountBackOptions({
             on: thisOn,
             challList: list,
         }));
-    }, [gameData]);
+    }, [gameData, isDigitalMenu]);
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
@@ -84,6 +109,10 @@ export default function DiscountBackOptions({
                 [`clientAdminData.${
                     isDigitalMenu ? "onlineGames" : "games"
                 }.${GAME}.on`]: isTruthy,
+                // this following line is required in every online game
+                "clientAdminData.onlineGames.currGame": isTruthy
+                    ? "discountBack"
+                    : null,
             };
 
             await updateUser(userId, "cliente-admin", dataToSend);
