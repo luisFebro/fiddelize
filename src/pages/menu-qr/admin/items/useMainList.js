@@ -58,6 +58,7 @@ export default function useMainList(options = {}) {
         }
 
         setSkip(0);
+        // create unique id for be able to reseach multiple times. Otherwise only the firs try will work.
         setSearch(entry);
     };
 

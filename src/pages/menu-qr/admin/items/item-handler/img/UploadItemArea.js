@@ -7,6 +7,7 @@ import RadiusBtn from "components/buttons/RadiusBtn";
 
 export default function UploadItemArea({
     savedImg,
+    isCustomer = false,
     isMultiple = false,
     body = {},
     callback,
@@ -118,35 +119,43 @@ export default function UploadItemArea({
 
     const showAddImgArea = () => (
         <section className="container-center-col" style={{ minHeight: 250 }}>
-            <input
-                accept="image/*;capture=camera"
-                onChange={handleMediaChange}
-                onClick={undefined}
-                name="file"
-                style={{ display: "none" }}
-                id="uploaded-file"
-                type="file"
-                multiple={isMultiple}
-            />
-            <label
-                className="container-center-col position-relative"
-                style={{
-                    cursor: "pointer",
-                    width: "100%",
-                    padding: 100,
-                    zIndex: 1000,
-                }}
-                htmlFor="uploaded-file"
-            >
-                <AddAPhotoIcon
-                    style={{ color: "var(--mainWhite)", fontSize: 35 }}
-                />
+            {isCustomer ? (
                 <p className="text-small text-white text-shadow">
-                    adicione
-                    <br />
-                    imagem
+                    Falha ao carregar
                 </p>
-            </label>
+            ) : (
+                <Fragment>
+                    <input
+                        accept="image/*;capture=camera"
+                        onChange={handleMediaChange}
+                        onClick={undefined}
+                        name="file"
+                        style={{ display: "none" }}
+                        id="uploaded-file"
+                        type="file"
+                        multiple={isMultiple}
+                    />
+                    <label
+                        className="container-center-col position-relative"
+                        style={{
+                            cursor: "pointer",
+                            width: "100%",
+                            padding: 100,
+                            zIndex: 1000,
+                        }}
+                        htmlFor="uploaded-file"
+                    >
+                        <AddAPhotoIcon
+                            style={{ color: "var(--mainWhite)", fontSize: 35 }}
+                        />
+                        <p className="text-small text-white text-shadow">
+                            adicione
+                            <br />
+                            imagem
+                        </p>
+                    </label>
+                </Fragment>
+            )}
         </section>
     );
 

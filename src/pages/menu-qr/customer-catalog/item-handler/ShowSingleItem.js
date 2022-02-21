@@ -68,6 +68,9 @@ export default function ShowSingleItem({
 
         setLoadingShowItem(true);
 
+        // const ind = itemSearch.indexOf("_");
+        // const search = itemSearch.slice(0, ind);
+
         const params = {
             adminId,
             search: itemSearch,
@@ -192,7 +195,12 @@ export default function ShowSingleItem({
                     <Spinner size="large" />
                 </div>
             ) : (
-                <ImgHandler setData={setData} savedImg={img} isShowItem />
+                <ImgHandler
+                    isCustomer
+                    setData={setData}
+                    savedImg={img}
+                    isShowItem
+                />
             )}
             {showCardInfo()}
             {showFloatCTA()}

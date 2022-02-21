@@ -217,6 +217,6 @@ function getSelectedMsg(stage) {
     if (stage === "preparing") return "Estamos preparando seu pedido agora!";
     if (stage === "canceled") return "Pedido foi cancelado";
     // done
-    return "Opa! Pedido pronto e a caminho. Bom apetite!";
+    return "Opa! Pedido pronto e a caminho!";
 }
 // END HELPERS

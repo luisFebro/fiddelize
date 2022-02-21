@@ -106,7 +106,7 @@ export default function PendingCard({ onlineGames, data, socket }) {
                 {totalCount === 1 ? "item" : "itens"}):
             </p>
             <ItemsDesc data={dataItems} onlineGames={onlineGames} />
-            {needDiscountCoupon && (
+            {false && ( // needDiscountCoupon
                 <p className="my-3 text-pill text-center text-normal font-weight-bold">
                     Vale desconto de
                     <br />

@@ -5,7 +5,12 @@ import UploadItemArea from "./UploadItemArea";
 // import getId from "utils/getId";
 
 // const randomId = getId();
-export default function ImgHandler({ setData, savedImg, isShowItem }) {
+export default function ImgHandler({
+    isCustomer,
+    setData,
+    savedImg,
+    isShowItem,
+}) {
     const [targetImg, setTargetImg] = useState(null);
     const { bizLinkName } = useBizData();
 
@@ -26,6 +31,7 @@ export default function ImgHandler({ setData, savedImg, isShowItem }) {
 
     return (
         <UploadItemArea
+            isCustomer
             savedImg={savedImg}
             loadingMsg="Adicionando..."
             callback={handleUploadCallback}

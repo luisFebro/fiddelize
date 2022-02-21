@@ -114,9 +114,11 @@ export default function CustomerCatalog({
         digitalMenuData[bizLinkName] &&
         digitalMenuData[bizLinkName].orderCount;
     useEffect(() => {
-        if (gotSavedMenuData) setData(digitalMenuData[bizLinkName]);
+        // This digitalMenuCurrData should not be done because products could be outdated...
+        // if (gotSavedMenuData) setData(digitalMenuData[bizLinkName]);
+
         // if it is a used link, then remain in the menu page and ignore local db
-        if (digitalMenuCurrPage === "orders") return setNextPage("orders");
+        // if (digitalMenuCurrPage === "orders") return setNextPage("orders");
         if (!isUsedLink) setNextPage("menu");
         else setNextPage("success");
     }, [gotSavedMenuData, isUsedLink]);
@@ -446,7 +448,7 @@ function DigitalMenu({
 
     const [showSingleItem, setShowSingleItem] = useState(false);
     useEffect(() => {
-        if (search) setShowSingleItem(true);
+        if (search) setShowSingleItem(getId());
     }, [search]);
 
     return (

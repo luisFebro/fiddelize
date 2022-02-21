@@ -234,7 +234,7 @@ export default function FinalList({
             {error && <ShowError />}
             {isCustomerCatalog && <ShowOverMsg />}
             {!isCustomerCatalog && tapHoldOn && showTapAndHoldOptions()}
-            {!isCustomerCatalog && (
+            {!isAddCat && !isCustomerCatalog && (
                 <p className="my-3 main-font text-small font-weight-bold mx-3 text-grey">
                     clique e segure um ou mais itens para mais opções
                 </p>
