@@ -6,6 +6,7 @@ import { setItems } from "init/lStorage";
 import { Load } from "components/code-splitting/LoadableComp";
 import useContext from "context";
 import { getCustomerGameData } from "pages/menu-qr/customer-catalog/customer-area/customer-panel/CustomerPanelContent";
+import showToast from "components/toasts";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
 
@@ -29,7 +30,7 @@ export default function OrdersPage({
     isOnline,
 }) {
     useScrollUp();
-    const { currGame, bizLinkName, loginData } = useContext();
+    const { currGame, adminGame, bizLinkName, loginData } = useContext();
     const customerEmail = loginData && loginData.email;
     const [customerNote, setCustomerNote] = useState("");
     const [customerPoints, setCustomerPoints] = useState(0);
@@ -46,7 +47,7 @@ export default function OrdersPage({
             adminId,
             email: customerEmail,
             currGame,
-            callback: (data) => setCustomerPoints(data && data.currPoints),
+            callback: (dt) => setCustomerPoints(dt && dt.currPoints),
         });
     }, [adminId, customerEmail]);
 
@@ -64,6 +65,19 @@ export default function OrdersPage({
 
     const runSuccessOrder = (dataOrder = {}) => {
         const { customerName, customerPhone, customerAddress } = dataOrder;
+        if (currGame === "discountBack" && !customerPoints)
+            return showToast(
+                "Ops! Parece que está faltando dados. Favor, tente clicar de novo.",
+                { dur: 3000 }
+            );
+
+        // marketing and promotion data
+        const gamesData = handleGamesData({
+            currGame,
+            customerPoints,
+            totalAmount: investAmount,
+            adminGame, // all data related to admin game
+        });
 
         const body = {
             customerId,
@@ -72,7 +86,6 @@ export default function OrdersPage({
             customerAddress,
             customerNote,
             customerEmail,
-            customerPoints,
             placeId,
             adminId,
             order: {
@@ -80,6 +93,9 @@ export default function OrdersPage({
                 totalCount: itemsCount,
                 totalAmount: investAmount,
                 orderList: itemList,
+            },
+            games: {
+                ...gamesData,
             },
         };
 
@@ -162,3 +178,21 @@ export default function OrdersPage({
         </section>
     );
 }
+
+// HELPERS
+function handleGamesData({ currGame, adminGame, customerPoints, totalAmount }) {
+    if (!currGame) return null;
+    if (currGame === "discountBack") {
+        return {
+            discountBack: {
+                orderPoints: totalAmount,
+                priorPoints: customerPoints,
+                allPoints: Number(totalAmount) + Number(customerPoints),
+                ...adminGame,
+            },
+        };
+    }
+
+    return null;
+}
+// END HELPERS

@@ -76,6 +76,18 @@ export default function RealtimeOrders({ match, location }) {
     const currGame =
         cliAdmin && cliAdmin.onlineGames && cliAdmin.onlineGames.currGame;
 
+    const handleGame = () => {
+        if (currGame === "discountBack") {
+            return (
+                cliAdmin &&
+                cliAdmin.onlineGames &&
+                cliAdmin.onlineGames[currGame] &&
+                cliAdmin.onlineGames[currGame].challList[0]
+            );
+        }
+        return null;
+    };
+    const adminGame = handleGame();
     // activate socket here
     const socket = useInitSocket({
         namespace: "nspDigitalMenu",
@@ -131,6 +143,7 @@ export default function RealtimeOrders({ match, location }) {
                     bizName={bizName}
                     loadingMainData={loadingBizData}
                     currGame={currGame}
+                    adminGame={adminGame}
                 />
             )}
             {isAdmin && (
