@@ -54,10 +54,12 @@ const [
     digitalMenuData,
     digitalMenuCurrPage,
     digitalMenuLogin,
+    digitalMenuSkipLogin,
 ] = getItems("global", [
     "digitalMenuData",
     "digitalMenuCurrPage",
     "digitalMenuLogin",
+    "digitalMenuSkipLogin",
 ]);
 
 export default function CustomerCatalog({
@@ -77,7 +79,7 @@ export default function CustomerCatalog({
     currGame,
     // url,
 }) {
-    const login = digitalMenuLogin && digitalMenuLogin[bizLinkName];
+    const login = digitalMenuLogin && digitalMenuLogin[bizLinkName] && " ";
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
         orderCount: 0,
@@ -92,7 +94,7 @@ export default function CustomerCatalog({
     let { email } = data;
     // loginOk and email gets undefined when initializes
     email = email || login;
-    const isConnected = Boolean(loginOk || login); //loginOk && Boolean(email);
+    const isConnected = Boolean(loginOk || login) && !digitalMenuSkipLogin; // loginOk && Boolean(email);
     // biz logo should be fetched with adminId when page is laoded
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
@@ -107,6 +109,7 @@ export default function CustomerCatalog({
         isConnected,
         email,
         errorEmail,
+        digitalMenuSkipLogin,
     };
 
     const gotSavedMenuData =
@@ -400,7 +403,7 @@ function DigitalMenu({
                                     pageDotsColor="#b59e9e"
                                 />
                             </div>
-                            {isConnected && (
+                            {(isConnected || digitalMenuSkipLogin) && (
                                 <section className="animated-fadeInUp">
                                     <TotalInvest
                                         orderAmount={orderAmount}
@@ -460,7 +463,7 @@ function DigitalMenu({
             {loading && <ShowLoadingSkeleton />}
             {!loading && !gotData && showIllustration()}
             {error && <ShowError />}
-            {gotData && <ShowOverMsg txtColor="text-white" />}
+            {gotData && <ShowOverMsg txtColor="text-white" brand />}
             <div style={{ marginBottom: 150 }} />
             {showSingleItem && (
                 <ModalFullContent

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
+import { Link } from "react-router-dom";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import useBackColor from "hooks/useBackColor";
 import { useBizData } from "init";
 import { useHistory } from "react-router-dom";
@@ -239,8 +241,35 @@ function MenuList({
                 }}
             >
                 <TweaksBtn />
+                <div className="ml-3">
+                    <SupportBtn />
+                </div>
             </div>
         </section>
+    );
+}
+
+function SupportBtn() {
+    return (
+        <Link className="no-text-decoration" to="/suporte">
+            <ButtonFab
+                title="suporte"
+                backgroundColor="var(--themePDark)"
+                iconFontAwesome={
+                    <FontAwesomeIcon
+                        icon="comment"
+                        style={{
+                            fontSize: 30,
+                        }}
+                    />
+                }
+                onClick={null}
+                position="relative"
+                variant="extended"
+                size="large"
+                width="100%"
+            />
+        </Link>
     );
 }
 

@@ -23,14 +23,14 @@ export default function CustomerArea({ isOnline }) {
         pColor,
         loginData,
     } = useContext();
-    const { isConnected, email } = loginData;
+    const { isConnected, email, digitalMenuSkipLogin } = loginData;
 
     const [fullOpen, setFullOpen] = useState(false);
 
     useEffect(() => {
-        if (loadingMainData) return;
+        if (loadingMainData || digitalMenuSkipLogin) return;
         if (!isConnected) setFullOpen(true);
-    }, [loadingMainData, isConnected]);
+    }, [loadingMainData, isConnected, digitalMenuSkipLogin]);
 
     // const handleFullOpen = () => {
     //     setFullOpen(true);
@@ -72,7 +72,7 @@ export default function CustomerArea({ isOnline }) {
                     {isOnline ? "Online" : "Local"}
                 </span>
             </h1>
-            {isConnected && (
+            {isConnected ? (
                 <div className="text-normal text-center">
                     <p className="text-normal position-relative">
                         Conectado por:
@@ -82,6 +82,21 @@ export default function CustomerArea({ isOnline }) {
                     </p>
                     {showConnectedBtns()}
                 </div>
+            ) : (
+                <p className="text-center text-shadow text-normal position-relative">
+                    Olá, visitante!
+                    <div className="my-3 container-center">
+                        <ButtonFab
+                            size="small"
+                            title="Acessar conta cliente"
+                            fontSize={10}
+                            position="relative"
+                            onClick={() => setFullOpen(true)}
+                            backgroundColor={`var(--themeSDark--${pColor})`}
+                            variant="extended"
+                        />
+                    </div>
+                </p>
             )}
         </Fragment>
     );

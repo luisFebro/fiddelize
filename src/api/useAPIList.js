@@ -341,19 +341,49 @@ export default function useAPIList({
     );
 
     const ShowOverMsg = (options = {}) => {
-        const { txtColor = "text-purple" } = options;
+        const { txtColor = "text-purple", brand = false } = options;
 
         return (
             <Fragment>
                 {!hasMore && readyShowElems && (
-                    <p
-                        className={`${txtColor} text-normal text-center font-weight-bold`}
-                        style={{
-                            margin: "70px 0 100px",
-                        }}
-                    >
-                        Isso é tudo{`${userName ? `, ${userName}.` : "."}`}
-                    </p>
+                    <Fragment>
+                        {brand ? (
+                            <p
+                                className={`text-grey font-site text-em-1 text-grey text-center font-weight-bold`}
+                                style={{
+                                    margin: "70px 0 100px",
+                                }}
+                            >
+                                produzido por
+                                <a
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    className="ml-2 text-em-1-2"
+                                    href="https://fiddelize.com"
+                                    style={{
+                                        color: "grey",
+                                        textDecoration: "none",
+                                        fontWeight: "bold",
+                                        letterSpacing: ".5px;text-align:center",
+                                        margin: "0px",
+                                        padding: "0px",
+                                    }}
+                                >
+                                    fiddelize.com
+                                </a>
+                            </p>
+                        ) : (
+                            <p
+                                className={`${txtColor} text-normal text-center font-weight-bold`}
+                                style={{
+                                    margin: "70px 0 100px",
+                                }}
+                            >
+                                Isso é tudo
+                                {`${userName ? `, ${userName}.` : "."}`}
+                            </p>
+                        )}
+                    </Fragment>
                 )}
 
                 {isOffline && (

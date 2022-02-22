@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "utils/form/use-state/handleChange";
@@ -10,6 +10,7 @@ import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import useContext from "context";
 import { setItems } from "init/lStorage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
 
 const getStyles = () => ({
     fieldForm: {
@@ -37,6 +38,16 @@ export default function CustomerAccessForm({ closeModal }) {
     const { email, errorEmail } = loginData;
 
     const styles = getStyles();
+
+    useEffect(() => {
+        // handle skipLogin which returns true when visitor opens the modal after skipping
+        if (email === true) {
+            setMainData((prev) => ({
+                ...prev,
+                email: "",
+            }));
+        }
+    }, [email]);
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 
@@ -147,7 +158,7 @@ export default function CustomerAccessForm({ closeModal }) {
                     />
                 </div>
             </form>
-            <div className="mt-2 mb-4 mx-3 container-center">
+            <div className="mt-2 mb-1 mx-3 container-center">
                 <ButtonFab
                     size="medium"
                     title="Acessar"
@@ -156,6 +167,20 @@ export default function CustomerAccessForm({ closeModal }) {
                     onClick={handleAccess}
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     variant="extended"
+                />
+            </div>
+            <div className="mb-1 container-center">
+                <ButtonMulti
+                    title="Pular e acessar menu"
+                    onClick={() => {
+                        closeModal();
+                        setItems("global", {
+                            digitalMenuSkipLogin: {
+                                [bizLinkName]: true,
+                            },
+                        });
+                    }}
+                    variant="link"
                 />
             </div>
         </Fragment>

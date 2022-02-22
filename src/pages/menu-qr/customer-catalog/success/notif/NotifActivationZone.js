@@ -18,7 +18,7 @@ export default function NotifActivationZone({ socket, ids, bizLinkName }) {
         success: false,
     });
     const { email, success } = data;
-    const digitalMenuLogin = loginData[bizLinkName];
+    const digitalMenuLogin = loginData && loginData[bizLinkName];
 
     const updateDbEmail = (thisData) => {
         const dataEmail = {

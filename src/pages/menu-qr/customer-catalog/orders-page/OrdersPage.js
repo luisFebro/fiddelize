@@ -65,7 +65,12 @@ export default function OrdersPage({
 
     const runSuccessOrder = (dataOrder = {}) => {
         const { customerName, customerPhone, customerAddress } = dataOrder;
-        if (currGame === "discountBack" && !customerPoints)
+        if (
+            currGame === "discountBack" &&
+            !customerPoints &&
+            customerPoints !== null
+        )
+            // null if it is a visitor
             return showToast(
                 "Ops! Parece que está faltando dados. Favor, tente clicar de novo.",
                 { dur: 3000 }
@@ -85,7 +90,7 @@ export default function OrdersPage({
             customerPhone,
             customerAddress,
             customerNote,
-            customerEmail,
+            customerEmail: customerEmail || "visitante",
             placeId,
             adminId,
             order: {
