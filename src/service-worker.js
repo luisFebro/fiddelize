@@ -17,6 +17,7 @@ import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import {
     CacheFirst,
     NetworkOnly,
+    NetworkFirst,
     StaleWhileRevalidate,
 } from "workbox-strategies";
 import { BackgroundSyncPlugin } from "workbox-background-sync";
@@ -104,19 +105,6 @@ registerRoute(
     })
 );
 
-registerRoute(
-    ({ request }) => request.destination === "audio",
-    new CacheFirst({
-        cacheName: "fiddelize-audios",
-        plugins: [
-            new ExpirationPlugin({
-                maxEntries: 30,
-                maxAgeSeconds: addDaysInMs(30), // 30 Days
-            }),
-        ],
-    })
-);
-
 // Cache Google Fonts with a stale-while-revalidate strategy, with
 // a maximum number of entries.
 registerRoute(
@@ -160,6 +148,9 @@ registerRoute(
     }),
     "POST"
 );
+
+// TEST all page running network first to load first time
+registerRoute("/", new NetworkFirst());
 
 self.addEventListener("activate", (event) => {
     event.waitUntil(self.clients.claim());
