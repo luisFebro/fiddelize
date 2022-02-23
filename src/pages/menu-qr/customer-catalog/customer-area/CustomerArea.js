@@ -84,7 +84,7 @@ export default function CustomerArea({ isOnline }) {
                 </div>
             ) : (
                 <p className="text-center text-shadow text-normal position-relative">
-                    Olá, visitante TESTE!
+                    Olá, visitante!
                     <div className="my-3 container-center">
                         <ButtonFab
                             size="small"
