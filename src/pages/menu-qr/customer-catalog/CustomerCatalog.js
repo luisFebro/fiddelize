@@ -88,8 +88,6 @@ export default function CustomerCatalog({
         orderCount: 0,
         orderAmount: 0,
         orderList: [],
-        // login
-        loginOk: Boolean(login) || false,
         // discount back
         allPoints: 0,
         customerPoints: 0,
@@ -100,14 +98,15 @@ export default function CustomerCatalog({
         orderList,
         orderAmount,
         orderCount,
-        loginOk,
         didBeatGame,
     } = data;
     const [emailData, setEmailData] = useState({
+        // login
+        loginOk: Boolean(login) || false,
         email: login,
         errorEmail: false,
     });
-    const { errorEmail } = emailData;
+    const { errorEmail, loginOk } = emailData;
     let { email } = emailData;
     email = email && email.trim();
     // loginOk and email gets undefined when initializes
