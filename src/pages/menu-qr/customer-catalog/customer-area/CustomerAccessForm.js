@@ -35,7 +35,7 @@ export default function CustomerAccessForm({ closeModal }) {
         setMainData,
         mainData,
     } = useContext();
-    const { email, errorEmail } = loginData;
+    const { email, errorEmail, digitalMenuSkipLogin } = loginData;
 
     const styles = getStyles();
 
@@ -64,18 +64,29 @@ export default function CustomerAccessForm({ closeModal }) {
         if (!validateEmail(email))
             return showToast("Formato de e-mail inválido.", { type: "error" });
 
+        // success
+
         setItems("global", {
             digitalMenuLogin: {
                 [bizLinkName]: email,
             },
+            digitalMenuSkipLogin: {
+                [bizLinkName]: !digitalMenuSkipLogin,
+            },
         });
         // save db
         if (socket) {
-            socket.emit("newCustomerRegister", { bizName, adminId, email });
+            socket.emit("customerAccess", { bizName, adminId, email });
             setMainData((prev) => ({
                 ...prev,
                 loginOk: true,
             }));
+
+            // need reload to show email
+            // if(digitalMenuSkipLogin) {
+            //     window.location.reload();
+            //     showToast("Iniciando sessão...");
+            // }
             closeModal();
         }
     };

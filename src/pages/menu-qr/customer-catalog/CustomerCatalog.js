@@ -52,12 +52,12 @@ const AsyncCategoryList = Load({
 
 const [
     digitalMenuData,
-    digitalMenuCurrPage,
+    // digitalMenuCurrPage,
     digitalMenuLogin,
     digitalMenuSkipLogin,
 ] = getItems("global", [
     "digitalMenuData",
-    "digitalMenuCurrPage",
+    // "digitalMenuCurrPage",
     "digitalMenuLogin",
     "digitalMenuSkipLogin",
 ]);
@@ -79,7 +79,8 @@ export default function CustomerCatalog({
     currGame,
     // url,
 }) {
-    const login = digitalMenuLogin && digitalMenuLogin[bizLinkName] && " ";
+    const login = digitalMenuLogin && digitalMenuLogin[bizLinkName];
+
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
         orderCount: 0,
@@ -92,10 +93,21 @@ export default function CustomerCatalog({
     });
     const { orderList, orderAmount, orderCount, errorEmail, loginOk } = data;
     let { email } = data;
+    email = email && email.trim();
     // loginOk and email gets undefined when initializes
-    email = email || login;
-    const isConnected = Boolean(loginOk || login) && !digitalMenuSkipLogin; // loginOk && Boolean(email);
+    const isConnected =
+        Boolean(loginOk || login) &&
+        digitalMenuSkipLogin &&
+        !digitalMenuSkipLogin[bizLinkName]; // loginOk && Boolean(email);
     // biz logo should be fetched with adminId when page is laoded
+    useEffect(() => {
+        if (login) {
+            setData((prev) => ({
+                ...prev,
+                email: login,
+            }));
+        }
+    }, [login]);
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 

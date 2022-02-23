@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
+import CartRace from "pages/mobile-app/content/bottom-menu-contents/all-games/discount-back/cart-race/CartRace.js";
 
 export default function OnlineDiscountBack({ currPoints }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
@@ -20,7 +21,7 @@ export default function OnlineDiscountBack({ currPoints }) {
     const txtColor = "white";
 
     const showCoinsArea = () => (
-        <section className="text-subtitle mt-3 text-white text-center">
+        <section className="text-subtitle text-white text-center">
             <span
                 className={`animated fadeInUp d-block mb-3 text-title ${txtColor}`}
             >
@@ -58,5 +59,45 @@ export default function OnlineDiscountBack({ currPoints }) {
         </section>
     );
 
-    return <section>{showCoinsArea()}</section>;
+    const mainTxt = (
+        <section className="text-white text-shadow text-center font-weight-bold text-normal animated fadeInUp">
+            Acumule <span className="text-title">150 PTS,</span>
+            <br />e ganhe desconto de R$ 15 no pedido
+        </section>
+    );
+
+    return (
+        <section>
+            {showCoinsArea()}
+            {mainTxt}
+            <div
+                style={{
+                    margin: "70px 0",
+                }}
+            >
+                <CartRace
+                    className="animated fadeInUp faster"
+                    targetPoints={150}
+                    perc={50}
+                    currPoints={100}
+                />
+            </div>
+        </section>
+    );
 }
+
+/*
+
+const mainTxt = didBeatGame ? (
+    <section className="text-center font-weight-bold text-normal animated fadeInUp">
+        Você bateu <span className="text-title">{targetPoints} PTS,</span>
+        <br />e ganhou:
+    </section>
+) : (
+    <section className="text-center font-weight-bold text-normal animated fadeInUp">
+        Acumule <span className="text-title">{targetPoints} PTS,</span>
+        <br />e ganhe:
+    </section>
+);
+
+ */

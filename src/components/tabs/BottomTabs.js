@@ -72,11 +72,12 @@ export default function BottomTabs({
     needTabFullWidth = false,
     showAppBar = true,
     disableClick,
+    tabsColor = undefined,
 }) {
     const [mainColor] = getItems("bizData", ["themePColor"]);
     // themeBackColor for club maker front page
     const { themePColor } = useBizData();
-    const tabMainColor = themePColor || mainColor;
+    const tabMainColor = tabsColor || themePColor || mainColor;
 
     const isAppTopDetected = useDetectScrollSingle("#topAppContent");
 
