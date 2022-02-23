@@ -31,6 +31,7 @@ export default function OrdersPage({
 }) {
     useScrollUp();
     const { currGame, adminGame, bizLinkName, loginData } = useContext();
+    console.log("adminGame", adminGame);
     const customerEmail = loginData && loginData.email;
     const [customerNote, setCustomerNote] = useState("");
     const [customerPoints, setCustomerPoints] = useState(0);

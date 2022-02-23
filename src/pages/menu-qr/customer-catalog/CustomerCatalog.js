@@ -77,6 +77,7 @@ export default function CustomerCatalog({
     bizName,
     loadingMainData,
     currGame,
+    adminGame,
     // url,
 }) {
     const login = digitalMenuLogin && digitalMenuLogin[bizLinkName];
@@ -289,6 +290,7 @@ export default function CustomerCatalog({
         socket,
         loadingMainData,
         currGame,
+        adminGame,
     });
 
     return (

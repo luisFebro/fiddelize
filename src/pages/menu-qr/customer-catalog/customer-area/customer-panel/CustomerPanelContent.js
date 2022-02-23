@@ -1,5 +1,5 @@
-import GroupedAppBar from "./GroupedAppBar";
 import useContext from "context";
+import GroupedAppBar from "./GroupedAppBar";
 
 export function getCustomerGameData({
     socket,
