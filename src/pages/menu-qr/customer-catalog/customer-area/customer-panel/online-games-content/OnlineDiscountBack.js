@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
 import CartRace from "pages/mobile-app/content/bottom-menu-contents/all-games/discount-back/cart-race/CartRace.js";
+import convertToReal from "utils/numbers/convertToReal";
 
-export default function OnlineDiscountBack({ currPoints }) {
+export default function OnlineDiscountBack({ currPoints, adminGame }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [dataRef, setDataRef] = useState(null);
+
+    const targetPoints = adminGame && adminGame.targetPoints;
+    const targetMoney = adminGame && adminGame.targetMoney;
 
     const numberOptions = {
         trigger: true,
@@ -16,7 +20,7 @@ export default function OnlineDiscountBack({ currPoints }) {
         setDataRef(ref);
     }, []);
 
-    useAnimateNumber(dataRef, currPoints, numberOptions);
+    useAnimateNumber(dataRef, currPoints || 0, numberOptions);
 
     const txtColor = "white";
 
@@ -61,8 +65,8 @@ export default function OnlineDiscountBack({ currPoints }) {
 
     const mainTxt = (
         <section className="text-white text-shadow text-center font-weight-bold text-normal animated fadeInUp">
-            Acumule <span className="text-title">150 PTS,</span>
-            <br />e ganhe desconto de R$ 15 no pedido
+            Acumule <span className="text-title">{targetPoints} PTS,</span>
+            <br />e ganhe desconto de R$ {convertToReal(targetMoney)} no pedido
         </section>
     );
 
@@ -77,9 +81,10 @@ export default function OnlineDiscountBack({ currPoints }) {
             >
                 <CartRace
                     className="animated fadeInUp faster"
-                    targetPoints={150}
+                    targetPoints={targetPoints}
                     perc={50}
-                    currPoints={100}
+                    isOnline
+                    currPoints={currPoints}
                 />
             </div>
         </section>

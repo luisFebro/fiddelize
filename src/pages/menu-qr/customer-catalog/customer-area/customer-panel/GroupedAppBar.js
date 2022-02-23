@@ -25,13 +25,6 @@ export default function GroupedAppBar() {
             colorBack: backColor,
         },
         {
-            tabLabel: "Pedidos",
-            tabIcon: <AssignmentIcon />,
-            tabContentPanel: null,
-            scrollView: true,
-            colorBack: backColor,
-        },
-        {
             tabLabel: "Ajustes",
             tabIcon: <BuildIcon />,
             tabContentPanel: null,
@@ -46,3 +39,13 @@ export default function GroupedAppBar() {
         <BottomTabs data={data} showAppBar needTabFullWidth tabsColor="black" />
     );
 }
+
+/*
+{
+    tabLabel: "Pedidos",
+    tabIcon: <AssignmentIcon />,
+    tabContentPanel: null,
+    scrollView: true,
+    colorBack: backColor,
+},
+ */

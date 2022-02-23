@@ -23,7 +23,6 @@ export default function DoneCard({ data }) {
     const customerAddress = data && data.customerAddress;
     const customerEmail = data && data.customerEmail;
     // amount of points of any online game that offers that. The user use it in a single game, regardless if game changes
-    const customerPoints = data && data.customerPoints;
     const customerNote = data && data.customerNote;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;

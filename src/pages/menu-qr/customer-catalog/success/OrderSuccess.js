@@ -7,9 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import convertToReal from "utils/numbers/convertToReal";
 import showToast from "components/toasts";
 import ModalYesNo from "components/modals/ModalYesNo";
+import { useHistory } from "react-router-dom";
 import ProgressTrack from "./ProgressTrack";
 import NotifActivationZone from "./notif/NotifActivationZone";
-// import useContext from "context";
+import useContext from "context";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -18,11 +19,12 @@ export default function OrderSuccess({
     socket,
     ids,
     bizLinkName,
+    didBeatGame,
 }) {
     const [currStage, setCurrStage] = useState("queue");
     const [openCancel, setOpenCancel] = useState(false);
     // 3 stages of order: queue, preparing, done
-
+    const placeId = ids && ids.placeId;
     const disconnected = socket && socket.disconnected;
 
     useEffect(() => {
@@ -64,6 +66,25 @@ export default function OrderSuccess({
         if (currStage === "done") finishOrder();
     }, [currStage]);
 
+    const showBackBtn = () => (
+        <div className="container-center my-3">
+            <ButtonFab
+                title="Voltar"
+                color="var(--mainWhite)"
+                onClick={() => {
+                    window.location.href =
+                        placeId && placeId.includes("online")
+                            ? `/${bizLinkName}/menu`
+                            : `/${bizLinkName}/menu/${placeId}`;
+                }}
+                backgroundColor="var(--themeSDark)"
+                variant="extended"
+                position="relative"
+                size="medium"
+            />
+        </div>
+    );
+
     const showCancelBtn = () => (
         <div className="mx-3 d-flex justify-content-end">
             <ButtonFab
@@ -77,6 +98,7 @@ export default function OrderSuccess({
                 position="relative"
                 size="medium"
             />
+            {showBackBtn()}
         </div>
     );
 
@@ -86,9 +108,12 @@ export default function OrderSuccess({
         return (
             <Fragment>
                 {currStage === "done" ? (
-                    <div className="mx-3 my-5 text-white text-subtitle font-weight-bold text-center">
-                        Agradecemos sua preferência e volte sempre!
-                    </div>
+                    <Fragment>
+                        <div className="mx-3 my-5 text-white text-subtitle font-weight-bold text-center">
+                            Agradecemos sua preferência e volte sempre!
+                        </div>
+                        {showBackBtn()}
+                    </Fragment>
                 ) : (
                     <NotifActivationZone
                         ids={ids}
@@ -116,7 +141,7 @@ export default function OrderSuccess({
             </h2>
             <ProgressTrack stage={currStage} />
             {allDataItem && allDataItem.orderCount && (
-                <MyOrder allDataItem={allDataItem} />
+                <MyOrder allDataItem={allDataItem} didBeatGame={didBeatGame} />
             )}
             {allowCancelStages.includes(currStage) && showCancelBtn()}
             {showEndZone()}
@@ -147,8 +172,29 @@ export default function OrderSuccess({
 }
 
 // COMP
-function MyOrder({ allDataItem }) {
+function MyOrder({ allDataItem, didBeatGame }) {
     const { orderList = [], orderAmount, orderCount } = allDataItem;
+    const {
+        customerPoints,
+        currGame,
+        adminGame,
+        bizLinkName,
+        loginData,
+    } = useContext();
+
+    const targetMoney = adminGame && adminGame.targetMoney;
+
+    const needShowPromo = didBeatGame;
+
+    const handleTotalOrder = (investAmount) => {
+        if (needShowPromo) {
+            if (currGame === "discountBack") {
+                return investAmount - targetMoney;
+            }
+        }
+
+        return investAmount;
+    };
 
     const showTitle = () => (
         <h2 className="text-subtitle text-center font-weight-bold my-3">
@@ -181,13 +227,21 @@ function MyOrder({ allDataItem }) {
                 <br />
                 <span className="text-normal">{orderCount} itens</span>
                 <br />
+                {didBeatGame && (
+                    <p className="text-normal">
+                        Desconto de: -{" "}
+                        {convertToReal(targetMoney, { moneySign: true })}
+                    </p>
+                )}
                 <span className="text-normal">
                     Valor final:{" "}
                     <span
                         className="text-pill"
                         style={{ backgroundColor: "green" }}
                     >
-                        {convertToReal(orderAmount, { moneySign: true })}
+                        {convertToReal(handleTotalOrder(orderAmount), {
+                            moneySign: true,
+                        })}
                     </span>
                 </span>
             </p>

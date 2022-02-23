@@ -23,9 +23,11 @@ export default function PendingCard({ onlineGames, data, socket }) {
     const customerName = data && data.customerName;
     const customerPhone = data && data.customerPhone;
     const customerAddress = data && data.customerAddress;
-    const customerPoints = data && data.customerPoints;
     const customerEmail = data && data.customerEmail;
     const customerNote = data && data.customerNote;
+    const games = data && data.games;
+    const currGame = games && games.currGame;
+    const adminGame = games && games[currGame];
     const placeId = data && data.placeId;
     const updatedAt = data && data.updatedAt;
     const totalCount = orderData && orderData.totalCount;
@@ -40,7 +42,8 @@ export default function PendingCard({ onlineGames, data, socket }) {
             dataItems={dataItems}
             customerEmail={customerEmail}
             totalAmount={totalAmount}
-            customerPoints={customerPoints}
+            currGame={currGame}
+            adminGame={adminGame}
         />
     );
 
@@ -57,25 +60,36 @@ export default function PendingCard({ onlineGames, data, socket }) {
         customerAddress,
     };
 
-    // THIS DATA SHOULD BE TRANSFERED FROM SUCCESS PAGE FROM CUSTOMER
-    const currGame = onlineGames && onlineGames.currGame;
-    let accumulativePoints = 0;
-    const didBeatGame = true;
-    const needDiscountCoupon = currGame === "discountBack" && didBeatGame;
-    const targetPoints = 100;
-    const targetMoney = 20;
+    // the current promo (game) is sent in the customer's orde page.
+    const handleDidBeatGame = () => {
+        if (!currGame) return false;
+        if (currGame === "discountBack")
+            return (
+                games && games.discountBack && games.discountBack.didBeatGame
+            );
 
-    if (currGame === "descountBack") {
-        accumulativePoints = totalAmount + customerPoints;
-        // const targetPoints = adminGame && adminGame.targetPoints;
-        // const customerCurrPoints = adminGame && adminGame.customerPoints || 0; // zero here is required to avoid undefined and cause error in the accumulated amount when the user has no purchases priorly
-        // const accumulatedPoints = Number(customerCurrPoints) + Number(totalAmount);
-        // const didBeatGame = accumulatedPoints >= targetPoints;
-    }
+        return false;
+    };
+    const didBeatGame = handleDidBeatGame();
+
+    const handleNeedShowPromo = () => {
+        if (currGame === "discountBack" && didBeatGame) return true;
+
+        return false;
+    };
+    const needShowPromo = handleNeedShowPromo();
 
     const handleTotalOrder = () => {
-        if (needDiscountCoupon) {
-            return totalAmount - targetMoney;
+        if (needShowPromo) {
+            if (currGame === "discountBack") {
+                const targetMoney =
+                    games &&
+                    games.discountBack &&
+                    games.discountBack.targetMoney;
+                return totalAmount - targetMoney;
+            }
+
+            return totalAmount;
         }
 
         return totalAmount;
@@ -106,22 +120,11 @@ export default function PendingCard({ onlineGames, data, socket }) {
                 {totalCount === 1 ? "item" : "itens"}):
             </p>
             <ItemsDesc data={dataItems} onlineGames={onlineGames} />
-            {false && ( // needDiscountCoupon
-                <p className="my-3 text-pill text-center text-normal font-weight-bold">
-                    Vale desconto de
-                    <br />
-                    <span
-                        className="text-pill text-shadow"
-                        style={{ background: "var(--themePLight)" }}
-                    >
-                        R$ {convertToReal(targetMoney)}
-                    </span>{" "}
-                    aplicado
-                    <p className="text-em-0-7 font-site font-weight-bold">
-                        cliente bateu a meta de {targetPoints} pontos.
-                    </p>
-                </p>
-            )}
+            <PromoArea
+                games={games}
+                currGame={currGame}
+                needShowPromo={needShowPromo}
+            />
             <h2 className="mt-2 my-2 text-normal text-center">
                 Valor Total:
                 <span className="ml-3 hightlight text-pill">
@@ -211,5 +214,39 @@ function ItemsDesc({ data }) {
                 </div>
             )}
         </section>
+    );
+}
+
+function PromoArea({ currGame, games, needShowPromo }) {
+    const discountBackPromo = () => {
+        const dataG = games && games.discountBack;
+        const targetMoney = dataG && dataG.targetMoney;
+        const targetPoints = dataG && dataG.targetPoints;
+        return (
+            <Fragment>
+                {needShowPromo && (
+                    <p className="my-3 text-pill text-center text-normal font-weight-bold">
+                        Desconto de
+                        <br />
+                        <span
+                            className="text-pill text-shadow"
+                            style={{ background: "var(--themePLight)" }}
+                        >
+                            R$ {convertToReal(targetMoney)}
+                        </span>{" "}
+                        aplicado
+                        <p className="text-em-0-7 font-site font-weight-bold">
+                            cliente bateu a meta de {targetPoints} pontos.
+                        </p>
+                    </p>
+                )}
+            </Fragment>
+        );
+    };
+
+    return (
+        <Fragment>
+            {currGame === "discountBack" && discountBackPromo()}
+        </Fragment>
     );
 }

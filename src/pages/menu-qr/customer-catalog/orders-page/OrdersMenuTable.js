@@ -10,9 +10,24 @@ export default function OrdersMenuTable({
     itemList,
     itemsCount,
     investAmount,
+    discountAmount,
+    currGame,
+    adminGame,
+    needShowPromo,
 }) {
     const loading = false;
     const vanishMsgReady = useDelay(6000);
+
+    const handleTotalOrder = () => {
+        if (needShowPromo) {
+            if (currGame === "discountBack") {
+                const targetMoney = adminGame && adminGame.targetMoney;
+                return investAmount - targetMoney;
+            }
+        }
+
+        return investAmount;
+    };
 
     return (
         <section>
@@ -36,6 +51,14 @@ export default function OrdersMenuTable({
                 loading={loading}
                 setData={setData}
             />
+            {discountAmount && (
+                <p className="m-0 mt-3 mr-3 d-flex justify-content-end text-normal text-white">
+                    Desconto:{" "}
+                    <span className="d-inline-block ml-3 font-weight-bold">
+                        - R$ {convertToReal(discountAmount)}
+                    </span>
+                </p>
+            )}
             <p className="m-0 mt-3 mr-3 d-flex justify-content-end text-normal text-white">
                 {itemsCount} item{itemsCount > 1 ? "s" : ""} por:{" "}
                 <span
@@ -44,7 +67,7 @@ export default function OrdersMenuTable({
                         backgroundColor: "green",
                     }}
                 >
-                    R$ {convertToReal(investAmount)}
+                    R$ {convertToReal(handleTotalOrder())}
                 </span>
             </p>
         </section>

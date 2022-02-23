@@ -23,6 +23,7 @@ export const AsyncMainMenuAdmin = Load({
 export default function RealtimeOrders({ match, location }) {
     const [mainData, setMainData] = useState({
         isUsedLink: false,
+        // discount back
         // loaded: false,
     });
     const { isUsedLink } = mainData;
@@ -118,7 +119,7 @@ export default function RealtimeOrders({ match, location }) {
                 <p className="text-center text-subtitle text-white font-weight-bold text-shadow">
                     {error
                         ? "Ocorreu um erro na sua conexão. Tente recarregar novamente"
-                        : "Loja não encontrada"}
+                        : "Indisponível. Verifique Conexão"}
                 </p>
             </div>
         );

@@ -108,16 +108,12 @@ export default function MainMenuAdmin(compData) {
 }
 
 function selectComp(comp, compData) {
-    const { adminId, bizLinkName, socket } = compData;
+    const { bizLinkName, socket } = compData;
 
     if (comp === "Itens") return null;
     if (comp === "Pedidos")
         return (
-            <AsyncAdminMenuOrders
-                adminId={adminId}
-                bizLinkName={bizLinkName}
-                socket={socket}
-            />
+            <AsyncAdminMenuOrders bizLinkName={bizLinkName} socket={socket} />
         );
     if (comp === "Divulgação") return <AsyncAdvertise />;
     if (comp === "Análise") return <AsyncAnalysis />; // <AsyncTweaks />

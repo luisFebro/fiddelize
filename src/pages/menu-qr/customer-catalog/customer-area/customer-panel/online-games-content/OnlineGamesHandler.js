@@ -12,21 +12,8 @@ export const AsyncOnlineDiscountBack = Load({
 });
 
 export default function OnlineGamesHandler() {
-    const [currBenefit, setCurrBenefit] = useState(null);
-    const { currGame, socket, loginData, adminId } = useContext();
-    const email = loginData && loginData.email;
+    const { customerPoints, currGame, adminGame } = useContext();
     const { icon, nameBr } = getOnlineGameData(currGame);
-
-    useEffect(() => {
-        if (!socket) return;
-        getCustomerGameData({
-            socket,
-            currGame,
-            adminId,
-            email,
-            callback: (data) => setCurrBenefit(data),
-        });
-    }, [adminId, email, currGame]);
 
     const showPromotionTitle = () => (
         <section className="animated fadeIn py-4">
@@ -40,14 +27,10 @@ export default function OnlineGamesHandler() {
     return (
         <Fragment>
             {showPromotionTitle()}
-            {!currBenefit && (
-                <p className="text-subtitle text-white text-shadow text-center font-weight-bold">
-                    Carregando...
-                </p>
-            )}
             {currGame === "discountBack" && (
                 <AsyncOnlineDiscountBack
-                    currPoints={currBenefit && currBenefit.currPoints}
+                    currPoints={customerPoints}
+                    adminGame={adminGame}
                 />
             )}
         </Fragment>
@@ -65,3 +48,13 @@ function getOnlineGameData(currGame) {
     return {};
 }
 // END HELPERS
+
+/*
+
+{!currBenefit && (
+    <p className="text-subtitle text-white text-shadow text-center font-weight-bold">
+        Carregando...
+    </p>
+)}
+
+ */

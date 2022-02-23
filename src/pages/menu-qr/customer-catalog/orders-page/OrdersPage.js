@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import CommentField from "components/fields/CommentField";
 import { setItems } from "init/lStorage";
 import { Load } from "components/code-splitting/LoadableComp";
+import convertToReal from "utils/numbers/convertToReal";
 import useContext from "context";
-import { getCustomerGameData } from "pages/menu-qr/customer-catalog/customer-area/customer-panel/CustomerPanelContent";
-import showToast from "components/toasts";
+// import showToast from "components/toasts";
+import getId from "utils/getId";
 import { ReturnBtn } from "../OrdersCart";
 import OrdersMenuTable from "./OrdersMenuTable";
 
@@ -28,29 +29,31 @@ export default function OrdersPage({
     customerId,
     socket,
     isOnline,
+    didBeatGame,
 }) {
     useScrollUp();
-    const { currGame, adminGame, bizLinkName, loginData } = useContext();
-    console.log("adminGame", adminGame);
+    const {
+        customerPoints,
+        currGame,
+        adminGame,
+        bizLinkName,
+        loginData,
+    } = useContext();
+
     const customerEmail = loginData && loginData.email;
     const [customerNote, setCustomerNote] = useState("");
-    const [customerPoints, setCustomerPoints] = useState(0);
+
+    const allPoints = Number(investAmount) + Number(customerPoints || 0);
+    useEffect(() => {
+        if (!currGame) return;
+        const did = !adminGame ? false : allPoints >= adminGame.targetPoints;
+        if (did) setCatalogData((prev) => ({ ...prev, didBeatGame: true }));
+    }, [allPoints, currGame]);
 
     const [data, setData] = useState({
         openExternalOrder: false,
     });
     const { openExternalOrder } = data;
-
-    useEffect(() => {
-        if (!socket || !currGame) return;
-        getCustomerGameData({
-            socket,
-            adminId,
-            email: customerEmail,
-            currGame,
-            callback: (dt) => setCustomerPoints(dt && dt.currPoints),
-        });
-    }, [adminId, customerEmail]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -66,16 +69,6 @@ export default function OrdersPage({
 
     const runSuccessOrder = (dataOrder = {}) => {
         const { customerName, customerPhone, customerAddress } = dataOrder;
-        if (
-            currGame === "discountBack" &&
-            !customerPoints &&
-            customerPoints !== null
-        )
-            // null if it is a visitor
-            return showToast(
-                "Ops! Parece que está faltando dados. Favor, tente clicar de novo.",
-                { dur: 3000 }
-            );
 
         // marketing and promotion data
         const gamesData = handleGamesData({
@@ -149,7 +142,7 @@ export default function OrdersPage({
                     if (isOnline)
                         return setData((prev) => ({
                             ...prev,
-                            openExternalOrder: true,
+                            openExternalOrder: getId(),
                         }));
                     return runSuccessOrder();
                 }}
@@ -164,13 +157,26 @@ export default function OrdersPage({
         <section>
             <ReturnBtn setNextPage={setNextPage} />
             {showTitle()}
+            {didBeatGame && (
+                <PromoArea
+                    currGame={currGame}
+                    adminGame={adminGame}
+                    needShowPromo
+                />
+            )}
             <OrdersMenuTable
                 setData={setCatalogData}
                 investAmount={investAmount}
+                discountAmount={
+                    didBeatGame && adminGame && adminGame.targetMoney
+                }
                 itemList={itemList}
                 itemsCount={itemsCount}
                 removeVar={() => null}
                 setNextPage={setNextPage}
+                currGame={currGame}
+                adminGame={adminGame}
+                needShowPromo={didBeatGame}
             />
             {showCustomerNote()}
             {showDoneOrderBtn()}
@@ -185,16 +191,69 @@ export default function OrdersPage({
     );
 }
 
+function PromoArea({ currGame, adminGame, needShowPromo }) {
+    const discountBackPromo = () => {
+        const targetMoney = adminGame && adminGame.targetMoney;
+        const targetPoints = adminGame && adminGame.targetPoints;
+
+        return (
+            <Fragment>
+                {needShowPromo && (
+                    <Fragment>
+                        <h1 className="text-center text-subtitle font-weight-bold text-white text-shadow">
+                            Desconto Retornado
+                        </h1>
+                        <p className="my-3 text-white text-shadow text-center text-normal font-weight-bold">
+                            Neste pedido, você ganha
+                            <br />
+                            <span
+                                className="text-pill text-shadow"
+                                style={{ background: "var(--themePLight)" }}
+                            >
+                                R$ {convertToReal(targetMoney)} de desconto
+                            </span>{" "}
+                            porque acumulou {targetPoints} pontos.
+                        </p>
+                    </Fragment>
+                )}
+            </Fragment>
+        );
+    };
+
+    return (
+        <section className="promo-area my-3">
+            {currGame === "discountBack" && discountBackPromo()}
+            <style jsx>
+                {`
+                    .promo-area {
+                        background-color: var(--themePDark);
+                        border-radius: 15px;
+                    }
+                `}
+            </style>
+        </section>
+    );
+}
+
 // HELPERS
 function handleGamesData({ currGame, adminGame, customerPoints, totalAmount }) {
     if (!currGame) return null;
     if (currGame === "discountBack") {
+        const allPoints = Number(totalAmount) + Number(customerPoints || 0);
         return {
+            currGame,
             discountBack: {
                 orderPoints: totalAmount,
                 priorPoints: customerPoints,
                 allPoints: Number(totalAmount) + Number(customerPoints),
+                didBeatGame: !adminGame
+                    ? false
+                    : allPoints >= adminGame.targetPoints,
                 ...adminGame,
+                // ...adminGame:
+                // targetPoints
+                // targetMoney
+                // perc
             },
         };
     }

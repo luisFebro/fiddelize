@@ -11,6 +11,7 @@ import { Load } from "components/code-splitting/LoadableComp";
 import ModalFullContent from "components/modals/ModalFullContent";
 import getId from "utils/getId";
 import RadiusBtn from "components/buttons/RadiusBtn";
+import { getCustomerGameData } from "pages/menu-qr/customer-catalog/customer-area/customer-panel/CustomerPanelContent";
 import useMainList from "../admin/items/useMainList";
 import useGlobalData from "./useGlobalData";
 import { ContinueBtn, TotalInvest } from "./OrdersCart";
@@ -89,11 +90,25 @@ export default function CustomerCatalog({
         orderList: [],
         // login
         loginOk: Boolean(login) || false,
+        // discount back
+        allPoints: 0,
+        customerPoints: 0,
+        didBeatGame: false,
+    });
+    const {
+        customerPoints,
+        orderList,
+        orderAmount,
+        orderCount,
+        loginOk,
+        didBeatGame,
+    } = data;
+    const [emailData, setEmailData] = useState({
         email: login,
         errorEmail: false,
     });
-    const { orderList, orderAmount, orderCount, errorEmail, loginOk } = data;
-    let { email } = data;
+    const { errorEmail } = emailData;
+    let { email } = emailData;
     email = email && email.trim();
     // loginOk and email gets undefined when initializes
     const isConnected =
@@ -103,12 +118,28 @@ export default function CustomerCatalog({
     // biz logo should be fetched with adminId when page is laoded
     useEffect(() => {
         if (login) {
-            setData((prev) => ({
+            setEmailData((prev) => ({
                 ...prev,
                 email: login,
             }));
         }
     }, [login]);
+
+    useEffect(() => {
+        if (currGame && socket) {
+            getCustomerGameData({
+                socket,
+                adminId,
+                email,
+                currGame,
+                callback: (dt) =>
+                    setData((prev) => ({
+                        ...prev,
+                        customerPoints: dt && dt.currPoints,
+                    })),
+            });
+        }
+    }, [currGame]);
 
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 
@@ -257,6 +288,7 @@ export default function CustomerCatalog({
                     customerId={customerId}
                     socket={socket}
                     isOnline={isOnline}
+                    didBeatGame={didBeatGame}
                 />
             )}
             {nextPage === "success" && (
@@ -265,6 +297,7 @@ export default function CustomerCatalog({
                     socket={socket}
                     ids={ids}
                     bizLinkName={bizLinkName}
+                    didBeatGame={didBeatGame}
                 />
             )}
         </Fragment>
@@ -278,7 +311,7 @@ export default function CustomerCatalog({
     const store = useGlobalData({
         itemData,
         loginData,
-        setMainData: setData,
+        setMainData: setEmailData,
         mainData: data,
         adminId,
         sColor,
@@ -291,6 +324,7 @@ export default function CustomerCatalog({
         loadingMainData,
         currGame,
         adminGame,
+        customerPoints,
     });
 
     return (

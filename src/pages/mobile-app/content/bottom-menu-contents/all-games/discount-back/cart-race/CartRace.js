@@ -14,6 +14,7 @@ export default function CartRace({
     targetPoints,
     perc,
     currPoints,
+    isOnline = false,
 }) {
     const [msg, setMsg] = useState("");
     const { firstName } = useData();
@@ -40,9 +41,9 @@ export default function CartRace({
             bizName,
         };
 
-        const thisMsg = pickMsg(msgOptions);
+        const thisMsg = !isOnline && pickMsg(msgOptions);
         setMsg(thisMsg);
-    }, [firstName, bizName, targetPoints, currPoints, currChallenge]);
+    }, [isOnline, firstName, bizName, targetPoints, currPoints, currChallenge]);
 
     const completePerc = getPercentage(targetPoints, currPoints);
 
@@ -50,12 +51,14 @@ export default function CartRace({
         <section className={className}>
             <div className="cart-race--root mt-3">
                 <LineRoad needDark={needDark} />
-                {msg && didUserScroll && (
+                {(isOnline || (msg && didUserScroll)) && (
                     <Fragment>
                         <QuantStatus completePerc={completePerc} />
-                        <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 text-small text-center text-purple text-shadow">
-                            {parse(msg)}
-                        </p>
+                        {!isOnline && (
+                            <p className="mot-msg animated fadeInUp text-white delay-3s font-weight-bold mx-3 mt-5 text-small text-center text-purple text-shadow">
+                                {parse(msg)}
+                            </p>
+                        )}
                     </Fragment>
                 )}
                 <style jsx global>

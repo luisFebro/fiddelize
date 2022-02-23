@@ -12,7 +12,7 @@ import PendingCard from "./cards/PendingCard";
 
 // setItems("global", { lastDatePendingOrderCard: new Date() });
 
-export default function PendingOrdersList({ onlineGames, socket }) {
+export default function PendingOrdersList({ socket }) {
     const [trigger, setTrigger] = useState(false);
     const [skip, setSkip] = useState(0);
     // const [search, setSearch] = useState("");
@@ -73,9 +73,7 @@ export default function PendingOrdersList({ onlineGames, socket }) {
         setSkip,
         isOffline,
     });
-    const showCard = (data) => (
-        <PendingCard data={data} socket={socket} onlineGames={onlineGames} />
-    );
+    const showCard = (data) => <PendingCard data={data} socket={socket} />;
 
     const listMap = list.map((data, ind) =>
         checkDetectedElem({ list, ind, indFromLast: 2 }) ? (
