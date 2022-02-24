@@ -82,6 +82,7 @@ export default function CustomerCatalog({
     // url,
 }) {
     const login = digitalMenuLogin && digitalMenuLogin[bizLinkName];
+    console.log("login", login);
 
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
@@ -109,13 +110,14 @@ export default function CustomerCatalog({
     const { errorEmail, loginOk } = emailData;
     let { email } = emailData;
     email = email && email.trim();
-    console.log("loginOk", loginOk);
-    console.log("email", email);
-    // loginOk and email gets undefined when initializes
-    const isConnected =
-        Boolean(loginOk || login) &&
-        digitalMenuSkipLogin &&
-        !digitalMenuSkipLogin[bizLinkName]; // loginOk && Boolean(email);
+
+    const handleSkip = () => {
+        if (!digitalMenuSkipLogin) return true;
+        if (digitalMenuSkipLogin[bizLinkName]) return false;
+        return true;
+    };
+
+    const isConnected = Boolean(loginOk || login) && handleSkip(); // loginOk && Boolean(email);
     // biz logo should be fetched with adminId when page is laoded
     useEffect(() => {
         if (login) {

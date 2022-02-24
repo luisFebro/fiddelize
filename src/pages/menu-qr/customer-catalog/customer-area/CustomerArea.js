@@ -27,7 +27,7 @@ export default function CustomerArea({ isOnline }) {
     const { isConnected, email, digitalMenuSkipLogin } = loginData;
 
     const [fullOpen, setFullOpen] = useState(false);
-    const skipLogin = digitalMenuSkipLogin[bizLinkName];
+    const skipLogin = digitalMenuSkipLogin && digitalMenuSkipLogin[bizLinkName];
 
     useEffect(() => {
         if (loadingMainData || skipLogin) return;
