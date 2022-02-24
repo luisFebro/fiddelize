@@ -22,15 +22,17 @@ export default function CustomerArea({ isOnline }) {
         backColor,
         pColor,
         loginData,
+        bizLinkName,
     } = useContext();
     const { isConnected, email, digitalMenuSkipLogin } = loginData;
 
     const [fullOpen, setFullOpen] = useState(false);
+    const skipLogin = digitalMenuSkipLogin[bizLinkName];
 
     useEffect(() => {
-        if (loadingMainData || digitalMenuSkipLogin) return;
+        if (loadingMainData || skipLogin) return;
         if (!isConnected) setFullOpen(true);
-    }, [loadingMainData, isConnected, digitalMenuSkipLogin]);
+    }, [loadingMainData, isConnected, skipLogin]);
 
     // const handleFullOpen = () => {
     //     setFullOpen(true);

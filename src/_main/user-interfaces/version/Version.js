@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.21.15";
+const latestVersion = "v5.21.20";
 const updateDescription = "digital menu - client-user";
 /* HISTORY
 chat 2.0 with Fidda Bot training pt4

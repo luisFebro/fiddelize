@@ -109,6 +109,8 @@ export default function CustomerCatalog({
     const { errorEmail, loginOk } = emailData;
     let { email } = emailData;
     email = email && email.trim();
+    console.log("loginOk", loginOk);
+    console.log("email", email);
     // loginOk and email gets undefined when initializes
     const isConnected =
         Boolean(loginOk || login) &&
@@ -310,8 +312,8 @@ export default function CustomerCatalog({
     const store = useGlobalData({
         itemData,
         loginData,
-        setMainData: setEmailData,
-        mainData: data,
+        setEmailData,
+        emailData,
         adminId,
         sColor,
         pColor,

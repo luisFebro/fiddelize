@@ -144,6 +144,7 @@ export default function OrdersPage({
                             ...prev,
                             openExternalOrder: getId(),
                         }));
+                    // donot require delivery info, emtpy params
                     return runSuccessOrder();
                 }}
                 position="relative"
@@ -181,10 +182,7 @@ export default function OrdersPage({
             {showCustomerNote()}
             {showDoneOrderBtn()}
             {isOnline && openExternalOrder && (
-                <AsyncExternalOrderForm
-                    setMainData={setData}
-                    runSuccessOrder={runSuccessOrder}
-                />
+                <AsyncExternalOrderForm runSuccessOrder={runSuccessOrder} />
             )}
             <div style={{ marginBottom: 150 }} />
         </section>

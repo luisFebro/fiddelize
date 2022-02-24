@@ -45,7 +45,6 @@ export default function ExternalOrderForm({
     sColor = "default",
     isDelivery = true,
     runSuccessOrder,
-    setMainData,
 }) {
     const [comp, setComp] = useState("main");
     const [fullOpen, setFullOpen] = useState(true);
@@ -133,13 +132,6 @@ export default function ExternalOrderForm({
             switchError({ errorCustomerAddress: true });
             return showToast("Informe endereço", { type: "error" });
         }
-
-        setMainData((prev) => ({
-            ...prev,
-            customerName: name,
-            customerPhone: phone,
-            customerAddress,
-        }));
 
         await saveToStorage();
     };

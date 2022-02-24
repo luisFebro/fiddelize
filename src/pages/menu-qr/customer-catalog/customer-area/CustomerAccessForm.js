@@ -32,8 +32,8 @@ export default function CustomerAccessForm({ closeModal }) {
         pColor,
         sColor,
         bizLinkName,
-        setMainData,
-        mainData,
+        setEmailData,
+        emailData,
     } = useContext();
     const { email, errorEmail, digitalMenuSkipLogin } = loginData;
 
@@ -42,7 +42,7 @@ export default function CustomerAccessForm({ closeModal }) {
     useEffect(() => {
         // handle skipLogin which returns true when visitor opens the modal after skipping
         if (email === true) {
-            setMainData((prev) => ({
+            setEmailData((prev) => ({
                 ...prev,
                 email: "",
             }));
@@ -52,7 +52,7 @@ export default function CustomerAccessForm({ closeModal }) {
     const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
 
     const switchError = (error) => {
-        setMainData((prev) => ({ ...prev, ...error }));
+        setEmailData((prev) => ({ ...prev, ...error }));
     };
 
     const handleAccess = () => {
@@ -70,14 +70,16 @@ export default function CustomerAccessForm({ closeModal }) {
             digitalMenuLogin: {
                 [bizLinkName]: email,
             },
+            // if toggle when false, it will prevent access from first-time users
             digitalMenuSkipLogin: {
-                [bizLinkName]: !digitalMenuSkipLogin,
+                [bizLinkName]:
+                    digitalMenuSkipLogin === true ? false : undefined,
             },
         });
         // save db
         if (socket) {
             socket.emit("customerAccess", { bizName, adminId, email });
-            setMainData((prev) => ({
+            setEmailData((prev) => ({
                 ...prev,
                 loginOk: true,
             }));
@@ -149,7 +151,7 @@ export default function CustomerAccessForm({ closeModal }) {
                         autoFocus
                         required
                         margin="dense"
-                        onChange={handleChange(setMainData, mainData)}
+                        onChange={handleChange(setEmailData, emailData)}
                         error={errorEmail}
                         name="email"
                         variant="standard"
