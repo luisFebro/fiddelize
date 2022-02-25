@@ -349,7 +349,7 @@ export default function useAPIList({
                     <Fragment>
                         {brand ? (
                             <p
-                                className={`text-grey font-site text-em-1 text-grey text-center font-weight-bold`}
+                                className={`d-none text-grey font-site text-em-1 text-grey text-center font-weight-bold`}
                                 style={{
                                     margin: "70px 0 100px",
                                 }}
