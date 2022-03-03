@@ -8,11 +8,12 @@ import InstructionBtn from "components/buttons/InstructionBtn";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
 import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
+import MonthlyRevenueRegisterBtn from "./monthly-revenue-register/MonthlyRevenueRegisterBtn";
 import CashflowBtn from "./cash-flow/CashflowBtn";
 
 export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
-    const [revenueMode, setRevenueMode] = useState("netProfit"); //or allTimeRevenue
+    const [revenueMode, setRevenueMode] = useState("netProfit"); // or allTimeRevenue
     const revenueAmount = mainData && mainData.revenueAmount;
 
     const allTimeRevenueAmount = mainData && mainData.allTimeRevenueAmount;
@@ -57,6 +58,11 @@ export default function PrimaryMetrics({ mainData }) {
                 {gotData
                     ? convertToReal(revenueAmount, { moneySign: true })
                     : "R$ ..."}
+                <MonthlyRevenueRegisterBtn
+                    currMonth={currMonth}
+                    handleNewCostValue={handleNewCostValue}
+                    mainData={mainData}
+                />
             </div>
             <div className="position-relative text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Custos</span>

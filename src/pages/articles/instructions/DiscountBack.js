@@ -27,10 +27,10 @@ const Body = ({ picClass, rootPath }) => {
                 oferecer desconto pela frequência das compras.
             </p>
             <p>
-                É uma tática de marketing de benefícios que nasceu e ficou
-                popular nos Estados Unidos e na Europa. Já no Brasil, vem
-                ganhando força principalmente com milhas e apps com programas de
-                fidelidade em sites de e-commerce.
+                É uma tática de marketing promocional que nasceu e ficou popular
+                nos Estados Unidos e na Europa. Já no Brasil, vem ganhando força
+                principalmente com milhas e apps com programas de fidelidade em
+                sites de e-commerce.
             </p>
             <p>
                 A tática pode ser usado na prática e encontrada em abordagens de

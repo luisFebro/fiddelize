@@ -150,7 +150,7 @@ registerRoute(
 );
 
 // TEST all page running network first to load first time
-registerRoute("/", new NetworkFirst());
+// registerRoute("/", new NetworkFirst());
 
 self.addEventListener("activate", (event) => {
     event.waitUntil(self.clients.claim());

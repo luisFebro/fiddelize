@@ -46,7 +46,7 @@ export default function DetectedApp({
                         />
                     </div>
                     <p className="mx-4 mt-3 animated fadeIn text-normal font-weight-bold text-left">
-                        Instale novos apps usando apenas seu CPF via App
+                        Instale novos apps usando apenas seu email via App
                         Instantâneo.
                     </p>
                     <div className="container-center-col mt-5">
@@ -112,7 +112,7 @@ export default function DetectedApp({
                 Uma conta. Tenha todos os seus apps.
             </p>
             <p className="text-normal font-weight-bold text-left">
-                Procure pelo seu CPF e adicione seu novo app de {bizName} sem
+                Procure pelo seu email e adicione seu novo app de {bizName} sem
                 precisar preencher novo cadastro.
             </p>
             <InstantApp

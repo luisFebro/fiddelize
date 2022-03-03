@@ -36,17 +36,19 @@ export default function Title({
             style={{ color, backgroundColor, lineHeight }}
         >
             {parse(title)}
-            <p
-                className={`${subTitleClassName} text-normal ${
-                    subTitleClassName ? "" : "font-weight-bold"
-                } mb-3`}
-                style={{
-                    color: subColor || color,
-                    marginBottom: 0,
-                }}
-            >
-                {subTitle && parse(subTitle)}
-            </p>
+            {subTitle && (
+                <p
+                    className={`${subTitleClassName} text-normal ${
+                        subTitleClassName ? "" : "font-weight-bold"
+                    } mb-3`}
+                    style={{
+                        color: subColor || color,
+                        marginBottom: 0,
+                    }}
+                >
+                    {parse(subTitle)}
+                </p>
+            )}
         </div>
     );
 }

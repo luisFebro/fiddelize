@@ -8,8 +8,11 @@ import useContext from "context";
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 function ItemCardCustomer({ card, flickity, carouselInd }, ref) {
-    const { itemData } = useContext();
-    const { handleItem, orderList } = itemData;
+    const contextData = useContext();
+    const itemData = contextData && contextData.itemData;
+
+    const handleItem = itemData && itemData.handleItem;
+    const orderList = itemData && itemData.orderList;
 
     const [data, setData] = useState({
         added: false,
@@ -20,6 +23,7 @@ function ItemCardCustomer({ card, flickity, carouselInd }, ref) {
     const itemDesc = card.adName;
 
     useEffect(() => {
+        if (!orderList || !orderList.length) return;
         const foundItem = orderList.find(
             (item) => item.adName === itemDesc && item.count >= 1
         );

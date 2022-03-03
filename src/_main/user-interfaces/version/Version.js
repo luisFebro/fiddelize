@@ -2,9 +2,10 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.21.50";
-const updateDescription = "digital menu - client-user";
+const latestVersion = "v5.22.0";
+const updateDescription = "fiddelize - new access system";
 /* HISTORY
+digital menu - client-user
 chat 2.0 with Fidda Bot training pt4
 balloonPop game pt5 and new email
 support real time chat and replace Whatsapp

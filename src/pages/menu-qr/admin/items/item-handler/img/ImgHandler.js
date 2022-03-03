@@ -31,7 +31,7 @@ export default function ImgHandler({
 
     return (
         <UploadItemArea
-            isCustomer
+            isCustomer={isCustomer}
             savedImg={savedImg}
             loadingMsg="Adicionando..."
             callback={handleUploadCallback}

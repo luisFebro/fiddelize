@@ -120,9 +120,8 @@ export default function UploadItemArea({
     const showAddImgArea = () => (
         <section className="container-center-col" style={{ minHeight: 250 }}>
             {isCustomer ? (
-                <p className="text-small text-white text-shadow">
-                    Falha ao carregar
-                </p>
+                //   Falha ao carregar
+                <p className="text-small text-white text-shadow"></p>
             ) : (
                 <Fragment>
                     <input

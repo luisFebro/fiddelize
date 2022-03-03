@@ -82,7 +82,6 @@ export default function CustomerCatalog({
     // url,
 }) {
     const login = digitalMenuLogin && digitalMenuLogin[bizLinkName];
-    console.log("login", login);
 
     const [nextPage, setNextPage] = useState("menu");
     const [data, setData] = useState({
