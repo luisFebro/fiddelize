@@ -1,10 +1,10 @@
 import { useState } from "react";
-import MonthlyCostsList from "./monthly-costs-list/MonthlyCostsList";
-import AddCostBtn from "./add-cost-btn/AddCostBtn";
+import MonthlyRevenueList from "./monthly-revenue-list/MonthlyRevenueList";
+import AddRevenueBtn from "./add-revenue-btn/AddRevenueBtn";
 
 export default function MonthlyRevenueRegisterContent({
     currMonth = "...",
-    handleNewCostValue,
+    handleNewRevenueValue,
     mainData,
 }) {
     const [newCardSet, setNewCardSet] = useState([]);
@@ -21,19 +21,19 @@ export default function MonthlyRevenueRegisterContent({
         </div>
     );
 
-    async function handleNewCostCard(newCard) {
-        await handleNewCostValue(newCard.value);
+    async function handleNewRevenueCard(newCard) {
+        await handleNewRevenueValue(newCard.value);
         await setNewCardSet((prevCardSet) => [newCard, ...prevCardSet]);
     }
 
     return (
         <section>
             {showTitle()}
-            <AddCostBtn
-                handleNewCostCard={handleNewCostCard}
+            <AddRevenueBtn
+                handleNewRevenueCard={handleNewRevenueCard}
                 mainData={mainData}
             />
-            <MonthlyCostsList
+            <MonthlyRevenueList
                 newCardSet={newCardSet}
                 allTimeCostAvgAmount={allTimeCostAvgAmount}
             />

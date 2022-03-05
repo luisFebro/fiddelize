@@ -1,8 +1,8 @@
 import convertToReal from "utils/numbers/convertToReal";
 import { calendar } from "utils/dates/dateFns";
-import PhotoBtn from "./photo/PhotoBtn";
+// import PhotoBtn from "./photo/PhotoBtn";
 
-export default function MonthlyCostsCard({ data }) {
+export default function MonthlyRevenueCard({ data }) {
     const { _id, desc, value, createdAt, receiptImg } = data;
 
     const investedValue = convertToReal(value, { moneySign: true });
@@ -14,7 +14,7 @@ export default function MonthlyCostsCard({ data }) {
             savedImg: receiptImg,
         };
 
-        return <PhotoBtn modalData={{ ...uploadData }} />;
+        return <div />; //<PhotoBtn modalData={{ ...uploadData }} />;
     };
 
     return (

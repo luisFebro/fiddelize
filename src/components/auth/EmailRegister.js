@@ -15,7 +15,6 @@ import getVar, { removeStore } from "init/var";
 // import { CLIENT_URL } from "config/clientUrl";
 import sendEmail from "hooks/email/sendEmail";
 import Title from "../Title";
-import { faStyle } from "../buttons/material-ui/ButtonMulti";
 import showToast from "../toasts";
 // import CheckBoxForm from "../CheckBoxForm";
 // import ReCaptchaCheckbox from "../ReCaptcha";
@@ -61,7 +60,7 @@ export default function Register({ logo, role = "cliente-admin" }) {
         filter,
         // showAgreement: false,
     });
-    console.log("data FUCK", data);
+
     const {
         clientAdminData,
         email,

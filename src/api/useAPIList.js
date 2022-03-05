@@ -120,11 +120,13 @@ export default function useAPIList({
 
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
+        const responseData = response && response.data;
+        const responseList = responseData.list || [];
 
         setData((prev) => {
             const handledListUnion = disableDupFilter
-                ? [...prev.list, ...response.data.list]
-                : [...prev.list, ...response.data.list].filter(
+                ? [...prev.list, ...responseList]
+                : [...prev.list, ...responseList].filter(
                       (val, ind, arr) =>
                           arr.findIndex(
                               (t) => t[filterId] === val[filterId]
@@ -133,10 +135,10 @@ export default function useAPIList({
 
             return {
                 ...prev,
-                list: updateOnly ? response.data.list : handledListUnion,
-                listTotal: response.data.listTotal,
-                chunksTotal: response.data.chunksTotal,
-                content: response.data.content,
+                list: updateOnly ? responseList : handledListUnion,
+                listTotal: responseData && response.data.listTotal,
+                chunksTotal: responseData && response.data.chunksTotal,
+                content: responseData && response.data.content,
             };
         });
 

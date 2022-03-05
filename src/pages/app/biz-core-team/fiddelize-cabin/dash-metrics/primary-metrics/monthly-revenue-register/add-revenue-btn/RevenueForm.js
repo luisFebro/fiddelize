@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { convertToDollar } from "utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -7,12 +8,10 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import showToast from "components/toasts";
 import handleChange from "utils/form/use-state/handleChange";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
-import getAPI, { addFiddelizeCosts } from "api";
+import getAPI, { addFiddelizeRevenue } from "api";
 import moneyMaskBr from "utils/validation/masks/moneyMaskBr";
 import useData from "init";
-import converToReal, { convertToDollar } from "utils/numbers/convertToReal";
 import getPercentage from "utils/numbers/getPercentage";
-import SelectField from "components/fields/SelectField";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -23,10 +22,10 @@ const getStyles = () => ({
     },
 });
 
-export default function CostForm({
+export default function RevenueForm({
     mainData,
-    switchCostPanel,
-    handleNewCostCard,
+    switchRevenuePanel,
+    handleNewRevenueCard,
 }) {
     const [data, setData] = useState({
         desc: "",
@@ -34,16 +33,9 @@ export default function CostForm({
         isCAC: false,
         alreadySalary: false,
     });
-    const { desc, value, alreadySalary, isCAC } = data;
+    const { desc, value } = data;
 
     const availableCash = mainData && mainData.allTimeCashAmount;
-    const alreadyCurrMonthWithdrawal = mainData
-        ? mainData.alreadyCurrMonthWithdrawal
-        : null;
-    const CEO_PERC_SALARY = 15;
-    const ceoSalary = getPercentage(availableCash, CEO_PERC_SALARY, {
-        mode: "value",
-    });
 
     const styles = getStyles();
     const [firstName] = useData(["firstName"]);
@@ -65,21 +57,20 @@ export default function CostForm({
             const newCostCard = {
                 desc,
                 value: convertToDollar(formattedValue),
-                isCAC,
             };
 
             await getAPI({
                 method: "post",
-                url: addFiddelizeCosts(),
+                url: addFiddelizeRevenue(),
                 body: newCostCard,
             });
 
             // update by adding this new card to the list of loaded cards
-            await handleNewCostCard(newCostCard);
+            await handleNewRevenueCard(newCostCard);
             // close panel
-            await switchCostPanel(false);
+            await switchRevenuePanel(false);
 
-            showToast(`Novo Custo registrado, ${firstName}!`, {
+            showToast(`Nova Receita registrada, ${firstName}!`, {
                 type: "success",
             });
         })();
@@ -100,126 +91,6 @@ export default function CostForm({
         </section>
     );
 
-    const handleSalaryWithdrawal = async () => {
-        showToast(`Retirando e registrando salário! Um momento...`);
-
-        const newCostCard = {
-            desc: "salário",
-            value: ceoSalary,
-            isSalary: true,
-        };
-
-        await getAPI({
-            method: "post",
-            url: addFiddelizeCosts(),
-            body: newCostCard,
-        });
-
-        await setData((prev) => ({
-            ...prev,
-            alreadySalary: true,
-        }));
-        await handleNewCostCard(newCostCard);
-
-        showToast(`Salário Retirado, ${firstName}!`, { type: "success" });
-    };
-
-    const showSalaryArea = () => {
-        if (alreadyCurrMonthWithdrawal === null) {
-            return (
-                <h2 className="text-center text-purple text-subtitle font-weight-bold">
-                    Carregando...
-                </h2>
-            );
-        }
-
-        if (alreadyCurrMonthWithdrawal === false) {
-            return (
-                <section
-                    className="text-purple"
-                    style={{
-                        backgroundColor: "rgb(148, 224, 148)",
-                        padding: "30px 0",
-                        borderRadius: "25px",
-                    }}
-                >
-                    <h2
-                        className="text-center text-black text-subtitle font-weight-bold"
-                        style={{
-                            lineHeight: "25px",
-                        }}
-                    >
-                        Salário Mensal
-                        <br />
-                        Disponível
-                    </h2>
-                    <div className="container-center">
-                        <p
-                            className="mt-3 text-pill text-normal text-center font-weight-bold"
-                            style={{
-                                backgroundColor: "green",
-                            }}
-                        >
-                            {converToReal(ceoSalary, { moneySign: true })} (
-                            {CEO_PERC_SALARY}%)
-                        </p>
-                    </div>
-                    <section className="container-center my-4">
-                        <ButtonFab
-                            onClick={handleSalaryWithdrawal}
-                            disabled={false}
-                            title="Retirar"
-                            color="var(--mainWhite)"
-                            size="large"
-                            backgroundColor="green"
-                            variant="extended"
-                        />
-                    </section>
-                </section>
-            );
-        }
-
-        return (
-            <h2
-                className="text-center text-grey text-normal font-weight-bold"
-                style={{
-                    backgroundColor: "var(--themeBackground--white)",
-                    borderRadius: "25px",
-                    marginTop: "100px",
-                }}
-            >
-                Salário {ceoSalary}% do mês já retirado.
-            </h2>
-        );
-    };
-
-    const showCaCSelect = () => {
-        const handleSelected = (val) => {
-            setData((prev) => ({
-                ...prev,
-                isCAC: val,
-            }));
-        };
-
-        const valuesArray = [
-            { val: true, showVal: "Sim" },
-            { val: false, showVal: "Não" },
-        ];
-
-        const defaultSelected = false;
-
-        return (
-            <div className="mt-3">
-                É CAC (custo venda/marketing)?
-                <SelectField
-                    title={defaultSelected}
-                    valuesArray={valuesArray}
-                    handleValue={handleSelected}
-                />
-            </div>
-        );
-    };
-
     return (
         <form
             style={{
@@ -232,7 +103,7 @@ export default function CostForm({
             onBlur={null}
         >
             <h2 className="text-center text-subtitle font-weight-bold">
-                Novo Custo
+                Nova Receita
             </h2>
             <div id="field1" className="mt-3">
                 Descrição:
@@ -284,13 +155,7 @@ export default function CostForm({
                     }}
                 />
             </div>
-            {showCaCSelect()}
             {showCTA()}
-            {!alreadySalary && showSalaryArea()}
-            <p className="text-grey font-site text-em-0-9 mx-3 my-3">
-                Quanto disponível, é verificado se há alguma transação de
-                salário não adicionada no mês atual.
-            </p>
         </form>
     );
 }

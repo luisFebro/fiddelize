@@ -13,6 +13,8 @@ import CashflowBtn from "./cash-flow/CashflowBtn";
 
 export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
+    const [newRevenueValue, setNewRevenueValue] = useState(0);
+
     const [revenueMode, setRevenueMode] = useState("netProfit"); // or allTimeRevenue
     const revenueAmount = mainData && mainData.revenueAmount;
 
@@ -26,19 +28,24 @@ export default function PrimaryMetrics({ mainData }) {
         },
     });
 
+    const finalTotalRevenue =
+        (data && data.transactionsRevenueAmount) || newRevenueValue
+            ? data.transactionsRevenueAmount + newRevenueValue
+            : 0;
+
     const finalTotalCost =
         (data && data.transactionsAmount) || newCostValue
             ? data.transactionsAmount + newCostValue
             : 0;
 
     const monthlyCosts = loading ? "..." : finalTotalCost;
-    const profitValue = revenueAmount - monthlyCosts; // Margem  = ( Lucro / Vendas ) * 100
+    const profitValue = finalTotalRevenue - monthlyCosts; // Margem  = ( Lucro / Vendas ) * 100
 
-    let netProfitMargin = getPercentage(revenueAmount, profitValue); // ((profitValue / revenue) * 100).toFixed(1)
+    let netProfitMargin = getPercentage(finalTotalRevenue, profitValue); // ((profitValue / revenue) * 100).toFixed(1)
     netProfitMargin = netProfitMargin < 0 ? 0 : netProfitMargin;
 
     const currMonth = getMonthNowBr();
-    const gotData = revenueAmount || revenueAmount === 0;
+    const gotData = finalTotalRevenue || finalTotalRevenue === 0;
 
     const {
         color: colorNetProfitMargin,
@@ -50,17 +57,21 @@ export default function PrimaryMetrics({ mainData }) {
         setNewCostValue((prevValue) => prevValue + newValue);
     }
 
+    async function handleNewRevenueValue(newValue) {
+        setNewRevenueValue((prevValue) => prevValue + newValue);
+    }
+
     const showRevenueAndCost = ({ currMonth }) => (
         <section className="d-flex text-purple justify-content-between mx-3">
             <div className="text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Vendas</span>
                 <br />
                 {gotData
-                    ? convertToReal(revenueAmount, { moneySign: true })
+                    ? convertToReal(finalTotalRevenue, { moneySign: true })
                     : "R$ ..."}
                 <MonthlyRevenueRegisterBtn
                     currMonth={currMonth}
-                    handleNewCostValue={handleNewCostValue}
+                    handleNewRevenueValue={handleNewRevenueValue}
                     mainData={mainData}
                 />
             </div>
@@ -68,7 +79,7 @@ export default function PrimaryMetrics({ mainData }) {
                 <span className="font-site text-em-1-1">Custos</span>
                 <br />
                 {monthlyCosts === "..."
-                    ? "..."
+                    ? "R$ ..."
                     : convertToReal(monthlyCosts, { moneySign: true })}
                 <MonthlyCostRegisterBtn
                     currMonth={currMonth}

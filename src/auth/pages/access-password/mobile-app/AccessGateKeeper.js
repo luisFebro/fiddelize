@@ -20,30 +20,26 @@ export default function AccessGateKeeper({
     accessClassname,
 }) {
     const [data, setData] = useState({
-        twoLastCpfDigits: "--",
+        email: "---",
         rememberAccess: true,
     });
-    const { twoLastCpfDigits, rememberAccess } = data;
+    const { email, rememberAccess } = data;
     const { themeBackColor } = useBizData();
     const { txtColorStyle } = getColor(themeBackColor);
 
     useEffect(() => {
-        getVars(["twoLastCpfDigits", "rememberAccess"], "user").then(
-            (dataList) => {
-                const [cpfDigits, rememberAccess] = dataList;
-                setData((prev) => ({
-                    ...prev,
-                    twoLastCpfDigits: cpfDigits,
-                    rememberAccess,
-                }));
-            }
-        );
+        getVars(["email", "rememberAccess"], "user").then((dataList) => {
+            const [cpfDigits, rememberAccess] = dataList;
+            setData((prev) => ({
+                ...prev,
+                email: cpfDigits,
+                rememberAccess,
+            }));
+        });
     }, []);
 
     const showLoginName = () => (
-        <section className={`text-normal ${txtColorStyle}`}>
-            CPF: ***.***.***-{twoLastCpfDigits}
-        </section>
+        <section className={`text-normal ${txtColorStyle}`}>{email}</section>
     );
 
     const showAccessSwitcher = () => (

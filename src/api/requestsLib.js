@@ -128,6 +128,12 @@ export const readFiddelizeCosts = () =>
 export const addFiddelizeCosts = () =>
     `${ROOT}/admin/fiddelize-cabin/add-costs`;
 
+export const addFiddelizeRevenue = () =>
+    `${ROOT}/admin/fiddelize-cabin/add-revenue`;
+
+export const readFiddelizeRevenue = () =>
+    `${ROOT}/admin/fiddelize-cabin/read-revenue`;
+
 // personal finance usage
 export const readFinanceTransactions = () =>
     `${ROOT}/admin/finance/transaction-history`; // GET

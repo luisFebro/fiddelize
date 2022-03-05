@@ -3,7 +3,7 @@ import { useBizData } from "init";
 import LoadableVisible from "components/code-splitting/LoadableVisible";
 import DashSectionTitle from "../../DashSectionTitle";
 import ClientReviews from "./clients-reviews/ClientsReviews";
-import ClientsBirthdayMsgBtn from "./clients-birthday-msg/ClientsBirthdayMsgBtn";
+// import ClientsBirthdayMsgBtn from "./clients-birthday-msg/ClientsBirthdayMsgBtn";
 
 const AsyncRankingPondium = LoadableVisible({
     loading: true,
@@ -46,33 +46,6 @@ export default function DashClients() {
                 padding=" "
             />
             <AsyncRankingPondium />
-            <section className="position-relative">
-                <div className="automatic-fiddelize-robot position-absolute animated fadeInUp delay-3s slow">
-                    <img
-                        className="shadow-elevation-black animated fadeInUp slow delay-1s"
-                        src="/img/icons/auto-fiddelize-robot.svg"
-                        height="auto"
-                        width={100}
-                        alt="robô fiddelize de automação"
-                    />
-                    <style jsx>
-                        {`
-                            .automatic-fiddelize-robot {
-                                top: -30px;
-                                left: -30px;
-                            }
-                        `}
-                    </style>
-                </div>
-                <Title
-                    title="&#187; Aniversário de clientes"
-                    subTitle="Envie automaticamente uma mensagem para todos seus clientes lembrarem da sua marca neste dia importante para eles"
-                    subTitleClassName="text-small font-weight-bold"
-                    color="var(--themeP)"
-                    padding=" "
-                />
-            </section>
-            <ClientsBirthdayMsgBtn />
             <hr className="lazer-purple" />
             <Title
                 title="&#187; Clientes do seu clube de compras"
@@ -83,3 +56,35 @@ export default function DashClients() {
         </div>
     );
 }
+
+/* ARCHIVES
+
+<section className="position-relative">
+    <div className="automatic-fiddelize-robot position-absolute animated fadeInUp delay-3s slow">
+        <img
+            className="shadow-elevation-black animated fadeInUp slow delay-1s"
+            src="/img/icons/auto-fiddelize-robot.svg"
+            height="auto"
+            width={100}
+            alt="robô fiddelize de automação"
+        />
+        <style jsx>
+            {`
+                .automatic-fiddelize-robot {
+                    top: -30px;
+                    left: -30px;
+                }
+            `}
+        </style>
+    </div>
+    <Title
+        title="&#187; Aniversário de clientes"
+        subTitle="Envie automaticamente uma mensagem para todos seus clientes lembrarem da sua marca neste dia importante para eles"
+        subTitleClassName="text-small font-weight-bold"
+        color="var(--themeP)"
+        padding=" "
+    />
+</section>
+<ClientsBirthdayMsgBtn />
+
+ */

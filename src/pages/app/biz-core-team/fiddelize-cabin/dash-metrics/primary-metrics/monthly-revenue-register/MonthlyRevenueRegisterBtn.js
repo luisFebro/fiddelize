@@ -23,7 +23,7 @@ const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 export default function MonthlyRevenueRegisterBtn({
     size = "medium",
     currMonth,
-    handleNewCostValue,
+    handleNewRevenueValue,
     mainData,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
@@ -39,7 +39,7 @@ export default function MonthlyRevenueRegisterBtn({
     const AsyncComp = (
         <Async
             currMonth={currMonth}
-            handleNewCostValue={handleNewCostValue}
+            handleNewRevenueValue={handleNewRevenueValue}
             mainData={mainData}
         />
     );

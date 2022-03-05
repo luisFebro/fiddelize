@@ -32,9 +32,7 @@ export default function GatewayAndCTAs({
                     } font-weight-bold`}
                 >
                     <strong className="text-normal font-weight-bold">
-                        {isSessionOver
-                            ? "Sessão por:"
-                            : `${getFirstName(fullName)}, escolha opção:`}
+                        {isSessionOver ? "Sessão por:" : "Escolha opção:"}
                     </strong>
                     <br />
                 </span>
@@ -128,3 +126,8 @@ export default function GatewayAndCTAs({
         </section>
     );
 }
+
+/*
+
+${getFirstName(fullName)}
+ */

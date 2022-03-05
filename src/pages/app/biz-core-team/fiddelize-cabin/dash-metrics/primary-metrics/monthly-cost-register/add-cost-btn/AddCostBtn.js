@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import CostForm from "./CostForm";
 
 export default function AddCostBtn({ handleNewCostCard, mainData }) {

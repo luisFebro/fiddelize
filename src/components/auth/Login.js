@@ -1,40 +1,76 @@
+import { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { useGlobalContext } from "context";
 import Card from "@material-ui/core/Card";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import EmailIcon from "@material-ui/icons/Email";
 import { doLogin } from "auth/api";
 import isThisApp from "utils/window/isThisApp";
 import { useBizData } from "init";
 import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "api/frequent";
-import { removeVar, getVars, removeVars } from "init/var";
+import { setVar, removeVar, getVars, removeVars } from "init/var";
 import getColor from "styles/txt";
-import { setVar } from "init/var";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import handleChange from "utils/form/use-state/handleChange";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RadiusBtn from "../buttons/RadiusBtn";
-import KeypadButton from "../modals/keypad";
 import Title from "../Title";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 import showToast from "../toasts";
+// import KeypadButton from "../modals/keypad";
 
 const isApp = isThisApp();
+const isSmall = window.Helper.isSmallScreen();
+
+const getStyles = () => ({
+    fieldForm: {
+        backgroundColor: "var(--mainWhite)",
+        color: "var(--themeP)",
+        zIndex: 2000,
+        font: "normal 1em Poppins, sans-serif",
+    },
+    helperFromField: {
+        color: "grey",
+        fontFamily: "Poppins, sans-serif",
+        fontSize: isSmall ? ".8em" : ".6em",
+    },
+    card: {
+        margin: "auto",
+        width: "90%",
+        maxWidth: isSmall ? "" : 360,
+        boxShadow: "0 31px 120px -6px rgba(0, 0, 0, 0.35)",
+    },
+});
 
 function Login({
-    history,
     setLoginOrRegister,
     needAppRegister,
     rootClassname,
     isBizTeam,
+    history,
 }) {
     needAppRegister = needAppRegister === "..." ? false : needAppRegister;
 
+    const styles = getStyles();
     const { uify } = useGlobalContext();
+
+    const [data, setData] = useState({
+        email: "",
+    });
+
+    const { email } = data;
+
+    // detecting field errors
+    const [fieldError, setFieldError] = useState(null);
+    const errorEmail = fieldError && fieldError.email;
 
     const { themeSColor, themeBackColor } = useBizData();
 
     const showTitle = () => (
         <Title
-            title="Acessar Conta"
+            title="Acesso"
             color="var(--mainWhite)"
             padding="py-2 px-2"
             needShadow
@@ -42,21 +78,6 @@ function Login({
                 isBizTeam ? "default" : themeSColor
             })`}
         />
-    );
-
-    const showKeypadButton = () => (
-        <div className="mt-3 mb-2 animated fadeInDown normal delay-1s d-flex justify-content-center">
-            <KeypadButton
-                title="Informe CPF"
-                titleIcon={<FontAwesomeIcon icon="list-ol" />}
-                keyboardType="cpf"
-                confirmFunction={signInUserData}
-                confirmPayload={{ history, uify }}
-                backgroundColor={`var(--themeSDark--${
-                    isBizTeam ? "default" : themeSColor
-                })`}
-            />
-        </div>
     );
 
     const handleLoginAndRegister = () => {
@@ -89,6 +110,72 @@ function Login({
         </div>
     );
 
+    const showForm = () => (
+        <form
+            style={{ margin: "auto", width: "90%" }}
+            className="mb-5 text-p text-normal"
+            onBlur={() => setFieldError(null)}
+        >
+            <section id="field1">
+                <div className="mt-3">
+                    Email
+                    <TextField
+                        required
+                        margin="dense"
+                        onChange={handleChange(setData, data)}
+                        onKeyPress={(e) => null}
+                        onBlur={() => null}
+                        // handleNextField(e, "field4", { event: "onBlur" })
+                        // }
+                        error={!!errorEmail}
+                        name="email"
+                        variant="outlined"
+                        value={email}
+                        type="email"
+                        autoComplete="off"
+                        fullWidth
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <EmailIcon />
+                                </InputAdornment>
+                            ),
+                            style: styles.fieldForm,
+                            id: "value4",
+                        }}
+                    />
+                </div>
+            </section>
+        </form>
+    );
+
+    const dataUser = {
+        uify,
+        history,
+    };
+
+    const showButtonActions = () => (
+        <div className="my-4 mx-5 container-center">
+            <ButtonFab
+                title="Acessar"
+                width="100%"
+                iconFontAwesome={
+                    <FontAwesomeIcon
+                        icon="paper-plane"
+                        style={{
+                            fontSize: 30,
+                        }}
+                    />
+                }
+                backgroundColor="var(--themeSDark)"
+                onClick={() => signInUserData(email, dataUser)}
+                position="relative"
+                variant="extended"
+                size="large"
+            />
+        </div>
+    );
+
     return (
         <div className={rootClassname || "my-5"}>
             <Card
@@ -96,7 +183,8 @@ function Login({
                 className="animated zoomIn fast card-elevation"
             >
                 {showTitle()}
-                {showKeypadButton()}
+                {showForm()}
+                {showButtonActions()}
             </Card>
             {isApp && needAppRegister && showRegisterForm()}
         </div>
@@ -105,7 +193,7 @@ function Login({
 
 export default withRouter(Login);
 
-export async function signInUserData(cpfValue, options = {}) {
+export async function signInUserData(emailValue, options = {}) {
     const {
         uify,
         history,
@@ -114,7 +202,7 @@ export async function signInUserData(cpfValue, options = {}) {
     } = options;
 
     const objToSend = {
-        cpf: cpfValue,
+        email: emailValue,
         appPanelUserId,
         appPanelRole,
     };
@@ -244,3 +332,22 @@ async function handleCliUserPath(history) {
 n1: LESSON: autoComplete is "off" to not allow the browser to autocomplete with suggestions of other searches.other
 Disablign this, can enhances security since it does not read past delicate infos.
 */
+
+/* ARCHIVES
+
+const showKeypadButton = () => (
+    <div className="mt-3 mb-2 animated fadeInDown normal delay-1s d-flex justify-content-center">
+        <KeypadButton
+            title="Informe CPF"
+            titleIcon={<FontAwesomeIcon icon="list-ol" />}
+            keyboardType="cpf"
+            confirmFunction={signInUserData}
+            confirmPayload={{ history, uify }}
+            backgroundColor={`var(--themeSDark--${
+                isBizTeam ? "default" : themeSColor
+            })`}
+        />
+    </div>
+);
+
+ */
