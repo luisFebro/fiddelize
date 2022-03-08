@@ -2,11 +2,8 @@ import { Fragment, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
-import MoneyIcon from "@material-ui/icons/Money";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import handleChange from "utils/form/use-state/handleChange";
-import { handleNextField } from "utils/form/kit";
-import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
 import ButtonMulti, {
     faStyle,
 } from "components/buttons/material-ui/ButtonMulti";
@@ -32,12 +29,10 @@ const getStyles = () => ({
 
 export default function AsyncPasswordRecoverContent({ role }) {
     const [data, setData] = useState({
-        cpf: "",
         email: "",
         visibleForm: true,
     });
-    const { cpf, email, visibleForm } = data;
-    const cpfValue = autoCpfMaskBr(cpf);
+    const { email, visibleForm } = data;
 
     const styles = getStyles();
 
@@ -58,47 +53,6 @@ export default function AsyncPasswordRecoverContent({ role }) {
             className="text-p text-normal"
             onBlur={null}
         >
-            <div id="field1" className="mt-3">
-                CPF
-                <TextField
-                    required
-                    margin="dense"
-                    onChange={handleChange(setData, data)}
-                    error={null}
-                    name="cpf"
-                    variant="standard"
-                    onKeyPress={(e) => {
-                        // Not working
-                        handleNextField(e, "field1", {
-                            callback: () => {
-                                setData({ ...data, cpf: autoCpfMaskBr(cpf) });
-                            },
-                        });
-                    }}
-                    onBlur={(e) => {
-                        setData({ ...data, cpf: autoCpfMaskBr(cpf) });
-                        // handleNextField(e, "field1", {
-                        //     callback: () => {
-                        //     },
-                        // });
-                    }}
-                    value={cpfValue}
-                    type="tel"
-                    autoComplete="off"
-                    helperText="Digite apenas números."
-                    FormHelperTextProps={{ style: styles.helperFromField }}
-                    fullWidth
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <MoneyIcon />
-                            </InputAdornment>
-                        ),
-                        style: styles.fieldForm,
-                        id: "value2",
-                    }}
-                />
-            </div>
             <div id="field2" className="mt-3">
                 Email
                 <TextField
@@ -130,9 +84,11 @@ export default function AsyncPasswordRecoverContent({ role }) {
 
     const handlePassRecover = () => {
         (async () => {
+            if (!email)
+                return showToast("Informe email válido.", { type: "error" });
+
             const body = {
                 userId,
-                cpf,
                 email,
                 role,
             };

@@ -338,9 +338,9 @@ Disablign this, can enhances security since it does not read past delicate infos
 const showKeypadButton = () => (
     <div className="mt-3 mb-2 animated fadeInDown normal delay-1s d-flex justify-content-center">
         <KeypadButton
-            title="Informe CPF"
+            title="Informe CPfsdF"
             titleIcon={<FontAwesomeIcon icon="list-ol" />}
-            keyboardType="cpf"
+            keyboardType="cpdsf"
             confirmFunction={signInUserData}
             confirmPayload={{ history, uify }}
             backgroundColor={`var(--themeSDark--${

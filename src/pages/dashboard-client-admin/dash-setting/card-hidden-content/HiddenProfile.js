@@ -10,7 +10,7 @@ import CreatedAtBr from "../../CreatedAtBr";
 import { readUser, updateUser } from "api/frequent";
 import showToast from "../../../../components/toasts";
 import isValidName from "../../../../utils/validation/isValidName";
-import autoPhoneMask from "../../../../utils/validation/masks/autoPhoneMask";
+// import autoPhoneMask from "../../../../utils/validation/masks/autoPhoneMask";
 import isKeyPressed from "../../../../utils/event/isKeyPressed";
 import validatePhone from "../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../utils/validation/validateEmail";
@@ -24,15 +24,14 @@ HiddenProfile.propTypes = {
 export default function HiddenProfile({ userData }) {
     const [data, setData] = useState({
         name: userData.name,
-        cpf: "",
-        birthday: "",
         email: "",
-        phone: "",
-        gender: "",
+        // cfspf: "",
+        // birthday: "",
+        // phone: "",
+        // gender: "",
     });
 
-    const { name, cpf, birthday, email, phone, gender } = data;
-    const phoneValue = autoPhoneMask(phone);
+    const { name, email, gender } = data;
 
     const [error, setError] = useState("");
 
@@ -83,11 +82,11 @@ export default function HiddenProfile({ userData }) {
             return setError("name");
         }
 
-        if (!validatePhone(phone))
-            return showToast(
-                "Formato telefone inválido. Digita o número com DDD ex: (95) 97777-9999",
-                { type: "error", callback: () => setError("phone") }
-            );
+        // if (!validatePhone(phone))
+        //     return showToast(
+        //         "Formato telefone inválido. Digita o número com DDD ex: (95) 97777-9999",
+        //         { type: "error", callback: () => setError("phone") }
+        //     );
         if (!validateEmail(email))
             return showToast(
                 "Email inválido. Verifique caracteres e tente novamente",
@@ -142,7 +141,7 @@ export default function HiddenProfile({ userData }) {
                         value={name}
                     />
                 </div>
-                <div className="mt-4 margin-auto-95 text-normal">
+                {/*<div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">CPF</p>
                     <TextField
                         InputProps={{
@@ -157,8 +156,8 @@ export default function HiddenProfile({ userData }) {
                         value={cpf}
                         disabled
                     />
-                </div>
-                <div className="mt-4 margin-auto-95 text-normal">
+                </div>*/}
+                {/* <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Contato</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -204,7 +203,7 @@ export default function HiddenProfile({ userData }) {
                         value={email}
                         fullWidth
                     />
-                </div>
+                </div>*/}
                 <div className="d-none mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Forma de Tratamento</p>
                     <TextField

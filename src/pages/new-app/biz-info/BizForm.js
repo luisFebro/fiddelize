@@ -12,7 +12,7 @@ import { getVars, setVars } from "init/var";
 import showToast from "components/toasts";
 import isKeyPressed from "utils/event/isKeyPressed";
 import { useLocation } from "react-router-dom";
-import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
+import generateBizCodeName from "../../download-app/Ω-archives/instant-app/helpers/generateBizCodeName";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 // import { ROOT } from "api/root";
 // import AutoCompleteSearch from "components/search/AutoCompleteSearch";

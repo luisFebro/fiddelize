@@ -4,12 +4,11 @@ const dbCommonFieldsTrans = {
     name: "nome",
     password: "senha",
     user: "usuário",
-    email: "email",
-    whatsapp: "whatsapp",
-    cpf: "cpf",
-    birthday: "data de aniversário",
-    phone: "contato",
-    maritalStatus: "estado civil",
+    // whatsapp: "whatsapp",
+    // birthday: "data de aniversário",
+    // email: "email",
+    // phone: "contato",
+    // cdsapf: "cpf",
 };
 
 const findAndConvertFieldNameToPtBr = (key) => {

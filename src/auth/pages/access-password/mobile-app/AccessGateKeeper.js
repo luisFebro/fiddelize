@@ -29,10 +29,10 @@ export default function AccessGateKeeper({
 
     useEffect(() => {
         getVars(["email", "rememberAccess"], "user").then((dataList) => {
-            const [cpfDigits, rememberAccess] = dataList;
+            const [thisEmail, rememberAccess] = dataList;
             setData((prev) => ({
                 ...prev,
-                email: cpfDigits,
+                email: thisEmail,
                 rememberAccess,
             }));
         });

@@ -3,7 +3,7 @@ import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import OfflineBoltIcon from "@material-ui/icons/OfflineBolt";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
-import InstantApp from "../instant-app/InstantApp";
+// import InstantApp from "../instant-app/InstantApp";
 
 const iconStyle = {
     fontSize: "140px",
@@ -45,30 +45,33 @@ export default function DetectedApp({
                             alt="app fiddelize no dispositivo"
                         />
                     </div>
-                    <p className="mx-4 mt-3 animated fadeIn text-normal font-weight-bold text-left">
+                    <p className="d-none mx-4 mt-3 animated fadeIn text-normal font-weight-bold text-left">
                         Instale novos apps usando apenas seu email via App
                         Instantâneo.
                     </p>
                     <div className="container-center-col mt-5">
-                        <ButtonFab
-                            title="Novo App Instantâneo"
-                            color={
-                                txtPColor && txtPColor.includes("text-white")
-                                    ? "#fff"
-                                    : "#000"
-                            }
-                            backgroundColor={`var(--themeSDark--${
-                                pColor || "default"
-                            })`}
-                            onClick={() => {
-                                setCurrComp("instant");
-                            }}
-                            position="relative"
-                            variant="extended"
-                            size="medium"
-                            needBtnShadow
-                            shadowColor="white"
-                        />
+                        <div className="d-none">
+                            <ButtonFab
+                                title="Novo App Instantâneo"
+                                color={
+                                    txtPColor &&
+                                    txtPColor.includes("text-white")
+                                        ? "#fff"
+                                        : "#000"
+                                }
+                                backgroundColor={`var(--themeSDark--${
+                                    pColor || "default"
+                                })`}
+                                onClick={() => {
+                                    setCurrComp("instant");
+                                }}
+                                position="relative"
+                                variant="extended"
+                                size="medium"
+                                needBtnShadow
+                                shadowColor="white"
+                            />
+                        </div>
                         <div className="mt-3">
                             <ButtonMulti
                                 title="Não achou? continue para baixar"
@@ -101,7 +104,7 @@ export default function DetectedApp({
     );
 
     const showInstantAccount = () => (
-        <section className="mt-5" style={{ marginBottom: 150 }}>
+        <section className="d-none mt-5" style={{ marginBottom: 150 }}>
             <div className="container-center">
                 <OfflineBoltIcon style={{ ...iconStyle }} />
             </div>
@@ -115,13 +118,13 @@ export default function DetectedApp({
                 Procure pelo seu email e adicione seu novo app de {bizName} sem
                 precisar preencher novo cadastro.
             </p>
-            <InstantApp
+            {/*<InstantApp
                 payload={instantAccountPayload}
                 txtPColor={txtPColor}
                 pColor={pColor}
                 setSuccess={setSuccess}
                 setMainData={setData}
-            />
+            />*/}
         </section>
     );
 

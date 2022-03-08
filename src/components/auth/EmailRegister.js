@@ -50,7 +50,7 @@ const getStyles = () => ({
     },
 });
 
-export default function Register({ logo, role = "cliente-admin" }) {
+export default function EmailRegister({ logo, role = "cliente-admin" }) {
     const [data, setData] = useState({
         role,
         email: "",
@@ -69,6 +69,7 @@ export default function Register({ logo, role = "cliente-admin" }) {
         // role,
     } = data;
 
+    const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [preRegisterCliAdminData, bizTeamReferrer] = useData(
         ["clientAdminData", "referrer"],
         "pre_register"
@@ -95,11 +96,6 @@ export default function Register({ logo, role = "cliente-admin" }) {
     // detecting field errors
     const [fieldError, setFieldError] = useState(null);
     const errorEmail = fieldError && fieldError.email;
-    // const errorBirthday = fieldError && fieldError.birthday;
-    // const errorGender = fieldError && fieldError.gender;
-    // const errorCpf = fieldError && fieldError.cpf;
-    // const errorPhone = fieldError && fieldError.phone;
-    // const errorName = fieldError && fieldError.name;
     // end detecting field errors
 
     const styles = getStyles();
@@ -116,6 +112,8 @@ export default function Register({ logo, role = "cliente-admin" }) {
     };
 
     const registerThisUser = async () => {
+        setActionBtnDisabled(true);
+
         const newUser = {
             ...data,
         };
@@ -193,7 +191,10 @@ export default function Register({ logo, role = "cliente-admin" }) {
         <form
             style={{ margin: "auto", width: "90%" }}
             className="text-p text-normal"
-            onBlur={() => setFieldError(null)}
+            onBlur={() => {
+                setFieldError(null);
+                setActionBtnDisabled(false);
+            }}
         >
             <section id="field1">
                 <div className="mt-3">
@@ -232,6 +233,7 @@ export default function Register({ logo, role = "cliente-admin" }) {
         <div className="my-4 mx-5 container-center">
             <ButtonFab
                 title="Registrar"
+                disabled={!!actionBtnDisabled}
                 width="100%"
                 iconFontAwesome={
                     <FontAwesomeIcon

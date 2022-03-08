@@ -4,7 +4,7 @@ import parse from "html-react-parser";
 import CreatedAtBr from "../../../../CreatedAtBr";
 
 export default function ClientProfile({ data, title, subtitle }) {
-    const { cpf, phone, email, birthday, createdAt } = data;
+    const { email, createdAt } = data;
 
     const showMainTitle = () => (
         <section
@@ -24,10 +24,10 @@ export default function ClientProfile({ data, title, subtitle }) {
 
     const showMainFormData = () => {
         const infos = {
-            CPF: cpf,
-            Contato: phone,
             Email: email,
-            Aniversário: birthday,
+            // Contato: phone,
+            // CfPF: cpf,
+            // Aniversário: birthday,
         };
 
         const infoKeys = Object.keys(infos);

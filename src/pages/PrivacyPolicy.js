@@ -36,13 +36,13 @@ const text2 = (
         <p>
             <strong>Acreditamos na prevenção</strong> e usamos desde o começo
             tais medidas de segurança para proteger{" "}
-            <strong>os dados sensíveis tais como CPF, email e contato</strong>{" "}
-            de todos nossos usuários.
+            <strong>os dados sensíveis tais como email</strong> de todos nossos
+            usuários.
         </p>
         <h2 className="font-weight-bold text-normal">PROTEÇÃO DE SENHAS</h2>
         <p>
             Com exceção do App do cliente, que não possui senha de acesso -
-            apenas acesso por CPF, todos os outros tipos de apps da Fiddelize
+            apenas acesso por EMAIL, todos os outros tipos de apps da Fiddelize
             exigem senha.
         </p>
         Veja a relação das senhas exigidas em cada app:
@@ -157,30 +157,17 @@ const text4 = (
         </p>
         <ul>
             <li>
-                <strong>nome: </strong>identificação nominal nos serviços,
-                utilizado para personalizar seu app
+                <strong>email: </strong>garantir que o acesso da conta seja
+                único ao sistema, comunicados importantes, recuperação de senha
+                de acesso.
             </li>
             <li>
-                <strong>CPF: </strong>garantir que o acesso da conta seja único
-                ao sistema. É usado para transações de cartão de crédito e
-                boleto (Veja parte 5), atualização de serviços como Pix.
-                Recuperação de senhas
+                <strong>nome (opcional): </strong>identificação nominal nos
+                serviços, utilizado para personalizar seu app
             </li>
             <li>
-                <strong>celular: </strong>Usado para SMS, redirecionamento de
-                Whatsapp.
-            </li>
-            <li>
-                <strong>email: </strong>comunicados importantes, recuperação de
-                senha de acesso.
-            </li>
-            <li>
-                <strong>data de nascimento: </strong>análise e personalização
-                dos serviços de nossos usuários em cada app
-            </li>
-            <li>
-                <strong>sexo: </strong>análise e personalização dos serviços de
-                nossos usuários em cada app
+                <strong>gênero (opcional): </strong>análise e personalização dos
+                serviços de nossos usuários em cada app
             </li>
         </ul>
         <p>
@@ -398,3 +385,17 @@ export default function PrivacyPolicy() {
         </Fragment>
     );
 }
+
+/* ARCHIVES
+
+<li>
+    <strong>celular: </strong>Usado para SMS, redirecionamento de
+    Whatsapp.
+</li>
+<li>
+    <strong>data de nascimento: </strong>análise e personalização
+    dos serviços de nossos usuários em cada app
+</li>
+
+
+*/

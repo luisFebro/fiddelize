@@ -43,7 +43,6 @@ const getDataByRole = (role, initData) => {
     const cliAdmin = {
         rememberAccess: true,
         linkId: 0,
-        twoLastCpfDigits: initData.twoLastCpfDigits,
         memberJob: initData.memberJob,
     };
 

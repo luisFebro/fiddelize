@@ -58,27 +58,27 @@ const AsyncDownloadAppGuide = Load({
         ),
 });
 
-const AsyncRegisterCliUser = Load({
+const AsyncEmailRegisterCliUser = Load({
     loading: true,
     loader: () =>
         import(
-            "../../components/auth/AsyncRegisterCliUser" /* webpackChunkName: "cli-user-register-comp-lazy" */
+            "../../components/auth/EmailRegisterCliUser.js" /* webpackChunkName: "email-register-cli-user-comp-lazy" */
         ),
 });
 
-const AsyncRegisterCliMember = Load({
+const AsyncEmailRegisterCliMember = Load({
     loading: true,
     loader: () =>
         import(
-            "../../components/auth/AsyncRegisterCliMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
+            "../../components/auth/EmailRegisterCliMember" /* webpackChunkName: "email-register-cli-member-comp-lazy" */
         ),
 });
 // import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
-const AsyncRegisterBizTeam = Load({
+const AsyncEmailRegisterBizTeam = Load({
     loading: true,
     loader: () =>
         import(
-            "../../components/auth/AsyncRegisterBizTeam" /* webpackChunkName: "biz-team-register-comp-lazy" */
+            "../../components/auth/EmailRegisterBizTeam" /* webpackChunkName: "email-register-biz-team-comp-lazy" */
         ),
 });
 
@@ -245,7 +245,7 @@ function ClientMobileApp({ location, history }) {
                 style={{ marginBottom: 100 }}
             >
                 {isCliUser && // in near updates - rewards or discounts according to which games cli-admin has chosen
-                    "Acumule pontos. Supere Metas. Ganhe benefícios em jogos de compra feito para você!"}
+                    "Ganhe benefícios com promoções feitas para você!"}
                 {isCliMember &&
                     "Adicione pontos e clientes para o clube de compras em segundos."}
                 {isBizTeam && "Faça parte do time da Fiddelize."}
@@ -256,20 +256,20 @@ function ClientMobileApp({ location, history }) {
                 comp={
                     <div className="position-relative" style={{ top: -80 }}>
                         {isCliUser && (
-                            <AsyncRegisterCliUser
+                            <AsyncEmailRegisterCliUser
                                 needAlreadyRegisterBtn
                                 setSuccessfulRegister={setSuccessfulRegister}
                                 setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                         {isCliMember && (
-                            <AsyncRegisterCliMember
+                            <AsyncEmailRegisterCliMember
                                 setSuccessfulRegister={setSuccessfulRegister}
                                 setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                         {isBizTeam && (
-                            <AsyncRegisterBizTeam
+                            <AsyncEmailRegisterBizTeam
                                 setSuccessfulRegister={setSuccessfulRegister}
                                 setLoginOrRegister={setLoginOrRegister}
                             />

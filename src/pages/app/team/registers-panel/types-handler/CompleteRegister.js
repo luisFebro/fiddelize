@@ -1,21 +1,21 @@
 import { useState, useRef } from "react";
 import { setRun, useAction } from "global-data/ui";
+import { Load } from "components/code-splitting/LoadableComp";
 import SuccessOp from "./SuccessOp";
-import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
-const AsyncRegister = Load({
+const AsyncEmailRegisterCliUser = Load({
     loading: true,
     loader: () =>
         import(
-            "../../../../../components/auth/AsyncRegisterCliUser" /* webpackChunkName: "cli-user-register-comp-lazy" */
+            "components/auth/EmailRegisterCliUser" /* webpackChunkName: "email-register-cli-user-comp-lazy" */
         ),
 });
 
-const AsyncRegisterMember = Load({
+const AsyncEmailRegisterCliMember = Load({
     loading: true,
     loader: () =>
         import(
-            "../../../../../components/auth/AsyncRegisterCliMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
+            "components/auth/EmailRegisterCliMember" /* webpackChunkName: "email-register-cli-member-comp-lazy" */
         ),
 });
 
@@ -40,12 +40,12 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
         !hidePanel && (
             <section className="my-5">
                 {isNewMember ? (
-                    <AsyncRegisterMember
+                    <AsyncEmailRegisterCliMember
                         isStaff // isStaff define if is from the dashboard or not
                         callback={handleSuccessfulRegister}
                     />
                 ) : (
-                    <AsyncRegister
+                    <AsyncEmailRegisterCliUser
                         isStaff
                         callback={handleSuccessfulRegister}
                     />

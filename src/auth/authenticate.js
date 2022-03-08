@@ -34,7 +34,7 @@ export default async function authenticate(newToken, options = {}) {
             "authenticate requires an valid JWT token as the first parameter"
         );
     const { history, role, uify } = options;
-    // these variables are set and avaiable after CPF login.
+    // these variables are set and avaiable after EMAIL login.
 
     await setVars({ success: true, token: newToken }, "user");
     updateUI(

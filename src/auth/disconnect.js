@@ -53,7 +53,7 @@ export default async function disconnect(options = {}) {
     const isCliAdmin = role === "cliente-admin";
     if (isCliAdmin)
         await setVars(
-            { rememberAccess }, // userId, name, twoLastCpfDigits
+            { rememberAccess }, // userId, name,
             "user"
         ).catch((err) => `ERROR disconnect setVars ${err}`);
     // end
@@ -64,8 +64,8 @@ export default async function disconnect(options = {}) {
 
 /* ARCHIVES
 
-const [role, userId, name, twoLastCpfDigits] = await getVars(
-    ["role", "userId", "name", "twoLastCpfDigits"],
+const [role, userId, name, twoLastCpsfDigits] = await getVars(
+    ["role", "userId", "name", "twoLastCdpfDigits"],
     "user"
 );
 async function removeLocalCollectionAsync() {

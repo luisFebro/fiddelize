@@ -16,7 +16,7 @@ export default function SeeProfileBtn({ modalData = {} }) {
 
     const { name, _id } = modalData;
 
-    const select = "name cpf createdAt phone email birthday";
+    const select = "name createdAt email";
     const { data: payload, loading } = useReadUser(
         _id,
         "cliente-membro",
@@ -28,9 +28,7 @@ export default function SeeProfileBtn({ modalData = {} }) {
         name: loading ? "..." : payload.name,
         cpf: loading ? "..." : payload.cpf,
         createdAt: loading ? "..." : payload.createdAt,
-        phone: loading ? "..." : payload.phone,
         email: loading ? "..." : payload.email,
-        birthday: loading ? "..." : payload.birthday,
     };
     const AsyncMemberProfile = (
         <Async
@@ -42,7 +40,7 @@ export default function SeeProfileBtn({ modalData = {} }) {
                         • NOME:
                     </span>
                     <br />
-                    {name},
+                    {name || "Não informado"},
                 </p>
             }
         />

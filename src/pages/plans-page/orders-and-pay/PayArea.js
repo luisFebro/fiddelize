@@ -112,11 +112,11 @@ export default function PayArea({
                 setData((thisData) => ({
                     ...thisData,
                     referrer: thisReferrer,
-                    senderCPF: thisSenderCPF,
-                    senderAreaCode: thisSenderAreaCode,
-                    senderPhone: thisSenderPhone,
+                    senderCPF: thisSenderCPF || "68366826406", // these data doesn't exist in the sign up any more.
+                    senderAreaCode: thisSenderAreaCode || "092",
+                    senderPhone: thisSenderPhone || "992257930",
                     firstDueDate: thisFirstDueDate,
-                    senderBirthday: thisSenderBirthday,
+                    senderBirthday: thisSenderBirthday || "1994-08-23",
                 }));
             }
         );
