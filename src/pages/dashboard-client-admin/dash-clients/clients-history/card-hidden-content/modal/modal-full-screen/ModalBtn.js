@@ -1,8 +1,8 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import useData, { useBizData } from "init";
 import { useVar } from "init/var";
-import showToast from "components/toasts";
+// import useData from "init";
+// import showToast from "components/toasts";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullScreen from "./ModalFullScreen";
 
@@ -21,12 +21,12 @@ export default function ModalBtn({
 }) {
     const [open, setOpen] = useState(false);
 
-    const dataPolls = useVar("polls");
-    const xp = dataPolls ? dataPolls.xp : 0;
-    const nps = dataPolls ? dataPolls.nps : 0;
-    const { countCliUsers } = useBizData();
+    // const dataPolls = useVar("polls");
+    // const xp = dataPolls ? dataPolls.xp : 0;
+    // const nps = dataPolls ? dataPolls.nps : 0;
+    // const { countCliUsers } = useBizData();
 
-    const isBtnBlock = countCliUsers < 100 || !nps || nps < 0 || !xp || xp < 6;
+    const isBtnBlock = false; // countCliUsers < 100 || !nps || nps < 0 || !xp || xp < 6;
 
     const {
         title,
@@ -60,15 +60,7 @@ export default function ModalBtn({
                 iconMarginLeft={iconMarginLeft}
                 shadowColor={shadowColor}
                 backgroundColor={backgroundColor}
-                onClick={
-                    isBtnBlock
-                        ? () =>
-                              showToast(
-                                  "Para ter acesso aos dados cadastrais dos clientes, você precisa ter os critérios mínimos de segurança indo em ajustes > dados projetos.",
-                                  { dur: 15000 }
-                              )
-                        : onOpen
-                }
+                onClick={onOpen}
                 position={position}
                 variant={variant}
                 size={size}

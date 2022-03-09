@@ -53,6 +53,7 @@ const getStyles = () => ({
 export default function EmailRegister({ logo, role = "cliente-admin" }) {
     const [data, setData] = useState({
         role,
+        name: "Usuário", // temp
         email: "",
         bizImg: "", // for account panel...
         bizName: "", // for account panel...

@@ -4,16 +4,16 @@ import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import ButtonMulti, {
     faStyle,
-} from "../../../../components/buttons/material-ui/ButtonMulti";
-import handleChange from "../../../../utils/form/use-state/handleChange";
-import CreatedAtBr from "../../CreatedAtBr";
+} from "components/buttons/material-ui/ButtonMulti";
+import handleChange from "utils/form/use-state/handleChange";
+import showToast from "components/toasts";
+// import isValidName from "utils/validation/isValidName";
+// import autoPhoneMask from "utils/validation/masks/autoPhoneMask";
+import isKeyPressed from "utils/event/isKeyPressed";
+import validatePhone from "utils/validation/validatePhone";
+import validateEmail from "utils/validation/validateEmail";
 import { readUser, updateUser } from "api/frequent";
-import showToast from "../../../../components/toasts";
-import isValidName from "../../../../utils/validation/isValidName";
-// import autoPhoneMask from "../../../../utils/validation/masks/autoPhoneMask";
-import isKeyPressed from "../../../../utils/event/isKeyPressed";
-import validatePhone from "../../../../utils/validation/validatePhone";
-import validateEmail from "../../../../utils/validation/validateEmail";
+import CreatedAtBr from "../../CreatedAtBr";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -25,10 +25,10 @@ export default function HiddenProfile({ userData }) {
     const [data, setData] = useState({
         name: userData.name,
         email: "",
+        gender: "",
         // cfspf: "",
         // birthday: "",
         // phone: "",
-        // gender: "",
     });
 
     const { name, email, gender } = data;
@@ -37,7 +37,7 @@ export default function HiddenProfile({ userData }) {
 
     useEffect(() => {
         (async () => {
-            const select = "name cpf birthday email phone gender";
+            const select = "name email gender";
             const dataUser = await readUser(
                 userData.userId,
                 "cliente-admin",
@@ -47,11 +47,11 @@ export default function HiddenProfile({ userData }) {
             setData((prev) => ({
                 ...prev,
                 name: dataUser.name.cap(),
-                cpf: dataUser.cpf,
-                birthday: dataUser.birthday,
                 email: dataUser.email,
-                phone: dataUser.phone,
                 gender: dataUser.gender,
+                // birthday: dataUser.birthday,
+                // cpf: dataUser.cpf,
+                // phone: dataUser.phone,
             }));
         })();
     }, []);
@@ -77,10 +77,10 @@ export default function HiddenProfile({ userData }) {
     };
 
     const sendDataBackend = () => {
-        if (!isValidName(name)) {
-            showToast("O nome deve conter um sobrenome", { type: "error" });
-            return setError("name");
-        }
+        // if (!isValidName(name)) {
+        //     showToast("O nome deve conter um sobrenome", { type: "error" });
+        //     return setError("name");
+        // }
 
         // if (!validatePhone(phone))
         //     return showToast(
@@ -94,7 +94,7 @@ export default function HiddenProfile({ userData }) {
             );
 
         const dataToSend = { ...data };
-        updateUser(userData._id, "cliente-admin", dataToSend)
+        updateUser(userData.userId, "cliente-admin", dataToSend)
             .then(() =>
                 showToast("Seu perfil foi atualizado!", { type: "success" })
             )
@@ -139,6 +139,20 @@ export default function HiddenProfile({ userData }) {
                         type="text"
                         name="name"
                         value={name}
+                    />
+                </div>
+                <div className="mt-4 margin-auto-95 text-normal">
+                    <p className="text-shadow">Email</p>
+                    <TextField
+                        InputProps={{ style: styles.fieldForm }}
+                        variant="outlined"
+                        onChange={handleChange(setData, data)}
+                        error={error === "email"}
+                        autoComplete="off"
+                        type="text"
+                        name="email"
+                        value={email}
+                        fullWidth
                     />
                 </div>
                 {/*<div className="mt-4 margin-auto-95 text-normal">
@@ -190,20 +204,7 @@ export default function HiddenProfile({ userData }) {
                         value={birthday}
                     />
                 </div>
-                <div className="mt-4 margin-auto-95 text-normal">
-                    <p className="text-shadow">Email</p>
-                    <TextField
-                        InputProps={{ style: styles.fieldForm }}
-                        variant="outlined"
-                        onChange={handleChange(setData, data)}
-                        error={error === "email"}
-                        autoComplete="off"
-                        type="text"
-                        name="email"
-                        value={email}
-                        fullWidth
-                    />
-                </div>*/}
+                */}
                 <div className="d-none mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Forma de Tratamento</p>
                     <TextField

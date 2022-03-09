@@ -1,6 +1,5 @@
 // custom icons
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
-import CakeIcon from "@material-ui/icons/Cake";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import StarsIcon from "@material-ui/icons/Stars";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
@@ -11,6 +10,7 @@ import EventIcon from "@material-ui/icons/Event";
 import InstructionBtn from "components/buttons/InstructionBtn";
 import AnimaIconsSelect from "components/fields/anima-icons-select/AnimaIconsSelect";
 import FilterStatus from "components/fields/anima-icons-select/FilterStatus";
+// import CakeIcon from "@material-ui/icons/Cake";
 
 // do not include btn styling for free options...
 const mainOptions = () => [
@@ -22,25 +22,11 @@ const mainOptions = () => [
         Icon: <SortByAlphaIcon />,
     },
     {
-        titleBr: "Maiores Pontos Ativos",
-        title: "highestActiveScores",
-        reverseBr: "Menores Pontos Ativos",
-        reverse: "lowestActiveScores",
-        Icon: <FiberManualRecordIcon />,
-    },
-    {
         titleBr: "Clientes Novos",
         title: "newCustomers",
         reverseBr: "Clientes Veteranos",
         reverse: "veteranCustomers",
         Icon: <StarsIcon />,
-    },
-    {
-        titleBr: "Clientes Aniversariantes",
-        title: "birthdayCustomers",
-        reverseBr: null,
-        reverse: null,
-        Icon: <CakeIcon />,
     },
     {
         titleBr: "Clientes Fãs (compram mais)",
@@ -155,3 +141,22 @@ export default function Filters({
 
     return <section>{showCategories()}</section>;
 }
+
+/* ARCHIVES
+
+{
+    titleBr: "Clientes Aniversariantes",
+    title: "birthdayCustomers",
+    reverseBr: null,
+    reverse: null,
+    Icon: <CakeIcon />,
+},
+
+{
+    titleBr: "Maiores Pontos Ativos",
+    title: "highestActiveScores",
+    reverseBr: "Menores Pontos Ativos",
+    reverse: "lowestActiveScores",
+    Icon: <FiberManualRecordIcon />,
+},
+ */

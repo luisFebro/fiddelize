@@ -72,7 +72,7 @@ export default function BackUpToExcel() {
             if (err.status === 400 && err.data && err.data.status === false) {
                 return setData((prev) => ({
                     ...prev,
-                    minSec: false,
+                    // minSec: false,
                     criteria: err.data,
                 }));
             }
@@ -108,11 +108,14 @@ export default function BackUpToExcel() {
                     selectedButton === "SELECIONE BOTÃO" || isLoading
                         ? "d-none"
                         : `${
-                              !securityAlertOn ? "" : "text-voca-cyan theme-p"
+                              !securityAlertOn
+                                  ? ""
+                                  : "text-voca-cyan theme-p p-2"
                           } MuiButtonBase-root MuiFab-root MuiFab-extended text-normal font-weight-bold ${
-                              isArrayReady && !securityAlertOn
-                                  ? "disabledLink"
-                                  : ""
+                              ""
+                              // isArrayReady && !securityAlertOn
+                              // ? "disabledLink"
+                              // : ""
                           }`
                 }
                 table={brDbName} // file`s name
@@ -158,11 +161,11 @@ export default function BackUpToExcel() {
     const showActionBtn = () => (
         <Fragment>
             <ButtonFab
-                disabled={!minSec}
+                disabled={false} // !minSec
                 title={isLoading ? "Solicitando..." : "Solicitar Cópia"}
-                backgroundColor={
-                    !minSec ? "grey" : "var(--themeSDark--default)"
-                }
+                backgroundColor="var(--themeSDark--default)"
+                // !minSec ? "grey" : "var(--themeSDark--default)"
+                // }
                 onClick={() => onSelectedValue("users")}
                 position="relative"
                 variant="extended"
@@ -171,55 +174,16 @@ export default function BackUpToExcel() {
         </Fragment>
     );
 
-    const handleChecked = (status) => {
-        setData({
-            ...data,
-            securityAlertOn: status,
-        });
-    };
-
-    const showMinSecurityInstru = () => (
-        <Fragment>
-            <section className="my-5 font-site text-em-1 text-grey mx-3">
-                <h2
-                    className="mb-4 text-shadow text-pill text-white text-center text-normal font-weight-bold"
-                    style={{
-                        backgroundColor: "grey",
-                        borderRadius: "0px",
-                    }}
-                >
-                    Critério mínimo de segurança para baixar
-                </h2>
-                <p className="m-0">
-                    - base mínima de <strong>100 clientes cadastrados</strong>.
-                </p>
-                <p>
-                    Atual: {countCliUsers} clientes{" "}
-                    {getStatusIcon(criteria.isBaseBlock ? "block" : "ok")}
-                </p>
-                <p className="m-0">
-                    -nota de métrica de fidelidade NPS{" "}
-                    <strong>positiva.</strong>
-                </p>
-                <p>
-                    Atual: {nps} pontos{" "}
-                    {getStatusIcon(criteria.isNpsBlock ? "block" : "ok")}
-                </p>
-                <p className="m-0">
-                    - nota de experiência de compra dos clientes no mínimo de{" "}
-                    <strong>6 pontos</strong>
-                </p>
-                <p>
-                    Atual: {xp} pontos{" "}
-                    {getStatusIcon(criteria.isXpBlock ? "block" : "ok")}
-                </p>
-            </section>
-        </Fragment>
-    );
+    // const handleChecked = (status) => {
+    //     setData({
+    //         ...data,
+    //         securityAlertOn: status,
+    //     });
+    // };
 
     const showAgreementAndBtn = () => (
         <Fragment>
-            <section className="mt-5 text-small text-purple mx-3">
+            <section className="d-none mt-5 text-small text-purple mx-3">
                 <h2 className="text-center text-normal font-weight-bold">
                     Acordo de Segurança
                 </h2>
@@ -263,7 +227,7 @@ export default function BackUpToExcel() {
                 </p>
                 <CheckBoxForm
                     text="concordo com as condições de uso"
-                    setIsBoxChecked={handleChecked}
+                    setIsBoxChecked={false} //
                 />
             </section>
             {showExcelDownloadBtn()}
@@ -291,7 +255,7 @@ export default function BackUpToExcel() {
             <p className="text-center text-normal font-weight-bold">
                 Baixe dados de toda sua base de clientes
             </p>
-            {!minSec && showMinSecurityInstru()}
+            {/*{!minSec && showMinSecurityInstru()}*/}
             {isArrayReady ? showAgreementAndBtn() : showActionBtn()}
         </div>
     );
@@ -318,6 +282,45 @@ function getStatusIcon(type) {
 // END HELPERS
 
 /* ARCHIVES
+
+const showMinSecurityInstru = () => (
+    <Fragment>
+        <section className="my-5 font-site text-em-1 text-grey mx-3">
+            <h2
+                className="mb-4 text-shadow text-pill text-white text-center text-normal font-weight-bold"
+                style={{
+                    backgroundColor: "grey",
+                    borderRadius: "0px",
+                }}
+            >
+                Critério mínimo de segurança para baixar
+            </h2>
+            <p className="m-0">
+                - base mínima de <strong>100 clientes cadastrados</strong>.
+            </p>
+            <p>
+                Atual: {countCliUsers} clientes{" "}
+                {getStatusIcon(criteria.isBaseBlock ? "block" : "ok")}
+            </p>
+            <p className="m-0">
+                -nota de métrica de fidelidade NPS{" "}
+                <strong>positiva.</strong>
+            </p>
+            <p>
+                Atual: {nps} pontos{" "}
+                {getStatusIcon(criteria.isNpsBlock ? "block" : "ok")}
+            </p>
+            <p className="m-0">
+                - nota de experiência de compra dos clientes no mínimo de{" "}
+                <strong>6 pontos</strong>
+            </p>
+            <p>
+                Atual: {xp} pontos{" "}
+                {getStatusIcon(criteria.isXpBlock ? "block" : "ok")}
+            </p>
+        </section>
+    </Fragment>
+);
 
 function handleDbSelection(selectedButton) {
     switch (selectedButton) {

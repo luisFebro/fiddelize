@@ -254,7 +254,9 @@ export default function AsyncRecordedClientsList() {
                     } position-absolute text-subtitle font-weight-bold text-shadow`}
                 >
                     {truncate(
-                        getFirstName(user.name.cap(), { addSurname: true }),
+                        getFirstName(user.name && user.name.cap(), {
+                            addSurname: true,
+                        }),
                         isSmall ? 17 : 40
                     )}
                 </span>

@@ -64,6 +64,7 @@ export default function EmailRegisterCliMember({
 
     const [data, setData] = useState({
         role: "cliente-membro",
+        name: "Usuário", // temp
         email: "",
         clientMemberData: {
             bizId: "",

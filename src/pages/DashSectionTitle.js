@@ -34,7 +34,7 @@ function DashSectionTitle({ title, backgroundColor }) {
                     alt="forma título"
                 />
                 <h2
-                    className="animated zoomIn delay-1s center-to-img position-absolute text-title text-shadow text-center mb-5"
+                    className="center-to-img position-absolute text-title text-shadow text-center mb-5" // animated zoomIn delay-1s
                     style={styles.title}
                 >
                     {title}

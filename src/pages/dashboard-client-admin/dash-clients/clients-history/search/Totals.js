@@ -28,14 +28,14 @@ export default function Totals({
     // const usedPTS = convertToReal(countCliUsersGeneralPoints - countCliUsersCurrPoints);
     const generalPTS = convertToReal(countCliUsersGeneralPoints);
 
-    const showGeneralScores = () => (
-        <p
-            className="text-subtitle font-weight-bold text-center mt-2 py-2 px-3 font-weight-bold"
-            style={styles.accumulativeScore}
-        >
-            {`${generalPTS} Pontos Gerais`}
-        </p>
-    );
+    // const showGeneralScores = () => (
+    //     <p
+    //         className="text-subtitle font-weight-bold text-center mt-2 py-2 px-3 font-weight-bold"
+    //         style={styles.accumulativeScore}
+    //     >
+    //         {`${generalPTS} Pontos Gerais`}
+    //     </p>
+    // );
 
     const showCredits = () => <ProCreditsBadge service="Novvos Clientes" />;
 
@@ -74,7 +74,7 @@ export default function Totals({
                             }`}
                         </span>
                         <br />
-                        {showGeneralScores()}
+                        {/*{showGeneralScores()}*/}
                         {showCredits()}
                     </div>
                 )}

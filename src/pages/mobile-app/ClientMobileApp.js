@@ -14,9 +14,18 @@ import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
-import useLoginOrRegister from "./helpers/useLoginOrRegister";
 import AsyncVersion from "../../_main/user-interfaces/version/AsyncVersion";
+import useLoginOrRegister from "./helpers/useLoginOrRegister";
+import ModalFullContent from "components/modals/ModalFullContent";
 // import ClientUserAppContent from "./content/ClientUserAppContent";
+
+const AsyncCustomDataForm = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "./custom-data-form/CustomDataForm" /* webpackChunkName: "custom-form-comp-lazy" */
+        ),
+});
 
 const AsyncGatewayAndCTAs = Load({
     loading: false,
@@ -89,6 +98,7 @@ function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     // the needAppRegister is only updated after reloading, and the register button should not appear right after a successful register. This cond will solve that without having to reload the variable
     const [successfulRegister, setSuccessfulRegister] = useState(false);
+    const [openCustomData, setOpenCustomData] = useState(true);
 
     useScrollUp();
 
@@ -128,7 +138,7 @@ function ClientMobileApp({ location, history }) {
         themeBackColor,
     } = useBizData();
 
-    const { notifCount } = useData();
+    const { notifCount, firstName } = useData();
 
     useLoginOrRegister({
         setLoginOrRegister,
@@ -138,6 +148,7 @@ function ClientMobileApp({ location, history }) {
     });
 
     const isAuthUser = useAuth();
+    const needCustomData = isAuthUser && firstName === "Usuário";
 
     // MAIN VARIABLES
     // # query
@@ -171,7 +182,8 @@ function ClientMobileApp({ location, history }) {
         `var(--themeBackground--${isBizTeam ? "default" : themeBackColor})`
     );
 
-    if (isCliMember) {
+    // dont redirect when no custom data was set. Usuário is the default and means user hasn't updated his data
+    if (isCliMember && firstName !== "Usuário") {
         // this var is removed when making login
         // userId to check if data still persists or user device
         // otherwise the user will be not able to access...
@@ -182,7 +194,7 @@ function ClientMobileApp({ location, history }) {
         }
     }
 
-    if (isBizTeam) {
+    if (isBizTeam && firstName !== "Usuário") {
         if (!disconnectAgent && userId) {
             if (isSessionOver) history.push("t/app/nucleo-equipe/acesso");
             else history.push("t/app/nucleo-equipe");
@@ -421,6 +433,18 @@ function ClientMobileApp({ location, history }) {
                     title="Baixe aqui o seu app"
                     icon="/img/official-logo-white.png"
                     alwaysOn
+                />
+            )}
+            {needCustomData && (
+                <ModalFullContent
+                    contentComp={
+                        <AsyncCustomDataForm userId={userId} role={role} />
+                    }
+                    fullScreen={false}
+                    fullOpen={openCustomData}
+                    setFullOpen={setOpenCustomData}
+                    needCloseBtn={false}
+                    needIndex={false}
                 />
             )}
         </div>

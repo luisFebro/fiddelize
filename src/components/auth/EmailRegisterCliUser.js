@@ -54,6 +54,7 @@ export default function EmailRegisterCliUser({
     const [data, setData] = useState({
         role: "cliente",
         email: "",
+        name: "Usuário", // temp
         clientUserData: { bizId: "", filterBirthday: "" },
         filter,
         bizImg: "", // for account panel...

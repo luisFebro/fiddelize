@@ -59,6 +59,7 @@ export default function EmailRegisterBizTeam({
 
     const [data, setData] = useState({
         role: "nucleo-equipe",
+        name: "Usuário", // temp this is required to avoid issues with db aggregation when no name is set.
         email: "",
         bizTeamData: {
             job: "associado", // if rep-comercial, it should be manually set in DB for now.

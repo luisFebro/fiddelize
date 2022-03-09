@@ -51,7 +51,7 @@ export default function NewPassword({ location, match, history }) {
         themePColor: colorP,
         themeSColor: colorS,
     } = useBizData();
-    const { needDark } = getColor(themeBackColor);
+    const { needDark } = getColor(backColor);
 
     useBackColor(`var(--themeBackground--${backColor})`);
 

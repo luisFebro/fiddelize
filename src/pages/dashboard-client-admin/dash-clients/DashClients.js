@@ -48,7 +48,7 @@ export default function DashClients() {
             <AsyncRankingPondium />
             <hr className="lazer-purple" />
             <Title
-                title="&#187; Clientes do seu clube de compras"
+                title="&#187; Clientes Cadastrados"
                 color="var(--themeP)"
                 margin="mb-0"
             />

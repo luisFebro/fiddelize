@@ -34,7 +34,7 @@ export default function RankingPondium() {
 
                 const valTotal = itemsList && itemsList.value;
                 const memberName = truncateWords(
-                    itemsList && itemsList.name.cap(),
+                    itemsList && itemsList.name && itemsList.name.cap(),
                     13
                 );
 

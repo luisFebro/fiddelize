@@ -113,7 +113,7 @@ export default function PayArea({
                     ...thisData,
                     referrer: thisReferrer,
                     senderCPF: thisSenderCPF || "68366826406", // these data doesn't exist in the sign up any more.
-                    senderAreaCode: thisSenderAreaCode || "092",
+                    senderAreaCode: thisSenderAreaCode || "92",
                     senderPhone: thisSenderPhone || "992257930",
                     firstDueDate: thisFirstDueDate,
                     senderBirthday: thisSenderBirthday || "1994-08-23",

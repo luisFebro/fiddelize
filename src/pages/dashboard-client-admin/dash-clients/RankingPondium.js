@@ -23,7 +23,7 @@ export default function RankingPondium() {
 
                 const clientScore = convertToReal(itemsList && itemsList.score);
                 const clientName = truncateWords(
-                    itemsList && itemsList.name.cap(),
+                    itemsList && itemsList.name && itemsList.name.cap(),
                     13
                 );
 
