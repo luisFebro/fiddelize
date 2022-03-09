@@ -1,17 +1,32 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import useBackColor from "hooks/useBackColor";
 import useData from "init";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
+import { Load } from "components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
+
 // import { IS_DEV } from "config/clientUrl";
 import GroupedDashSessions from "./GroupedDashSessions";
 import ShareLink from "./share-link/ShareLink";
 import BizTeamNavbar from "./navbar/BizTeamNavbar";
 
+const AsyncCustomDataForm = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "pages/mobile-app/custom-data-form/CustomDataForm" /* webpackChunkName: "custom-form-comp-lazy" */
+        ),
+});
+
 export default function BizTeamApp({ history }) {
-    const [userFirstName, agentJob] = useData(["firstName", "agentJob"]);
+    const [userFirstName, agentJob, loading] = useData([
+        "firstName",
+        "agentJob",
+    ]);
+    const { userId } = useData();
 
     useScrollUp();
     useBackColor("var(--themeBackground--default)");
@@ -27,6 +42,8 @@ export default function BizTeamApp({ history }) {
         </p>
     );
 
+    const [openCustomData, setOpenCustomData] = useState(true);
+
     return (
         <Fragment>
             <BizTeamNavbar />
@@ -41,6 +58,22 @@ export default function BizTeamApp({ history }) {
                 title="Receba notificações sobre vendas!"
                 subtitle="saiba quando suas vendas são realizadas em tempo real"
             />
+            {!loading &&
+                Boolean(!userFirstName || userFirstName === "Usuário") && (
+                    <ModalFullContent
+                        contentComp={
+                            <AsyncCustomDataForm
+                                userId={userId}
+                                role="nucleo-equipe"
+                            />
+                        }
+                        fullScreen={false}
+                        fullOpen={openCustomData}
+                        setFullOpen={setOpenCustomData}
+                        needCloseBtn={false}
+                        needIndex={false}
+                    />
+                )}
         </Fragment>
     );
 }

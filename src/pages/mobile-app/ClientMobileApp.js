@@ -12,18 +12,18 @@ import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import AsyncVersion from "../../_main/user-interfaces/version/AsyncVersion";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
-import ModalFullContent from "components/modals/ModalFullContent";
 // import ClientUserAppContent from "./content/ClientUserAppContent";
 
 const AsyncCustomDataForm = Load({
     loading: false,
     loader: () =>
         import(
-            "./custom-data-form/CustomDataForm" /* webpackChunkName: "custom-form-comp-lazy" */
+            "pages/mobile-app/custom-data-form/CustomDataForm" /* webpackChunkName: "custom-form-comp-lazy" */
         ),
 });
 
@@ -148,7 +148,9 @@ function ClientMobileApp({ location, history }) {
     });
 
     const isAuthUser = useAuth();
-    const needCustomData = isAuthUser && firstName === "Usuário";
+    // only for client and client-admin, other apps should be in the main app's page
+    const needCustomData =
+        isAuthUser && (!firstName || firstName === "Usuário");
 
     // MAIN VARIABLES
     // # query
@@ -182,8 +184,7 @@ function ClientMobileApp({ location, history }) {
         `var(--themeBackground--${isBizTeam ? "default" : themeBackColor})`
     );
 
-    // dont redirect when no custom data was set. Usuário is the default and means user hasn't updated his data
-    if (isCliMember && firstName !== "Usuário") {
+    if (isCliMember) {
         // this var is removed when making login
         // userId to check if data still persists or user device
         // otherwise the user will be not able to access...
@@ -194,7 +195,7 @@ function ClientMobileApp({ location, history }) {
         }
     }
 
-    if (isBizTeam && firstName !== "Usuário") {
+    if (isBizTeam) {
         if (!disconnectAgent && userId) {
             if (isSessionOver) history.push("t/app/nucleo-equipe/acesso");
             else history.push("t/app/nucleo-equipe");

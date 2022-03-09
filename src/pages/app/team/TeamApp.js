@@ -1,6 +1,7 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import useData, { useBizData } from "init";
 import { Load } from "components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
 import getDayGreetingBr from "utils/getDayGreetingBr";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
@@ -13,6 +14,14 @@ import AddTempPointsBtn from "./add-points/AddTempPointsBtn";
 import AddBenefitsBtn from "./add-benefits/AddBenefitsBtn";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 // import ReturnBtn from 'components/buttons/ReturnBtn';
+
+const AsyncCustomDataForm = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "pages/mobile-app/custom-data-form/CustomDataForm" /* webpackChunkName: "custom-form-comp-lazy" */
+        ),
+});
 
 export const AsyncBellNotifBtn = Load({
     loading: false,
@@ -28,11 +37,7 @@ export default function TeamApp({
     isCliAdmin,
     // toTab = "Cliente",
 }) {
-    const [firstName, userId, bizId] = useData([
-        "firstName",
-        "userId",
-        "bizId",
-    ]);
+    const { firstName, userId, bizId } = useData();
     const isPreviewMode = location && location.search.includes("modo-prev=1");
 
     const { notifCount } = useData();
@@ -219,6 +224,8 @@ export default function TeamApp({
         />
     );
 
+    const [openCustomData, setOpenCustomData] = useState(true);
+
     return (
         <Fragment>
             {isPreviewMode && showBackTestAdminBtn()}
@@ -239,6 +246,21 @@ export default function TeamApp({
                 <NotifPermissionBanner
                     title="Receba notificações para agilizar seu trabalho!"
                     subtitle="Saiba quando um cliente estiver apto a receber algum benefício"
+                />
+            )}
+            {Boolean(!firstName || firstName === "Usuário") && (
+                <ModalFullContent
+                    contentComp={
+                        <AsyncCustomDataForm
+                            userId={userId}
+                            role="cliente-membro"
+                        />
+                    }
+                    fullScreen={false}
+                    fullOpen={openCustomData}
+                    setFullOpen={setOpenCustomData}
+                    needCloseBtn={false}
+                    needIndex={false}
                 />
             )}
         </Fragment>

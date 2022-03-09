@@ -40,7 +40,7 @@ export default function CustomDataForm({ userId, role = "cliente" }) {
         updateUser(userId, role, dataToSend)
             .then(() => {
                 showToast("Um momento. Atualizando seu app...", { dur: 15000 });
-                window.location.reload();
+                window.location.href = "/app";
             })
             .catch((err) => showToast("Ocorreu um erro. Tente novamente."));
     };
