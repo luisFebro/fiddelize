@@ -42,13 +42,16 @@ const Footer = ({ location }) => {
             <div className="footer-col first text-voca-cyan">
                 <h4>Sobre a Fiddelize</h4>
                 <p>
-                    Ajudamos negócios a oferecer <strong>benefícios</strong>{" "}
-                    para seus clientes com <strong>clube de compra</strong>.
+                    Ajudamos negócios a implementar{" "}
+                    <strong>estratégia de venda</strong> com{" "}
+                    <strong>promoções</strong> populares ou projetadas para sua
+                    loja física ou campanha online.
                 </p>
                 <p>
-                    No clube, clientes recebem <strong>moedas digitais</strong>{" "}
-                    nas compras para troca de benefícios ao concluir a meta de
-                    um <strong>jogo de compra</strong>.
+                    Oferecemos soluções como programa de incentivo de compra, de
+                    indicação, pontos de fidelidade, cashback, vale compra,
+                    cupons de desconto, clube de compras, e promoções
+                    projetadas.
                 </p>
                 <p>
                     Somos uma martech especializada em{" "}
