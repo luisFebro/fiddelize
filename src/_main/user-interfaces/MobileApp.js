@@ -46,6 +46,8 @@ import {
     // menu-qr
     AsyncRealtimeOrders,
     AsyncAdminCatalog,
+    // docs
+    AsyncCapTableFiddelize,
 } from "./CommonImports";
 // END PAGES
 
@@ -222,6 +224,11 @@ function Mobile({ location }) {
                     path="/:bizLinkId/menu/p/admin/items"
                     exact
                     component={AsyncAdminCatalog}
+                />
+                <Route
+                    path="/docs/cap-table"
+                    exact
+                    component={AsyncCapTableFiddelize}
                 />
                 <Route component={Default} />
             </Switch>

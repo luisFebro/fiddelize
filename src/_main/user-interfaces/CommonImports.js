@@ -167,6 +167,13 @@ export const AsyncAppsPanel = Load({
 });
 
 // BIZ DOCS AND FOOTER
+export const AsyncCapTableFiddelize = Load({
+    loader: () =>
+        import(
+            "pages/docs/cap-table/CapTableFiddelize" /* webpackChunkName: "cap-table-page-lazy" */
+        ),
+});
+
 // support
 export const AsyncServicesStatus = Load({
     loader: () =>
