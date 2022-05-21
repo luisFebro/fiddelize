@@ -88,8 +88,8 @@ function AsyncAddCustomersContent({
             </p>
             <p className="text-small text-left text-purple mt-3">
                 - Quando expira seu tempo de uso, os seus{" "}
-                <strong>créditos não usados são zerados</strong>. Você é
-                notificado <strong>10 dias</strong> antes do prazo expirar.
+                <strong>créditos restantes são zerados</strong>. Você é
+                notificado <strong>5 dias</strong> antes do prazo expirar.
                 Renovando o serviço, você extende o tempo de uso dos créditos.
             </p>
             <p className="text-small text-left text-purple mt-3">

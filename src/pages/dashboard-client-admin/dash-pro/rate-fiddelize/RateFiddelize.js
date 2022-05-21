@@ -26,7 +26,7 @@ export default function RateFiddelize() {
     const { nps, xpReport } = dataDB;
 
     const dispatch = useStoreDispatch();
-    const [userId] = useData(["userId"]);
+    const [userId, customerName] = useData(["userId", "name"]);
     const loadingData = userId === "...";
 
     useEffect(() => {
@@ -73,6 +73,7 @@ export default function RateFiddelize() {
                 dispatch={dispatch}
                 userId={userId}
                 loadingData={loadingData}
+                customerName={customerName}
             />
         </section>
     );
@@ -118,7 +119,7 @@ function ShowNPS({ dbNps, dispatch, userId, loadingData }) {
     const showNpsSmiley = () => (
         <section className="nps-rating--root">
             <div
-                className="faces-group shadow-elevation-black"
+                className="faces-group container-center shadow-elevation-black"
                 style={{
                     backgroundColor: "transparent",
                     padding: 0,
@@ -221,6 +222,7 @@ function ShowXpReportField({
     userId,
     role = "cliente-admin",
     loadingData,
+    customerName,
 }) {
     const [xpReport, setXpReport] = useState("");
     const [edit, setEdit] = useState(false);
@@ -241,6 +243,9 @@ function ShowXpReportField({
             body: {
                 "clientAdminData.review.xpReport": xpReport,
                 "clientAdminData.review.reportUpdatedAt": new Date(),
+                isBizReport: true,
+                report: xpReport,
+                customerName,
             },
         }).catch((err) => {
             console.log(`ERROR: ${err}`);
@@ -275,7 +280,7 @@ function ShowXpReportField({
                 fullWidth
             />
             <div className="mb-3 position-relative text-white text-left">
-                <span className="font-site text-em-0-7 text-purple font-weight-bold">
+                <span className="font-site text-em-0-9 text-purple font-weight-bold">
                     {xpReport.length}/{MAX_LEN} characteres
                 </span>
             </div>

@@ -54,11 +54,11 @@ export default function OrdersTableContent({
             os créditos não usados e ganha um novo tempo de uso.
             <br />
             <br /> - Porém, quando o tempo de uso termina ou expira, todos os
-            créditos não usados <strong>são zerados automaticamente</strong> de
+            créditos restantes <strong>são zerados automaticamente</strong> de
             forma permanente.
             <br />
-            <br /> - Você é notificado <strong>10 dias</strong> antes de expirar
-            algum plano.
+            <br /> - Você é notificado <strong>5 dias</strong> antes de expirar
+            algum plano ou serviço.
             <br />
             <br />- Você pode renovar seu plano mesmo durante sua ativação. O
             sistema da Fiddelize analisa se você já tem o serviço a ser renovado

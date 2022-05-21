@@ -4,14 +4,14 @@ import getPercentage from "../numbers/getPercentage";
 WARNING: changes here should also be made in the BACKEND same method.
 
 - Possible earnings for each job:
-fiddelize - 100% (solo income/sale) and/or 55% (each from his/her rep-comercials income/sales)
-rep-comercial - 45% (solo income/sale) and/or 15% (each from his/her associate members income/sales)
+dev-fiddelize - 100% (solo income/sale) and/or 60% (each from his/her rep-comercials income/sales)
+rep-comercial - 40% (solo income/sale) and/or 10% (each from his/her associate members income/sales)
 associado - 30%
 
 - Possible Combinations of earnings' proportion
-fiddelize - 100%
-fiddelize (55%) + rep-comercial (45%)
-fiddelize (55%) + rep-comercial (15%) + associado (30%)
+dev-fiddelize - 100%
+dev-fiddelize (60%) + rep-comercial (40%)
+dev-fiddelize (60%) + rep-comercial (10%) + associado (30%)
 
 - Possible Combinations for roles
 # primaryAgent defines the earnings' proportion
@@ -51,8 +51,8 @@ export default function getBizSplitProportion(primaryAgent, options = {}) {
         return {
             job: "rep-comercial",
             perc: {
-                dev: 55,
-                "rep-comercial": 45,
+                dev: 60,
+                "rep-comercial": 40,
             },
             ...proportionAmount,
         };
@@ -65,8 +65,8 @@ export default function getBizSplitProportion(primaryAgent, options = {}) {
     return {
         job: "associado",
         perc: {
-            dev: 55,
-            "rep-comercial": 15,
+            dev: 60,
+            "rep-comercial": 10,
             associado: 30,
         },
         ...proportionAmount,
@@ -76,9 +76,9 @@ export default function getBizSplitProportion(primaryAgent, options = {}) {
 /* TEST EXAMPLE
 const res = getBizSplitProportion("luana", { amount: 100 });
 res = { job: 'associado',
-  perc: { dev: 55, 'rep-comercial': 15, associado: 30 },
+  perc: { dev: 60, 'rep-comercial': 10, associado: 30 },
   value:
-   { dev: '55.00', 'rep-comercial': '15.00', associado: '30.00' } }
+   { dev: '60.00', 'rep-comercial': '10.00', associado: '30.00' } }
  */
 
 function getProportionValue(amount, primaryAgent) {

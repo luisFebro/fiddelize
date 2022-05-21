@@ -24,7 +24,6 @@ import CompLoader from "../../components/CompLoader";
 import useBackColor from "../../hooks/useBackColor";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
-import useManageProServices from "../../hooks/pro/useManageProServices";
 import useData from "../../hooks/useData";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
@@ -87,7 +86,6 @@ function ClientMobileApp({ location, history }) {
 
     usePersistentStorage();
     useScrollUp();
-    useManageProServices();
 
     const [
         userId,

@@ -56,7 +56,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
     if (needPushNotif) {
         try {
             return await axios.put(
-                `${API}/notification/send${queryNoToken}`,
+                `${API}/notification/send`,
                 pushNotifData,
                 getHeaderToken(token)
             );

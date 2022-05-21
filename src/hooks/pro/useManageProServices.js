@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { default as checkToday } from "date-fns/isToday";
 import getAccurateDate from "../../utils/dates/getAccurateDate";
-import useAPI, { getNextExpiryDate, removeServices } from "../api/useAPI";
+import useAPI, { removeServices } from "../api/useAPI";
 import { getVar, store } from "../storage/useVar";
 import { isScheduledDate, addDays } from "../../utils/dates/dateFns";
 import { IS_PROD } from "../../config/clientUrl";
@@ -9,10 +9,10 @@ import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import usePro from "./usePro";
 import { useClientAdmin } from "../useRoleData";
-import useData from "../useData";
+// import useData from "../useData";
 
 const getPeriod = (ref) => {
-    if (!ref) return;
+    if (!ref) return false;
     const [, , per] = ref.split("-");
     if (per === "A") return "yearly";
 
@@ -28,28 +28,23 @@ export default function useManageProServices() {
     const { isToday, userId, isExpired } = data;
     const { bizPlan } = useClientAdmin();
 
-    const [role] = useData(["role"]);
-
-    const { data: nextExpiryDate } = useAPI({
-        url: getNextExpiryDate(userId),
-        trigger: isToday && userId && role === "cliente-admin",
-    });
-
-    const { nextExpiryData: expiryData } = usePro({
-        trigger: bizPlan === "gratis" || (nextExpiryDate && userId),
-        nextExpiryDate,
+    const proData = usePro({
         userId,
+        trigger: (isToday && bizPlan === "gratis") || userId,
     });
 
-    const planBr = expiryData && expiryData.nextExPlan;
-    const totalMoney = expiryData && expiryData.nextExTotalMoney;
-    const totalServ = expiryData && expiryData.nextExTotalServ;
-    const orders = expiryData && JSON.stringify(expiryData.nextExOrdersStat);
-    const ref = expiryData && expiryData.nextExRef;
+    const expiryData = proData && proData.nextExpiryData;
+
+    const planBr = expiryData && expiryData.nextPlan;
+    const totalServ = expiryData && expiryData.nextTotalServ;
+    const totalMoney = expiryData && expiryData.nextInvestAmount;
+    const orders = expiryData && JSON.stringify(expiryData.nextOrdersStatement);
+    const ref = expiryData && expiryData.nextReference;
+    const nextExpiryDate = proData && proData.nextExpiryDate;
     const period = getPeriod(ref);
     const planDays = period === "yearly" ? 365 : 30;
 
-    const { data: removalRes } = useAPI({
+    useAPI({
         method: "delete",
         url: removeServices(userId),
         trigger: nextExpiryDate && isExpired,
@@ -70,63 +65,78 @@ export default function useManageProServices() {
         );
     }, []);
 
-    const checkForExpiryServices = async () => {
-        if (nextExpiryDate && nextExpiryDate) {
-            const isServActive = isScheduledDate(nextExpiryDate);
-            const daysBeforeExpiringDate = addDays(
-                new Date(nextExpiryDate),
-                -10
+    const checkForExpiryServices = async (expiryDate) => {
+        const DAYS_BEFORE_EXPIRE = -5;
+
+        if (!userId) return;
+
+        const allRequiredData = {
+            businessId: userId,
+            totalMoney,
+            period,
+            ref,
+            totalServ,
+            planBr,
+            orders,
+            expiryDate,
+            planDays,
+        };
+
+        if (!nextExpiryDate) return;
+
+        // date which DAYS_BEFORE_EXPIRE days before expiring plan
+        const daysBeforeExpiringDate = addDays(
+            new Date(nextExpiryDate),
+            DAYS_BEFORE_EXPIRE
+        );
+
+        const needNearExpirePushNotif = !isScheduledDate(
+            daysBeforeExpiringDate
+        );
+
+        const areServicesActivated = isScheduledDate(nextExpiryDate);
+
+        const userAlreadyNotified = await didRunOnce(
+            "pro_nearExpiryDate",
+            daysBeforeExpiringDate,
+            { trigger: needNearExpirePushNotif && areServicesActivated }
+        );
+
+        const isNearToExpire =
+            period && needNearExpirePushNotif && !userAlreadyNotified;
+        if (isNearToExpire) {
+            const pushNearExpire = getPushNotifData(
+                "proNearExpiryDate",
+                allRequiredData
             );
+            sendNotification(userId, "pro", pushNearExpire);
+        }
 
-            const needServPreExpiryAlert = !isScheduledDate(
-                daysBeforeExpiringDate
+        if (!areServicesActivated) {
+            setData((prevData) => ({
+                ...prevData,
+                isExpired: true,
+            }));
+
+            const alreadyExpiryNotified = await didRunOnce(
+                "pro_expiredDate",
+                nextExpiryDate
             );
-            const needServExpiredDateAlert = !isScheduledDate(nextExpiryDate);
-
-            const alreadyNearNotified = await didRunOnce(
-                "pro_nearExpiryDate",
-                daysBeforeExpiringDate,
-                { trigger: needServPreExpiryAlert && isServActive }
-            );
-
-            if (period && needServPreExpiryAlert && !alreadyNearNotified) {
-                sendNotification(userId, "pro", {
-                    role: "cliente-admin",
-                    subtype: "proNearExpiryDate",
-                    nT: true,
-                    content: `totalMoney:${totalMoney};period:${period};ref:${ref};totalServ:${totalServ};planBr:${planBr};orders:${orders};expiryDate:${nextExpiryDate};planDays:${planDays};`,
-                });
-            }
-
-            if (!isServActive) {
-                setData((prevData) => ({
-                    ...prevData,
-                    isExpired: true,
-                }));
-
-                const alreadyExpiryNotified = await didRunOnce(
-                    "pro_expiredDate",
-                    nextExpiryDate
+            if (period && !alreadyExpiryNotified) {
+                const pushExpired = getPushNotifData(
+                    "proExpiredDate",
+                    allRequiredData
                 );
-                if (
-                    period &&
-                    needServExpiredDateAlert &&
-                    !alreadyExpiryNotified
-                ) {
-                    sendNotification(userId, "pro", {
-                        role: "cliente-admin",
-                        subtype: "proExpiredDate",
-                        nT: true,
-                        content: `totalMoney:${totalMoney};period:${period};ref:${ref};totalServ:${totalServ};planBr:${planBr};orders:${orders};expiryDate:${nextExpiryDate};planDays:${planDays};`,
-                    });
-                }
+                sendNotification(userId, "pro", pushExpired);
             }
         }
     };
 
     useEffect(() => {
-        checkForExpiryServices();
-    }, [nextExpiryDate, expiryData]);
+        if (!nextExpiryDate || proData.loading !== false) return;
+        checkForExpiryServices(nextExpiryDate);
+        // eslint-disable-next-line
+    }, [nextExpiryDate, proData.loading]);
 
     useEffect(() => {
         // fix date redirection will only applied on production env.
@@ -136,6 +146,56 @@ export default function useManageProServices() {
     }, [isToday, userId]);
 }
 
+function getPushNotifData(type, data) {
+    const role = "cliente-admin";
+
+    const defaultNotifCard = {
+        // senderId,
+        cardType: "pro",
+        totalMoney: data.totalMoney,
+        period: data.period,
+        ref: data.ref,
+        totalServ: data.totalServ,
+        planBr: data.planBr,
+        orders: data.orders,
+        expiryDate: data.expiryDate,
+        planDays: data.planDays,
+    };
+
+    const notifs = {
+        proNearExpiryDate: {
+            role,
+            userId: data.businessId,
+            isPushNotif: true, // only to verify in the backend that need push notif
+            type: "proNearExpiryDate",
+            payload: {
+                planBr: data.planBr,
+                totalServ: data.totalServ,
+                expiryDate: data.expiryDate,
+            },
+            notifCard: {
+                ...defaultNotifCard,
+                subtype: "proNearExpiryDate",
+            },
+        },
+        get proExpiredDate() {
+            return {
+                ...this.proNearExpiryDate,
+                type: "proExpiredDate",
+                payload: {
+                    planBr: data.planBr,
+                    totalServ: data.totalServ,
+                },
+                notifCard: {
+                    ...defaultNotifCard,
+                    subtype: "proExpiredDate",
+                },
+            };
+        },
+    };
+
+    return notifs[type];
+}
 /* ARCHIVES
 Using isToday from fns-date instead...
 comparison between dates are 15 minutes diferent.

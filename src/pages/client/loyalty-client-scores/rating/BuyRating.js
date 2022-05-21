@@ -46,7 +46,6 @@ export default function BuyRating({
 }) {
     const [scale, setScale] = useState(null);
     const [grade, setGrade] = useState(5);
-    const [finalGrade] = useState(null);
     const [buyReport, setBuyReport] = useState("");
     const [switchEdit, setSwitchEdit] = useState(false);
 

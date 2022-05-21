@@ -94,7 +94,7 @@ function AsyncAddMembersContent({
                 na aba PRO.
             </p>
             <p className="text-small text-left text-purple mt-3">
-                - Você é notificado <strong>10 dias</strong> antes do prazo
+                - Você é notificado <strong>5 dias</strong> antes do prazo
                 expirar.
             </p>
         </section>

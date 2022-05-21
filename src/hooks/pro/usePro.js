@@ -16,7 +16,7 @@ const setAllData = (thisData, setData, bizPlan) =>
     }));
 
 export default function usePro(options = {}) {
-    const { service, trigger = true, nextExpiryDate, userId } = options;
+    const { service, trigger = true, userId } = options;
 
     const [data, setData] = useState({
         isPro: false,
@@ -38,14 +38,9 @@ export default function usePro(options = {}) {
     const { businessId } = useAppSystem();
     const { bizPlan } = useClientAdmin();
 
-    const params = {
-        nextExpiryDate,
-    };
-
     const { data: backData, loading } = useAPI({
         url: getProData(businessId || userId), // userId used if user not logged in.
         dataName: "proData",
-        params,
         trigger: trigger && businessId !== "...",
     });
 
@@ -93,6 +88,7 @@ export default function usePro(options = {}) {
         plan,
         totalScore,
         nextExpiryData,
+        nextExpiryDate: backData && backData.nextExpiryDate,
         bizPlanList,
     };
 }

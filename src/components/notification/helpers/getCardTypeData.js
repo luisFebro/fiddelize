@@ -66,14 +66,15 @@ export default function getCardTypeData(cardType, options = {}) {
 
             if (subtype === "welcomeProPay") {
                 title = "Clube Pro";
-                brief = `Boas vindas do Clube Pro da Fiddelize! Os serviços Pro contratados já estão disponíveis. O seu pagamento foi aprovado em ${
+                brief = `Boas vindas do Clube Pro da Fiddelize! Os serviços Pro contratados já estão disponíveis. O seu pagamento foi aprovado hoje - ${
                     approvalDate && formatDMY(new Date(approvalDate))
                 }.`;
+                circularImg = "/img/icons/notif/crown.svg";
                 circularImg = "/img/icons/notif/crown.svg";
             }
             if (subtype === "proPay") {
                 title = "Pagamento Aprovado";
-                brief = `Já está disponível os serviços investidos e aprovados no dia ${
+                brief = `Já estão disponíveis os serviços investidos e aprovados hoje - ${
                     approvalDate && formatDMY(new Date(approvalDate))
                 }.`;
                 circularImg = "/img/icons/notif/crown-approval.svg";
@@ -95,7 +96,7 @@ export default function getCardTypeData(cardType, options = {}) {
                     planBr && planBr.cap()
                 } com ${totalServ} serviço${
                     totalServ > 1 ? "s" : ""
-                } acabou de expirar. Renove seus serviços para continuar usando.`;
+                } expirou hoje. Renove seus serviços para continuar usando.`;
                 circularImg = "/img/icons/notif/crown-expired.svg";
             }
             break;

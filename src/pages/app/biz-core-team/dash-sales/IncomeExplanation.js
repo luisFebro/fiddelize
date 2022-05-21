@@ -102,7 +102,7 @@ export default function IncomeExplanation() {
                         className="text-pill text-shadow"
                         style={{ backgroundColor: "grey" }}
                     >
-                        {agentJob === "dev" ? "55" : agentPerc}%
+                        {agentPerc}%
                     </span>{" "}
                     para cada transação dos seus clientes.
                 </p>

@@ -73,8 +73,6 @@ export const removeOneClickInvest = (userId) =>
 // PRO
 export const getProData = (userId) =>
     `${API}/pro/pro-member-data?userId=${userId}`; // POST
-export const getNextExpiryDate = (userId) =>
-    `${API}/pro/service/next-expiry-date?userId=${userId}`; // GET
 export const removeServices = (userId) =>
     `${API}/pro/service/remove?userId=${userId}`; // DELETE
 

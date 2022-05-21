@@ -9,12 +9,14 @@ import MoreOptionsMenu from "./MoreOptionsMenu";
 import PlanBadges from "./PlanBadges";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
+import useManageProServices from "../../hooks/pro/useManageProServices";
 import NotifPermissionBanner from "../../components/pwa-push-notification/NotifPermissionBanner";
 
 function DashboardClientAdmin({ location, history }) {
     const { name } = useProfile();
     useBackColor("var(--themeBackground--default)");
     useScrollUp();
+    useManageProServices();
 
     const showGreeting = () => (
         <p

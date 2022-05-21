@@ -199,7 +199,7 @@ export async function signInUserData(cpfValue, options = {}) {
         if (!verificationPass) {
             await sendWelcomeNotif({
                 userId: authUserId,
-                role: "ambos-clientes",
+                role: "cliente-admin",
             });
             // showSnackbar(dispatch, notifRes.data.msg, "success");
             showSnackbar(dispatch, "Verificando...", "warning", 3000);
@@ -335,8 +335,7 @@ export async function signInUserData(cpfValue, options = {}) {
 }
 
 // HELPERS
-async function sendWelcomeNotif({ userId, role = "ambos-clientes" }) {
-    // "ambos-clientes" add an welcome obj to cli-user as weel for test mode.
+async function sendWelcomeNotif({ userId, role = "cliente-admin" }) {
     const notifOptions = {
         role,
         noToken: true, // allow notification without being loggedin

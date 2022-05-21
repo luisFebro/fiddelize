@@ -54,8 +54,8 @@ export default function FacesPromotersScore({
 
     return (
         <section className="nps-rating--root">
-            <section className="d-flex justify-content-center">
-                <div className="faces-group shadow-elevation-black">
+            <section>
+                <div className="faces-group container-center shadow-elevation-black">
                     {facePatterns.map((f, ind) => (
                         <FontAwesomeIcon
                             key={ind}

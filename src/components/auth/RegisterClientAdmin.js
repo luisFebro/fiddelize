@@ -89,7 +89,7 @@ function RegisterClientAdmin({ logo }) {
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
-        referrer: "dev-fiddelize", // default
+        referrer: "",
         showAgreement: false,
         agreementDone: false,
     });
@@ -125,7 +125,7 @@ function RegisterClientAdmin({ logo }) {
                         ...prev.clientAdminData,
                         ...preRegisterCliAdminData,
                     },
-                    referrer: bizTeamReferrer,
+                    referrer: bizTeamReferrer || "dev-fiddelize",
                 }));
             }, 4000);
         }

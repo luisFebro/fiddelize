@@ -54,8 +54,8 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
                 mainReward,
                 phone,
             },
-            // eslint-disable-next-line
         }),
+        // eslint-disable-next-line
         [fullName, lastPrizeId]
     );
 
