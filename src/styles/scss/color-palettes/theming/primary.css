@@ -71,6 +71,8 @@
     --themePDark--yellow: #948c00;
     --themeBackground--yellow: #c9bc1f;
     /*END THEMING*/
+
+    --clr: #fff; /* magic nav */
 }
 /* THEMING */
 .theme-back--default {

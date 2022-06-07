@@ -122,6 +122,8 @@ const Footer = ({ location }) => {
         </section>
     );
 
+    return <span />;
+
     return (
         !isBlackList && (
             <footer>

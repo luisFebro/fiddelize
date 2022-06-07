@@ -272,7 +272,7 @@ function Website({ location }) {
                 />
                 <Route component={Default} />
             </Switch>
-            {dontNeedLayout && <Footer />}
+            {false && <Footer />}
         </Fragment>
     );
 }

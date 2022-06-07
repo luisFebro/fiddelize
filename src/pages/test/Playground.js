@@ -6,17 +6,17 @@ import "./_Playground.scss";
 // import Test from "./Test";
 
 export default function Playground() {
-    useBackColor("var(--mainWhite)");
+    useBackColor("#00020f");
 
     return (
         <Fragment>
-            <h1 className="mx-3 text-title text-center my-5 text-purple">
+            <h1 className="mx-3 text-title text-center my-5 text-white">
                 Playground for testing
             </h1>
             <main>
                 <MagicNavMenuIndicator />
             </main>
-            <div className="spacing" />
+            <div className="" />
             <style jsx>
                 {`
                     .spacing {
