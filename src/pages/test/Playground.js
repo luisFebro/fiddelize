@@ -10,20 +10,31 @@ export default function Playground() {
 
     return (
         <Fragment>
-            <h1 className="mx-3 text-title text-center my-5 text-white">
-                Playground for testing
-            </h1>
             <main>
                 <MagicNavMenuIndicator />
             </main>
-            <div className="" />
-            <style jsx>
-                {`
-                    .spacing {
-                        margin: 500px 0 500px;
-                    }
-                `}
-            </style>
         </Fragment>
     );
 }
+
+/*
+TEMPLATE
+
+<Fragment>
+    <h1 className="mx-3 text-title text-center my-5 text-white">
+        Playground for testing
+    </h1>
+    <main>
+        <MagicNavMenuIndicator />
+    </main>
+    <div className="" />
+    <style jsx>
+        {`
+            .spacing {
+                margin: 500px 0 500px;
+            }
+        `}
+    </style>
+</Fragment>
+
+ */
