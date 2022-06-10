@@ -1,192 +1,190 @@
-import { Fragment, useEffect } from "react";
-import TopNav from "./TopNav.js";
-import BottomNav from "./BottomNav.js";
-import CTA from "./CTA.js";
+import { useEffect } from "react";
 
 export default function MagicNavMenuIndicator() {
     useEffect(() => {
-        const script1 = document.createElement("script");
-        script1.type = "module";
-        script1.src =
-            "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js";
+        const list = document.querySelectorAll(".bottom-item");
 
-        const script2 = document.createElement("script");
-        script2.nomodule = true;
-        script2.src =
-            "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js";
+        function activeLink() {
+            list.forEach((item) => item.classList.remove("active"));
+            this.classList.add("active");
+        }
 
-        document.body.appendChild(script1);
-        document.body.appendChild(script2);
-
-        console.log("IonIcons started");
-
-        return () => {
-            // document.body.removeChild(script1);
-            // document.body.removeChild(script2);
-        };
+        list.forEach((item) => item.addEventListener("click", activeLink));
     }, []);
 
-    const InfoArea = () => (
-        <section className="info-area">
-            <hr className="lazer" />
-            <section className="data">
-                <div>
-                    <p>
-                        <span>201</span>ms
-                    </p>
-                    <div>
-                        <span>
-                            <ion-icon name="pencil"></ion-icon>
-                        </span>
-                        <p>Current Delay</p>
-                    </div>
-                </div>
-                <div>
-                    <p className="status">Ordinary</p>
-                    <div>
-                        <span>
-                            <ion-icon name="share-social"></ion-icon>
-                        </span>
-                        <p>Network Quality</p>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                        <span>45</span>%
-                    </p>
-                    <div>
-                        <span>
-                            <ion-icon name="flash"></ion-icon>
-                        </span>
-                        <p>Accelerate</p>
-                    </div>
-                </div>
-            </section>
-            <style jsx>
+    return (
+        <section className="wrapper">
+            <div className="navigation">
+                <ul>
+                    <li className="bottom-item">
+                        <a href="#">
+                            <span className="icon">
+                                <ion-icon name="bar-chart"></ion-icon>
+                            </span>
+                            <span className="text">Análise</span>
+                        </a>
+                    </li>
+                    <li className="bottom-item active">
+                        <a href="#">
+                            <span className="icon">
+                                <ion-icon name="home" />
+                            </span>
+                            <span className="text"></span>
+                        </a>
+                    </li>
+                    <li className="bottom-item">
+                        <a href="#">
+                            <span className="icon">
+                                <ion-icon name="person" />
+                            </span>
+                            <span className="text">Usuário</span>
+                        </a>
+                    </li>
+                    <div className="indicator" />
+                </ul>
+            </div>
+            <style jsx global>
                 {`
-                    @import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap");
-
-                    .info-area {
-                        position: relative;
+                    .wrapper {
+                        position: fixed;
+                        bottom: 0;
                     }
 
-                    .info-area .lazer {
+                    .navigation {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
                         position: relative;
-                        top: -25px;
-                        margin: 0 0 10px 0;
-                        width: 100%;
-                        border: 0;
-                        height: 2px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 400px;
+                        height: 70px;
                         background-image: linear-gradient(
-                            to right,
-                            rgba(0, 0, 0, 0),
-                            rgba(34, 202, 165, 0.75),
-                            rgba(0, 0, 0, 0)
+                            to bottom,
+                            #0f3129,
+                            #062928,
+                            #032225,
+                            #031a21,
+                            #01121a
                         );
+                        border-radius: 10px;
                     }
 
-                    .data {
+                    .navigation ul {
+                        display: flex;
+                        padding: 0;
+                        margin: 0;
+                        box-sizing: border;
+                        width: 350px;
+                    }
+
+                    .navigation ul li {
                         position: relative;
-                        top: -15px;
+                        list-style: none;
+                        width: 120px;
+                        height: 120px;
+                        z-index: 1;
+                    }
+
+                    .navigation ul li a {
+                        position: relative;
                         display: flex;
-                        justify-content: space-around;
+                        justify-content: center;
                         align-items: center;
-                    }
-
-                    .data div p {
-                        color: #fff;
-                        margin: 0;
-                        font-size: 11px;
-                        font-weight: bold;
-                        font-family: "Kdam Thmor Pro", sans-serif;
-                    }
-
-                    .data div p.status {
-                        margin-right: 0;
-                        font-size: 19px;
-                        color: #1cf499;
-                    }
-
-                    .data div p span {
-                        margin-right: 5px;
-                    }
-
-                    .data div p span,
-                    data div p.status {
-                        font-size: 18px;
-                    }
-
-                    .data div p,
-                    data div div p {
+                        flex-direction: column;
+                        width: 100%;
                         text-align: center;
+                        font-weight: 500;
                     }
 
-                    .data div div {
-                        display: flex;
-                        align-items: center;
+                    .navigation ul li a .icon {
+                        position: relative;
+                        display: block;
+                        line-height: 125px;
+                        font-size: 1.5em;
+                        text-align: center;
+                        transition: 0.5s;
+                        color: #3c5c59;
                     }
 
-                    .data div div span {
-                        color: rgb(34, 202, 165);
+                    .navigation ul li.active a .icon {
+                        color: #fff;
+                        transform: translateY(-35px);
                     }
 
-                    .data div div p {
-                        margin: 0;
-                        color: #657379;
+                    .navigation ul li a .text {
+                        position: absolute;
+                        color: #fff;
+                        font-weight: 400;
+                        font-size: 0.75em;
+                        opacity: 0;
+                        transform: translateY(20px);
+                        letter-spacing: 0.05em;
+                        transition: 0.5s;
                     }
 
-                    .data div div p,
-                    data div div span {
-                        font-size: 10px;
+                    .navigation ul li.active a .text {
+                        opacity: 1;
+                        transform: translateY(10px);
+                    }
+
+                    .indicator {
+                        position: absolute;
+                        width: 70px;
+                        height: 70px;
+                        top: -50%;
+                        left: 11%;
+                        border-radius: 50%;
+                        border: 6px solid #00020f;
+                        transition: 0.5s;
+                        background-image: linear-gradient(
+                            to bottom,
+                            #ffb600,
+                            #ffaa00,
+                            #ff9d00,
+                            #fe9100,
+                            #fd8401
+                        ); /*#eeab48*/
+                    }
+
+                    .indicator::before {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: -22px;
+                        width: 20px;
+                        height: 20px;
+                        background: transparent;
+                        border-top-right-radius: 20px;
+                        box-shadow: 1px -10px 0 0 #00020f;
+                    }
+
+                    .indicator::after {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        right: -22px;
+                        width: 20px;
+                        height: 20px;
+                        background: transparent;
+                        border-top-left-radius: 20px;
+                        box-shadow: 0px -10px 0 0 #00020f;
+                    }
+
+                    .navigation ul li:nth-child(1).active ~ .indicator {
+                        transform: translateX(calc(120px * 0));
+                    }
+
+                    .navigation ul li:nth-child(2).active ~ .indicator {
+                        transform: translateX(calc(120px * 1));
+                    }
+
+                    .navigation ul li:nth-child(3).active ~ .indicator {
+                        transform: translateX(calc(120px * 2));
                     }
                 `}
             </style>
         </section>
     );
-
-    return (
-        <Fragment>
-            <section className="main-gauge-area">
-                <TopNav />
-            </section>
-            <div className="cta-area">
-                <CTA />
-                <style jsx>
-                    {`
-                        .cta-area {
-                            position: relative;
-                            display: flex;
-                            justify-content: center;
-                        }
-                    `}
-                </style>
-            </div>
-            <InfoArea />
-            <BottomNav />
-            <style jsx>
-                {`
-                    .main-gauge-area {
-                        min-height: 330px;
-                        border-bottom-left-radius: 60px;
-                        border-bottom-right-radius: 60px;
-                        background-image: linear-gradient(
-                            to left bottom,
-                            #002d2a,
-                            #002628,
-                            #011f24,
-                            #02191e,
-                            #001118
-                        );
-                        border: solid 2px #043228;
-                    }
-                `}
-            </style>
-        </Fragment>
-    );
 }
-
-/*
-
-
-
- */

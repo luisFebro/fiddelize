@@ -48,8 +48,10 @@ export default function SwitchBtn({
     pillStyle = false,
     pillBack,
     customColor,
+    thisSColor = undefined,
     animationOn = true,
     needCustomColor = false,
+    needSameColor = false, // only the turn-on mode color will be displayed
     loading = false,
     disabled = false,
     disableToLeft = false,
@@ -71,12 +73,27 @@ export default function SwitchBtn({
     const { themeSColor: sColor } = useBizData();
 
     const styles = getStyles({ pillStyle, pillBack });
-    const classes = useStyles({
-        darkColor: needCustomColor ? `var(--themeSDark--${sColor})` : undefined,
-        lightColor: needCustomColor
-            ? `var(--themeSLight--${sColor})`
-            : undefined,
-    });
+
+    const handleClassColors = () => {
+        const defaultLightColor = needCustomColor
+            ? `var(--themeSLight--${thisSColor || sColor})`
+            : undefined;
+
+        if (needSameColor)
+            return {
+                darkColor: defaultLightColor,
+                lightColor: defaultLightColor,
+            };
+
+        return {
+            darkColor: needCustomColor
+                ? `var(--themeSDark--${thisSColor || sColor})`
+                : undefined,
+            lightColor: defaultLightColor,
+        };
+    };
+
+    const classes = useStyles(handleClassColors());
 
     const handleChange = (event) => {
         if (needDisableToLeft) return disableToLeftCallback();

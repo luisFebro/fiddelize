@@ -10,9 +10,16 @@ export default function TopNav() {
                             </span>
                         </a>
                     </li>
-                    <li className="top-item name-area text-white">
-                        <span className="name fani">fani</span>
-                        <span className="name vpn font-weight-bold">VPN</span>
+                    <li className="top-item logo-area text-white">
+                        <figure className="">
+                            <img
+                                src="/img/febront/logo-marica.png"
+                                width={80}
+                                height={80}
+                                title="logo da Maricá"
+                                alt="logo da Maricá"
+                            />
+                        </figure>
                     </li>
                     <li className="top-item">
                         <a href="#">
@@ -55,17 +62,8 @@ export default function TopNav() {
                         z-index: 1;
                     }
 
-                    .nav-top ul li.name-area {
-                        font-size: 1.5em;
+                    .nav-top ul li.logo-area {
                         margin: 0 50px;
-                    }
-
-                    .nav-top ul li .name.fani {
-                        //font-family: none;
-                    }
-
-                    .nav-top ul li .name.vpn {
-                        //font-family: none;
                     }
 
                     .nav-top ul li a .icon {

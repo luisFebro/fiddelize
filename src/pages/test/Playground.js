@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import useBackColor from "hooks/useBackColor";
 import FaniVPN from "./fani-vpn/FaniVPN";
-import MagicNavMenuIndicator from "./ref-codes/online-tut/magic-nav-menu-indicator/MagicNavMenuIndicator";
 import "./_Playground.scss";
 // import Test from "./Test";
 
@@ -10,14 +9,15 @@ export default function Playground() {
 
     return (
         <Fragment>
-            <main>
-                <MagicNavMenuIndicator />
-            </main>
+            <FaniVPN />
         </Fragment>
     );
 }
 
 /*
+<MagicNavMenuIndicator />
+
+
 TEMPLATE
 
 <Fragment>

@@ -2,7 +2,7 @@ import ModalBtn from "components/buttons/ModalBtn";
 import Img from "components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
-const latestVersion = "v5.24.50";
+const latestVersion = "v5.24.51";
 const updateDescription = "fiddelize - new access system";
 /* HISTORY
 digital menu - client-user
