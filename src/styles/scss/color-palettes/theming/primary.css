@@ -14,6 +14,7 @@
     --mainWhite: #ecf0f1;
 
     --mainFont: "Poppins", sans-serif;
+    --faniFont: "Kdam Thmor Pro", sans-serif;
     /*THEMING*/
     /*default*/
     --themeP--default: #4a148c;
@@ -74,6 +75,11 @@
 
     --clr: #fff; /* magic nav */
 }
+
+.font-fani {
+    font-family: var(--fontFani);
+}
+
 /* THEMING */
 .theme-back--default {
     background-color: #4a148c !important;

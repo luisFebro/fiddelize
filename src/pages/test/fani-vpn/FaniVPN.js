@@ -1,22 +1,31 @@
 import { Fragment, useEffect } from "react";
 import MagicNavMenuIndicator from "pages/test/ref-codes/online-tut/magic-nav-menu-indicator/MagicNavMenuIndicator.js";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
+import GaugeMeasuringData from "./GaugeMeasuringData";
 import TopNav from "./TopNav.js";
-import CTA from "./CTA.js";
+import HelpConectionBtn from "./components/buttons/HelpConectionBtn.js";
 
 /* IMPORTANT NOTES/LINKS
 repo: https://github.com/luisFebro/febront
 CTA hover effect: https://codepen.io/avvign/pen/NVJzQW
 */
 
+const statusStore = {
+    connected: "Conectado",
+    connecting: "Connectando...",
+    disconnected: "Desconectado",
+};
+
 export default function FaniVPN() {
+    const currStatus = "connected";
+
     const showSwitcher = () => {
         return (
             <SwitchBtn
                 titleLeft="Conexão 1" // when selected, should be "v2ray"
                 titleRight="Conexão 2" // when selected, should be "vchannel"
                 defaultStatus
-                customColor="text-green text-small"
+                customColor="text-green text-small font-fani"
                 thisSColor="green"
                 needSameColor
                 animationOn
@@ -32,27 +41,24 @@ export default function FaniVPN() {
             <section className="data">
                 <div>
                     <p>
-                        <span>201</span>ms
+                        <span>00:30:25</span>
                     </p>
                     <div>
                         <span>
-                            <ion-icon name="pencil"></ion-icon>
+                            <ion-icon name="alarm-outline"></ion-icon>
                         </span>
                         <p>Tempo Conexão</p>
                     </div>
                 </div>
                 <div>
-                    <p className="status">Ordinary</p>
-                    <div>
-                        <span>
-                            <ion-icon name="share-social"></ion-icon>
-                        </span>
-                        <p>Network Quality</p>
-                    </div>
+                    <p className={`status ${currStatus}`}>
+                        <span>{statusStore[currStatus]}</span>
+                    </p>
                 </div>
                 <div>
                     <p>
-                        <span>45</span>%
+                        <span className="data-num">5</span>mb{" "}
+                        {/*condition to either mb or gb */}
                     </p>
                     <div>
                         <span>
@@ -62,10 +68,9 @@ export default function FaniVPN() {
                     </div>
                 </div>
             </section>
+            <div style={{ marginBottom: 250 }} />
             <style jsx>
                 {`
-                    @import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap");
-
                     .info-area {
                         position: relative;
                     }
@@ -98,16 +103,27 @@ export default function FaniVPN() {
                         margin: 0;
                         font-size: 11px;
                         font-weight: bold;
-                        font-family: "Kdam Thmor Pro", sans-serif;
+                        font-family: var(--faniFont);
                     }
 
                     .data div p.status {
                         margin-right: 0;
                         font-size: 19px;
+                    }
+
+                    .data div p.status.connected {
                         color: #1cf499;
                     }
 
-                    .data div p span {
+                    .data div p.status.connecting {
+                        color: #e1d509;
+                    }
+
+                    .data div p.status.disconnected {
+                        color: #ee8888;
+                    }
+
+                    .data div p span.data-num {
                         margin-right: 5px;
                     }
 
@@ -135,8 +151,7 @@ export default function FaniVPN() {
                         color: #657379;
                     }
 
-                    .data div div p,
-                    data div div span {
+                    .data div div p {
                         font-size: 10px;
                     }
                 `}
@@ -171,17 +186,37 @@ export default function FaniVPN() {
             <section className="main-gauge-area">
                 <TopNav />
                 <div className="container-center my-3">{showSwitcher()}</div>
+                <hr className="lazer-gauge" />
+                <GaugeMeasuringData />
+                <div
+                    style={{
+                        marginBottom: 60,
+                    }}
+                />
             </section>
-            <div className="cta-area">
-                <CTA />
+            <div className="help-area">
+                <HelpConectionBtn />
             </div>
             <InfoArea />
             <MagicNavMenuIndicator />
             <div className="space-bottom" />
             <style jsx>
                 {`
+                    .main-gauge-area .lazer-gauge {
+                        position: relative;
+                        margin: 80px 0 40px 0;
+                        width: 100%;
+                        border: 0;
+                        height: 2px;
+                        background-image: linear-gradient(
+                            to right,
+                            rgba(0, 0, 0, 0),
+                            rgba(34, 202, 165, 0.75),
+                            rgba(0, 0, 0, 0)
+                        );
+                    }
+
                     .main-gauge-area {
-                        min-height: 330px;
                         border-bottom-left-radius: 60px;
                         border-bottom-right-radius: 60px;
                         background-image: linear-gradient(
@@ -199,13 +234,22 @@ export default function FaniVPN() {
                         margin-bottom: 100px;
                     }
 
-                    .cta-area {
+                    .help-area {
                         position: relative;
                         display: flex;
-                        justify-content: center;
+                        justify-content: right;
                     }
                 `}
             </style>
         </Fragment>
     );
 }
+
+/* ARCHIVES
+<div>
+    <span>
+        <ion-icon name="share-social"></ion-icon>
+    </span>
+    <p>Ping ms</p>
+</div>
+ */

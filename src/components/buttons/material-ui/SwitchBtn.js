@@ -125,10 +125,12 @@ export default function SwitchBtn({
         return null;
     };
 
-    const on = `m-0 ${animationOn ? "animated rubberBand" : ""} text-normal ${
-        customColor || "text-purple font-weight-bold"
-    }`;
-    const off = `m-0 text-normal ${customColor || "text-grey"}`;
+    const on = `d-flex align-items-center m-0 ${
+        animationOn ? "animated rubberBand" : ""
+    } text-normal ${customColor || "text-purple font-weight-bold"}`;
+    const off = `d-flex align-items-center m-0 text-normal ${
+        customColor || "text-grey"
+    } text-grey`;
     const txtStyle1 = checked ? off : on;
     const txtStyle2 = !checked ? off : on;
 

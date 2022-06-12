@@ -1,19 +1,15 @@
+import MuDrawerBtn from "./components/buttons/MuDrawerBtn";
+
 export default function TopNav() {
     return (
         <section className="wrapper-nav-top">
             <div className="nav-top">
                 <ul>
-                    <li className="top-item">
-                        <a href="#">
-                            <span className="icon">
-                                <ion-icon name="grid"></ion-icon>
-                            </span>
-                        </a>
-                    </li>
+                    <MuDrawerBtn />
                     <li className="top-item logo-area text-white">
                         <figure className="">
                             <img
-                                src="/img/febront/logo-marica.png"
+                                src="/img/febront/logo-marica2.png"
                                 width={80}
                                 height={80}
                                 title="logo da Maricá"
@@ -52,7 +48,6 @@ export default function TopNav() {
                         line-height: 70px;
                         padding: 0;
                         margin: 0;
-                        //width: 350px;
                     }
 
                     .nav-top ul li {
@@ -81,9 +76,6 @@ export default function TopNav() {
                         width: 100%;
                         justify-content: center;
                         align-items: center;
-                        //flex-direction: column;
-                        //text-align: center;
-                        //font-weight: 500;
                     }
                 `}
             </style>

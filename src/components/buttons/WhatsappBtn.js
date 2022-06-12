@@ -22,9 +22,9 @@ export default function WhatsappBtn({
     return (
         <a
             target="_blank"
-            rel="noopener noreferrer"
             className="no-text-decoration"
             title="Clique aqui para enviar uma mensagem em nosso WhatsApp"
+            rel="noopener noreferrer"
             href={`https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${greetingTxt}`}
             onClick={() =>
                 showToast("Um momento. Redirecionando...", { dur: 10000 })

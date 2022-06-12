@@ -19,7 +19,7 @@ export default function MagicNavMenuIndicator() {
                     <li className="bottom-item">
                         <a href="#">
                             <span className="icon">
-                                <ion-icon name="bar-chart"></ion-icon>
+                                <ion-icon name="document-text"></ion-icon>
                             </span>
                             <span className="text">Análise</span>
                         </a>
