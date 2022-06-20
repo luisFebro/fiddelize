@@ -11,8 +11,9 @@ import showToast from "components/toasts";
 import checkValidSession, { runSessionCheck } from "auth/checkValidSession";
 import "utils/globalHelpers";
 import useGlobalApp from "./useGlobalApp.js";
-import AsyncWebsite from "./user-interfaces/AsyncWebsite";
-import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
+// import AsyncWebsite from "./user-interfaces/AsyncWebsite";
+// import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
+import MobileApp from "./user-interfaces/MobileApp";
 // STYLING
 // I inlined all critical bootstrap classes on critical css... OMG!!
 // Selected is just the other ones...
@@ -77,7 +78,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <GlobalProvider store={store}>
-                {isApp ? <AsyncMobileApp /> : <AsyncWebsite />}
+                <MobileApp />
             </GlobalProvider>
         </BrowserRouter>
     );

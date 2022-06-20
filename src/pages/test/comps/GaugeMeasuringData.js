@@ -28,6 +28,8 @@ export default function GaugeMeasuringData() {
             <style jsx>
                 {`
                     .gauge-measuring--root {
+                        position: relative;
+                        z-index: 100;
                         display: flex;
                         justify-content: space-around;
                         align-items: center;
@@ -53,7 +55,7 @@ export default function GaugeMeasuringData() {
                         margin: 0;
                         font-size: 11px;
                         font-weight: bold;
-                        font-family: var(--faniFont);
+                        font-family: var(--mainFont);
                     }
 
                     .gauge-measuring--root div div p span {
@@ -62,7 +64,7 @@ export default function GaugeMeasuringData() {
                     }
 
                     .gauge-measuring--root div div .sub-title {
-                        color: #657379;
+                        color: var(--txtColorDark);
                     }
 
                     .triangle {

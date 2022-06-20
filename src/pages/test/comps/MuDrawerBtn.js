@@ -12,6 +12,7 @@ import NetworkCheckIcon from "@mui/icons-material/NetworkCheck";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import SupportIcon from "@mui/icons-material/Support";
+import Grid from "styles/icons/ion/Grid";
 // import Button from '@mui/material/Button';
 
 const dataStore = [
@@ -19,10 +20,10 @@ const dataStore = [
     { txt: "Forçar Rede", icon: <NetworkCheckIcon /> },
     { txt: "Configurar APN", icon: <AdjustIcon /> },
     { txt: "Rotear para PC", icon: <ComputerIcon /> },
-    { txt: "Fale conosco", icon: <SupportIcon /> },
+    { txt: "Fale Conosco", icon: <SupportIcon /> },
 ];
 
-export default function MuDrawer() {
+export default function MuDrawerBtn() {
     const [state, setState] = useState({
         left: false,
     });
@@ -48,10 +49,10 @@ export default function MuDrawer() {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            <List>
+            <List style={{ backgroundColor: "#00020f" }}>
                 {dataStore.map((itemObj) => (
-                    <Fragment>
-                        <ListItem key={itemObj.txt} disablePadding>
+                    <Fragment key={itemObj.txt}>
+                        <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>{itemObj.icon}</ListItemIcon>
                                 <ListItemText primary={itemObj.txt} />
@@ -70,7 +71,7 @@ export default function MuDrawer() {
                             color: #fff !important;
                         }
 
-                        .MuiPaper--root.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+                        .MuiDrawer-paper {
                             background: #00020f !important;
                         }
 
@@ -98,7 +99,7 @@ export default function MuDrawer() {
             <li className="top-item" onClick={toggleDrawer("left", true)}>
                 <a href="#">
                     <span className="icon">
-                        <ion-icon name="grid"></ion-icon>
+                        <Grid />
                     </span>
                 </a>
             </li>

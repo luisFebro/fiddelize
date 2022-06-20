@@ -1,0 +1,215 @@
+// reference: https://codepen.io/domwebber/pen/zyagEr
+
+$meter-border: 33px;
+$meter-bordered: 250px;
+
+$meter-filled-connected-color: #004331;
+$meter-filled-disconnecting-color: rgba(225, 213, 9, 0.5);
+$meter-filled-disconnected-color: rgba(238, 136, 136, 0.5);
+
+// connection colors
+$border-connected-color: var(--connected);
+$border-connecting-color: var(--connecting);
+$border-disconnected-color: var(--disconnected);
+
+.meter-container {
+    position:relative;
+    z-index: 10;
+    top: 30px;
+    width: $meter-bordered;
+    height: $meter-bordered;
+    margin: auto;
+    border-radius: 50%;
+    overflow: visible;
+    //border-bottom-color: transparent;
+
+    &:before {
+        content: '';
+        position: absolute; // *
+        border-radius: 50%; // *
+        display: block; // *
+        top: -$meter-border;
+        left: -$meter-border;
+        height: $meter-bordered;
+        width: $meter-bordered;
+        border: $meter-border solid transparent;
+        // donut animation
+        border-left: $meter-border solid var(--fill); // border-left: connecting - border: connected - border: none (disconnected)
+        animation: donutSpin 1.2s linear infinite forwards;
+        filter: blur(4px);
+        transition: 4s;
+    }
+
+    &.connected.connect-stabilize:before {
+        border: $meter-border solid var(--fill);
+        animation: changeConnectedColor 4s linear 2 forwards;
+    }
+
+    &.connected {
+        box-shadow: inset 0px 0px 0px 3px $border-connected-color;
+        border: $meter-border solid $meter-filled-connected-color;
+    }
+
+    &.connecting {
+        box-shadow: inset 0px 0px 0px 3px $border-connecting-color;
+        border: $meter-border solid $meter-filled-disconnecting-color;
+    }
+
+    &.disconnected {
+        box-shadow: inset 0px 0px 0px 3px $border-disconnected-color;
+        border: $meter-border solid $meter-filled-disconnected-color;
+    }
+
+    & .bottom-brick {
+        z-index: 100;
+        position: absolute;
+        bottom: 0;
+        background: #011f24;
+        width: 42px;
+        height: 14px;
+
+        &.connected {
+            box-shadow: 0px 6px 0px -3px $border-connected-color, 0px -6px 0px -3px $border-connected-color;
+        }
+
+        &.connecting {
+            box-shadow: 0px 6px 0px -3px $border-connecting-color, 0px -6px 0px -3px $border-connecting-color;
+        }
+
+        &.disconnected {
+            box-shadow: 0px 6px 0px -3px $border-disconnected-color, 0px -6px 0px -3px $border-disconnected-color;
+        }
+
+        &.left {
+            left: 5px;
+            transform: rotate(135deg);
+        }
+
+
+        &.right {
+            right: 5px;
+            transform: rotate(-135deg);
+        }
+
+        &.ground {
+             width: 152px;
+             bottom: -42px;
+             left: 16px;
+             height: 28px;
+
+             &.connected {
+                 box-shadow: 0px -6px 0px -3px $border-connected-color;
+             }
+
+             &.connecting {
+                 box-shadow: 0px -6px 0px -3px $border-connecting-color;
+             }
+
+             &.disconnected {
+                 box-shadow: 0px -6px 0px -3px $border-disconnected-color;
+             }
+        }
+    }
+
+    & .bottom-line {
+        position: absolute;
+        bottom: -52px;
+        left: 10px;
+        margin: 40px 0;
+        width: 80%;
+        border: 0;
+        height: 5px;
+
+        &.connected {
+            background-image: linear-gradient(
+                to right,
+                rgba(0, 0, 0, 0),
+                $border-connected-color,
+                rgba(0, 0, 0, 0)
+            );
+        }
+
+        &.connecting {
+            background-image: linear-gradient(
+                to right,
+                rgba(0, 0, 0, 0),
+                $border-connecting-color,
+                rgba(0, 0, 0, 0)
+            );
+        }
+
+        &.disconnected {
+            background-image: linear-gradient(
+                to right,
+                rgba(0, 0, 0, 0),
+                $border-disconnected-color,
+                rgba(0, 0, 0, 0)
+            );
+        }
+    }
+}
+
+// ANIMATIONS
+@keyframes donutSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes changeConnectedColor {
+  0% {
+    border: $meter-border solid var(--fill);
+  }
+  100% {
+    border: $meter-border solid #139a61;
+  }
+}
+// END ANIMATIONS
+
+
+/* ARCHIVES
+
+@keyframes dialVibrate {
+  0%   { transform:rotate($rotation); }
+  50% { transform:rotate(- $rotation); }
+  100%   { transform:rotate($rotation); }
+}
+
+@keyframes pinVibrate {
+  0%   { transform:rotate(0deg); }
+  50% { transform:rotate(-2 * $rotation); }
+  100%   { transform:rotate(0deg); }
+}
+
+.dial {
+    height:($meter-bordered/2) !important;
+    width:0px;
+    border:$dial-border solid $dial-background;
+    background-color:$dial-background;
+    transform:rotate(45deg);
+    transform-origin: bottom center;
+    transition:0.75s;
+    position:absolute;
+    top:-$meter-border;
+    right:($meter - $dial-width)/2;
+    border-radius:15px;
+    box-shadow: 0 0 0 $dial-shadow $meter-background;
+  }
+
+.pin {
+  position:absolute;
+  width:$pin;
+  height:$pin;
+  background-color:$dial-background;
+  border-radius:50% 0% 50% 50%;
+  top:($meter/2) - (0.5 * $pin);
+  transform-origin: center;
+  right:-$pin + ($meter/2) + (2*$dial-border) + (0.25 * $pin);
+  box-shadow: inset 0 0 0 ($dial-border*2) $dial-background, inset 0 0 0 ($pin - (2* $dial-border)) $meter-background;
+  animation: pinVibrate $animation-time ease 0.5s infinite;
+}
+
+ */

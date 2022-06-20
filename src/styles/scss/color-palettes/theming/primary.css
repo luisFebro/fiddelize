@@ -1,6 +1,27 @@
 @import "../../functions/setContrastedColor";
 
 :root {
+    /* APP MARICÁ */
+    --connected: #1cf499;
+    --connecting: #e1d509;
+    --disconnecting: #e1d509;
+    --disconnected: #ee8888;
+
+    /* surface */
+    --themeBackground: #00020f;
+
+    --btnColor: linear-gradient(
+        to bottom,
+        #ffb600,
+        #ffaa00,
+        #ff9d00,
+        #fe9100,
+        #fd8401
+    );
+    --txtColorDark: #657379;
+    --btnRed: #ed213a;
+    /* END APP MARICÁ */
+
     /*purple 900*/
     --themeP: #4a148c;
     --themePLight: #7c43bd;
@@ -8,13 +29,12 @@
 
     /*surface (such as cards, sheets, and menus) and background*/
     --themeSurface: #f7f1e3; /*white variant*/
-    --themeBackground: #4a148c; /*same as primary*/
+    /* --themeBackground: #4a148c; */ /*same as primary*/
     /*on colors - text*/
     /*--mainBlack: black; use only: black */
     --mainWhite: #ecf0f1;
 
-    --mainFont: "Poppins", sans-serif;
-    --faniFont: "Kdam Thmor Pro", sans-serif;
+    --mainFont: "Kdam Thmor Pro", sans-serif; /* "Poppins", sans-serif; */
     /*THEMING*/
     /*default*/
     --themeP--default: #4a148c;

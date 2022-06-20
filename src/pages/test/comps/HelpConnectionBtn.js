@@ -1,7 +1,7 @@
 import { useState } from "react";
 import parse from "html-react-parser";
 
-export default function HelpConectionBtn() {
+export default function HelpConnectionBtn() {
     const [clicked, setClicked] = useState(false);
     const [countClick, setCountClick] = useState(0);
 
@@ -26,7 +26,7 @@ export default function HelpConectionBtn() {
                 }
                 rel="noopener noreferrer"
                 target={urlReady ? "_blank" : "_self"}
-                className={`help-btn font-fani ${clicked ? "left-anima" : ""}`}
+                className={`help-btn ${clicked ? "left-anima" : ""}`}
                 onClick={handleBtnClick}
             >
                 {clicked ? null : parse(`Conexão<br />Emergencial`)}
@@ -60,14 +60,7 @@ export default function HelpConectionBtn() {
                         border: solid 10px rgb(0, 2, 15);
                         transition: 4s ease;
                         color: #fff;
-                        background: linear-gradient(
-                            to bottom,
-                            #ffb600,
-                            #ffaa00,
-                            #ff9d00,
-                            #fe9100,
-                            #fd8401
-                        );
+                        background: var(--btnColor);
                         text-decoration: none !important;
                         z-index: 1;
                         overflow: hidden;

@@ -2,6 +2,95 @@ import { useMemo, Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useGlobalContext } from "context";
 import loadInit from "auth/api";
+import { Load } from "components/code-splitting/LoadableComp";
+// PAGES
+import MaricaTelecom from "pages/test/MaricaTelecom";
+
+export const AsyncPlayground = Load({
+    loader: () =>
+        import(
+            "pages/test/Playground" /* webpackChunkName: "playground-lazy" */
+        ),
+});
+// END PAGES
+
+function Mobile({ location }) {
+    const locationNow = location.pathname;
+
+    const { uify } = useGlobalContext();
+
+    // eslint-disable-next-line
+    const setUify = useMemo(() => uify, []);
+
+    useEffect(() => {
+        loadInit(setUify);
+        // eslint-disable-next-line
+    }, [setUify]);
+
+    return (
+        <Fragment>
+            <Switch>
+                <Route path="/" exact component={MaricaTelecom} />
+                <Route
+                    path="/test/playground"
+                    exact
+                    component={AsyncPlayground}
+                />
+            </Switch>
+        </Fragment>
+    );
+}
+
+export default withRouter(Mobile);
+
+/* ARCHIVES
+
+<Route
+    path="/test/playground"
+    exact
+    component={AsyncPlayground}
+/>
+
+<Route component={Default} />
+{!["/app", "/acesso/verificacao"].includes(locationNow) ? (
+    <AsyncNavBar />
+) : null}
+
+ */
+
+/* ARCHIVES
+import ChangePassword from 'pages/client/ChangePassword';
+import InsertNewPassword from 'pages/client/InsertNewPassword';
+import ConfirmAccount from 'pages/client/ConfirmAccount';
+
+ // This is the msg to be displayed for desktop users when popping up the
+ // new screen right after the download.
+ // some phones browsers are detecting as it is a mobile
+ // baixe-app is now demantory from website interface and not mixing up with mobile version.
+ const InstallMsg = () => (
+     <div className="text-center mt-5">
+         <p className="text-white text-title">Seu App está sendo instalado!</p>
+         <p className="text-white text-subtitle mx-2">
+             Feche essa janela e abra o app direto da sua área de desktop assim
+             que aparecer a mensagem de confirmação.
+         </p>
+     </div>
+ );
+
+<Route path="/baixe-app" exact component={InstallMsg} />
+<Route
+    path="/baixe-app/:userName"
+    exact
+    component={InstallMsg}
+/>
+ */
+
+/* FIDDELIZE ORIGINAL FILES
+
+import { useMemo, Fragment, useEffect } from "react";
+import { Switch, Route, withRouter } from "react-router-dom";
+import { useGlobalContext } from "context";
+import loadInit from "auth/api";
 import PrivateRouteClientAdm from "components/auth/routes/PrivateRouteClientAdm";
 import { Load } from "components/code-splitting/LoadableComp";
 // PAGES
@@ -55,7 +144,7 @@ const AsyncNavBar = Load({
     loading: false,
     loader: () =>
         import(
-            "components/_layout/navbar" /* webpackChunkName: "main-navbar-lazy" */
+            "components/_layout/navbar" /* webpackChunkName: "main-navbar-lazy"
         ),
 });
 

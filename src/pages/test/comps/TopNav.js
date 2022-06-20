@@ -1,4 +1,5 @@
-import MuDrawerBtn from "./components/buttons/MuDrawerBtn";
+import MuDrawerBtn from "./MuDrawerBtn";
+import Settings from "styles/icons/ion/Settings";
 
 export default function TopNav() {
     return (
@@ -11,7 +12,7 @@ export default function TopNav() {
                             <img
                                 src="/img/febront/logo-marica2.png"
                                 width={80}
-                                height={80}
+                                height={70}
                                 title="logo da Maricá"
                                 alt="logo da Maricá"
                             />
@@ -20,7 +21,7 @@ export default function TopNav() {
                     <li className="top-item">
                         <a href="#">
                             <span className="icon">
-                                <ion-icon name="settings"></ion-icon>
+                                <Settings />
                             </span>
                         </a>
                     </li>
