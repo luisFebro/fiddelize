@@ -6,12 +6,12 @@ import { Load } from "components/code-splitting/LoadableComp";
 // PAGES
 import MaricaTelecom from "pages/test/MaricaTelecom";
 
-export const AsyncPlayground = Load({
-    loader: () =>
-        import(
-            "pages/test/Playground" /* webpackChunkName: "playground-lazy" */
-        ),
-});
+// export const AsyncPlayground = Load({
+//     loader: () =>
+//         import(
+//             "pages/test/Playground" /* webpackChunkName: "playground-lazy" */
+//         ),
+// });
 // END PAGES
 
 function Mobile({ location }) {
@@ -31,11 +31,6 @@ function Mobile({ location }) {
         <Fragment>
             <Switch>
                 <Route path="/" exact component={MaricaTelecom} />
-                <Route
-                    path="/test/playground"
-                    exact
-                    component={AsyncPlayground}
-                />
             </Switch>
         </Fragment>
     );
@@ -44,6 +39,12 @@ function Mobile({ location }) {
 export default withRouter(Mobile);
 
 /* ARCHIVES
+
+<Route
+    path="/test/playground"
+    exact
+    component={AsyncPlayground}
+/>
 
 <Route
     path="/test/playground"
