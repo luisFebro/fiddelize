@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import useBackColor from "hooks/useBackColor";
-import FaniVPN from "./fani-vpn/FaniVPN";
 import "./_Playground.scss";
 // import Test from "./Test";
 // TESTES
@@ -11,7 +10,7 @@ import "./_Playground.scss";
 export default function Playground() {
     useBackColor("#00020f"); // "#00020f" => background maricá
 
-    return <FaniVPN />;
+    return <div>Playground</div>;
 }
 
 /* DRAWER MATERIAL UI
