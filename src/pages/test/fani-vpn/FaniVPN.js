@@ -5,11 +5,6 @@ import GaugeMeasuringData from "./GaugeMeasuringData";
 import TopNav from "./TopNav.js";
 import HelpConectionBtn from "./components/buttons/HelpConectionBtn.js";
 
-/* IMPORTANT NOTES/LINKS
-repo: https://github.com/luisFebro/febront
-CTA hover effect: https://codepen.io/avvign/pen/NVJzQW
-*/
-
 const statusStore = {
     connected: "Conectado",
     connecting: "Connectando...",
