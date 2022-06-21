@@ -5,12 +5,12 @@ import { BrowserRouter } from "react-router-dom";
 import isThisApp from "utils/window/isThisApp";
 import deferJsOnload from "utils/performance/deferJsOnload";
 import useOffline from "hooks/useOffline";
-import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
 // import checkValidSession, { runSessionCheck } from "auth/checkValidSession";
 import "utils/globalHelpers";
 import useGlobalApp from "./useGlobalApp.js";
+// import { IS_PROD } from "config/clientUrl";
 // import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 // import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 import MobileApp from "./user-interfaces/MobileApp";
@@ -24,7 +24,7 @@ import "../styles/bootstrap.selected.css";
 // END STYLING
 // import ScrollToTop from 'react-router-scroll-top';
 
-const isApp = isThisApp();
+// const isApp = isThisApp();
 
 export default function App() {
     useOffline();
@@ -45,7 +45,7 @@ export default function App() {
         //         .then(console.log)
         //         .catch((err) => console.log(`push sub rejected: ${err}`));
 
-        if (IS_PROD) deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
+        // if (IS_PROD) deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
 
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
