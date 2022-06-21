@@ -5,11 +5,25 @@ const weatherCondStore = {
     rainy: "chuvoso", // e.g 19°
     cloudy: "nublado", // e.g 26°
     //
+    mostlySunny: "parte ensolarado", // e.g 26
+    partlyCloudy: "parcialmente nublado", // e.g 20
     stormy: "turbulento",
+};
+
+const weekDays = {
+    0: "Domingo",
+    1: "Segunda",
+    2: "Terça",
+    3: "Quarta",
+    4: "Quinta",
+    5: "Sexta",
+    6: "Sábado",
 };
 
 export default function Clouds() {
     const currWeatherCond = "sunny";
+
+    const todayDateInd = new Date().getDay();
 
     return (
         <section className="clouds--root">
@@ -17,7 +31,7 @@ export default function Clouds() {
                 <div className={`${currWeatherCond}`}></div>
                 <span className="degrees-celsius-wrapper">
                     <span className="degrees-celsius">
-                        24
+                        27
                         <span className="c">°C</span>
                     </span>
                     <span className="weather-desc">
@@ -25,7 +39,9 @@ export default function Clouds() {
                             {weatherCondStore[currWeatherCond]}
                         </p>
                         <div className="infos">
-                            <span className="weather-today">Segunda</span>
+                            <span className="weather-today">
+                                {weekDays[todayDateInd]}
+                            </span>
                             <span className="weather-place">Maricá, RJ</span>
                         </div>
                     </span>

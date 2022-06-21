@@ -19,6 +19,7 @@
         #fd8401
     );
     --txtColorDark: #657379;
+    --txtColorDarkLight: #848f94;
     --btnRed: #ed213a;
     /* END APP MARICÁ */
 
@@ -96,9 +97,23 @@
     --clr: #fff; /* magic nav */
 }
 
-.font-fani {
-    font-family: var(--fontFani);
+.main-font {
+    font-family: var(--mainFont);
 }
+
+/* Marica */
+.txt-color-connected {
+    color: var(--connected) !important;
+}
+
+.txt-color-connecting {
+    color: var(--connecting) !important;
+}
+
+.txt-color-disconnected {
+    color: var(--disconnected) !important;
+}
+/* End Marica */
 
 /* THEMING */
 .theme-back--default {

@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import Flash from "styles/icons/ion/Flash";
-import AlarmOutline from "styles/icons/ion/AlarmOutline";
+import Alarm from "styles/icons/ion/Alarm";
 
 const statusStore = {
     connected: "Conectado",
@@ -18,7 +18,7 @@ const InfoArea = ({ connectStatus = "disconnected" }) => (
                 </p>
                 <div>
                     <span>
-                        <AlarmOutline />
+                        <Alarm />
                     </span>
                     <p>Tempo Conexão</p>
                 </div>

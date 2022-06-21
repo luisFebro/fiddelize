@@ -14,7 +14,7 @@ export default function HelpConnectionBtn() {
     };
 
     const urlReady = countClick === 2;
-    const jeanPhone = 21991120967;
+    const jeanPhone = 22998055851; // 21991120967;
 
     return (
         <section>
@@ -35,7 +35,7 @@ export default function HelpConnectionBtn() {
                         <img
                             width={35}
                             height={35}
-                            src="/img/febront/whats-icon.svg"
+                            src="/img/febront/whats-icon.png"
                             alt="whatsapp"
                         />
                     </span>

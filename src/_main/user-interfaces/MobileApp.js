@@ -2,7 +2,7 @@ import { useMemo, Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useGlobalContext } from "context";
 import loadInit from "auth/api";
-import { Load } from "components/code-splitting/LoadableComp";
+// import { Load } from "components/code-splitting/LoadableComp";
 // PAGES
 import MaricaTelecom from "pages/test/MaricaTelecom";
 

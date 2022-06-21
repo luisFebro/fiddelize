@@ -184,30 +184,30 @@ export default function MainBtn({
                     }
 
                     .core-bubble--root .logo {
-                        top: 75px;
+                        top: 65px;
                     }
 
                     .core-bubble--root .light3 {
-                        bottom: -6px;
-                        right: -15px;
+                        bottom: -17px;
+                        right: -35px;
                         transform: rotate(200deg);
                     }
 
                     .core-bubble--root .light4 {
-                        bottom: -11px;
-                        left: -15px;
+                        bottom: -24px;
+                        left: -32px;
                         transform: rotate(-210deg);
                     }
 
                     .core-bubble--root .light5 {
-                        top: 39px;
-                        left: -12px;
+                        top: 27px;
+                        left: -28px;
                         transform: rotate(200deg);
                     }
 
                     .core-bubble--root .light6 {
-                        top: 44px;
-                        right: -10px;
+                        top: 30px;
+                        right: -27px;
                         transform: rotate(-210deg);
                     }
 
@@ -216,7 +216,7 @@ export default function MainBtn({
                         left: 50%;
                         transform: translateX(-50%);
                         z-index: 100;
-                        bottom: -39%;
+                        bottom: -47%;
                     }
                 `}
             </style>

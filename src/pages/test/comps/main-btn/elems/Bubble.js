@@ -64,7 +64,7 @@ export default function Bubble({ connectStatus = "" }) {
                         height: 110px;
                         border-radius: 100%;
                         position: relative;
-                        top: 30px;
+                        top: 37px;
                     }
 
                     .bubble--root .ball:before {

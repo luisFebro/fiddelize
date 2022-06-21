@@ -22,7 +22,7 @@ export default function ProfileContent() {
                 {`
                     .copy-btn-area {
                         position: relative;
-                        top: 35px;
+                        padding-top: 5px;
                     }
 
                     .copy-btn {
@@ -86,7 +86,7 @@ export default function ProfileContent() {
 
                     .profile-info h1 {
                         font-size: 21px;
-                        color: var(--txtColorDark);
+                        color: var(--txtColorDarkLight);
                         text-align: center;
                     }
 

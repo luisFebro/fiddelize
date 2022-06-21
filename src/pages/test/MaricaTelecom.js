@@ -1,5 +1,5 @@
 // version 0.90.2
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 // import { useGlobalContext } from "context";
 import useBackColor from "hooks/useBackColor";
@@ -17,6 +17,28 @@ export default function MaricaTelecom() {
     const [connectStatus, setConnectStatus] = useState("disconnected");
     const [connect, setConnect] = useState(false);
     const isDisconnecting = connectStatus === "connected";
+
+    useEffect(() => {
+        const script1 = document.createElement("script");
+        script1.type = "module";
+        script1.src =
+            "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js";
+
+        const script2 = document.createElement("script");
+        script2.nomodule = true;
+        script2.src =
+            "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js";
+
+        document.body.appendChild(script1);
+        document.body.appendChild(script2);
+
+        console.log("IonIcons started");
+
+        return () => {
+            // document.body.removeChild(script1);
+            // document.body.removeChild(script2);
+        };
+    }, []);
 
     const showSwitcher = () => {
         return (
@@ -68,6 +90,9 @@ export default function MaricaTelecom() {
             <style jsx>
                 {`
                     .switcher-area {
+                        position: relative;
+                        top: -9px;
+                        z-index: 100;
                         margin-top: 1.8rem !important;
                         margin-bottom: 0.4rem !important;
                     }

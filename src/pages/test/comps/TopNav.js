@@ -10,6 +10,7 @@ export default function TopNav() {
                     <li className="top-item logo-area text-white">
                         <figure className="">
                             <img
+                                className="logo-img"
                                 src="/img/febront/logo-marica2.png"
                                 width={80}
                                 height={70}
@@ -59,7 +60,12 @@ export default function TopNav() {
                     }
 
                     .nav-top ul li.logo-area {
-                        margin: 0 50px;
+                        margin: 0 50px 0;
+                    }
+
+                    .nav-top ul li.logo-area .logo-img {
+                        position: relative;
+                        top: 13px;
                     }
 
                     .nav-top ul li a .icon {

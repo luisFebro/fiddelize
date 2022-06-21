@@ -28,7 +28,7 @@ export default function MagicNavMenuIndicator() {
                 <ul>
                     <li className="bottom-item">
                         <a href="#" onClick={() => handleMenuClick("logs")}>
-                            <span className="icon">
+                            <span className="icon svg-elevation">
                                 <DocumentText />
                             </span>
                             <span className="text">Registros</span>
@@ -36,7 +36,7 @@ export default function MagicNavMenuIndicator() {
                     </li>
                     <li className="bottom-item active">
                         <a href="#" onClick={() => handleMenuClick("home")}>
-                            <span className="icon">
+                            <span className="icon svg-elevation">
                                 <Home />
                             </span>
                             <span className="text">Início</span>
@@ -44,7 +44,7 @@ export default function MagicNavMenuIndicator() {
                     </li>
                     <li className="bottom-item">
                         <a href="#" onClick={() => handleMenuClick("profile")}>
-                            <span className="icon">
+                            <span className="icon svg-elevation">
                                 <Person />
                             </span>
                             <span className="text">Perfil</span>
@@ -148,7 +148,7 @@ export default function MagicNavMenuIndicator() {
                         width: 70px;
                         height: 70px;
                         top: -50%;
-                        left: 11%;
+                        left: 11.2%;
                         border-radius: 50%;
                         border: 6px solid #00020f;
                         transition: 0.5s;

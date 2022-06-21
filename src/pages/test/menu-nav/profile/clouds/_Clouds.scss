@@ -18,8 +18,8 @@
 
     .degrees-celsius-wrapper {
         position: absolute;
-        top: -10px;
-        right: -120px;
+        top: -25px;
+        right: -120px; // prior -120px for sunny;
 
         & .degrees-celsius {
             position: relative;
@@ -275,6 +275,64 @@
         50% { transform: translateY(20px) scale(.7); opacity:.05; }
     }
 
+    /* PARTLY CLOUDY */
+    .partlyCloudy {
+        background: #FFFFFF;
+        border-radius: 50%;
+        box-shadow:
+            #FFFFFF 65px -15px 0 -5px,
+            #FFFFFF 25px -25px,
+            #FFFFFF 30px 10px,
+            #FFFFFF 60px 15px 0 -10px,
+            #FFFFFF 85px 5px 0 -5px;
+        height: 50px;
+        width: 50px;
+        position: relative;
+        z-index: 12px;
+
+        &:before {
+            content: '';
+            background: #FFEE44;
+            border-radius: 50%;
+            box-shadow: rgba(255,255,0,0.2) 0 0 0 15px;
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            left: 20px;
+            top: -30px;
+            z-index: 10px;
+        }
+    }
+
+    .mostlySunny {
+        position: relative;
+        left: 40px;
+        background: #FFEE44;
+        border-radius: 50%;
+        box-shadow: rgba(255,255,0,0.2) 0 0 0 15px;
+        height: 80px;
+        width: 80px;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 30px;
+
+            background: #FFFFFF;
+            border-radius: 50%;
+            box-shadow:
+                #FFFFFF 65px -15px 0 -5px,
+                #FFFFFF 25px -25px,
+                #FFFFFF 30px 10px,
+                #FFFFFF 60px 15px 0 -10px,
+                #FFFFFF 85px 5px 0 -5px;
+            height: 50px;
+            width: 50px;
+            transform: scale(.6);
+        }
+    }
+
     /* STORMY */
     .stormy {
         animation: stormy 5s ease-in-out infinite;
@@ -469,17 +527,5 @@
                 #EEEEEE 110px 45px,
                 #EEEEEE 90px 35px;
         }
-    }
-
-    a {
-      position: absolute;
-      top: 30px;
-      left: 60px;
-      color: #777;
-      text-decoration: none;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      display: none;
     }
 }

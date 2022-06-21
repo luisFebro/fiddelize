@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { GlobalProvider } from "context";
 import { BrowserRouter } from "react-router-dom";
-import ReactGA from "react-ga"; // google analytics
+// import ReactGA from "react-ga"; // google analytics
 import isThisApp from "utils/window/isThisApp";
 import deferJsOnload from "utils/performance/deferJsOnload";
 import useOffline from "hooks/useOffline";
 import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
-import checkValidSession, { runSessionCheck } from "auth/checkValidSession";
+// import checkValidSession, { runSessionCheck } from "auth/checkValidSession";
 import "utils/globalHelpers";
 import useGlobalApp from "./useGlobalApp.js";
 // import AsyncWebsite from "./user-interfaces/AsyncWebsite";
@@ -20,7 +20,7 @@ import MobileApp from "./user-interfaces/MobileApp";
 import "../styles/bootstrap-padding-margin-w-h-only.min.css";
 import "../styles/scss/App.scss";
 import "../styles/bootstrap.selected.css";
-import "../styles/libraries/fontAwesomeLib";
+// import "../styles/libraries/fontAwesomeLib";
 // END STYLING
 // import ScrollToTop from 'react-router-scroll-top';
 
@@ -31,14 +31,14 @@ export default function App() {
 
     useEffect(() => {
         switchConsoleLogs();
-        runSessionCheck();
-        checkValidSession();
+        // runSessionCheck();
+        // checkValidSession();
 
-        const runGoogleAnalytics = () => {
-            const opts = { testMode: false };
-            ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
-            ReactGA.pageview(window.location.pathname + window.location.search);
-        };
+        // const runGoogleAnalytics = () => {
+        //     const opts = { testMode: false };
+        //     ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
+        //     ReactGA.pageview(window.location.pathname + window.location.search);
+        // };
 
         // const checkExpPushSub = async () =>
         //     await updateExpiredPushSub()

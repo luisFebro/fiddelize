@@ -68,7 +68,7 @@ export default function MuDrawerBtn() {
                         }
 
                         .MuiListItemText-root .MuiTypography-root {
-                            color: #fff !important;
+                            color: var(--mainWhite) !important;
                         }
 
                         .MuiDrawer-paper {
@@ -85,7 +85,7 @@ export default function MuDrawerBtn() {
                         }
 
                         .MuiListItemIcon-root.css-cveggr-MuiListItemIcon-root {
-                            min-width: 36px !important;
+                            min-width: 45px !important;
                             padding: 0 20px !important;
                         }
                     `}
