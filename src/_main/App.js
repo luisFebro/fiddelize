@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { GlobalProvider } from "context";
 import { BrowserRouter } from "react-router-dom";
 // import ReactGA from "react-ga"; // google analytics
-import isThisApp from "utils/window/isThisApp";
+// import isThisApp from "utils/window/isThisApp";
 import deferJsOnload from "utils/performance/deferJsOnload";
 import useOffline from "hooks/useOffline";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";

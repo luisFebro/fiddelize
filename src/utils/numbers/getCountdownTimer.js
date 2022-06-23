@@ -1,5 +1,11 @@
 // for seconds like 30s, use 0.5
-export default function getCountdownTimer({ dur, elem, stop, overCallback }) {
+export default function getCountdownTimer({
+    dur,
+    elem,
+    stop,
+    overCallback,
+    onlySecs = false,
+}) {
     if (!elem) return console.log("no DOM elem parameter");
     if (typeof dur !== "number")
         return console.log("ERROR: dur should be a number");
@@ -21,7 +27,9 @@ export default function getCountdownTimer({ dur, elem, stop, overCallback }) {
             seconds = "00";
         }
 
-        elem.textContent = `${minutes}:${seconds}`; // n2
+        if (onlySecs) seconds = seconds;
+
+        elem.textContent = onlySecs ? `${seconds}` : `${minutes}:${seconds}`; // n2
         // console.log(minutes + ":" + seconds)
 
         if (--timer < 0) {
@@ -49,7 +57,7 @@ The textContent property sets or returns the text content of the specified node,
 If you set the textContent property, any child nodes are removed and replaced by a single Text node containing the specified string.
 */
 
-const res = getCountdownTimer({ dur: 16 });
+// const res = getCountdownTimer({ dur: 16 });
 
 /* DOM EXEMPLE
 window.onload = function () {

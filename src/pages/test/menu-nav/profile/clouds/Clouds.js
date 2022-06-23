@@ -20,18 +20,47 @@ const weekDays = {
     6: "Sábado",
 };
 
+const isSun = ["sunny", "partlyCloudy", "mostlySunny"];
+
 export default function Clouds() {
-    const currWeatherCond = "sunny";
+    const currWeatherCond = "mostlySunny";
+    const isSunCond = isSun.includes(currWeatherCond);
+    const isMostlySunny = currWeatherCond === "mostlySunny";
 
     const todayDateInd = new Date().getDay();
+
+    const handleCondAnima = () => {
+        if (isSunCond)
+            return (
+                <section className="sunny-area">
+                    <section className={`sunny ${isMostlySunny ? "big" : ""}`}>
+                        <div className="rays" />
+                        <div className="reflex" />
+                    </section>
+                    {currWeatherCond === "partlyCloudy" && (
+                        <div className="cloudy" />
+                    )}
+                    {isMostlySunny && <div className="cloudy small" />}
+                    <style jsx>
+                        {`
+                            .sunny-area {
+                                position: relative;
+                            }
+                        `}
+                    </style>
+                </section>
+            );
+
+        return <div className={`${currWeatherCond}`} />;
+    };
 
     return (
         <section className="clouds--root">
             <div className="container">
-                <div className={`${currWeatherCond}`}></div>
+                {handleCondAnima()}
                 <span className="degrees-celsius-wrapper">
                     <span className="degrees-celsius">
-                        27
+                        26
                         <span className="c">°C</span>
                     </span>
                     <span className="weather-desc">

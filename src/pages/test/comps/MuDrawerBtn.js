@@ -85,8 +85,8 @@ export default function MuDrawerBtn() {
                         }
 
                         .MuiListItemIcon-root.css-cveggr-MuiListItemIcon-root {
-                            min-width: 45px !important;
-                            padding: 0 20px !important;
+                            min-width: 55px !important;
+                            padding: 0 25px !important;
                         }
                     `}
                 </style>

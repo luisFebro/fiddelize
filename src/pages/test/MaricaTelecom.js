@@ -1,4 +1,4 @@
-// version 0.90.2
+// version 0.91.2
 import { Fragment, useState, useEffect } from "react";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 // import { useGlobalContext } from "context";
@@ -9,36 +9,28 @@ import TopNav from "./comps/TopNav";
 import HelpConnectionBtn from "./comps/HelpConnectionBtn";
 import MainBtn from "./comps/main-btn/MainBtn";
 import InfoArea from "./comps/InfoArea";
+import PopupAd from "./popup-ad/PopupAd";
+import useScrollUp from "hooks/scroll/useScrollUp";
 
 export default function MaricaTelecom() {
     useBackColor("var(--themeBackground)");
+    useScrollUp();
     // const { connectStatus } = useGlobalContext();
     // TEMP FOR TESTING
     const [connectStatus, setConnectStatus] = useState("disconnected");
     const [connect, setConnect] = useState(false);
     const isDisconnecting = connectStatus === "connected";
 
+    // trigger popup ad
+    const [popupOpen, setPopupOpen] = useState(false);
+
     useEffect(() => {
-        const script1 = document.createElement("script");
-        script1.type = "module";
-        script1.src =
-            "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js";
-
-        const script2 = document.createElement("script");
-        script2.nomodule = true;
-        script2.src =
-            "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js";
-
-        document.body.appendChild(script1);
-        document.body.appendChild(script2);
-
-        console.log("IonIcons started");
-
-        return () => {
-            // document.body.removeChild(script1);
-            // document.body.removeChild(script2);
-        };
+        const waitSeconds = 5000;
+        setTimeout(() => {
+            // setPopupOpen(true)
+        }, waitSeconds);
     }, []);
+    // end trigger popup ad
 
     const showSwitcher = () => {
         return (
@@ -87,6 +79,7 @@ export default function MaricaTelecom() {
             </div>
             <MagicNavMenuIndicator />
             <div className="space-bottom" />
+            <PopupAd setPopupOpen={setPopupOpen} popupOpen={popupOpen} />
             <style jsx>
                 {`
                     .switcher-area {
