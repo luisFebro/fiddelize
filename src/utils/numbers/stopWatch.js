@@ -1,24 +1,39 @@
+let h = 0;
 let sec = 0;
 let min = 0;
+let ms = 0;
 
 let timeSecs;
 let time;
 let timingSeconds = 0;
 
 const runTimer = (el) => {
+    ms += 1;
+    if (ms >= 100) {
+        sec += 1;
+        ms = 0;
+    }
+
+    if (min === 60) {
+        h += 1;
+        min = 1;
+    }
+
     if (sec === 60) {
-        min++;
+        min += 1;
         sec = 0;
     }
 
-    if (min === 60) sec, (min = 0);
+    if (min === 60) {
+        sec, (min = 0);
+    }
 
     // Doing some string interpolation
-    let hour = "00";
-    let seconds = sec < 10 ? `0` + sec : sec;
-    let minute = min < 10 ? `0` + min : min;
+    const hour = h < 10 ? `0${h}` : h;
+    const seconds = sec < 10 ? `0${sec}` : sec;
+    const minute = min < 10 ? `0${min}` : min;
 
-    let timer = `${hour}:${minute}:${seconds}`;
+    const timer = `${hour}:${minute}:${seconds}`;
     el.innerHTML = timer;
 };
 
@@ -43,9 +58,10 @@ export default function stopWatch(action, { stopwatchElem }) {
     // stop stopwatch
     if (action === "stop") {
         clearInterval(time);
+        clearInterval(timeSecs);
     }
 
-    if (action === "reset" || action === "empty") {
+    if (action === "reset") {
         sec = 0;
         min = 0;
 
@@ -53,7 +69,9 @@ export default function stopWatch(action, { stopwatchElem }) {
 
         return {
             disconnectedDate: new Date(),
-            timingSeconds,
+            timingSeconds: null,
         };
     }
+
+    return {};
 }

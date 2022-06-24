@@ -25,10 +25,10 @@ export default function MaricaTelecom() {
     const [popupOpen, setPopupOpen] = useState(false);
 
     useEffect(() => {
-        const waitSeconds = 30000;
-        setTimeout(() => {
-            setPopupOpen(true);
-        }, waitSeconds);
+        // const waitSeconds = 30000;
+        // setTimeout(() => {
+        //     setPopupOpen(true);
+        // }, waitSeconds);
     }, []);
     // end trigger popup ad
 

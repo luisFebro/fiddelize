@@ -21,6 +21,8 @@ export default function InfoArea({ connectStatus = "disconnected" }) {
 
     useEffect(() => {
         const stopwatchElem = document.querySelector(".stop-watch");
+        if (!stopwatchElem) return;
+
         if (connectStatus === "connected") {
             stopWatch("start", { stopwatchElem });
             setLastConnData((prev) => ({
@@ -28,9 +30,10 @@ export default function InfoArea({ connectStatus = "disconnected" }) {
                 usingConnection: true,
                 connectedDate: new Date(),
             }));
-        }
-
-        if (connectStatus === "disconnected" && usingConnection === true) {
+        } else if (
+            connectStatus === "disconnected" &&
+            usingConnection === true
+        ) {
             const stopWatchResult = stopWatch("reset", { stopwatchElem });
 
             setLastConnData((prev) => ({
@@ -39,9 +42,9 @@ export default function InfoArea({ connectStatus = "disconnected" }) {
                 disconnectedDate: stopWatchResult.disconnectedDate,
                 timingSeconds: stopWatchResult.timingSeconds,
             }));
+        } else {
+            stopWatch("stop", { stopwatchElem });
         }
-
-        stopWatch("stop", { stopwatchElem });
     }, [connectStatus, usingConnection]);
 
     return (

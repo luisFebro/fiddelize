@@ -7,11 +7,14 @@ export default function LogsContent() {
     const now = new Date();
 
     useEffect(() => {
-        const totalLogs = 3;
-        // if(currLog > totalLogs) return;
+        let countingLogs;
+        const totalLogs = 8;
+        if (currLog > totalLogs) return clearInterval(countingLogs);
+
         const thisDocLog = document.querySelector(`.log-line${currLog}`);
-        setTimeout(() => {
-            if (thisDocLog) thisDocLog.classList.add("d-inline-block");
+
+        countingLogs = setInterval(() => {
+            if (thisDocLog) thisDocLog.classList.add("d-block");
         }, 3000);
         setCurrLog((prev) => (prev += 1));
     }, [currLog]);
@@ -28,7 +31,7 @@ export default function LogsContent() {
                         Versão do Aplicativo: Correção Proxy T Build 701
                     </span>
                 </div>
-                <div className="log-line log-line2 d-none">
+                <div className="animated zoomIn log-line log-line2 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
@@ -36,31 +39,31 @@ export default function LogsContent() {
                         Versão do Aplicativo: Correção Proxy T Build 701
                     </span>
                 </div>
-                <div className="log-line log-line3 d-none">
+                <div className="animated zoomIn log-line log-line3 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
                     <span className="text service">Iniciado serviço</span>
                 </div>
-                <div className="log-line log-line4 d-none">
+                <div className="animated zoomIn log-line log-line4 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
                     <span className="text">Conectando...</span>
                 </div>
-                <div className="log-line log-line5 d-none">
+                <div className="animated zoomIn log-line log-line5 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
                     <span className="text">Estabelecendo conexão...</span>
                 </div>
-                <div className="log-line log-line6 d-none">
+                <div className="animated zoomIn log-line log-line6 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
                     <span className="text">Injetando...</span>
                 </div>
-                <div className="log-line log-line7 d-none">
+                <div className="animated zoomIn log-line log-line7 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
@@ -69,7 +72,7 @@ export default function LogsContent() {
                         4d:df:1f:0b:7b:13:69:2c:89:8a:c8:d1:95:16:68:e5
                     </span>
                 </div>
-                <div className="log-line log-line7 d-none">
+                <div className="animated zoomIn log-line log-line7 d-none">
                     <span className="hour">
                         {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
                     </span>
