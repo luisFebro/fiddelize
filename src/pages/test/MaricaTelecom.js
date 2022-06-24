@@ -1,4 +1,5 @@
 // version 0.91.2
+import useScrollUp from "hooks/scroll/useScrollUp";
 import { Fragment, useState, useEffect } from "react";
 import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
 // import { useGlobalContext } from "context";
@@ -10,7 +11,6 @@ import HelpConnectionBtn from "./comps/HelpConnectionBtn";
 import MainBtn from "./comps/main-btn/MainBtn";
 import InfoArea from "./comps/InfoArea";
 import PopupAd from "./popup-ad/PopupAd";
-import useScrollUp from "hooks/scroll/useScrollUp";
 
 export default function MaricaTelecom() {
     useBackColor("var(--themeBackground)");
