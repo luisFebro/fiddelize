@@ -70,6 +70,8 @@ export default function stopWatch(action, { stopwatchElem }) {
         sec = 0;
         min = 0;
 
+        clearInterval(time);
+        clearInterval(timeSecs);
         stopwatchElem.innerHTML = `00:00:00`;
 
         return {
