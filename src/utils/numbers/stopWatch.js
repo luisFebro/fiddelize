@@ -66,6 +66,7 @@ export default function stopWatch(action, { stopwatchElem }) {
     }
 
     if (action === "reset") {
+        h = 0;
         sec = 0;
         min = 0;
 

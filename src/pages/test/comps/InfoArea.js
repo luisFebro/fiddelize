@@ -23,7 +23,7 @@ export default function InfoArea({ connectStatus = "disconnected" }) {
         const stopwatchElem = document.querySelector(".stop-watch");
         if (!stopwatchElem) return;
 
-        if (connectStatus === "connected") {
+        if (connectStatus === "connected" && usingConnection === false) {
             stopWatch("start", { stopwatchElem });
             setLastConnData((prev) => ({
                 ...prev,
@@ -44,6 +44,7 @@ export default function InfoArea({ connectStatus = "disconnected" }) {
             }));
         } else {
             stopWatch("reset", { stopwatchElem });
+            stopwatchElem.innerHTML = "00:00:00";
         }
     }, [connectStatus, usingConnection]);
 
