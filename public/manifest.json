@@ -1,8 +1,8 @@
 {
-    "name": "Fiddelize",
-    "short_name": "Fiddelize",
-    "description": "Conquiste clientes no próximo nível",
-    "start_url": "/app",
+    "name": "Maricá Telecom",
+    "short_name": "Maricá Telecom",
+    "description": "",
+    "start_url": "/",
     "display": "standalone",
     "scope": ".",
     "categories": ["moeda digital", "clube de compras", "pontos de compra", "jogos de compra", "marketing de relacionamento"],

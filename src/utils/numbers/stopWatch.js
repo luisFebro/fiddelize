@@ -9,7 +9,7 @@ let timingSeconds = 0;
 
 const runTimer = (el) => {
     ms += 1;
-    if (ms >= 100) {
+    if (ms >= 150) {
         sec += 1;
         ms = 0;
     }
@@ -25,7 +25,8 @@ const runTimer = (el) => {
     }
 
     if (min === 60) {
-        sec, (min = 0);
+        sec = 0;
+        min = 0;
     }
 
     // Doing some string interpolation
@@ -45,9 +46,12 @@ export default function stopWatch(action, { stopwatchElem }) {
     // start stopwatch
     if (action === "start") {
         timeSecs = setInterval(() => {
-            timingSeconds++;
+            timingSeconds += 1;
         }, 1000);
-        time = setInterval(() => runTimer(stopwatchElem), 10);
+
+        time = setInterval(() => {
+            runTimer(stopwatchElem);
+        }, 10);
 
         return {
             date: null,
