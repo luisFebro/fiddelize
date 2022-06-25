@@ -24,7 +24,7 @@ export default function LogsContent() {
                 ...prev,
                 `${hourNow}:${minNow}:${(secNow += 1)}`,
             ]);
-        }, 800);
+        }, 1500);
     }, [currLog]);
 
     return (

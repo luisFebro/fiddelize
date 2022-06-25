@@ -43,7 +43,7 @@ export default function InfoArea({ connectStatus = "disconnected" }) {
                 timingSeconds: stopWatchResult.timingSeconds,
             }));
         } else {
-            stopWatch("stop", { stopwatchElem });
+            stopWatch("reset", { stopwatchElem });
         }
     }, [connectStatus, usingConnection]);
 
