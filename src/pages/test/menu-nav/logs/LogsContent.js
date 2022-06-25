@@ -3,6 +3,7 @@ import Alarm from "styles/icons/ion/Alarm";
 import Navbar from "../comps/Navbar";
 
 export default function LogsContent() {
+    const [date, setDate] = useState([]);
     const [currLog, setCurrLog] = useState(1);
     const now = new Date();
 
@@ -10,12 +11,19 @@ export default function LogsContent() {
         let countingLogs;
         const totalLogs = 8;
         if (currLog > totalLogs) return clearInterval(countingLogs);
+        const hourNow = now.getHours();
+        const minNow = now.getMinutes();
+        let secNow = now.getSeconds();
 
         const thisDocLog = document.querySelector(`.log-line${currLog}`);
 
         countingLogs = setInterval(() => {
             if (thisDocLog) thisDocLog.classList.add("d-block");
             setCurrLog((prev) => (prev += 1));
+            setDate((prev) => [
+                ...prev,
+                `${hourNow}:${minNow}:${(secNow += 1)}`,
+            ]);
         }, 800);
     }, [currLog]);
 
@@ -24,64 +32,46 @@ export default function LogsContent() {
             <Navbar title="Registros" />
             <section className="logs-area">
                 <div className="animated fadeInDown log-line log-line1 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
-                    <span className="text">
-                        Versão do Aplicativo: Correção Proxy T Build 701
-                    </span>
+                    <span className="hour">{date[0]}</span>
+                    <span className="text service">Procurando conexão...</span>
                 </div>
                 <div className="animated fadeInDown log-line log-line2 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[1]}</span>
                     <span className="text">
                         Versão do Aplicativo: Correção Proxy T Build 701
                     </span>
                 </div>
                 <div className="animated fadeInDown log-line log-line3 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[2]}</span>
                     <span className="text service">Iniciado serviço</span>
                 </div>
                 <div className="animated fadeInDown log-line log-line4 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[3]}</span>
                     <span className="text">Conectando...</span>
                 </div>
                 <div className="animated fadeInDown log-line log-line5 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[4]}</span>
                     <span className="text">Estabelecendo conexão...</span>
                 </div>
                 <div className="animated fadeInDown log-line log-line6 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[5]}</span>
                     <span className="text">Injetando...</span>
                 </div>
                 <div className="animated fadeInDown log-line log-line7 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[6]}</span>
                     <span className="text">
                         Finger Print:
                         4d:df:1f:0b:7b:13:69:2c:89:8a:c8:d1:95:16:68:e5
                     </span>
                 </div>
                 <div className="animated fadeInDown log-line log-line8 d-none">
-                    <span className="hour">
-                        {now.getHours()}:{now.getMinutes()}:{now.getSeconds()}
-                    </span>
+                    <span className="hour">{date[7]}</span>
                     <span className="text success">Sua VPN foi conectada!</span>
                 </div>
             </section>
             <div
                 style={{
-                    paddingBottom: 150,
+                    paddingBottom: 250,
                 }}
             />
             <style jsx>
