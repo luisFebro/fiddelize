@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:id="@+id/activity_mainLinearLayout"
+		android:background="@drawable/logo"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<LinearLayout
+			android:visibility="gone"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:gravity="right"
+			android:padding="5dp">
+
+			<TextView
+				android:id="@+id/activity_mainAutorText"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="Andley Dev"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:orientation="vertical"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:padding="10dp"
+
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp">
+
+
+
+			<LinearLayout
+				android:id="@+id/activity_mainInputPasswordLayout"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:orientation="vertical"
+				android:gravity="center"
+				android:paddingTop="10dp"
+				android:paddingLeft="20dp"
+				android:paddingRight="20dp"
+				android:paddingBottom="5dp"
+				android:layout_gravity="center">
+
+
+				<LinearLayout
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_marginBottom="10dp"
+					android:paddingBottom="10dp">
+
+					<TextView
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:text="@string/title_login_main"
+						android:textStyle="bold"
+						android:textSize="18sp"
+						android:textColor="@color/white"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_gravity="center_vertical"
+					android:layout_height="45dp"
+					android:layout_width="fill_parent"
+					>
+
+					<LinearLayout
+						android:layout_height="fill_parent"
+						android:layout_margin="5dp"
+						android:layout_width="40dp">
+
+						<ImageView
+							android:layout_width="26dip"
+							android:layout_height="24dip"
+							android:tint="@color/white"
+							android:src="@drawable/ic_server"/>
+
+					</LinearLayout>
+
+					<RelativeLayout
+						android:layout_height="fill_parent"
+						android:layout_width="fill_parent">
+
+						<Spinner
+							android:id="@+id/serverSpin"
+							android:textStyle="bold"
+							android:textSize="15sp"
+							android:textColor="#FFFFFF"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:theme="@style/spinnerTheme"/>
+
+						<ImageView
+							android:visibility="gone"
+							android:layout_height="fill_parent"
+							android:layout_width="50dp"
+							android:src="@drawable/drop"
+							android:layout_alignParentRight="true"/>
+
+					</RelativeLayout>
+
+				</LinearLayout>
+
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/activity_mainInputPasswordUserEdit"
+						android:layout_height="wrap_content"
+						android:layout_width="match_parent"
+						android:ems="20"
+						android:singleLine="true"
+						android:drawableStart="@drawable/ic_person_white_24dp"
+						android:textColor="@color/white"
+						android:hint="@string/auth_username"/>
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<RelativeLayout
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+					android:layout_marginTop="4dp"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:orientation="horizontal">
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:id="@+id/fragment_userpassTextInputLayout"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/activity_mainInputPasswordPassEdit"
+							android:inputType="textPassword"
+							android:textColor="@color/white"
+							android:drawableStart="@drawable/ic_lock_white_24dp"
+							android:ems="20"
+							android:singleLine="true"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:hint="@string/password"/>
+
+					</com.google.android.material.textfield.TextInputLayout>
+
+					<LinearLayout
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:orientation="vertical"
+						android:layout_alignEnd="@id/fragment_userpassTextInputLayout">
+
+						<ImageButton
+							android:id="@+id/activity_mainInputShowPassImageButton"
+							android:src="@drawable/ic_visibility_off_black_24dp"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:hint="@string/show_password"
+							android:layout_gravity="right"/>
+
+					</LinearLayout>
+
+				</RelativeLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:orientation="horizontal">
+
+				<Button
+					android:id="@+id/activity_starterButtonMain"
+					android:layout_width="200dp"
+					android:layout_height="40dp"
+					android:layout_gravity="right"
+					android:layout_marginLeft="50dp"
+					android:layout_marginRight="16dp"
+					android:background="@drawable/button_blue"
+					android:textColor="#FFFFFF"
+					android:textStyle="bold"
+					android:text="@string/start" />
+
+				<ImageView
+					android:id="@+id/contato"
+					android:layout_width="40dp"
+					android:layout_height="40dp"
+					android:layout_toRightOf="@+id/activity_starterButtonMain"
+					android:src="@drawable/ic_baseline_help_center_24">
+
+
+				</ImageView>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:visibility="gone"
+			android:text="\n\nVelocidade Atual:"
+			android:textColor="#FFFFFF"
+			android:textStyle="bold"
+			android:textSize="14sp" />
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text=" UP: "
+				android:visibility="gone"
+				android:textColor="#4AAA4A"
+				android:textSize="14sp" />
+
+			<TextView
+				android:id="@+id/UX"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="left"
+				android:text="0"
+				android:visibility="gone"
+				android:textColor="#FFFFFF"
+				android:textSize="14sp" />
+		</LinearLayout>
+		<LinearLayout
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal">
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text="DW: "
+				android:textColor="#CF2525"
+				android:textSize="14sp"
+				android:visibility="gone" />
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="14sp"
+				android:gravity="center"
+				android:text="0"
+				android:visibility="gone"
+				android:textColor="#FFFFFF"
+				android:id="@+id/YX"/>
+		</LinearLayout>
+
+		<TextView
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:text="\nStatus da Rede:"
+			android:textColor="#FFFFFF"
+			android:textStyle="bold"
+			android:textSize="14sp" />
+		<LinearLayout
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text="IP: "
+				android:textColor="#4AAA4A"
+				android:textSize="14sp" />
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="14sp"
+				android:gravity="center"
+				android:text="0.0.0.0"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:id="@+id/iplocal"/>
+		</LinearLayout>
+		<LinearLayout
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal"
+			android:gravity="center">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text="REDE: "
+				android:textStyle="bold"
+				android:textColor="#CF2525"
+				android:textSize="14sp" />
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="14sp"
+				android:gravity="center"
+				android:text="NONE"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:id="@+id/networktype"/>
+		</LinearLayout>
+		<TextView
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:textStyle="bold"
+			android:text="\nNetwork SPEED:"
+			android:textColor="#FFFFFF"
+			android:textSize="14sp" />
+
+		<LinearLayout
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text=" UP: "
+				android:textStyle="bold"
+				android:textColor="#4AAA4A"
+				android:textSize="14sp" />
+
+			<TextView
+				android:id="@+id/TX"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="left"
+				android:text="0"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:textSize="14sp" />
+		</LinearLayout>
+		<LinearLayout
+			android:visibility="gone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text="DW: "
+				android:textStyle="bold"
+				android:textColor="#CF2525"
+				android:textSize="14sp" />
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="14sp"
+				android:gravity="center"
+				android:text="0"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:id="@+id/RX"/>
+		</LinearLayout>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:visibility="invisible"
+			android:text="\n"
+			/>
+	<!--	<com.appodeal.ads.BannerView
+			android:id="@+id/appodealBannerView"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			/> -->
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:visibility="invisible"
+			android:text="\n"
+			/>
+		<TextView
+			android:id="@+id/txtUser"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text=""
+			/>
+
+		<TextView
+			android:id="@+id/txtVencimentoDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Carregando informações do login..."
+			/>
+
+
+		<TextView
+			android:id="@+id/txtDiasRestantes"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text=""
+
+			/>
+
+		<TextView
+			android:id="@+id/somente_um_espaco_kek"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			/>
+
+		<TextView
+			android:id="@+id/txtAvisos"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:textAlignment="center"
+			android:text=""
+			android:textColor="#FFFFFF"
+			android:textSize="14sp"
+			/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:orientation="horizontal">
+			<Button
+				android:id="@+id/cake"
+				android:background="@drawable/button_blue"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:text="Mudar DNS"
+				android:visibility="gone"/>
+		</LinearLayout>
+
+
+
+
+
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/activity_AutoReconnectSwitch"
+			android:visibility="gone"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:hint="Auto Reconexão(Beta)"
+			android:layout_gravity="center"/>
+
+
+
+		<LinearLayout
+			android:id="@+id/activity_AutoReconnectLayout"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="0dp"
+			android:visibility="gone"
+			android:gravity="center">
+
+			<EditText
+				android:layout_marginEnd="5dp"
+				android:gravity="center"
+				android:id="@+id/time"
+				android:layout_width="60dp"
+				android:layout_height="wrap_content"
+				android:ems="3"
+				android:hint="Tempo"
+				android:inputType="number"
+				android:defaultValue="10"
+				android:textSize="12sp" />
+
+			<TextView
+				android:textSize="16sp"
+				android:gravity="center"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="00:00"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:layout_margin="5dp"
+				android:id="@+id/duration"/>
+
+
+			<Button
+				android:background="@color/blue"
+				android:textSize="10sp"
+				android:gravity="center"
+				android:layout_marginStart="2dp"
+				android:layout_width="70dp"
+				android:layout_height="30dp"
+				android:text="INSERIR"
+				android:id="@+id/set"
+				android:layout_marginEnd="3dp"/>
+
+
+			<Button
+				android:background="@color/blue"
+				android:textSize="10sp"
+				android:gravity="center"
+				android:layout_marginStart="5dp"
+				android:layout_width="70dp"
+				android:layout_height="30dp"
+				android:text="INICIAR"
+				android:id="@+id/start"
+
+				android:layout_marginEnd="3dp"/>
+
+			<Button
+				tools:visibility="visible"
+				android:textSize="10sp"
+				android:gravity="center"
+				android:layout_marginStart="2dp"
+				android:layout_width="70dp"
+				android:layout_height="30dp"
+				android:text="RESETAR"
+				android:id="@+id/reset"
+				android:background="@color/blue"
+				android:layout_marginEnd="3dp"/>
+
+		</LinearLayout>
+
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="match_parent"
+			android:gravity="right"
+			android:orientation="horizontal"
+			tools:ignore="RtlHardcoded">
+
+
+			<com.google.android.material.floatingactionbutton.FloatingActionButton
+				android:id="@+id/logs"
+				android:visibility="gone"
+				android:src="@drawable/ic_event_note_black_24dp"
+				app:backgroundTint="#FF0000"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end|bottom|center"
+				android:layout_marginLeft="16.0dip"
+				android:layout_marginTop="16.0dip"
+				android:layout_marginRight="16.0dip"
+				android:layout_marginBottom="16.0dip"
+				android:clickable="true"
+				android:focusable="true"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+
+</LinearLayout>
+

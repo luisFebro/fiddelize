@@ -1,0 +1,31 @@
+<component name="libraryTable">
+  <library name="Gradle: org.conscrypt:conscrypt-android:2.5.1@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0923242414c01a8ada1abe7fecf3e3fe/jetified-conscrypt-android-2.5.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/res" />
+      <root url="file://$PROJECT_DIR$/../Programs/AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/res" />
+      <root url="file://$PROJECT_DIR$/../Programs/AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../Programs/AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/res" />
+      <root url="file://$PROJECT_DIR$/../../../AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../../../AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/res" />
+      <root url="jar://$PROJECT_DIR$/../../AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../AndroidGradle/caches/transforms-3/d075d933b7674bffb6dd5a121240d18d/transformed/jetified-conscrypt-android-2.5.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/6ad401a71d7984cacff48985f5fe00b5dd050ede/conscrypt-android-2.5.1-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Programs/AndroidGradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/6ad401a71d7984cacff48985f5fe00b5dd050ede/conscrypt-android-2.5.1-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../AndroidGradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/6ad401a71d7984cacff48985f5fe00b5dd050ede/conscrypt-android-2.5.1-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../AndroidGradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/6ad401a71d7984cacff48985f5fe00b5dd050ede/conscrypt-android-2.5.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/443ddd8448d64343c2fd23222cd66cb5a66ab5d2/conscrypt-android-2.5.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Programs/AndroidGradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/443ddd8448d64343c2fd23222cd66cb5a66ab5d2/conscrypt-android-2.5.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../AndroidGradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/443ddd8448d64343c2fd23222cd66cb5a66ab5d2/conscrypt-android-2.5.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../AndroidGradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-android/2.5.1/443ddd8448d64343c2fd23222cd66cb5a66ab5d2/conscrypt-android-2.5.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

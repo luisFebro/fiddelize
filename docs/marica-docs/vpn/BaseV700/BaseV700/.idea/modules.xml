@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BaseV700.iml" filepath="$PROJECT_DIR$/.idea/modules/BaseV700.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BaseV700.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BaseV700.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BaseV700.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BaseV700.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BaseV700.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BaseV700.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BaseV700.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BaseV700.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/BaseV700.service.iml" filepath="$PROJECT_DIR$/.idea/modules/service/BaseV700.service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/BaseV700.service.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/service/BaseV700.service.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/BaseV700.service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/service/BaseV700.service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/BaseV700.service.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/service/BaseV700.service.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/style/BaseV700.style.iml" filepath="$PROJECT_DIR$/.idea/modules/style/BaseV700.style.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/style/BaseV700.style.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/style/BaseV700.style.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/style/BaseV700.style.main.iml" filepath="$PROJECT_DIR$/.idea/modules/style/BaseV700.style.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/style/BaseV700.style.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/style/BaseV700.style.unitTest.iml" />
+    </modules>
+  </component>
+</project>

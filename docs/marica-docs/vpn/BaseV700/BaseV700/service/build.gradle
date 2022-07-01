@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion 31
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 31
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    namespace 'com.bsev700.ultrasshservice'
+
+}
+dependencies {
+    api 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'org.conscrypt:conscrypt-android:2.5.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api 'net.i2p.crypto:eddsa:0.3.0'
+    api 'org.connectbot.jbcrypt:jbcrypt:1.0.0'
+
+    // root detect
+    api project(':style')
+
+}
